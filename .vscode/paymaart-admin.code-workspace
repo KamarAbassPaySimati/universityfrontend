@@ -1,0 +1,278 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"eslint.options": { "overrideConfigFile": ".eslintrc.json" },
+		"python.defaultInterpreterPath": "/usr/bin/python3",
+		"python.terminal.activateEnvironment": false,
+		"pylint.args": [
+			"--rcfile=pylintrc"
+		],
+		"vscodeGitCommit.template": [
+			"{jira_id} #time {timespent} {issue_type}: {message}"
+		],
+		"vscodeGitCommit.variables": {
+			"issue_type": [
+			{
+				"label": "feature",
+			},
+			{
+				"label": "bugfix"
+			},
+			{
+				"label": "hotfix"
+			}
+			],
+		},
+		"triggerTaskOnSave.tasks": {
+			"Bandit": [
+				"src/**/**/*.js",
+                "src/**/**/*.jsx",
+			],
+			"Njsscan":[
+				"src/**/**/*.jsx",
+                "src/**/**/*.js",
+			],
+			"Secret Detection":[
+				"src/**/**/*.js",
+				"src/**/**/*.jsx",
+			],
+			"License Compliance":[
+				"package.json"
+			],
+			"Dependency Scanning":[
+				"package-lock.json"
+			],
+			"Build":[
+				"package.json"
+			],
+		},
+		
+	},
+	"extensions": {
+		"recommendations": ["dbaeumer.vscode-eslint", "esbenp.prettier-vscode", "ms-python.pylint", "Gruntfuggly.triggertaskonsave", "rioukkevin.vscode-git-commit"]
+	},
+	"tasks": {
+		"version": "2.0.0",
+		"tasks": [
+			{
+				"label": "Build",
+				"type": "shell",
+				"presentation": {
+        			"reveal": "never"
+      			},
+				"options": {
+        			"cwd": "${workspaceFolder}"
+      			},
+				"group": {
+					"kind": "build",
+					"isDefault": true
+				},
+				"command": "npm install --force",
+				"runOptions": {
+					"runOn": "folderOpen"
+				}
+			},
+			{
+				"label": "Bandit",
+				"type": "shell",
+				"presentation": {
+        			"reveal": "never"
+      			},
+				"options": {
+        			"cwd": "${workspaceFolder}"
+      			},
+				"group": {
+					"kind": "test",
+					"isDefault": true
+				},
+				"command": "source ${workspaceFolder}/.venv/bin/activate && bandit ${relativeFile} -f custom --msg-template {relpath}:::{line}:::{msg}:::{severity}:::{test_id} --exit-zero",
+				"problemMatcher": {
+					"owner": "sast",
+					"source": "SAST",
+					"fileLocation": [
+						"relative",
+						"${workspaceFolder}"
+					],
+					"pattern": [{
+						"regexp": "(.*):::(.*):::(.*):::(.*):::(.*).",
+						"file": 1,
+						"line": 2,
+						"message": 3,
+						"severity": 4,
+						"code": 5
+					},
+
+				],
+				"background": {
+					"activeOnStart": false,
+					}
+				},
+				"runOptions": {
+					"runOn": "folderOpen"
+				}
+			},
+			{
+				"label": "Njsscan",
+				"type": "shell",
+				"presentation": {
+        			"reveal": "never"
+      			},
+				"options": {
+        			"cwd": "${workspaceFolder}"
+      			},
+				"group": {
+					"kind": "test",
+					"isDefault": true
+				},
+				"command": "source ${workspaceFolder}/.venv/bin/activate && njsscan ${relativeFile} --sonarqube",
+				"problemMatcher": {
+					"owner": "sast",
+					"source": "SAST",
+					"fileLocation": [
+						"relative",
+						"${workspaceFolder}"
+					],
+					"pattern": [{
+						"regexp": "filePath\": \"(.*)\",",
+						"file": 1,
+						"line": 1
+					},
+					{
+						"regexp": "message\": \"(.*)\",",
+						"message": 1,
+						"code": 0
+					},
+				],
+					"background": {
+						"activeOnStart": false,
+							}
+				},
+				"runOptions": {
+					"runOn": "folderOpen"
+				}
+			},
+			{
+				"label": "Secret Detection",
+				"type": "shell",
+				"presentation": {
+        			"reveal": "never"
+      			},
+				"options": {
+        			"cwd": "${workspaceFolder}"
+      			},
+				"group": {
+					"kind": "test",
+					"isDefault": true
+				},
+				"command": "source ${workspaceFolder}/.venv/bin/activate && detect-secrets scan ${relativeFile}",
+				"problemMatcher": {
+					"owner": "Secret Detection",
+					"source": "Secret Detection",
+					"fileLocation": [
+						"relative",
+						"${workspaceFolder}"
+					],
+					"pattern": [
+						{
+							"regexp": "type\": \"(.*)\",",
+							"message": 1
+						},
+						{
+							"regexp": "filename\": \"(.*)\",",
+							"file": 1,
+							"line": 1
+						},
+					],
+				"background": {
+					"activeOnStart": false,
+					}
+				},
+				"runOptions": {
+					"runOn": "folderOpen"
+				}
+			},
+			{
+				"label": "License Compliance",
+				"type": "shell",
+				"presentation": {
+        			"reveal": "never"
+      			},
+				"options": {
+        			"cwd": "${workspaceFolder}"
+      			},
+				"group": {
+					"kind": "test",
+					"isDefault": true
+				},
+				"command": "${workspaceFolder}/node_modules/license-checker/bin/license-checker --start ${workspaceFolder}  --exclude 'MIT, MIT OR X11, BSD, ISC, Apache, BSD-2-Clause, BSD-3-Clause, MPL, MS-PL, CDDL, Apache-2.0, Zlib, CC-BY-3.0, CC0-1.0, BlueOak-1.0.0, CC-BY-4.0, Python-2.0, WTFPL, Custom: https://paymaart.com' --json",
+				"problemMatcher": {
+					"owner": "License Compliance",
+					"source": "License Compliance",
+					"fileLocation": [
+						"relative",
+						"${workspaceFolder}"
+					],
+					"pattern": [
+						{
+							"regexp": "\"(.*)\": {",
+							"message": 1
+						},
+						{
+							"regexp": "licenses\": \"(.*)\",",
+							"file": 1,
+							"line": 1,
+							"code": 1
+						},
+					],
+				"background": {
+					"activeOnStart": false,
+					}
+				},
+				"runOptions": {
+					"runOn": "folderOpen"
+				}
+			},
+			{
+				"label": "Dependency Scanning",
+				"type": "shell",
+				"presentation": {
+        			"reveal": "never"
+      			},
+				"options": {
+        			"cwd": "${workspaceFolder}"
+      			},
+				"group": {
+					"kind": "test",
+					"isDefault": true
+				},
+				"command": "npm run owasp",
+				"problemMatcher": {
+					"owner": "Dependency Scanning",
+					"source": "SAST",
+					"fileLocation": [
+						"relative",
+						"${workspaceFolder}/dependency-check-reports/dependency-check-report.json"
+					],
+					"pattern": [
+						{
+							"regexp": "(^(?!   .*|.*Sponsor).*:\\d\\.\\d.\\d: CVE.*)",
+							"message": 1,
+							"file":1,
+							"line": 1
+						},
+					],
+				"background": {
+					"activeOnStart": false,
+					}
+				},
+				"runOptions": {
+					"runOn": "folderOpen"
+				}
+			}
+		]
+	},
+}
