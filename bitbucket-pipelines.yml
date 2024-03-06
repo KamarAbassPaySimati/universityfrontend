@@ -127,17 +127,17 @@ definitions:
           - python version.py $(git log -1 --pretty=%B)
           - pipe: atlassian/aws-s3-deploy:0.2.4
             variables:
-              AWS_ACCESS_KEY_ID: $ACCESS_KEY_ID
-              AWS_SECRET_ACCESS_KEY: $SECRET_ACCESS_KEY
-              AWS_DEFAULT_REGION: $AWS_REGION
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $REGION
               S3_BUCKET: $ADMIN_S3_BUCKET
               ACL: "public-read"
               LOCAL_PATH: "dist"
           - pipe: atlassian/aws-cloudfront-invalidate:0.1.1
             variables:
-              AWS_ACCESS_KEY_ID: $ACCESS_KEY_ID
-              AWS_SECRET_ACCESS_KEY: $SECRET_ACCESS_KEY
-              AWS_DEFAULT_REGION: $AWS_REGION
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $REGION
               DISTRIBUTION_ID: $ADMIN_DISTRIBUTION_ID
 
     - step: &RunBDD
@@ -388,7 +388,6 @@ pipelines:
             - step: *ESlint
             - step: *LicenseCompliance
             - step: *DependencyScanning
-            - step: *Danger
       - step: *UnitTestCase
       - step: *Deploy
       - parallel:
@@ -408,7 +407,6 @@ pipelines:
             - step: *ESlint
             - step: *LicenseCompliance
             - step: *DependencyScanning
-            - step: *Danger
       - step: *UnitTestCase
       - step: *Deploy
       - parallel:
@@ -427,7 +425,6 @@ pipelines:
             - step: *ESlint
             - step: *LicenseCompliance
             - step: *DependencyScanning
-            - step: *Danger
       - step: *UnitTestCase
       - step: *Deploy
       - parallel:
