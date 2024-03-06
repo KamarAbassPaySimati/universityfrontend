@@ -55,7 +55,6 @@ definitions:
           - node
         script:
            - npm i --force
-           - npm i eslint --force
            - npm run eslint
            
     - step: &LicenseCompliance
