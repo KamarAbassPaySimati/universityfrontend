@@ -10,8 +10,8 @@
     "bdd": "./node_modules/@cucumber/cucumber/bin/cucumber.js -f json:./reports/test-report.json --config features/Flow3_Integration_Flows/cucumber.js",
     "unit-bdd": "./node_modules/@cucumber/cucumber/bin/cucumber.js -f json:./reports/test-report.json features/unit-testing/AddAdminstartivenoteandMedicalnotewhileUpdatepatient.feature",
     "bdd_dry_run": "./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run -f html:./living-documenation-feature/report.html",
-    "generate_report": "nyc report --temp-dir ./features/step-definations/coverageData --reporter html --report-dir ./coverage",
-    "code_coverage": "nyc check-coverage --temp-dir ./features/step_definitions/coverageData",
+    "generate_report": "nyc report --temp-dir ./test/step-definations/coverageData --reporter html --report-dir ./coverage",
+    "code_coverage": "nyc check-coverage --temp-dir ./test/step_definitions/coverageData",
     "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt"
   },
   "dependencies": {
