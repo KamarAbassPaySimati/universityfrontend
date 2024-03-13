@@ -1,4 +1,4 @@
-@1.0
+@1.1
 Feature: Paymaart - Admin Web- Logout
     As a super/finance/admin/support of the application,I want to easily logout from my account So that I can ensure the security of my personal information.
     Conditions for Satisfaction
