@@ -29,7 +29,6 @@ Feature: Paymaart -Admin Web - Forgot Password
     Randomness:
     a. Require random combinations of characters.
 
-    @reset_password
     Scenario: Request Forgot password
         Given I am on the login screen
         And I click on forgot password
@@ -86,7 +85,6 @@ Feature: Paymaart -Admin Web - Forgot Password
         And I submit the TOTP form
         Then I should be redirected to the '/dashboard' page
 
-    @request_reset_password
     Scenario: Set password to previous password
         Given I open a reset password link
         When I enter password as "Admin@1234" and confirm password as "Admin@1234"
