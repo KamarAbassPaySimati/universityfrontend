@@ -13,7 +13,7 @@ const InputField = ({ setErrors, id, error, label, placeholder }) => {
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
                 className={`placeholder:text-neutral-secondary text-neutral-primary bg-[#F8F8F8] px-[10px] py-[11px]
-                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b 
+                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal
                     ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
                 id={id}
                 placeholder={placeholder}

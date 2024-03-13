@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import InputField from '../../components/InputField/InputField'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const initailState = {
@@ -7,6 +8,7 @@ const Login = () => {
         password: ''
     }
 
+    const navigate = useNavigate()
     // const [formData, setFormData] = useState(initailState)
     const [errors, setErrors] = useState(initailState)
 
@@ -54,7 +56,7 @@ const Login = () => {
                                 Login
                             </button>
                         </form>
-                        <div className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
+                        <div onClick={() => navigate('/ForgotPassword')} className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
                             text-center'>
                             Forgot Password?
                         </div>

@@ -34,6 +34,8 @@ export default {
                 'neutral-disable': '#D1D4D7',
                 'neutral-outline': '#E5E9EB',
 
+                'accent-positive': '#13B681',
+
                 error: '#FF4343'
             }
         }
