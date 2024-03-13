@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
 const { AfterAll, BeforeAll, AfterStep } = require('@cucumber/cucumber')
 const chrome = require('selenium-webdriver/chrome')
@@ -30,36 +31,42 @@ BeforeAll(async function () {
     await driver.wait(until.elementLocated(By.id('root')))
     global.current_process_name = faker.string.alpha({ count: 10, casing: 'upper' })
     global.is_user_logged_in = false
-    console.log('Current process name:', global.current_process_name)
-    try {
-        global.__coverage__ = await driver.executeScript('return __coverage__;')
-        global.coverageMap = createCoverageMap(__coverage__)
-    } catch (error) {
-        throw new Error('::: __coverage__ ::: Coverage Mapping Object Not Found :::')
+    console.log('logged in')
+    if (process.env.VITE_COVERAGE == true) {
+        try {
+            global.__coverage__ = await driver.executeScript('return __coverage__;')
+            global.coverageMap = createCoverageMap(__coverage__)
+        } catch (error) {
+            throw new Error('::: __coverage__ ::: Coverage Mapping Object Not Found :::')
+        }
     }
 })
 
 AfterAll(async function () {
-    const coverageDataDir = path.join(__dirname, 'coverageData')
-    if (!fs.existsSync(coverageDataDir)) {
-        fs.mkdirSync(coverageDataDir)
-    }
-    const coverageDataFile = path.join(coverageDataDir, `coverage_${global.current_process_name}.json`)
-    const coverageData = global.coverageMap.toJSON()
-    // Write coverage data to file
-    fs.writeFile(coverageDataFile, JSON.stringify(coverageData), (err) => {
-        if (err) {
-            console.error('Error writing coverage data:', err)
-        } else {
-            console.log('Coverage data has been written to:', coverageDataFile)
+    if (process.env.VITE_COVERAGE == true) {
+        const coverageDataDir = path.join(__dirname, 'coverageData')
+        if (!fs.existsSync(coverageDataDir)) {
+            fs.mkdirSync(coverageDataDir)
         }
-    })
+        const coverageDataFile = path.join(coverageDataDir, `coverage_${global.current_process_name}.json`)
+        const coverageData = global.coverageMap.toJSON()
+        // Write coverage data to file
+        fs.writeFile(coverageDataFile, JSON.stringify(coverageData), (err) => {
+            if (err) {
+                console.error('Error writing coverage data:', err)
+            } else {
+                console.log('Coverage data has been written to:', coverageDataFile)
+            }
+        })
+    }
     await driver.quit()
 })
 AfterStep(async function () {
-    const updatedCoverageData = await driver.executeScript('return __coverage__;')
-    const updatedCoverageMap = createCoverageMap(updatedCoverageData)
-    global.coverageMap.merge(updatedCoverageMap)
+    if (process.env.VITE_COVERAGE == true) {
+        const updatedCoverageData = await driver.executeScript('return __coverage__;')
+        const updatedCoverageMap = createCoverageMap(updatedCoverageData)
+        global.coverageMap.merge(updatedCoverageMap)
+    }
 })
 
 module.exports = {

@@ -2,7 +2,7 @@
 const { Given, Then } = require('@cucumber/cucumber')
 const until = require('selenium-webdriver').until
 const By = require('selenium-webdriver').By
-
+const { driver } = require('../Driver.js')
 Given('I am on welcome screen', async function () {
     // Write code here that turns the phrase above into concrete actions
     await driver.get('http://localhost:3000/')
