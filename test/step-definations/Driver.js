@@ -61,3 +61,7 @@ AfterStep(async function () {
     const updatedCoverageMap = createCoverageMap(updatedCoverageData)
     global.coverageMap.merge(updatedCoverageMap)
 })
+
+module.exports = {
+    driver
+}
