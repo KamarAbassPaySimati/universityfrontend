@@ -1,4 +1,3 @@
-import './App.css'
 import React from 'react'
 import NavigationRoutes from './routes'
 import { motion } from 'framer-motion'
