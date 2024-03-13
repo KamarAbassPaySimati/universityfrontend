@@ -51,8 +51,7 @@ Feature: Paymaart -Admin Web - Forgot Password
     Scenario: Check for password requirement
         Given I am in reset password page
         When I enter password as <password> and confirm password as <confirm_password>
-        And I submit the forgot password form
-        Then I should forgot password submit button as disabled
+        Then I should see forgot password submit button as disabled
         Examples:
             | password      | confirm_password |
             | "abcpassword" | "abcpassword"    |
@@ -87,6 +86,6 @@ Feature: Paymaart -Admin Web - Forgot Password
 
     Scenario: Set password to previous password
         Given I open a reset password link
-        When I enter password as "Admin@1234" and confirm password as "Admin@1234"
+        When I enter password as "Admin@123" and confirm password as "Admin@123"
         And I submit the forgot password form
         Then I should read a message stating that "Your password has been successfully changed"
