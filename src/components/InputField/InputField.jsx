@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 
-const InputField = ({ value, onChange, type, givenType, onFocus, id, error, label, placeholder }) => {
+const InputField = ({ value, onChange, type, givenType, onFocus, id, error, label, placeholder, onBlur }) => {
     const [ispasswordType, setIsPasswordType] = useState(true)
     return (
         <div className='flex flex-col gap-2 relative'>
@@ -14,8 +14,9 @@ const InputField = ({ value, onChange, type, givenType, onFocus, id, error, labe
                     ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
                 id={id}
                 placeholder={placeholder}
-                onFocus={() => onFocus(id)}
+                onFocus={onFocus}
                 onChange={(e) => onChange(e, id)}
+                onBlur={onBlur}
             />
             {/* && value.length > 0 */}
             {givenType === 'password' &&
