@@ -6,7 +6,7 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "eslint": "eslint src/**/*.jsx src/*.jsx test/**/*.js test/**/**/*.js --fix",
+    "eslint": "eslint src/**/*.jsx src/**/**/*.jsx src/**/**/**/*.jsx src/*.jsx src/**/*.js src/**/**/*.js src/**/**/**/*.js test/**/*.js test/**/**/*.js --fix",
     "bdd_dry_run": "./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run test --require test",
     "generate_report": "nyc report --temp-dir ./test/step-definations/coverageData --reporter html --report-dir ./coverage",
     "code_coverage": "nyc check-coverage --temp-dir ./test/step_definitions/coverageData",

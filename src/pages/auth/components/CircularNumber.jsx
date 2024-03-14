@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const CircularNumber = ({ active, text }) => {
     return (
@@ -6,7 +6,7 @@ const CircularNumber = ({ active, text }) => {
         ${active ? 'bg-primary-normal text-[#fff]' : 'text-neutral-primary border border-neutral-primary'}`}>
             {text}
         </div>
-    )
-}
+    );
+};
 
-export default CircularNumber
+export default CircularNumber;

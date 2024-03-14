@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 const InputField = ({ value, onChange, type, givenType, onFocus, id, error, label, placeholder }) => {
-    const [ispasswordType, setIsPasswordType] = useState(true)
+    const [ispasswordType, setIsPasswordType] = useState(true);
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
@@ -35,7 +35,7 @@ const InputField = ({ value, onChange, type, givenType, onFocus, id, error, labe
                     {error}
                 </motion.div>}
         </div>
-    )
-}
+    );
+};
 
-export default InputField
+export default InputField;

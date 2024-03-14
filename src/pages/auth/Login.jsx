@@ -1,33 +1,33 @@
 /* eslint-disable indent */
-import React, { useEffect, useState } from 'react'
-import isValid from './components/validation'
-import LoginPage from './components/LoginPage'
-import Totp from './components/Totp'
+import React, { useEffect, useState } from 'react';
+import isValid from './components/validation';
+import LoginPage from './components/LoginPage';
+import Totp from './components/Totp';
 
 const Login = () => {
     const initailState = {
         email: '',
         password: ''
-    }
+    };
 
-    const [formData, setFormData] = useState(initailState)
-    const [errors, setErrors] = useState(initailState)
+    const [formData, setFormData] = useState(initailState);
+    const [errors, setErrors] = useState(initailState);
 
-    const [isLoginPage, setIsLoginPage] = useState(false)
+    const [isLoginPage, setIsLoginPage] = useState(false);
 
     const submitHandler = (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!isValid(formData, setErrors)) {
-            return
+            return;
         }
 
-        console.log(isValid(formData, setErrors))
-    }
+        console.log(isValid(formData, setErrors));
+    };
 
     useEffect(() => {
 
-    }, [formData])
+    }, [formData]);
 
     return (
         <>
@@ -37,7 +37,7 @@ const Login = () => {
                 : <Totp />
             }
         </>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

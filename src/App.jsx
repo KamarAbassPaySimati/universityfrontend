@@ -1,9 +1,9 @@
-import React from 'react'
-import NavigationRoutes from './routes'
-import { motion } from 'framer-motion'
+import React from 'react';
+import NavigationRoutes from './routes';
+import { motion } from 'framer-motion';
 
 function App (props) {
-    const navigationPath = NavigationRoutes(props)
+    const navigationPath = NavigationRoutes(props);
 
     return (
         <motion.div
@@ -12,7 +12,7 @@ function App (props) {
         >
             {navigationPath}
         </motion.div>
-    )
+    );
 }
 
-export default App
+export default App;

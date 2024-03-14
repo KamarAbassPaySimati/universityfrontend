@@ -1,7 +1,7 @@
-import React from 'react'
-import CircularNumber from './CircularNumber'
-import { QRCode } from 'react-qrcode-logo'
-import Button from '../../../components/Button/Button'
+import React from 'react';
+import CircularNumber from './CircularNumber';
+import { QRCode } from 'react-qrcode-logo';
+import Button from '../../../components/Button/Button';
 
 const Totp = () => {
     return (
@@ -36,7 +36,7 @@ const Totp = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Totp
+export default Totp;

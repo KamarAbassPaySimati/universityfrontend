@@ -1,27 +1,27 @@
-import React from 'react'
-import InputField from '../../../components/InputField/InputField'
-import { useNavigate } from 'react-router-dom'
-import Button from '../../../components/Button/Button'
+import React from 'react';
+import InputField from '../../../components/InputField/InputField';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../../components/Button/Button';
 
 const LoginPage = ({ submitHandler, setFormData, formData, setErrors, errors }) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const focusHandler = (id) => {
         setErrors(prevState => {
-            return { ...prevState, [id]: '' }
-        })
-    }
+            return { ...prevState, [id]: '' };
+        });
+    };
 
     const changeHandler = (e, id) => {
-        const value = e.target.value
-        const enteredLetter = value[value.length - 1]
+        const value = e.target.value;
+        const enteredLetter = value[value.length - 1];
         if (id === 'password' && /\s|[.!?]/.test(enteredLetter)) {
-            return
+            return;
         }
         setFormData(prevState => {
-            return { ...prevState, [id]: value }
-        })
-    }
+            return { ...prevState, [id]: value };
+        });
+    };
 
     return (
         <div className='bg-primary-normal'>
@@ -73,7 +73,7 @@ const LoginPage = ({ submitHandler, setFormData, formData, setErrors, errors }) 
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default LoginPage
+export default LoginPage;
