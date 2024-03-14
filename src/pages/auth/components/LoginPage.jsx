@@ -1,18 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import InputField from '../../../components/InputField/InputField'
 import { useNavigate } from 'react-router-dom'
 import Button from '../../../components/Button/Button'
+import { motion } from 'framer-motion'
 
-const LoginPage = ({ submitHandler, setFormData, formData, setErrors, errors }) => {
+const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
     const navigate = useNavigate()
 
-    const focusHandler = (id) => {
+    const handleFocus = (id) => {
+        setloginError('')
         setErrors(prevState => {
             return { ...prevState, [id]: '' }
         })
     }
 
-    const changeHandler = (e, id) => {
+    const handleChange = (e, id) => {
         const value = e.target.value
         const enteredLetter = value[value.length - 1]
         if (id === 'password' && /\s|[.!?]/.test(enteredLetter)) {
@@ -40,13 +42,14 @@ const LoginPage = ({ submitHandler, setFormData, formData, setErrors, errors }) 
                                 Welcome back!
                             </div>
                         </div>
-                        <form onSubmit={submitHandler} className='flex flex-col gap-[16px]'>
+                        <form onSubmit={handleSubmit} className='flex flex-col gap-[16px]'>
                             <InputField
                                 value={formData.email}
-                                onChange={changeHandler}
-                                onFocus={focusHandler}
-                                setErrors={setErrors}
-                                id='email' error={errors?.email}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                id='email'
+                                error={errors?.email}
+                                loginError={loginError}
                                 label='Email'
                                 placeholder='Enter email'
                             />
@@ -54,15 +57,16 @@ const LoginPage = ({ submitHandler, setFormData, formData, setErrors, errors }) 
                                 givenType='password'
                                 value={formData.password}
                                 type='password'
-                                onChange={changeHandler}
-                                onFocus={focusHandler}
-                                setErrors={setErrors}
+                                onChange={handleChange}
+                                onFocus={handleFocus}
                                 id='password'
                                 error={errors?.password}
+                                loginError={loginError}
                                 label='Password'
                                 placeholder='Enter password'
+                                showLoginError={true}
                             />
-                            <Button text='Login' className='mt-8' />
+                            <Button isLoading={isLoading} text='Login' className='mt-8' />
                         </form>
                         <div onClick={() => navigate('/forgot-password')}
                             className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]

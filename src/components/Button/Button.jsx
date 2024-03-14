@@ -1,10 +1,13 @@
 import React from 'react'
+import { BeatLoader } from 'react-spinners'
 
-const Button = ({ text, className }) => {
+const Button = ({ text, className, onClick, isLoading, color, smallLoader }) => {
     return (
-        <button className={`w-full text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2 rounded-[8px]
+        <button
+            onClick={onClick}
+            className={`w-full text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2 rounded-[8px]
              ${className}`}>
-            {text}
+            {!isLoading ? text : <span>{<BeatLoader color={color || '#ffff'} size={`${smallLoader ? '7px' : '10px'}`} />}</span>}
         </button>
     )
 }
