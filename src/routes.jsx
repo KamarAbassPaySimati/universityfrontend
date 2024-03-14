@@ -1,10 +1,10 @@
-import React, { Suspense, useState } from 'react'
-import { Route, Routes } from 'react-router-dom'
-import NotFound from './pages/NotFount'
-import Login from './pages/auth/Login'
+import React, { Suspense, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import NotFound from './pages/NotFount';
+import Login from './pages/auth/Login';
 
 export default function NavigationRoutes (props) {
-    const [loggedIn] = useState(false)
+    const [loggedIn] = useState(false);
     return (
 
         <Suspense fallback={<div></div>}>{
@@ -26,5 +26,5 @@ export default function NavigationRoutes (props) {
             </>
         }</Suspense>
 
-    )
+    );
 }

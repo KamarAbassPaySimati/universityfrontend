@@ -9,7 +9,7 @@ const Login = () => {
     const initailState = {
         email: '',
         password: ''
-    }
+    };
 
     const [formData, setFormData] = useState(initailState)
     const [errors, setErrors] = useState(initailState)
@@ -60,7 +60,7 @@ const Login = () => {
         setErrors(initailState)
         setloginError('')
         if (!isValid(formData, setErrors)) {
-            return
+            return;
         }
         setIsLoading(true)
         try {
@@ -129,7 +129,7 @@ const Login = () => {
 
     useEffect(() => {
 
-    }, [formData])
+    }, [formData]);
 
     return (
         <>
@@ -139,7 +139,7 @@ const Login = () => {
                 : <Totp Qrcode={Qrcode} />
             }
         </>
-    )
-}
+    );
+};
 
-export default Login
+export default Login;

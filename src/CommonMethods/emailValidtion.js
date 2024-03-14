@@ -7,5 +7,5 @@ if (import.meta.env.VITE_STAGE === 'qa') {
 }
 
 export default function emailValidation (email) {
-    return emailRegex.test(email)
+    return emailRegex.test(email);
 }

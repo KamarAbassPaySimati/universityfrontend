@@ -126,7 +126,7 @@ const Totp = ({ Qrcode }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default Totp
+export default Totp;

@@ -9,7 +9,7 @@ const Button = ({ text, className, onClick, isLoading, color, smallLoader }) => 
              ${className}`}>
             {!isLoading ? text : <span>{<BeatLoader color={color || '#ffff'} size={`${smallLoader ? '7px' : '10px'}`} />}</span>}
         </button>
-    )
-}
+    );
+};
 
-export default Button
+export default Button;

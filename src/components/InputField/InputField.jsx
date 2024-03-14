@@ -47,7 +47,7 @@ const InputField = ({ value, onChange, type, givenType, onFocus, id, error, labe
                     {loginError}
                 </motion.div>}
         </div>
-    )
-}
+    );
+};
 
-export default InputField
+export default InputField;

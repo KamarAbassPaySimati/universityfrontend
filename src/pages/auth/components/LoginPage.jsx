@@ -10,20 +10,20 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     const handleFocus = (id) => {
         setloginError('')
         setErrors(prevState => {
-            return { ...prevState, [id]: '' }
-        })
-    }
+            return { ...prevState, [id]: '' };
+        });
+    };
 
     const handleChange = (e, id) => {
         const value = e.target.value
         const enteredLetter = value[value.length - 1]
         if (id === 'password' && /\s|[.!?]/.test(enteredLetter)) {
-            return
+            return;
         }
         setFormData(prevState => {
-            return { ...prevState, [id]: value }
-        })
-    }
+            return { ...prevState, [id]: value };
+        });
+    };
 
     return (
         <div className='bg-primary-normal'>
@@ -77,7 +77,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default LoginPage
+export default LoginPage;

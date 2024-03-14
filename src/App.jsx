@@ -7,7 +7,7 @@ import { awsConfig } from './config'
 Amplify.configure(awsConfig)
 
 function App (props) {
-    const navigationPath = NavigationRoutes(props)
+    const navigationPath = NavigationRoutes(props);
 
     return (
         <motion.div
@@ -16,7 +16,7 @@ function App (props) {
         >
             {navigationPath}
         </motion.div>
-    )
+    );
 }
 
-export default App
+export default App;

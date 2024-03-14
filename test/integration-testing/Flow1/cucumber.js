@@ -6,4 +6,4 @@ module.exports = {
             'test/integration-testing/Flow1/Login.feature'
         ]
     }
-}
+};
