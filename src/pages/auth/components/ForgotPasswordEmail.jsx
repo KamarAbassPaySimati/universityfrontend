@@ -25,7 +25,7 @@ import InputField from '../../../components/InputField/InputField'
       setError('')
     }
     return (
-        <div className='z-20 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
+        <div className='z-20 bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
             <div className='flex justify-center items-center mb-9'>
                 <img src='/images/logo.svg' />
             </div>

@@ -56,7 +56,7 @@ const Login = () => {
                                 Login
                             </button>
                         </form>
-                        <div onClick={() => navigate('/set-new-password')} className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
+                        <div onClick={() => navigate('/forgot-password')} className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
                             text-center'>
                             Forgot Password?
                         </div>
