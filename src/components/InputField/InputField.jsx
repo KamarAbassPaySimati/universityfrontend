@@ -1,24 +1,29 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 
-const InputField = ({ setErrors, id, error, label, placeholder }) => {
-    const focusHandler = () => {
-        setErrors(prevState => {
-            return { ...prevState, [id]: '' }
-        })
-    }
-
+const InputField = ({ value, onChange, type, givenType, onFocus, id, error, label, placeholder }) => {
+    const [ispasswordType, setIsPasswordType] = useState(true)
     return (
-        <div className='flex flex-col gap-2'>
+        <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
+                value={value}
+                type={givenType ? ispasswordType ? 'password' : 'text' : type || 'text'}
                 className={`placeholder:text-neutral-secondary text-neutral-primary bg-[#F8F8F8] px-[10px] py-[11px]
-                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal
+                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[62px]
                     ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
                 id={id}
                 placeholder={placeholder}
-                onFocus={focusHandler}
+                onFocus={() => onFocus(id)}
+                onChange={(e) => onChange(e, id)}
             />
+            {/* && value.length > 0 */}
+            {givenType === 'password' &&
+                <div className={`absolute right-0 py-[18.79px] pl-[10px] pr-[23.77px] cursor-pointer 
+                    ${error ? 'bottom-[30px]' : 'bottom-0'}`} onClick={() => setIsPasswordType(prevState => !prevState)}>
+                    {ispasswordType ? <img src='/images/SHOW.svg' /> : <img src='/images/HIDE.svg' />}
+                </div>
+            }
             {error &&
                 <motion.div
                     initial={{ opacity: 0, y: 0 }}
