@@ -34,6 +34,7 @@ function extractQRCodeData (canvas) {
     // Use the jsQR library to decode the QR code
     const code = jsQR(canvas.data, canvas.width, canvas.height);
 
+    console.log('data', code)
     // Check if a QR code was found
     if (code) {
         return code.data;

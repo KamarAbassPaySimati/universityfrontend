@@ -29,9 +29,9 @@ const MFA = ({ handleSubmit, otp, setOtp, setOtpError, otpError, handleScanAgain
                         setError={setOtpError}
                         otpError={otpError}
                     />
-                    <Button isLoading={isLoading} text='Submit' />
+                    <Button testId='submit_totp_form' isLoading={isLoading} text='Submit' />
                 </form>
-                {!isSecondTime && <Button2 onClick={handleScanAgain} text='Scan Again' />}
+                {!isSecondTime && <Button2 testId='scan_qr_code_again' onClick={handleScanAgain} text='Scan Again' />}
             </div>
         </div>
     );

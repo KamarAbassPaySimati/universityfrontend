@@ -19,7 +19,7 @@ Before('@perform_logout', async function () {
 Given('I am on the login screen', async function () {
     await driver.get('http://localhost:3000');
     await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.wait(until.elementLocated(By.xpath('//p[text()="Admin Login"]')));
+    await driver.wait(until.elementLocated(By.xpath('//*[text()="Login"]')));
 });
 
 When('I enter the email address as {string} and password as {string}', async function (email_address, password) {
@@ -55,7 +55,7 @@ When('I click on the proceed to authenticate button', async function () {
 });
 
 Then('I should be navigated to the TOTP screen', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('#digit-1')));
+    const element = await driver.wait(until.elementLocated(By.css('#digit-0')));
     await driver.wait(until.elementIsVisible(element));
 });
 
@@ -77,9 +77,11 @@ When('I scan the QR code', async function () {
         return imageData;
     });
 
+    console.log
     await new Promise(resolve => setTimeout(resolve, 2000));
     const qr_code_data = extractQRCodeData(canvas_data);
 
+    console.log('qr_code_data', qr_code_data)
     // Split the URI by the '?' character to get the parameters
     const uriParts = qr_code_data.split('?');
     // Iterate through the parameters to find the 'secret' parameter
@@ -96,21 +98,21 @@ When('I scan the QR code', async function () {
 });
 
 Given('I am on the TOTP screen', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('#digit-1')));
+    const element = await driver.wait(until.elementLocated(By.css('#digit-0')));
     await driver.wait(until.elementIsVisible(element));
 });
 
 When('I enter TOTP as {string}', async function (OTP) {
     // clear already existing TOTP
     await new Promise(resolve => setTimeout(resolve, 100));
-    for (let i = 6; i > 0; i--) {
+    for (let i = 5; i >= 0; i--) {
         await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 100));
 
     for (let i = 0; i < OTP.length; i++) {
-        await driver.wait(until.elementLocated(By.css(`#digit-${i + 1}`))).sendKeys(OTP);
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(OTP);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 });
@@ -118,7 +120,7 @@ When('I enter TOTP as {string}', async function (OTP) {
 When('I enter a valid TOTP', async function () {
     // clear already existing TOTP
     await new Promise(resolve => setTimeout(resolve, 100));
-    for (let i = 6; i > 0; i--) {
+    for (let i = 5; i >= 0; i--) {
         await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
@@ -126,7 +128,7 @@ When('I enter a valid TOTP', async function () {
 
     await driver.wait(until.elementLocated(By.id('digit-1')));
     for (let i = 0; i < global.TOTP.length; i++) {
-        await driver.wait(until.elementLocated(By.id(`digit-${i + 1}`))).sendKeys(global.TOTP[i]);
+        await driver.wait(until.elementLocated(By.id(`digit-${i}`))).sendKeys(global.TOTP[i]);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 });
@@ -144,15 +146,15 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
     global.TOTP = generateTOTP(secret, 0);
 
     await new Promise(resolve => setTimeout(resolve, 100));
-    for (let i = 6; i > 0; i--) {
+    for (let i = 5; i >= 0; i--) {
         await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.id('digit-1')));
+    await driver.wait(until.elementLocated(By.id('digit-0')));
     for (let i = 0; i < global.TOTP.length; i++) {
-        await driver.wait(until.elementLocated(By.id(`digit-${i + 1}`))).sendKeys(global.TOTP[i]);
+        await driver.wait(until.elementLocated(By.id(`digit-${i}`))).sendKeys(global.TOTP[i]);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 });

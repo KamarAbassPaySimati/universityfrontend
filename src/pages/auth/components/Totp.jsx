@@ -7,6 +7,7 @@ import MFA from './MFA';
 import { confirmSignIn, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
 import { login } from '../authSlice';
+import Image from '../../../components/Image/Image';
 
 const Totp = ({ Qrcode }) => {
     const [isScanPage, setIsScanPage] = useState(true);
@@ -91,7 +92,7 @@ const Totp = ({ Qrcode }) => {
     return (
         <div>
             <div>
-                <img src='/images/Header.svg' />
+                <Image src='Header' />
                 <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
                     {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
                 </div>
@@ -100,7 +101,7 @@ const Totp = ({ Qrcode }) => {
                     <div className='text-neutral-primary'>
                         Scan QR Code
                     </div>
-                    <img src='/images/line.svg' />
+                    <Image src='line' />
                     <CircularNumber text='2' active={!isScanPage} />
                     <div className='text-neutral-primary'>
                         Authentication OTP
@@ -119,10 +120,10 @@ const Totp = ({ Qrcode }) => {
                                             Scan QR Code using your Google Authenticator app
                                         </div>
                                     </div>
-                                    <div className='flex justify-center mt-8'>
+                                    <div data-testid="qr_code" className='flex justify-center mt-8'>
                                         <QRCode value={Qrcode} logoImage='/images/qr_logo.svg' />
                                     </div>
-                                    <Button onClick={nextHandler} text='Next' className='mt-9' />
+                                    <Button testId='proceed_next_button' onClick={nextHandler} text='Next' className='mt-9' />
                                 </>
                                 : <MFA
                                     isLoading={isLoading}

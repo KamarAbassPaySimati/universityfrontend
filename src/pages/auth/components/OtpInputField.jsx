@@ -86,7 +86,7 @@ const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError, handleSubmi
                     <input
                         id={`digit-${index}`}
                         key={index}
-                        type="text"
+                        type="password"
                         maxLength="1"
                         value={otp[index]}
                         onKeyDown={(e) => {

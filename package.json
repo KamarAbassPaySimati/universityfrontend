@@ -2,7 +2,7 @@
   "name": "paymaart-admin-web-application",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -10,6 +10,7 @@
     "bdd_dry_run": "./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run test --require test",
     "generate_report": "nyc report --temp-dir ./test/step-definations/coverageData --reporter html --report-dir ./coverage",
     "code_coverage": "nyc check-coverage --temp-dir ./test/step_definitions/coverageData",
+    "bdd_unit": "./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test-${featureFile}.json test/unit-testing/login.feature",
     "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt"
   },
   "dependencies": {

@@ -24,6 +24,7 @@ const Login = () => {
 
     function handleSignInNextSteps (output) {
         const { nextStep } = output;
+        console.log(nextStep);
         switch (nextStep.signInStep) {
           // ...
           case 'CONTINUE_SIGN_IN_WITH_TOTP_SETUP':
