@@ -21,5 +21,7 @@ Then('I should read a message stating that {string}', async function (errorMessa
 });
 
 Then('I should be redirected to the {string} page', async function (url) {
-    await driver.wait(until.urlIs(`http://localhost:3000/${url}`));
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await driver.wait(until.urlIs(`http://localhost:3000${url}`));
+    console.log('url is ', `http://localhost:3000${url}`);
 });

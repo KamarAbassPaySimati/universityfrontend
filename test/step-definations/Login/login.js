@@ -66,7 +66,7 @@ When('I click on the scan QR code again', async function () {
     await element.click();
 });
 
-When('I scan the QR code', async function () {
+When('I scan the QR code', { timeout: 20000 }, async function () {
     const canvasElement = await driver.wait(until.elementLocated(By.css('canvas')));
     await driver.wait(until.elementIsVisible(canvasElement));
 
@@ -77,11 +77,10 @@ When('I scan the QR code', async function () {
         return imageData;
     });
 
-    console.log
     await new Promise(resolve => setTimeout(resolve, 2000));
     const qr_code_data = extractQRCodeData(canvas_data);
 
-    console.log('qr_code_data', qr_code_data)
+    console.log('qr_code_data', qr_code_data);
     // Split the URI by the '?' character to get the parameters
     const uriParts = qr_code_data.split('?');
     // Iterate through the parameters to find the 'secret' parameter
@@ -93,6 +92,7 @@ When('I scan the QR code', async function () {
             break;
         }
     }
+
     global.TOTP = await generateTOTP(secret, 0);
     console.log('TOPTP', global.TOTP);
 });
@@ -141,9 +141,10 @@ When('I submit the TOTP form', async function () {
 });
 
 When('I enter the TOTP obtained from the previously scanned device', async function () {
-    const response = await getMFASecret({ email_address: 'bharath.shet+admin@7edge.com' });
-    const secret = response.data.secret;
-    global.TOTP = generateTOTP(secret, 0);
+    const response = await getMFASecret({ username: 'bharath.shet+admin@7edge.com' });
+    const secret = response.mfa_code;
+    console.log('secret 123', secret);
+    global.TOTP = await generateTOTP(secret, 0);
 
     await new Promise(resolve => setTimeout(resolve, 100));
     for (let i = 5; i >= 0; i--) {

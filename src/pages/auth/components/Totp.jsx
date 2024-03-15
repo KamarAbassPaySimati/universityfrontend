@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
 import React, { useState } from 'react';
 import CircularNumber from './CircularNumber';
-import { QRCode } from 'react-qrcode-logo';
+// import { QRCode } from 'react-qrcode-logo';
+import QRCode from 'qrcode.react';
 import Button from '../../../components/Button/Button';
 import MFA from './MFA';
 import { confirmSignIn, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
@@ -27,7 +29,7 @@ const Totp = ({ Qrcode }) => {
         setOtp(Array(6).fill(''));
     };
 
-    async function handleUpdateMFAPreference () {
+    async function handleUpdateMFAPreference() {
         try {
             await updateMFAPreference({ totp: 'PREFERRED' });
         } catch (error) {
@@ -35,7 +37,7 @@ const Totp = ({ Qrcode }) => {
         }
     }
 
-    async function handleUpdateUserAttribute (url) {
+    async function handleUpdateUserAttribute(url) {
         try {
             // eslint-disable-next-line no-unused-vars
             const output = await updateUserAttribute({
@@ -121,7 +123,12 @@ const Totp = ({ Qrcode }) => {
                                         </div>
                                     </div>
                                     <div data-testid="qr_code" className='flex justify-center mt-8'>
-                                        <QRCode value={Qrcode} logoImage='/images/qr_logo.svg' />
+                                        <div className='relative'>
+                                            <QRCode value={Qrcode} level="H" size={200}/>
+                                            <Image
+                                                className='absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 h-[32px] w-[32px]'
+                                                src='qr_logo' />
+                                        </div>
                                     </div>
                                     <Button testId='proceed_next_button' onClick={nextHandler} text='Next' className='mt-9' />
                                 </>

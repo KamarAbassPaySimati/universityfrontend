@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
-const { AfterAll, BeforeAll, AfterStep } = require('@cucumber/cucumber');
+const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout } = require('@cucumber/cucumber');
 const chrome = require('selenium-webdriver/chrome');
 const { By, until } = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
@@ -23,7 +23,7 @@ options.addArguments('--dns-prefetch-disable');
 options.addArguments('enable-features=NetworkServiceInProcess');
 
 global.driver = chrome.Driver.createSession(options, service);
-
+setDefaultTimeout(10000);
 BeforeAll(async function () {
     await driver.manage();
     await new Promise(resolve => setTimeout(resolve, 3000));

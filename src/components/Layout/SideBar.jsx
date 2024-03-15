@@ -8,8 +8,10 @@ const SideBar = ({ role }) => {
             <div className='flex justify-center h-[56px] items-center'>
                 <Image src='sideNavLogo' />
             </div>
-            <div className='mt-8'>
+            <div className='mt-8 flex justify-center'>
+                <div>
 
+                </div>
             </div>
         </div>
     );

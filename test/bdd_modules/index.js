@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const base32Decode = require('base32-decode');
 const crypto = require('crypto');
 const jsQR = require('jsqr');
+require('dotenv').config();
 
 async function getToken () {
     const keys = Object.keys(await driver.executeScript('return window.localStorage'));
@@ -23,9 +24,10 @@ async function getToken () {
 
 async function getBddSignedToken () {
     const payload = {
-        stage: process.env.REACT_APP_STAGE
+        stage: process.env.VITE_STAGE
     };
-    const token = jwt.sign(payload, process.env.REACT_APP_TOKEN);
+    console.log('payload', payload);
+    const token = jwt.sign(payload, process.env.VITE_BDD_TOKEN);
 
     return token;
 }
@@ -34,7 +36,7 @@ function extractQRCodeData (canvas) {
     // Use the jsQR library to decode the QR code
     const code = jsQR(canvas.data, canvas.width, canvas.height);
 
-    console.log('data', code)
+    console.log('data', code);
     // Check if a QR code was found
     if (code) {
         return code.data;
@@ -43,7 +45,7 @@ function extractQRCodeData (canvas) {
     }
 }
 async function generateHOTP (secret, counter) {
-    const decodedSecret = base32Decode(secret, process.env.REACT_APP_OTP_ENCODING);
+    const decodedSecret = base32Decode(secret, process.env.VITE_OTP_ENCODING);
     const buffer = Buffer.alloc(8);
     for (let i = 0; i < 8; i += 1) {
         buffer[7 - i] = counter & 0xff;
