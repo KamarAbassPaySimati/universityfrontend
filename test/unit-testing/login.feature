@@ -15,17 +15,17 @@ Feature: Paymaart - Admin Web - Login
         When I enter the email address as <email_address> and password as <password>
         When I submit the login form
         Then I should read a message stating that <message>
+        Examples: 
+            | email_address            | password   | message                   |
+            | ""                       | "Test@123" | "This field is mandatory" |
+            | "bharath.shet@7edge.com" | ""         | "This field is mandatory" |
+            | "bharath.shet7edge.com"  | ""         | "Invalid email"           |
+            | "bharath.shet@7edge.com" | "12345"    | "Invalid credentials"     |
 
-    Examples: 
-        | email_address            | password   | message                   |
-        | ""                       | "Test@123" | "This field is mandatory" |
-        | "bharath.shet@7edge.com" | ""         | "This field is mandatory" |
-        | "bharath.shet7edge.com"  | ""         | "Invalid email"           |
-        | "bharath.shet@7edge.com"  | "12345"    | "Invalid credentials"     |
-
+    @add_admin_user
     Scenario: Admin User login with valid credentials
         Given I am on the login screen
-        When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
+        When I enter valid email address and password
         Then I submit the login form
         Then I should be presented with the authenticator QR Code
 
@@ -57,9 +57,10 @@ Feature: Paymaart - Admin Web - Login
 
     @perform_logout 
     @wait
+    @delete_admin_account
     Scenario: Admin User login with valid credentials for the second time using email
         Given I am on the login screen
-        When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
+        When I enter valid email address and password
         And I submit the login form
         Then I should be navigated to the TOTP screen
         When I enter the TOTP obtained from the previously scanned device

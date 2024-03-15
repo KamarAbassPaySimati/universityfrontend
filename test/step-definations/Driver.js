@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
-const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout } = require('@cucumber/cucumber');
+const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout, Before } = require('@cucumber/cucumber');
 const chrome = require('selenium-webdriver/chrome');
 const { By, until } = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
@@ -60,6 +60,11 @@ AfterAll(async function () {
         });
     }
     await driver.quit();
+});
+
+Before('@wait', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    console.log('waiting');
 });
 AfterStep(async function () {
     if (process.env.VITE_COVERAGE == true) {

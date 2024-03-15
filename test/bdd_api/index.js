@@ -14,7 +14,38 @@ async function getMFASecret (payload) {
 
     try {
         const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/fetch-mfa`, payload, { headers: axiosOptions });
-        console.log('data', data.data);
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function addAdminUser (payload) {
+    const token = await getBddSignedToken();
+
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/add_account`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function deleteAdminAccount (payload) {
+    const token = await getBddSignedToken();
+
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete_account`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -22,5 +53,7 @@ async function getMFASecret (payload) {
 }
 
 module.exports = {
-    getMFASecret
+    getMFASecret,
+    addAdminUser,
+    deleteAdminAccount
 };

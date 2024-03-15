@@ -26,7 +26,6 @@ async function getBddSignedToken () {
     const payload = {
         stage: process.env.VITE_STAGE
     };
-    console.log('payload', payload);
     const token = jwt.sign(payload, process.env.VITE_BDD_TOKEN);
 
     return token;

@@ -1,12 +1,13 @@
 /* eslint-disable camelcase */
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
+const { Given, When, Then, Before, After } = require('@cucumber/cucumber');
 const webdriver = require('selenium-webdriver');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const Keys = webdriver.Key;
+const { faker } = require('@faker-js/faker');
 
 const { extractQRCodeData, generateTOTP } = require('../../bdd_modules/index.js');
-const { getMFASecret } = require('../../bdd_api/index.js');
+const { getMFASecret, addAdminUser, deleteAdminAccount } = require('../../bdd_api/index.js');
 const { driver } = require('../Driver.js');
 
 Before('@perform_logout', async function () {
@@ -16,18 +17,62 @@ Before('@perform_logout', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
+Before('@add_admin_user', async function () {
+    try {
+        const random_number = faker.string.alphanumeric(5);
+        const email = `bharath+${random_number}@7edge.com`;
+
+        const payload = {
+            username: email,
+            paymaart_id: `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`,
+            password: 'Admin@123',
+            email,
+            phno: `${faker.phone.number('+265#######')}`
+        };
+
+        global.adminUser = {
+            pass: 'Admin@123',
+            email_address: email
+        };
+        await addAdminUser(payload);
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+After('@delete_admin_account', async function () {
+    try {
+        const payload = {
+            username: global.adminUser.email_address
+        };
+        const response = await deleteAdminAccount(payload);
+        console.log('response of deleted acc', response);
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
 Given('I am on the login screen', async function () {
     await driver.get('http://localhost:3000');
     await new Promise(resolve => setTimeout(resolve, 500));
     await driver.wait(until.elementLocated(By.xpath('//*[text()="Login"]')));
 });
 
+When('I enter valid email address and password', async function () {
+    await new Promise(resolve => setTimeout(resolve, 750));
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+});
+
 When('I enter the email address as {string} and password as {string}', async function (email_address, password) {
     await new Promise(resolve => setTimeout(resolve, 750));
-    global.login_email_address = email_address;
+    global.adminUser = {
+        pass: password,
+        email_address
+    };
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email_address);
-    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(password);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
 });
 
 When('I submit the login form', async function () {
@@ -141,7 +186,7 @@ When('I submit the TOTP form', async function () {
 });
 
 When('I enter the TOTP obtained from the previously scanned device', async function () {
-    const response = await getMFASecret({ username: 'bharath.shet+admin@7edge.com' });
+    const response = await getMFASecret({ username: global.adminUser.email_address });
     const secret = response.mfa_code;
     console.log('secret 123', secret);
     global.TOTP = await generateTOTP(secret, 0);

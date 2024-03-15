@@ -15,16 +15,17 @@ Feature: Paymaart - Admin Web - Login
         When I enter the email address as <email_address> and password as <password>
         When I submit the login form
         Then I should read a message stating that <message>
-        Examples:
-            | email_address            | password   | message                                |
-            | ""                       | "Test@123" | "This field is mandatory"              |
-            | "bharath.shet@7edge.com" | ""         | "This field is mandatory"              |
-            | "bharath.shet7edge.com"   | ""          | "Invalid email"              |
-            | "bharath"                | "12345"    | "Incorrect username/email or password" |
-            
+        Examples: 
+            | email_address            | password   | message                   |
+            | ""                       | "Test@123" | "This field is mandatory" |
+            | "bharath.shet@7edge.com" | ""         | "This field is mandatory" |
+            | "bharath.shet7edge.com"  | ""         | "Invalid email"           |
+            | "bharath.shet@7edge.com" | "12345"    | "Invalid credentials"     |
+
+    @add_admin_user
     Scenario: Admin User login with valid credentials
         Given I am on the login screen
-        When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
+        When I enter valid email address and password
         Then I submit the login form
         Then I should be presented with the authenticator QR Code
 
@@ -37,16 +38,16 @@ Feature: Paymaart - Admin Web - Login
         When I scan the QR code
         And I click on the proceed to authenticate button
         Then I should be navigated to the TOTP screen
-        
+
     Scenario Outline: Admin User enters invalid TOTP
         Given I am on the TOTP screen
         When I enter TOTP as <TOTP>
         And I submit the TOTP form
         Then I should read a message stating that <message>
-        Examples:
-            | TOTP | message |
-            | "0"          | "Invalid code"       |
-            | "111111"     | "Invalid code"       |
+        Examples: 
+            | TOTP     | message        |
+            | "0"      | "Invalid code" |
+            | "111111" | "Invalid code" |
 
     Scenario: Admin User enters valid TOTP
         Given I am on the TOTP screen
@@ -54,10 +55,12 @@ Feature: Paymaart - Admin Web - Login
         And I submit the TOTP form
         Then I should be redirected to the '/dashboard' page
 
-    @perform_logout @wait
+    @perform_logout 
+    @wait
+    @delete_admin_account
     Scenario: Admin User login with valid credentials for the second time using email
         Given I am on the login screen
-        When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
+        When I enter valid email address and password
         And I submit the login form
         Then I should be navigated to the TOTP screen
         When I enter the TOTP obtained from the previously scanned device
