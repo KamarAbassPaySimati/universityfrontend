@@ -1,8 +1,13 @@
 import React from 'react';
+import CardHeader from '../../components/CardHeader';
 
 const Dashboard = () => {
     return (
-        <div className='text-3xl h-screen w-screen flex justify-center items-center text-primary-normal underline'>Dashboard</div>
+        <CardHeader>
+            <div className='text-3xl flex justify-center items-center text-primary-normal underline'>
+                Dashboard
+            </div>
+        </CardHeader>
     );
 };
 

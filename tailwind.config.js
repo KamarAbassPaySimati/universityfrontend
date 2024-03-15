@@ -34,7 +34,8 @@ export default {
                 'neutral-disable': '#D1D4D7',
                 'neutral-outline': '#E5E9EB',
 
-                error: '#FF4343'
+                error: '#FF4343',
+                background: '#F6F8F9'
             }
         }
     },

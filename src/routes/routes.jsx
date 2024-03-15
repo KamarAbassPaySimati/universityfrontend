@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 
-export default function NavigationRoutes(props) {
+export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn } = auth;
 
