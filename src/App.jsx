@@ -1,10 +1,10 @@
-import React from 'react'
-import NavigationRoutes from './routes'
-import { motion } from 'framer-motion'
-import { Amplify } from 'aws-amplify'
-import { awsConfig } from './config'
+import React from 'react';
+import NavigationRoutes from './routes/routes';
+import { motion } from 'framer-motion';
+import { Amplify } from 'aws-amplify';
+import { awsConfig } from './config';
 
-Amplify.configure(awsConfig)
+Amplify.configure(awsConfig);
 
 function App (props) {
     const navigationPath = NavigationRoutes(props);

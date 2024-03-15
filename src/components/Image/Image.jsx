@@ -1,5 +1,5 @@
-import React from 'react'
-import { motion } from 'framer-motion'
+import React from 'react';
+import { motion } from 'framer-motion';
 
 const Image = ({ src, alt, type }) => {
     return (
@@ -10,7 +10,7 @@ const Image = ({ src, alt, type }) => {
             alt={alt}
             loading='lazy'
         />
-    )
-}
+    );
+};
 
-export default Image
+export default Image;

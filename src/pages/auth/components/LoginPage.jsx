@@ -1,23 +1,25 @@
-import React, { useEffect } from 'react'
-import InputField from '../../../components/InputField/InputField'
-import { useNavigate } from 'react-router-dom'
-import Button from '../../../components/Button/Button'
-import { motion } from 'framer-motion'
+import React from 'react';
+import InputField from '../../../components/InputField/InputField';
+import { useNavigate } from 'react-router-dom';
+import Button from '../../../components/Button/Button';
 
 const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleFocus = (id) => {
-        setloginError('')
+        setloginError('');
         setErrors(prevState => {
             return { ...prevState, [id]: '' };
         });
     };
 
     const handleChange = (e, id) => {
-        const value = e.target.value
-        const enteredLetter = value[value.length - 1]
+        const value = e.target.value;
+        const enteredLetter = value[value.length - 1];
         if (id === 'password' && /\s|[.!?]/.test(enteredLetter)) {
+            return;
+        }
+        if (enteredLetter === ' ') {
             return;
         }
         setFormData(prevState => {

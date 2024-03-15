@@ -1,9 +1,9 @@
 /* eslint-disable indent */
-import React, { useState } from 'react'
-import { motion } from 'framer-motion'
+import React, { useState } from 'react';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const InputField = ({ value, onChange, type, givenType, onFocus, id, error, label, placeholder, loginError, showLoginError }) => {
-    const [ispasswordType, setIsPasswordType] = useState(true)
+    const [ispasswordType, setIsPasswordType] = useState(true);
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
@@ -19,33 +19,15 @@ const InputField = ({ value, onChange, type, givenType, onFocus, id, error, labe
                 onChange={(e) => onChange(e, id)}
             />
             {/* && value.length > 0 */}
-            {givenType === 'password' &&
+            {givenType === 'password' && value.length > 0 &&
                 <div className={`absolute right-0 py-[18.79px] pl-[10px] pr-[23.77px] cursor-pointer 
                     ${error || loginError ? 'bottom-[30px]' : 'bottom-0'}`}
                     onClick={() => setIsPasswordType(prevState => !prevState)}>
                     {ispasswordType ? <img src='/images/SHOW.svg' /> : <img src='/images/HIDE.svg' />}
                 </div>
             }
-            {error &&
-                <motion.div
-                    initial={{ opacity: 0, y: 0 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className='text-error font-[400] text-[12px] leading-[20px]'
-                >
-                    {error}
-                </motion.div>}
-            {showLoginError && loginError && !error &&
-                <motion.div
-                    initial={{ opacity: 0, y: 0 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className='text-error font-[400] text-[12px] leading-[20px]'
-                >
-                    {loginError}
-                </motion.div>}
+            {error && <ErrorMessage error={error} /> }
+            {showLoginError && loginError && !error && <ErrorMessage error={loginError} />}
         </div>
     );
 };

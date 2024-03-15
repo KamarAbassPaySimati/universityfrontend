@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 const Button2 = ({ className, text, type, onClick }) => {
     return (
@@ -10,7 +10,7 @@ const Button2 = ({ className, text, type, onClick }) => {
     ${className}`}>
             {text}
         </button>
-    )
-}
+    );
+};
 
-export default Button2
+export default Button2;

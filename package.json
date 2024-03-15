@@ -13,6 +13,7 @@
     "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.1",
     "assert": "^2.1.0",
     "aws-amplify": "^6.0.18",
     "base32-decode": "^1.0.0",

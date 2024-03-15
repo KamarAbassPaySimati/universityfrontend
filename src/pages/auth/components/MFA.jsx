@@ -1,8 +1,8 @@
-import React from 'react'
-import Button from '../../../components/Button/Button'
-import Button2 from '../../../components/Button2/Button2'
-import OtpInputField from './OtpInputField'
-import Image from '../../../components/Image/Image'
+import React from 'react';
+import Button from '../../../components/Button/Button';
+import Button2 from '../../../components/Button2/Button2';
+import OtpInputField from './OtpInputField';
+import Image from '../../../components/Image/Image';
 
 const MFA = ({ handleSubmit, otp, setOtp, setOtpError, otpError, handleScanAgain, isSecondTime, isLoading }) => {
     return (
@@ -20,19 +20,21 @@ const MFA = ({ handleSubmit, otp, setOtp, setOtpError, otpError, handleScanAgain
                         6-digit code generated for this account
                     </div>
                 </div>
-                <OtpInputField
-                    handleSubmit={handleSubmit}
-                    numInputs={6}
-                    otp={otp}
-                    setOTP={setOtp}
-                    setError={setOtpError}
-                    otpError={otpError}
-                />
-                <Button isLoading={isLoading} onClick={handleSubmit} text='Submit' />
+                <form className='flex flex-col gap-6' onSubmit={handleSubmit}>
+                    <OtpInputField
+                        handleSubmit={handleSubmit}
+                        numInputs={6}
+                        otp={otp}
+                        setOTP={setOtp}
+                        setError={setOtpError}
+                        otpError={otpError}
+                    />
+                    <Button isLoading={isLoading} text='Submit' />
+                </form>
                 {!isSecondTime && <Button2 onClick={handleScanAgain} text='Scan Again' />}
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default MFA
+export default MFA;

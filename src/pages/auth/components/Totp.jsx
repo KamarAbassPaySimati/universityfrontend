@@ -1,72 +1,92 @@
 /* eslint-disable react/jsx-indent-props */
-import React, { useEffect, useState } from 'react'
-import CircularNumber from './CircularNumber'
-import { QRCode } from 'react-qrcode-logo'
-import Button from '../../../components/Button/Button'
-import MFA from './MFA'
+import React, { useState } from 'react';
+import CircularNumber from './CircularNumber';
+import { QRCode } from 'react-qrcode-logo';
+import Button from '../../../components/Button/Button';
+import MFA from './MFA';
+import { confirmSignIn, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
+import { useDispatch } from 'react-redux';
+import { login } from '../authSlice';
 
 const Totp = ({ Qrcode }) => {
-    const [isScanPage, setIsScanPage] = useState(true)
+    const [isScanPage, setIsScanPage] = useState(true);
 
     const nextHandler = () => {
-        setIsScanPage(false)
-    }
+        setIsScanPage(false);
+    };
 
-    const [otp, setOtp] = useState(Array(6).fill(''))
-    const [otpError, setOtpError] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+    const [otp, setOtp] = useState(Array(6).fill(''));
+    const [otpError, setOtpError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const dispatch = useDispatch();
 
     const handleScanAgain = () => {
-        setIsScanPage(true)
-        setOtp(Array(6).fill(''))
+        setIsScanPage(true);
+        setOtp(Array(6).fill(''));
+    };
+
+    async function handleUpdateMFAPreference () {
+        try {
+            await updateMFAPreference({ totp: 'PREFERRED' });
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async function handleUpdateUserAttribute (url) {
+        try {
+            // eslint-disable-next-line no-unused-vars
+            const output = await updateUserAttribute({
+                userAttribute: {
+                    attributeKey: 'custom:mfa_secret',
+                    value: url
+                }
+            });
+            console.log('SUCCESS'); // SUCCESS
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     // OTP submit handler
     const handleTotpVerify = async (e) => {
-        e.preventDefault()
-        setOtpError('')
-        const val = otp.toString().replace(/,/g, '')
+        e.preventDefault();
+        setOtpError('');
+        const val = otp.toString().replace(/,/g, '');
         if (val.split('').length < 6) {
-            setOtpError('Invalid code')
-            setIsLoading(false)
-            return
+            setOtpError('Invalid code');
+            setIsLoading(false);
+            return;
         }
-        setIsLoading(true)
-        let cognitoUserSession = ''
-        console.log(userData)
+        setIsLoading(true);
         try {
-            if (userData.Session && userData.Session !== null) {
-                cognitoUserSession = await Auth.confirmSignIn(
-                    userData,
-                    val,
-                    'SOFTWARE_TOKEN_MFA'
-                )
-            } else {
-                const cognitoUserSession = await Auth.verifyTotpToken(userData, val)
-                await Auth.setPreferredMFA(userData, 'TOTP')
-            }
+            // eslint-disable-next-line no-unused-vars
+            const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
-            setIsLoading(false)
-            dispactch(verifyOtp(email))
+            handleUpdateMFAPreference();
+            if (Qrcode) {
+                handleUpdateUserAttribute(Qrcode);
+            }
+            dispatch(login());
+            setIsLoading(false);
         } catch (error) {
             if (error.message.includes('session is expired')) {
-                setotpError('session has expired')
+                setOtpError('session has expired');
             } else if (error.message.includes('mismatch')) {
-                setotpError('Invalid code')
+                setOtpError('Invalid code');
+            } else if (error.message.includes('Invalid code')) {
+                setOtpError('Invalid code');
             } else if (error.message === 'Missing required parameter Session') {
-                setotpError('Missing required parameter Session')
-            } else if (error.code === 'CodeMismatchException') {
-                setotpError('Invalid OTP')
+                setOtpError('Missing required parameter Session');
+            } else if (error.__type === 'CodeMismatchException') {
+                setOtpError('Invalid code');
             } else {
                 // handleToast(error.message, 'error');
             }
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
-
-    useEffect(() => {
-        console.log(Qrcode)
-    }, [])
+    };
 
     return (
         <div>
@@ -75,7 +95,7 @@ const Totp = ({ Qrcode }) => {
                 <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
                     {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
                 </div>
-                <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
+                {Qrcode && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
                     <CircularNumber text='1' active={isScanPage} />
                     <div className='text-neutral-primary'>
                         Scan QR Code
@@ -85,9 +105,9 @@ const Totp = ({ Qrcode }) => {
                     <div className='text-neutral-primary'>
                         Authentication OTP
                     </div>
-                </div>
-                <div className='flex justify-center items-center'>
-                    <div className='p-8 border border-neutral-outline max-w-[425px]'>
+                </div>}
+                <div className={`flex justify-center items-center ${Qrcode ? '' : 'h-[calc(100vh-112px)]'}`}>
+                    <div className='p-8 border border-neutral-outline max-w-[425px] rounded-[8px]'>
                         {Qrcode
                             ? (isScanPage
                                 ? <>
