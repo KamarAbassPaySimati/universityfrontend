@@ -29,7 +29,7 @@ import InputField from '../../../components/InputField/InputField'
                     <div className='text-accent-positive font-[400] text-[14px] leading-[24px]'>
                         Check your email for a password reset link. The link <br></br>will be active for 10 minutes.
                     </div>
-                    <button className='w-full text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2
+                    <button onClick={() => navigate('/')}className='w-full text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2
                                     rounded-[8px] mt-8'>
                         Login
                     </button>

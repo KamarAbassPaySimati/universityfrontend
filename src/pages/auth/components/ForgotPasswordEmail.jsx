@@ -1,29 +1,54 @@
 import React from 'react'
 import { useState } from 'react'
 import InputField from '../../../components/InputField/InputField'
+import dataServices from '../../../services/data.services';
+import Button from '../../../CommonMethods/Button/Button';
 
-const ForgotPasswordEmail = ({ setIsSuccess, isSuccess }) => {
+const ForgotPasswordEmail = ({ setIsSuccess }) => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     // regex check for email and call the api
-    const submitHandler = (e) => {
+    const handleClick = async (e) => {
         e.preventDefault()
         const emailRegex = /^[^\s@]+@(paymaart\.(net|com)|7edge\.com)$/;
         const isValidEmail = emailRegex.test(email);
-        if (!isValidEmail) {
+        if (email === '') {
+            setError('This field is mandatory');
+        } else if (!isValidEmail) {
             setError('Invalid Email');
             setIsSuccess(false); // Set isSuccess to false since the email is invalid
         } else {
-            setIsSuccess(true);
-            // Make API call here
+            try {
+                setIsLoading(true);
+                const response = await dataServices.PostAPIWithoutHeader('reset-password-email', {
+                    email
+                })
+                console.log(response, 'hjfjgjgh');
+                if (!response.error) {
+                    setIsSuccess(true)
+
+                } else if (response?.data?.status === 404) {
+                    setError(response?.data?.data?.message);
+                    setIsLoading(false);
+                    setIsSuccess(false)
+                } else {
+                    setToastErrorMessage('An Error Occured');
+                    setIsLoading(false);
+                    setIsSuccess(false)
+                }
+            } catch (error) {
+                setIsLoading(false);
+                console.log(error);
+                setIsSuccess(false)
+            }
         }
     }
     // set the email
     const changeHandler = (e) => {
         setEmail(e.target.value)
     }
-    
     const focusHandler = () => {
         setError('')
     }
@@ -41,7 +66,7 @@ const ForgotPasswordEmail = ({ setIsSuccess, isSuccess }) => {
                         Enter registered email to reset your password
                     </div>
                 </div>
-                <form onSubmit={submitHandler} className='flex flex-col gap-[16px]'>
+                <form className='flex flex-col gap-[16px]'>
                     <InputField
                         value={email}
                         onChange={changeHandler}
@@ -51,10 +76,14 @@ const ForgotPasswordEmail = ({ setIsSuccess, isSuccess }) => {
                         label='Email'
                         placeholder='Enter email'
                     />
-                    <button className='w-full text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2
-                                    rounded-[8px] mt-4'>
-                        Proceed
-                    </button>
+                    <Button
+                        text="Proceed"
+                        onClick={handleClick}
+                        isLoading={isLoading}
+                        color="#ff0000"
+                        smallLoader={false}
+                        disabled={false}
+                    />
                 </form>
             </div>
         </div>
