@@ -183,6 +183,7 @@ When('I submit the TOTP form', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_totp_form"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
+    await new Promise(resolve => setTimeout(resolve, 3000));
 });
 
 When('I enter the TOTP obtained from the previously scanned device', async function () {
