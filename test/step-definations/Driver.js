@@ -32,33 +32,29 @@ BeforeAll(async function () {
     global.current_process_name = faker.string.alpha({ count: 10, casing: 'upper' });
     global.is_user_logged_in = false;
     console.log('logged in');
-    if (process.env.VITE_COVERAGE == true) {
-        try {
-            global.__coverage__ = await driver.executeScript('return __coverage__;');
-            global.coverageMap = createCoverageMap(__coverage__);
-        } catch (error) {
-            throw new Error('::: __coverage__ ::: Coverage Mapping Object Not Found :::');
-        }
+    try {
+        global.__coverage__ = await driver.executeScript('return __coverage__;');
+        global.coverageMap = createCoverageMap(__coverage__);
+    } catch (error) {
+        throw new Error('::: __coverage__ ::: Coverage Mapping Object Not Found :::');
     }
 });
 
 AfterAll(async function () {
-    if (process.env.VITE_COVERAGE == true) {
-        const coverageDataDir = path.join(__dirname, 'coverageData');
-        if (!fs.existsSync(coverageDataDir)) {
-            fs.mkdirSync(coverageDataDir);
-        }
-        const coverageDataFile = path.join(coverageDataDir, `coverage_${global.current_process_name}.json`);
-        const coverageData = global.coverageMap.toJSON();
-        // Write coverage data to file
-        fs.writeFile(coverageDataFile, JSON.stringify(coverageData), (err) => {
-            if (err) {
-                console.error('Error writing coverage data:', err);
-            } else {
-                console.log('Coverage data has been written to:', coverageDataFile);
-            }
-        });
+    const coverageDataDir = path.join(__dirname, 'coverageData');
+    if (!fs.existsSync(coverageDataDir)) {
+        fs.mkdirSync(coverageDataDir);
     }
+    const coverageDataFile = path.join(coverageDataDir, `coverage_${global.current_process_name}.json`);
+    const coverageData = global.coverageMap.toJSON();
+    // Write coverage data to file
+    fs.writeFile(coverageDataFile, JSON.stringify(coverageData), (err) => {
+        if (err) {
+            console.error('Error writing coverage data:', err);
+        } else {
+            console.log('Coverage data has been written to:', coverageDataFile);
+        }
+    });
     await driver.quit();
 });
 
@@ -67,11 +63,9 @@ Before('@wait', async function () {
     console.log('waiting');
 });
 AfterStep(async function () {
-    if (process.env.VITE_COVERAGE == true) {
-        const updatedCoverageData = await driver.executeScript('return __coverage__;');
-        const updatedCoverageMap = createCoverageMap(updatedCoverageData);
-        global.coverageMap.merge(updatedCoverageMap);
-    }
+    const updatedCoverageData = await driver.executeScript('return __coverage__;');
+    const updatedCoverageMap = createCoverageMap(updatedCoverageData);
+    global.coverageMap.merge(updatedCoverageMap);
 });
 
 module.exports = {
