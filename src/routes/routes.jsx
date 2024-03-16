@@ -5,7 +5,7 @@ import Login from '../pages/auth/Login';
 import { getCurrentUser } from 'aws-amplify/auth';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../pages/auth/authSlice';
+import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 
 export default function NavigationRoutes (props) {
@@ -19,10 +19,12 @@ export default function NavigationRoutes (props) {
         try {
             const userData = await getCurrentUser();
             if (userData) {
+                dispatch(setUser(userData));
                 dispatch(login());
             }
         } catch (error) {
-
+            dispatch(setUser(''));
+            dispatch(logout);
         }
     };
 
@@ -33,6 +35,8 @@ export default function NavigationRoutes (props) {
     useEffect(() => {
         if (loggedIn && window.location.pathname === '/') {
             navigate('/dashboard');
+        } else if (!loggedIn) {
+            navigate('/');
         }
     }, [loggedIn]);
 
