@@ -2,16 +2,6 @@ import React from 'react';
 import Image from '../Image/Image';
 
 const CardHeader = ({ children }) => {
-    function cumulativeSum (arr) {
-        const result = [];
-        let sum = '';
-        for (const str of arr) {
-            sum += str;
-            result.push(sum);
-        }
-        return result;
-    }
-
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between'>
