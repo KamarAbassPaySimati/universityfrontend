@@ -29,7 +29,7 @@ const Totp = ({ Qrcode }) => {
         setOtp(Array(6).fill(''));
     };
 
-    async function handleUpdateMFAPreference() {
+    async function handleUpdateMFAPreference () {
         try {
             await updateMFAPreference({ totp: 'PREFERRED' });
         } catch (error) {
@@ -37,7 +37,7 @@ const Totp = ({ Qrcode }) => {
         }
     }
 
-    async function handleUpdateUserAttribute(url) {
+    async function handleUpdateUserAttribute (url) {
         try {
             // eslint-disable-next-line no-unused-vars
             const output = await updateUserAttribute({

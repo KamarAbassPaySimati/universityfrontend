@@ -2,13 +2,13 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFount';
 import Login from '../pages/auth/Login';
-import { getCurrentUser } from 'aws-amplify/auth';
+import { fetchUserAttributes } from 'aws-amplify/auth';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, setUser } from '../pages/auth/authSlice';
-import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
+import Profile from '../pages/Profile';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -17,16 +17,15 @@ export default function NavigationRoutes (props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const [pageLoading, setPageLoading] = useState(false);
+    const [pageLoading, setPageLoading] = useState(true);
 
     const checkLoggedInUser = async () => {
         try {
             setPageLoading(true);
-            const userData = await getCurrentUser();
+            const userAttributes = await fetchUserAttributes();
             setPageLoading(false);
-            if (userData) {
-                dispatch(setUser(userData));
-                dispatch(setUser(userData));
+            if (userAttributes) {
+                dispatch(setUser(userAttributes));
                 dispatch(login());
             }
         } catch (error) {
@@ -42,13 +41,13 @@ export default function NavigationRoutes (props) {
 
     useEffect(() => {
         if (!pageLoading && !loggedIn) {
+            console.log('yes');
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
+            console.log('no');
             navigate('/dashboard');
-        } else if (!loggedIn) {
-            navigate('/');
         }
-    }, [loggedIn, pageLoading]);
+    }, [pageLoading]);
 
     return (
 
@@ -62,6 +61,7 @@ export default function NavigationRoutes (props) {
                             : <>
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/profile" element={<Profile />} />
                                 </Route>
                             </>
                     }
