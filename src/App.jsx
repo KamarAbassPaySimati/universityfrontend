@@ -10,10 +10,7 @@ function App (props) {
     const navigationPath = NavigationRoutes(props);
 
     return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-        >
+        <motion.div>
             {navigationPath}
         </motion.div>
     );

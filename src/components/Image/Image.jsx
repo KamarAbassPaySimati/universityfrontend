@@ -5,8 +5,6 @@ const Image = ({ src, alt, type, className }) => {
     return (
         <motion.img
             className={className}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
             src={`/images/${src}.${type || 'svg'}`}
             alt={alt || src}
             loading='lazy'
