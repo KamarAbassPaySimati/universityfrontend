@@ -179,7 +179,7 @@ When('I enter a valid TOTP', async function () {
 });
 
 When('I submit the TOTP form', async function () {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_totp_form"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -197,7 +197,7 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
         await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     await driver.wait(until.elementLocated(By.id('digit-0')));
     for (let i = 0; i < global.TOTP.length; i++) {
