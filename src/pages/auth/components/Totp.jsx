@@ -72,12 +72,12 @@ const Totp = ({ Qrcode }) => {
             const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
-            dispatch(login());
             setIsLoading(false);
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
             } else {
+                dispatch(login());
                 navigate('/dashboard');
             }
         } catch (error) {
@@ -116,7 +116,7 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center h-[calc(100vh-112px)] ${successfulLogin ? 'flex-col' : ''}`}>
+                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin

@@ -2,11 +2,15 @@ import React from 'react';
 import Image from '../../../components/Image/Image';
 import Button from '../../../components/Button/Button';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../authSlice';
 
 const SuccessfulLogin = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleDone = () => {
+        dispatch(login());
         navigate('/dashboard');
     };
 
@@ -24,7 +28,7 @@ const SuccessfulLogin = () => {
                     </p>
                 </div>
             </div>
-            <Button testId="done_button" onClick={handleDone} text='Done' className='w-[167px]' />
+            <Button testId="done_button" onClick={handleDone} text='Done' className='!w-[167px]' />
         </>
     );
 };
