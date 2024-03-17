@@ -16,7 +16,7 @@ const Profile = () => {
     const keys = Object.keys(userDetails);
     return (
         <CardHeader activePath='Profile'>
-            <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]'>
+            <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]' data-testid="profile_info_card">
 
                 <div className='flex justify-between border-b border-neutral-outline pb-[18px]'>
                     <div className='flex gap-[27px] justify-center items-center'>
@@ -25,7 +25,7 @@ const Profile = () => {
                             {getInitials(user.name, 3)}
                         </div>
                         <div className='text-neutral-primary'>
-                            <div className='font-[700] text-[30px] leading-[40px] capitalize'>
+                            <div className='font-[700] text-[30px] leading-[40px] capitalize' data-testid="name">
                                 {user.name}
                             </div>
                             <div className='text-[14px] leading-[24px] font-[400]'>
@@ -35,6 +35,7 @@ const Profile = () => {
                     </div>
                     <div className='mt-1'>
                         <Button2
+                            testId="update_password"
                             onClick={() => navigate('/update-password')}
                             text='Update Password'
                             icon='key-icon'
@@ -46,7 +47,7 @@ const Profile = () => {
                     {keys.map((key, index) => (
                         <div key={index} className='w-1/5 text-[14px] leading-[24px] font-[400] mr-2'>
                             <p className='text-neutral-secondary mb-1'>{key}</p>
-                            <span className={`text-neutral-primary max-w-[300px] whitespace-nowrap
+                            <span data-testid={key} className={`text-neutral-primary max-w-[300px] whitespace-nowrap
                                     break-words block overflow-hidden text-ellipsis ${key === 'Role' ? 'capitalize' : ''}`}>
                                 {userDetails[key]}
                             </span>
