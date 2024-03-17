@@ -1,26 +1,57 @@
 import React from 'react';
 import CardHeader from '../../components/CardHeader';
 import { useSelector } from 'react-redux';
+import Button2 from '../../components/Button2/Button2';
+import { useNavigate } from 'react-router-dom';
+import getInitials from '../../CommonMethods/getInitials';
 
 const Profile = () => {
     const { user } = useSelector(state => state.auth);
-    console.log(user);
+    const navigate = useNavigate();
+    const userDetails = {
+        'Phone Number': user.phone_number,
+        Email: user.email,
+        Role: user.user_type
+    };
+    const keys = Object.keys(userDetails);
     return (
         <CardHeader activePath='Profile'>
             <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]'>
-                <div className='flex justify-between'>
-                    <div className='flex gap-[27px]'>
+
+                <div className='flex justify-between border-b border-neutral-outline pb-[18px]'>
+                    <div className='flex gap-[27px] justify-center items-center'>
                         <div className='bg-primary-normal text-[#FFFFFF] h-[66px] w-[66px] flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px]'>
-                            ABC
+                            {getInitials(user.name, 3)}
                         </div>
-                        <div>
-                            Sophia Rose DOE
+                        <div className='text-neutral-primary'>
+                            <div className='font-[700] text-[30px] leading-[40px] capitalize'>
+                                {user.name}
+                            </div>
+                            <div className='text-[14px] leading-[24px] font-[400]'>
+                                Paymaart ID: <span className='font-[600]'>{user.paymaart_id}</span>
+                            </div>
                         </div>
                     </div>
-                    <div>
-                        Update Password
+                    <div className='mt-1'>
+                        <Button2
+                            onClick={() => navigate('/update-password')}
+                            text='Update Password'
+                            icon='key-icon'
+                            className='!w-[182px] !text-primary-normal' />
                     </div>
+                </div>
+
+                <div className='w-full flex mt-7'>
+                    {keys.map((key, index) => (
+                        <div key={index} className='w-1/5 text-[14px] leading-[24px] font-[400] mr-2'>
+                            <p className='text-neutral-secondary mb-1'>{key}</p>
+                            <span className={`text-neutral-primary max-w-[300px] whitespace-nowrap
+                                    break-words block overflow-hidden text-ellipsis ${key === 'Role' ? 'capitalize' : ''}`}>
+                                {userDetails[key]}
+                            </span>
+                        </div>
+                    ))}
                 </div>
             </div>
         </CardHeader>

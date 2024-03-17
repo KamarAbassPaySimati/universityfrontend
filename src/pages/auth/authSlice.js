@@ -16,12 +16,21 @@ const initialState = {
  * the input `object`, except for the keys specified in the `keysToRemove` array.
  */
 function filterObjectKeys (object, keysToRemove) {
+    const newObject = {};
+    Object.entries(object).forEach(([key, value]) => {
+        if (key.startsWith('custom:')) {
+            const newKey = key.slice(7);
+            newObject[newKey] = value;
+        } else {
+            newObject[key] = value;
+        }
+    });
     return Object.fromEntries(
-        Object.entries(object).filter(([key]) => !keysToRemove.includes(key))
+        Object.entries(newObject).filter(([key]) => !keysToRemove.includes(key))
     );
 }
 
-const keysToRemoveFromAttributes = ['custom:mfa_secret', 'email_verified', 'phone_number_verified', 'sub'];
+const keysToRemoveFromAttributes = ['mfa_secret', 'email_verified', 'phone_number_verified', 'sub'];
 
 const authSlice = createSlice({
     name: 'user',
