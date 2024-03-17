@@ -6,9 +6,9 @@ import CircularNumber from './CircularNumber';
 import QRCode from 'qrcode.react';
 import Button from '../../../components/Button/Button';
 import MFA from './MFA';
-import { confirmSignIn, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
+import { confirmSignIn, fetchUserAttributes, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
-import { login } from '../authSlice';
+import { login, logout, setUser } from '../authSlice';
 import Image from '../../../components/Image/Image';
 import SuccessfulLogin from './SuccessfulLogin';
 import { useNavigate } from 'react-router-dom';
@@ -56,6 +56,19 @@ const Totp = ({ Qrcode }) => {
         }
     }
 
+    const handleFetchUserAttributes = async () => {
+        try {
+            const userAttributes = await fetchUserAttributes();
+            if (userAttributes) {
+                dispatch(setUser(userAttributes));
+                dispatch(login());
+            }
+        } catch (error) {
+            dispatch(setUser(''));
+            dispatch(logout());
+        }
+    };
+
     // OTP submit handler
     const handleTotpVerify = async (e) => {
         e.preventDefault();
@@ -73,6 +86,7 @@ const Totp = ({ Qrcode }) => {
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
             dispatch(login());
+            handleFetchUserAttributes();
             setIsLoading(false);
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);

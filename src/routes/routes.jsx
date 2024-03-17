@@ -23,6 +23,7 @@ export default function NavigationRoutes (props) {
         try {
             setPageLoading(true);
             const userAttributes = await fetchUserAttributes();
+            console.log(userAttributes);
             setPageLoading(false);
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
