@@ -264,3 +264,22 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
         await new Promise(resolve => setTimeout(resolve, 100));
     }
 });
+
+Then('I should be presented with 2FA Enabled successfully page', async function () {
+    const element_header = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-header"]')));
+    await driver.wait(until.elementIsVisible(element_header));
+    const element_header_content = await element_header.getText();
+    assert.equal(element_header_content, 'Successfully Enabled');
+
+    const element_body = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-content"]')));
+    await driver.wait(until.elementIsVisible(element_body));
+    const element_body_content = await element_header.getText();
+    console.log('element_body_content', element_body_content);
+    assert.notEqual(element_body_content, '');
+});
+
+When('I click on done button', async function () {
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="done_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    element.click();
+});

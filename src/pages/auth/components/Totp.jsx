@@ -92,6 +92,7 @@ const Totp = ({ Qrcode }) => {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
             } else {
+                dispatch(login());
                 navigate('/dashboard');
             }
         } catch (error) {
@@ -130,7 +131,7 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center h-[calc(100vh-112px)] ${successfulLogin ? 'flex-col' : ''}`}>
+                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin
