@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { login } from '../authSlice';
 import Image from '../../../components/Image/Image';
 import SuccessfulLogin from './SuccessfulLogin';
+import { useNavigate } from 'react-router-dom';
 
 const Totp = ({ Qrcode }) => {
     const [isScanPage, setIsScanPage] = useState(true);
@@ -25,6 +26,7 @@ const Totp = ({ Qrcode }) => {
     const [successfulLogin, setSuccessfulLogin] = useState(false);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleScanAgain = () => {
         setIsScanPage(true);
@@ -70,13 +72,14 @@ const Totp = ({ Qrcode }) => {
             const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
+            dispatch(login());
+            setIsLoading(false);
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
             } else {
-                dispatch(login());
+                navigate('/dashboard');
             }
-            setIsLoading(false);
         } catch (error) {
             if (error.message.includes('session is expired')) {
                 setOtpError('session has expired');
@@ -102,7 +105,7 @@ const Totp = ({ Qrcode }) => {
                 <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
                     {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
                 </div>
-                {Qrcode && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
+                {Qrcode && !successfulLogin && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
                     <CircularNumber text='1' active={isScanPage} />
                     <div className='text-neutral-primary'>
                         Scan QR Code
@@ -113,7 +116,7 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center ${Qrcode ? '' : 'h-[calc(100vh-112px)]'}`}>
+                <div className={`flex justify-center items-center h-[calc(100vh-112px)] ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin

@@ -1,21 +1,20 @@
 import React from 'react';
 import Image from '../../../components/Image/Image';
 import Button from '../../../components/Button/Button';
-import { useDispatch } from 'react-redux';
-import { login } from '../authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const SuccessfulLogin = () => {
-    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleDone = () => {
-        dispatch(login());
+        navigate('/dashboard');
     };
 
     return (
         <>
-            <div className='border border-neutral-outline max-w-[627.5px] rounded-[8px] mb-10 flex justify-center items-center'>
+            <div className='border border-neutral-outline max-w-[627.5px] gap-[27px] rounded-[8px] mb-10 flex p-12'>
                 <Image src='security-icon' />
-                <div className='flex items-center gap-[27px] font-[400]'>
+                <div className='flex flex-col items-start justify-center font-[400]'>
                     <h1 className='text-[20px] leading-[28px] text-[#000000]'>
                         Successfully Enabled
                     </h1>
