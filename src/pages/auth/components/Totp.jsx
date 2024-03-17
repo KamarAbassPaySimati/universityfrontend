@@ -10,6 +10,8 @@ import { confirmSignIn, updateMFAPreference, updateUserAttribute } from 'aws-amp
 import { useDispatch } from 'react-redux';
 import { login } from '../authSlice';
 import Image from '../../../components/Image/Image';
+import SuccessfulLogin from './SuccessfulLogin';
+import { useNavigate } from 'react-router-dom';
 
 const Totp = ({ Qrcode }) => {
     const [isScanPage, setIsScanPage] = useState(true);
@@ -21,8 +23,10 @@ const Totp = ({ Qrcode }) => {
     const [otp, setOtp] = useState(Array(6).fill(''));
     const [otpError, setOtpError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [successfulLogin, setSuccessfulLogin] = useState(false);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const handleScanAgain = () => {
         setIsScanPage(true);
@@ -68,11 +72,14 @@ const Totp = ({ Qrcode }) => {
             const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
-            if (Qrcode) {
-                handleUpdateUserAttribute(Qrcode);
-            }
             dispatch(login());
             setIsLoading(false);
+            if (Qrcode) {
+                handleUpdateUserAttribute(Qrcode);
+                setSuccessfulLogin(true);
+            } else {
+                navigate('/dashboard');
+            }
         } catch (error) {
             if (error.message.includes('session is expired')) {
                 setOtpError('session has expired');
@@ -98,7 +105,7 @@ const Totp = ({ Qrcode }) => {
                 <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
                     {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
                 </div>
-                {Qrcode && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
+                {Qrcode && !successfulLogin && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
                     <CircularNumber text='1' active={isScanPage} />
                     <div className='text-neutral-primary'>
                         Scan QR Code
@@ -109,37 +116,39 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center ${Qrcode ? '' : 'h-[calc(100vh-112px)]'}`}>
-                    <div className='p-8 border border-neutral-outline max-w-[425px] rounded-[8px]'>
+                <div className={`flex justify-center items-center h-[calc(100vh-112px)] ${successfulLogin ? 'flex-col' : ''}`}>
+                    <>
                         {Qrcode
-                            ? (isScanPage
-                                ? <>
-                                    <div className='text-center'>
-                                        <div className='text-[#000000] font-[500] text-[24px] leading-[32px]'>
-                                            Paymaart QR Code
+                            ? successfulLogin
+                                ? <SuccessfulLogin />
+                                : (isScanPage
+                                    ? <div className='p-8 border border-neutral-outline max-w-[425px] rounded-[8px] mb-10'>
+                                        <div className='text-center'>
+                                            <div className='text-[#000000] font-[500] text-[24px] leading-[32px]'>
+                                                Paymaart QR Code
+                                            </div>
+                                            <div className='text-neutral-secondary font-[400] text-[14px] leading-[24px]'>
+                                                Scan QR Code using your Google Authenticator app
+                                            </div>
                                         </div>
-                                        <div className='text-neutral-secondary font-[400] text-[14px] leading-[24px]'>
-                                            Scan QR Code using your Google Authenticator app
+                                        <div data-testid="qr_code" className='flex justify-center mt-8'>
+                                            <div className='relative'>
+                                                <QRCode value={Qrcode} level="H" size={200}/>
+                                                <Image
+                                                    className='absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 h-[32px] w-[32px]'
+                                                    src='qr_logo' />
+                                            </div>
                                         </div>
+                                        <Button testId='proceed_next_button' onClick={nextHandler} text='Next' className='mt-9' />
                                     </div>
-                                    <div data-testid="qr_code" className='flex justify-center mt-8'>
-                                        <div className='relative'>
-                                            <QRCode value={Qrcode} level="H" size={200}/>
-                                            <Image
-                                                className='absolute top-2/4 left-2/4 -translate-x-2/4 -translate-y-2/4 h-[32px] w-[32px]'
-                                                src='qr_logo' />
-                                        </div>
-                                    </div>
-                                    <Button testId='proceed_next_button' onClick={nextHandler} text='Next' className='mt-9' />
-                                </>
-                                : <MFA
-                                    isLoading={isLoading}
-                                    handleSubmit={handleTotpVerify}
-                                    otp={otp} setOtp={setOtp}
-                                    setOtpError={setOtpError}
-                                    otpError={otpError}
-                                    handleScanAgain={handleScanAgain}
-                                />)
+                                    : <MFA
+                                        isLoading={isLoading}
+                                        handleSubmit={handleTotpVerify}
+                                        otp={otp} setOtp={setOtp}
+                                        setOtpError={setOtpError}
+                                        otpError={otpError}
+                                        handleScanAgain={handleScanAgain}
+                                    />)
                             : <MFA
                                 isLoading={isLoading}
                                 isSecondTime={true}
@@ -150,7 +159,7 @@ const Totp = ({ Qrcode }) => {
                                 handleScanAgain={handleScanAgain}
                             />
                         }
-                    </div>
+                    </>
                 </div>
             </div>
         </div>
