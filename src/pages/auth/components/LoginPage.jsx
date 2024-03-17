@@ -47,6 +47,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                         </div>
                         <form onSubmit={handleSubmit} className='flex flex-col gap-[16px]'>
                             <InputField
+                                autoComplete='off'
                                 testId='email_address'
                                 value={formData.email}
                                 onChange={handleChange}
@@ -58,6 +59,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 placeholder='Enter email'
                             />
                             <InputField
+                                autoComplete='off'
                                 testId='password'
                                 givenType='password'
                                 value={formData.password}

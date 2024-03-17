@@ -15,13 +15,15 @@ const InputField = ({
     placeholder,
     loginError,
     showLoginError,
-    testId
+    testId,
+    autoComplete
 }) => {
     const [ispasswordType, setIsPasswordType] = useState(true);
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
+                autoComplete={autoComplete}
                 data-testid={testId}
                 value={value}
                 type={givenType ? ispasswordType ? 'password' : 'text' : type || 'text'}

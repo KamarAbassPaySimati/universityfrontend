@@ -53,6 +53,8 @@ Feature: Paymaart - Admin Web - Login
         Given I am on the TOTP screen
         When I enter a valid TOTP
         And I submit the TOTP form
+        Then I should be presented with 2FA Enabled successfully page
+        When I click on done button
         Then I should be redirected to the '/dashboard' page
 
     @perform_logout 
