@@ -6,7 +6,7 @@ const By = require('selenium-webdriver').By;
 const Keys = webdriver.Key;
 const { faker } = require('@faker-js/faker');
 const path = require('path');
-
+const assert = require('assert');
 const {
     extractQRCodeData,
     generateTOTP,
