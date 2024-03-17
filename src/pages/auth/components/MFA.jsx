@@ -6,9 +6,9 @@ import Image from '../../../components/Image/Image';
 
 const MFA = ({ handleSubmit, otp, setOtp, setOtpError, otpError, handleScanAgain, isSecondTime, isLoading }) => {
     return (
-        <div>
+        <div className='p-8 border border-neutral-outline max-w-[425px] rounded-[8px] mb-10'>
             <div className='flex justify-center'>
-                <Image src={`${isSecondTime ? 'blueKey' : 'greenKey'}`} alt='Key' />
+                <Image src='blueKey' alt='Key' />
             </div>
             <div className='mt-9 flex gap-6 flex-col'>
                 <div className='font-[400]'>

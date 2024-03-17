@@ -44,7 +44,7 @@ export default function NavigationRoutes (props) {
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
             navigate('/dashboard');
         }
-    }, [loggedIn, pageLoading]);
+    }, [pageLoading]);
 
     return (
 
