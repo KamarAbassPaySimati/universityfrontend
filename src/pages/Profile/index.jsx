@@ -3,7 +3,6 @@ import CardHeader from '../../components/CardHeader';
 import { useSelector } from 'react-redux';
 import Button2 from '../../components/Button2/Button2';
 import { useNavigate } from 'react-router-dom';
-import getInitials from '../../CommonMethods/getInitials';
 
 const Profile = () => {
     const { user } = useSelector(state => state.auth);
@@ -22,11 +21,11 @@ const Profile = () => {
                     <div className='flex gap-[27px] justify-center items-center'>
                         <div className='bg-primary-normal text-[#FFFFFF] h-[66px] w-[66px] flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px]'>
-                            {getInitials(user.name, 3)}
+                            {`${user?.first_name?.[0]}${user?.middle_name?.[0]}${user?.last_name?.[0]}`}
                         </div>
                         <div className='text-neutral-primary'>
                             <div className='font-[700] text-[30px] leading-[40px] capitalize' data-testid="name">
-                                {user.name}
+                                {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}
                             </div>
                             <div className='text-[14px] leading-[24px] font-[400]'>
                                 Paymaart ID: <span className='font-[600]'>{user.paymaart_id}</span>
