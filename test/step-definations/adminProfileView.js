@@ -7,9 +7,7 @@ const By = require('selenium-webdriver').By;
 const { driver } = require('./Driver.js');
 
 When('I navigate to my profile page', async function () {
-    // Write code to navigate to the profile page
-    // This might involve clicking on a navigation link or button
-    await driver.get('https://localhost:3000/profile');
+    await driver.get('http://localhost:3000/profile');
 });
 
 Then('I should see my profile card information', async function () {

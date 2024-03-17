@@ -5,16 +5,75 @@ const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const Keys = webdriver.Key;
 const { faker } = require('@faker-js/faker');
+const path = require('path');
 
-const { extractQRCodeData, generateTOTP } = require('../../bdd_modules/index.js');
+const {
+    extractQRCodeData,
+    generateTOTP,
+    saveLocalStorageData,
+    loadLocalStorageData
+} = require('../../bdd_modules/index.js');
 const { getMFASecret, addAdminUser, deleteAdminAccount } = require('../../bdd_api/index.js');
 const { driver } = require('../Driver.js');
+
+async function login () {
+    await driver.get('http://localhost:3000/');
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await driver.wait(until.elementLocated(By.xpath('//*[text()="Login"]')));
+
+    await new Promise(resolve => setTimeout(resolve, 750));
+    global.adminUser = {
+        pass: 'Admin@123',
+        email_address: 'admin@paymaart.com'
+    };
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
+
+    const response = await getMFASecret({ username: global.adminUser.email_address });
+    const secret = response.mfa_code;
+    console.log('secret 123', secret);
+    global.TOTP = await generateTOTP(secret, 0);
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+    for (let i = 5; i >= 0; i--) {
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
+    await driver.wait(until.elementLocated(By.id('digit-0')));
+    for (let i = 0; i < global.TOTP.length; i++) {
+        await driver.wait(until.elementLocated(By.id(`digit-${i}`))).sendKeys(global.TOTP[i]);
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_totp_form"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+    await new Promise(resolve => setTimeout(resolve, 2000));
+}
 
 Before('@perform_logout', async function () {
     await new Promise(resolve => setTimeout(resolve, 500));
     await driver.executeScript('window.localStorage.clear();');
     await driver.executeScript('window.location.reload();');
     await new Promise(resolve => setTimeout(resolve, 2000));
+});
+
+Before('@login', async function () {
+    const localStorageFilePath = path.join(__dirname, 'localStorageData.json');
+    console.log('globale', global.is_user_logged_in === false && global.perform_login === true);
+    if (global.is_user_logged_in === false && global.perform_login === true) {
+        await login();
+        await saveLocalStorageData(localStorageFilePath);
+        global.is_user_logged_in = true;
+    } else if (global.is_user_logged_in === false) {
+        await loadLocalStorageData(localStorageFilePath);
+        global.is_user_logged_in = true;
+    }
 });
 
 Before('@add_admin_user', async function () {
