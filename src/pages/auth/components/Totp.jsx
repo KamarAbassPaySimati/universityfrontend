@@ -61,7 +61,6 @@ const Totp = ({ Qrcode }) => {
             const userAttributes = await fetchUserAttributes();
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
-                dispatch(login());
             }
         } catch (error) {
             dispatch(setUser(''));
@@ -86,13 +85,14 @@ const Totp = ({ Qrcode }) => {
             const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
-            dispatch(login());
             handleFetchUserAttributes();
             setIsLoading(false);
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
+                console.log('yess');
             } else {
+                console.log('nooo');
                 dispatch(login());
                 navigate('/dashboard');
             }
