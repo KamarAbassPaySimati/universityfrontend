@@ -28,7 +28,7 @@ const Profile = () => {
                                 {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}
                             </div>
                             <div className='text-[14px] leading-[24px] font-[400]'>
-                                Paymaart ID: <span className='font-[600]'>{user.paymaart_id}</span>
+                                Paymaart ID: <span data-testid="paymaart_id" className='font-[600]'>{user.paymaart_id}</span>
                             </div>
                         </div>
                     </div>

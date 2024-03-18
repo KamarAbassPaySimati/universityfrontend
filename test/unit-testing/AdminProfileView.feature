@@ -16,6 +16,6 @@ Feature: Paymaart - Admin Web -Profile View
         And I should see my name
         And I should see my email address
         And I should see my role
-        # And I should see my paymaart ID
+        And I should see my paymaart ID
         And I should see my phone number
         And I should see the option to update my password

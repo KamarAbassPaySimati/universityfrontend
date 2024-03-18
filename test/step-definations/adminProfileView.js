@@ -7,12 +7,15 @@ const By = require('selenium-webdriver').By;
 const { driver } = require('./Driver.js');
 
 When('I navigate to my profile page', async function () {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     await driver.get('http://localhost:3000/profile');
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 Then('I should see my profile card information', async function () {
     // Write code to verify that the profile card information is visible
     // This might involve checking the visibility of specific elements on the page
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"]')));
     await driver.wait(until.elementIsVisible(element));
 });
