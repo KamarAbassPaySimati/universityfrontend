@@ -29,7 +29,7 @@ Then('I should see my email address', async function () {
     assert.equal(actual_email, global.adminUser.email_address);
 });
 
-Then('I should see my role', async function (expected_role) {
+Then('I should see my role', async function () {
     // Write code to verify that the name displayed matches the expected value
     const actual_role = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="Role"]'))).getText();
     assert.equal(actual_role, global.adminUser.role);
