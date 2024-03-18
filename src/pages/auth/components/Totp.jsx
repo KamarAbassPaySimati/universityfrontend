@@ -63,6 +63,7 @@ const Totp = ({ Qrcode }) => {
         const val = otp.toString().replace(/,/g, '');
         if (val.split('').length < 6) {
             setOtpError('Invalid code');
+            setOtp(Array(6).fill(''));
             setIsLoading(false);
             return;
         }
@@ -94,6 +95,7 @@ const Totp = ({ Qrcode }) => {
             } else {
                 // handleToast(error.message, 'error');
             }
+            setOtp(Array(6).fill(''));
             setIsLoading(false);
         }
     };
