@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import NotFound from '../pages/NotFount';
+import NotFound from '../pages/NotFound';
 import Login from '../pages/auth/Login';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import Dashboard from '../pages/Dashboard/Dashboard';
@@ -23,7 +23,6 @@ export default function NavigationRoutes (props) {
         try {
             setPageLoading(true);
             const userAttributes = await fetchUserAttributes();
-            console.log(userAttributes);
             setPageLoading(false);
             if (userAttributes) {
                 dispatch(setUser(userAttributes));

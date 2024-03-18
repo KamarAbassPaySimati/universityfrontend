@@ -14,7 +14,7 @@ const Profile = () => {
     };
     const keys = Object.keys(userDetails);
     return (
-        <CardHeader activePath='Profile'>
+        <CardHeader activePath='Profile' >
             <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]' data-testid="profile_info_card">
 
                 <div className='flex justify-between border-b border-neutral-outline pb-[18px]'>
