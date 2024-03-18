@@ -22,10 +22,8 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
         } else {
             try {
                 setIsLoading(true);
-                const response = await dataServices.PostAPIWithoutHeader('reset-password-email', {
-                    email
-                })
-                console.log(response, 'hjfjgjgh');
+                const response = await dataServices.PostAPIWithoutHeader('send-reset-link', { email_address: email })
+                console.log(response, 'Forgot Password response:');
                 if (!response.error) {
                     setIsSuccess(true)
 
@@ -34,7 +32,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                     setIsLoading(false);
                     setIsSuccess(false)
                 } else {
-                    setToastErrorMessage('An Error Occured');
+                  
                     setIsLoading(false);
                     setIsSuccess(false)
                 }
@@ -71,7 +69,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         value={email}
                         onChange={changeHandler}
                         onFocus={focusHandler}
-                        id='email'
+                        id='email_address'
                         error={error}
                         label='Email'
                         placeholder='Enter email'
@@ -79,8 +77,8 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                     <Button
                         text="Proceed"
                         onClick={handleClick}
+                        id = ""
                         isLoading={isLoading}
-                        color="#ff0000"
                         smallLoader={false}
                         disabled={false}
                     />

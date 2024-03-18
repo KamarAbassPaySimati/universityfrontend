@@ -5,7 +5,10 @@ import { baseURL } from '../config';
 async function PostAPIWithoutHeader(endpoint,body)
 {
     try{
-        let data = await axios.post(`${baseURL}${endpoint}`, body)
+        let url = `${baseURL}${endpoint}`;
+        console.log("URL:", url); // Print the URL
+        let data = await axios.post(url, body);
+        console.log("body:", body)
         return { error: false, data: data };
     }
     catch (error) {

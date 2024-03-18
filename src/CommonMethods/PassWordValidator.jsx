@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react';
 import { motion } from 'framer-motion'
 import Image from './Image'
 function PassWordValidator({ newPassword, setIsCriteriaMet }) {

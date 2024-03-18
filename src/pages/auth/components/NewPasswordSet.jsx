@@ -2,52 +2,54 @@ import React from 'react'
 import { useState } from 'react'
 import InputField from '../../../components/InputField/InputField'
 import PassWordValidator from '../../../CommonMethods/PassWordValidator'
+import Button from '../../../CommonMethods/Button/Button'
 
-const NewPasswordSet = () => {
+const NewPasswordSet = ({ setIsSuccess }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [error, setError] = useState('')
-    const [isSuccessPage, setIsSuccess] = useState(false)
+    const [newPasswordError, setNewPasswordError] = useState('')
+    const [confirmPasswordError, setConfirmPasswordError] = useState('')
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
+    const specialCharactersPattern = /[.?!]/;
    
 
     const handleClick = (e) => {
         e.preventDefault()
-        if (password === '' && confirmPassword == '') {
-
-        } else if (!isCriteriaMet) {
+        if (password.trim() === '' && confirmPassword.trim() == '') {
+            setNewPasswordError('This field is mandatory')
+            setConfirmPasswordError('This field is mandatory')
+        }  else if (password.trim() === '') {
+            setNewPasswordError('This field is mandatory')
+        } else if (confirmPassword.trim() == '') {
+            setConfirmPasswordError('This field is mandatory')
+        }
+        else if (!isCriteriaMet) {
             //Pssword Criteria did not met
+            setConfirmPasswordError('Password Criteria did not match')
         } else if (password != confirmPassword) {
             //passwords do not match
-        } else {
-            // call api
-            setIsSuccess(true)
+            setConfirmPasswordError('Passwords do not match')
+        } else if (specialCharactersPattern.test(password)) {
+            console.log("came here")
+            setNewPasswordError('Weak password. Check guidelines for strong passwords.')
         }
-
-
-
-
-        // when the error comes for email
-        setError('invalid Email')
-        // setIsSuccess(true)
-
-        //api
+        else {
+            // call api
+           setIsSuccess(true)
+        }
     }
 
     const changeHandler = (e, id) => {
-
         if (id == 'New Password') {
             setPassword(e.target.value)
         } else {
             setConfirmPassword(e.target.value)
         }
-
-        const focusHandler = (id) => {
-            console.log("error", id)
-            setError('')
-
-
-        }
+    }
+    const focusHandler = () => {
+        setNewPasswordError('')
+        setConfirmPasswordError('')
     }
     return (
         <div className='z-20 mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
@@ -64,26 +66,26 @@ const NewPasswordSet = () => {
                     <InputField
                         value={password}
                         onChange={changeHandler}
-                        onFocus={() => { focusHandler }}
-
+                        onFocus={focusHandler}
                         id='New Password'
-                        error={error}
+                        error={newPasswordError}
                         label='New Password'
                         placeholder='Enter new password'
+                        givenType='password'
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                      <PassWordValidator newPassword={newPassword} setIsCriteriaMet={setIsCriteriaMet} />
+                      <PassWordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
                     </div>
 
                     <InputField
                         value={confirmPassword}
                         onChange={changeHandler}
-                        onFocus={() => { focusHandler }}
-
+                        onFocus={focusHandler}
                         id='Confirm New Password'
-                        error={error}
+                        error={confirmPasswordError}
                         label='Confirm New Password'
                         placeholder='Re-enter new password'
+                        givenType='password'
                     />
                     <Button
                         text="Reset"
