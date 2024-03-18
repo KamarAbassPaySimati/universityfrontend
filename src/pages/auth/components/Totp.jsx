@@ -50,7 +50,6 @@ const Totp = ({ Qrcode }) => {
                     value: url
                 }
             });
-            console.log('SUCCESS'); // SUCCESS
         } catch (err) {
             console.log(err);
         }

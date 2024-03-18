@@ -1,0 +1,28 @@
+/* eslint-disable max-len */
+import React from 'react';
+import Button from '../../../components/Button';
+import Button2 from '../Button2/Button2';
+
+export default function ConfirmationPopup ({ message, title, handleSubmit, isLoading, handleClose }) {
+    return (
+        <div className="p-6 w-full bg-white ">
+            <div className="flex pb-4 justify-between">
+                <h1 className="text-lg font-normla text-[#1f1f1f]">
+                    {title}
+                </h1>
+            </div>
+            <p className="text-sm font-normal text-[#4B4B4B]">
+                {message}
+            </p>
+            <div className="flex justify-end space-x-2 mt-6">
+                <Button2 onClick={() => handleClose()} text='Cancel' testId='cancel-btn'/>
+                <Button
+                    onClick={handleSubmit}
+                    isLoading={isLoading}
+                    text='Confirm'
+                    testId="confirm-btn"
+                />
+            </div>
+        </div>
+    );
+}
