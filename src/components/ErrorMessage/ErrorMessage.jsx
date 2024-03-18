@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+
 const ErrorMessage = ({ error }) => {
     return (
         <motion.div
@@ -13,4 +14,5 @@ const ErrorMessage = ({ error }) => {
         </motion.div>
     );
 };
+
 export default ErrorMessage;

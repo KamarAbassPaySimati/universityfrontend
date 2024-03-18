@@ -1,55 +1,51 @@
-import React from 'react'
-import { useState } from 'react'
-import InputField from '../../../components/InputField/InputField'
-import dataServices from '../../../services/data.services';
-import Button from '../../../CommonMethods/Button/Button';
+import React, { useState } from 'react';
+import InputField from '../../../components/InputField/InputField';
+import { dataService } from '../../../services/data.services';
+import Button from '../../../components/Button/Button';
+import emailValidation from '../../../CommonMethods/emailValidtion';
 
 const ForgotPasswordEmail = ({ setIsSuccess }) => {
     const [email, setEmail] = useState('');
-    const [error, setError] = useState('')
-    const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     // regex check for email and call the api
     const handleClick = async (e) => {
-        e.preventDefault()
-        const emailRegex = /^[^\s@]+@(paymaart\.(net|com)|7edge\.com)$/;
-        const isValidEmail = emailRegex.test(email);
+        e.preventDefault();
         if (email === '') {
             setError('This field is mandatory');
-        } else if (!isValidEmail) {
+        } else if (!emailValidation(email)) {
             setError('Invalid Email');
             setIsSuccess(false); // Set isSuccess to false since the email is invalid
         } else {
             try {
                 setIsLoading(true);
-                const response = await dataServices.PostAPIWithoutHeader('send-reset-link', { email_address: email })
+                const response = await dataService.PostAPIWithoutHeader('send-reset-link', { email_address: email });
                 console.log(response, 'Forgot Password response:');
                 if (!response.error) {
-                    setIsSuccess(true)
-
+                    setIsSuccess(true);
                 } else if (response?.data?.status === 404) {
                     setError(response?.data?.data?.message);
                     setIsLoading(false);
-                    setIsSuccess(false)
+                    setIsSuccess(false);
                 } else {
-                  
                     setIsLoading(false);
-                    setIsSuccess(false)
+                    setIsSuccess(false);
                 }
             } catch (error) {
                 setIsLoading(false);
                 console.log(error);
-                setIsSuccess(false)
+                setIsSuccess(false);
             }
         }
-    }
+    };
     // set the email
     const changeHandler = (e) => {
-        setEmail(e.target.value)
-    }
+        setEmail(e.target.value);
+    };
     const focusHandler = () => {
-        setError('')
-    }
+        setError('');
+    };
     return (
         <div className='z-20 bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
             <div className='flex justify-center items-center mb-9'>
@@ -70,6 +66,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         onChange={changeHandler}
                         onFocus={focusHandler}
                         id='email_address'
+                        testId='email_address'
                         error={error}
                         label='Email'
                         placeholder='Enter email'
@@ -83,6 +80,6 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                 </form>
             </div>
         </div>
-    )
-}
-export default ForgotPasswordEmail
+    );
+};
+export default ForgotPasswordEmail;

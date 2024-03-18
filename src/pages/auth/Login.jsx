@@ -1,70 +1,110 @@
-import React, { useState } from 'react'
-import InputField from '../../components/InputField/InputField'
-import { useNavigate } from 'react-router-dom'
+/* eslint-disable no-case-declarations */
+/* eslint-disable indent */
+import React, { useEffect, useState } from 'react';
+import isValid from './components/validation';
+import LoginPage from './components/LoginPage';
+import Totp from './components/Totp';
+import { signIn } from 'aws-amplify/auth';
 
 const Login = () => {
     const initailState = {
         email: '',
         password: ''
-    }
+    };
 
-    const navigate = useNavigate()
-    // const [formData, setFormData] = useState(initailState)
-    const [errors, setErrors] = useState(initailState)
+    const [formData, setFormData] = useState(initailState);
+    const [errors, setErrors] = useState(initailState);
+    const [loginError, setloginError] = useState('');
 
-    const submitHandler = (e) => {
-        e.preventDefault()
+    const [isLoginPage, setIsLoginPage] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
+    const [Qrcode, setQrcode] = useState('');
 
-        setErrors(prevState => {
-            return { ...prevState, email: 'Invalid email' }
-        })
-    }
+    const { email, password } = formData;
+
+    function handleSignInNextSteps (output) {
+        const { nextStep } = output;
+        console.log(nextStep);
+        switch (nextStep.signInStep) {
+          // ...
+          case 'CONTINUE_SIGN_IN_WITH_TOTP_SETUP':
+            const totpSetupDetails = nextStep.totpSetupDetails;
+            const appName = 'Paymaart';
+            const setupUri = totpSetupDetails.getSetupUri(appName);
+            setQrcode(setupUri.href);
+            // Open setupUri with an authenticator APP to retrieve an OTP code
+            break;
+          // ...
+        }
+      }
+
+    const handleLogin = async (e, key) => {
+        e.preventDefault();
+        setErrors(initailState);
+        setloginError('');
+        if (!isValid(formData, setErrors)) {
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const loginresponse = await signIn({
+                username: email,
+                password
+            });
+            handleSignInNextSteps(loginresponse);
+            setIsLoading(false);
+            setIsLoginPage(false);
+            // Login successful, redirect or perform any other actions
+        } catch (error) {
+            if (error.name === 'UserNotConfirmedException') {
+                // User is not confirmed
+                // Show a message or redirect to a confirmation page
+                setloginError("UserNotConfirmelocalStorage.setItem('login_time', moment());dException");
+            } else if (
+                error.name === 'NotAuthorizedException' &&
+                error.message !== 'User is disabled.'
+            ) {
+                // Incorrect username or password
+                // Show an error message
+                setloginError('Invalid credentials');
+            } else if (
+                error.name === 'NotAuthorizedException' &&
+                error.message === 'User is disabled.'
+            ) {
+                setloginError('Deactivated account. Please contact support');
+            } else if (error.name === 'UserNotFoundException') {
+                // User does not exist
+                // Show an error message or redirect to a signup page
+                setloginError('Invalid credentials');
+            } else if (error.name === 'InvalidLambdaResponseException') {
+                setloginError('User account is disabled. Please contact our support team for assistance.');
+            } else if (error.name === 'UserLambdaValidationException') {
+                // Handle other exceptions or display a generic error message
+                setloginError('Invalid credentials');
+            } else if (error.name === 'InvalidParameterException') {
+                // Handle other exceptions or display a generic error message
+                setloginError('Invalid credentials');
+            } else {
+                setloginError('Something went wrong');
+            }
+            console.error(error);
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+
+    }, [formData]);
 
     return (
-        <div className='bg-primary-normal'>
-            <img className='fixed bottom-[30px] right-[100px] object-cover z-10' src='images/login_img.svg' />
-            <div className='h-screen w-screen flex justify-center items-center'>
-                <div className='z-20 bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
-                    <div className='flex justify-center items-center mb-9'>
-                        <img src='/images/logo.svg' />
-                    </div>
-                    <div>
-                        <div className='mb-9'>
-                            <div className='text-[#000000] font-[500] text-[24px] leading-[32px]'>
-                                Login
-                            </div>
-                            <div className='text-neutral-secondary font-[400] text-[14px] leading-[24px]'>
-                                Welcome back!
-                            </div>
-                        </div>
-                        <form onSubmit={submitHandler} className='flex flex-col gap-[16px]'>
-                            <InputField
-                                setErrors={setErrors}
-                                id='email' error={errors?.email}
-                                label='Email'
-                                placeholder='Enter email'
-                            />
-                            <InputField
-                                setErrors={setErrors}
-                                id='password'
-                                error={errors?.password}
-                                label='Password'
-                                placeholder='Enter password'
-                            />
-                            <button className='w-full text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2
-                                    rounded-[8px] mt-8'>
-                                Login
-                            </button>
-                        </form>
-                        <div onClick={() => navigate('/forgot-password')} className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
-                            text-center'>
-                            Forgot Password?
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    )
-}
+        <>
+            {isLoginPage
+                ? <LoginPage handleSubmit={handleLogin} formData={formData} setErrors={setErrors} errors={errors}
+                        setFormData={setFormData} loginError={loginError} setloginError={setloginError} isLoading={isLoading} />
+                : <Totp Qrcode={Qrcode} />
+            }
+        </>
+    );
+};
 
-export default Login
+export default Login;

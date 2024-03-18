@@ -36,9 +36,10 @@ export default {
 
                 'accent-positive': '#13B681',
 
-                error: '#FF4343'
+                error: '#FF4343',
+                background: '#F6F8F9'
             }
         }
     },
     plugins: []
-}
+};

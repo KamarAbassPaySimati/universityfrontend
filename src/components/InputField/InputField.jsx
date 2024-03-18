@@ -1,6 +1,8 @@
+/* eslint-disable indent */
 import React, { useState } from 'react';
-import ErrorMessage from '../../CommonMethods/ErrorMessage/ErrorMessage';
-import Image from '../../CommonMethods/Image';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import Image from '../Image/Image';
+
 const InputField = ({
     value,
     onChange,
@@ -13,13 +15,15 @@ const InputField = ({
     placeholder,
     loginError,
     showLoginError,
-    testId
+    testId,
+    autoComplete
 }) => {
     const [ispasswordType, setIsPasswordType] = useState(true);
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
+                autoComplete={autoComplete}
                 data-testid={testId}
                 value={value}
                 type={givenType ? ispasswordType ? 'password' : 'text' : type || 'text'}
@@ -31,8 +35,8 @@ const InputField = ({
                 onFocus={() => onFocus(id)}
                 onChange={(e) => onChange(e, id)}
             />
-             {/* && value.length > 0 */}
-             {givenType === 'password' && value.length > 0 &&
+            {/* && value.length > 0 */}
+            {givenType === 'password' && value.length > 0 &&
                 <div className={`absolute right-0 py-[18.79px] pl-[10px] pr-[23.77px] cursor-pointer 
                     ${error || loginError ? 'bottom-[30px]' : 'bottom-0'}`}
                     onClick={() => setIsPasswordType(prevState => !prevState)}>
@@ -44,5 +48,5 @@ const InputField = ({
         </div>
     );
 };
-export default InputField;
 
+export default InputField;
