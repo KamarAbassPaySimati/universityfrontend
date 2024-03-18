@@ -1,3 +1,4 @@
+import 'react-responsive-modal/styles.css';
 import React, { useState } from 'react';
 import Image from '../Image/Image';
 import { signOut } from 'aws-amplify/auth';
@@ -5,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { logout } from '../../pages/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
-import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup';
+import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -63,14 +64,15 @@ const SideBar = ({ role }) => {
                     </div>
                 </div>
             </div>
-            <Modal open={isOpen} onClose={handleClose}>
-                <ConfirmationPopup
-                    title='Logout User'
-                    message='Confirm to Logout?'
-                    handleSubmit={handleLogout}
-                    isLoading={isLoading}
-                    handleClose={handleClose} />
-
+            <Modal center open={isOpen} onClose={handleClose} closeIcon={<button style={{ color: 'white' }} disabled></button>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title='Logout User'
+                        message='Confirm to Logout?'
+                        handleSubmit={handleLogout}
+                        isLoading={isLoading}
+                        handleClose={handleClose} />
+                </div>
             </Modal>
         </>
     );
