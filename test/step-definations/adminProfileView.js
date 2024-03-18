@@ -17,28 +17,34 @@ Then('I should see my profile card information', async function () {
     await driver.wait(until.elementIsVisible(element));
 });
 
-Then('I should see my name as {string}', async function (expected_name) {
+Then('I should see my name', async function () {
     // Write code to verify that the name displayed matches the expected value
     const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="name"]'))).getText();
-    assert.equal(actual_name, expected_name);
+    assert.equal(actual_name, global.adminUser.fullName);
 });
 
-Then('I should see my email address as {string}', async function (expected_email) {
+Then('I should see my email address', async function () {
     // Write code to verify that the name displayed matches the expected value
     const actual_email = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="Email"]'))).getText();
-    assert.equal(actual_email, expected_email);
+    assert.equal(actual_email, global.adminUser.email_address);
 });
 
-Then('I should see my role as {string}', async function (expected_role) {
+Then('I should see my role', async function (expected_role) {
     // Write code to verify that the name displayed matches the expected value
     const actual_role = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="Role"]'))).getText();
-    assert.equal(actual_role, expected_role);
+    assert.equal(actual_role, global.adminUser.role);
 });
 
-Then('I should see my phone number as {string}', async function (expected_phone_number) {
+Then('I should see my phone number', async function () {
     // Write code to verify that the name displayed matches the expected value
     const actual_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="Phone Number"]'))).getText();
-    assert.equal(actual_phone_number, expected_phone_number);
+    assert.equal(actual_phone_number, global.adminUser.phone_number);
+});
+
+Then('I should see my paymaart ID', async function () {
+    // Write code to verify that the name displayed matches the expected value
+    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="paymaart_id"]'))).getText();
+    assert.equal(actual_paymaart_ID, global.adminUser.paymaart_id);
 });
 
 Then('I should see the option to update my password', async function () {
