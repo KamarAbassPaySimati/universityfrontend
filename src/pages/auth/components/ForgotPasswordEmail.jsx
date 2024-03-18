@@ -79,8 +79,6 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         onClick={handleClick}
                         id = ""
                         isLoading={isLoading}
-                        smallLoader={false}
-                        disabled={false}
                     />
                 </form>
             </div>
