@@ -158,7 +158,7 @@ Before('@add_admin_user', async function () {
         const lastName = faker.person.lastName();
         const phoneNumber = `${faker.phone.number('+265#######')}`;
         const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
-        const fullName = `${firstName} ${middleName} ${lastName}`;
+        const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
         const payload = {
             first_name: firstName,
             username: email,
