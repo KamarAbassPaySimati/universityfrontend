@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Image from '../Image/Image';
 
-const Toast = ({ message, type, setToastmessage }) => {
+const Toast = ({ message, type, setToastmessage, bottom }) => {
     const [showToast, setShowToast] = useState(true);
 
     /* This `useEffect` hook is setting a timer using `setTimeout` function to hide the toast message
@@ -21,17 +21,27 @@ const Toast = ({ message, type, setToastmessage }) => {
         };
     }, []);
 
+    let initial;
+    let animate;
+    if (bottom) {
+        initial = { opacity: 0 };
+        animate = { opacity: 1 };
+    } else {
+        initial = { x: 10000 };
+        animate = { x: 0 };
+    }
+
     return (
         <>
             {showToast && (
                 <motion.div
-                    initial={{ x: 1000 }}
-                    animate={{ x: 0 }}
+                    initial={initial}
+                    animate={animate}
                     transition={{ duration: 1 }}
                     exit={{ opacity: 0.5 }}
                     onClick={() => { setShowToast(!showToast); setToastmessage(''); }}
                     style={{ zIndex: '999' }}
-                    className={`rounded-[4px] px-5 py-[15px] flex absolute top-7 right-5 items-center z-50 gap-4
+                    className={`rounded-[4px] px-5 py-[15px] flex absolute items-center z-50 gap-4 ${bottom ? 'bottom-[100px] right-2/4 translate-x-1/2' : 'top-7 right-5'}
                         ${type === 'success'
                     ? 'bg-[#13B681]'
                     : type === 'warning'
