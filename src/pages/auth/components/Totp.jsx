@@ -134,7 +134,7 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
+                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'min-h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin
