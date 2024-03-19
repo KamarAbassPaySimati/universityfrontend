@@ -11,7 +11,7 @@ Amplify.configure(awsConfig);
 function App (props) {
     const navigationPath = NavigationRoutes(props);
     const [ToastSuccess, setToastSuccess] = useState('');
-    const [ToastSuccessBottom, setToastSuccessBottom] = useState('Hello paymaart');
+    const [ToastSuccessBottom, setToastSuccessBottom] = useState('');
     const [ToastError, setToastError] = useState('');
     const [ToastWarning, setToastWarning] = useState('');
     const [ToastInformation, setToastInformation] = useState('');
@@ -24,7 +24,7 @@ function App (props) {
             setToastInformation,
             setToastSuccessBottom
         }}>
-            <motion.div className='overflow-hidden h-screen relative'>
+            <motion.div className='overflow-x-hidden h-screen relative'>
                 {ToastSuccess !== '' && <Toast
                     message={ToastSuccess}
                     type="success"
