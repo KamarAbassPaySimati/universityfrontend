@@ -14,7 +14,7 @@ const SideBar = ({ role }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
 
-    const { setToastSuccess } = useContext(GlobalContext);
+    const { setToastSuccessBottom } = useContext(GlobalContext);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ const SideBar = ({ role }) => {
         handleSignOut();
         dispatch(logout());
         navigate('/');
-        setToastSuccess('You have been logged out');
+        setToastSuccessBottom('You have been logged out');
     };
     return (
         <>
