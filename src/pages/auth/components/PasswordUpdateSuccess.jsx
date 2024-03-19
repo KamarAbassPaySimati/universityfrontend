@@ -10,7 +10,8 @@ const PasswordUpdateSuccess = () => {
                 <div className='flex flex-col mt-[20px]'>
                     <h2 className='font-[400] text-[20px] text-[#000000]'>Password Changed</h2>
                     <h2 className='font-[400] text-[14px] mt-[7.58px] text-[#A4A9AE]'>
-                        Your password has been succesfully changed</h2>
+                        Your password has been successfully changed
+                    </h2>
                 </div>
             </div>
             <button data-testid="back_to_login"

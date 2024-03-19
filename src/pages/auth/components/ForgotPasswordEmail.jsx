@@ -15,7 +15,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
         if (email === '') {
             setError('This field is mandatory');
         } else if (!emailValidation(email)) {
-            setError('Invalid Email');
+            setError('Invalid email');
             setIsSuccess(false); // Set isSuccess to false since the email is invalid
         } else {
             try {
@@ -72,6 +72,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         placeholder='Enter email'
                     />
                     <Button
+                        testId="proceed_button"
                         text="Proceed"
                         onClick={handleClick}
                         id = ""

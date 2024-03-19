@@ -15,7 +15,7 @@ options.addArguments('--no-sandbox');
 options.addArguments('--disable-features=VizDisplayCompositor');
 options.addArguments('enable-automation');
 options.addArguments('--disable-dev-shm-usage');
-options.addArguments('--headless'); // comment this line of code to run in local chrome browser
+// options.addArguments('--headless'); // comment this line of code to run in local chrome browser
 options.addArguments('--window-size=1920,1080');
 options.addArguments('--disable-gpu');
 options.addArguments('--disable-extensions');
@@ -68,7 +68,7 @@ AfterAll(async function () {
 });
 
 Before('@wait', async function () {
-    await new Promise(resolve => setTimeout(resolve, 3000));
+    await new Promise(resolve => setTimeout(resolve, 4000));
     console.log('waiting');
 });
 AfterStep(async function () {
