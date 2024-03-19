@@ -5,7 +5,7 @@ import Button from '../Button/Button';
 
 export default function ConfirmationPopup ({ message, title, handleSubmit, isLoading, handleClose }) {
     return (
-        <div className="p-6 w-full bg-white rounded-[8px]">
+        <div className="p-6 w-full bg-white rounded-[8px]" data-testid="modal">
             <h1 className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
                 {title}
             </h1>
@@ -13,13 +13,13 @@ export default function ConfirmationPopup ({ message, title, handleSubmit, isLoa
                 {message}
             </p>
             <div className="flex mt-8 gap-6">
-                <Button2 className='w-[117px]' onClick={() => handleClose()} text='Cancel' testId='cancel-btn' />
+                <Button2 className='w-[117px]' onClick={() => handleClose()} text='Cancel' testId='cancel_button' />
                 <Button
                     className='w-[117px]'
                     onClick={handleSubmit}
                     isLoading={isLoading}
                     text='Confirm'
-                    testId="confirm-btn"
+                    testId="confirm_button"
                 />
             </div>
         </div>

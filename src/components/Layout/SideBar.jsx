@@ -58,7 +58,7 @@ const SideBar = ({ role }) => {
                     </div>
                     <div className='flex justify-center items-center'>
                         <button
-                            data-testid='logout-btn'
+                            data-testid='logout'
                             onClick={() => setIsOpen(true)}
                             className={`w-[123px] bg-[#fff] text-primary-normal border border-primary-normal font-[400] 
                             text-[14px] leading-[16px] py-2 rounded-[4px] flex justify-center items-center gap-[10px] h-[37px]`}>
