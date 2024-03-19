@@ -27,7 +27,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
             setConfirmPasswordError('Password criteria is not met');
         } else if (password !== confirmPassword) {
             // passwords do not match
-            setConfirmPasswordError('Passwords do not match');
+            setConfirmPasswordError('Passwords does not match');
         } else if (!weakPasswordValidation.test(password)) {
             console.log('came here');
             setNewPasswordError('Weak password. Check guidelines for strong passwords.');
@@ -48,6 +48,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                     setIsLoading(false);
                     setIsSuccess(false);
                 } else {
+                    setNewPasswordError(response?.data?.data?.message);
                     setIsLoading(false);
                     setIsSuccess(false);
                 }
@@ -66,9 +67,12 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
             setConfirmPassword(e.target.value);
         }
     };
-    const focusHandler = () => {
-        setNewPasswordError('');
-        setConfirmPasswordError('');
+    const focusHandler = (id) => {
+        if (id === 'New Password') {
+            setNewPasswordError('');
+        } else {
+            setConfirmPasswordError('');
+        }
     };
     return (
         <div className='z-20 mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
@@ -81,7 +85,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         Reset Password
                     </div>
                 </div>
-                <form className='flex flex-col gap-[16px]'>
+                <form className='flex flex-col gap-[12px]'>
                     <InputField
                         value={password}
                         onChange={changeHandler}
@@ -108,12 +112,15 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         placeholder='Re-enter new password'
                         givenType='password'
                     />
-                    <Button
-                        text="Reset"
-                        testId= 'submit_button'
-                        onClick={handleClick}
-                        isLoading={isLoading}
-                    />
+                    <div className='mt-6'>
+                        <Button
+                            text="Reset"
+                            testId= 'submit_button'
+                            onClick={handleClick}
+                            isLoading={isLoading}
+                        />
+                    </div>
+
                 </form>
             </div>
         </div>

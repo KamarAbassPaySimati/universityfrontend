@@ -25,7 +25,7 @@ function PassWordValidator ({ newPassword, setIsCriteriaMet }) {
             exit={{ opacity: 0, y: -50 }}
             className='m-1'
             transition={{ duration: 1 }}>
-            <p className="text-neutral-secondary font-[400] text-[14px] text-left mb-[4px mt-[2px]]">
+            <p className="text-neutral-secondary font-[400] text-[14px] text-left mb-[4px]">
                 Password must have atleast:</p>
             <div className="flex items-center gap-2 mb-1">
                 <Image src={`${(newPassword.length > 7 && newPassword.length <= 12) ? 'greenTick' : 'grayDot'}`}
