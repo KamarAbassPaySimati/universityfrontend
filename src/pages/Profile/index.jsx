@@ -26,7 +26,7 @@ const Profile = () => {
                         <div className='text-neutral-primary'>
                             <div className='font-[700] text-[30px] leading-[40px] capitalize' data-testid="name">
                                 {`${user?.first_name || '-'} ${user?.middle_name || '-'}`}
-                                <span className='uppercase'>${user?.last_name || '-'}</span>
+                                <span className='uppercase'> {user?.last_name || '-'}</span>
                             </div>
                             <div className='text-[14px] leading-[24px] font-[400]'>
                                 Paymaart ID: <span data-testid="paymaart_id" className='font-[600]'>{user.paymaart_id}</span>
