@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
-
+import PassWordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
 
 const UpdateToNewPassword = () => {
@@ -10,10 +10,37 @@ const UpdateToNewPassword = () => {
     const [oldPasswordError, setOldPasswordError] = useState('');
     const [newPasswordError, setNewPasswordError] = useState('');
     const [newConfirmPasswordError, setNewConfirmPasswordError] = useState('');
+    const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    // eslint-disable-next-line max-len
+    const weakPasswordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%&])(?![.\d]{4,})(?!(.)\1{2})(?!(123|234|321|345|432|543|654|765|876|987))(?!.*(password|qwerty))(?!.*(admin|user|root|12345|abcd|abcd1234))([^.!?$\s]){8,12}$/;
 
     const handleClick = async (e) => {
         e.preventDefault();
+        if (oldPassword.trim() === '' && newPassword.trim() === '' && confirmNewPassword.trim() === '') {
+            setOldPasswordError('This field is mandatory');
+            setNewPasswordError('This field is mandatory');
+            setNewConfirmPasswordError('This field is mandatory');
+        } else if (oldPassword.trim() === '' && newPassword.trim() === '') {
+            setOldPasswordError('This field is mandatory');
+            setNewPasswordError('This field is mandatory');
+        } else if (newPassword.trim() === '' && confirmNewPassword.trim() === '') {
+            setNewPasswordError('This field is mandatory');
+            setNewConfirmPasswordError('This field is mandatory');
+        } else if (confirmNewPassword.trim() === '' && oldPassword.trim() === '') {
+            setOldPasswordError('This field is mandatory');
+            setNewConfirmPasswordError('This field is mandatory');
+        } else if (!isCriteriaMet) {
+            setNewPasswordError('Password criteria is not met');
+        } else if (newPassword !== confirmNewPassword) {
+            setNewConfirmPasswordError('Password does not match');
+        } else if (!weakPasswordValidation.test(newPassword)) {
+            console.log('came here');
+            setNewPasswordError('Weak password. Check guidelines for strong passwords.');
+        } else {
+            // call api
+        }
+
         // if (password.trim() === '' && confirmPassword.trim() === '') {
         //     setNewPasswordError('This field is mandatory');
         //     setConfirmPasswordError('This field is mandatory');
@@ -104,7 +131,7 @@ const UpdateToNewPassword = () => {
                         givenType='password'
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                        {/* <PassWordValidator newPassword={newPassword} /> */}
+                        <PassWordValidator newPassword={newPassword} setIsCriteriaMet={setIsCriteriaMet} />
                     </div>
 
                     <InputField

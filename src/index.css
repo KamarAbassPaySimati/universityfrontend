@@ -9,6 +9,30 @@ body {
   background-color: #FFF;
 }
 
+
+.react-responsive-modal-modal {
+  padding: 0 !important;
+}
+
+.react-responsive-modal-closeButton {
+  padding-top: 16px !important;
+  right: 32px !important;
+  position: absolute;
+  top: 24px;
+  right: 14px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+}
+
+.react-responsive-modal-modal:has(.customModal) {
+  max-width: fit-content !important;
+  min-width: 306px !important;
+  border-radius: 8px !important;
+}
+
 /* Tooltip styling rules */
 .my-tooltip {
   background-color: #FFFFFF !important;
@@ -19,4 +43,32 @@ body {
   border-radius: 4px !important;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
   cursor: pointer;
+}
+.scrollBar::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollHide::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollBar::-webkit-scrollbar:vertical {
+  position: relative;
+  width: 4px;
+  background-color: white;
+}
+
+.scrollBar::-webkit-scrollbar:horizontal {
+  height: 4px;
+  background-color: transparent;
+  border-radius: 0px !important;
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+  background-color: #816cbe;
+  border: transparent;
+  border-radius: 22px;
+  width: 4px;
+  height: 45px;
+  right: 20px;
 }
