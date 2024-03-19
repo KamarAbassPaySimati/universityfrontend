@@ -11,7 +11,7 @@ Amplify.configure(awsConfig);
 function App (props) {
     const navigationPath = NavigationRoutes(props);
     const [ToastSuccess, setToastSuccess] = useState('');
-    const [ToastSuccessBottom, setToastSuccessBottom] = useState('');
+    const [ToastSuccessBottom, setToastSuccessBottom] = useState('Hello paymaart');
     const [ToastError, setToastError] = useState('');
     const [ToastWarning, setToastWarning] = useState('');
     const [ToastInformation, setToastInformation] = useState('');
