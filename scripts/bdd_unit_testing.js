@@ -7,6 +7,7 @@ const readdir = util.promisify(fs.readdir);
 
 const featureDirectory = 'test/unit-testing';
 const DELAY_BETWEEN_TESTS = 5000; // 5 seconds
+const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 40000; // 40 seconds
 const MAX_PARALLEL_EXECUTIONS = 3;
 
 async function runTestQueue () {
@@ -30,6 +31,8 @@ async function runTestQueue () {
     }
 
     const testPromises = [];
+    testPromises.push(runNextTest(true));
+    await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_PARALLEL_EXECUTIONS));
 
     for (let i = 0; i < MAX_PARALLEL_EXECUTIONS; i++) {
         testPromises.push(runNextTest(false));

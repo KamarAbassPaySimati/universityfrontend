@@ -20,7 +20,7 @@ export default defineConfig({
         sourcemap: true
     },
     define: {
-        _global: ({})
+        global: 'window'
     },
     resolve: {
         alias: {
