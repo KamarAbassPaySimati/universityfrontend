@@ -3,7 +3,7 @@ module.exports = {
         import: ['test'],
         paths: [
             'test/integration-testing/Flow1/welcome.feature',
-            'test/integration-testing/Flow1/Login.feature'
+            'test/integration-testing/Flow1/LoginAndViewProfile.feature'
         ]
     }
 };

@@ -28,10 +28,11 @@
     "qrcode.react": "^3.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-qrcode-logo": "^2.9.0",
     "react-redux": "^9.1.0",
     "react-router-dom": "^6.22.2",
-    "react-spinners": "^0.13.8"
+    "react-spinners": "^0.13.8",
+    "react-tooltip": "^5.26.3",
+    "rollup": "^4.13.0"
   },
   "devDependencies": {
     "@cucumber/cucumber": "^10.3.1",
