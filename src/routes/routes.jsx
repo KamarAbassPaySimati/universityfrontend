@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
-import NotFound from '../pages/NotFount';
+import NotFound from '../pages/NotFound';
 import Login from '../pages/auth/Login';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import Dashboard from '../pages/Dashboard/Dashboard';
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
+import Profile from '../pages/Profile';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -40,8 +41,10 @@ export default function NavigationRoutes (props) {
 
     useEffect(() => {
         if (!pageLoading && !loggedIn) {
+            console.log('yes');
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
+            console.log('no');
             navigate('/dashboard');
         }
     }, [pageLoading]);
@@ -58,6 +61,7 @@ export default function NavigationRoutes (props) {
                             : <>
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
+                                    <Route path="/profile" element={<Profile />} />
                                 </Route>
                             </>
                     }
