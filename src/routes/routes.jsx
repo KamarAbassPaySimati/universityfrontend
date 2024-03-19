@@ -42,13 +42,8 @@ export default function NavigationRoutes (props) {
     }, []);
 
     useEffect(() => {
-<<<<<<< HEAD
         if (!pageLoading && !loggedIn && (window.location.pathname !== '/forgot-password' &&
         window.location.pathname !== '/set-new-password')) {
-=======
-        if (!pageLoading && !loggedIn) {
-            console.log('yes');
->>>>>>> 2936b7c34d627f30cf915a2106912356807d6b7c
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
             console.log('no');
