@@ -1,16 +1,9 @@
 /* eslint-disable camelcase */
-const { When, Then, Before } = require('@cucumber/cucumber');
+const { When, Then } = require('@cucumber/cucumber');
 const assert = require('assert');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const { driver } = require('./Driver.js');
-
-Before('@perform_logout', async function () {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.executeScript('window.localStorage.clear();');
-    await driver.executeScript('window.location.reload();');
-    await new Promise(resolve => setTimeout(resolve, 2000));
-});
 
 When('I click on logout', async function () {
     await new Promise(resolve => setTimeout(resolve, 100));
