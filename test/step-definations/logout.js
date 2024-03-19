@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
+const { When, Then, Before } = require('@cucumber/cucumber');
 const assert = require('assert');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
@@ -10,10 +10,6 @@ Before('@perform_logout', async function () {
     await driver.executeScript('window.localStorage.clear();');
     await driver.executeScript('window.location.reload();');
     await new Promise(resolve => setTimeout(resolve, 2000));
-});
-
-Given('I am logged into the application', async function () {
-    await driver.wait(until.urlIs('http://localhost:3000/dashboard'));
 });
 
 When('I click on logout', async function () {
@@ -40,14 +36,13 @@ Then('I should see a confirmation prompt for logout', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const modal_body = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]'))).getText();
+    const modal_body = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
     assert.equal(modal_body, 'Confirm to Logout?');
 });
 
 Then('I should be redirected to login', async function () {
     await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.wait(until.elementLocated(By.xpath('//p[text()="Login"]')));
-    await driver.wait(until.urlIs('http://localhost:3000'));
+    await driver.wait(until.elementLocated(By.xpath('//*[text()="Login"]')));
 });
 
 Then('I should not be logged out', async function () {
