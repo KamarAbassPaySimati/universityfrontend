@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
-import PassWordValidator from '../../../components/PasswordValidator/PassWordValidator';
+
 import Button from '../../../components/Button/Button';
 
 const UpdateToNewPassword = () => {
@@ -78,7 +78,7 @@ const UpdateToNewPassword = () => {
         }
     };
     return (
-        <div className='mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]  border-b border-neutral-outline'>
+        <div className='mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px] border border-neutral-outline '>
             <div>
                 <form className='flex flex-col gap-[12px]'>
                     <InputField
@@ -104,7 +104,7 @@ const UpdateToNewPassword = () => {
                         givenType='password'
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                        <PassWordValidator newPassword={newPassword} />
+                        {/* <PassWordValidator newPassword={newPassword} /> */}
                     </div>
 
                     <InputField

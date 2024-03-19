@@ -7,10 +7,9 @@ const UpdatePassword = () => {
         <CardHeader activePath='Update Password' paths={['Profile']} pathurls={['profile']} >
             <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]'
                 data-testid="update_password_card">
-                <p>Update Password</p>
-                <div className='flex justify-between border-b border-neutral-outline pb-[18px]'>
+                <p className='font-[600] text-[24px] text-neutral-primary mt-[32px] ml-[24px]'>Update Password</p>
+                <div className='flex justify-center items-center  mt-[68px]'>
                     <UpdateToNewPassword />
-
                 </div>
             </div>
         </CardHeader>

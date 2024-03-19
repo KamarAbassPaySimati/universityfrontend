@@ -35,7 +35,7 @@ const Profile = () => {
                     <div className='mt-1'>
                         <Button2
                             testId="update_password"
-                            onClick={() => navigate('/update-password')}
+                            onClick={() => navigate('/profile/update-password')}
                             text='Update Password'
                             icon='key-icon'
                             className='!w-[182px] !text-primary-normal' />
