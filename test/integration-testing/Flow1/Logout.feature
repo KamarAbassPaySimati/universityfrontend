@@ -6,6 +6,7 @@ Feature: Paymaart - Admin Web- Logout
     Upon selecting logout admin user should be logged out of the account immediately And all session data and authentication tokens should be cleared 
     The user should be redirected to the login page.
 
+    @perform_logout 
     @add_admin_user
     @create_new_user_and_login
     Scenario: Cancel Logout of the application
