@@ -117,7 +117,7 @@ const Totp = ({ Qrcode }) => {
     return (
         <div>
             <div>
-                <div className='sticky top-0 left-0 bg-[#fff]'>
+                <div className='sticky top-0 left-0 bg-[#fff] mb-10'>
                     <Image src='Header'/>
                     <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
                         {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
@@ -134,7 +134,7 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'min-h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
+                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'min-h-[calc(100vh-152px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin
