@@ -1,6 +1,8 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const PasswordUpdateSuccess = () => {
+    const navigate = useNavigate();
     return (
         <div className='z-20 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[550px] flex flex-col justify-center items-center'>
             <div className='flex mx-2 my-2 border border-gray-300 rounded p-10 gap-10'>

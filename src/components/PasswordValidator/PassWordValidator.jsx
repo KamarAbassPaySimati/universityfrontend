@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from '../Image/Image';
 function PassWordValidator ({ newPassword, setIsCriteriaMet }) {
+    // eslint-disable-next-line no-useless-escape
+    const specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     useEffect(() => {
         // Check if all conditions are met
         const conditionsMet =
@@ -11,7 +13,7 @@ function PassWordValidator ({ newPassword, setIsCriteriaMet }) {
             /[a-z]/.test(newPassword) &&
             /\d/.test(newPassword) &&
             // eslint-disable-next-line no-useless-escape
-            /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(newPassword);
+            specialCharacter.test(newPassword);
 
         // Update state accordingly
         setIsCriteriaMet(conditionsMet);
@@ -46,7 +48,7 @@ function PassWordValidator ({ newPassword, setIsCriteriaMet }) {
                 <p className={'font-[400] text-[14px] text-neutral-secondary'}>1 number</p>
             </div>
             <div className="flex items-center gap-2 mb-1">
-                <Image src={`${/[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/.test(newPassword) ? 'greenTick' : 'grayDot'}`}
+                <Image src={`${specialCharacter.test(newPassword) ? 'greenTick' : 'grayDot'}`}
                     alt='Key' className = 'w-5 h-5'/>
                 <p className={'font-[400] text-[14px] text-neutral-secondary'}>1 special character</p>
             </div>
