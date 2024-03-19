@@ -1,4 +1,4 @@
-const { Then } = require('@cucumber/cucumber');
+const { When, Then } = require('@cucumber/cucumber');
 const until = require('selenium-webdriver').until;
 const { driver } = require('../Driver.js');
 Then('I should read a message stating that {string}', async function (errorMessage) {
@@ -24,4 +24,9 @@ Then('I should be redirected to the {string} page', async function (url) {
     await new Promise(resolve => setTimeout(resolve, 1000));
     await driver.wait(until.urlIs(`http://localhost:3000${url}`));
     console.log('url is ', `http://localhost:3000${url}`);
+});
+
+When('I am logged into the application', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await driver.wait(until.urlIs('http://localhost:3000/dashboard'));
 });

@@ -8,3 +8,15 @@ body {
   font-family: "Inter", sans-serif;
   background-color: #FFF;
 }
+
+/* Tooltip styling rules */
+.my-tooltip {
+  background-color: #FFFFFF !important;
+  color: #333333 !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
+  cursor: pointer;
+}

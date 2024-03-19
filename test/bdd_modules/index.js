@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const base32Decode = require('base32-decode');
 const crypto = require('crypto');
 const jsQR = require('jsqr');
+const fs = require('fs');
 require('dotenv').config();
 
 async function getToken () {
@@ -72,9 +73,30 @@ function generateTOTP (secret, window = 0) {
     return generateHOTP(secret, counter + window);
 }
 
+const saveLocalStorageData = async (localStorageFilePath) => {
+    const localStorageData = await driver.executeScript('return JSON.stringify(localStorage);');
+    fs.writeFileSync(localStorageFilePath, localStorageData, 'utf-8');
+    console.log('Local Storage Data saved to:', localStorageFilePath);
+};
+
+const loadLocalStorageData = async (localStorageFilePath) => {
+    if (fs.existsSync(localStorageFilePath)) {
+        const localStorageData = JSON.parse(fs.readFileSync(localStorageFilePath, 'utf-8'));
+        Object.keys(localStorageData).forEach(async function (key) {
+            const value = localStorageData[key];
+            await driver.executeScript(`localStorage.setItem('${key}', ${JSON.stringify(value)});`);
+        });
+        await driver.executeScript('window.location.reload();');
+    } else {
+        console.log('could not find local storage data');
+    }
+};
+
 module.exports = {
     getToken,
     getBddSignedToken,
     extractQRCodeData,
-    generateTOTP
+    generateTOTP,
+    saveLocalStorageData,
+    loadLocalStorageData
 };
