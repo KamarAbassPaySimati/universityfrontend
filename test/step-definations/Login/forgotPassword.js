@@ -28,12 +28,6 @@ When('I click on go back to login screen', async function () {
     await element.click();
 });
 
-Then('I should be redirected to login', async function () {
-    await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.wait(until.elementLocated(By.xpath('//p[text()="Login"]')));
-    await driver.wait(until.urlIs('http://localhost:3000'));
-});
-
 When('I open a reset password link', async function () {
     await driver.get(global.reset_password_link);
 });
@@ -79,4 +73,11 @@ When('I submit the forgot password form', async function () {
     // Check if the element is enabled
     const isEnabled = await element.isEnabled();
     assert(true, isEnabled);
+});
+
+When('I click on proceed button', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="proceed_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
 });
