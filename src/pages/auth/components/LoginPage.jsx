@@ -75,7 +75,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                             />
                             <Button testId='login_button' isLoading={isLoading} text='Login' className='mt-8' />
                         </form>
-                        <div onClick={() => navigate('/forgot-password')}
+                        <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
                             className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
                             text-center'>
                             Forgot Password?

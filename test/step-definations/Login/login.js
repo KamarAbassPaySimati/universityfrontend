@@ -152,7 +152,7 @@ Before('@login', async function () {
 Before('@add_admin_user', async function () {
     try {
         const random_number = faker.string.alphanumeric(5);
-        const email = `bharath+${random_number}@7edge.com`;
+        const email = `bharath.shet+${random_number}@7edge.com`;
         const firstName = faker.person.firstName();
         const middleName = faker.person.middleName();
         const lastName = faker.person.lastName();
