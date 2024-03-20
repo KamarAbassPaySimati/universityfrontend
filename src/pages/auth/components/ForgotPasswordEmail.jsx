@@ -50,7 +50,6 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
         setError('');
     };
     const handleBacktoLogin = () => {
-        console.log("isLoading", isLoading)
         navigate('/');
     };
     return (
