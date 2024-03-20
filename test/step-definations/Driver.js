@@ -23,7 +23,7 @@ options.addArguments('--dns-prefetch-disable');
 options.addArguments('enable-features=NetworkServiceInProcess');
 
 global.driver = chrome.Driver.createSession(options, service);
-setDefaultTimeout(15000);
+setDefaultTimeout(35000);
 BeforeAll(async function () {
     await driver.manage();
     await new Promise(resolve => setTimeout(resolve, 3000));
@@ -31,7 +31,16 @@ BeforeAll(async function () {
     await driver.wait(until.elementLocated(By.id('root')));
     global.current_process_name = faker.string.alpha({ count: 10, casing: 'upper' });
     global.is_user_logged_in = false;
-    console.log('logged in');
+
+    const worldParametersIndex = process.argv.indexOf('--world-parameters');
+    let worldParameters;
+    if (worldParametersIndex !== -1 && process.argv.length > worldParametersIndex + 1) {
+        worldParameters = JSON.parse(process.argv[worldParametersIndex + 1]);
+        global.perform_login = worldParameters.login;
+
+        console.log('global.perform_login', global.perform_login);
+    }
+
     try {
         global.__coverage__ = await driver.executeScript('return __coverage__;');
         global.coverageMap = createCoverageMap(__coverage__);

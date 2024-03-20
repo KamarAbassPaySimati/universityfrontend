@@ -6,9 +6,9 @@ import CircularNumber from './CircularNumber';
 import QRCode from 'qrcode.react';
 import Button from '../../../components/Button/Button';
 import MFA from './MFA';
-import { confirmSignIn, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
+import { confirmSignIn, fetchUserAttributes, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
-import { login } from '../authSlice';
+import { login, logout, setUser } from '../authSlice';
 import Image from '../../../components/Image/Image';
 import SuccessfulLogin from './SuccessfulLogin';
 import { useNavigate } from 'react-router-dom';
@@ -50,11 +50,22 @@ const Totp = ({ Qrcode }) => {
                     value: url
                 }
             });
-            console.log('SUCCESS'); // SUCCESS
         } catch (err) {
             console.log(err);
         }
     }
+
+    const handleFetchUserAttributes = async () => {
+        try {
+            const userAttributes = await fetchUserAttributes();
+            if (userAttributes) {
+                dispatch(setUser(userAttributes));
+            }
+        } catch (error) {
+            dispatch(setUser(''));
+            dispatch(logout());
+        }
+    };
 
     // OTP submit handler
     const handleTotpVerify = async (e) => {
@@ -73,11 +84,14 @@ const Totp = ({ Qrcode }) => {
             const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
+            handleFetchUserAttributes();
             setIsLoading(false);
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
+                console.log('yess');
             } else {
+                console.log('nooo');
                 dispatch(login());
                 navigate('/dashboard');
             }
@@ -103,9 +117,11 @@ const Totp = ({ Qrcode }) => {
     return (
         <div>
             <div>
-                <Image src='Header' />
-                <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
-                    {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
+                <div className='sticky top-0 left-0 bg-[#fff] mb-10'>
+                    <Image src='Header'/>
+                    <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
+                        {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
+                    </div>
                 </div>
                 {Qrcode && !successfulLogin && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
                     <CircularNumber text='1' active={isScanPage} />
@@ -118,13 +134,13 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
+                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'min-h-[calc(100vh-152px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin
                                 ? <SuccessfulLogin />
                                 : (isScanPage
-                                    ? <div className='p-8 border border-neutral-outline max-w-[425px] rounded-[8px] mb-10'>
+                                    ? <div className='p-8 border border-neutral-outline max-w-[420px] rounded-[8px] mb-10'>
                                         <div className='text-center'>
                                             <div className='text-[#000000] font-[500] text-[24px] leading-[32px]'>
                                                 Paymaart QR Code

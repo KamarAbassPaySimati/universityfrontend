@@ -59,7 +59,6 @@ Feature: Paymaart - Admin Web - Login
 
     @perform_logout 
     @wait
-    @delete_admin_account
     Scenario: Admin User login with valid credentials for the second time using email
         Given I am on the login screen
         When I enter valid email address and password
@@ -68,3 +67,15 @@ Feature: Paymaart - Admin Web - Login
         When I enter the TOTP obtained from the previously scanned device
         And I submit the TOTP form
         Then I should be redirected to the '/dashboard' page
+
+    @delete_admin_account
+    Scenario: Admin View profile
+        Given I am logged into the application
+        When I navigate to my profile page
+        Then I should see my profile card information
+        And I should see my name
+        And I should see my email address
+        And I should see my role
+        And I should see my paymaart ID
+        And I should see my phone number
+        And I should see the option to update my password
