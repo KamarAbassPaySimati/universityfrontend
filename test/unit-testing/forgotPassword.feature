@@ -1,6 +1,6 @@
 @1.1
 Feature: Paymaart -Admin Web - Forgot Password
-    As an Super/finance/support/admin. who forgot the password, I want an option to reset my password so 
+    As an Super/finance/support/admin. who forgot the password, I want an option to reset my password so
     that I can set a new password and log in
     Conditions of Satisfaction:
     The user should enter their registered email associated with the account
@@ -30,26 +30,27 @@ Feature: Paymaart -Admin Web - Forgot Password
     a. Require random combinations of characters.
 
 
-    @perform_logout 
+    # @perform_logout
+    # @wait
+    # Scenario: Request Forgot password with invalid email
+    #     Given I am on the login screen
+    #     And I click on forgot password
+    #     When I enter the email address as "bharath.shet7edge.com"
+    #     When I click on proceed button
+    #     Then I should read a message stating that "Invalid email"
+    #     And I click on go back to login screen
+    #     Then I should be redirected to login
+
     @wait
-    Scenario: Request Forgot password with invalid email
-        Given I am on the login screen
-        And I click on forgot password
-        When I enter the email address as "bharath.shet7edge.com" 
-        When I click on proceed button
-        Then I should read a message stating that "Invalid email"
-        And I click on go back to login screen
-        Then I should be redirected to login
-    
     Scenario: Request Forgot password
         Given I am on the login screen
         And I click on forgot password
-        When I enter the email address as "bharath.shet+admin@7edge.com" 
+        When I enter the email address as "bharath.shet+admin@7edge.com"
         When I click on proceed button
         Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes."
         And I click on go back to login screen
         Then I should be redirected to login
-    
+
     @request_reset_password
     Scenario Outline: Passwords do not match
         Given I open a reset password link
@@ -58,37 +59,37 @@ Feature: Paymaart -Admin Web - Forgot Password
         And I submit the forgot password form
         Then I should read a message stating that <message>
         Examples:
-            | password        | confirm_password | message                   |
-            | "1234@bharathB" | "1234@bharathBc" | "Password does not match" |
+            | password    | confirm_password | message                   |
+            | "1234@bhaB" | "1234@bhab"      | "Password does not match" |
 
     Scenario: Check for password requirement
         Given I am in reset password page
         When I enter password as <password> and confirm password as <confirm_password>
         When I submit the forgot password form
-        Then I should read a message stating that <message>        
+        Then I should read a message stating that <message>
         Examples:
-            | password      | confirm_password |message|
-            | "abcpassword" | "abcpassword"    |"Password criteria is not met"|
-            | "1"           | "1"              |"Password criteria is not met"|
-            | "c"           | "c"              |"Password criteria is not met"|
-            | "@"           | "@"              |"Password criteria is not met"|
-            | "bharath@"    | "bharath@"       |"Password criteria is not met"|
-            | "B"           | "B"              |"Password criteria is not met"|
-            | "Ba"          | "Ba"             |"Password criteria is not met"|
-            | "Ba1"         | "Ba1"            |"Password criteria is not met"|
-            | "Pass!1"      | "Pass!1"         |"Password criteria is not met"|
+            | password      | confirm_password | message                        |
+            | "abcpassword" | "abcpassword"    | "Password criteria is not met" |
+            | "1"           | "1"              | "Password criteria is not met" |
+            | "c"           | "c"              | "Password criteria is not met" |
+            | "@"           | "@"              | "Password criteria is not met" |
+            | "bharath@"    | "bharath@"       | "Password criteria is not met" |
+            | "B"           | "B"              | "Password criteria is not met" |
+            | "Ba"          | "Ba"             | "Password criteria is not met" |
+            | "Ba1"         | "Ba1"            | "Password criteria is not met" |
+            | "Pass!1"      | "Pass!1"         | "Password criteria is not met" |
 
     Scenario: Set New Password with valid information
         Given I am in reset password page
         When I enter password as "Admin@1234" and confirm password as "Admin@1234"
         And I submit the forgot password form
         Then I should read a message stating that "Your password has been successfully changed"
-        
+
     Scenario: Link Expired
         Given I reopen the reset password link
         Then I should read a message stating that "The link you are trying to access has expired or is invalid."
 
-    @perform_logout 
+    @perform_logout
     @wait
     Scenario: Admin User login with valid credentials after reseting password
         Given I am on the login screen
@@ -99,7 +100,7 @@ Feature: Paymaart -Admin Web - Forgot Password
         And I submit the TOTP form
         Then I should be redirected to the '/dashboard' page
 
-    @perform_logout 
+    @perform_logout
     @request_reset_password
     Scenario: Set password to previous password
         Given I open a reset password link

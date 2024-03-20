@@ -24,10 +24,10 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
             setConfirmPasswordError('This field is mandatory');
         } else if (!isCriteriaMet) {
             // Pssword Criteria did not met
-            setConfirmPasswordError('Password criteria is not met');
+            setNewPasswordError('Password criteria is not met');
         } else if (password !== confirmPassword) {
             // passwords do not match
-            setConfirmPasswordError('Passwords does not match');
+            setConfirmPasswordError('Password does not match');
         } else if (!weakPasswordValidation.test(password)) {
             console.log('came here');
             setNewPasswordError('Weak password. Check guidelines for strong passwords.');

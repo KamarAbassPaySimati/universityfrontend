@@ -52,8 +52,22 @@ async function deleteAdminAccount (payload) {
     }
 }
 
+async function requestResetPassword (payload) {
+    const axiosOptions = {
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/admin-users/send-reset-link`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
 module.exports = {
     getMFASecret,
     addAdminUser,
-    deleteAdminAccount
+    deleteAdminAccount,
+    requestResetPassword
 };
