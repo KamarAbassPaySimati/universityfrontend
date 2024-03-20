@@ -156,9 +156,12 @@ Before('@add_admin_user', async function () {
         const firstName = faker.person.firstName();
         const middleName = faker.person.middleName();
         const lastName = faker.person.lastName();
-        const phoneNumber = `${faker.phone.number('+265#######')}`;
+        const phoneNumber = `${faker.phone.number('## ### ####')}`;
         const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
+        const countryCode = '+265';
+        const mainPhoneNumber = `${countryCode} ${phoneNumber}`;
+
         const payload = {
             first_name: firstName,
             username: email,
@@ -167,10 +170,12 @@ Before('@add_admin_user', async function () {
             password: 'Admin@123',
             paymaart_id: paymaartId,
             email,
+            country_code: countryCode,
             role: 'Super Admin',
-            phone_number: phoneNumber
+            phone_number: phoneNumber.replaceAll(' ', '')
         };
 
+        console.log('payload', payload);
         global.adminUser = {
             pass: 'Admin@123',
             email_address: email,
@@ -179,7 +184,7 @@ Before('@add_admin_user', async function () {
             middle_name: middleName,
             last_name: lastName,
             role: 'Super Admin',
-            phone_number: phoneNumber,
+            phone_number: mainPhoneNumber,
             paymaart_id: paymaartId,
             fullName
         };
