@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
-const assert = require('assert');
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
+const { Given, When, Before } = require('@cucumber/cucumber');
 const webdriver = require('selenium-webdriver');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
