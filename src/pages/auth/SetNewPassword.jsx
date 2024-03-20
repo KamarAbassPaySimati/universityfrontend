@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React, { useState, useEffect } from 'react';
-import NewPasswordSet from './Components/NewPasswordSet';
-import PasswordUpdateSuccess from './Components/PasswordUpdateSuccess';
+import NewPasswordSet from './components/NewPasswordSet';
+import PasswordUpdateSuccess from './components/PasswordUpdateSuccess';
 import { dataService } from '../../services/data.services';
 import { useSearchParams } from 'react-router-dom';
-import TokenInvalid from './Components/TokenInvalid';
+import TokenInvalid from './components/TokenInvalid';
 import Loading from '../../components/Loading/Loading';
 
 const SetNewPassword = () => {

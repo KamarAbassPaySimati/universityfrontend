@@ -84,7 +84,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         id="Proceed"
                         isLoading={isLoading}
                     />
-                    <Button2 testId='Login' onClick={handleBacktoLogin} text='Back to Login' disabled={isLoading} />
+                    <Button2 testId='back_to_login' onClick={handleBacktoLogin} text='Back to Login' disabled={isLoading} />
                 </form>
             </div>
         </div>
