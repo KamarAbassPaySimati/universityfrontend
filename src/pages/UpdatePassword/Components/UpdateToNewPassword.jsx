@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import PassWordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
+// import { signOut } from 'aws-amplify/auth';
 
 const UpdateToNewPassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -85,6 +86,13 @@ const UpdateToNewPassword = () => {
         //     }
         // }
     };
+    // async function handleSignOut () {
+    //     try {
+    //         await signOut({ global: true });
+    //     } catch (error) {
+    //         console.log('error signing out: ', error);
+    //     }
+    // }
 
     const changeHandler = (e, id) => {
         if (id === 'Old Password') {
