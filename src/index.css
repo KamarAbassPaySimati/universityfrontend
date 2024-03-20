@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Inter", sans-serif;
+  background-color: #FFF;
+}
+
+
+.react-responsive-modal-modal {
+  padding: 0 !important;
+}
+
+.react-responsive-modal-closeButton {
+  padding-top: 16px !important;
+  right: 32px !important;
+  position: absolute;
+  top: 24px;
+  right: 14px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+}
+
+.react-responsive-modal-modal:has(.customModal) {
+  max-width: fit-content !important;
+  min-width: 306px !important;
+  border-radius: 8px !important;
+}
+
+/* Tooltip styling rules */
+.my-tooltip {
+  background-color: #FFFFFF !important;
+  color: #333333 !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  padding: 6px 10px !important;
+  border-radius: 4px !important;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
+  cursor: pointer;
+}
