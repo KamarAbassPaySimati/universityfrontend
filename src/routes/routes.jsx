@@ -41,10 +41,8 @@ export default function NavigationRoutes (props) {
 
     useEffect(() => {
         if (!pageLoading && !loggedIn) {
-            console.log('yes');
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
-            console.log('no');
             navigate('/dashboard');
         }
     }, [pageLoading]);
