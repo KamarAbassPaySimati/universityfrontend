@@ -1,0 +1,434 @@
+image: node:14.18.1
+
+clone:
+  depth: full
+
+options:
+  max-time: 120 #max time in minutes
+
+definitions:
+
+  services:
+    docker-high-memory:
+      memory: 7128
+      type: docker
+      
+  steps:
+    - step: &BuildStep
+        name: Build
+        image: sleavely/node-awscli:18.x
+        size: 2x
+        caches:
+          - node
+        script:
+          - if [ ! "$(ls -A node_modules)" ]; then   npm install --force; fi 
+          - printenv | awk -F= '!/^HOME|^PWD/ {print $1 "=\""$2"\""}' >> .env
+          - ./scripts/envs.sh
+          - export NODE_OPTIONS=--max-old-space-size=8192
+          - npm run build
+        artifacts:
+          - .env
+          - dist/**
+          
+    - step: &SiteSpeed
+        name: Browser Performance
+        image: timbru31/node-chrome
+        services:
+          - docker-high-memory
+        size: 2x
+        script:
+          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
+          - echo "sitespeed is skipped"
+          - source .env
+          - export BASE_URL='http://localhost:3000'
+          - npm install pm2 sitespeed.io -g
+          - npm install express --force
+          - pm2 start scripts/sitespeed-server.js
+          - sleep 30
+          - sitespeed.io  --multi scripts/sitespeed/testMultipleURLs.js --preScript scripts/sitespeed/login.js --budget.configPath scripts/budget.json -n 1 --firstParty ".amazon.com" --firstParty "sdk.relicx.ai" --headless true --browsertime.chrome.args no-sandbox
+        artifacts:
+          - sitespeed-result/**
+
+    - step: &ESlint
+        name: ESLint
+        image: node:latest
+        caches:
+          - node
+        script:
+           - npm i --force
+           - npm run eslint
+           
+    - step: &LicenseCompliance
+        name: License Compliance
+        script:
+          - echo "License Compliance"
+          - npm install -g license-checker 
+          - license-checker --json > licenses.json  
+          - node scripts/license.js
+
+    - step: &DependencyScanning
+        name: Dependency Scanning
+        services:
+          - docker
+        script:
+          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
+          - echo "Dependency Scanning"
+          - npm i --force
+          - pipe: docker://aligent/owasp-dependency-check-pipe
+            variables:
+              SCAN_PATH: "./package-lock.json"
+              CVSS_FAIL_LEVEL: "8"
+        artifacts:
+          - test_results/**
+
+    - step: &SecretChecking
+        name: Secret Detection
+        image: python:latest
+        script:
+          - echo "Secret Checking"
+          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
+          - pip install detect-secrets
+          - detect-secrets scan
+          #- pipe: atlassian/git-secrets-scan:0.4.3
+
+    - step: &SAST
+        name: Static Application Security Testing (SAST)
+        image: python:latest
+        script:
+          - echo "SAST"
+          - pip3 install njsscan
+          - njsscan -w .
+
+    - step: &DAST 
+        name: Dynamic Application Security Testing (DAST) 
+        image: softwaresecurityproject/zap-stable
+        services:
+          - docker
+        script:
+          - source .env
+          - docker run -u zap -p 8080:8080 -d softwaresecurityproject/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+          - sleep 30
+          - mkdir test_results
+          - apt-get update && apt-get install python-is-python3 -y && apt-get install python3-pip -y
+          - pip3 install beautifulsoup4
+          - source .env
+          - python3 scripts/dast.py
+        artifacts:
+          - test_results/**
+        
+    - step: &Deploy
+        name: Deployment
+        image: jimdo/aws-python
+        script:
+          - source .env
+          - pip install urllib3==1.26.5
+          - pip install --upgrade pip
+          - pip install requests
+          # - python version.py $(git log -1 --pretty=%B)
+          - pipe: atlassian/aws-s3-deploy:0.2.4
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $REGION
+              S3_BUCKET: $ADMIN_S3_BUCKET
+              ACL: "public-read"
+              LOCAL_PATH: "dist"
+          - pipe: atlassian/aws-cloudfront-invalidate:0.1.1
+            variables:
+              AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID
+              AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY
+              AWS_DEFAULT_REGION: $REGION
+              DISTRIBUTION_ID: $ADMIN_DISTRIBUTION_ID
+
+    - step: &RunBDD
+        name: Integration Testing
+        image: timbru31/node-chrome
+        caches:
+          - node
+        size: 2x
+        script:
+          - source .env
+          - export NODE_OPTIONS=--max-old-space-size=8192
+          - npm install pm2 -g
+          - source .env
+          - npm install express --force
+          - npm install nyc --save-dev --force
+          - pm2 start scripts/server.js
+          - sleep 60
+          - mkdir reports
+          - node scripts/bdd-execution.js
+        after-script:
+          - cat log.txt
+        artifacts: # defining the artifacts to be passed to each future step.
+          - reports/**
+          - test/step-definations/coverageData/**
+          - living-documentation/**
+          
+
+    - step: &UnitTestCase
+        name: Unit Testing
+        image: timbru31/node-chrome
+        size: 2x
+        script:
+          - echo "Unit test cases"
+          - export NODE_OPTIONS=--max-old-space-size=8192
+          - npm install pm2 -g
+          - source .env
+          - npm install express --force
+          - pm2 start scripts/server.js
+          - sleep 60
+          - mkdir reports
+          - npm install nyc --save-dev --force
+          - node scripts/bdd_unit_testing.js
+        after-script:
+          - cat log.txt
+
+    - step: &BDDReports
+        name: Integration Testing Reports
+        image: doctrine/nodejs-aws-cli
+        caches:
+          - node
+        size: 2x
+        script:
+          - source .env
+          - mkdir coverage
+          - npm install nyc --save-dev --force
+          - npm run generate_report
+          - node scripts/livingdoc.js
+          - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+          - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+          - aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/$BITBUCKET_BRANCH/
+          - aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/$BITBUCKET_BRANCH/
+          - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*" 
+
+    - step: &BDDDryRun
+        name: BDD Report
+        image: doctrine/nodejs-aws-cli
+        script:
+          - npm install --force
+          - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+          - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+          - mkdir living-documenation-feature
+          - aws s3 cp s3://$DOCS_S3_BUCKET/branches.json ./branches.json
+          - aws s3 sync s3://$DOCS_S3_BUCKET/$BITBUCKET_REPO_SLUG/$Version/reports reports
+          - jq '. + ["'"$BITBUCKET_REPO_SLUG/$Version"'"]' branches.json > temp.json && mv temp.json branches.json
+          - aws s3 cp ./branches.json s3://$DOCS_S3_BUCKET/branches.json
+          - ./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run -f json:./reports/test-report-$BITBUCKET_BUILD_NUMBER.json -t @$Version
+          - node scripts/dry-report.js
+          - aws s3 cp ./reports/cucumber_report.html s3://$DOCS_S3_BUCKET/living-documenation-feature/$BITBUCKET_REPO_SLUG/$Version.html
+          - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
+   
+    - step: &Danger
+        name: Git Compliance - Danger
+        caches:
+          - node
+        script:
+          - export LANG="C.UTF-8"
+          - npm install -g danger
+          - npx danger ci 
+
+    - step: &Relicx
+        name: Relicx Automation Execution
+        caches:
+            - node
+        image: node:latest
+        script:
+            - echo "Relicx is skipped"
+            # - apt-get update && apt-get install python-is-python3 -y && apt-get install python3-pip -y
+            # - pip install pip==22.3.1 --break-system-packages
+            # - pip install urllib3
+            # - wget https://s3.us-west-1.amazonaws.com/apiclient.relicx.ai/prod/relicx.tar.gz
+            # - pip install relicx.tar.gz
+            # - npm install axios --f
+            # - node relicx.js
+
+    - step: &RelicxResult
+        name: Relicx Automation Result
+        trigger: manual
+        image: python:3.7.2
+        script:
+          - pip install requests
+          - pip install urllib3==1.26.7
+          # - python3 relicx-result.py
+    
+    - step: &RunBDD1
+        name: Integration Testing
+        image: timbru31/node-chrome
+        caches:
+          - node
+        size: 2x
+        script:
+          - export NODE_OPTIONS=--max-old-space-size=8192
+          - source .env
+          - npm install pm2 -g
+          - npm install express --force
+          - npm install nyc --save-dev --force
+          - pm2 start scripts/server.js
+          - sleep 10
+          - mkdir reports
+          - node scripts/bdd-execution-split1.js
+        after-script:
+          - cat log.txt
+        artifacts: # defining the artifacts to be passed to each future step.
+          - reports/**
+          - test/step-definations/coverageData/**
+          - living-documentation/**
+
+    - step: &RunBDD2
+        name: Integration Testing
+        image: timbru31/node-chrome
+        caches:
+          - node
+        size: 2x
+        script:
+          - export NODE_OPTIONS=--max-old-space-size=8192
+          - npm install pm2 -g
+          - source .env
+          - npm install express --force
+          - npm install nyc --save-dev --force
+          - pm2 start scripts/server.js
+          - sleep 60
+          - mkdir reports
+          - node scripts/bdd-execution-split2.js 
+        after-script:
+          - cat log.txt
+        artifacts: # defining the artifacts to be passed to each future step.
+          - reports/**
+          - test/step-definations/coverageData/**
+          - living-documentation/**
+
+    - step: &RunBDD3
+        name: Integration Testing
+        image: timbru31/node-chrome
+        caches:
+          - node
+        size: 2x
+        script:
+          - export NODE_OPTIONS=--max-old-space-size=8192
+          - npm install pm2 -g
+          - source .env
+          - npm install express --force
+          - npm install nyc --save-dev --force
+          - pm2 start scripts/server.js
+          - sleep 30
+          - mkdir reports
+          - node scripts/bdd-execution-split3.js
+        after-script:
+          - cat log.txt
+        artifacts: # defining the artifacts to be passed to each future step.
+          - reports/**
+          - test/step-definations/coverageData/**
+          - living-documentation/**
+          
+pipelines:
+  custom: 
+    BDD:
+      - step: *RunBDD
+    ESLint:
+      - step: *ESlint
+    BDDDryRun:
+      - variables:
+          - name: Version
+            default: '1.0'
+      - step: *BDDDryRun
+    Sitespeed:
+      - step: *SiteSpeed
+      
+  branches:
+    master:
+      - step: *SecretChecking
+      - stage:
+          name: PRODUCTION Build
+          deployment: Production
+          image: python:3.7.2
+          steps:
+            - step: *BuildStep
+      - step: *Deploy
+      - step: *DAST
+
+    qa:
+      - step: *SecretChecking
+      - stage:
+          name: QA Build
+          deployment: QA
+          steps:
+            - step: *BuildStep
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *RunBDD1
+            # - step: *RunBDD2
+            # - step: *RunBDD3
+      - step: *BDDReports
+      - step: *Deploy
+      - step: *DAST
+      - step: *SiteSpeed
+      #- step: *Relicx
+      #- step: *RelicxResult
+
+
+    Pre-Production:
+      - stage: 
+          name: Pre-Production Build
+          deployment: Pre-Production
+          steps:
+            - step: *BuildStep
+      - step: *Deploy
+          
+      
+      
+  pull-requests:
+    feature/**:  
+      - step: *SecretChecking
+      - step: *SAST
+      - step: *BuildStep
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *ESlint
+            - step: *LicenseCompliance
+            - step: *DependencyScanning
+      - step: *UnitTestCase
+      - step: *Deploy
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *DAST
+            - step: *SiteSpeed
+      
+
+    bugfix/**: 
+      - step: *SecretChecking
+      - step: *SAST
+      - step: *BuildStep
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *ESlint
+            - step: *LicenseCompliance
+            - step: *DependencyScanning
+      - step: *UnitTestCase
+      - step: *Deploy
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *DAST
+            - step: *SiteSpeed
+
+    hotfix/**: 
+      - step: *SecretChecking
+      - step: *SAST
+      - step: *BuildStep
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *ESlint
+            - step: *LicenseCompliance
+            - step: *DependencyScanning
+      - step: *UnitTestCase
+      - step: *Deploy
+      - parallel:
+          fail-fast: true
+          steps:
+            - step: *DAST
+            - step: *SiteSpeed
