@@ -161,6 +161,7 @@ Before('@add_admin_user', async function () {
         const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
         const countryCode = '+265';
         const mainPhoneNumber = `${countryCode} ${phoneNumber}`;
+
         const payload = {
             first_name: firstName,
             username: email,
