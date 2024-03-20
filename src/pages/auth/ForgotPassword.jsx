@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import ForgotPasswordEmail from '../auth/components/ForgotPasswordEmail';
-import ForgotPasswordLinkSent from './components/ForgotPasswordLinkSent';
+import ForgotPasswordEmail from './Components/ForgotPasswordEmail';
+import ForgotPasswordLinkSent from './Components/ForgotPasswordLinkSent';
 
 const ForgotPassword = () => {
     const [isSuccess, setIsSuccess] = useState(false);

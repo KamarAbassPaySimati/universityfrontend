@@ -3,8 +3,11 @@ import InputField from '../../../components/InputField/InputField';
 import { dataService } from '../../../services/data.services';
 import Button from '../../../components/Button/Button';
 import emailValidation from '../../../CommonMethods/emailValidtion';
+import Button2 from '../../../components/Button2/Button2';
+import { useNavigate } from 'react-router-dom';
 
 const ForgotPasswordEmail = ({ setIsSuccess }) => {
+    const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +49,10 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
     const focusHandler = () => {
         setError('');
     };
+    const handleBacktoLogin = () => {
+        console.log("isLoading", isLoading)
+        navigate('/');
+    };
     return (
         <div className='z-20 bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
             <div className='flex justify-center items-center mb-9'>
@@ -74,9 +81,10 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                     <Button
                         text="Proceed"
                         onClick={handleClick}
-                        id = ""
+                        id="Proceed"
                         isLoading={isLoading}
                     />
+                    <Button2 testId='Login' onClick={handleBacktoLogin} text='Back to Login' disabled={isLoading} />
                 </form>
             </div>
         </div>
