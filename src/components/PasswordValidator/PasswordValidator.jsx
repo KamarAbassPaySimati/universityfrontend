@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from '../Image/Image';
-function PasswordValidator ({ newPassword, setIsCriteriaMet }) {
+function PassWordValidator ({ newPassword, setIsCriteriaMet }) {
     // eslint-disable-next-line no-useless-escape
     const specialCharacter = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
     useEffect(() => {
@@ -56,4 +56,4 @@ function PasswordValidator ({ newPassword, setIsCriteriaMet }) {
     );
 }
 
-export default PasswordValidator;
+export default PassWordValidator;
