@@ -75,10 +75,17 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                             />
                             <Button testId='login_button' isLoading={isLoading} text='Login' className='mt-8' />
                         </form>
-                        <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
+                        {/* <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
                             className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
                             text-center'>
                             Forgot Password?
+                        </div> */}
+                        <div className='mt-6 text-primary-normal font-[400] text-[14px] leading-[24px] text-center'
+                            style={{ userSelect: 'none' }}>
+                            <a href="/forgot-password" data-testid="forgot_password_link"
+                                onClick={(e) => { e.preventDefault(); navigate('/forgot-password'); }} className='cursor-pointer'>
+                                Forgot Password?
+                            </a>
                         </div>
                     </div>
                 </div>
