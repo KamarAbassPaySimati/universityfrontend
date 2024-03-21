@@ -2,8 +2,12 @@
 import axios from 'axios';
 import { baseURL } from '../config';
 import authHeader from './authHeader';
+import { globalSignout } from '../CommonMethods/globalSignout';
 
 async function PostAPIWithoutHeader (endpoint, body) {
+    if (globalSignout()) {
+        return;
+    }
     try {
         const url = `${baseURL}${endpoint}`;
         console.log('URL:', url); // Print the URL
