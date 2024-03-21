@@ -1,4 +1,4 @@
-@1.1
+@1.1 @login
 Feature: Paymaart -Admin Web - Forgot Password
     As an Super/finance/support/admin, I want an option to update the password so that I can secure my account.
     Conditions of Satisfaction:
@@ -33,8 +33,8 @@ Feature: Paymaart -Admin Web - Forgot Password
     Then I should read a message stating that <message>
     Examples: 
       | current_password | new_password  | confirm_password | message                                          |
-      | "Admin@123"      | "Admin@123"   | "Admin@123"      | "New password must differ from current password" |
-      | "Admin!1234"     | "Admin@1234"  | "Admin@1234"     | "Incorrect Password"                             |
+      | "Admin@123"      | "Admin@123"   | "Admin@123"      | "Old password and new password cannot be the same" |
+      | "Admin!1234"     | "Admin@1234"  | "Admin@1234"     | "Incorrect password"                             |
       | "Admin@123"      | "Admin@12345" | "Admin@1234"     | "Password does not match"                        |
 
   Scenario: Check for password requirement
