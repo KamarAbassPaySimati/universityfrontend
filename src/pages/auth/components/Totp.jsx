@@ -89,9 +89,7 @@ const Totp = ({ Qrcode }) => {
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
-                console.log('yess');
             } else {
-                console.log('nooo');
                 dispatch(login());
                 navigate('/dashboard');
             }

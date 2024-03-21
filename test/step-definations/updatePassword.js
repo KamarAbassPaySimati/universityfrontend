@@ -10,7 +10,7 @@ const { driver } = require('./Driver.js');
 
 Given('I navigate to update password page', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await driver.get('http://localhost:3000/update-password');
+    await driver.get('http://localhost:3000/profile/update-password');
 });
 
 When('I enter current password as {string}', async function (current_password) {
@@ -33,12 +33,8 @@ When('I enter new password as {string} and confirm password as {string}', async 
 
 When('I submit the update password form', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
-    await driver.wait(until.elementIsDisabled(element));
+    await driver.wait(until.elementIsVisible(element));
     element.click();
-
-    // Check if the element is enabled
-    const isEnabled = await element.isEnabled();
-    assert(true, isEnabled);
 });
 
 Then('I should see update password button as disabled', async function () {
