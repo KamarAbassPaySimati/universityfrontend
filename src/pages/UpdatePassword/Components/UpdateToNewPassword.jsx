@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import PassWordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
-// import { signOut } from 'aws-amplify/auth';
+import { dataService } from '../../../services/data.services';
+import { signOut } from 'aws-amplify/auth';
+import { logout } from '../../auth/authSlice';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import GlobalContext from '../../../components/Context/GlobalContext';
+import { endpoints } from '../../../services/endpoints';
 
 const UpdateToNewPassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -13,6 +19,12 @@ const UpdateToNewPassword = () => {
     const [newConfirmPasswordError, setNewConfirmPasswordError] = useState('');
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const { setToastError, setToastSuccessBottom } = useContext(GlobalContext);
+
+    const { updatePassword } = endpoints;
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     // eslint-disable-next-line max-len
     const weakPasswordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%&])(?![.\d]{4,})(?!(.)\1{2})(?!(123|234|321|345|432|543|654|765|876|987))(?!.*(password|qwerty))(?!.*(admin|user|root|12345|abcd|abcd1234))([^.!?$\s]){8,12}$/;
 
@@ -38,61 +50,40 @@ const UpdateToNewPassword = () => {
         } else if (!weakPasswordValidation.test(newPassword)) {
             console.log('came here');
             setNewPasswordError('Weak password. Check guidelines for strong passwords.');
+        } else if (oldPassword === newPassword) {
+            setNewPasswordError('Old password and new password cannot be the same');
         } else {
-            // call api
+            try {
+                setIsLoading(true);
+                const response = await dataService.PostAPI(updatePassword,
+                    { old_password: oldPassword, new_password: newPassword });
+                console.log(response, 'UpdatePassword response:');
+                if (!response.error) {
+                    setIsLoading(false);
+                    handleSignOut();
+                } else if (response?.data.status === 401) {
+                    setOldPasswordError(response?.data?.data?.message);
+                    setIsLoading(false);
+                } else {
+                    setIsLoading(false);
+                    setToastError('Something went wrong!');
+                }
+            } catch (error) {
+                setIsLoading(false);
+                setToastError('Something went wrong......!');
+            }
         }
-
-        // if (password.trim() === '' && confirmPassword.trim() === '') {
-        //     setNewPasswordError('This field is mandatory');
-        //     setConfirmPasswordError('This field is mandatory');
-        // } else if (password.trim() === '') {
-        //     setNewPasswordError('This field is mandatory');
-        // } else if (confirmPassword.trim() === '') {
-        //     setConfirmPasswordError('This field is mandatory');
-        // } else if (!isCriteriaMet) {
-        //     // Pssword Criteria did not met
-        //     setConfirmPasswordError('Password criteria is not met');
-        // } else if (password !== confirmPassword) {
-        //     // passwords do not match
-        //     setConfirmPasswordError('Passwords does not match');
-        // } else if (!weakPasswordValidation.test(password)) {
-        //     console.log('came here');
-        //     setNewPasswordError('Weak password. Check guidelines for strong passwords.');
-        // } else {
-        //     // call api
-        //     try {
-        //         setIsLoading(true);
-        //         const response = await dataService.PostAPIWithoutHeader('reset-password',
-        //             { token, new_password: password });
-        //         console.log(response, 'Set New Password response:');
-        //         if (!response.error) {
-        //             setIsSuccess(true);
-        //         } else if (response?.data?.status === 401) {
-        //             setIsValidToken(true);
-        //         } else if (response?.data.status === 400) {
-        //             console.log('came here 400');
-        //             setNewPasswordError(response?.data?.data?.message);
-        //             setIsLoading(false);
-        //             setIsSuccess(false);
-        //         } else {
-        //             setNewPasswordError(response?.data?.data?.message);
-        //             setIsLoading(false);
-        //             setIsSuccess(false);
-        //         }
-        //     } catch (error) {
-        //         setIsLoading(false);
-        //         console.log(error);
-        //         setIsSuccess(false);
-        //     }
-        // }
     };
-    // async function handleSignOut () {
-    //     try {
-    //         await signOut({ global: true });
-    //     } catch (error) {
-    //         console.log('error signing out: ', error);
-    //     }
-    // }
+    async function handleSignOut () {
+        try {
+            await signOut({ global: true });
+            dispatch(logout());
+            navigate('/');
+            setToastSuccessBottom('Your password has been updated successfully');
+        } catch (error) {
+            console.log('error signing out: ', error);
+        }
+    }
 
     const changeHandler = (e, id) => {
         if (id === 'Old Password') {
