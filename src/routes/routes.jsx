@@ -47,7 +47,6 @@ export default function NavigationRoutes (props) {
         window.location.pathname !== '/set-new-password')) {
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
-            console.log('no');
             navigate('/dashboard');
         }
     }, [pageLoading]);
