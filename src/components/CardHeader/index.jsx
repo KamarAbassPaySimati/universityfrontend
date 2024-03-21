@@ -19,14 +19,12 @@ const CardHeader = ({ children, paths, activePath, pathurls }) => {
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
-        console.log(arr, 'arr');
         const result = [];
         let sum = '';
         for (const str of arr) {
             sum += str;
             result.push(sum);
         }
-        console.log(result, 'result');
         return result;
     }
 
