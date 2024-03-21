@@ -186,7 +186,8 @@ Before('@add_admin_user', async function () {
             role: 'Super Admin',
             phone_number: mainPhoneNumber,
             paymaart_id: paymaartId,
-            fullName
+            fullName,
+            phone_number_without_country_code: phoneNumber
         };
         await addAdminUser(payload);
     } catch (error) {
