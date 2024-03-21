@@ -4,11 +4,13 @@ import PasswordValidator from '../../../components/PasswordValidator/PasswordVal
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import { signOut } from 'aws-amplify/auth';
-import { logout } from '../../auth/authSlice';
+import { logout, setUser } from '../../auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { endpoints } from '../../../services/endpoints';
+import useGlobalSignout from '../../../CommonMethods/globalSignout';
+import appLogout from '../../../CommonMethods/appLogout';
 
 const UpdateToNewPassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -57,6 +59,10 @@ const UpdateToNewPassword = () => {
                 setIsLoading(true);
                 const response = await dataService.PostAPI(updatePassword,
                     { old_password: oldPassword, new_password: newPassword });
+                if (response === 'unauthorized') {
+                    appLogout(dispatch, navigate);
+                    return;
+                }
                 console.log(response, 'UpdatePassword response:');
                 if (!response.error) {
                     setIsLoading(false);
@@ -70,7 +76,8 @@ const UpdateToNewPassword = () => {
                 }
             } catch (error) {
                 setIsLoading(false);
-                setToastError('Something went wrong!');
+                console.log('EEER', error);
+                setToastError('Something went wrong!......');
             }
         }
     };

@@ -1,5 +1,5 @@
 import 'react-responsive-modal/styles.css';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from '../Image/Image';
 import { signOut } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
-import { globalSignout } from '../../CommonMethods/globalSignout.js';
+import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -42,9 +42,7 @@ const SideBar = ({ role }) => {
         setToastSuccessBottom('You have been logged out');
     };
 
-    useEffect(() => {
-        globalSignout();
-    }, []);
+    useGlobalSignout();
 
     return (
         <>

@@ -1,19 +1,29 @@
+import { useEffect } from 'react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
 import { setUser, logout } from '../pages/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 
-export const globalSignout = async () => {
+const useGlobalSignout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    try {
-        // eslint-disable-next-line no-unused-vars
-        const userAttributes = await fetchUserAttributes();
-        return false;
-    } catch (error) {
-        dispatch(setUser(''));
-        dispatch(logout());
-        navigate('/');
-        return true;
-    }
+
+    useEffect(() => {
+        const signout = async () => {
+            try {
+                // eslint-disable-next-line no-unused-vars
+                const userAttributes = await fetchUserAttributes();
+                return false;
+            } catch (error) {
+                dispatch(setUser(''));
+                dispatch(logout());
+                navigate('/');
+                return true;
+            }
+        };
+
+        signout();
+    }, [dispatch, navigate]);
 };
+
+export default useGlobalSignout;
