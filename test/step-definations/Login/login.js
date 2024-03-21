@@ -152,13 +152,13 @@ Before('@login', async function () {
 Before('@add_admin_user', async function () {
     try {
         const random_number = faker.string.alphanumeric(5);
-        const email = `bharath+${random_number}@7edge.com`;
+        const email = `bharath.shet+${random_number}@7edge.com`;
         const firstName = faker.person.firstName();
         const middleName = faker.person.middleName();
         const lastName = faker.person.lastName();
         const phoneNumber = `${faker.phone.number('+265#######')}`;
         const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
-        const fullName = `${firstName} ${middleName} ${lastName}`;
+        const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
         const payload = {
             first_name: firstName,
             username: email,

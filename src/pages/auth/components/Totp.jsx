@@ -117,9 +117,11 @@ const Totp = ({ Qrcode }) => {
     return (
         <div>
             <div>
-                <Image src='Header' />
-                <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
-                    {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
+                <div className='sticky top-0 left-0 bg-[#fff] mb-10'>
+                    <Image src='Header'/>
+                    <div className='bg-primary-normal text-[#fff] px-[67px] py-3 font-[400] text-[24px] leading-[32px]'>
+                        {Qrcode ? 'Setup Two-Factor Authentication (2FA)' : 'Two-Factor Authentication (2FA)'}
+                    </div>
                 </div>
                 {Qrcode && !successfulLogin && <div className='flex gap-4 justify-center items-center mt-[106px] mb-[57px]'>
                     <CircularNumber text='1' active={isScanPage} />
@@ -132,13 +134,13 @@ const Totp = ({ Qrcode }) => {
                         Authentication OTP
                     </div>
                 </div>}
-                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'h-[calc(100vh-112px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
+                <div className={`flex justify-center items-center ${Qrcode && !successfulLogin ? '' : 'min-h-[calc(100vh-152px)]'} ${successfulLogin ? 'flex-col' : ''}`}>
                     <>
                         {Qrcode
                             ? successfulLogin
                                 ? <SuccessfulLogin />
                                 : (isScanPage
-                                    ? <div className='p-8 border border-neutral-outline max-w-[425px] rounded-[8px] mb-10'>
+                                    ? <div className='p-8 border border-neutral-outline max-w-[420px] rounded-[8px] mb-10'>
                                         <div className='text-center'>
                                             <div className='text-[#000000] font-[500] text-[24px] leading-[32px]'>
                                                 Paymaart QR Code

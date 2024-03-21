@@ -21,11 +21,12 @@ const Profile = () => {
                     <div className='flex gap-[27px] justify-center items-center'>
                         <div className='bg-primary-normal text-[#FFFFFF] h-[66px] w-[66px] flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px]'>
-                            {`${user?.first_name?.[0]}${user?.middle_name?.[0]}${user?.last_name?.[0]}`}
+                            {`${user?.first_name?.[0] || ''}${user?.middle_name?.[0] || ''}${user?.last_name?.[0] || ''}`}
                         </div>
                         <div className='text-neutral-primary'>
                             <div className='font-[700] text-[30px] leading-[40px] capitalize' data-testid="name">
-                                {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}
+                                {`${user?.first_name || '-'} ${user?.middle_name || '-'}`}
+                                <span className='uppercase'> {user?.last_name || '-'}</span>
                             </div>
                             <div className='text-[14px] leading-[24px] font-[400]'>
                                 Paymaart ID: <span data-testid="paymaart_id" className='font-[600]'>{user.paymaart_id}</span>
@@ -44,11 +45,15 @@ const Profile = () => {
 
                 <div className='w-full flex mt-7'>
                     {keys.map((key, index) => (
-                        <div key={index} className='w-1/5 text-[14px] leading-[24px] font-[400] mr-2'>
+                        <div key={index} className={`text-[14px] leading-[24px] font-[400] mr-2 
+                            ${key === 'Email' ? 'w-[30%]' : 'w-1/5'}`}>
                             <p className='text-neutral-secondary mb-1'>{key}</p>
-                            <span data-testid={key} className={`text-neutral-primary max-w-[300px] whitespace-nowrap
+                            <span
+                                title={userDetails[key]}
+                                data-testid={key}
+                                className={`text-neutral-primary max-w-[300px] whitespace-nowrap cursor-default
                                     break-words block overflow-hidden text-ellipsis ${key === 'Role' ? 'capitalize' : ''}`}>
-                                {userDetails[key]}
+                                {userDetails[key] || '-'}
                             </span>
                         </div>
                     ))}

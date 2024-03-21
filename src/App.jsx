@@ -24,7 +24,7 @@ function App (props) {
             setToastInformation,
             setToastSuccessBottom
         }}>
-            <motion.div className='overflow-hidden h-screen relative'>
+            <motion.div className='overflow-x-hidden h-screen relative'>
                 {ToastSuccess !== '' && <Toast
                     message={ToastSuccess}
                     type="success"
