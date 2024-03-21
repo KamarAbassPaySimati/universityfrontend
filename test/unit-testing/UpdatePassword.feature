@@ -1,4 +1,4 @@
-@1.1 @login
+@1.1
 Feature: Paymaart -Admin Web - Forgot Password
   As an Super/finance/support/admin, I want an option to update the password so that I can secure my account.
   Conditions of Satisfaction:
@@ -24,6 +24,17 @@ Feature: Paymaart -Admin Web - Forgot Password
   keyboard patterns like qwerty
   Randomness:
   a. Require random combinations of characters.
+
+  @perform_logout
+  @wait
+  Scenario: Admin Login
+    Given I am on the login screen
+    When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
+    And I submit the login form
+    Then I should be navigated to the TOTP screen
+    When I enter the TOTP obtained from the previously scanned device
+    And I submit the TOTP form
+    Then I should be redirected to the '/dashboard' page
 
   Scenario Outline: Passwords do not match
     Given I navigate to update password page
@@ -79,5 +90,4 @@ Feature: Paymaart -Admin Web - Forgot Password
     And I submit the update password form
     Then I should read a message stating that "Your password has been updated successfully"
     Then I should be redirected to login
-
-
+    
