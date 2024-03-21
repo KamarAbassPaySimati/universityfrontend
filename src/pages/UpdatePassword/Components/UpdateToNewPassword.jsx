@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
-import PassWordValidator from '../../../components/PasswordValidator/PasswordValidator';
+import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import { signOut } from 'aws-amplify/auth';
@@ -112,7 +112,7 @@ const UpdateToNewPassword = () => {
                         onChange={changeHandler}
                         onFocus={focusHandler}
                         id='Old Password'
-                        testId='new_password'
+                        testId='current_password'
                         error={oldPasswordError}
                         label='Current Password'
                         placeholder='Enter current password'
@@ -130,7 +130,7 @@ const UpdateToNewPassword = () => {
                         givenType='password'
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                        <PassWordValidator newPassword={newPassword} setIsCriteriaMet={setIsCriteriaMet} />
+                        <PasswordValidator newPassword={newPassword} setIsCriteriaMet={setIsCriteriaMet} />
                     </div>
 
                     <InputField

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
-import PassWordValidator from '../../../components/PasswordValidator/PasswordValidator';
+import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
@@ -98,7 +98,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         givenType='password'
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                        <PassWordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
+                        <PasswordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
                     </div>
 
                     <InputField
