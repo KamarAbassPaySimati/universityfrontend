@@ -88,3 +88,4 @@ Feature: Paymaart -Admin Web - Forgot Password
         And I submit the update password form
         Then I should read a message stating that "Your password has been updated successfully"
         Then I should be redirected to login
+    
