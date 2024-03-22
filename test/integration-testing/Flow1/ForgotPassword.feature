@@ -103,6 +103,7 @@ Feature: Paymaart -Admin Web - Forgot Password
         Then I should be redirected to the '/dashboard' page
 
     @perform_logout
+    @wait
     @request_reset_password
     Scenario: Set password to previous password
         Given I open a reset password link
