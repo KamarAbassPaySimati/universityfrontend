@@ -143,7 +143,7 @@ const SideBar = ({ role }) => {
                     </div>
                 </div>
             </div>
-            <Modal center open={isOpen} onClose={handleClose} closeIcon={<button style={{ color: 'white' }} disabled></button>}>
+            <Modal center open={isOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title='Logout User'
