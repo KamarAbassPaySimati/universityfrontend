@@ -29,7 +29,7 @@ Feature: Paymaart -Admin Web - Forgot Password
   @wait
   Scenario: Admin Login
     Given I am on the login screen
-    When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
+    When I enter the email address as "bharath.shet+admin3@7edge.com" and password as "Admin@123"
     And I submit the login form
     Then I should be navigated to the TOTP screen
     When I enter the TOTP obtained from the previously scanned device
@@ -76,7 +76,7 @@ Feature: Paymaart -Admin Web - Forgot Password
 
   Scenario: Admin User login with valid credentials after reseting password
     Given I am on the login screen
-    When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@12354"
+    When I enter the email address as "bharath.shet+admin3@7edge.com" and password as "Admin@12354"
     And I submit the login form
     Then I should be navigated to the TOTP screen
     When I enter the TOTP obtained from the previously scanned device
