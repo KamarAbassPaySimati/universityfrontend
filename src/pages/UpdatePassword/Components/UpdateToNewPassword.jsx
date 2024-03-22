@@ -4,13 +4,13 @@ import PasswordValidator from '../../../components/PasswordValidator/PasswordVal
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import { signOut } from 'aws-amplify/auth';
-import { logout, setUser } from '../../auth/authSlice';
+import { logout } from '../../auth/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { endpoints } from '../../../services/endpoints';
-import useGlobalSignout from '../../../CommonMethods/globalSignout';
 import appLogout from '../../../CommonMethods/appLogout';
+import passwordCheck from '../../../CommonMethods/passwordCheck';
 
 const UpdateToNewPassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -22,14 +22,11 @@ const UpdateToNewPassword = () => {
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const { setToastError, setToastSuccessBottom } = useContext(GlobalContext);
-
     const { updatePassword } = endpoints;
+    const [enteredLetter, setEnteredLetter] = useState();
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    // eslint-disable-next-line max-len
-    const weakPasswordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%&])(?![.\d]{4,})(?!(.)\1{2})(?!(123|234|321|345|432|543|654|765|876|987))(?!.*(password|qwerty))(?!.*(admin|user|root|12345|abcd|abcd1234))([^.!?$\s]){8,12}$/;
-
     const handleClick = async (e) => {
         e.preventDefault();
         if (oldPassword.trim() === '' && newPassword.trim() === '' && confirmNewPassword.trim() === '') {
@@ -49,11 +46,8 @@ const UpdateToNewPassword = () => {
             setNewPasswordError('Password criteria is not met');
         } else if (newPassword !== confirmNewPassword) {
             setNewConfirmPasswordError('Password does not match');
-        } else if (!weakPasswordValidation.test(newPassword)) {
-            console.log('came here');
+        } else if (!passwordCheck(newPassword)) {
             setNewPasswordError('Weak password. Check guidelines for strong passwords.');
-        } else if (oldPassword === newPassword) {
-            setNewPasswordError('Old password and new password cannot be the same');
         } else {
             try {
                 setIsLoading(true);
@@ -68,7 +62,11 @@ const UpdateToNewPassword = () => {
                     setIsLoading(false);
                     handleSignOut();
                 } else if (response?.data.status === 401) {
-                    setOldPasswordError(response?.data?.data?.message);
+                    if (response?.data?.data?.message === 'Old password and new password cannot be the same') {
+                        setNewPasswordError('Old password and new password cannot be the same');
+                    } else {
+                        setOldPasswordError(response?.data?.data?.message);
+                    }
                     setIsLoading(false);
                 } else {
                     setIsLoading(false);
@@ -76,8 +74,7 @@ const UpdateToNewPassword = () => {
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log('EEER', error);
-                setToastError('Something went wrong!......');
+                setToastError('Something went wrong!.....');
             }
         }
     };
@@ -93,6 +90,9 @@ const UpdateToNewPassword = () => {
     }
 
     const changeHandler = (e, id) => {
+        if (enteredLetter && enteredLetter === ' ') {
+            return;
+        }
         if (id === 'Old Password') {
             setOldPassword(e.target.value);
         } else if (id === 'New Password') {
@@ -124,6 +124,7 @@ const UpdateToNewPassword = () => {
                         label='Current Password'
                         placeholder='Enter current password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <InputField
                         value={newPassword}
@@ -135,6 +136,7 @@ const UpdateToNewPassword = () => {
                         label='New Password'
                         placeholder='Enter new password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
                         <PasswordValidator newPassword={newPassword} setIsCriteriaMet={setIsCriteriaMet} />
@@ -150,6 +152,7 @@ const UpdateToNewPassword = () => {
                         label='Confirm New Password'
                         placeholder='Re-enter new password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <div className='mt-6'>
                         <Button

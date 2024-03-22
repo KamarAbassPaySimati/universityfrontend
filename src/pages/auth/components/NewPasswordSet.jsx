@@ -3,6 +3,7 @@ import InputField from '../../../components/InputField/InputField';
 import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
+import passwordCheck from '../../../CommonMethods/passwordCheck';
 const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -10,8 +11,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    // eslint-disable-next-line max-len
-    const weakPasswordValidation = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$%&])(?![.\d]{4,})(?!(.)\1{2})(?!(123|234|321|345|432|543|654|765|876|987))(?!.*(password|qwerty))(?!.*(admin|user|root|12345|abcd|abcd1234))([^.!?$\s]){8,12}$/;
+    const [enteredLetter, setEnteredLetter] = useState();
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -28,7 +28,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
         } else if (password !== confirmPassword) {
             // passwords do not match
             setConfirmPasswordError('Password does not match');
-        } else if (!weakPasswordValidation.test(password)) {
+        } else if (!passwordCheck(password)) {
             console.log('came here');
             setNewPasswordError('Weak password. Check guidelines for strong passwords.');
         } else {
@@ -61,6 +61,9 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     };
 
     const changeHandler = (e, id) => {
+        if (enteredLetter && enteredLetter === ' ') {
+            return;
+        }
         if (id === 'New Password') {
             setPassword(e.target.value);
         } else {
@@ -96,6 +99,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         label='New Password'
                         placeholder='Enter new password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
                         <PasswordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
@@ -111,6 +115,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         label='Confirm New Password'
                         placeholder='Re-enter new password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <div className='mt-6'>
                         <Button

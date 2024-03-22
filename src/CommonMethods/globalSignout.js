@@ -15,6 +15,11 @@ const useGlobalSignout = () => {
                 const userAttributes = await fetchUserAttributes();
                 return false;
             } catch (error) {
+                if (window.location.pathname === '/forgot-password' ||
+                window.location.pathname === '/set-new-password') {
+                    console.log('fdf');
+                    return;
+                }
                 dispatch(setUser(''));
                 dispatch(logout());
                 navigate('/');

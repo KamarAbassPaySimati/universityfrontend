@@ -4,10 +4,6 @@ import { baseURL } from '../config';
 import authHeader from './authHeader';
 
 async function PostAPIWithoutHeader (endpoint, body) {
-    const headers = await authHeader();
-    if (headers === 'unauthorized') {
-        return 'unauthorized';
-    }
     try {
         const url = `${baseURL}${endpoint}`;
         console.log('URL:', url); // Print the URL

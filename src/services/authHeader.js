@@ -11,6 +11,6 @@ export default async function authHeader () {
         return headers;
     } catch (error) {
         console.log(error);
-        return 'unauthorized';
+        window.location.reload();
     }
 };

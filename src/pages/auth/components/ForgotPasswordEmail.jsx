@@ -11,6 +11,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [enteredLetter, setEnteredLetter] = useState();
 
     // regex check for email and call the api
     const handleClick = async (e) => {
@@ -44,6 +45,9 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
     };
     // set the email
     const changeHandler = (e) => {
+        if (enteredLetter && enteredLetter === ' ') {
+            return;
+        }
         setEmail(e.target.value);
     };
     const focusHandler = () => {
@@ -68,6 +72,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                 </div>
                 <form className='flex flex-col gap-[16px]'>
                     <InputField
+                        autoComplete='off'
                         value={email}
                         onChange={changeHandler}
                         onFocus={focusHandler}
@@ -76,6 +81,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         error={error}
                         label='Email'
                         placeholder='Enter email'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <Button
                         testId="proceed_button"

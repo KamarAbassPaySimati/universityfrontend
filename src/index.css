@@ -44,3 +44,54 @@ body {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
   cursor: pointer;
 }
+
+.scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollHide::-webkit-scrollbar  {
+  -webkit-appearance: none;
+}
+
+.scrollBar::-webkit-scrollbar:vertical {
+  position: relative;
+  width: 4px;
+  background-color: white;
+}
+.whiteScrollBar::-webkit-scrollbar:vertical {
+  position: relative;
+  width: 4px;
+  background-color: #3B2A6F;
+}
+
+.scrollBar::-webkit-scrollbar:horizontal, .whiteScrollBar::-webkit-scrollbar:horizontal {
+  height: 4px;
+  background-color: transparent;
+  border-radius: 0px !important;
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+  background-color: #816cbe;
+  border: transparent;
+  border-radius: 22px;
+  width: 4px;
+  height: 45px;
+  right: 20px;
+}
+.whiteScrollBar::-webkit-scrollbar-thumb {
+  background-color: #FFF;
+  border: transparent;
+  border-radius: 22px;
+  width: 4px;
+  height: 45px;
+  right: 20px;
+}
+
+.setNewPassword::before{
+  position: fixed;
+  content: url(images/login_img.svg);
+  z-index: 10;
+  bottom: 30px;
+  right: 100px 
+
+}
