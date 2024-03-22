@@ -45,23 +45,11 @@ body {
   cursor: pointer;
 }
 
-/* Tooltip styling rules */
-.info-tooltip {
-  width: 419px !important;
-  background-color: #3B2A6F !important;
-  color: #FFFFFF !important;
-  font-weight: 400 !important;
-  font-size: 16px !important;
-  padding: 24px !important;
-  border-radius: 16px !important;
-}
-
-
-.scrollBar::-webkit-scrollbar {
+.scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
   -webkit-appearance: none;
 }
 
-.scrollHide::-webkit-scrollbar {
+.scrollHide::-webkit-scrollbar  {
   -webkit-appearance: none;
 }
 
@@ -70,8 +58,13 @@ body {
   width: 4px;
   background-color: white;
 }
+.whiteScrollBar::-webkit-scrollbar:vertical {
+  position: relative;
+  width: 4px;
+  background-color: #3B2A6F;
+}
 
-.scrollBar::-webkit-scrollbar:horizontal {
+.scrollBar::-webkit-scrollbar:horizontal, .whiteScrollBar::-webkit-scrollbar:horizontal {
   height: 4px;
   background-color: transparent;
   border-radius: 0px !important;
@@ -125,4 +118,22 @@ body {
   position: absolute;
   top: 9px;
   left: 4px;
+}
+
+.whiteScrollBar::-webkit-scrollbar-thumb {
+  background-color: #FFF;
+  border: transparent;
+  border-radius: 22px;
+  width: 4px;
+  height: 45px;
+  right: 20px;
+}
+
+.setNewPassword::before{
+  position: fixed;
+  content: url(images/login_img.svg);
+  z-index: 10;
+  bottom: 30px;
+  right: 100px 
+
 }
