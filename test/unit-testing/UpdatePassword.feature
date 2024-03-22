@@ -45,7 +45,7 @@ Feature: Paymaart -Admin Web - Forgot Password
     Examples:
       | current_password | new_password  | confirm_password | message                                            |
       | "Admin@123"      | "Admin@123"   | "Admin@123"      | "Old password and new password cannot be the same" |
-      | "Admin!1234"     | "Admin@1235"  | "Admin@1235"     | "Incorrect password"                               |
+      | "Admin!1234"     | "Admin@1235"  | "Admin@1235"     | "Incorrect Password"                               |
       | "Admin@123"      | "Admin@12354" | "Admin@12431"    | "Password does not match"                          |
 
   Scenario: Check for password requirement
