@@ -9,7 +9,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { endpoints } from '../../../services/endpoints';
-import appLogout from '../../../CommonMethods/appLogout';
 import passwordCheck from '../../../CommonMethods/passwordCheck';
 
 const UpdateToNewPassword = () => {
@@ -53,20 +52,15 @@ const UpdateToNewPassword = () => {
                 setIsLoading(true);
                 const response = await dataService.PostAPI(updatePassword,
                     { old_password: oldPassword, new_password: newPassword });
-                if (response === 'unauthorized') {
-                    appLogout(dispatch, navigate);
-                    return;
-                }
                 console.log(response, 'UpdatePassword response:');
                 if (!response.error) {
                     setIsLoading(false);
                     handleSignOut();
                 } else if (response?.data.status === 401) {
-                    if (response?.data?.data?.message === 'Old password and new password cannot be the same') {
-                        setNewPasswordError('Old password and new password cannot be the same');
-                    } else {
-                        setOldPasswordError(response?.data?.data?.message);
-                    }
+                    setOldPasswordError(response?.data?.data?.message);
+                    setIsLoading(false);
+                } else if (response?.data.status === 400) {
+                    setNewPasswordError('Old password and new password cannot be the same');
                     setIsLoading(false);
                 } else {
                     setIsLoading(false);

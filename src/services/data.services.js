@@ -29,9 +29,6 @@ async function PostAPIWithoutHeader (endpoint, body) {
  */
 async function GetAPI (endpoint) {
     const headers = await authHeader();
-    if (headers === 'unauthorized') {
-        return 'unauthorized';
-    }
     try {
         const data = await axios.get(`${baseURL}${endpoint}`, {
             headers
@@ -62,9 +59,6 @@ async function GetAPI (endpoint) {
 async function PostAPI (endpoint, payload) {
     try {
         const headers = await authHeader();
-        if (headers === 'unauthorized') {
-            return 'unauthorized';
-        }
         const data = await axios.post(`${baseURL}${endpoint}`, payload, {
             headers
         });

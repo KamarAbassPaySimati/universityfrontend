@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
 import { setUser, logout } from '../pages/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import GlobalContext from '../components/Context/GlobalContext';
 
 const useGlobalSignout = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { setToastError } = useContext(GlobalContext);
 
     useEffect(() => {
         const signout = async () => {
@@ -23,6 +25,7 @@ const useGlobalSignout = () => {
                 dispatch(setUser(''));
                 dispatch(logout());
                 navigate('/');
+                setToastError('Logged out due to session expiration');
                 return true;
             }
         };
