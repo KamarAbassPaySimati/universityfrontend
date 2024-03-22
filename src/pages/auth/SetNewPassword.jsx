@@ -36,10 +36,10 @@ const SetNewPassword = () => {
     }, []);
 
     return (
-        <>
+        <div className='whiteScrollBar overflow-auto h-[100vh] w-[100vw]'>
             {screenLoading
                 ? <Loading/>
-                : <div className='bg-primary-normal'>
+                : <div className='bg-primary-normal '>
                     <img className='fixed bottom-[30px] right-[100px] object-cover z-10' src='images/login_img.svg' />
                     <div >
                         <div className='min-h-screen min-w-screen flex flex-col justify-center items-center gap-20'>
@@ -71,7 +71,7 @@ const SetNewPassword = () => {
                     </div>
                 </div>
             }
-        </>
+        </div>
     );
 };
 
