@@ -16,17 +16,18 @@ const InputField = ({
     loginError,
     showLoginError,
     testId,
-    autoComplete
+    autoComplete,
+    setEnteredLetter
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
-    // Function to handle key down event
-    const handleKeyDown = (e) => {
-        // If the type is password and the key pressed is a space, prevent default action
-        if (givenType === 'password' && e.key === ' ') {
-            e.preventDefault();
-        }
-    };
+   // Function to handle key down event
+   const handleKeyDown = (e) => {
+    if (setEnteredLetter) {
+        setEnteredLetter(e.key);
+    console.log('coming', e.key);
+    }
+};
 
     return (
         <div className='flex flex-col gap-2 relative'>
@@ -43,7 +44,7 @@ const InputField = ({
                 placeholder={placeholder}
                 onFocus={() => onFocus(id)}
                 onChange={(e) => onChange(e, id)}
-                onKeyDown={handleKeyDown} // Use onKeyDown event handler instead of onKeyPress
+                onKeyDown={(e) => handleKeyDown(e)} // Use onKeyDown event handler instead of onKeyPress
             />
             {/* && value.length > 0 */}
             {givenType === 'password' && value.length > 0 &&

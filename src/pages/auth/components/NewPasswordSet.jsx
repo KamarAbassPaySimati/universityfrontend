@@ -11,6 +11,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [enteredLetter, setEnteredLetter] = useState();
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -60,6 +61,9 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     };
 
     const changeHandler = (e, id) => {
+        if (enteredLetter && enteredLetter === ' ') {
+            return;
+        }
         if (id === 'New Password') {
             setPassword(e.target.value);
         } else {
@@ -95,6 +99,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         label='New Password'
                         placeholder='Enter new password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
                         <PassWordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
@@ -110,6 +115,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         label='Confirm New Password'
                         placeholder='Re-enter new password'
                         givenType='password'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <div className='mt-6'>
                         <Button

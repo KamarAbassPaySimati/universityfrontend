@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button/Button';
@@ -6,6 +6,7 @@ import Image from '../../../components/Image/Image';
 
 const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
     const navigate = useNavigate();
+    const [enteredLetter, setEnteredLetter] = useState();
 
     const handleFocus = (id) => {
         setloginError('');
@@ -15,16 +16,14 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     };
 
     const handleChange = (e, id) => {
-        const value = e.target.value;
-        const enteredLetter = value[value.length - 1];
         if (id === 'password' && /\s|[.!?]/.test(enteredLetter)) {
             return;
         }
-        if (enteredLetter === ' ') {
+        if (enteredLetter && enteredLetter === ' ') {
             return;
         }
         setFormData(prevState => {
-            return { ...prevState, [id]: value };
+            return { ...prevState, [id]: e.target.value };
         });
     };
 
@@ -57,6 +56,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 loginError={loginError}
                                 label='Email'
                                 placeholder='Enter email'
+                                setEnteredLetter={setEnteredLetter}
                             />
                             <InputField
                                 autoComplete='off'
@@ -72,6 +72,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 label='Password'
                                 placeholder='Enter password'
                                 showLoginError={true}
+                                setEnteredLetter={setEnteredLetter}
                             />
                             <Button testId='login_button' isLoading={isLoading} text='Login' className='mt-8' />
                         </form>

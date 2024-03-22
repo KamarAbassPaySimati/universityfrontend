@@ -45,11 +45,11 @@ body {
   cursor: pointer;
 }
 
-.scrollBar::-webkit-scrollbar {
+.scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
   -webkit-appearance: none;
 }
 
-.scrollHide::-webkit-scrollbar {
+.scrollHide::-webkit-scrollbar  {
   -webkit-appearance: none;
 }
 
@@ -58,8 +58,13 @@ body {
   width: 4px;
   background-color: white;
 }
+.whiteScrollBar::-webkit-scrollbar:vertical {
+  position: relative;
+  width: 4px;
+  background-color: #3B2A6F;
+}
 
-.scrollBar::-webkit-scrollbar:horizontal {
+.scrollBar::-webkit-scrollbar:horizontal, .whiteScrollBar::-webkit-scrollbar:horizontal {
   height: 4px;
   background-color: transparent;
   border-radius: 0px !important;
@@ -67,6 +72,14 @@ body {
 
 .scrollBar::-webkit-scrollbar-thumb {
   background-color: #816cbe;
+  border: transparent;
+  border-radius: 22px;
+  width: 4px;
+  height: 45px;
+  right: 20px;
+}
+.whiteScrollBar::-webkit-scrollbar-thumb {
+  background-color: #FFF;
   border: transparent;
   border-radius: 22px;
   width: 4px;
