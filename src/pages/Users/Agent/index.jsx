@@ -1,12 +1,12 @@
 import React from 'react';
 import CardHeader from '../../../components/CardHeader';
 
-const ManageAgent = () => {
+const Agent = () => {
     return (
         <CardHeader>
-            <div>ManageAgent</div>
+            <div>Agent</div>
         </CardHeader>
     );
 };
 
-export default ManageAgent;
+export default Agent;

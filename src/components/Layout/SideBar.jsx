@@ -97,7 +97,7 @@ const SideBar = ({ role }) => {
         },
         Users: {
             path: 'users',
-            dropdown: ['Manage Admin', 'Manage Agent', 'Manage Merchant', 'Manage Customer']
+            dropdown: ['Admin', 'Agent', 'Merchant', 'Customer']
         }
     };
 

@@ -11,8 +11,8 @@ import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
 import Profile from '../pages/Profile';
-import OnboardAgent from '../pages/Users/Manage Agent/Onboard Agent/OnboardAgent';
-import ManageAgent from '../pages/Users/Manage Agent/ManageAgent';
+import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
+import Agent from '../pages/Users/Agent';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -73,8 +73,8 @@ export default function NavigationRoutes (props) {
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/profile" element={<Profile />} />
-                                    <Route path="/users/manage-agent" element={<ManageAgent />} />
-                                    <Route path="/users/manage-agent/onboard-agent" element={<OnboardAgent />} />
+                                    <Route path="/users/agent" element={<Agent />} />
+                                    <Route path="/users/agent/onboard-agent" element={<OnboardAgent />} />
                                 </Route>
                             </>
                     }

@@ -16,7 +16,9 @@ const InputFieldWithButton = ({
     autoComplete,
     buttonText,
     buttonDisabled,
-    setEnteredLetter
+    setEnteredLetter,
+    className,
+    maxLength
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -28,13 +30,14 @@ const InputFieldWithButton = ({
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <div className='bg-[#F8F8F8] relative w-fit'>
                 <input
+                    maxLength={maxLength}
                     autoComplete={autoComplete || 'off'}
                     data-testid={testId}
                     value={value}
                     type={type || 'text'}
                     className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px]
-                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[62px]
-                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'}`}
+                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
+                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className}`}
                     id={id}
                     placeholder={placeholder}
                     onFocus={() => onFocus(id)}

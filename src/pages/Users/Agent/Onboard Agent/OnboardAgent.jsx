@@ -27,6 +27,12 @@ const OnboardAgent = () => {
             });
             return;
         }
+        if (id === 'email') {
+            setFormData(prevState => {
+                return { ...prevState, [id]: e.target.value.toLowerCase() };
+            });
+            return;
+        }
 
         setFormData(prevState => {
             return { ...prevState, [id]: e.target.value };
@@ -45,8 +51,8 @@ const OnboardAgent = () => {
     return (
         <CardHeader
             activePath='Onboard Agent'
-            paths={['Users', 'Manage Agent']}
-            pathurls={['users/manage-agent']}
+            paths={['Users', 'Agent']}
+            pathurls={['users/agent']}
             header='Registration'
         >
             <>
@@ -55,6 +61,7 @@ const OnboardAgent = () => {
                 </h1>
                 <div className='my-4 flex gap-[20px]'>
                     <InputField
+                        className='w-[339px]'
                         value={formData.firstName}
                         onChange={handleChange}
                         onFocus={handleFocus}
@@ -66,6 +73,7 @@ const OnboardAgent = () => {
                         setEnteredLetter={setEnteredLetter}
                     />
                     <InputField
+                        className='w-[339px]'
                         value={formData.middleName}
                         onChange={handleChange}
                         onFocus={handleFocus}
@@ -77,6 +85,7 @@ const OnboardAgent = () => {
                         setEnteredLetter={setEnteredLetter}
                     />
                     <InputField
+                        className='w-[339px]'
                         value={formData.lastName}
                         onChange={handleChange}
                         onFocus={handleFocus}
@@ -93,6 +102,7 @@ const OnboardAgent = () => {
                 </p>
                 <div>
                     <InputFieldWithButton
+                        className='w-[339px]'
                         onChange={handleChange}
                         onFocus={handleFocus}
                         id='email'
