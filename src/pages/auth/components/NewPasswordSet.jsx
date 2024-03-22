@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
-import PassWordValidator from '../../../components/PasswordValidator/PassWordValidator';
+import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import passwordCheck from '../../../CommonMethods/passwordCheck';
+import GlobalContext from '../../../components/Context/GlobalContext';
 const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -12,6 +13,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [enteredLetter, setEnteredLetter] = useState();
+    const { setToastError } = useContext(GlobalContext);
 
     const handleClick = async (e) => {
         e.preventDefault();
@@ -29,7 +31,6 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
             // passwords do not match
             setConfirmPasswordError('Password does not match');
         } else if (!passwordCheck(password)) {
-            console.log('came here');
             setNewPasswordError('Weak password. Check guidelines for strong passwords.');
         } else {
             // call api
@@ -43,7 +44,6 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                 } else if (response?.data?.status === 401) {
                     setIsValidToken(true);
                 } else if (response?.data.status === 400) {
-                    console.log('came here 400');
                     setNewPasswordError(response?.data?.data?.message);
                     setIsLoading(false);
                     setIsSuccess(false);
@@ -54,7 +54,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error);
+                setToastError('Something went wrong!');
                 setIsSuccess(false);
             }
         }
@@ -102,7 +102,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         setEnteredLetter={setEnteredLetter}
                     />
                     <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                        <PassWordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
+                        <PasswordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
                     </div>
 
                     <InputField
