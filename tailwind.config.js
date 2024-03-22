@@ -35,9 +35,11 @@ export default {
                 'neutral-outline': '#E5E9EB',
 
                 'accent-positive': '#13B681',
+                'background-light': '#F0ECFF',
 
                 error: '#FF4343',
-                background: '#F6F8F9'
+                background: '#F6F8F9',
+                'header-dark': '#252C32'
             }
         }
     },
