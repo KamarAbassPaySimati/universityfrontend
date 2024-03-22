@@ -45,9 +45,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
     };
     // set the email
     const changeHandler = (e) => {
-        console.log(enteredLetter);
         if (enteredLetter && enteredLetter === ' ') {
-            console.log('fcgcg');
             return;
         }
         setEmail(e.target.value);
