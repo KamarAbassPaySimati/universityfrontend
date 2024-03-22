@@ -44,3 +44,32 @@ body {
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
   cursor: pointer;
 }
+
+.scrollBar::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollHide::-webkit-scrollbar {
+  -webkit-appearance: none;
+}
+
+.scrollBar::-webkit-scrollbar:vertical {
+  position: relative;
+  width: 4px;
+  background-color: white;
+}
+
+.scrollBar::-webkit-scrollbar:horizontal {
+  height: 4px;
+  background-color: transparent;
+  border-radius: 0px !important;
+}
+
+.scrollBar::-webkit-scrollbar-thumb {
+  background-color: #816cbe;
+  border: transparent;
+  border-radius: 22px;
+  width: 4px;
+  height: 45px;
+  right: 20px;
+}

@@ -82,6 +82,11 @@ const SideBar = ({ role }) => {
         });
     };
 
+    const handleOptionClick = (nav, option, key) => {
+        handleDropDown(key);
+        navigate(nav.toLowerCase() + '/' + Slugify(option));
+    };
+
     useEffect(() => {
         console.log(hoveringOn);
     }, [hoveringOn]);
@@ -121,8 +126,8 @@ const SideBar = ({ role }) => {
                                 {dropDown.users &&
                                 <>
                                     {sideNavObject[nav]?.dropdown?.map((option) => (
-                                        <div key={option} className={`ml-10 mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
-                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => navigate(nav.toLowerCase() + '/' + Slugify(option))} >
+                                        <div key={option} className={`ml-10 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
+                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[nav]?.dropdown)} >
                                             {option}
                                         </div>
                                     ))}

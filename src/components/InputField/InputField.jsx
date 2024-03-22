@@ -16,14 +16,22 @@ const InputField = ({
     loginError,
     showLoginError,
     testId,
-    autoComplete
+    autoComplete,
+    setEnteredLetter
 }) => {
     const [ispasswordType, setIsPasswordType] = useState(true);
+
+    const handleKeyDown = (e) => {
+        if (setEnteredLetter) {
+            setEnteredLetter(e.key);
+        }
+    };
+
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
-                autoComplete={autoComplete}
+                autoComplete={autoComplete || 'off'}
                 data-testid={testId}
                 value={value}
                 type={givenType ? ispasswordType ? 'password' : 'text' : type || 'text'}
@@ -34,6 +42,7 @@ const InputField = ({
                 placeholder={placeholder}
                 onFocus={() => onFocus(id)}
                 onChange={(e) => onChange(e, id)}
+                onKeyDown={handleKeyDown}
             />
             {/* && value.length > 0 */}
             {givenType === 'password' && value.length > 0 &&
