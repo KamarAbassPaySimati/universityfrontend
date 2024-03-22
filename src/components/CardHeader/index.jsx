@@ -61,7 +61,7 @@ const CardHeader = ({ children, paths, activePath, pathurls, testId }) => {
                 </div>
             </div>
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
-                <div className='max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]'
+                <div className='max-h-[calc(100vh-120px)] overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]'
                     data-testid={testId}>
                     {children}
                 </div>
