@@ -81,7 +81,7 @@ Feature: Paymaart -Admin Web - Forgot Password
 
     Scenario: Set New Password with valid information
         Given I am in reset password page
-        When I enter password as "Admin@1234" and confirm password as "Admin@1234"
+        When I enter password as "Admin@12354" and confirm password as "Admin@12354"
         And I submit the forgot password form
         Then I should read a message stating that "Your password has been successfully changed"
         When I click on go back to login screen
@@ -95,7 +95,7 @@ Feature: Paymaart -Admin Web - Forgot Password
     @wait
     Scenario: Admin User login with valid credentials after reseting password
         Given I am on the login screen
-        When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@1234"
+        When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@12354"
         And I submit the login form
         Then I should be navigated to the TOTP screen
         When I enter the TOTP obtained from the previously scanned device
@@ -103,7 +103,6 @@ Feature: Paymaart -Admin Web - Forgot Password
         Then I should be redirected to the '/dashboard' page
 
     @perform_logout
-    @wait
     @request_reset_password
     Scenario: Set password to previous password
         Given I open a reset password link
