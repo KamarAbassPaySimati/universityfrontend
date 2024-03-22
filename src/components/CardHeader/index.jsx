@@ -23,7 +23,7 @@ const CardHeader = ({ children, paths, activePath, pathurls }) => {
         const result = [];
         let sum = '';
         for (const str of arr) {
-            sum += str;
+            sum += str + '/';
             result.push(sum);
         }
         console.log(result, 'result');
