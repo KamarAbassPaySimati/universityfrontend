@@ -35,6 +35,7 @@ export default {
                 'neutral-outline': '#E5E9EB',
 
                 'accent-positive': '#13B681',
+                'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
 
                 error: '#FF4343',
