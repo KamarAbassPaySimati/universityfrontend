@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import { dataService } from '../../../services/data.services';
 import Button from '../../../components/Button/Button';
 import emailValidation from '../../../CommonMethods/emailValidtion';
 import Button2 from '../../../components/Button2/Button2';
 import { useNavigate } from 'react-router-dom';
+import GlobalContext from '../../../components/Context/GlobalContext';
 
 const ForgotPasswordEmail = ({ setIsSuccess }) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [enteredLetter, setEnteredLetter] = useState();
+    const { setToastError } = useContext(GlobalContext);
 
     // regex check for email and call the api
     const handleClick = async (e) => {
@@ -23,7 +26,8 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
         } else {
             try {
                 setIsLoading(true);
-                const response = await dataService.PostAPIWithoutHeader('send-reset-link', { email_address: email });
+                const response = await dataService.PostAPIWithoutHeader('send-reset-link',
+                    { email_address: email.toLowerCase() });
                 console.log(response, 'Forgot Password response:');
                 if (!response.error) {
                     setIsSuccess(true);
@@ -34,17 +38,21 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                 } else {
                     setIsLoading(false);
                     setIsSuccess(false);
+                    setToastError('Something went wrong!');
                 }
             } catch (error) {
                 setIsLoading(false);
-                console.log(error);
+                setToastError('Something went wrong!');
                 setIsSuccess(false);
             }
         }
     };
     // set the email
     const changeHandler = (e) => {
-        setEmail(e.target.value);
+        if (enteredLetter && enteredLetter === ' ') {
+            return;
+        }
+        setEmail(e.target.value.toLowerCase());
     };
     const focusHandler = () => {
         setError('');
@@ -68,6 +76,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                 </div>
                 <form className='flex flex-col gap-[16px]'>
                     <InputField
+                        autoComplete='off'
                         value={email}
                         onChange={changeHandler}
                         onFocus={focusHandler}
@@ -76,6 +85,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         error={error}
                         label='Email'
                         placeholder='Enter email'
+                        setEnteredLetter={setEnteredLetter}
                     />
                     <Button
                         testId="proceed_button"

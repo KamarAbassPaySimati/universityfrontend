@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-indent-props */
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import CircularNumber from './CircularNumber';
 // import { QRCode } from 'react-qrcode-logo';
 import QRCode from 'qrcode.react';
@@ -12,9 +12,11 @@ import { login, logout, setUser } from '../authSlice';
 import Image from '../../../components/Image/Image';
 import SuccessfulLogin from './SuccessfulLogin';
 import { useNavigate } from 'react-router-dom';
+import GlobalContext from '../../../components/Context/GlobalContext';
 
 const Totp = ({ Qrcode }) => {
     const [isScanPage, setIsScanPage] = useState(true);
+    const { setToastError } = useContext(GlobalContext);
 
     const nextHandler = () => {
         setIsScanPage(false);
@@ -105,7 +107,7 @@ const Totp = ({ Qrcode }) => {
             } else if (error.__type === 'CodeMismatchException') {
                 setOtpError('Invalid code');
             } else {
-                // handleToast(error.message, 'error');
+                setToastError(error.message);
             }
             setOtp(Array(6).fill(''));
             setIsLoading(false);

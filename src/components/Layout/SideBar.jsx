@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
-import { Slugify } from '../../CommonMethods/Sulgify.js';
+import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -100,6 +100,7 @@ const SideBar = ({ role }) => {
             dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
         }
     };
+    useGlobalSignout();
 
     return (
         <>

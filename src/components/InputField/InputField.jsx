@@ -21,7 +21,7 @@ const InputField = ({
     className,
     showErrorBottom = true
 }) => {
-    const [ispasswordType, setIsPasswordType] = useState(true);
+    const [isPasswordType, setIsPasswordType] = useState(true);
 
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -36,7 +36,7 @@ const InputField = ({
                 autoComplete={autoComplete || 'off'}
                 data-testid={testId}
                 value={value}
-                type={givenType ? ispasswordType ? 'password' : 'text' : type || 'text'}
+                type={givenType ? isPasswordType ? 'password' : 'text' : type || 'text'}
                 className={`placeholder:text-neutral-secondary text-neutral-primary bg-[#F8F8F8] px-[10px] py-[11px]
                     font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[62px]
                     ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className}`}
@@ -51,7 +51,7 @@ const InputField = ({
                 <div className={`absolute right-0 py-[18.79px] pl-[10px] pr-[23.77px] cursor-pointer 
                     ${error || loginError ? 'bottom-[30px]' : 'bottom-0'}`}
                     onClick={() => setIsPasswordType(prevState => !prevState)}>
-                    {ispasswordType ? <Image src='SHOW' /> : <Image src='HIDE' />}
+                    {isPasswordType ? <Image src='SHOW' /> : <Image src='HIDE' />}
                 </div>
             }
             {showErrorBottom && error && <ErrorMessage error={error} />}

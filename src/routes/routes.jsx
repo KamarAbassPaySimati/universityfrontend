@@ -13,6 +13,7 @@ import Loading from '../components/Loading/Loading';
 import Profile from '../pages/Profile';
 import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
 import Agent from '../pages/Users/Agent';
+import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -75,6 +76,7 @@ export default function NavigationRoutes (props) {
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/users/agent" element={<Agent />} />
                                     <Route path="/users/agent/onboard-agent" element={<OnboardAgent />} />
+                                    <Route path="/profile/update-password" element={<UpdatePassword />} />
                                 </Route>
                             </>
                     }

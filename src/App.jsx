@@ -5,6 +5,7 @@ import { Amplify } from 'aws-amplify';
 import { awsConfig } from './config';
 import Toast from './components/Toast/Toast';
 import GlobalContext from './components/Context/GlobalContext';
+import useGlobalSignout from './CommonMethods/globalSignout';
 
 Amplify.configure(awsConfig);
 
@@ -15,6 +16,8 @@ function App (props) {
     const [ToastError, setToastError] = useState('');
     const [ToastWarning, setToastWarning] = useState('');
     const [ToastInformation, setToastInformation] = useState('');
+
+    useGlobalSignout();
 
     return (
         <GlobalContext.Provider value={{
