@@ -45,6 +45,17 @@ body {
   cursor: pointer;
 }
 
+/* Tooltip styling rules */
+.info-tooltip {
+  width: 419px !important;
+  background-color: #3B2A6F !important;
+  color: #FFFFFF !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  padding: 24px !important;
+  border-radius: 16px !important;
+}
+
 .scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
   -webkit-appearance: none;
 }
@@ -135,5 +146,13 @@ body {
   z-index: 10;
   bottom: 30px;
   right: 100px 
+}
 
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Optional - if you want to remove the margin */
+}
+input[type='number'] {
+  -moz-appearance: textfield; /* Optional - for Firefox */
 }

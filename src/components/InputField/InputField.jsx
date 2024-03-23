@@ -19,7 +19,7 @@ const InputField = ({
     autoComplete,
     setEnteredLetter,
     className,
-    showErrorBottom = true
+    notShowErrorBottom
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -54,7 +54,7 @@ const InputField = ({
                     {isPasswordType ? <Image src='SHOW' /> : <Image src='HIDE' />}
                 </div>
             }
-            {showErrorBottom && error && <ErrorMessage error={error} />}
+            {!notShowErrorBottom && error && <ErrorMessage error={error} />}
             {showLoginError && loginError && !error && <ErrorMessage error={loginError} />}
         </div>
     );

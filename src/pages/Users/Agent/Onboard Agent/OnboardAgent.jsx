@@ -9,6 +9,10 @@ import axios from 'axios';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import Button from '../../../../components/Button/Button';
 import SecurityQuestionsShimmer from '../../../../components/Shimmers/SecurityQuestionsShimmer';
+import { formatInputPhone } from '../../../../CommonMethods/formatInputPhone';
+import validation from './validation';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
+import securityAnswersCheck from './securityAnswersCheck';
 
 const OnboardAgent = () => {
     const initialState = {
@@ -18,23 +22,39 @@ const OnboardAgent = () => {
         email: '',
         phoneNumber: ''
     };
-
-    const [formData, setFormData] = useState(initialState);
-    const [formErrors, setFormErrors] = useState(initialState);
-    const [securityQuestions, setSecurityQuestions] = useState([]);
-    const [securityAnswers, setSecurityAnswers] = useState();
-    const [securityQuestionError, setsecurityQuestionError] = useState();
     const [enteredLetter, setEnteredLetter] = useState();
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [questionsLoading, setQuestionsLoading] = useState(false);
 
-    const { setToastError } = useContext(GlobalContext);
+    const [formData, setFormData] = useState(initialState);
+    const [formErrors, setFormErrors] = useState(initialState);
+
+    const [securityQuestions, setSecurityQuestions] = useState([]);
+    const [securityQuestionError, setsecurityQuestionError] = useState(false);
+
+    const [otp, setOtp] = useState({
+        emailOtp: '',
+        phoneNumberOtp: ''
+    });
+    const [otpErrors, setOtpErros] = useState({
+        emailOtp: '',
+        phoneNumberOtp: ''
+    });
+    const [verify, setVerify] = useState({
+        email: false,
+        phoneNumber: false
+    });
+    const [verified, setVerified] = useState({
+        email: false,
+        phoneNumber: false
+    });
+
+    const { setToastError, setToastWarning } = useContext(GlobalContext);
 
     const handleChange = (e, id) => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
         }
-
         if (id === 'lastName') {
             setFormData(prevState => {
                 return { ...prevState, [id]: e.target.value.toUpperCase() };
@@ -47,6 +67,13 @@ const OnboardAgent = () => {
             });
             return;
         }
+        if (id === 'phoneNumber') {
+            const formattedPhoneNumber = formatInputPhone(e.target.value);
+            setFormData(prevState => {
+                return { ...prevState, [id]: formattedPhoneNumber };
+            });
+            return;
+        };
 
         setFormData(prevState => {
             return { ...prevState, [id]: e.target.value };
@@ -54,7 +81,6 @@ const OnboardAgent = () => {
     };
 
     const handleAnswerChange = (e, id) => {
-        console.log(id);
         setSecurityQuestions(prevState => {
             const updatedAnswers = [...prevState];
             const indexToUpdate = updatedAnswers.findIndex(question => question.id === id);
@@ -67,8 +93,75 @@ const OnboardAgent = () => {
         });
     };
 
-    const handleFocus = () => {
+    const handleFocus = (id) => {
+        setFormErrors((prevState) => {
+            return { ...prevState, [id]: '' };
+        });
+    };
 
+    const handleOtpChange = (e, id) => {
+        const value = e.target.value;
+        if (value.length > 6) {
+            return;
+        }
+        setOtp(prevState => {
+            return { ...prevState, [id]: value };
+        });
+    };
+
+    const handleOtpFocus = (e, id) => {
+
+    };
+
+    const handleVerifyEmail = (text) => {
+        if (text === 'EDIT') {
+            setVerify(prevState => {
+                return { ...prevState, email: false };
+            });
+            return;
+        }
+        if (formData.email.trim() === '') {
+            setFormErrors((prevState) => {
+                return { ...prevState, email: 'Required field' };
+            });
+            return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            setFormErrors((prevState) => {
+                return { ...prevState, email: 'Invalid email' };
+            });
+            return;
+        }
+        console.log('api call');
+    };
+
+    const handleVerifyPhoneNumber = (text) => {
+        if (text === 'EDIT') {
+            setVerify(prevState => {
+                return { ...prevState, email: false };
+            });
+            return;
+        }
+        if (!verified.email) {
+            setFormErrors((prevState) => {
+                return { ...prevState, email: 'Please verify your Email' };
+            });
+            return;
+        }
+        if (formData.phoneNumber.trim() === '') {
+            setFormErrors((prevState) => {
+                return { ...prevState, phoneNumber: 'Required field' };
+            });
+            return;
+        }
+        if (!(formData.phoneNumber.startsWith('+91') || formData.phoneNumber.startsWith('+265'))) {
+            setFormErrors((prevState) => {
+                return { ...prevState, phoneNumber: 'Invalid phone number' };
+            });
+            return;
+        }
+        console.log('api call');
     };
 
     useEffect(() => {
@@ -91,8 +184,18 @@ const OnboardAgent = () => {
         fetchSecurityQuestions();
     }, []);
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!validation(formData, setFormErrors, verified, securityQuestions, setsecurityQuestionError)) {
+            return;
+        }
+        if (!termsAccepted) {
+            setToastWarning('Please accept the terms and conditions');
+        }
+    };
+
     useEffect(() => {
-        console.log(securityQuestions);
+        // console.log(securityQuestions);
     }, [securityQuestions]);
 
     return (
@@ -148,35 +251,80 @@ const OnboardAgent = () => {
                     Enter a valid email and phone number. To confirm it’s you, we will send a verification code.
                 </p>
                 <div className='flex flex-col gap-6 w-[339px]'>
-                    <InputFieldWithButton
-                        className='w-[339px]'
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        id='email'
-                        testId='email'
-                        error={formErrors.email}
-                        label='Email'
-                        placeholder='Enter email'
-                        value={formData.email}
-                        buttonText={'VERIFY'}
-                        setEnteredLetter={setEnteredLetter}
-                    />
-                    <InputFieldWithButton
-                        className='w-[339px]'
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        id='phoneNumber'
-                        testId='phoneNumber'
-                        error={formErrors.phoneNumber}
-                        label='Phone Number'
-                        placeholder='Enter phone number'
-                        value={formData.phoneNumber}
-                        buttonText={'VERIFY'}
-                        setEnteredLetter={setEnteredLetter}
-                    />
-                    <div className='info-icon flex justify-between mt-2 mb-[2px]'>
-                        <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>
-                        <Image src='info_icon' className='cursor-pointer' />
+                    <div className='flex gap-[20px]'>
+                        <InputFieldWithButton
+                            className='w-[339px]'
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            id='email'
+                            testId='email'
+                            error={formErrors.email}
+                            label='Email'
+                            placeholder='Enter email'
+                            value={formData.email}
+                            buttonText={verify.email ? 'EDIT' : 'VERIFY'}
+                            setEnteredLetter={setEnteredLetter}
+                            onClick={handleVerifyEmail}
+                            verified={verified.email}
+                            inputDisabled={verified.email || verify.email}
+                            buttonDisabled={formData.email.length < 1}
+                        />
+                        {verify.email &&
+                        <InputFieldWithButton
+                            className='w-[339px]'
+                            onChange={handleOtpChange}
+                            onFocus={handleOtpFocus}
+                            id='emailOtp'
+                            testId='emailOtp'
+                            error={otpErrors.emailOtp}
+                            label='Verification Code'
+                            placeholder='_ _ _ _ _ _'
+                            value={otp.emailOtp}
+                            buttonText={'VERIFY'}
+                            setEnteredLetter={setEnteredLetter}
+                            type='number'
+                        />}
+                    </div>
+                    <div className='flex gap-[20px]'>
+                        <InputFieldWithButton
+                            className='w-[339px]'
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            id='phoneNumber'
+                            testId='phoneNumber'
+                            error={formErrors.phoneNumber}
+                            label='Phone Number'
+                            placeholder='Enter phone number'
+                            value={formData.phoneNumber}
+                            buttonText={'VERIFY'}
+                            setEnteredLetter={setEnteredLetter}
+                            onClick={handleVerifyPhoneNumber}
+                            verified={verified.phoneNumber}
+                            inputDisabled={verified.phoneNumber || verify.phoneNumber}
+                            buttonDisabled={formData.phoneNumber.length < 1}
+                        />
+                        {verify.phoneNumber &&
+                        <InputFieldWithButton
+                            className='w-[339px]'
+                            onChange={handleOtpChange}
+                            onFocus={handleOtpFocus}
+                            id='phoneNumberOtp'
+                            testId='phoneNumberOtp'
+                            error={otpErrors.phoneNumberOtp}
+                            label='Verification Code'
+                            placeholder='_ _ _ _ _ _'
+                            value={otp.phoneNumberOtp}
+                            buttonText={'VERIFY'}
+                            setEnteredLetter={setEnteredLetter}
+                            type='number'
+                        />}
+                    </div>
+                    <div className='flex flex-col gap-2'>
+                        <div className='info-icon flex justify-between mt-2 mb-[2px]'>
+                            <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>
+                            <Image src='info_icon' className='cursor-pointer' />
+                        </div>
+                        {securityQuestionError && <ErrorMessage error='Answer at least 3 questions' />}
                     </div>
                     <Tooltip
                         className='info-tooltip'
@@ -206,13 +354,14 @@ const OnboardAgent = () => {
                                     className='w-[339px]'
                                     value={securityQuestion?.answer || ''}
                                     onChange={handleAnswerChange}
-                                    onFocus={handleFocus}
+                                    onFocus={() => setsecurityQuestionError(false)}
                                     id={securityQuestion?.id}
                                     testId={securityQuestion?.question}
                                     showErrorBottom={false}
                                     error={securityQuestionError}
                                     label={securityQuestion?.question}
                                     placeholder='Answer'
+                                    notShowErrorBottom={true}
                                 />))}
                         </div>}
                     {/* checkbox */}
@@ -234,7 +383,7 @@ const OnboardAgent = () => {
                                 className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
                         </label>
                     </div>
-                    <Button text='Register' className='w-[200px] mt-4' />
+                    <Button onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
                 </div>
             </>
         </CardHeader>

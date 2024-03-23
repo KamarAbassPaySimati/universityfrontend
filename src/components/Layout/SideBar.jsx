@@ -10,6 +10,7 @@ import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
 import useGlobalSignout from '../../CommonMethods/globalSignout.js';
+import Slugify from '../../CommonMethods/Sulgify.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
