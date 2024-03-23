@@ -9,7 +9,7 @@ const UpdatePassword = () => {
             <div className='flex justify-center items-center  mt-[44px] mb-22'>
                 <UpdateToNewPassword />
             </div>
-            <div className='left-0 ml-[20px] mb-8 mt-15 w-max max-w-[calc(100vw-90px)] break-words place-self-start pt-[84px]'>
+            <div className='left-0 ml-[20px] mb-8 mt-15 break-words place-self-start pt-[84px]'>
                 <h1 className='text-[#4F5962] font-[500] text-[16px]'>Note: Password Guidelines</h1>
                 <ul className='text-[#4F5962] font-[400] text-[14px] marker:text-[#4F5962] list-outside list-disc ml-6 leading-6'>
                     <li>Passwords must not include spaces or any punctuation marks like &apos;.&apos;, &apos;!&apos;,
