@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import InputField from '../../../../components/InputField/InputField';
@@ -13,6 +14,9 @@ import { formatInputPhone } from '../../../../CommonMethods/formatInputPhone';
 import validation from './validation';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import securityAnswersCheck from './securityAnswersCheck';
+import verificationValidation from './verificationValidation';
+import { dataService } from '../../../../services/data.services';
+import { endpoints } from '../../../../services/endpoints';
 
 const OnboardAgent = () => {
     const initialState = {
@@ -32,24 +36,31 @@ const OnboardAgent = () => {
     const [securityQuestions, setSecurityQuestions] = useState([]);
     const [securityQuestionError, setsecurityQuestionError] = useState(false);
 
-    const [otp, setOtp] = useState({
-        emailOtp: '',
-        phoneNumberOtp: ''
-    });
-    const [otpErrors, setOtpErros] = useState({
-        emailOtp: '',
-        phoneNumberOtp: ''
-    });
+    const [otp, setOtp] = useState('');
+
+    const [otpError, setOtpError] = useState();
+
     const [verify, setVerify] = useState({
         email: false,
         phoneNumber: false
+    });
+    const [loadingEmailVerify, setLoadingEmailVerify] = useState(false);
+    const [loadingPhoneVerify, setLoadingPhoneVerify] = useState(false);
+    const [loadingOtpVerify, setLoadingOtpVerify] = useState(false);
+    const [otpId, setOtpId] = useState({
+        email: '',
+        phoneNumber: ''
     });
     const [verified, setVerified] = useState({
         email: false,
         phoneNumber: false
     });
 
+    const [otpToken, setOtpToken] = useState('');
+
     const { setToastError, setToastWarning } = useContext(GlobalContext);
+
+    const { sendOtp, verifyOtp, createAgent } = endpoints;
 
     const handleChange = (e, id) => {
         if (enteredLetter && enteredLetter === ' ') {
@@ -104,64 +115,138 @@ const OnboardAgent = () => {
         if (value.length > 6) {
             return;
         }
-        setOtp(prevState => {
-            return { ...prevState, [id]: value };
-        });
+        setOtp(value);
     };
 
     const handleOtpFocus = (e, id) => {
-
+        setOtpError('');
     };
 
-    const handleVerifyEmail = (text) => {
+    const handleVerifyEmail = async (text) => {
+        setFormErrors(initialState);
         if (text === 'EDIT') {
             setVerify(prevState => {
                 return { ...prevState, email: false };
             });
+            setOtp('');
+            setOtpError('');
             return;
         }
-        if (formData.email.trim() === '') {
-            setFormErrors((prevState) => {
-                return { ...prevState, email: 'Required field' };
-            });
-            return;
-        }
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            setFormErrors((prevState) => {
-                return { ...prevState, email: 'Invalid email' };
-            });
+        if (!verificationValidation(formData, setFormErrors, 'phoneNumber')) {
             return;
         }
         console.log('api call');
+
+        const payload = {
+            first_name: formData.firstName,
+            middle_name: formData.middleName,
+            last_name: formData.lastName,
+            type: 'email',
+            value: formData.email
+        };
+
+        setLoadingEmailVerify(true);
+        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        setLoadingEmailVerify(false);
+        console.log(response);
+        if (!response.error) {
+            setVerify(prevState => {
+                return { ...prevState, email: true };
+            });
+            setOtpToken(response?.data?.token);
+        }
     };
 
-    const handleVerifyPhoneNumber = (text) => {
+    const handleVerifyPhoneNumber = async (text) => {
         if (text === 'EDIT') {
             setVerify(prevState => {
-                return { ...prevState, email: false };
+                return { ...prevState, phoneNumber: false };
             });
+            setOtp('');
             return;
         }
         if (!verified.email) {
             setFormErrors((prevState) => {
-                return { ...prevState, email: 'Please verify your Email' };
+                return { ...prevState, email: 'Please verify your email' };
             });
             return;
         }
-        if (formData.phoneNumber.trim() === '') {
-            setFormErrors((prevState) => {
-                return { ...prevState, phoneNumber: 'Required field' };
-            });
-            return;
-        }
-        if (!(formData.phoneNumber.startsWith('+91') || formData.phoneNumber.startsWith('+265'))) {
-            setFormErrors((prevState) => {
-                return { ...prevState, phoneNumber: 'Invalid phone number' };
-            });
+        if (!verificationValidation(formData, setFormErrors, 'email')) {
             return;
         }
         console.log('api call');
+
+        let country_code;
+        let value;
+        if (formData.phoneNumber.startsWith(+91)) {
+            country_code = '+91';
+            value = formData.phoneNumber.slice(3);
+        } else {
+            country_code = '+265';
+            value = formData.phoneNumber.slice(4);
+        }
+
+        const payload = {
+            first_name: formData.firstName,
+            middle_name: formData.middleName,
+            last_name: formData.lastName,
+            type: 'sms',
+            country_code,
+            value
+        };
+
+        setLoadingPhoneVerify(true);
+        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        setLoadingPhoneVerify(false);
+        console.log(response);
+        if (!response.error) {
+            setVerify(prevState => {
+                return { ...prevState, phoneNumber: true };
+            });
+            setOtpToken(response?.token);
+        }
+    };
+
+    const handleVerifyOtp = async (text, id) => {
+        if (otp.trim().length < 6) {
+            setOtpError('Invalid OTP');
+            return;
+        }
+        console.log(otpToken, 'token');
+        const payload = {
+            otp,
+            token: otpToken
+        };
+        setLoadingOtpVerify(true);
+        const response = await dataService.PostAPIAgent(verifyOtp, payload);
+        setLoadingOtpVerify(false);
+        setOtp('');
+        console.log(response);
+        if (!response.error) {
+            console.log(response.data);
+            let key = '';
+            if (id.includes('email')) {
+                key = 'email';
+            } else if (id.includes('phoneNumber')) {
+                key = 'phoneNumber';
+            }
+            setVerified(prevState => {
+                return { ...prevState, [key]: true };
+            });
+            setVerify(prevState => {
+                return { ...prevState, [key]: false };
+            });
+            setOtpId(prevState => {
+                return { ...prevState, [key]: response?.data?.record_id };
+            });
+        } else {
+            console.log(response.data, 'error');
+            if (response?.data?.status === 400) {
+                setOtpError(response?.data?.data?.message);
+            } else {
+                setToastError('Something went wrong!');
+            }
+        }
     };
 
     useEffect(() => {
@@ -184,7 +269,14 @@ const OnboardAgent = () => {
         fetchSecurityQuestions();
     }, []);
 
-    const handleSubmit = (e) => {
+    const transformArray = (array) => {
+        return array.map((item, index) => ({
+            question_id: item.id,
+            answer: item.answer
+        }));
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validation(formData, setFormErrors, verified, securityQuestions, setsecurityQuestionError)) {
             return;
@@ -192,10 +284,24 @@ const OnboardAgent = () => {
         if (!termsAccepted) {
             setToastWarning('Please accept the terms and conditions');
         }
+        const payload = {
+            first_name: formData.firstName,
+            middle_name: formData.middleName,
+            last_name: formData.lastName,
+            phone_number: formData.phoneNumber,
+            email: formData.email,
+            email_otp_id: otpId.email,
+            phone_otp_id: otpId.phoneNumber,
+            security_questions: transformArray(securityQuestions)
+        };
+
+        console.log(payload);
+        const response = await dataService.PostAPIAgent(createAgent, payload);
+        console.log(response, 'create');
     };
 
     useEffect(() => {
-        // console.log(securityQuestions);
+        console.log(securityQuestions);
     }, [securityQuestions]);
 
     return (
@@ -266,8 +372,8 @@ const OnboardAgent = () => {
                             setEnteredLetter={setEnteredLetter}
                             onClick={handleVerifyEmail}
                             verified={verified.email}
-                            inputDisabled={verified.email || verify.email}
-                            buttonDisabled={formData.email.length < 1}
+                            inputDisabled={verified.email || verify.email || loadingEmailVerify}
+                            buttonDisabled={formData.email.length < 1 || loadingEmailVerify}
                         />
                         {verify.email &&
                         <InputFieldWithButton
@@ -276,13 +382,16 @@ const OnboardAgent = () => {
                             onFocus={handleOtpFocus}
                             id='emailOtp'
                             testId='emailOtp'
-                            error={otpErrors.emailOtp}
+                            error={otpError}
                             label='Verification Code'
                             placeholder='_ _ _ _ _ _'
-                            value={otp.emailOtp}
+                            value={otp}
                             buttonText={'VERIFY'}
                             setEnteredLetter={setEnteredLetter}
                             type='number'
+                            onClick={handleVerifyOtp}
+                            inputDisabled={loadingOtpVerify}
+                            buttonDisabled={otp.length < 1 || loadingOtpVerify}
                         />}
                     </div>
                     <div className='flex gap-[20px]'>
@@ -296,12 +405,12 @@ const OnboardAgent = () => {
                             label='Phone Number'
                             placeholder='Enter phone number'
                             value={formData.phoneNumber}
-                            buttonText={'VERIFY'}
+                            buttonText={verify.phoneNumber ? 'EDIT' : 'VERIFY'}
                             setEnteredLetter={setEnteredLetter}
                             onClick={handleVerifyPhoneNumber}
                             verified={verified.phoneNumber}
-                            inputDisabled={verified.phoneNumber || verify.phoneNumber}
-                            buttonDisabled={formData.phoneNumber.length < 1}
+                            inputDisabled={verified.phoneNumber || verify.phoneNumber || loadingPhoneVerify}
+                            buttonDisabled={formData.phoneNumber.length < 1 || loadingPhoneVerify}
                         />
                         {verify.phoneNumber &&
                         <InputFieldWithButton
@@ -310,13 +419,15 @@ const OnboardAgent = () => {
                             onFocus={handleOtpFocus}
                             id='phoneNumberOtp'
                             testId='phoneNumberOtp'
-                            error={otpErrors.phoneNumberOtp}
+                            error={otpError}
                             label='Verification Code'
                             placeholder='_ _ _ _ _ _'
-                            value={otp.phoneNumberOtp}
+                            value={otp}
                             buttonText={'VERIFY'}
                             setEnteredLetter={setEnteredLetter}
                             type='number'
+                            inputDisabled={loadingOtpVerify}
+                            buttonDisabled={otp.length < 1 || loadingOtpVerify}
                         />}
                     </div>
                     <div className='flex flex-col gap-2'>

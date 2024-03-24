@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-object-injection */
 import axios from 'axios';
-import { baseURL } from '../config';
+import { baseURL, baseURLAgent } from '../config';
 import authHeader from './authHeader';
 
 async function PostAPIWithoutHeader (endpoint, body) {
@@ -68,6 +68,18 @@ async function PostAPI (endpoint, payload) {
     }
 }
 
+async function PostAPIAgent (endpoint, payload) {
+    try {
+        const headers = await authHeader();
+        const data = await axios.post(`${baseURLAgent}${endpoint}`, payload, {
+            headers
+        });
+        return { error: false, data: data.data };
+    } catch (error) {
+        return { error: true, data: error.response };
+    }
+}
+
 /**
  * The function `PatchAPI` sends a PATCH request to a specified endpoint with a payload and returns the
  * response data or an error object.
@@ -124,5 +136,6 @@ export const dataService = {
     GetAPI,
     PostAPI,
     DeleteAPI,
-    PostAPIWithoutHeader
+    PostAPIWithoutHeader,
+    PostAPIAgent
 };

@@ -58,7 +58,7 @@ const InputFieldWithButton = ({
                     </div>
                     : <button className='absolute top-0 right-0 bg-[#FFFFFF] w-[95px] h-[34px] rounded-[8px] text-primary-normal
                     disabled:text-neutral-secondary font-[400] text-[14px] leading-[22px] my-[5px] mr-3 disabled:border-[#F5F5F5]
-                        border-neutral-secondary border' disabled={buttonDisabled} onClick={() => onClick(buttonText)}
+                        border-neutral-secondary border' disabled={buttonDisabled} onClick={() => onClick(buttonText, id)}
                     >
                         {buttonText}
                     </button>}
