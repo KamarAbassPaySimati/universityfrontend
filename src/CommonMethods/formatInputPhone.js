@@ -5,16 +5,15 @@ export const formatInputPhone = (inputPhoneNumber) => {
     // Apply the desired formatting
     let formattedPhoneNumber = '';
     for (let i = 0; i < digitsOnly.length; i++) {
-    // Insert space after every 3, 2, 3, 4 digits
-        if (i === 3 || i === 5 || i === 8) {
+        // Restrict entering 0 at the beginning
+        if (i === 0 && digitsOnly[i] === '0') {
+            continue; // Skip adding 0 at the beginning
+        }
+        // Insert space after every third, sixth, and ninth digit
+        if (i === 2 || i === 5 || i === 9) {
             formattedPhoneNumber += ' ';
         }
         formattedPhoneNumber += digitsOnly[i];
-    }
-
-    // Add the country code prefix if it's missing
-    if (!formattedPhoneNumber.startsWith('+')) {
-        formattedPhoneNumber = `+${formattedPhoneNumber}`;
     }
 
     return formattedPhoneNumber;

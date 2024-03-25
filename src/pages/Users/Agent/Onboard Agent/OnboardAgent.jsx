@@ -17,6 +17,7 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import verificationValidation from './verificationValidation';
 import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
+import RegistrationSuccessful from './components/RegistrationSuccessful';
 
 const OnboardAgent = () => {
     const initialState = {
@@ -59,9 +60,12 @@ const OnboardAgent = () => {
     });
 
     const [otpToken, setOtpToken] = useState('');
-    const [registrationSuccessful, setRegistrationSuccessful] = useState('');
+    const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
     const [timer, setTimer] = useState(0);
     const [resendCount, setResendCount] = useState(0);
+    const [countryCode, setCountryCode] = useState('+265');
+    const [numberMaxLength, setNumberMaxLength] = useState(11);
+    const [isResendLoading, setIsResendLoading] = useState(false);
 
     useEffect(() => {
         let intervalId;
@@ -73,7 +77,7 @@ const OnboardAgent = () => {
         return () => clearInterval(intervalId);
     }, [timer]);
 
-    const { setToastError, setToastWarning, setToastInformation } = useContext(GlobalContext);
+    const { setToastError, setToastInformation } = useContext(GlobalContext);
 
     const { sendOtp, verifyOtp, createAgent } = endpoints;
 
@@ -151,7 +155,7 @@ const OnboardAgent = () => {
         if (!verificationValidation(formData, setFormErrors, 'phoneNumber')) {
             return;
         }
-        console.log('api call');
+        console.log('api call', text);
 
         const payload = {
             first_name: formData.firstName,
@@ -161,9 +165,12 @@ const OnboardAgent = () => {
             value: formData.email
         };
 
-        setLoadingEmailVerify(true);
+        if (text.includes('Otp')) {
+            setIsResendLoading(true);
+        } else {
+            setLoadingEmailVerify(true);
+        }
         const response = await dataService.PostAPIAgent(sendOtp, payload);
-        setLoadingEmailVerify(false);
         console.log(response);
         if (!response.error) {
             setVerify(prevState => {
@@ -182,6 +189,8 @@ const OnboardAgent = () => {
                 setToastError('Something went wrong!');
             }
         }
+        setLoadingEmailVerify(false);
+        setIsResendLoading(false);
     };
 
     const handleVerifyPhoneNumber = async (text) => {
@@ -205,29 +214,21 @@ const OnboardAgent = () => {
         }
         console.log('api call');
 
-        let country_code;
-        let value;
-        const number = formData.phoneNumber.replace(/\s/g, '');
-        if (number.startsWith('+91')) {
-            country_code = '+91';
-            value = number.slice(3);
-        } else {
-            country_code = '+265';
-            value = number.slice(4);
-        }
-
         const payload = {
             first_name: formData.firstName,
             middle_name: formData.middleName,
             last_name: formData.lastName,
             type: 'sms',
-            country_code,
-            value
+            country_code: countryCode,
+            value: formData.phoneNumber.replace(/\s/g, '')
         };
 
-        setLoadingPhoneVerify(true);
+        if (text.includes('Otp')) {
+            setIsResendLoading(true);
+        } else {
+            setLoadingPhoneVerify(true);
+        }
         const response = await dataService.PostAPIAgent(sendOtp, payload);
-        setLoadingPhoneVerify(false);
         console.log(response);
         if (!response.error) {
             setVerify(prevState => {
@@ -240,12 +241,14 @@ const OnboardAgent = () => {
         } else {
             if (response?.data?.status === 409 || response?.data?.status === 400) {
                 setFormErrors(prevState => {
-                    return { ...prevState, email: response?.data?.data?.message };
+                    return { ...prevState, phoneNumber: response?.data?.data?.message };
                 });
             } else {
                 setToastError('Something went wrong!');
             }
         }
+        setLoadingPhoneVerify(false);
+        setIsResendLoading(false);
     };
 
     const handleVerifyOtp = async (text, id) => {
@@ -294,10 +297,6 @@ const OnboardAgent = () => {
         }
     };
 
-    const handleResend = async () => {
-
-    };
-
     useEffect(() => {
         const fetchSecurityQuestions = async () => {
             try {
@@ -332,23 +331,13 @@ const OnboardAgent = () => {
         if (!validation(formData, setFormErrors, verified, securityQuestions, setsecurityQuestionError, termsAccepted, setTermsAcceptedError)) {
             return;
         }
-        let country_code;
-        let phone_number;
-        const number = formData.phoneNumber.replace(/\s/g, '');
-        if (number.startsWith('+91')) {
-            country_code = '+91';
-            phone_number = number.slice(3);
-        } else {
-            country_code = '+265';
-            phone_number = number.slice(4);
-        }
 
         const payload = {
             first_name: formData.firstName,
             middle_name: formData.middleName,
             last_name: formData.lastName,
-            country_code,
-            phone_number,
+            country_code: countryCode,
+            phone_number: formData.phoneNumber.replace(/\s/g, ''),
             email: formData.email,
             email_otp_id: otpId.email,
             phone_otp_id: otpId.phoneNumber,
@@ -375,206 +364,215 @@ const OnboardAgent = () => {
             activePath='Onboard Agent'
             paths={['Users', 'Agent']}
             pathurls={['users/agent']}
-            header='Registration'
+            header={registrationSuccessful ? false : 'Registration'}
         >
-            <>
-                <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
-                    Basic Details
-                </h1>
-                <div className='my-4 flex gap-[20px] flex-wrap'>
-                    <InputField
-                        className='w-[339px]'
-                        value={formData.firstName}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        id='firstName'
-                        testId='firstName'
-                        error={formErrors.firstName}
-                        label='First Name'
-                        placeholder='Enter first name'
-                        setEnteredLetter={setEnteredLetter}
-                    />
-                    <InputField
-                        className='w-[339px]'
-                        value={formData.middleName}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        id='middleName'
-                        testId='middleName'
-                        error={formErrors.middleName}
-                        label='Middle Name'
-                        placeholder='Enter middle name'
-                        setEnteredLetter={setEnteredLetter}
-                    />
-                    <InputField
-                        className='w-[339px]'
-                        value={formData.lastName}
-                        onChange={handleChange}
-                        onFocus={handleFocus}
-                        id='lastName'
-                        testId='lastName'
-                        error={formErrors.lastName}
-                        label='Last Name'
-                        placeholder='Enter last name'
-                        setEnteredLetter={setEnteredLetter}
-                    />
-                </div>
-                <p className='my-4 font-[500] text-[14px] leading-[22px] text-neutral-secondary'>
-                    Enter a valid email and phone number. To confirm it’s you, we will send a verification code.
-                </p>
-                <div className='flex flex-col gap-6 w-[339px]'>
-                    <div className='flex gap-[20px]'>
-                        <InputFieldWithButton
+            {registrationSuccessful
+                ? <RegistrationSuccessful email={formData.email} />
+                : <>
+                    <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
+                        Basic Details
+                    </h1>
+                    <div className='my-4 flex gap-[20px] flex-wrap'>
+                        <InputField
                             className='w-[339px]'
+                            value={formData.firstName}
                             onChange={handleChange}
                             onFocus={handleFocus}
-                            id='email'
-                            testId='email'
-                            error={formErrors.email}
-                            label='Email'
-                            placeholder='Enter email'
-                            value={formData.email}
-                            buttonText={verify.email ? 'EDIT' : 'VERIFY'}
+                            id='firstName'
+                            testId='firstName'
+                            error={formErrors.firstName}
+                            label='First Name'
+                            placeholder='Enter first name'
                             setEnteredLetter={setEnteredLetter}
-                            onClick={handleVerifyEmail}
-                            verified={verified.email}
-                            inputDisabled={verified.email || verify.email}
-                            buttonDisabled={formData.email.length < 1}
-                            isLoading={loadingEmailVerify}
                         />
-                        {verify.email &&
-                        <InputFieldWithButton
+                        <InputField
                             className='w-[339px]'
-                            onChange={handleOtpChange}
-                            onFocus={handleOtpFocus}
-                            id='emailOtp'
-                            testId='emailOtp'
-                            error={otpError}
-                            label='Verification Code'
-                            placeholder='_ _ _ _ _ _'
-                            value={otp}
-                            buttonText={'VERIFY'}
-                            setEnteredLetter={setEnteredLetter}
-                            type='number'
-                            onClick={handleVerifyOtp}
-                            inputDisabled={loadingOtpVerify}
-                            buttonDisabled={otp.length < 1 || loadingOtpVerify}
-                            resend={true && resendCount <= 3}
-                            timer={timer}
-                            handleResend={handleVerifyEmail}
-                        />}
-                    </div>
-                    <div className='flex gap-[20px]'>
-                        <InputFieldWithButton
-                            className='w-[339px]'
+                            value={formData.middleName}
                             onChange={handleChange}
                             onFocus={handleFocus}
-                            id='phoneNumber'
-                            testId='phoneNumber'
-                            error={formErrors.phoneNumber}
-                            label='Phone Number'
-                            placeholder='Enter phone number'
-                            value={formData.phoneNumber}
-                            buttonText={verify.phoneNumber ? 'EDIT' : 'VERIFY'}
+                            id='middleName'
+                            testId='middleName'
+                            error={formErrors.middleName}
+                            label='Middle Name'
+                            placeholder='Enter middle name'
                             setEnteredLetter={setEnteredLetter}
-                            onClick={handleVerifyPhoneNumber}
-                            verified={verified.phoneNumber}
-                            inputDisabled={verified.phoneNumber || verify.phoneNumber}
-                            buttonDisabled={formData.phoneNumber.length < 1}
-                            isLoading={loadingPhoneVerify}
                         />
-                        {verify.phoneNumber &&
-                        <InputFieldWithButton
+                        <InputField
                             className='w-[339px]'
-                            onChange={handleOtpChange}
-                            onFocus={handleOtpFocus}
-                            id='phoneNumberOtp'
-                            testId='phoneNumberOtp'
-                            error={otpError}
-                            label='Verification Code'
-                            placeholder='_ _ _ _ _ _'
-                            value={otp}
-                            buttonText={'VERIFY'}
+                            value={formData.lastName}
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            id='lastName'
+                            testId='lastName'
+                            error={formErrors.lastName}
+                            label='Last Name'
+                            placeholder='Enter last name'
                             setEnteredLetter={setEnteredLetter}
-                            type='number'
-                            onClick={handleVerifyOtp}
-                            inputDisabled={loadingOtpVerify}
-                            buttonDisabled={otp.length < 1 || loadingOtpVerify}
-                            resend={true && resendCount <= 3}
-                            timer={timer}
-                            handleResend={handleResend}
-                        />}
+                        />
                     </div>
-                    <div className='flex flex-col gap-2'>
-                        <div className='info-icon flex justify-between mt-2 mb-[2px]'>
-                            <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>
-                            <Image src='info_icon' className='cursor-pointer' />
+                    <p className='my-4 font-[500] text-[14px] leading-[22px] text-neutral-secondary'>
+                        Enter a valid email and phone number. To confirm it’s you, we will send a verification code.
+                    </p>
+                    <div className='flex flex-col gap-6 w-[339px]'>
+                        <div className='flex gap-[20px]'>
+                            <InputFieldWithButton
+                                className='w-[339px]'
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                id='email'
+                                testId='email'
+                                error={formErrors.email}
+                                label='Email'
+                                placeholder='Enter email'
+                                value={formData.email}
+                                buttonText={verify.email ? 'EDIT' : 'VERIFY'}
+                                setEnteredLetter={setEnteredLetter}
+                                onClick={handleVerifyEmail}
+                                verified={verified.email}
+                                inputDisabled={verified.email || verify.email}
+                                buttonDisabled={formData.email.length < 1 || isResendLoading}
+                                isLoading={loadingEmailVerify}
+                            />
+                            {verify.email &&
+                            <InputFieldWithButton
+                                className='w-[339px]'
+                                onChange={handleOtpChange}
+                                onFocus={handleOtpFocus}
+                                id='emailOtp'
+                                testId='emailOtp'
+                                error={otpError}
+                                label='Verification Code'
+                                placeholder='_ _ _ _ _ _'
+                                value={otp}
+                                buttonText={'VERIFY'}
+                                setEnteredLetter={setEnteredLetter}
+                                type='number'
+                                onClick={handleVerifyOtp}
+                                inputDisabled={loadingOtpVerify}
+                                buttonDisabled={otp.length < 1 || loadingOtpVerify || isResendLoading}
+                                resend={true && resendCount <= 3}
+                                timer={timer}
+                                handleResend={handleVerifyEmail}
+                                isLoading={loadingOtpVerify}
+                            />}
                         </div>
-                        {securityQuestionError && <ErrorMessage error='Answer at least 3 questions' />}
-                    </div>
-                    <Tooltip
-                        className='info-tooltip'
-                        anchorSelect=".info-icon"
-                        place='right-start'
-                        effect="solid"
-                        arrowColor="transparent"
-                    >
-                        <h1 className='mb-2'>Guide</h1>
-                        <ul className='text-[14px] list-disc ml-6'>
-                            <li>
-                                Please provide unique and memorable answers that are easy to remember, even years later.
-                            </li>
-                            <li>
-                                Answers should be clear and exact (preferably a single word),
-                                but they don&apos;t need to be truthful.
-                                Indeed, it&apos;s best to use fake answers for security questions to enhance security.
-                            </li>
-                        </ul>
-                    </Tooltip>
-                    { questionsLoading
-                        ? <SecurityQuestionsShimmer />
-                        : <div className='flex flex-col gap-6'>
-                            {securityQuestions.map((securityQuestion) => (
-                                <InputField
-                                    key={securityQuestion?.id}
-                                    className='w-[339px]'
-                                    value={securityQuestion?.answer || ''}
-                                    onChange={handleAnswerChange}
-                                    onFocus={() => setsecurityQuestionError(false)}
-                                    id={securityQuestion?.id}
-                                    testId={securityQuestion?.question}
-                                    showErrorBottom={false}
-                                    error={securityQuestionError}
-                                    label={securityQuestion?.question}
-                                    placeholder='Answer'
-                                    notShowErrorBottom={true}
-                                />))}
-                        </div>}
-                    {/* checkbox */}
-                    <div className='flex flex-col gap-[14px]'>
-                        <div className={`checkbox ${termsAcceptedError ? 'checkbox-error' : ''} w-full flex justify-start items-start  gap-4 relative`}>
-                            <input
-                                data-testid="agree_status"
-                                type="checkbox"
-                                onChange={() => { setTermsAcceptedError(false); setTermsAccepted((prevState) => !prevState); }}
-                                className="w-4 cursor-pointer"
-                                id="termsAccepted"
-                                name='checkbox' />
-                            <label className="text-neutral-primary text-[14px]
+                        <div className='flex gap-[20px]'>
+                            <InputFieldWithButton
+                                className='w-[294px]'
+                                onChange={handleChange}
+                                onFocus={handleFocus}
+                                id='phoneNumber'
+                                testId='phoneNumber'
+                                error={formErrors.phoneNumber}
+                                label='Phone Number'
+                                placeholder='Enter phone number'
+                                value={formData.phoneNumber}
+                                buttonText={verify.phoneNumber ? 'EDIT' : 'VERIFY'}
+                                setEnteredLetter={setEnteredLetter}
+                                onClick={handleVerifyPhoneNumber}
+                                verified={verified.phoneNumber}
+                                inputDisabled={verified.phoneNumber || verify.phoneNumber}
+                                buttonDisabled={formData.phoneNumber.length < 1 || isResendLoading}
+                                isLoading={loadingPhoneVerify}
+                                phoneNumber={true}
+                                countryCode={countryCode}
+                                setCountryCode={setCountryCode}
+                                maxLength={numberMaxLength}
+                                setNumberMaxLength={setNumberMaxLength}
+                            />
+                            {verify.phoneNumber &&
+                            <InputFieldWithButton
+                                className='w-[339px]'
+                                onChange={handleOtpChange}
+                                onFocus={handleOtpFocus}
+                                id='phoneNumberOtp'
+                                testId='phoneNumberOtp'
+                                error={otpError}
+                                label='Verification Code'
+                                placeholder='_ _ _ _ _ _'
+                                value={otp}
+                                buttonText={'VERIFY'}
+                                setEnteredLetter={setEnteredLetter}
+                                type='number'
+                                onClick={handleVerifyOtp}
+                                inputDisabled={loadingOtpVerify}
+                                buttonDisabled={otp.length < 1 || loadingOtpVerify || isResendLoading}
+                                resend={true && resendCount <= 3}
+                                timer={timer}
+                                handleResend={handleVerifyPhoneNumber}
+                                isLoading={loadingOtpVerify}
+                            />}
+                        </div>
+                        <div className='flex flex-col gap-2'>
+                            <div className='info-icon flex justify-between mt-2 mb-[2px]'>
+                                <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>
+                                <Image src='info_icon' className='cursor-pointer' />
+                            </div>
+                            {securityQuestionError && <ErrorMessage error='Answer at least 3 questions' />}
+                        </div>
+                        <Tooltip
+                            className='info-tooltip'
+                            anchorSelect=".info-icon"
+                            place='right-start'
+                            effect="solid"
+                            arrowColor="transparent"
+                        >
+                            <h1 className='mb-2'>Guide</h1>
+                            <ul className='text-[14px] list-disc ml-6'>
+                                <li>
+                                    Please provide unique and memorable answers that are easy to remember, even years later.
+                                </li>
+                                <li>
+                                    Answers should be clear and exact (preferably a single word),
+                                    but they don&apos;t need to be truthful.
+                                    Indeed, it&apos;s best to use fake answers for security questions to enhance security.
+                                </li>
+                            </ul>
+                        </Tooltip>
+                        { questionsLoading
+                            ? <SecurityQuestionsShimmer />
+                            : <div className='flex flex-col gap-6'>
+                                {securityQuestions.map((securityQuestion) => (
+                                    <InputField
+                                        key={securityQuestion?.id}
+                                        className='w-[339px]'
+                                        value={securityQuestion?.answer || ''}
+                                        onChange={handleAnswerChange}
+                                        onFocus={() => setsecurityQuestionError(false)}
+                                        id={securityQuestion?.id}
+                                        testId={securityQuestion?.question}
+                                        showErrorBottom={false}
+                                        error={securityQuestionError}
+                                        label={securityQuestion?.question}
+                                        placeholder='Answer'
+                                        notShowErrorBottom={true}
+                                    />))}
+                            </div>}
+                        {/* checkbox */}
+                        <div className='flex flex-col gap-[14px]'>
+                            <div className={`checkbox ${termsAcceptedError ? 'checkbox-error' : ''} w-full flex justify-start items-start  gap-4 relative`}>
+                                <input
+                                    data-testid="agree_status"
+                                    type="checkbox"
+                                    onChange={() => { setTermsAcceptedError(false); setTermsAccepted((prevState) => !prevState); }}
+                                    className="w-4 cursor-pointer"
+                                    id="termsAccepted"
+                                    name='checkbox' />
+                                <label className="text-neutral-primary text-[14px]
                             leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted" >
-                                I have read and agree to Paymaart’s
-                                <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
-                                    className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
-                                and
-                                <a target='_blank' href='https://www.paymaart.net/privacy-policy'
-                                    className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
-                            </label>
+                                    I have read and agree to Paymaart’s
+                                    <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
+                                        className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
+                                    and
+                                    <a target='_blank' href='https://www.paymaart.net/privacy-policy'
+                                        className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
+                                </label>
+                            </div>
+                            {termsAcceptedError && <ErrorMessage error='Please accept the Terms & Conditions and Privacy Policies to continue.' />}
                         </div>
-                        {termsAcceptedError && <ErrorMessage error='Please accept the Terms & Conditions and Privacy Policies to continue.' />}
+                        <Button isLoading={isLoading} onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
                     </div>
-                    <Button isLoading={isLoading} onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
-                </div>
-            </>
+                </>}
         </CardHeader>
     );
 };

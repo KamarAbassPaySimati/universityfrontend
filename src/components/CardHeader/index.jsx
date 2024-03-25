@@ -18,7 +18,7 @@ import { Link, useNavigate } from 'react-router-dom';
 const CardHeader = ({ children, paths, activePath, pathurls, testId, header }) => {
     const navigate = useNavigate();
 
-    function cumulativeSum(arr) {
+    function cumulativeSum (arr) {
         const result = [];
         let sum = '';
         for (const str of arr) {

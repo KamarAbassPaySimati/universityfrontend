@@ -22,13 +22,6 @@ export default function verificationValidation (state, setErrorState, ignoreKey)
             });
             isValid = false;
         }
-    } else if (ignoreKey === 'email') {
-        if (!(state.phoneNumber.startsWith('+91') || state.phoneNumber.startsWith('+265'))) {
-            setErrorState((prevState) => {
-                return { ...prevState, phoneNumber: 'Invalid phone number' };
-            });
-            isValid = false;
-        }
     }
 
     return isValid;

@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Image from '../Image/Image';
 import formatTime from '../../CommonMethods/formatTimer';
@@ -29,17 +29,56 @@ const InputFieldWithButton = ({
     resend,
     timer,
     isLoading,
-    handleResend
+    handleResend,
+    phoneNumber,
+    countryCode,
+    setCountryCode,
+    setNumberMaxLength
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
             setEnteredLetter(e.key);
         }
     };
+
+    const [isFocused, setIsFocused] = useState(false);
+
+    const handleFocus = () => {
+        onFocus(id);
+        setIsFocused(true);
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);
+    };
+
+    const handleCountryCode = () => {
+        if (import.meta.env.VITE_STAGE === 'qa' || import.meta.env.VITE_STAGE === 'dev') {
+            if (countryCode === '+265') {
+                setCountryCode('+91');
+                setNumberMaxLength(12);
+            } else {
+                setCountryCode('+265');
+                setNumberMaxLength(11);
+            }
+        }
+    };
+
+    const handleResendClick = () => {
+        if (!isLoading) {
+            console.log('api calling');
+            handleResend(id);
+        }
+    };
+
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
-            <div className='bg-[#F8F8F8] relative w-fit'>
+            <div className='bg-[#F8F8F8] relative w-fit flex justify-center items-center'>
+                {phoneNumber &&
+                <div onClick={handleCountryCode} className={`min-w-[45px] pl-[10px] font-[400] text-[14px] leading-[22px] text-primary-normal py-[11px] border-b ${isFocused ? 'border-primary-normal' : 'border-[#DDDDDD]'} ${error ? 'border-error' : 'border-[#DDDDDD]'}`}>
+                    {countryCode}
+                </div>}
                 <input
                     disabled={inputDisabled || isLoading}
                     maxLength={maxLength}
@@ -52,7 +91,8 @@ const InputFieldWithButton = ({
                     ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className}`}
                     id={id}
                     placeholder={placeholder}
-                    onFocus={() => onFocus(id)}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                     onChange={(e) => onChange(e, id)}
                     onKeyDown={handleKeyDown}
                 />
@@ -74,12 +114,16 @@ const InputFieldWithButton = ({
             </div>
             <div className={`flex items-center ${error ? 'justify-between' : 'justify-end'}`}>
                 {error && <ErrorMessage error={error} />}
-                {resend && <div className='font-[400] text-[12px] leading-[20px] text-neutral-primary'>
-                    Didn’t receive OTP?
-                    {timer > 0
-                        ? <span> &nbsp;Resend in {formatTime(timer)}</span>
-                        : <span onClick={handleResend} className='cursor-pointer text-primary-normal'> &nbsp;Resend</span>}
-                </div>}
+                {id?.includes('Otp') && (resend
+                    ? <div className='font-[400] text-[12px] leading-[20px] text-neutral-primary'>
+                        Didn’t receive OTP?
+                        {timer > 0
+                            ? <span> &nbsp;Resend in {formatTime(timer)}</span>
+                            : <span onClick={handleResendClick} className={`${isLoading ? 'cursor-default' : 'cursor-pointer'} text-primary-normal`}> &nbsp;Resend</span>}
+                    </div>
+                    : <div className='text-accent-information font-[400] text-[12px] leading-[24px]'>
+                        Resend limit is 3 times
+                    </div>)}
             </div>
             {showLoginError && loginError && !error && <ErrorMessage error={loginError} />}
         </div>
