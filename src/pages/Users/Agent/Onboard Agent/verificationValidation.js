@@ -22,6 +22,13 @@ export default function verificationValidation (state, setErrorState, ignoreKey)
             });
             isValid = false;
         }
+    } else if (ignoreKey === 'email') {
+        if (state?.phoneNumber.length < 11) {
+            setErrorState((prevState) => {
+                return { ...prevState, phoneNumber: 'Invalid phone number' };
+            });
+            isValid = false;
+        }
     }
 
     return isValid;

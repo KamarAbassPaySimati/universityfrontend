@@ -19,7 +19,8 @@ const InputField = ({
     autoComplete,
     setEnteredLetter,
     className,
-    notShowErrorBottom
+    notShowErrorBottom,
+    maxLength
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -45,6 +46,7 @@ const InputField = ({
                 onFocus={() => onFocus(id)}
                 onChange={(e) => onChange(e, id)}
                 onKeyDown={handleKeyDown}
+                maxLength={maxLength}
             />
             {/* && value.length > 0 */}
             {givenType === 'password' && value.length > 0 &&

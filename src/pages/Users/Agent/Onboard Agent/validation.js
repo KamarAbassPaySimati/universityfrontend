@@ -15,7 +15,7 @@ export default function validation (state, setErrorState, verified, securityQues
             console.log('yes');
             setErrorState((prevState) => ({
                 ...prevState,
-                [key]: 'Please verify your Email'
+                [key]: ' Please verify your email address'
             }));
             isValid = false;
         } else if (key === 'phoneNumber' && !verified[key]) {

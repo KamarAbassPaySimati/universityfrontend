@@ -205,7 +205,7 @@ const OnboardAgent = () => {
         }
         if (!verified.email) {
             setFormErrors((prevState) => {
-                return { ...prevState, email: 'Please verify your email' };
+                return { ...prevState, email: 'Please verify your email address' };
             });
             return;
         }
@@ -379,11 +379,12 @@ const OnboardAgent = () => {
                             onChange={handleChange}
                             onFocus={handleFocus}
                             id='firstName'
-                            testId='firstName'
+                            testId='first_name'
                             error={formErrors.firstName}
                             label='First Name'
                             placeholder='Enter first name'
                             setEnteredLetter={setEnteredLetter}
+                            maxLength={100}
                         />
                         <InputField
                             className='w-[339px]'
@@ -391,11 +392,12 @@ const OnboardAgent = () => {
                             onChange={handleChange}
                             onFocus={handleFocus}
                             id='middleName'
-                            testId='middleName'
+                            testId='middle_name'
                             error={formErrors.middleName}
                             label='Middle Name'
                             placeholder='Enter middle name'
                             setEnteredLetter={setEnteredLetter}
+                            maxLength={100}
                         />
                         <InputField
                             className='w-[339px]'
@@ -403,11 +405,12 @@ const OnboardAgent = () => {
                             onChange={handleChange}
                             onFocus={handleFocus}
                             id='lastName'
-                            testId='lastName'
+                            testId='last_name'
                             error={formErrors.lastName}
                             label='Last Name'
                             placeholder='Enter last name'
                             setEnteredLetter={setEnteredLetter}
+                            maxLength={100}
                         />
                     </div>
                     <p className='my-4 font-[500] text-[14px] leading-[22px] text-neutral-secondary'>
@@ -420,7 +423,8 @@ const OnboardAgent = () => {
                                 onChange={handleChange}
                                 onFocus={handleFocus}
                                 id='email'
-                                testId='email'
+                                testId='email_address'
+                                buttonTestId='verify_email_address'
                                 error={formErrors.email}
                                 label='Email'
                                 placeholder='Enter email'
@@ -432,6 +436,7 @@ const OnboardAgent = () => {
                                 inputDisabled={verified.email || verify.email}
                                 buttonDisabled={formData.email.length < 1 || isResendLoading}
                                 isLoading={loadingEmailVerify}
+                                maxLength={100}
                             />
                             {verify.email &&
                             <InputFieldWithButton
@@ -439,7 +444,8 @@ const OnboardAgent = () => {
                                 onChange={handleOtpChange}
                                 onFocus={handleOtpFocus}
                                 id='emailOtp'
-                                testId='emailOtp'
+                                testId='otp'
+                                buttonTestId='verify_OTP'
                                 error={otpError}
                                 label='Verification Code'
                                 placeholder='_ _ _ _ _ _'
@@ -462,7 +468,8 @@ const OnboardAgent = () => {
                                 onChange={handleChange}
                                 onFocus={handleFocus}
                                 id='phoneNumber'
-                                testId='phoneNumber'
+                                testId='phone_number'
+                                buttonTestId='verify_phone_number'
                                 error={formErrors.phoneNumber}
                                 label='Phone Number'
                                 placeholder='Enter phone number'
@@ -486,7 +493,8 @@ const OnboardAgent = () => {
                                 onChange={handleOtpChange}
                                 onFocus={handleOtpFocus}
                                 id='phoneNumberOtp'
-                                testId='phoneNumberOtp'
+                                testId='otp'
+                                buttonTestId='verify_OTP'
                                 error={otpError}
                                 label='Verification Code'
                                 placeholder='_ _ _ _ _ _'
@@ -504,9 +512,9 @@ const OnboardAgent = () => {
                             />}
                         </div>
                         <div className='flex flex-col gap-2'>
-                            <div className='info-icon flex justify-between mt-2 mb-[2px]'>
+                            <div className='flex justify-between mt-2 mb-[2px]'>
                                 <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>
-                                <Image src='info_icon' className='cursor-pointer' />
+                                <Image src='info_icon' className='cursor-pointer info-icon' />
                             </div>
                             {securityQuestionError && <ErrorMessage error='Answer at least 3 questions' />}
                         </div>
@@ -532,7 +540,7 @@ const OnboardAgent = () => {
                         { questionsLoading
                             ? <SecurityQuestionsShimmer />
                             : <div className='flex flex-col gap-6'>
-                                {securityQuestions.map((securityQuestion) => (
+                                {securityQuestions.map((securityQuestion, index) => (
                                     <InputField
                                         key={securityQuestion?.id}
                                         className='w-[339px]'
@@ -540,7 +548,7 @@ const OnboardAgent = () => {
                                         onChange={handleAnswerChange}
                                         onFocus={() => setsecurityQuestionError(false)}
                                         id={securityQuestion?.id}
-                                        testId={securityQuestion?.question}
+                                        testId={`security_question_${index + 1}`}
                                         showErrorBottom={false}
                                         error={securityQuestionError}
                                         label={securityQuestion?.question}
@@ -552,13 +560,12 @@ const OnboardAgent = () => {
                         <div className='flex flex-col gap-[14px]'>
                             <div className={`checkbox ${termsAcceptedError ? 'checkbox-error' : ''} w-full flex justify-start items-start  gap-4 relative`}>
                                 <input
-                                    data-testid="agree_status"
                                     type="checkbox"
                                     onChange={() => { setTermsAcceptedError(false); setTermsAccepted((prevState) => !prevState); }}
                                     className="w-4 cursor-pointer"
                                     id="termsAccepted"
                                     name='checkbox' />
-                                <label className="text-neutral-primary text-[14px]
+                                <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px]
                             leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted" >
                                     I have read and agree to Paymaart’s
                                     <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
@@ -570,7 +577,7 @@ const OnboardAgent = () => {
                             </div>
                             {termsAcceptedError && <ErrorMessage error='Please accept the Terms & Conditions and Privacy Policies to continue.' />}
                         </div>
-                        <Button isLoading={isLoading} onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
+                        <Button testId='submit_button' isLoading={isLoading} onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
                     </div>
                 </>}
         </CardHeader>
