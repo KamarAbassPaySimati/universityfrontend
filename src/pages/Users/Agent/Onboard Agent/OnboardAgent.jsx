@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
@@ -13,7 +14,6 @@ import SecurityQuestionsShimmer from '../../../../components/Shimmers/SecurityQu
 import { formatInputPhone } from '../../../../CommonMethods/formatInputPhone';
 import validation from './validation';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
-import securityAnswersCheck from './securityAnswersCheck';
 import verificationValidation from './verificationValidation';
 import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
@@ -28,6 +28,7 @@ const OnboardAgent = () => {
     };
     const [enteredLetter, setEnteredLetter] = useState();
     const [termsAccepted, setTermsAccepted] = useState(false);
+    const [termsAcceptedError, setTermsAcceptedError] = useState(false);
     const [questionsLoading, setQuestionsLoading] = useState(false);
 
     const [formData, setFormData] = useState(initialState);
@@ -47,6 +48,7 @@ const OnboardAgent = () => {
     const [loadingEmailVerify, setLoadingEmailVerify] = useState(false);
     const [loadingPhoneVerify, setLoadingPhoneVerify] = useState(false);
     const [loadingOtpVerify, setLoadingOtpVerify] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [otpId, setOtpId] = useState({
         email: '',
         phoneNumber: ''
@@ -57,8 +59,21 @@ const OnboardAgent = () => {
     });
 
     const [otpToken, setOtpToken] = useState('');
+    const [registrationSuccessful, setRegistrationSuccessful] = useState('');
+    const [timer, setTimer] = useState(0);
+    const [resendCount, setResendCount] = useState(0);
 
-    const { setToastError, setToastWarning } = useContext(GlobalContext);
+    useEffect(() => {
+        let intervalId;
+        if (timer > 0) {
+            intervalId = setInterval(() => {
+                setTimer(timer - 1);
+            }, 1000);
+        }
+        return () => clearInterval(intervalId);
+    }, [timer]);
+
+    const { setToastError, setToastWarning, setToastInformation } = useContext(GlobalContext);
 
     const { sendOtp, verifyOtp, createAgent } = endpoints;
 
@@ -130,6 +145,7 @@ const OnboardAgent = () => {
             });
             setOtp('');
             setOtpError('');
+            setResendCount(0);
             return;
         }
         if (!verificationValidation(formData, setFormErrors, 'phoneNumber')) {
@@ -153,7 +169,18 @@ const OnboardAgent = () => {
             setVerify(prevState => {
                 return { ...prevState, email: true };
             });
+            setToastInformation("Verification code has been sent to agent’s email. It's valid for 10 minutes");
+            setTimer(60 * 2);
             setOtpToken(response?.data?.token);
+            setResendCount(prevState => prevState + 1);
+        } else {
+            if (response?.data?.status === 409 || response?.data?.status === 400) {
+                setFormErrors(prevState => {
+                    return { ...prevState, email: response?.data?.data?.message };
+                });
+            } else {
+                setToastError('Something went wrong!');
+            }
         }
     };
 
@@ -163,6 +190,8 @@ const OnboardAgent = () => {
                 return { ...prevState, phoneNumber: false };
             });
             setOtp('');
+            setOtpError('');
+            setResendCount(0);
             return;
         }
         if (!verified.email) {
@@ -178,12 +207,13 @@ const OnboardAgent = () => {
 
         let country_code;
         let value;
-        if (formData.phoneNumber.startsWith(+91)) {
+        const number = formData.phoneNumber.replace(/\s/g, '');
+        if (number.startsWith('+91')) {
             country_code = '+91';
-            value = formData.phoneNumber.slice(3);
+            value = number.slice(3);
         } else {
             country_code = '+265';
-            value = formData.phoneNumber.slice(4);
+            value = number.slice(4);
         }
 
         const payload = {
@@ -203,7 +233,18 @@ const OnboardAgent = () => {
             setVerify(prevState => {
                 return { ...prevState, phoneNumber: true };
             });
-            setOtpToken(response?.token);
+            setToastInformation("Verification code has been sent to agent’s phone number. It's valid for 10 minutes");
+            setTimer(60 * 2);
+            setResendCount(prevState => prevState + 1);
+            setOtpToken(response?.data?.token);
+        } else {
+            if (response?.data?.status === 409 || response?.data?.status === 400) {
+                setFormErrors(prevState => {
+                    return { ...prevState, email: response?.data?.data?.message };
+                });
+            } else {
+                setToastError('Something went wrong!');
+            }
         }
     };
 
@@ -230,6 +271,10 @@ const OnboardAgent = () => {
             } else if (id.includes('phoneNumber')) {
                 key = 'phoneNumber';
             }
+            setResendCount(0);
+            setFormErrors(prevState => {
+                return { ...prevState, [key]: '' };
+            });
             setVerified(prevState => {
                 return { ...prevState, [key]: true };
             });
@@ -247,6 +292,10 @@ const OnboardAgent = () => {
                 setToastError('Something went wrong!');
             }
         }
+    };
+
+    const handleResend = async () => {
+
     };
 
     useEffect(() => {
@@ -270,25 +319,36 @@ const OnboardAgent = () => {
     }, []);
 
     const transformArray = (array) => {
-        return array.map((item, index) => ({
-            question_id: item.id,
-            answer: item.answer
-        }));
+        return array
+            .filter(item => item.answer) // Filter out objects without an answer property
+            .map((item, index) => ({
+                question_id: item.id,
+                answer: item.answer
+            }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!validation(formData, setFormErrors, verified, securityQuestions, setsecurityQuestionError)) {
+        if (!validation(formData, setFormErrors, verified, securityQuestions, setsecurityQuestionError, termsAccepted, setTermsAcceptedError)) {
             return;
         }
-        if (!termsAccepted) {
-            setToastWarning('Please accept the terms and conditions');
+        let country_code;
+        let phone_number;
+        const number = formData.phoneNumber.replace(/\s/g, '');
+        if (number.startsWith('+91')) {
+            country_code = '+91';
+            phone_number = number.slice(3);
+        } else {
+            country_code = '+265';
+            phone_number = number.slice(4);
         }
+
         const payload = {
             first_name: formData.firstName,
             middle_name: formData.middleName,
             last_name: formData.lastName,
-            phone_number: formData.phoneNumber,
+            country_code,
+            phone_number,
             email: formData.email,
             email_otp_id: otpId.email,
             phone_otp_id: otpId.phoneNumber,
@@ -296,13 +356,19 @@ const OnboardAgent = () => {
         };
 
         console.log(payload);
+        setIsLoading(true);
         const response = await dataService.PostAPIAgent(createAgent, payload);
+        setIsLoading(false);
+        if (!response.error) {
+            setRegistrationSuccessful(true);
+            console.log('successfull');
+        }
         console.log(response, 'create');
     };
 
     useEffect(() => {
-        console.log(securityQuestions);
-    }, [securityQuestions]);
+        console.log(resendCount, 'count');
+    }, [resendCount]);
 
     return (
         <CardHeader
@@ -372,8 +438,9 @@ const OnboardAgent = () => {
                             setEnteredLetter={setEnteredLetter}
                             onClick={handleVerifyEmail}
                             verified={verified.email}
-                            inputDisabled={verified.email || verify.email || loadingEmailVerify}
-                            buttonDisabled={formData.email.length < 1 || loadingEmailVerify}
+                            inputDisabled={verified.email || verify.email}
+                            buttonDisabled={formData.email.length < 1}
+                            isLoading={loadingEmailVerify}
                         />
                         {verify.email &&
                         <InputFieldWithButton
@@ -392,6 +459,9 @@ const OnboardAgent = () => {
                             onClick={handleVerifyOtp}
                             inputDisabled={loadingOtpVerify}
                             buttonDisabled={otp.length < 1 || loadingOtpVerify}
+                            resend={true && resendCount <= 3}
+                            timer={timer}
+                            handleResend={handleVerifyEmail}
                         />}
                     </div>
                     <div className='flex gap-[20px]'>
@@ -409,8 +479,9 @@ const OnboardAgent = () => {
                             setEnteredLetter={setEnteredLetter}
                             onClick={handleVerifyPhoneNumber}
                             verified={verified.phoneNumber}
-                            inputDisabled={verified.phoneNumber || verify.phoneNumber || loadingPhoneVerify}
-                            buttonDisabled={formData.phoneNumber.length < 1 || loadingPhoneVerify}
+                            inputDisabled={verified.phoneNumber || verify.phoneNumber}
+                            buttonDisabled={formData.phoneNumber.length < 1}
+                            isLoading={loadingPhoneVerify}
                         />
                         {verify.phoneNumber &&
                         <InputFieldWithButton
@@ -426,8 +497,12 @@ const OnboardAgent = () => {
                             buttonText={'VERIFY'}
                             setEnteredLetter={setEnteredLetter}
                             type='number'
+                            onClick={handleVerifyOtp}
                             inputDisabled={loadingOtpVerify}
                             buttonDisabled={otp.length < 1 || loadingOtpVerify}
+                            resend={true && resendCount <= 3}
+                            timer={timer}
+                            handleResend={handleResend}
                         />}
                     </div>
                     <div className='flex flex-col gap-2'>
@@ -476,25 +551,28 @@ const OnboardAgent = () => {
                                 />))}
                         </div>}
                     {/* checkbox */}
-                    <div className="checkbox w-full flex justify-start items-start  gap-4 relative">
-                        <input
-                            data-testid="agree_status"
-                            type="checkbox"
-                            onChange={() => { setTermsAccepted((prevState) => !prevState); }}
-                            className="w-4 cursor-pointer"
-                            id="termsAccepted"
-                            name='checkbox' />
-                        <label className="text-neutral-primary text-[14px]
+                    <div className='flex flex-col gap-[14px]'>
+                        <div className={`checkbox ${termsAcceptedError ? 'checkbox-error' : ''} w-full flex justify-start items-start  gap-4 relative`}>
+                            <input
+                                data-testid="agree_status"
+                                type="checkbox"
+                                onChange={() => { setTermsAcceptedError(false); setTermsAccepted((prevState) => !prevState); }}
+                                className="w-4 cursor-pointer"
+                                id="termsAccepted"
+                                name='checkbox' />
+                            <label className="text-neutral-primary text-[14px]
                             leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted" >
-                            I have read and agree to Paymaart’s
-                            <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
-                                className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
-                            and
-                            <a target='_blank' href='https://www.paymaart.net/privacy-policy'
-                                className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
-                        </label>
+                                I have read and agree to Paymaart’s
+                                <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
+                                    className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
+                                and
+                                <a target='_blank' href='https://www.paymaart.net/privacy-policy'
+                                    className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
+                            </label>
+                        </div>
+                        {termsAcceptedError && <ErrorMessage error='Please accept the Terms & Conditions and Privacy Policies to continue.' />}
                     </div>
-                    <Button onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
+                    <Button isLoading={isLoading} onClick={handleSubmit} text='Register' className='w-[200px] mt-4' />
                 </div>
             </>
         </CardHeader>

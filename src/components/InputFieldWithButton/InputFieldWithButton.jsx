@@ -1,6 +1,9 @@
+/* eslint-disable max-len */
 import React from 'react';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Image from '../Image/Image';
+import formatTime from '../../CommonMethods/formatTimer';
+import { BeatLoader } from 'react-spinners';
 
 const InputFieldWithButton = ({
     value,
@@ -22,7 +25,11 @@ const InputFieldWithButton = ({
     maxLength,
     onClick,
     verified,
-    inputDisabled
+    inputDisabled,
+    resend,
+    timer,
+    isLoading,
+    handleResend
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -34,7 +41,7 @@ const InputFieldWithButton = ({
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <div className='bg-[#F8F8F8] relative w-fit'>
                 <input
-                    disabled={inputDisabled}
+                    disabled={inputDisabled || isLoading}
                     maxLength={maxLength}
                     autoComplete={autoComplete || 'off'}
                     data-testid={testId}
@@ -58,12 +65,22 @@ const InputFieldWithButton = ({
                     </div>
                     : <button className='absolute top-0 right-0 bg-[#FFFFFF] w-[95px] h-[34px] rounded-[8px] text-primary-normal
                     disabled:text-neutral-secondary font-[400] text-[14px] leading-[22px] my-[5px] mr-3 disabled:border-[#F5F5F5]
-                        border-neutral-secondary border' disabled={buttonDisabled} onClick={() => onClick(buttonText, id)}
+                        border-neutral-secondary border' disabled={buttonDisabled || isLoading} onClick={() => onClick(buttonText, id)}
                     >
-                        {buttonText}
+                        {!isLoading
+                            ? buttonText
+                            : <span>{<BeatLoader color='#3B2A6F' size='7px' />}</span>}
                     </button>}
             </div>
-            {error && <ErrorMessage error={error} />}
+            <div className={`flex items-center ${error ? 'justify-between' : 'justify-end'}`}>
+                {error && <ErrorMessage error={error} />}
+                {resend && <div className='font-[400] text-[12px] leading-[20px] text-neutral-primary'>
+                    Didn’t receive OTP?
+                    {timer > 0
+                        ? <span> &nbsp;Resend in {formatTime(timer)}</span>
+                        : <span onClick={handleResend} className='cursor-pointer text-primary-normal'> &nbsp;Resend</span>}
+                </div>}
+            </div>
             {showLoginError && loginError && !error && <ErrorMessage error={loginError} />}
         </div>
     );

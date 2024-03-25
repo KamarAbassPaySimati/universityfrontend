@@ -1,6 +1,7 @@
 import securityAnswersCheck from './securityAnswersCheck';
 
-export default function validation (state, setErrorState, verified, securityQuestions, setsecurityQuestionError) {
+export default function validation (state, setErrorState, verified, securityQuestions, setsecurityQuestionError,
+    termsAccepted, setTermsAcceptedError) {
     let isValid = true;
 
     for (const key in state) {
@@ -27,6 +28,10 @@ export default function validation (state, setErrorState, verified, securityQues
     }
     if (!securityAnswersCheck(securityQuestions)) {
         setsecurityQuestionError(true);
+        isValid = false;
+    }
+    if (!termsAccepted) {
+        setTermsAcceptedError(true);
         isValid = false;
     }
 
