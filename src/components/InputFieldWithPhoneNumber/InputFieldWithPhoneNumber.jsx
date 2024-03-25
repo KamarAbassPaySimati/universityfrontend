@@ -40,8 +40,8 @@ const InputFieldWithPhoneNumber = ({
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <div className={` bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px]
                      leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
-                    ${error ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr`}
-                style={{ borderBottomColor: isFocused ? '#3B2A6F' : '' }}>
+                    ${error ? 'border-error' : 'border-[#DDDDDD]'} 
+                    ${className} rounded-tl rounded-tr`} style={{ borderBottomColor: isFocused ? '#3B2A6F' : '' }}>
                 <p
                     className=' top-0 left-0  text-primary-normal font-[400] text-[14px]
                     leading-[22px]  mr-2'
@@ -50,7 +50,6 @@ const InputFieldWithPhoneNumber = ({
                 </p>
                 <input
                     maxLength={maxLength}
-                    type="tel"
                     autoComplete='off'
                     data-testid={testId}
                     value={value}

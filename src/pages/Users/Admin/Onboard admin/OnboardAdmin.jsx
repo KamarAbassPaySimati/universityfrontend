@@ -77,6 +77,10 @@ const OnboardAdmin = () => {
             errors.email = 'Invalid email address';
             hasError = true;
         }
+        if (formData.phoneNumber && (formData.phoneNumber.replace(/\s/g, '').length < 9)) {
+            errors.phoneNumber = 'Invalid phone number';
+            hasError = true;
+        }
         // Set the form errors
         setFormErrors(errors);
         if (!hasError) {
@@ -95,7 +99,7 @@ const OnboardAdmin = () => {
                 console.log(response, 'Set New Password response:');
                 if (!response.error) {
                     setIsLoading(false);
-                    setToastSuccess('Admin onboarded successfully ');
+                    setToastSuccess(`${formData.role} onboarded successfully `);
                     navigate('/users/admin');
                     // take back to listing
                 } else if (response?.data?.status === 409) {

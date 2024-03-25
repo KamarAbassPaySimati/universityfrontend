@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-function InputFieldWithDropDown(props) {
+function InputFieldWithDropDown (props) {
     const { labelName, value, placeholder, options, id, error, handleInput } = props;
     const [show, setShow] = useState(false);
 
@@ -16,8 +16,7 @@ function InputFieldWithDropDown(props) {
             <div ref={outsideClickRef} className={` bg-[#F8F8F8] text-neutral-primary
                      leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
                      rounded-tl rounded-tr  ${error ? 'border-error' : 'border-[#DDDDDD]'}
-                     `}
-                style={{ borderBottomColor: show ? '#3B2A6F' : '' }}>
+                     `} style={{ borderBottomColor: show ? '#3B2A6F' : '' }}>
                 <button
                     onClick={() => setShow(!show)}
                     data-testid={id}
@@ -35,15 +34,14 @@ function InputFieldWithDropDown(props) {
                 </button>
                 <ul id="#patient-dropdownMenuButton1" className={`bg-[#FFFFFF] dropdown-menu 
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
-                border border-[#E5E4E5] !top-3 h-fit transform-none ${show === true ? 'show' : 'hidden'}`}
-                    aria-labelledby="patient-dropdownMenuButton1"
-                    style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
+                border border-[#E5E4E5] !top-3 h-fit transform-none 
+                ${show === true ? 'show' : 'hidden'}`}
+                    aria-labelledby="patient-dropdownMenuButton1" style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
                     {options.map((item, index = 0) => (
                         <li onClick={(e) => {
                             e.preventDefault(); setShow(false);
                             handleInput(item);
-                        }} key={index}
-                            className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
+                        }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
                             <a className="dropdown-item font-normal text-xs text-[#444652]"
                                 href="/">
                                 {item}
