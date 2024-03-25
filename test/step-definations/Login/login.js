@@ -201,7 +201,7 @@ Before('@add_admin_user', async function () {
             username: email,
             middle_name: middleName,
             last_name: lastName,
-            role: 'Super admin',
+            role: 'Super Admin',
             phone_number: mainPhoneNumber,
             paymaart_id: paymaartId,
             fullName,
