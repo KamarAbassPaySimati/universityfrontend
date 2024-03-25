@@ -2,14 +2,15 @@
 import 'react-responsive-modal/styles.css';
 import React, { useContext, useEffect, useState } from 'react';
 import Image from '../Image/Image';
-import { fetchUserAttributes, signOut } from 'aws-amplify/auth';
+import { signOut } from 'aws-amplify/auth';
 import { useDispatch } from 'react-redux';
-import { logout, setUser } from '../../pages/auth/authSlice';
+import { logout } from '../../pages/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
 import { Slugify } from '../../CommonMethods/Sulgify.js';
+import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -27,21 +28,6 @@ const SideBar = ({ role }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const checkLoggedInUserForGlobalSignout = async () => {
-        try {
-            // eslint-disable-next-line no-unused-vars
-            const userAttributes = await fetchUserAttributes();
-        } catch (error) {
-            dispatch(setUser(''));
-            dispatch(logout());
-            navigate('/');
-        }
-    };
-
-    useEffect(() => {
-        checkLoggedInUserForGlobalSignout();
-    }, []);
 
     async function handleSignOut () {
         try {
@@ -100,6 +86,7 @@ const SideBar = ({ role }) => {
             dropdown: ['Admin', 'Agent', 'Merchant', 'Customer']
         }
     };
+    useGlobalSignout();
 
     return (
         <>

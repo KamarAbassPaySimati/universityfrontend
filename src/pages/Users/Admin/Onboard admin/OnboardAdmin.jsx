@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import InputField from '../../../../components/InputField/InputField';
-import InputFieldWithButton from '../../../../components/InputFieldWithButton/InputFieldWithButton';
+import InputFieldWithPhoneNumber from '../../../../components/InputFieldWithPhoneNumber/InputFieldWithPhoneNumber';
 
 const OnboardAdmin = () => {
     const initialState = {
@@ -9,16 +9,19 @@ const OnboardAdmin = () => {
         middleName: '',
         lastName: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        role: ''
     };
-
+    const [enteredLetter, setEnteredLetter] = useState();
     const [formData, setFormData] = useState(initialState);
     const [formErrors, setFormErrors] = useState(initialState);
-    const [enteredLetter, setEnteredLetter] = useState();
 
     const handleChange = (e, id) => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
+        }
+        if (id === 'email') {
+            console.log(' ');
         }
 
         if (id === 'lastName') {
@@ -42,9 +45,6 @@ const OnboardAdmin = () => {
     const handleFocus = () => {
 
     };
-
-    useEffect(() => {
-    }, [formData]);
 
     return (
         <CardHeader
@@ -95,12 +95,10 @@ const OnboardAdmin = () => {
                         setEnteredLetter={setEnteredLetter}
                     />
                 </div>
-                <p className='my-4 font-[500] text-[14px] leading-[22px] text-neutral-secondary'>
-                    Enter a valid email and phone number. To confirm it’s you, we will send a verification code.
-                </p>
-                <div>
-                    <InputFieldWithButton
+                <div className='my-4 flex gap-[20px]'>
+                    <InputField
                         className='w-[339px]'
+                        value={formData.email}
                         onChange={handleChange}
                         onFocus={handleFocus}
                         id='email'
@@ -108,11 +106,23 @@ const OnboardAdmin = () => {
                         error={formErrors.email}
                         label='Email'
                         placeholder='Enter email'
-                        value={formData.email}
-                        buttonText={'VERIFY'}
                         setEnteredLetter={setEnteredLetter}
                     />
+                    <InputFieldWithPhoneNumber
+                        className='w-[339px]'
+                        value={formData.phoneNumber}
+                        onChange={handleChange}
+                        onFocus={handleFocus}
+                        id='phoneNumber'
+                        testId='Phone Number'
+                        error={formErrors.email}
+                        label='Phone Number'
+                        placeholder='Enter phone number'
+                        setEnteredLetter={setEnteredLetter}
+                    />
+
                 </div>
+
             </>
         </CardHeader>
     );

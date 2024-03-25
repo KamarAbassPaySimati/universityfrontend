@@ -77,7 +77,7 @@ function hasThreeRepeatedConsecutiveDigits (str) {
 }
 // Check contains common values
 function containsCommonPasswords (str) {
-    return /(qwerty|password)/i.test(str);
+    return /qwerty|password/i.test(str);
 }
 
 export default function passwordCheck (password) {

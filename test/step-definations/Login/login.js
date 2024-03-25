@@ -24,7 +24,7 @@ async function login () {
     await new Promise(resolve => setTimeout(resolve, 750));
     global.adminUser = {
         pass: 'Admin@123',
-        email_address: 'admin@paymaart.com'
+        email_address: 'bharath.shet+admin@7edge.com'
     };
 
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
