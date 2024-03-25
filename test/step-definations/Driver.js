@@ -1,6 +1,6 @@
 /* eslint-disable eqeqeq */
 /* eslint-disable no-undef */
-const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout, Before } = require('@cucumber/cucumber');
+const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout, Before, After } = require('@cucumber/cucumber');
 const chrome = require('selenium-webdriver/chrome');
 const { By, until } = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
@@ -71,6 +71,15 @@ Before('@wait', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
     console.log('waiting');
 });
+
+Before(async function () {
+    await new Promise(resolve => setTimeout(resolve, 1500));
+});
+
+After(async function () {
+    await new Promise(resolve => setTimeout(resolve, 1500));
+});
+
 AfterStep(async function () {
     const updatedCoverageData = await driver.executeScript('return __coverage__;');
     const updatedCoverageMap = createCoverageMap(updatedCoverageData);

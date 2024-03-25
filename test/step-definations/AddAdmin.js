@@ -11,10 +11,14 @@ const { faker } = require('@faker-js/faker');
 Given('I navigate to onboard admin user', async function () {
     // Write code here that turns the phrase above into concrete actions
     await driver.get('http://localhost:3000/users/admin/onboard-admin');
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
+    await driver.wait(until.elementIsVisible(element));
 });
 
 When('I enter first name as {string} for admin onboarding', async function (first_name) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
@@ -64,7 +68,7 @@ When('I enter phone number as {string} for admin onboarding', async function (ph
 
 When('I select the role as {string}', async function (role) {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
     await driver.wait(until.elementLocated(By.css('[data-testid="role"]'))).click();
     await new Promise(resolve => setTimeout(resolve, 1000));
     switch (role) {
@@ -91,10 +95,13 @@ When('I submit the onboard admin form', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
+    await new Promise(resolve => setTimeout(resolve, 100));
 });
 
 When('I enter valid basic details for admin onboarding', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const firstName = faker.person.firstName();
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(firstName);
@@ -110,6 +117,8 @@ When('I enter valid basic details for admin onboarding', async function () {
 
 When('I enter valid email address for admin onboarding', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 700));
+
     const random_number = faker.string.alpha(10);
     const email = `bharath.shet+${random_number}@7edge.com`;
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
@@ -118,6 +127,8 @@ When('I enter valid email address for admin onboarding', async function () {
 
 When('I enter valid phone number for admin onboarding', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 700));
+
     let phoneNumber = faker.phone.number('#########');
 
     // Check if the phone number starts with '0'
@@ -130,6 +141,7 @@ When('I enter valid phone number for admin onboarding', async function () {
 });
 
 When('I enter already existing {string}', async function (field) {
+    await new Promise(resolve => setTimeout(resolve, 1000));
     let random_number;
     let email;
     switch (field) {
