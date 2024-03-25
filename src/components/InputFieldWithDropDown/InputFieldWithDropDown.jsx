@@ -26,17 +26,15 @@ function InputFieldWithDropDown (props) {
                     type="button" aria-expanded="false">
                     {value === '' ? placeholder : value}
                     {show
-                        ? <img loading="lazy" decoding="async"
-                            src="/images/chevron-up.svg" alt="icon" />
-                        : <img loading="lazy" decoding="async"
-                            src="/images/chevron-dark-down.svg" alt="icon" />
+                        ? <img loading="lazy" decoding="async" src="/images/chevron-up.svg" alt="icon" />
+                        : <img loading="lazy" decoding="async" src="/images/chevron-dark-down.svg" alt="icon" />
                     }
                 </button>
-                <ul id="#patient-dropdownMenuButton1" className={`bg-[#FFFFFF] dropdown-menu 
+                <ul id="#patient-dropdownMenuButton1"
+                    className={`bg-[#FFFFFF] dropdown-menu 
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
                 border border-[#E5E4E5] !top-3 h-fit transform-none 
-                ${show === true ? 'show' : 'hidden'}`}
-                    aria-labelledby="patient-dropdownMenuButton1"
+                ${show === true ? 'show' : 'hidden'}`} aria-labelledby="patient-dropdownMenuButton1"
                     style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
                     {options.map((item, index = 0) => (
                         <li onClick={(e) => {
