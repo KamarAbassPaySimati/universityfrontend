@@ -11,8 +11,7 @@ const Admin = () => {
             minHeightRequired={true}
             buttonText='Register'
             navigationPath='/users/admin/onboard-admin'
-            >
-            <div></div>
+        ><div></div>
         </CardHeader>
     );
 };
