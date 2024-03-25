@@ -3,7 +3,15 @@ import CardHeader from '../../../components/CardHeader';
 
 const Admin = () => {
     return (
-        <CardHeader header='Admin list' buttonText='Onboard'  >
+        <CardHeader
+            activePath='Admin'
+            paths={['Users']}
+            pathurls={['users/admin']}
+            header='Admin list'
+            minHeightRequired={true}
+            buttonText='Register'
+            navigationPath='/users/admin/onboard-admin'
+            >
             <div></div>
         </CardHeader>
     );

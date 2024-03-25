@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const InputFieldWithPhoneNumber = ({
@@ -10,20 +10,29 @@ const InputFieldWithPhoneNumber = ({
     error,
     label,
     placeholder,
-    loginError,
-    showLoginError,
     testId,
     autoComplete,
-    buttonText,
-    buttonDisabled,
     setEnteredLetter,
     className,
-    maxLength
+    maxLength,
+    notifyFocusChange
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
             setEnteredLetter(e.key);
         }
+    };
+    const [isFocused, setIsFocused] = useState(false);
+
+    const handleFocus = () => {
+        setIsFocused(true);
+        if (notifyFocusChange) {
+            notifyFocusChange('phoneNumber'); // Notify the parent about focus change
+        }
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);
     };
 
     return (
@@ -31,16 +40,18 @@ const InputFieldWithPhoneNumber = ({
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <div className={` bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px]
                      leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
-                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr`}>
+                    ${error ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr`}
+                style={{ borderBottomColor: isFocused ? '#3B2A6F' : '' }}>
                 <p
                     className=' top-0 left-0  text-primary-normal font-[400] text-[14px]
                     leading-[22px]  mr-2'
                 >
-                    +256
+                    +265
                 </p>
                 <input
                     maxLength={maxLength}
-                    autoComplete={autoComplete || 'off'}
+                    type="tel"
+                    autoComplete='off'
                     data-testid={testId}
                     value={value}
                     type={type || 'text'}
@@ -49,14 +60,14 @@ const InputFieldWithPhoneNumber = ({
                     ${className}`}
                     id={id}
                     placeholder={placeholder}
-                    onFocus={() => onFocus(id)}
                     onChange={(e) => onChange(e, id)}
                     onKeyDown={handleKeyDown}
                     style={{ outline: 'none' }}
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                 />
             </div>
             {error && <ErrorMessage error={error} />}
-            {showLoginError && loginError && !error && <ErrorMessage error={loginError} />}
         </div>
     );
 };
