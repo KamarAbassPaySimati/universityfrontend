@@ -67,14 +67,14 @@ const OnboardAdmin = () => {
         // Validate each field
         Object.entries(formData).forEach(([fieldName, value]) => {
             if (!value) {
-                errors[fieldName] = 'This field is required';
+                errors[fieldName] = 'Required field';
                 hasError = true;
             } else {
                 errors[fieldName] = ''; // Reset error message if field is not empty
             }
         });
         if (formData.email && !emailValidation(formData.email)) {
-            errors.email = 'Invalid email address';
+            errors.email = 'Invalid email';
             hasError = true;
         }
         if (formData.phoneNumber && (formData.phoneNumber.replace(/\s/g, '').length < 9)) {
@@ -173,7 +173,7 @@ const OnboardAdmin = () => {
                         onChange={handleChange}
                         onFocus={handleFocus}
                         id='firstName'
-                        testId='firstName'
+                        testId='first_name'
                         error={formErrors.firstName}
                         label='First Name'
                         placeholder='Enter first name'
@@ -186,7 +186,7 @@ const OnboardAdmin = () => {
                         onChange={handleChange}
                         onFocus={handleFocus}
                         id='middleName'
-                        testId='middleName'
+                        testId='middle_name'
                         error={formErrors.middleName}
                         label='Middle Name'
                         placeholder='Enter middle name'
@@ -199,7 +199,7 @@ const OnboardAdmin = () => {
                         onChange={handleChange}
                         onFocus={handleFocus}
                         id='lastName'
-                        testId='lastName'
+                        testId='last_name'
                         error={formErrors.lastName}
                         label='Last Name'
                         placeholder='Enter last name'
@@ -214,7 +214,7 @@ const OnboardAdmin = () => {
                         onChange={handleChange}
                         onFocus={handleFocus}
                         id='email'
-                        testId='email'
+                        testId='email_address'
                         error={formErrors.email}
                         label='Email'
                         placeholder='Enter email'
@@ -226,7 +226,7 @@ const OnboardAdmin = () => {
                         value={formData.phoneNumber}
                         onChange={handleChange}
                         id='phoneNumber'
-                        testId='Phone Number'
+                        testId='phone_number'
                         error={formErrors.phoneNumber}
                         label='Phone Number'
                         placeholder='Enter phone number'
@@ -241,6 +241,7 @@ const OnboardAdmin = () => {
                             error={formErrors.role}
                             options={['Super admin', 'Finance admin', 'Admin', 'Support admin']}
                             id="role"
+                            testId="role"
                             handleInput={handleInput}
                         />
                     </div>

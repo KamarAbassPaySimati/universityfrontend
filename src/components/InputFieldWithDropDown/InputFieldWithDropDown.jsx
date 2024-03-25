@@ -3,7 +3,7 @@ import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function InputFieldWithDropDown (props) {
-    const { labelName, value, placeholder, options, id, error, handleInput } = props;
+    const { labelName, value, placeholder, options, id, error, handleInput, testId } = props;
     const [show, setShow] = useState(false);
 
     const outsideClickRef = useRef();
@@ -19,7 +19,7 @@ function InputFieldWithDropDown (props) {
                      `} style={{ borderBottomColor: show ? '#3B2A6F' : '' }}>
                 <button
                     onClick={() => setShow(!show)}
-                    data-testid={id}
+                    data-testid={testId}
                     className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
                     ${value === '' ? 'text-[#8E949A]' : 'text-[#000000]'} 
                 outline-0`}/*  */
@@ -36,13 +36,14 @@ function InputFieldWithDropDown (props) {
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
                 border border-[#E5E4E5] !top-3 h-fit transform-none 
                 ${show === true ? 'show' : 'hidden'}`}
-                    aria-labelledby="patient-dropdownMenuButton1" style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
+                    aria-labelledby="patient-dropdownMenuButton1" 
+                    style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
                     {options.map((item, index = 0) => (
                         <li onClick={(e) => {
                             e.preventDefault(); setShow(false);
                             handleInput(item);
                         }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
-                            <a className="dropdown-item font-normal text-xs text-[#444652]"
+                            <a data-testid={`${testId}_${index}`}className="dropdown-item font-normal text-xs text-[#444652]"
                                 href="/">
                                 {item}
                             </a>

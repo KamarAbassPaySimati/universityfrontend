@@ -164,21 +164,33 @@ Before('@add_admin_user', async function () {
 
         const payload = {
             first_name: firstName,
-            username: email,
             middle_name: middleName,
             last_name: lastName,
             password: 'Admin@123',
             paymaart_id: paymaartId,
-            email,
-            country_code: countryCode,
-            role: 'Super Admin',
-            phone_number: phoneNumber.replaceAll(' ', '')
+            email: email.toLowerCase(),
+            role: 'Super admin',
+            phone_number: phoneNumber.replaceAll(' ', ''),
+            country_code: countryCode
         };
+
+        // const payload = {
+        //     first_name: firstName,
+        //     username: email,
+        //     middle_name: middleName,
+        //     last_name: lastName,
+        //     password: 'Admin@123',
+        //     paymaart_id: paymaartId,
+        //     email,
+        //     country_code: countryCode,
+        //     role: 'Super admin',
+        //     phone_number: phoneNumber.replaceAll(' ', '')
+        // };
 
         console.log('payload', payload);
         global.adminUser = {
             pass: 'Admin@123',
-            email_address: email,
+            email_address: email.toLowerCase(),
             first_name: firstName,
             username: email,
             middle_name: middleName,
@@ -190,6 +202,7 @@ Before('@add_admin_user', async function () {
             phone_number_without_country_code: phoneNumber
         };
         await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('error', error);
     }
