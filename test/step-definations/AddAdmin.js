@@ -64,8 +64,9 @@ When('I enter phone number as {string} for admin onboarding', async function (ph
 
 When('I select the role as {string}', async function (role) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     await driver.wait(until.elementLocated(By.css('[data-testid="role"]'))).click();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     switch (role) {
     case 'Super admin':
         await driver.wait(until.elementLocated(By.css('[data-testid="role_0"]'))).click();
@@ -86,6 +87,7 @@ When('I select the role as {string}', async function (role) {
 
 When('I submit the onboard admin form', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
@@ -108,7 +110,7 @@ When('I enter valid basic details for admin onboarding', async function () {
 
 When('I enter valid email address for admin onboarding', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const random_number = faker.string.alphanumeric(5);
+    const random_number = faker.string.alpha(10);
     const email = `bharath.shet+${random_number}@7edge.com`;
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email);
@@ -116,7 +118,13 @@ When('I enter valid email address for admin onboarding', async function () {
 
 When('I enter valid phone number for admin onboarding', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const phoneNumber = `${faker.phone.number('#########')}`;
+    let phoneNumber = faker.phone.number('#########');
+
+    // Check if the phone number starts with '0'
+    if (phoneNumber.startsWith('0')) {
+        // Replace the first character with '9'
+        phoneNumber = '9' + phoneNumber.substring(1);
+    }
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phoneNumber);
 });
