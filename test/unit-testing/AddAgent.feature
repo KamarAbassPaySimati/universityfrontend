@@ -66,6 +66,9 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
 
   Scenario: Validate already existing email address/phone number
     Given I navigate to agent onboarding screen
+    When I enter a valid first name for agent registration
+    When I enter a valid middle name for agent registration
+    When I enter a valid last name for agent registration
     When I enter the email address as "bharath.shet+agent@7edge.com" for agent registration
     When I click on verify email address
     Then I should read a message stating that "Email already exists"
@@ -73,13 +76,15 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
     When I click on verify email address
     When I enter the valid OTP and verify
     Then I should see the verify email address button text changed to "VERIFIED"
-    When I enter the phone number as "9741292994" for agent registration
+    When I enter the phone number as "+919741292994" for agent registration
     When I click on verify phone number
     Then I should read a message stating that "Phone number already exists"
 
-
  Scenario: Validate invalid OTP verification
     Given I navigate to agent onboarding screen
+    When I enter a valid first name for agent registration
+    When I enter a valid middle name for agent registration
+    When I enter a valid last name for agent registration
     When I enter a valid email address for agent registration
     When I enter a valid phone number for agent registration
     When I click on verify email address
