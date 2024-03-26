@@ -36,6 +36,7 @@ async function runTestQueue () {
 
     for (let i = 0; i < MAX_PARALLEL_EXECUTIONS; i++) {
         testPromises.push(runNextTest(false));
+        await new Promise(resolve => setTimeout(resolve, DELAY_BETWEEN_PARALLEL_EXECUTIONS));
     }
 
     await Promise.all(testPromises);

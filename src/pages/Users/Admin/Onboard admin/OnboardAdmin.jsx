@@ -157,8 +157,8 @@ const OnboardAdmin = () => {
     return (
         <CardHeader
             activePath='Register Admin'
-            paths={['Users', 'Admin']}
-            pathurls={['users/admin']}
+            paths={['Users', 'Admins']}
+            pathurls={['users/admins']}
             header='Register Admin'
             minHeightRequired={true}
         >

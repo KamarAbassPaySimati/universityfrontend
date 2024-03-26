@@ -18,7 +18,9 @@ const InputField = ({
     testId,
     autoComplete,
     setEnteredLetter,
-    className
+    className,
+    notShowErrorBottom,
+    maxLength
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -44,6 +46,7 @@ const InputField = ({
                 onFocus={() => onFocus(id)}
                 onChange={(e) => onChange(e, id)}
                 onKeyDown={handleKeyDown}
+                maxLength={maxLength}
             />
             {/* && value.length > 0 */}
             {givenType === 'password' && value.length > 0 &&
@@ -53,7 +56,7 @@ const InputField = ({
                     {isPasswordType ? <Image src='SHOW' /> : <Image src='HIDE' />}
                 </div>
             }
-            {error && <ErrorMessage error={error} />}
+            {!notShowErrorBottom && error && <ErrorMessage error={error} />}
             {showLoginError && loginError && !error && <ErrorMessage error={loginError} />}
         </div>
     );

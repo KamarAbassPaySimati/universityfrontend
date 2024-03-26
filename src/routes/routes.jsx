@@ -36,9 +36,11 @@ export default function NavigationRoutes (props) {
                 dispatch(login());
             }
         } catch (error) {
-            setPageLoading(false);
-            dispatch(setUser(''));
-            dispatch(logout());
+            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException')) {
+                setPageLoading(false);
+                dispatch(setUser(''));
+                dispatch(logout());
+            }
         }
     };
 
@@ -76,10 +78,10 @@ export default function NavigationRoutes (props) {
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/profile" element={<Profile />} />
-                                    <Route path="/users/agent" element={<Agent />} />
-                                    <Route path="/users/agent/onboard-agent" element={<OnboardAgent />} />
-                                    <Route path="/users/admin" element={<Admin />} />
-                                    <Route path="/users/admin/register-admin" element={<OnboardAdmin />} />
+                                    <Route path="/users/admins" element={<Admin />} />
+                                    <Route path="/users/admins/register-admin" element={<OnboardAdmin />} />
+                                    <Route path="/users/agents" element={<Agent />} />
+                                    <Route path="/users/agents/onboard-agent" element={<OnboardAgent />} />
                                     <Route path="/profile/update-password" element={<UpdatePassword />} />
                                 </Route>
                             </>

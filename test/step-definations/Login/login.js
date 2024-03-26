@@ -156,28 +156,27 @@ Before('@add_admin_user', async function () {
         const firstName = faker.person.firstName();
         const middleName = faker.person.middleName();
         const lastName = faker.person.lastName();
-        let phoneNumber = faker.phone.number('## ### ####');
-
-        // Check if the phone number starts with '0'
+        let phoneNumber = `${faker.phone.number('## ### ####')}`;
+        const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
+        const countryCode = '+265';
         if (phoneNumber.startsWith('0')) {
             // Replace the first character with '9'
             phoneNumber = '9' + phoneNumber.substring(1);
         }
-        const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
-        const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
-        const countryCode = '+265';
         const mainPhoneNumber = `${countryCode} ${phoneNumber}`;
 
         const payload = {
             first_name: firstName,
+            username: email.toLowerCase(),
             middle_name: middleName,
             last_name: lastName,
             password: 'Admin@123',
             paymaart_id: paymaartId,
             email: email.toLowerCase(),
+            country_code: countryCode,
             role: 'Super admin',
-            phone_number: phoneNumber.replaceAll(' ', ''),
-            country_code: countryCode
+            phone_number: phoneNumber.replaceAll(' ', '')
         };
 
         // const payload = {
@@ -198,7 +197,7 @@ Before('@add_admin_user', async function () {
             pass: 'Admin@123',
             email_address: email.toLowerCase(),
             first_name: firstName,
-            username: email,
+            username: email.toLowerCase(),
             middle_name: middleName,
             last_name: lastName,
             role: 'Super Admin',

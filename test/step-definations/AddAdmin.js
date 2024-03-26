@@ -10,7 +10,7 @@ const { faker } = require('@faker-js/faker');
 
 Given('I navigate to onboard admin user', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await driver.get('http://localhost:3000/users/admin/register-admin');
+    await driver.get('http://localhost:3000/users/admins/register-admin');
     await new Promise(resolve => setTimeout(resolve, 4000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
