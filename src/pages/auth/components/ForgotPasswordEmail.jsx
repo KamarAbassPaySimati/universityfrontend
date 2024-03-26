@@ -28,7 +28,6 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                 setIsLoading(true);
                 const response = await dataService.PostAPIWithoutHeader('send-reset-link',
                     { email_address: email.toLowerCase() });
-                console.log(response, 'Forgot Password response:');
                 if (!response.error) {
                     setIsSuccess(true);
                 } else if (response?.data?.status === 404) {

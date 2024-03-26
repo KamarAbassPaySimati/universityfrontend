@@ -78,6 +78,7 @@ definitions:
             variables:
               SCAN_PATH: "./package-lock.json"
               CVSS_FAIL_LEVEL: "8"
+              EXTRA_ARGS: "--noupdate"
         artifacts:
           - test_results/**
 
