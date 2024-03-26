@@ -82,7 +82,7 @@ body {
 }
 
 .scrollBar::-webkit-scrollbar-thumb {
-  background-color: #816cbe;
+  background-color: #A79FBE;
   border: transparent;
   border-radius: 22px;
   width: 4px;
