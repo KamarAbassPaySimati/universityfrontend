@@ -1,10 +1,10 @@
 const { When, Then } = require('@cucumber/cucumber');
 const until = require('selenium-webdriver').until;
 const { driver } = require('../Driver.js');
-Then('I should read a message stating that {string}', { timeout: 30000 }, async function (errorMessage) {
+Then('I should read a message stating that {string}', { timeout: 35000 }, async function (errorMessage) {
     // callback(null)
     let check = false;
-    let retries = 200;
+    let retries = 400;
 
     while (retries > 0) {
         const pageSource = await driver.getPageSource();

@@ -15,7 +15,7 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 
-const CardHeader = ({ children, paths, activePath, pathurls, testId, header }) => {
+const CardHeader = ({ children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, navigationPath }) => {
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
@@ -60,13 +60,24 @@ const CardHeader = ({ children, paths, activePath, pathurls, testId, header }) =
                     </Tooltip>
                 </div>
             </div>
-            <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline bg-'>
+            <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
                 {header &&
-                <div className='mx-10 mt-8 mb-6 px-8 py-7 bg-[#FFFFFF] text-[30px] font-[700] leading-[40px] text-header-dark'>
+                <div className='mx-10 mt-8 mb-6 px-8 py-7 bg-[#FFFFFF] text-[30px] font-[700] leading-[40px]
+                 text-header-dark flex flex-row justify-between'>
                     {header}
-                </div>}
-                <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px]
-                    pb-[28px] flex flex-col bg-[#FFFFFF] ${header ? 'max-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
+                    {buttonText && <button onClick={() => { console.log(navigationPath, 'ijhj'); navigate(navigationPath); }}
+                        className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
+                    h-[40px] rounded-[6px]'>
+                        <img src='/images/onboardIcon.svg'
+                            className='mr-[8px]'/>
+                        <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
+                    </button>}
+                </div>
+                }
+                <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
+                flex flex-col bg-[#FFFFFF] 
+                ${header ? 'max-h-[calc(100vh-240px)]' : ''} 
+                ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
                     {children}
                 </div>
             </div>
