@@ -174,7 +174,7 @@ Before('@add_admin_user', async function () {
             last_name: lastName,
             password: 'Admin@123',
             paymaart_id: paymaartId,
-            email,
+            email: email.toLowerCase(),
             country_code: countryCode,
             role: 'Super admin',
             phone_number: phoneNumber.replaceAll(' ', '')
@@ -185,7 +185,7 @@ Before('@add_admin_user', async function () {
             pass: 'Admin@123',
             email_address: email.toLowerCase(),
             first_name: firstName,
-            username: email,
+            username: email.toLowerCase(),
             middle_name: middleName,
             last_name: lastName,
             role: 'Super Admin',
