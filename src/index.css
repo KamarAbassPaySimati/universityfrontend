@@ -148,7 +148,7 @@ body {
 
 .setNewPassword::before{
   position: fixed;
-  content: url("public/images/login_img.svg");
+  content: url(/images/login_img.svg);
   z-index: 10;
   bottom: 30px;
   right: 100px 
