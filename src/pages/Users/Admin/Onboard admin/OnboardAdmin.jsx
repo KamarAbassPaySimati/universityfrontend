@@ -10,6 +10,7 @@ import { dataService } from '../../../../services/data.services';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
 import { useNavigate } from 'react-router-dom';
+import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 
 const OnboardAdmin = () => {
     const initialState = {
@@ -32,8 +33,8 @@ const OnboardAdmin = () => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
         }
-        if (id === 'email') {
-            console.log(' ');
+        if (enteredLetter && (id === 'firstName' || id === 'lastName' || id === 'middleName') && /\d/.test(enteredLetter)) {
+            return;
         }
 
         if (id === 'lastName') {
@@ -86,21 +87,21 @@ const OnboardAdmin = () => {
         if (!hasError) {
             try {
                 setIsLoading(true);
-                const response = await dataService.PostAPI(adminOnboard,
-                    {
-                        first_name: formData.firstName,
-                        middle_name: formData.middleName,
-                        last_name: formData.lastName,
-                        country_code: '+265',
-                        email: formData.email,
-                        role: formData.role,
-                        phone_number: formData.phoneNumber.replace(/\s/g, '')
-                    });
+                const payload = {
+                    first_name: addBackslashBeforeApostrophe(formData.firstName),
+                    middle_name: addBackslashBeforeApostrophe(formData.middleName),
+                    last_name: addBackslashBeforeApostrophe(formData.lastName),
+                    country_code: '+265',
+                    email: formData.email,
+                    role: formData.role,
+                    phone_number: formData.phoneNumber.replace(/\s/g, '')
+                };
+                const response = await dataService.PostAPI(adminOnboard, payload);
                 console.log(response, 'Set New Password response:');
                 if (!response.error) {
                     setIsLoading(false);
                     setToastSuccess(`${formData.role} onboarded successfully `);
-                    navigate('/users/admin');
+                    navigate('/users/admins');
                     // take back to listing
                 } else if (response?.data?.status === 409) {
                     setIsLoading(false);
