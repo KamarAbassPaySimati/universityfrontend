@@ -80,8 +80,6 @@ export default function NavigationRoutes (props) {
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/users/agents" element={<Agent />} />
                                     <Route path="/users/agents/onboard-agent" element={<OnboardAgent />} />
-                                    <Route path="/users/agent" element={<Agent />} />
-                                    <Route path="/users/agent/onboard-agent" element={<OnboardAgent />} />
                                     <Route path="/users/admin" element={<Admin />} />
                                     <Route path="/users/admin/register-admin" element={<OnboardAdmin />} />
                                     <Route path="/profile/update-password" element={<UpdatePassword />} />

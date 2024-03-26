@@ -21,13 +21,7 @@ const Agent = () => {
             <div>
                 <Topbar />
                 <Table />
-                <Paginator Pagination={{
-                    total_pages: 3,
-                    limit: 10,
-                    total_records: 21,
-                    next_page: 2,
-                    current_page: 1
-                }} setSearchParams={setSearchParams} searchParams={searchParams}
+                <Paginator currentPage={1} totalPages={10} setSearchParams={setSearchParams} searchParams={searchParams}
                 />
             </div>
         </CardHeader>
