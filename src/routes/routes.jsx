@@ -2,6 +2,8 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
 import Login from '../pages/auth/Login';
+import ForgotPassword from '../pages/auth/ForgotPassword';
+import SetNewPassword from '../pages/auth/SetNewPassword';
 import { fetchUserAttributes } from 'aws-amplify/auth';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
@@ -40,11 +42,10 @@ export default function NavigationRoutes (props) {
     }, []);
 
     useEffect(() => {
-        if (!pageLoading && !loggedIn) {
-            console.log('yes');
+        if (!pageLoading && !loggedIn && (window.location.pathname !== '/forgot-password' &&
+        window.location.pathname !== '/set-new-password')) {
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
-            console.log('no');
             navigate('/dashboard');
         }
     }, [pageLoading]);
@@ -57,7 +58,15 @@ export default function NavigationRoutes (props) {
                     {pageLoading
                         ? <Route path="*" element={<Loading />} />
                         : !loggedIn
-                            ? <Route path="/" element={<Login />} />
+                            ? <>
+                                <Route path="/" element={<Login />} />
+                                <Route
+                                    path={'/forgot-password'}
+                                    element={<ForgotPassword />} />
+                                <Route
+                                    path={'/set-new-password'}
+                                    element={<SetNewPassword />} />
+                            </>
                             : <>
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
