@@ -86,6 +86,30 @@ AfterStep(async function () {
     global.coverageMap.merge(updatedCoverageMap);
 });
 
+After(function (scenario) {
+    console.log('scenario.result.status', scenario.result.status);
+    let failedScenarios = path.join(__dirname, 'failedScenarios');
+    if (!fs.existsSync(failedScenarios)) {
+        fs.mkdirSync(failedScenarios);
+    }
+    if (scenario.result.status === 'FAILED') {
+        const world = this;
+        return driver.takeScreenshot().then(function (screenShot, error) {
+            if (!error) {
+                world.attach(screenShot, 'image/png');
+                failedScenarios = path.join(failedScenarios, `${scenario.pickle.id}_${scenario.pickle.name}.png`);
+                fs.writeFile(failedScenarios, screenShot, 'base64', (err) => {
+                    if (err) {
+                        console.error('Error writing coverage data:', err);
+                    } else {
+                        console.log('Coverage data has been written to:', failedScenarios);
+                    }
+                });
+            }
+        });
+    }
+});
+
 module.exports = {
     driver
 };

@@ -219,6 +219,7 @@ const OnboardAdmin = () => {
                         label='Email'
                         placeholder='Enter email'
                         setEnteredLetter={setEnteredLetter}
+                        maxLength="100"
                     />
                     <InputFieldWithPhoneNumber
                         className='w-[339px]'
