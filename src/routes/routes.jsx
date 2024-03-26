@@ -34,9 +34,11 @@ export default function NavigationRoutes (props) {
                 dispatch(login());
             }
         } catch (error) {
-            setPageLoading(false);
-            dispatch(setUser(''));
-            dispatch(logout());
+            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException')) {
+                setPageLoading(false);
+                dispatch(setUser(''));
+                dispatch(logout());
+            }
         }
     };
 
