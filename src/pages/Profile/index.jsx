@@ -17,7 +17,7 @@ const Profile = () => {
     const keys = Object.keys(userDetails);
     return (
         <CardHeader activePath='Profile' >
-            <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]' data-testid="profile_info_card">
+            <div className=' flex flex-col bg-[#FFFFFF]' data-testid="profile_info_card">
 
                 <div className='flex justify-between border-b border-neutral-outline pb-[18px]'>
                     <div className='flex gap-[27px] justify-center items-center'>
@@ -38,7 +38,7 @@ const Profile = () => {
                     <div className='mt-1'>
                         <Button2
                             testId="update_password"
-                            onClick={() => navigate('/update-password')}
+                            onClick={() => navigate('/profile/update-password')}
                             text='Update Password'
                             icon='key-icon'
                             className='!w-[182px] !text-primary-normal' />

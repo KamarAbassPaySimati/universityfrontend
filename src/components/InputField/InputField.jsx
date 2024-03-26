@@ -25,7 +25,6 @@ const InputField = ({
    const handleKeyDown = (e) => {
     if (setEnteredLetter) {
         setEnteredLetter(e.key);
-    console.log('coming', e.key);
     }
 };
 

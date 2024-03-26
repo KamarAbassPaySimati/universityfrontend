@@ -11,6 +11,7 @@ import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
 import Profile from '../pages/Profile';
+import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -71,6 +72,7 @@ export default function NavigationRoutes (props) {
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/profile" element={<Profile />} />
+                                    <Route path="/profile/update-password" element={<UpdatePassword />} />
                                 </Route>
                             </>
                     }

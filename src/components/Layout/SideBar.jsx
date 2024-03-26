@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
+import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -18,6 +19,7 @@ const SideBar = ({ role }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     async function handleSignOut () {
         try {
             setIsLoading(true);
@@ -39,6 +41,9 @@ const SideBar = ({ role }) => {
         navigate('/');
         setToastSuccessBottom('You have been logged out');
     };
+
+    useGlobalSignout();
+
     return (
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>
