@@ -155,7 +155,6 @@ const OnboardAgent = () => {
         if (!verificationValidation(formData, setFormErrors, 'phoneNumber')) {
             return;
         }
-        console.log('api call', text);
 
         const payload = {
             first_name: formData.firstName,
@@ -171,7 +170,6 @@ const OnboardAgent = () => {
             setLoadingEmailVerify(true);
         }
         const response = await dataService.PostAPIAgent(sendOtp, payload);
-        console.log(response);
         if (!response.error) {
             setVerify(prevState => {
                 return { ...prevState, email: true };
@@ -212,7 +210,6 @@ const OnboardAgent = () => {
         if (!verificationValidation(formData, setFormErrors, 'email')) {
             return;
         }
-        console.log('api call');
 
         const payload = {
             first_name: formData.firstName,
@@ -229,7 +226,6 @@ const OnboardAgent = () => {
             setLoadingPhoneVerify(true);
         }
         const response = await dataService.PostAPIAgent(sendOtp, payload);
-        console.log(response);
         if (!response.error) {
             setVerify(prevState => {
                 return { ...prevState, phoneNumber: true };
@@ -256,7 +252,6 @@ const OnboardAgent = () => {
             setOtpError('Invalid OTP');
             return;
         }
-        console.log(otpToken, 'token');
         const payload = {
             otp,
             token: otpToken
@@ -265,9 +260,7 @@ const OnboardAgent = () => {
         const response = await dataService.PostAPIAgent(verifyOtp, payload);
         setLoadingOtpVerify(false);
         setOtp('');
-        console.log(response);
         if (!response.error) {
-            console.log(response.data);
             let key = '';
             if (id.includes('email')) {
                 key = 'email';
@@ -288,9 +281,10 @@ const OnboardAgent = () => {
                 return { ...prevState, [key]: response?.data?.record_id };
             });
         } else {
-            console.log(response.data, 'error');
             if (response?.data?.status === 400) {
                 setOtpError(response?.data?.data?.message);
+            } else if (response?.data?.status === 401) {
+                setOtpError('Otp expired');
             } else {
                 setToastError('Something went wrong!');
             }
@@ -343,25 +337,23 @@ const OnboardAgent = () => {
             phone_otp_id: otpId.phoneNumber,
             security_questions: transformArray(securityQuestions)
         };
-
-        console.log(payload);
         setIsLoading(true);
         const response = await dataService.PostAPIAgent(createAgent, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
-            console.log('successfull');
+        } else {
+            setToastError('Something went wrong!');
         }
-        console.log(response, 'create');
     };
 
     useEffect(() => {
-        console.log(resendCount, 'count');
+        // console.log(resendCount, 'count');
     }, [resendCount]);
 
     return (
         <CardHeader
-            activePath='Onboard Agent'
+            activePath='Register Agent'
             paths={['Users', 'Agent']}
             pathurls={['users/agent']}
             header={registrationSuccessful ? false : 'Registration'}
@@ -416,29 +408,28 @@ const OnboardAgent = () => {
                     <p className='my-4 font-[500] text-[14px] leading-[22px] text-neutral-secondary'>
                         Enter a valid email and phone number. To confirm it’s you, we will send a verification code.
                     </p>
-                    <div className='flex flex-col gap-6 w-[339px]'>
-                        <div className='flex gap-[20px]'>
-                            <InputFieldWithButton
-                                className='w-[339px]'
-                                onChange={handleChange}
-                                onFocus={handleFocus}
-                                id='email'
-                                testId='email_address'
-                                buttonTestId='verify_email_address'
-                                error={formErrors.email}
-                                label='Email'
-                                placeholder='Enter email'
-                                value={formData.email}
-                                buttonText={verify.email ? 'EDIT' : 'VERIFY'}
-                                setEnteredLetter={setEnteredLetter}
-                                onClick={handleVerifyEmail}
-                                verified={verified.email}
-                                inputDisabled={verified.email || verify.email}
-                                buttonDisabled={formData.email.length < 1 || isResendLoading}
-                                isLoading={loadingEmailVerify}
-                                maxLength={100}
-                            />
-                            {verify.email &&
+                    <div className='flex gap-[20px] flex-wrap'>
+                        <InputFieldWithButton
+                            className='w-[339px]'
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            id='email'
+                            testId='email_address'
+                            buttonTestId='verify_email_address'
+                            error={formErrors.email}
+                            label='Email'
+                            placeholder='Enter email'
+                            value={formData.email}
+                            buttonText={verify.email ? 'EDIT' : 'VERIFY'}
+                            setEnteredLetter={setEnteredLetter}
+                            onClick={handleVerifyEmail}
+                            verified={verified.email}
+                            inputDisabled={verified.email || verify.email}
+                            buttonDisabled={formData.email.length < 1 || isResendLoading}
+                            isLoading={loadingEmailVerify}
+                            maxLength={100}
+                        />
+                        {verify.email &&
                             <InputFieldWithButton
                                 className='w-[339px]'
                                 onChange={handleOtpChange}
@@ -461,33 +452,33 @@ const OnboardAgent = () => {
                                 handleResend={handleVerifyEmail}
                                 isLoading={loadingOtpVerify}
                             />}
-                        </div>
-                        <div className='flex gap-[20px]'>
-                            <InputFieldWithButton
-                                className='w-[294px]'
-                                onChange={handleChange}
-                                onFocus={handleFocus}
-                                id='phoneNumber'
-                                testId='phone_number'
-                                buttonTestId='verify_phone_number'
-                                error={formErrors.phoneNumber}
-                                label='Phone Number'
-                                placeholder='Enter phone number'
-                                value={formData.phoneNumber}
-                                buttonText={verify.phoneNumber ? 'EDIT' : 'VERIFY'}
-                                setEnteredLetter={setEnteredLetter}
-                                onClick={handleVerifyPhoneNumber}
-                                verified={verified.phoneNumber}
-                                inputDisabled={verified.phoneNumber || verify.phoneNumber}
-                                buttonDisabled={formData.phoneNumber.length < 1 || isResendLoading}
-                                isLoading={loadingPhoneVerify}
-                                phoneNumber={true}
-                                countryCode={countryCode}
-                                setCountryCode={setCountryCode}
-                                maxLength={numberMaxLength}
-                                setNumberMaxLength={setNumberMaxLength}
-                            />
-                            {verify.phoneNumber &&
+                    </div>
+                    <div className='flex gap-[20px] flex-wrap my-6'>
+                        <InputFieldWithButton
+                            className='w-[294px]'
+                            onChange={handleChange}
+                            onFocus={handleFocus}
+                            id='phoneNumber'
+                            testId='phone_number'
+                            buttonTestId='verify_phone_number'
+                            error={formErrors.phoneNumber}
+                            label='Phone Number'
+                            placeholder='Enter phone number'
+                            value={formData.phoneNumber}
+                            buttonText={verify.phoneNumber ? 'EDIT' : 'VERIFY'}
+                            setEnteredLetter={setEnteredLetter}
+                            onClick={handleVerifyPhoneNumber}
+                            verified={verified.phoneNumber}
+                            inputDisabled={verified.phoneNumber || verify.phoneNumber}
+                            buttonDisabled={formData.phoneNumber.length < 1 || isResendLoading}
+                            isLoading={loadingPhoneVerify}
+                            phoneNumber={true}
+                            countryCode={countryCode}
+                            setCountryCode={setCountryCode}
+                            maxLength={numberMaxLength}
+                            setNumberMaxLength={setNumberMaxLength}
+                        />
+                        {verify.phoneNumber &&
                             <InputFieldWithButton
                                 className='w-[339px]'
                                 onChange={handleOtpChange}
@@ -510,7 +501,8 @@ const OnboardAgent = () => {
                                 handleResend={handleVerifyPhoneNumber}
                                 isLoading={loadingOtpVerify}
                             />}
-                        </div>
+                    </div>
+                    <div className='flex flex-col gap-6 w-[339px]'>
                         <div className='flex flex-col gap-2'>
                             <div className='flex justify-between mt-2 mb-[2px]'>
                                 <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>

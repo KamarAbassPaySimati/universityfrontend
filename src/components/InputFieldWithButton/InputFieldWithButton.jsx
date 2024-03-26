@@ -67,7 +67,6 @@ const InputFieldWithButton = ({
 
     const handleResendClick = () => {
         if (!isLoading) {
-            console.log('api calling');
             handleResend(id);
         }
     };

@@ -52,7 +52,6 @@ const UpdateToNewPassword = () => {
                 setIsLoading(true);
                 const response = await dataService.PostAPI(updatePassword,
                     { old_password: oldPassword, new_password: newPassword });
-                console.log(response, 'UpdatePassword response:');
                 if (!response.error) {
                     setIsLoading(false);
                     handleSignOut();
@@ -79,7 +78,6 @@ const UpdateToNewPassword = () => {
             navigate('/');
             setToastSuccessBottom('Your password has been updated successfully');
         } catch (error) {
-            console.log('error signing out: ', error);
         }
     }
 

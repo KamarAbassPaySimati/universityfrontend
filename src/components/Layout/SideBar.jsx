@@ -74,7 +74,6 @@ const SideBar = ({ role }) => {
     };
 
     const handleDropDown = (key, dropDown) => {
-        console.log(dropDown, key);
         if (dropDown === undefined) {
             navigate(key);
         }
@@ -89,7 +88,7 @@ const SideBar = ({ role }) => {
     };
 
     useEffect(() => {
-        console.log(hoveringOn);
+        // console.log(hoveringOn);
     }, [hoveringOn]);
 
     const sideNavObject = {
