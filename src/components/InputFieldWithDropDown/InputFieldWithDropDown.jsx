@@ -21,7 +21,7 @@ function InputFieldWithDropDown (props) {
                     onClick={() => setShow(!show)}
                     data-testid={testId}
                     className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
-                    ${value === '' ? 'text-[#8E949A]' : 'text-[#000000]'} 
+                    ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
                 outline-0`}/*  */
                     type="button" aria-expanded="false">
                     {value === '' ? placeholder : value}

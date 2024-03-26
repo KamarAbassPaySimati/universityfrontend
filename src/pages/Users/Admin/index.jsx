@@ -9,8 +9,8 @@ const Admin = () => {
             pathurls={['users/admin']}
             header='Admin list'
             minHeightRequired={true}
-            buttonText='Register'
-            navigationPath='/users/admin/onboard-admin'
+            buttonText='Register Admin'
+            navigationPath='/users/admin/register-admin'
         ><div></div>
         </CardHeader>
     );

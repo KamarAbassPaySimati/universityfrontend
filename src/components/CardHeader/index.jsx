@@ -70,7 +70,7 @@ const CardHeader = ({ children, paths, activePath, pathurls, testId, header, but
                     h-[40px] rounded-[6px]'>
                         <img src='/images/onboardIcon.svg'
                             className='mr-[8px]'/>
-                        <p className='text-[14px] font-[600] text-[#ffffff]'>Register</p>
+                        <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
                     </button>}
                 </div>
                 }

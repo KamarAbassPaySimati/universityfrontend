@@ -156,7 +156,7 @@ const OnboardAdmin = () => {
 
     return (
         <CardHeader
-            activePath='Onboard Admin'
+            activePath='Register Admin'
             paths={['Users', 'Admin']}
             pathurls={['users/admin']}
             header='Register Admin'
@@ -235,7 +235,7 @@ const OnboardAdmin = () => {
                     />
                     <div className="w-[339px] relative">
                         <InputFieldWithDropDown
-                            labelName="Select Role"
+                            labelName="Role"
                             value={formData.role}
                             placeholder="Select role"
                             error={formErrors.role}
@@ -248,9 +248,9 @@ const OnboardAdmin = () => {
                 </div>
                 <div>
                     <Button
-                        text="Onboard"
+                        text="Register"
                         testId= 'submit_button'
-                        className = 'max-w-[200px]'
+                        className = 'max-w-[200px] mt-[15px]'
                         onClick={handleClick}
                         isLoading={isLoading}
                     />
