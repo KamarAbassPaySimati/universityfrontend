@@ -15,7 +15,7 @@ Before(async function () {
 
 Given('I navigate to agent onboarding screen', async function () {
     // Write code here that turns the phrase above into concrete action
-    await driver.get('http://localhost:3000/users/agents/onboard-agent');
+    await driver.get('http://localhost:3000/users/agents/register-agent');
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
 });
