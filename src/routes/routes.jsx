@@ -11,6 +11,8 @@ import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
 import Profile from '../pages/Profile';
+import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
+import Agent from '../pages/Users/Agent';
 import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 
 export default function NavigationRoutes (props) {
@@ -32,9 +34,11 @@ export default function NavigationRoutes (props) {
                 dispatch(login());
             }
         } catch (error) {
-            setPageLoading(false);
-            dispatch(setUser(''));
-            dispatch(logout());
+            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException')) {
+                setPageLoading(false);
+                dispatch(setUser(''));
+                dispatch(logout());
+            }
         }
     };
 
@@ -72,6 +76,8 @@ export default function NavigationRoutes (props) {
                                 <Route element={<Layout />}>
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/profile" element={<Profile />} />
+                                    <Route path="/users/agents" element={<Agent />} />
+                                    <Route path="/users/agents/onboard-agent" element={<OnboardAgent />} />
                                     <Route path="/profile/update-password" element={<UpdatePassword />} />
                                 </Route>
                             </>
