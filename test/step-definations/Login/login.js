@@ -151,8 +151,8 @@ Before('@login', async function () {
 
 Before('@add_admin_user', async function () {
     try {
-        const random_number = faker.string.alphanumeric(5);
-        const email = `bharath.shet+${random_number}@7edge.com`;
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
         const firstName = faker.person.firstName();
         const middleName = faker.person.middleName();
         const lastName = faker.person.lastName();
@@ -160,12 +160,11 @@ Before('@add_admin_user', async function () {
         const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
         const countryCode = '+265';
-        const mainPhoneNumber = `${countryCode} ${phoneNumber}`;
-
         if (phoneNumber.startsWith('0')) {
             // Replace the first character with '9'
             phoneNumber = '9' + phoneNumber.substring(1);
         }
+        const mainPhoneNumber = `${countryCode} ${phoneNumber}`;
 
         const payload = {
             first_name: firstName,
@@ -180,7 +179,6 @@ Before('@add_admin_user', async function () {
             phone_number: phoneNumber.replaceAll(' ', '')
         };
 
-        console.log('payload', payload);
         global.adminUser = {
             pass: 'Admin@123',
             email_address: email.toLowerCase(),
@@ -191,9 +189,11 @@ Before('@add_admin_user', async function () {
             role: 'Super Admin',
             phone_number: mainPhoneNumber,
             paymaart_id: paymaartId,
-            fullName
+            fullName,
+            phone_number_without_country_code: phoneNumber
         };
         await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('error', error);
     }
@@ -353,6 +353,8 @@ When('I submit the TOTP form', async function () {
 });
 
 When('I enter the TOTP obtained from the previously scanned device', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const response = await getMFASecret({ username: global.adminUser.email_address });
     const secret = response.mfa_code;
     console.log('secret 123', secret);
@@ -373,6 +375,8 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 });
 
 Then('I should be presented with 2FA Enabled successfully page', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const element_header = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-header"]')));
     await driver.wait(until.elementIsVisible(element_header));
     const element_header_content = await element_header.getText();

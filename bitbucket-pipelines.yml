@@ -164,7 +164,7 @@ definitions:
           - reports/**
           - test/step-definations/coverageData/**
           - living-documentation/**
-          
+          - test/step-definations/failedScenarios/**
 
     - step: &UnitTestCase
         name: Unit Testing
@@ -183,6 +183,8 @@ definitions:
           - node scripts/bdd_unit_testing.js
         after-script:
           - cat log.txt
+        artifacts: # defining the artifacts to be passed to each future step.
+          - test/step-definations/failedScenarios/**
 
     - step: &BDDReports
         name: Integration Testing Reports
