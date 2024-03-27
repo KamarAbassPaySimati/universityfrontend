@@ -34,7 +34,9 @@ const InputFieldWithButton = ({
     countryCode,
     setCountryCode,
     setNumberMaxLength,
-    buttonTestId
+    buttonTestId,
+    setVerified,
+    verify
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -54,7 +56,10 @@ const InputFieldWithButton = ({
     };
 
     const handleCountryCode = () => {
-        if (import.meta.env.VITE_STAGE === 'qa' || import.meta.env.VITE_STAGE === 'dev') {
+        if ((import.meta.env.VITE_STAGE === 'qa' || import.meta.env.VITE_STAGE === 'dev') && !verify) {
+            setVerified(prevState => {
+                return { ...prevState, phoneNumber: false };
+            });
             if (countryCode === '+265') {
                 setCountryCode('+91');
                 setNumberMaxLength(12);

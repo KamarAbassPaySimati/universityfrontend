@@ -3,7 +3,7 @@ import 'react-responsive-modal/styles.css';
 import React, { useContext, useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { fetchUserAttributes, signOut } from 'aws-amplify/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout, setUser } from '../../pages/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
@@ -11,6 +11,7 @@ import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
 import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 import Slugify from '../../CommonMethods/Sulgify.js';
+import { setDropdown } from '../../redux/GlobalSlice.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -19,15 +20,13 @@ const SideBar = ({ role }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [hoveringOn, setHoveringOn] = useState('');
-    const [dropDown, setdropDown] = useState({
-        dashboard: false,
-        users: false
-    });
 
     const { setToastSuccessBottom } = useContext(GlobalContext);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const { dropdown } = useSelector(state => state.globalData);
 
     const checkLoggedInUserForGlobalSignout = async () => {
         try {
@@ -77,19 +76,16 @@ const SideBar = ({ role }) => {
         if (dropDown === undefined) {
             navigate(key);
         }
-        setdropDown(prevState => {
-            return { ...prevState, [key]: !prevState[key] };
-        });
+        dispatch(setDropdown(key));
     };
 
     const handleOptionClick = (nav, option, key) => {
-        handleDropDown(key);
         navigate(nav.toLowerCase() + '/' + Slugify(option));
     };
 
     useEffect(() => {
-        // console.log(hoveringOn);
-    }, [hoveringOn]);
+
+    }, []);
 
     const sideNavObject = {
         Dashboard: {
@@ -124,7 +120,7 @@ const SideBar = ({ role }) => {
                                     </div>
                                     {sideNavObject[nav]?.dropdown && <Image src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
                                 </div>
-                                {dropDown.users &&
+                                {dropdown.users &&
                                 <>
                                     {sideNavObject[nav]?.dropdown?.map((option) => (
                                         <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer

@@ -19,7 +19,6 @@ const useGlobalSignout = () => {
             } catch (error) {
                 if (window.location.pathname === '/forgot-password' ||
                 window.location.pathname === '/set-new-password') {
-                    console.log('fdf');
                     return;
                 }
                 dispatch(setUser(''));
