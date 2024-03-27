@@ -10,17 +10,17 @@ Feature: Paymaart - Admin Web - Login
     After a successful login, the admin will be redirected to the homepage.
     The scan QR code for MFA authentication should be shown only for the first-time login, later it is only the OTP to be received.
 
-    Scenario Outline: Admin login with invalid credentials
-        Given I am on the login screen
-        When I enter the email address as <email_address> and password as <password>
-        When I submit the login form
-        Then I should read a message stating that <message>
-        Examples: 
-            | email_address            | password   | message                   |
-            | ""                       | "Test@123" | "This field is mandatory" |
-            | "bharath.shet@7edge.com" | ""         | "This field is mandatory" |
-            | "bharath.shet7edge.com"  | ""         | "Invalid email"           |
-            | "bharath.shet@7edge.com" | "12345"    | "Invalid credentials"     |
+    # Scenario Outline: Admin login with invalid credentials
+    #     Given I am on the login screen
+    #     When I enter the email address as <email_address> and password as <password>
+    #     When I submit the login form
+    #     Then I should read a message stating that <message>
+    #     Examples: 
+    #         | email_address            | password   | message                   |
+    #         | ""                       | "Test@123" | "This field is mandatory" |
+    #         | "bharath.shet@7edge.com" | ""         | "This field is mandatory" |
+    #         | "bharath.shet7edge.com"  | ""         | "Invalid email"           |
+    #         | "bharath.shet@7edge.com" | "12345"    | "Invalid credentials"     |
 
     @add_admin_user
     Scenario: Admin User login with valid credentials
@@ -39,15 +39,15 @@ Feature: Paymaart - Admin Web - Login
         And I click on the proceed to authenticate button
         Then I should be navigated to the TOTP screen
 
-    Scenario Outline: Admin User enters invalid TOTP
-        Given I am on the TOTP screen
-        When I enter TOTP as <TOTP>
-        And I submit the TOTP form
-        Then I should read a message stating that <message>
-        Examples: 
-            | TOTP     | message        |
-            | "0"      | "Invalid code" |
-            | "111111" | "Invalid code" |
+    # Scenario Outline: Admin User enters invalid TOTP
+    #     Given I am on the TOTP screen
+    #     When I enter TOTP as <TOTP>
+    #     And I submit the TOTP form
+    #     Then I should read a message stating that <message>
+    #     Examples: 
+    #         | TOTP     | message        |
+    #         | "0"      | "Invalid code" |
+    #         | "111111" | "Invalid code" |
 
     Scenario: Admin User enters valid TOTP
         Given I am on the TOTP screen

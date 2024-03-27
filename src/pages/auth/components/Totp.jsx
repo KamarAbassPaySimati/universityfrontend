@@ -7,7 +7,7 @@ import QRCode from 'qrcode.react';
 import Button from '../../../components/Button/Button';
 import MFA from './MFA';
 import { confirmSignIn, fetchUserAttributes, updateMFAPreference, updateUserAttribute } from 'aws-amplify/auth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { login, logout, setUser } from '../authSlice';
 import Image from '../../../components/Image/Image';
 import SuccessfulLogin from './SuccessfulLogin';
