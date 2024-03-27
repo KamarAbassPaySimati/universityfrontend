@@ -137,6 +137,11 @@ body {
   left: 4px;
 }
 
+/* filter check box  */
+.filter-checkbox label::before {
+  top: 50%;
+}
+
 .whiteScrollBar::-webkit-scrollbar-thumb {
   background-color: #FFF;
   border: transparent;

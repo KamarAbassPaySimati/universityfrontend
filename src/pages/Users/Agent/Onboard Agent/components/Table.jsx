@@ -43,7 +43,7 @@ const Table = ({ loading, error, List, handleSortByName }) => {
                                     {user?.status}
                                 </span>
                             </td>
-                            <td className='py-2 px-[10px] flex gap-[19px]'>
+                            <td className='py-2 px-3 mr-3 flex gap-[19px] justify-end'>
                                 <Image src='eye' />
                                 <Image src='edit' />
                                 <Image src='payin' />

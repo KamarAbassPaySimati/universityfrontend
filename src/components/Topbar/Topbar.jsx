@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
+import Filter from '../Filter/Filter';
 
 const Topbar = ({
     searchParams,
     setSearchParams,
-    toggleSearch,
-    clearSearch
+    filterOptions
 
 }) => {
     const [timer, setTimer] = useState(null);
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
 
-    const handleSearch = (newValue) => {
+    const initialState = {};
+    Object.entries(filterOptions).forEach(([key, values]) => {
+        initialState[key.toLowerCase()] = {};
+        values.forEach((value) => {
+            initialState[key.toLowerCase()][value.toLowerCase()] = false;
+        });
+    });
+
+    const [filterValues, setFilterValues] = useState(initialState);
+
+    const handleSearch = (e) => {
+        const newValue = e.target.value;
         setSearch(newValue);
         clearTimeout(timer);
         const newTimer = setTimeout(() => {
@@ -20,18 +31,41 @@ const Topbar = ({
         setTimer(newTimer);
     };
 
-    const handleSearchParams = (key, value, del) => {
+    const handleSearchParams = (key, value) => {
         const params = Object.fromEntries(searchParams);
-        if (del) {
-            delete params[del];
-        } else {
-            params.page_number = 1;
-            if (key === 'search') params[key] = encodeURIComponent(value);
-            else params[key] = value;
-            if (params.search === '') delete params.search;
-        }
+        params.page = 1;
+        if (key === 'search') params[key] = encodeURIComponent(value);
+        else params[key] = value;
+        if (value === '') delete params[key];
         setSearchParams({ ...params });
     };
+
+    const handleClearSearch = () => {
+        setSearch('');
+        handleSearchParams('search', '');
+    };
+
+    useEffect(() => {
+        console.log(filterValues);
+        const activeFilters = Object.entries(initialState)
+            .map(([key, value]) => {
+                // Filter out values that are true and join them into a comma-separated string
+                const activeValues = Object.entries(value)
+                    .filter(([_, val]) => val)
+                    .map(([k]) => k)
+                    .join(',');
+
+                // Return key-value pairs with active values
+                return { [key]: activeValues };
+            });
+        if (activeFilters) {
+            activeFilters.forEach(option => {
+                const key = Object.keys(option)[0];
+                const value = option[key];
+                handleSearchParams(key, value);
+            });
+        }
+    }, [filterValues]);
 
     return (
         <div>
@@ -47,22 +81,16 @@ const Topbar = ({
                 />
                 <Image
                     src={search?.length > 1 ? 'small_search_icon' : 'search_icon'}
-                    onClick={toggleSearch}
                     data-testid='search-btn'
                     className="absolute top-1/2 -translate-y-1/2 left-[26px] cursor-pointer"
                 />
                 {search?.length > 1 && <Image
                     src="search_close"
-                    onClick={clearSearch}
+                    onClick={handleClearSearch}
                     data-testid='search-btn'
                     className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer"
                 />}
-                <Image
-                    src="filter_icon"
-                    onClick={toggleSearch}
-                    data-testid='filter-btn'
-                    className="absolute top-1/2 -translate-y-1/2 right-6"
-                />
+                <Filter setFilterValues={setFilterValues} filterValues={filterValues} filterOptions={filterOptions} />
             </div>
         </div>
     );

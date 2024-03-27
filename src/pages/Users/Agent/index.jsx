@@ -19,15 +19,18 @@ const Agent = () => {
         setSearchParams({ page: 1 });
     }
 
+    const filterOptions = {
+        Status: ['Active', 'Inactive'],
+        Role: ['Admin', 'Super admin', 'Support admin', 'Finance admin']
+    };
+
     const GetList = useCallback(async () => {
         let params = Object.fromEntries(searchParams);
         delete params.tab;
         try {
-            fit;
             params = objectToQueryString(params);
             dispatch(AgentList(params));
         } catch (error) {
-            // handleLoadData()
             console.error(error);
         }
     }, [searchParams]);
@@ -60,10 +63,9 @@ const Agent = () => {
         >
             <div>
                 <Topbar
-                    searchValue={searchValue}
-                    clearSearch={clearSearch}
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}
+                    filterOptions={filterOptions}
                 />
                 <div className='h-tableHeight'>
                     <Table
