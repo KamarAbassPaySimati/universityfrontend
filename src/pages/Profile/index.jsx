@@ -26,7 +26,8 @@ const Profile = () => {
                             {`${user?.first_name?.[0] || ''}${user?.middle_name?.[0] || ''}${user?.last_name?.[0] || ''}`}
                         </div>
                         <div className='text-neutral-primary'>
-                            <div className='font-[700] text-[30px] leading-[40px] capitalize' data-testid="name">
+                            <div className='font-[700] text-[30px] leading-[40px] capitalize max-w-[calc(100vw-690px)]
+                                 break-words' data-testid="name">
                                 {`${user?.first_name || '-'} ${user?.middle_name || '-'}`}
                                 <span className='uppercase'> {user?.last_name || '-'}</span>
                             </div>
