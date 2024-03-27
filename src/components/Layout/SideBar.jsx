@@ -94,6 +94,9 @@ const SideBar = ({ role }) => {
 
     useGlobalSignout();
 
+    console.log(role, 'role');
+    console.log(sideNavObject[role], 'role');
+
     return (
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>
@@ -103,10 +106,10 @@ const SideBar = ({ role }) => {
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
                     <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4'>
 
-                        {Object.keys(sideNavObject[role]).map((nav) => (
+                        {sideNavObject && sideNavObject[role] && Object.keys(sideNavObject[role]).map((nav) => (
                             <div key={nav} className='flex flex-col'>
                                 <div className={`flex gap-2 justify-between px-2 py-1 pr-3 rounded-[6px] cursor-pointer
-                    ${location.pathname.includes(nav.toLowerCase()) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(nav.toLowerCase(), sideNavObject[nav]?.dropdown)}>
+                    ${location.pathname.includes(nav.toLowerCase()) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(nav.toLowerCase(), sideNavObject[role][nav]?.dropdown)}>
                                     <div className='flex gap-2 items-center'>
                                         <Image src={`${hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? `active-${nav.toLowerCase()}` : nav.toLowerCase()}`} />
                                         <div className={`font-[400] text-[14px] leading-[24px]
@@ -114,13 +117,13 @@ const SideBar = ({ role }) => {
                                             {nav}
                                         </div>
                                     </div>
-                                    {sideNavObject[nav]?.dropdown && <Image src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
+                                    {sideNavObject[role][nav]?.dropdown && <Image src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
                                 </div>
                                 {dropDown.users &&
                                 <>
-                                    {sideNavObject[nav]?.dropdown?.map((option) => (
+                                    {sideNavObject[role][nav]?.dropdown?.map((option) => (
                                         <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
-                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[nav]?.dropdown)} >
+                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown)} >
                                             {option}
                                         </div>
                                     ))}

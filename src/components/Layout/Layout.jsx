@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import SideBar from './SideBar';
@@ -5,10 +6,12 @@ import { useSelector } from 'react-redux';
 import Slugify from '../../CommonMethods/Sulgify';
 
 export default function Layout () {
-    const user = useSelector((state) => state.auth);
-    // eslint-disable-next-line camelcase
+    const { user } = useSelector((state) => state.auth);
     const { user_type } = user;
-    const role = Slugify(user_type);
+    let role;
+    if (user_type) {
+        role = Slugify(user_type);
+    }
 
     return (
         <>
