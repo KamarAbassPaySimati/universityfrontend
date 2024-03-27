@@ -8,7 +8,7 @@ const Table = ({ loading, error, List, handleSortByName }) => {
     console.log(List);
 
     return (
-        <table className='w-max'>
+        <table className='w-full min-w-max'>
             {(List?.data?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                     <tr className='border-y border-neutral-outline'>

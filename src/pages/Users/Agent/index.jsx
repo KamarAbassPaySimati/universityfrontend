@@ -23,6 +23,7 @@ const Agent = () => {
         let params = Object.fromEntries(searchParams);
         delete params.tab;
         try {
+            fit;
             params = objectToQueryString(params);
             dispatch(AgentList(params));
         } catch (error) {
@@ -58,7 +59,12 @@ const Agent = () => {
             table={true}
         >
             <div>
-                <Topbar />
+                <Topbar
+                    searchValue={searchValue}
+                    clearSearch={clearSearch}
+                    setSearchParams={setSearchParams}
+                    searchParams={searchParams}
+                />
                 <div className='h-tableHeight'>
                     <Table
                         error={error}
