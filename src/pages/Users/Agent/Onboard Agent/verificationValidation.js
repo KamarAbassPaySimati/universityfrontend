@@ -1,3 +1,8 @@
+const invalidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return !emailRegex.test(email);
+};
+
 export default function verificationValidation (state, setErrorState, ignoreKey) {
     let isValid = true;
 
@@ -15,8 +20,7 @@ export default function verificationValidation (state, setErrorState, ignoreKey)
         }
     }
     if (ignoreKey === 'phoneNumber') {
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(state.email)) {
+        if (invalidEmail(state.email)) {
             setErrorState((prevState) => {
                 return { ...prevState, email: 'Invalid email' };
             });
