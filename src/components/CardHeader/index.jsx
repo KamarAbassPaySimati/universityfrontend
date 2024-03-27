@@ -65,7 +65,7 @@ const CardHeader = ({ children, paths, activePath, pathurls, testId, header, but
                 <div className='mx-10 mt-8 mb-6 px-8 py-7 bg-[#FFFFFF] text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-row justify-between border-b border-neutral-outline'>
                     {header}
-                    {buttonText && <button onClick={() => { console.log(navigationPath, 'ijhj'); navigate(navigationPath); }}
+                    {buttonText && <button onClick={() => { navigate(navigationPath); }}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                         <img src='/images/onboardIcon.svg'

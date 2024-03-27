@@ -92,12 +92,11 @@ const OnboardAdmin = () => {
                     middle_name: addBackslashBeforeApostrophe(formData.middleName),
                     last_name: addBackslashBeforeApostrophe(formData.lastName),
                     country_code: '+265',
-                    email: formData.email,
+                    email: addBackslashBeforeApostrophe(formData.email),
                     role: formData.role,
                     phone_number: formData.phoneNumber.replace(/\s/g, '')
                 };
                 const response = await dataService.PostAPI(adminOnboard, payload);
-                console.log(response, 'Set New Password response:');
                 if (!response.error) {
                     setIsLoading(false);
                     setToastSuccess(`${formData.role} registered successfully`);

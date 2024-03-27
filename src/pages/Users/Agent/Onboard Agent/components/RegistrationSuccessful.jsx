@@ -15,7 +15,6 @@ const RegistrationSuccessful = ({ email }) => {
         } else {
             setToastError('Something went wrong, please try again');
         }
-        console.log(response);
     };
     return (
         <div className='min-h-[calc(100vh-176px)] min-w-[700px] flex justify-center items-center text-neutral-primary
