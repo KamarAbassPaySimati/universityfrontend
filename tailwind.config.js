@@ -42,6 +42,9 @@ export default {
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
+            },
+            height: {
+                tableHeight: 'calc(100vh - 380px)'
             }
         }
     },

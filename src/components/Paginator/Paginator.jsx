@@ -7,7 +7,7 @@ import Image from '../Image/Image';
 export default function Paginator ({ setSearchParams, searchParams, currentPage, totalPages }) {
     const handlePage = (page) => {
         const params = Object.fromEntries(searchParams);
-        setSearchParams({ ...params, page_number: page + 1 });
+        setSearchParams({ ...params, page: page + 1 });
     };
     return (
         <div className="flex items-center w-full mt-1 py-3">
@@ -16,20 +16,20 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                     <ReactPaginate
                         previousLabel={
                             <div className='flex'>
-                                <a data-testid="paginate-prev" onClick={() => handlePage(currentPage - 1)} href="javascript:void(0)"
+                                <div data-testid="paginate-prev" onClick={() => handlePage(currentPage - 1)}
                                     className={`rounded-[5px] flex justify-center ${currentPage > 1 ? '' : 'pointer-events-none cursor-default'}`}>
                                     <Image src={currentPage > 1 ? 'paginator_left_arrow' : 'active_paginator_left_arrow'} className='w-[20px]' />
-                                </a>
+                                </div>
                             </div>
                         }
                         nextLabel={
                             <div className='flex'>
-                                <a data-testid="paginate-next" onClick={() => handlePage(currentPage + 1)} href="javascript:void(0)"
+                                <div data-testid="paginate-next" onClick={() => handlePage(currentPage + 1)}
                                     className={currentPage === totalPages ? 'pointer-events-none cursor-default mt-[3px]' : 'mt-[3px]'}>
                                     <Image src={(currentPage && (currentPage !== totalPages)) ? 'paginator_right_arrow' : 'active_paginator_right_arrow'}
                                         className={(currentPage === totalPages) ? 'pointer-events-none w-[20px]' : 'w-[20px]'}
                                     />
-                                </a>
+                                </div>
                             </div>
                         }
                         pageCount={totalPages}

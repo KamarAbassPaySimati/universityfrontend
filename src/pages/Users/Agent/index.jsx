@@ -9,11 +9,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AgentList } from './agentSlice';
 
 const Agent = () => {
-    const [searchParams, setSearchParams] = useSearchParams({ page_number: 1 });
+    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
 
     const dispatch = useDispatch();
     const agentUsers = useSelector(state => state.agentUsers);
     const { List, loading, error } = agentUsers;
+
+    if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
+        setSearchParams({ page: 1 });
+    }
 
     const GetList = useCallback(async () => {
         let params = Object.fromEntries(searchParams);
@@ -27,9 +31,20 @@ const Agent = () => {
         }
     }, [searchParams]);
 
+    const handleSortByName = () => {
+        const params = Object.fromEntries(searchParams);
+        params.sortBy = 'name';
+        if (params.sortOrder === 'asc') {
+            params.sortOrder = 'desc';
+        } else {
+            params.sortOrder = 'asc';
+        }
+        setSearchParams({ ...params });
+    };
+
     useEffect(() => {
         GetList();
-    }, []);
+    }, [searchParams]);
 
     return (
         <CardHeader
@@ -44,13 +59,21 @@ const Agent = () => {
         >
             <div>
                 <Topbar />
-                <Table
-                    error={error}
-                    loading={loading}
-                    List={List}
-                />
-                <Paginator currentPage={1} totalPages={10} setSearchParams={setSearchParams} searchParams={searchParams}
-                />
+                <div className='h-tableHeight'>
+                    <Table
+                        error={error}
+                        loading={loading}
+                        List={List}
+                        handleSortByName={handleSortByName}
+                    />
+                </div>
+                {!loading && Math.ceil(List.totalRecords / 10) > 1 &&
+                <Paginator
+                    currentPage={searchParams.get('page')}
+                    totalPages={Math.ceil(List.totalRecords / 10)}
+                    setSearchParams={setSearchParams}
+                    searchParams={searchParams}
+                />}
             </div>
         </CardHeader>
     );
