@@ -118,9 +118,9 @@ const SideBar = ({ role }) => {
                                             {nav}
                                         </div>
                                     </div>
-                                    {sideNavObject[nav]?.dropdown && <Image src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
+                                    {sideNavObject[nav]?.dropdown && <Image className={`duration-300 ${dropdown[nav.toLowerCase()] ? 'rotate-180' : ''}`} src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
                                 </div>
-                                {dropdown.users &&
+                                {dropdown[nav.toLowerCase()] &&
                                 <>
                                     {sideNavObject[nav]?.dropdown?.map((option) => (
                                         <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
