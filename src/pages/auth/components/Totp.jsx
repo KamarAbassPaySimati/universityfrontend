@@ -62,10 +62,14 @@ const Totp = ({ Qrcode }) => {
             const userAttributes = await fetchUserAttributes();
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
+                dispatch(login());
+                navigate('/dashboard');
+                setIsLoading(false);
             }
         } catch (error) {
             dispatch(setUser(''));
             dispatch(logout());
+            setIsLoading(false);
         }
     };
 
@@ -86,14 +90,11 @@ const Totp = ({ Qrcode }) => {
             const cognitoUserSession = await confirmSignIn({ challengeResponse: val });
             // don't forget to set TOTP as the preferred MFA method
             handleUpdateMFAPreference();
-            handleFetchUserAttributes();
-            setIsLoading(false);
             if (Qrcode) {
                 handleUpdateUserAttribute(Qrcode);
                 setSuccessfulLogin(true);
             } else {
-                dispatch(login());
-                navigate('/dashboard');
+                handleFetchUserAttributes();
             }
         } catch (error) {
             if (error.message.includes('session is expired')) {
@@ -138,7 +139,7 @@ const Totp = ({ Qrcode }) => {
                     <>
                         {Qrcode
                             ? successfulLogin
-                                ? <SuccessfulLogin />
+                                ? <SuccessfulLogin handleFetchUserAttributes={handleFetchUserAttributes} />
                                 : (isScanPage
                                     ? <div className='p-8 border border-neutral-outline max-w-[420px] rounded-[8px] mb-10'>
                                         <div className='text-center'>
