@@ -15,18 +15,16 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 
-const CardHeader = ({ children, paths, activePath, pathurls }) => {
+const CardHeader = ({ children, paths, activePath, pathurls, testId }) => {
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
-        console.log(arr, 'arr');
         const result = [];
         let sum = '';
         for (const str of arr) {
             sum += str;
             result.push(sum);
         }
-        console.log(result, 'result');
         return result;
     }
 
@@ -62,8 +60,11 @@ const CardHeader = ({ children, paths, activePath, pathurls }) => {
                     </Tooltip>
                 </div>
             </div>
-            <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline bg-'>
-                {children}
+            <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
+                <div className='max-h-[calc(100vh-120px)] scrollBar
+                overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]' data-testid={testId}>
+                    {children}
+                </div>
             </div>
         </div>
     );

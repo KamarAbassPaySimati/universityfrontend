@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
+import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -18,6 +19,7 @@ const SideBar = ({ role }) => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     async function handleSignOut () {
         try {
             setIsLoading(true);
@@ -39,6 +41,9 @@ const SideBar = ({ role }) => {
         navigate('/');
         setToastSuccessBottom('You have been logged out');
     };
+
+    useGlobalSignout();
+
     return (
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>
@@ -51,10 +56,10 @@ const SideBar = ({ role }) => {
                             <Image src='dashboard' />
                             <div className='font-[400] text-[14px] leading-[24px] text-neutral-secondary'>Dashboard</div>
                         </div>
-                        <div className='flex gap-2 items-center px-2 py-1'>
+                        {/* <div className='flex gap-2 items-center px-2 py-1'>
                             <Image src='dashboard' />
                             <div className='font-[400] text-[14px] leading-[24px] text-neutral-secondary'>Dashboard</div>
-                        </div>
+                        </div> */}
                     </div>
                     <div className='flex justify-center items-center'>
                         <button
@@ -68,7 +73,7 @@ const SideBar = ({ role }) => {
                     </div>
                 </div>
             </div>
-            <Modal center open={isOpen} onClose={handleClose} closeIcon={<button style={{ color: 'white' }} disabled></button>}>
+            <Modal center open={isOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title='Logout User'

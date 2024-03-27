@@ -3,24 +3,26 @@ import CardHeader from '../../components/CardHeader';
 import { useSelector } from 'react-redux';
 import Button2 from '../../components/Button2/Button2';
 import { useNavigate } from 'react-router-dom';
+import formatPhoneNumber from '../../CommonMethods/formatPhoneNumber';
 
 const Profile = () => {
     const { user } = useSelector(state => state.auth);
     const navigate = useNavigate();
+
     const userDetails = {
-        'Phone Number': user.phone_number,
+        'Phone Number': formatPhoneNumber(user.phone_number),
         Email: user.email,
         Role: user.user_type
     };
     const keys = Object.keys(userDetails);
     return (
         <CardHeader activePath='Profile' >
-            <div className='mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]' data-testid="profile_info_card">
+            <div className=' flex flex-col bg-[#FFFFFF]' data-testid="profile_info_card">
 
                 <div className='flex justify-between border-b border-neutral-outline pb-[18px]'>
                     <div className='flex gap-[27px] justify-center items-center'>
                         <div className='bg-primary-normal text-[#FFFFFF] h-[66px] w-[66px] flex justify-center items-center
-                            font-[400] text-[24px] leading-[32px] rounded-[8px]'>
+                            font-[400] text-[24px] leading-[32px] rounded-[8px] uppercase'>
                             {`${user?.first_name?.[0] || ''}${user?.middle_name?.[0] || ''}${user?.last_name?.[0] || ''}`}
                         </div>
                         <div className='text-neutral-primary'>
@@ -36,7 +38,7 @@ const Profile = () => {
                     <div className='mt-1'>
                         <Button2
                             testId="update_password"
-                            onClick={() => navigate('/update-password')}
+                            onClick={() => navigate('/profile/update-password')}
                             text='Update Password'
                             icon='key-icon'
                             className='!w-[182px] !text-primary-normal' />
