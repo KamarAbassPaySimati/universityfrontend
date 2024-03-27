@@ -83,9 +83,9 @@ export default function NavigationRoutes (props) {
                                     {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
                                         <Route path={nav.path} element={React.cloneElement(nav.element, props)} key={nav.path}/>
                                     ))}
-                                    <Route path="/profile/update-password" element={<UpdatePassword />} />
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/profile" element={<Profile />} />
+                                    <Route path="/profile/update-password" element={<UpdatePassword />} />
                                     <Route path="/users/agents" element={<Agent />} />
                                 </Route>
                             )
