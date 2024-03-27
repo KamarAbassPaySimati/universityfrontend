@@ -3,7 +3,7 @@ const { When, Then } = require('@cucumber/cucumber');
 const assert = require('assert');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
-const { driver } = require('./Driver.js');
+const { driver } = require('../Driver.js');
 
 When('I click on logout', async function () {
     await new Promise(resolve => setTimeout(resolve, 100));

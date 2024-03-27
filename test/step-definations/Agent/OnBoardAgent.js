@@ -6,7 +6,7 @@ const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const assert = require('assert');
 const Keys = webdriver.Key;
-const { driver } = require('./Driver');
+const { driver } = require('../Driver');
 const { faker } = require('@faker-js/faker');
 
 Before(async function () {
@@ -16,12 +16,13 @@ Before(async function () {
 Given('I navigate to agent onboarding screen', async function () {
     // Write code here that turns the phrase above into concrete action
     await driver.get('http://localhost:3000/users/agents/register-agent');
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
-    await driver.wait(until.elementIsVisible(element));
 });
 
 When('I enter the first name as {string} for agent registration', async function (first_name) {
     // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
+    await driver.wait(until.elementIsVisible(element));
+
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
     if (first_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
