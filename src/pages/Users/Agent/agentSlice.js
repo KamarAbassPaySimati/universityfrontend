@@ -7,10 +7,10 @@ const initialState = {
     success: ''
 };
 
-export const AgentList = createAsyncThunk('agent-user', async (searchParams, { rejectWithValue }) => {
+export const AgentList = createAsyncThunk('agentUsers', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     const safeUrl =
-        `orders/list?${new URLSearchParams(searchParams).toString()}`;
+        `agent-list?${new URLSearchParams(searchParams).toString()}`;
 
     try {
         const res = await dataService.GetAPI(safeUrl);
@@ -28,24 +28,24 @@ const agentSlice = createSlice({
     reducers: {
 
     },
-    extraReducers: {
-        // register user
-        [AgentList.pending]: (state) => {
-            state.loading = true;
-            state.error = null;
-        },
-        [AgentList.fulfilled]: (state, action) => {
-            state.loading = false;
-            if (!action?.payload?.error && action?.payload?.data?.success_status) {
-                state.List = action?.payload?.data;
-            } else {
-                state.error = action?.payload?.data?.message;
-            }
-        },
-        [AgentList.rejected]: (state, { payload }) => {
-            state.loading = false;
-            state.error = payload?.message?.message;
-        }
+    extraReducers: (builder) => {
+        builder
+            .addCase(AgentList.pending, (state) => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(AgentList.fulfilled, (state, action) => {
+                state.loading = false;
+                if (!action.payload.error && action.payload.data.success_status) {
+                    state.List = action.payload.data;
+                } else {
+                    state.error = action.payload.data.message;
+                }
+            })
+            .addCase(AgentList.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload.message.message;
+            });
     }
 });
 

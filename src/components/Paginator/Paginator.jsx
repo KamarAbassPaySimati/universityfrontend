@@ -37,17 +37,11 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                         pageRangeDisplayed={3}
                         forcePage={currentPage - 1}
                         onPageChange={(page) => handlePage(page.selected)}
-                        containerClassName="text-xs11 font-medium text-[#000000] rounded sm:h-5 w-full h-4 inline-flex justify-center items-center hover:text-[#107CC1] ml-1"
-                        pageClassName="text-base font-semibold text-[#333] ml-2 px-2 py-2 rounded h-[32px] w-[32px] inline-flex justify-center items-center"
-                        pageLinkClassName="page-link"
-                        previousClassName="text-xs11 font-medium text-[#000000] mx-2 rounded w-auto sm:h-5 h-4 inline-flex justify-center items-center hover:text-[#107CC1]"
-                        previousLinkClassName="page-link"
-                        nextClassName="text-xs11 font-medium text-[#000000] mx-2 rounded sm:h-5 w-auto h-4 inline-flex justify-center items-center hover:text-[#107CC1]"
-                        nextLinkClassName="page-link min-w-[20px]"
-                        breakClassName="text-xs font-regular text-[#000000] ml-2 px-2 border border-transparent rounded-[5px] w-5 h-5 inline-flex justify-center items-center hover:bg-[#F2F2F3]"
-                        breakLinkClassName="page-link"
+                        containerClassName="text-[14px] font-[400] text-[#000000] rounded sm:h-5 w-full h-4 inline-flex justify-center items-center ml-1"
+                        pageClassName="text-[14px] font-[400] text-[#4F5962] ml-2 px-2 py-2 rounded h-[32px] w-[32px] inline-flex justify-center items-center border-[4F5962] hover:border"
                         disabledLinkClassName="pointer-events-none cursor-default"
-                        activeClassName="text-base font-semibold text-[#7949FF] px-2  py-2 rounded h-[32px] w-[32px]inline-flex justify-center items-center"
+                        activeClassName="text-[14px] font-[400] text-[#7949FF] px-2  py-2 rounded h-[32px] w-[32px]inline-flex justify-center items-center border-[4F5962] hover:border-none"
+                        pageLinkClassName="p-2"
                     />
                 </div>
             </div>
