@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from '../Image/Image';
 import Filter from '../Filter/Filter';
 
@@ -6,11 +6,13 @@ const Topbar = ({
     searchParams,
     setSearchParams,
     filterOptions,
-    filterType
+    filterType,
+    placeHolder
 
 }) => {
     const [timer, setTimer] = useState(null);
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
+    const isFirstRender = useRef(true);
 
     const initialState = {};
     Object.entries(filterOptions).forEach(([key, values]) => {
@@ -37,7 +39,7 @@ const Topbar = ({
         params.page = 1;
         if (key === 'search') params[key] = encodeURIComponent(value);
         else params[key] = value;
-        if (value === '') delete params[key];
+        if (params.search === '') delete params.search;
         setSearchParams({ ...params });
     };
 
@@ -46,38 +48,38 @@ const Topbar = ({
         handleSearchParams('search', '');
     };
 
+    const handleClearFilter = () => {
+        // Reset filterValues to an empty object or default values
+        setFilterValues(initialState);
+    };
     useEffect(() => {
-        console.log(filterValues);
-        const filteredOptions = Object.entries(filterValues).map(([key, value]) => {
-            const filteredValues = Object.entries(value)
-                .filter(([subKey, subValue]) => subValue === true)
-                .map(([subKey]) => subKey);
-
-            return { [key]: filteredValues.join(',') };
-        });
-
-        console.log(filteredOptions, 'filteredOptions');
-        if (filteredOptions) {
-            console.log('first');
-            filteredOptions.forEach(option => {
-                const key = Object.keys(option)[0];
-                const value = option[key];
-                handleSearchParams(key, value);
-            });
+        // Skip the first render
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
         }
+        const filteredOptions = Object.entries(filterValues).filter(
+            ([_, value]) => Object.values(value).some((v) => v)
+        ).map(([key, value]) => ({ [key]: Object.keys(value).filter((subKey) => value[subKey]).join(',') }));
+
+        setSearchParams((prevParams) => ({
+            ...prevParams,
+            ...filteredOptions.reduce((acc, option) => ({ ...acc, ...option }), {})
+        }));
     }, [filterValues]);
 
     return (
         <div>
-            <div className="relative my-2">
+            <div className="relative my-2 ">
                 <input
                     type="text"
                     value={search}
                     data-testid="search"
                     onChange={handleSearch}
-                    placeholder="Paymaart ID, name or phone number "
-                    className='hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
-                    outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8'
+                    placeholder= {placeHolder}
+                    className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
+                    outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8 
+                    ${search?.length > 1 ? 'bg-[#F8F8F8]' : ''}`}
                 />
                 <Image
                     src={search?.length > 1 ? 'small_search_icon' : 'search_icon'}
@@ -88,9 +90,11 @@ const Topbar = ({
                     src="search_close"
                     onClick={handleClearSearch}
                     data-testid='search-btn'
-                    className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer"
+                    className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer bg-[#F8F8F8]"
                 />}
-                <Filter setFilterValues={setFilterValues} filterValues={filterValues} filterOptions={filterOptions}  filterType={filterType}/>
+                <Filter handleClearFilter={handleClearFilter}
+                    setFilterValues={setFilterValues}
+                    filterValues={filterValues} filterOptions={filterOptions} filterType={filterType}/>
             </div>
         </div>
     );

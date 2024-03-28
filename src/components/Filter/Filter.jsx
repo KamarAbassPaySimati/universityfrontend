@@ -5,7 +5,7 @@ import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-const Filter = ({ setFilterValues, filterValues, filterOptions, filterType }) => {
+const Filter = ({ setFilterValues, filterValues, filterOptions, filterType, handleClearFilter }) => {
     const filterDiv = useRef();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -15,7 +15,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, filterType }) =>
     });
 
     return (
-        <div ref={filterDiv} className="">
+        <div ref={filterDiv} className="z-10">
             <Image
                 src="filter_icon"
                 data-testid='filter-btn'
@@ -34,7 +34,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, filterType }) =>
                         <div className='font-[600]'>
                             {filterType}
                         </div>
-                        <button className='font-[400]'>
+                        <button className='font-[400]' onClick={handleClearFilter}>
                             Clear
                         </button>
                     </div>
