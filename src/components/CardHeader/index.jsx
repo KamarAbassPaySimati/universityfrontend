@@ -84,7 +84,7 @@ const CardHeader = ({
                 ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
                         {children}
                     </div>
-                    : <div className='min-h-[calc(100vh-240px)] max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-6
+                    : <div className='min-h-[calc(100vh-240px)] max-h-[calc(100vh-120px)] mx-10 my-6
                      bg-[#FFFFFF] rounded-[6px] border border-neutral-outline'>
                         {children}
                     </div>}
