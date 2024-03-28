@@ -138,8 +138,8 @@ When('I enter a valid email address for agent registration', async function () {
 
 When('I enter the valid OTP and verify', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const otpField = await driver.wait(until.elementLocated(By.css('[data-testid="otp"]')));
-    await driver.wait(until.elementIsVisible(otpField));
+    const OTP_field = await driver.wait(until.elementLocated(By.css('[data-testid="otp"]')));
+    await driver.wait(until.elementIsVisible(OTP_field));
 
     await new Promise(resolve => setTimeout(resolve, 1000));
 
@@ -172,21 +172,21 @@ When('I click on verify phone number', async function () {
 
 When('I enter a valid phone number for agent registration', async function () {
     // Write code here that turns the phrase above into concrete actions
-    let phoneNumber = `${faker.phone.number('#########')}`;
-    if (phoneNumber.startsWith('0')) {
+    let phone_number = `${faker.phone.number('#########')}`;
+    if (phone_number.startsWith('0')) {
         // Replace the first character with '9'
-        phoneNumber = '9' + phoneNumber.substring(1);
+        phone_number = '9' + phone_number.substring(1);
     }
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phoneNumber);
+    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
 });
 
-When('I enter the OTP as {string}', async function (otp) {
+When('I enter the OTP as {string}', async function (OTP) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys(otp);
+    await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys(OTP);
 });
 
 When('I click on verify OTP', async function () {
@@ -203,9 +203,9 @@ Then('I should see the verify phone number button text changed to {string}', asy
     await new Promise(resolve => setTimeout(resolve, 6000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_phone_number"]')));
     await driver.wait(until.elementIsVisible(element));
-    const elementText = await element.getText();
+    const element_text = await element.getText();
 
-    assert.equal(actual_text, elementText);
+    assert.equal(actual_text, element_text);
 });
 
 When('I enter a valid first name for agent registration', async function () {
@@ -213,9 +213,9 @@ When('I enter a valid first name for agent registration', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const firstName = faker.person.firstName();
+    const first_name = faker.person.firstName();
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(firstName);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
 });
 
 When('I enter a valid middle name for agent registration', async function () {
@@ -223,9 +223,9 @@ When('I enter a valid middle name for agent registration', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const middleName = faker.person.firstName();
+    const middle_name = faker.person.middleName();
     await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middleName);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
 });
 
 When('I enter a valid last name for agent registration', async function () {
@@ -233,9 +233,9 @@ When('I enter a valid last name for agent registration', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const lastName = faker.person.lastName();
+    const last_name = faker.person.lastName();
     await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(lastName);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
 });
 
 Then('I should read a message stating registration successfully', async function () {
@@ -244,7 +244,7 @@ Then('I should read a message stating registration successfully', async function
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="registration_success_message"]')));
     await driver.wait(until.elementIsVisible(element));
-    const elementText = await element.getText();
+    const element_text = await element.getText();
 
-    assert.equal(expected_text, elementText);
+    assert.equal(expected_text, element_text);
 });
