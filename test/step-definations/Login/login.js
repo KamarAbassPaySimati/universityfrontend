@@ -63,14 +63,14 @@ async function create_new_user_and_login () {
 
     await new Promise(resolve => setTimeout(resolve, 750));
 
-    const email_address = await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]')));
-    await driver.wait(until.elementIsVisible(email_address));
+    const email = await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]')));
+    await driver.wait(until.elementIsVisible(email));
 
     const password = await driver.wait(until.elementLocated(By.css('[data-testid="password"]')));
     await driver.wait(until.elementIsVisible(password));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
-    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.admin_user.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.admin_user.pass);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
 
