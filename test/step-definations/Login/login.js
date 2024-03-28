@@ -179,20 +179,6 @@ Before('@add_admin_user', async function () {
             phone_number: phoneNumber.replaceAll(' ', '')
         };
 
-        // const payload = {
-        //     first_name: firstName,
-        //     username: email,
-        //     middle_name: middleName,
-        //     last_name: lastName,
-        //     password: 'Admin@123',
-        //     paymaart_id: paymaartId,
-        //     email,
-        //     country_code: countryCode,
-        //     role: 'Super admin',
-        //     phone_number: phoneNumber.replaceAll(' ', '')
-        // };
-
-        console.log('payload', payload);
         global.adminUser = {
             pass: 'Admin@123',
             email_address: email.toLowerCase(),
@@ -367,6 +353,8 @@ When('I submit the TOTP form', async function () {
 });
 
 When('I enter the TOTP obtained from the previously scanned device', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const response = await getMFASecret({ username: global.adminUser.email_address });
     const secret = response.mfa_code;
     console.log('secret 123', secret);
@@ -387,6 +375,8 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 });
 
 Then('I should be presented with 2FA Enabled successfully page', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const element_header = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-header"]')));
     await driver.wait(until.elementIsVisible(element_header));
     const element_header_content = await element_header.getText();

@@ -8,10 +8,11 @@ import GlobalContext from './components/Context/GlobalContext';
 import useGlobalSignout from './CommonMethods/globalSignout';
 import { Hub } from 'aws-amplify/utils';
 import { dataService } from './services/data.services';
-import { endpoints } from '../../../services/endpoints';
 import { useDispatch } from 'react-redux';
-import { logout } from '../pages/auth/authSlice';
+
 import { useNavigate } from 'react-router-dom';
+import { endpoints } from './services/endpoints';
+import { logout } from './pages/auth/authSlice';
 
 Amplify.configure(awsConfig);
 

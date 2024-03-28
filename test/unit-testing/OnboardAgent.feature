@@ -15,7 +15,6 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
   Paymaart ID generation should be in non-sequential order
   Note: Resend can be allowed to 3 limit
 
-  @wait_for_few_time
   Scenario: Admin User login with valid credentials after reseting password
     Given I am on the login screen
     When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
@@ -125,7 +124,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
     Then I should see the verify phone number button text changed to "VERIFIED"
 
 
-  Scenario: Onboard the agent with valid information
+  Scenario: Super admin onboard the agent with valid information
     Given I navigate to agent onboarding screen
     When I enter a valid first name for agent registration
     When I enter a valid middle name for agent registration
@@ -138,6 +137,89 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
     When I answer the security question four as "Answer4"
     When I agree to the terms and conditions
     When I submit the agent registration form
+    Then I should read a message stating that "Please verify your email address"
+    Then I should read a message stating that "Please verify your phone number"
+    When I click on verify email address
+    Then I should read a message stating that "Verification code has been sent to agent’s email. It's valid for 10 minutes"
+    When I enter the valid OTP and verify
+    Then I should see the verify email address button text changed to "VERIFIED"
+    When I click on verify phone number
+    Then I should read a message stating that "Verification code has been sent to agent’s phone number. It's valid for 10 minutes"
+    When I enter the valid OTP and verify
+    Then I should see the verify phone number button text changed to "VERIFIED"
+    When I submit the agent registration form
+    Then I should read a message stating registration successfully
+
+  @perform_logout
+  @wait
+  Scenario: Finance Admin User login with valid credentials
+    Given I am on the login screen
+    When I enter the email address as "bharath.shet+finance_admin@7edge.com" and password as "Admin@123"
+    And I submit the login form
+    Then I should be navigated to the TOTP screen
+    When I enter the TOTP obtained from the previously scanned device
+    And I submit the TOTP form
+    Then I should be redirected to the '/dashboard' page
+    When I navigate to agent onboarding screen
+    Then I should view "404" page not found screen
+
+  @perform_logout
+  @wait
+  Scenario: Support Admin User login with valid credentials and onboard the agent with valid information
+    Given I am on the login screen
+    When I enter the email address as "bharath.shet+support_admin@7edge.com" and password as "Admin@123"
+    And I submit the login form
+    Then I should be navigated to the TOTP screen
+    When I enter the TOTP obtained from the previously scanned device
+    And I submit the TOTP form
+    Then I should be redirected to the '/dashboard' page
+    When I navigate to agent onboarding screen
+    * I enter a valid first name for agent registration
+    * I enter a valid middle name for agent registration
+    * I enter a valid last name for agent registration
+    * I enter a valid email address for agent registration
+    * I enter a valid phone number for agent registration
+    * I answer the security question one as "Answer1"
+    * I answer the security question two as "Answer2"
+    * I answer the security question three as "Answer3"
+    * I answer the security question four as "Answer4"
+    * I agree to the terms and conditions
+    * I submit the agent registration form
+    Then I should read a message stating that "Please verify your email address"
+    Then I should read a message stating that "Please verify your phone number"
+    When I click on verify email address
+    Then I should read a message stating that "Verification code has been sent to agent’s email. It's valid for 10 minutes"
+    When I enter the valid OTP and verify
+    Then I should see the verify email address button text changed to "VERIFIED"
+    When I click on verify phone number
+    Then I should read a message stating that "Verification code has been sent to agent’s phone number. It's valid for 10 minutes"
+    When I enter the valid OTP and verify
+    Then I should see the verify phone number button text changed to "VERIFIED"
+    When I submit the agent registration form
+    Then I should read a message stating registration successfully
+
+  @perform_logout
+  @wait
+  Scenario: Admin User login with valid credentials and onboard the agent with valid information
+    Given I am on the login screen
+    When I enter the email address as "bharath.shet+normal_admin@7edge.com" and password as "Admin@123"
+    And I submit the login form
+    Then I should be navigated to the TOTP screen
+    When I enter the TOTP obtained from the previously scanned device
+    And I submit the TOTP form
+    Then I should be redirected to the '/dashboard' page
+    When I navigate to agent onboarding screen
+    * I enter a valid first name for agent registration
+    * I enter a valid middle name for agent registration
+    * I enter a valid last name for agent registration
+    * I enter a valid email address for agent registration
+    * I enter a valid phone number for agent registration
+    * I answer the security question one as "Answer1"
+    * I answer the security question two as "Answer2"
+    * I answer the security question three as "Answer3"
+    * I answer the security question four as "Answer4"
+    * I agree to the terms and conditions
+    * I submit the agent registration form
     Then I should read a message stating that "Please verify your email address"
     Then I should read a message stating that "Please verify your phone number"
     When I click on verify email address

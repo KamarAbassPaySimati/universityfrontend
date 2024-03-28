@@ -1,17 +1,10 @@
 import React from 'react';
 import Image from '../../../components/Image/Image';
 import Button from '../../../components/Button/Button';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { login } from '../authSlice';
 
-const SuccessfulLogin = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-
+const SuccessfulLogin = ({ handleFetchUserAttributes }) => {
     const handleDone = () => {
-        dispatch(login());
-        navigate('/dashboard');
+        handleFetchUserAttributes();
     };
 
     return (

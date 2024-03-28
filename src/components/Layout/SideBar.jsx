@@ -3,7 +3,7 @@ import 'react-responsive-modal/styles.css';
 import React, { useContext, useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { fetchUserAttributes, signOut } from 'aws-amplify/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout, setUser } from '../../pages/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
@@ -11,6 +11,8 @@ import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
 import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 import Slugify from '../../CommonMethods/Sulgify.js';
+import { sideNavObject } from './sideNavObject.js';
+import { setDropdown } from '../../redux/GlobalSlice.js';
 
 // border border-neutral-outline
 const SideBar = ({ role }) => {
@@ -19,15 +21,13 @@ const SideBar = ({ role }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [hoveringOn, setHoveringOn] = useState('');
-    const [dropDown, setdropDown] = useState({
-        dashboard: false,
-        users: false
-    });
 
     const { setToastSuccessBottom } = useContext(GlobalContext);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const { dropdown } = useSelector(state => state.globalData);
 
     const checkLoggedInUserForGlobalSignout = async () => {
         try {
@@ -77,30 +77,21 @@ const SideBar = ({ role }) => {
         if (dropDown === undefined) {
             navigate(key);
         }
-        setdropDown(prevState => {
-            return { ...prevState, [key]: !prevState[key] };
-        });
+        dispatch(setDropdown(key));
     };
 
     const handleOptionClick = (nav, option, key) => {
-        handleDropDown(key);
         navigate(nav.toLowerCase() + '/' + Slugify(option));
     };
 
     useEffect(() => {
-        // console.log(hoveringOn);
-    }, [hoveringOn]);
 
-    const sideNavObject = {
-        Dashboard: {
-            path: 'dashboard'
-        },
-        Users: {
-            path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
-        }
-    };
+    }, []);
+
     useGlobalSignout();
+
+    console.log(role, 'role');
+    console.log(sideNavObject[role], 'role');
 
     return (
         <>
@@ -111,10 +102,10 @@ const SideBar = ({ role }) => {
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
                     <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4'>
 
-                        {Object.keys(sideNavObject).map((nav) => (
+                        {sideNavObject && sideNavObject[role] && Object.keys(sideNavObject[role]).map((nav) => (
                             <div key={nav} className='flex flex-col'>
                                 <div className={`flex gap-2 justify-between px-2 py-1 pr-3 rounded-[6px] cursor-pointer
-                    ${location.pathname.includes(nav.toLowerCase()) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(nav.toLowerCase(), sideNavObject[nav]?.dropdown)}>
+                    ${location.pathname.includes(nav.toLowerCase()) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(nav.toLowerCase(), sideNavObject[role][nav]?.dropdown)}>
                                     <div className='flex gap-2 items-center'>
                                         <Image src={`${hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? `active-${nav.toLowerCase()}` : nav.toLowerCase()}`} />
                                         <div className={`font-[400] text-[14px] leading-[24px]
@@ -122,13 +113,13 @@ const SideBar = ({ role }) => {
                                             {nav}
                                         </div>
                                     </div>
-                                    {sideNavObject[nav]?.dropdown && <Image src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
+                                    {sideNavObject[role][nav]?.dropdown && <Image className={`duration-300 ${dropdown[nav.toLowerCase()] ? 'rotate-180' : ''}`} src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
                                 </div>
-                                {dropDown.users &&
+                                {dropdown[nav.toLowerCase()] &&
                                 <>
-                                    {sideNavObject[nav]?.dropdown?.map((option) => (
+                                    {sideNavObject[role][nav]?.dropdown?.map((option) => (
                                         <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
-                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[nav]?.dropdown)} >
+                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown)} >
                                             {option}
                                         </div>
                                     ))}

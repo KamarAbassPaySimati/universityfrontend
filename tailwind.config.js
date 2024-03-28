@@ -37,10 +37,14 @@ export default {
                 'accent-positive': '#13B681',
                 'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
+                'neutral-grey': '#F8F8F8',
 
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
+            },
+            height: {
+                tableHeight: 'calc(100vh - 380px)'
             }
         }
     },

@@ -15,17 +15,16 @@ const RegistrationSuccessful = ({ email }) => {
         } else {
             setToastError('Something went wrong, please try again');
         }
-        console.log(response);
     };
     return (
-        <div className='h-[calc(100vh-240px)] flex justify-center items-center text-neutral-primary
+        <div className='min-h-[calc(100vh-176px)] min-w-[700px] flex justify-center items-center text-neutral-primary
         font-[400] text-[14px] leading-[22px]'>
             <div className='bg-background-light py-8 px-24 rounded-[6px] relative
             flex flex-col justify-center items-center text-center'>
                 <Image className='absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2' src='registrationSuccessful' />
                 <div className='z-20'>
                     <h1 className='text-[30px] font-[700] leading-[40px] text-primary-normal'>Welcome to Paymaart!</h1>
-                    <p data-testid="registration_success_message" 
+                    <p data-testid="registration_success_message"
                         className='text-[20px] font-[400] leading-[28px] w-[691px] mt-9'>
                         Registration is a vital step in realising our vision of universal e-payments.
                         Thank you for joining us on this transformative journey.
