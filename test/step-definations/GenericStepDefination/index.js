@@ -58,12 +58,12 @@ When('I click on the sort by {string}', async function (sortBy) {
 
 When('I click on filter tab', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await driver.wait(until.elementLocated(By.css("[data-testid='filters-tab']"))).click();
+    await driver.wait(until.elementLocated(By.css("[data-testid='filter-tab']"))).click();
 });
 
 Then('I should see filter popup modal', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await driver.wait(until.elementLocated(By.css("[data-testid='filters-modal']")));
+    await driver.wait(until.elementLocated(By.css("[data-testid='filter-modal']")));
 });
 
 When('I click on paginate next page', async function () {

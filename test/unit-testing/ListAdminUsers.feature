@@ -1,4 +1,3 @@
-@1.24
 Feature: Paymaart - Admin Web -Admin List
     As a super admin/admin, I want an option to view all the admin users added to the platform.
     Conditions of Satisfaction
