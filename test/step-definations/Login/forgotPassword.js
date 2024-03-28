@@ -61,6 +61,9 @@ Given('I should see option to enter my new password', async function () {
 
 When('I enter password as {string} and confirm password as {string}', async function (new_password, confirm_new_password) {
     await new Promise(resolve => setTimeout(resolve, 500));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]')));
+    await driver.wait(until.elementIsVisible(element));
+
     await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="new_confirm_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
 

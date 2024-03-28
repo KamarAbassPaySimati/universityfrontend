@@ -1,5 +1,5 @@
 const { When, Then } = require('@cucumber/cucumber');
-const until = require('selenium-webdriver').until;
+const { until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 Then('I should read a message stating that {string}', { timeout: 35000 }, async function (errorMessage) {
     // callback(null)
@@ -29,4 +29,8 @@ Then('I should be redirected to the {string} page', { timeout: 10000 }, async fu
 When('I am logged into the application', { timeout: 10000 }, async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
     await driver.wait(until.urlIs('http://localhost:3000/dashboard'));
+});
+
+Then('I should view {string} page not found screen', async function (page) {
+    await driver.wait(until.elementLocated(By.xpath('//*[text()="Page Not Found"]')));
 });
