@@ -66,9 +66,9 @@ const CardHeader = ({
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
                 {header &&
                 <div className='mx-10 mt-8 mb-6 px-8 py-7 bg-[#FFFFFF] text-[30px] font-[700] leading-[40px]
-                 text-header-dark flex flex-row justify-between'>
+                 text-header-dark flex flex-row justify-between border-b border-neutral-outline'>
                     {header}
-                    {buttonText && <button onClick={() => { console.log(navigationPath, 'ijhj'); navigate(navigationPath); }}
+                    {buttonText && <button onClick={() => { navigate(navigationPath); }}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                         <img src='/images/onboardIcon.svg'
@@ -79,7 +79,7 @@ const CardHeader = ({
                 }
                 {!table
                     ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
-                flex flex-col bg-[#FFFFFF] 
+                flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 ${header ? 'max-h-[calc(100vh-240px)]' : ''} 
                 ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
                         {children}

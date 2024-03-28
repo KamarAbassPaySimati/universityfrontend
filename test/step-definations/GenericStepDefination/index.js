@@ -104,4 +104,6 @@ Then('I should be navigated to page {int}', async function (expectedPage) {
     // eslint-disable-next-line max-len
     const currentPage = await driver.wait(until.elementLocated(By.css('[data-testid="paginator"] [aria-current="page"]'))).getText();
     assert.equal(currentPage, expectedPage);
+Then('I should view {string} page not found screen', async function (page) {
+    await driver.wait(until.elementLocated(By.xpath('//*[text()="Page Not Found"]')));
 });

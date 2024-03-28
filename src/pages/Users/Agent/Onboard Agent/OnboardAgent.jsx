@@ -18,6 +18,7 @@ import verificationValidation from './verificationValidation';
 import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
 import RegistrationSuccessful from './components/RegistrationSuccessful';
+import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 
 const OnboardAgent = () => {
     const initialState = {
@@ -85,6 +86,13 @@ const OnboardAgent = () => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
         }
+        if (enteredLetter && (id === 'firstName' || id === 'lastName' || id === 'middleName') && /\d/.test(enteredLetter)) {
+            return;
+        }
+        if (id === 'email' && e.target.value.includes("'")) {
+            e.preventDefault(); // Prevent entering the single quote
+            return;
+        }
         if (id === 'lastName') {
             setFormData(prevState => {
                 return { ...prevState, [id]: e.target.value.toUpperCase() };
@@ -92,12 +100,18 @@ const OnboardAgent = () => {
             return;
         }
         if (id === 'email') {
+            setVerified(prevState => {
+                return { ...prevState, [id]: false };
+            });
             setFormData(prevState => {
                 return { ...prevState, [id]: e.target.value.toLowerCase() };
             });
             return;
         }
         if (id === 'phoneNumber') {
+            setVerified(prevState => {
+                return { ...prevState, [id]: false };
+            });
             const formattedPhoneNumber = formatInputPhone(e.target.value);
             setFormData(prevState => {
                 return { ...prevState, [id]: formattedPhoneNumber };
@@ -156,12 +170,16 @@ const OnboardAgent = () => {
             return;
         }
 
+        setFormErrors((prevState) => {
+            return { ...prevState, email: '' };
+        });
+
         const payload = {
             first_name: formData.firstName,
             middle_name: formData.middleName,
             last_name: formData.lastName,
             type: 'email',
-            value: formData.email
+            value: addBackslashBeforeApostrophe(formData.email)
         };
 
         if (text.includes('Otp')) {
@@ -171,6 +189,8 @@ const OnboardAgent = () => {
         }
         const response = await dataService.PostAPIAgent(sendOtp, payload);
         if (!response.error) {
+            setOtp('');
+            setOtpError('');
             setVerify(prevState => {
                 return { ...prevState, email: true };
             });
@@ -211,6 +231,10 @@ const OnboardAgent = () => {
             return;
         }
 
+        setFormErrors((prevState) => {
+            return { ...prevState, phoneNumber: '' };
+        });
+
         const payload = {
             first_name: formData.firstName,
             middle_name: formData.middleName,
@@ -227,6 +251,8 @@ const OnboardAgent = () => {
         }
         const response = await dataService.PostAPIAgent(sendOtp, payload);
         if (!response.error) {
+            setOtp('');
+            setOtpError('');
             setVerify(prevState => {
                 return { ...prevState, phoneNumber: true };
             });
@@ -316,7 +342,7 @@ const OnboardAgent = () => {
             .filter(item => item.answer) // Filter out objects without an answer property
             .map((item, index) => ({
                 question_id: item.id,
-                answer: item.answer
+                answer: addBackslashBeforeApostrophe(item.answer)
             }));
     };
 
@@ -327,12 +353,12 @@ const OnboardAgent = () => {
         }
 
         const payload = {
-            first_name: formData.firstName,
-            middle_name: formData.middleName,
-            last_name: formData.lastName,
+            first_name: addBackslashBeforeApostrophe(formData.firstName),
+            middle_name: addBackslashBeforeApostrophe(formData.middleName),
+            last_name: addBackslashBeforeApostrophe(formData.lastName),
             country_code: countryCode,
             phone_number: formData.phoneNumber.replace(/\s/g, ''),
-            email: formData.email,
+            email: addBackslashBeforeApostrophe(formData.email),
             email_otp_id: otpId.email,
             phone_otp_id: otpId.phoneNumber,
             security_questions: transformArray(securityQuestions)
@@ -348,8 +374,7 @@ const OnboardAgent = () => {
     };
 
     useEffect(() => {
-        // console.log(resendCount, 'count');
-    }, [resendCount]);
+    }, []);
 
     return (
         <CardHeader
@@ -359,7 +384,7 @@ const OnboardAgent = () => {
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
-                ? <RegistrationSuccessful email={formData.email} />
+                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} />
                 : <>
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details
@@ -424,8 +449,8 @@ const OnboardAgent = () => {
                             setEnteredLetter={setEnteredLetter}
                             onClick={handleVerifyEmail}
                             verified={verified.email}
-                            inputDisabled={verified.email || verify.email}
-                            buttonDisabled={formData.email.length < 1 || isResendLoading}
+                            inputDisabled={verify.email}
+                            buttonDisabled={formData.email.length < 1 || isResendLoading || loadingOtpVerify}
                             isLoading={loadingEmailVerify}
                             maxLength={100}
                         />
@@ -469,14 +494,16 @@ const OnboardAgent = () => {
                             setEnteredLetter={setEnteredLetter}
                             onClick={handleVerifyPhoneNumber}
                             verified={verified.phoneNumber}
-                            inputDisabled={verified.phoneNumber || verify.phoneNumber}
-                            buttonDisabled={formData.phoneNumber.length < 1 || isResendLoading}
+                            inputDisabled={verify.phoneNumber}
+                            buttonDisabled={formData.phoneNumber.length < 1 || isResendLoading || loadingOtpVerify}
                             isLoading={loadingPhoneVerify}
                             phoneNumber={true}
                             countryCode={countryCode}
                             setCountryCode={setCountryCode}
                             maxLength={numberMaxLength}
                             setNumberMaxLength={setNumberMaxLength}
+                            setVerified={setVerified}
+                            verify={verify.phoneNumber}
                         />
                         {verify.phoneNumber &&
                             <InputFieldWithButton
@@ -546,6 +573,7 @@ const OnboardAgent = () => {
                                         label={securityQuestion?.question}
                                         placeholder='Answer'
                                         notShowErrorBottom={true}
+                                        maxLength={100}
                                     />))}
                             </div>}
                         {/* checkbox */}

@@ -58,7 +58,7 @@ const Agent = () => {
             header='Agent list'
             minHeightRequired={true}
             buttonText='Register Agent'
-            navigationPath='/users/agents/onboard-agent'
+            navigationPath='/users/agents/register-agent'
             table={true}
         >
             <div>

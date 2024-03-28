@@ -49,16 +49,16 @@ const OnboardAdmin = () => {
             });
             return;
         }
-
-        setFormData(prevState => {
-            return { ...prevState, [id]: e.target.value };
-        });
         if (id === 'phoneNumber') {
             const formattedPhoneNumber = formatInputPhone(e.target.value);
             setFormData(prevState => {
                 return { ...prevState, [id]: formattedPhoneNumber };
             });
+            return;
         }
+        setFormData(prevState => {
+            return { ...prevState, [id]: e.target.value };
+        });
     };
 
     const handleClick = async (e) => {
@@ -92,15 +92,14 @@ const OnboardAdmin = () => {
                     middle_name: addBackslashBeforeApostrophe(formData.middleName),
                     last_name: addBackslashBeforeApostrophe(formData.lastName),
                     country_code: '+265',
-                    email: formData.email,
+                    email: addBackslashBeforeApostrophe(formData.email),
                     role: formData.role,
                     phone_number: formData.phoneNumber.replace(/\s/g, '')
                 };
                 const response = await dataService.PostAPI(adminOnboard, payload);
-                console.log(response, 'Set New Password response:');
                 if (!response.error) {
                     setIsLoading(false);
-                    setToastSuccess(`${formData.role} onboarded successfully `);
+                    setToastSuccess(`${formData.role} registered successfully`);
                     navigate('/users/admins');
                     // take back to listing
                 } else if (response?.data?.status === 409) {
@@ -130,23 +129,9 @@ const OnboardAdmin = () => {
         });
     };
     const handleFocus = (id) => {
-        if (id === 'firstName') {
-            setFormErrors(prevState => {
-                return { ...prevState, [id]: '' };
-            });
-        } else if (id === 'middleName') {
-            setFormErrors(prevState => {
-                return { ...prevState, [id]: '' };
-            });
-        } else if (id === 'lastName') {
-            setFormErrors(prevState => {
-                return { ...prevState, [id]: '' };
-            });
-        } else if (id === 'email') {
-            setFormErrors(prevState => {
-                return { ...prevState, [id]: '' };
-            });
-        }
+        setFormErrors(prevState => {
+            return { ...prevState, [id]: '' };
+        });
     };
     const clearPhoneNumberError = () => {
         setFormErrors(prevErrors => ({

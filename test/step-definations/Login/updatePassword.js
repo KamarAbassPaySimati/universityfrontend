@@ -6,7 +6,7 @@ const webdriver = require('selenium-webdriver');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const Keys = webdriver.Key;
-const { driver } = require('./Driver.js');
+const { driver } = require('../Driver.js');
 
 Before('@wait_for_few_time', async function () {
     await new Promise(resolve => setTimeout(resolve, 3500));
