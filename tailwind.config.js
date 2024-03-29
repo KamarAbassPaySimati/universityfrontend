@@ -44,7 +44,19 @@ export default {
                 'header-dark': '#252C32'
             },
             height: {
-                tableHeight: 'calc(100vh - 380px)'
+                tableHeight: 'calc(100vh - 370px)',
+                tablebodyHeight: 'calc(100vh - 411px)',
+                noDataError: 'calc(100vh - 360px)'
+            },
+            minHeight: {
+                tableHeight: 'calc(100vh - 370px)',
+                tablebodyHeight: 'calc(100vh - 411px)',
+                noDataError: 'calc(100vh - 360px)'
+            },
+            maxHeight: {
+                tableHeight: 'calc(100vh - 370px)',
+                tablebodyHeight: 'calc(100vh - 411px)',
+                noDataError: 'calc(100vh - 360px)'
             }
         }
     },

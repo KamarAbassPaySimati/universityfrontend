@@ -90,9 +90,6 @@ const SideBar = ({ role }) => {
 
     useGlobalSignout();
 
-    console.log(role, 'role');
-    console.log(sideNavObject[role], 'role');
-
     return (
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>

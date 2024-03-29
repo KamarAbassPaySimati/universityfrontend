@@ -36,7 +36,7 @@ const Topbar = ({
 
     const handleSearchParams = (key, value) => {
         const params = Object.fromEntries(searchParams);
-        params.page = 1;
+        // params.page_number = 1;
         if (key === 'search') params[key] = encodeURIComponent(value);
         else params[key] = value;
         if (params.search === '') delete params.search;
@@ -53,11 +53,11 @@ const Topbar = ({
         setFilterValues(initialState);
     };
     useEffect(() => {
-        // Skip the first render
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        }
+        // // Skip the first render
+        // if (isFirstRender.current) {
+        //     isFirstRender.current = false;
+        //     return;
+        // }
         const filteredOptions = Object.entries(filterValues).filter(
             ([_, value]) => Object.values(value).some((v) => v)
         ).map(([key, value]) => ({ [key]: Object.keys(value).filter((subKey) => value[subKey]).join(',') }));

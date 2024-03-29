@@ -33,18 +33,20 @@ const agentSlice = createSlice({
             .addCase(AgentList.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.List = [];
             })
-            .addCase(AgentList.fulfilled, (state, action) => {
+            .addCase(AgentList.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                if (!action.payload.error && action.payload.data.success_status) {
-                    state.List = action.payload.data;
+                console.log(payload, 'payload');
+                if (payload?.data?.data?.success_status) {
+                    state.List = payload?.data;
                 } else {
-                    state.error = action.payload.data.message;
+                    state.error = payload?.data;
                 }
             })
-            .addCase(AgentList.rejected, (state, action) => {
+            .addCase(AgentList.rejected, (state, { payload }) => {
                 state.loading = false;
-                state.error = action.payload.message.message;
+                state.error = payload.message;
             });
     }
 });
