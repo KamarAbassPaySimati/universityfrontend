@@ -10,7 +10,7 @@ const initialState = {
 export const AdminList = createAsyncThunk('adminUsers', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     const safeUrl =
-        `get-admin?${new URLSearchParams(searchParams).toString()}`;// api end point
+        `get-admin?${searchParams.toString()}`;// api end point
 
     try {
         const res = await dataService.GetAPI(safeUrl);

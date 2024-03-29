@@ -57,8 +57,8 @@ const Filter = ({
                                     {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
                                             key={option} // active
-                                            id={option.toLowerCase()} // active
-                                            valueOf={key.toLowerCase()} // status
+                                            id={option} // active
+                                            valueOf={key} // status
                                             checkboxText={option} // active
                                             setFilterValues={setFilterValues}
                                             filterValues={filterValues}
