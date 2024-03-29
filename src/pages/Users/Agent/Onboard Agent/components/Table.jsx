@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from '../../../../../components/Image/Image';
 import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
 import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
@@ -9,13 +9,16 @@ import { Tooltip } from 'react-tooltip';
 
 const Table = ({ loading, error, List, handleSortByName, notFound, searchParams }) => {
     const param = Object.fromEntries(searchParams);
+
+    useEffect(() => {
+        console.log(notFound, 'not');
+    }, []);
     return (
         <>
             <table className='w-full min-w-max'>
                 {(List?.data?.length > 0 || loading) &&
-                <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]
-                    border-y border-neutral-outline sticky top-0 left-0 bg-[#fff] !m-0'>
-                    <tr>
+                <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
+                    <tr className='border-y border-neutral-outline sticky top-0 left-0 bg-[#fff] !m-0 z-10'>
                         <th className='py-2 px-[10px] text-center font-[400]'>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
                             <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
@@ -31,11 +34,11 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                 </thead>
                 }
                 {loading
-                    ? <Shimmer column={9} row={10}/>
-                    : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400] overflow-auto scrollBar'>
+                    ? <Shimmer column={6} row={10}/>
+                    : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-y border-neutral-outline h-[48px]'>
-                                <td className='py-2 px-[10px] text-center'>{user?.paymaart_id || '-'}</td>
+                                <td title={user?.paymaart_id} className='py-2 px-[10px] text-center truncate'>{user?.paymaart_id || '-'}</td>
                                 <td className='py-2 px-[10px]'>{`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}</td>
                                 <td className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
@@ -74,14 +77,13 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                     </tbody>
                 }
             </table>
-            {notFound && <NoDataError className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
             {!notFound && error &&
             (<NoDataError heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading && !(param.search || param.status) &&
             (<NoDataError heading='No data found' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&
             (param.status || param.search) &&
-            (<NoDataError heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
+            (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
         </>
     );
 };

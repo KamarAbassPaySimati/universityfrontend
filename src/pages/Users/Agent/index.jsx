@@ -8,18 +8,14 @@ import objectToQueryString from '../../../CommonMethods/objectToQueryString';
 import { useDispatch, useSelector } from 'react-redux';
 import { AgentList } from './agentSlice';
 import GlobalContext from '../../../components/Context/GlobalContext';
-
+import NoDataError from '../../../components/NoDataError/NoDataError';
 const Agent = () => {
-    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+    const [searchParams, setSearchParams] = useSearchParams({ });
     const [notFound, setNotFound] = useState(false);
 
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentUsers);
     const { setToastError } = useContext(GlobalContext);
-
-    if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
-        setSearchParams({ page: 1 });
-    }
 
     const filterOptions = {
         Status: ['Active', 'Inactive']
@@ -27,10 +23,12 @@ const Agent = () => {
 
     const GetList = useCallback(async () => {
         let params = Object.fromEntries(searchParams);
+        if (Object.keys(params).length === 0) {
+            return;
+        }
         delete params.tab;
         try {
             params = objectToQueryString(params);
-            console.log(params);
             dispatch(AgentList(params));
         } catch (error) {
             console.error(error);
@@ -49,18 +47,18 @@ const Agent = () => {
     };
 
     useEffect(() => {
+        console.log('first how may times');
         GetList();
-        console.log(searchParams, 'seacrh');
-    }, [searchParams]);
+    }, [GetList]);
 
-    // useEffect(() => {
-    //     const params = Object.fromEntries(searchParams);
-    //     if (List?.data?.length !== 0) {
-    //         console.log('i am here');
-    //         setNotFound(false);
-    //         params.page_number = 1;
-    //     }
-    // }, [List]);
+    useEffect(() => {
+        const params = Object.fromEntries(searchParams);
+        if (List?.data?.length !== 0) {
+            console.log('i am here');
+            setNotFound(false);
+            params.page = 1;
+        }
+    }, [List]);
 
     useEffect(() => {
         console.log(error, 'error');
@@ -75,6 +73,12 @@ const Agent = () => {
 
     /// Dont remove the below code it is being used
     const param = Object.fromEntries(searchParams);
+
+    useEffect(() => {
+        if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
+            setSearchParams({ page: 1 });
+        }
+    }, []);
 
     return (
         <CardHeader
@@ -98,7 +102,7 @@ const Agent = () => {
                     />
                 </div>
                 }
-                <div className='overflow-auto scrollBar h-tableHeight max-h-tableHeight'>
+                {!notFound && <div className='overflow-auto scrollBar h-tableHeight'>
                     <Table
                         error={error}
                         loading={loading}
@@ -107,14 +111,17 @@ const Agent = () => {
                         notFound={notFound}
                         searchParams={searchParams}
                     />
-                </div>
-                {!loading && Math.ceil(List?.totalRecords / 10) > 1 &&
-                    <Paginator
-                        currentPage={searchParams.get('page')}
-                        totalPages={Math.ceil(List.totalRecords / 10)}
-                        setSearchParams={setSearchParams}
-                        searchParams={searchParams}
-                    />}
+                </div>}
+                {notFound &&
+                <NoDataError
+                    className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
+                {!loading && !error && !notFound && <Paginator
+                    currentPage={searchParams.get('page')}
+                    totalPages={Math.ceil(List?.totalRecords / 10)}
+                    setSearchParams={setSearchParams}
+                    searchParams={searchParams}
+                    totalRecords={List?.totalRecords}
+                />}
             </div>
         </CardHeader>
     );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from '../Image/Image';
 import Filter from '../Filter/Filter';
 
@@ -10,6 +10,7 @@ const Topbar = ({
 }) => {
     const [timer, setTimer] = useState(null);
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
+    const isFirstRender = useRef(true);
 
     const initialState = {};
     Object.entries(filterOptions).forEach(([key, values]) => {
@@ -33,7 +34,7 @@ const Topbar = ({
 
     const handleSearchParams = (key, value) => {
         const params = Object.fromEntries(searchParams);
-        params.page_number = 1;
+        params.page = 1;
         if (key === 'search') params[key] = encodeURIComponent(value);
         else params[key] = value;
         if (params.search === '') delete params.search;
@@ -51,13 +52,30 @@ const Topbar = ({
     };
 
     useEffect(() => {
+        // Skip the first render
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         const filteredOptions = Object.entries(filterValues).filter(
             ([_, value]) => Object.values(value).some((v) => v)
         ).map(([key, value]) => ({ [key]: Object.keys(value).filter((subKey) => value[subKey]).join(',') }));
 
+        const finalValue = filteredOptions.reduce((acc, option) => ({ ...acc, ...option }), {});
+
+        if (Object.entries(finalValue).length === 0) {
+            setSearchParams({ page: 1 }); // Clear all search params and set page to 1
+            console.log('Cleared search params due to empty filteredOptions');
+            return;
+        }
+
+        const params = Object.fromEntries(searchParams);
         setSearchParams((prevParams) => ({
             ...prevParams,
-            ...filteredOptions.reduce((acc, option) => ({ ...acc, ...option }), {})
+            ...params,
+            ...{ page: 1 },
+            ...finalValue
         }));
     }, [filterValues]);
 
@@ -69,8 +87,9 @@ const Topbar = ({
                 data-testid="search"
                 onChange={handleSearch}
                 placeholder="Paymaart ID, name or phone number "
-                className='hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
-                    outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8'
+                className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
+                    outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8 
+                    ${search?.length > 1 ? 'bg-[#F8F8F8]' : ''}`}
             />
             <Image
                 src={search?.length > 1 ? 'small_search_icon' : 'search_icon'}

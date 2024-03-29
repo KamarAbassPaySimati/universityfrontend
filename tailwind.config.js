@@ -46,17 +46,17 @@ export default {
             height: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
-                noDataError: 'calc(100vh - 360px)'
+                noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
             },
             minHeight: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
-                noDataError: 'calc(100vh - 360px)'
+                noDataError: 'calc(100vh - 240px)'
             },
             maxHeight: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
-                noDataError: 'calc(100vh - 360px)'
+                noDataError: 'calc(100vh - 240px)'
             }
         }
     },

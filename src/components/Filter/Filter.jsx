@@ -29,7 +29,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilte
                 content="Filter"
             />
             {isFilterOpen && <div className=''>
-                <div className="absolute top-[35px] right-1 rounded-[8px] z-10 bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
+                <div className="absolute top-[35px] right-1 rounded-[8px] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
                         <div className='font-[600]'>
                             Filter agent list

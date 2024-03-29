@@ -38,7 +38,7 @@ const agentSlice = createSlice({
             .addCase(AgentList.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 console.log(payload, 'payload');
-                if (payload?.data?.data?.success_status) {
+                if (!payload?.error) {
                     state.List = payload?.data;
                 } else {
                     state.error = payload?.data;
@@ -46,7 +46,7 @@ const agentSlice = createSlice({
             })
             .addCase(AgentList.rejected, (state, { payload }) => {
                 state.loading = false;
-                state.error = payload.message;
+                state.error = payload?.message;
             });
     }
 });
