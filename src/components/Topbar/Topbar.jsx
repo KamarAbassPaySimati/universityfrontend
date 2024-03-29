@@ -14,16 +14,6 @@ const Topbar = ({
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
     const isFirstRender = useRef(true);
 
-    const initialState = {};
-    Object.entries(filterOptions).forEach(([key, values]) => {
-        initialState[key.toLowerCase()] = {};
-        values.forEach((value) => {
-            initialState[key.toLowerCase()][value.toLowerCase()] = false;
-        });
-    });
-
-    const [filterValues, setFilterValues] = useState(initialState);
-
     const handleSearch = (e) => {
         const newValue = e.target.value;
         setSearch(newValue);
@@ -42,6 +32,21 @@ const Topbar = ({
         if (params.search === '') delete params.search;
         setSearchParams({ ...params });
     };
+    const handleSearchParamsForFilter = (key, value) => {
+        const params = Object.fromEntries(searchParams);
+        params.page = 1;
+        if (searchParams.get(key) !== null) {
+            if (!params[key].split(',').includes(value)) {
+                params[key] = `${searchParams.get(key)},${value}`;
+            } else {
+                params[key] = params[key].split(',').filter(item => item !== value).join();
+            }
+        } else {
+            params[key] = value;
+        }
+        if (params[key] === '') delete params[key];
+        setSearchParams({ ...params });
+    };
 
     const handleClearSearch = () => {
         setSearch('');
@@ -50,26 +55,17 @@ const Topbar = ({
 
     const handleClearFilter = () => {
         // Reset filterValues to an empty object or default values
-        setFilterValues(initialState);
+        const params = Object.fromEntries(searchParams);
+        delete params.role;
+        delete params.status;
+        setSearchParams({ ...params });
     };
     useEffect(() => {
         // Skip the first render
         if (isFirstRender.current) {
             isFirstRender.current = false;
-            return;
         }
-
-        const filteredOptions = Object.entries(filterValues).filter(
-            ([_, value]) => Object.values(value).some((v) => v)
-        ).map(([key, value]) => ({ [key]: Object.keys(value).filter((subKey) => value[subKey]).join(',') }));
-
-        const params = Object.fromEntries(searchParams);
-        setSearchParams((prevParams) => ({
-            ...prevParams,
-            ...params,
-            ...filteredOptions.reduce((acc, option) => ({ ...acc, ...option }), {})
-        }));
-    }, [filterValues]);
+    }, []);
 
     return (
         <div>
@@ -95,9 +91,13 @@ const Topbar = ({
                     data-testid='search-btn'
                     className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer bg-[#F8F8F8]"
                 />}
-                <Filter handleClearFilter={handleClearFilter}
-                    setFilterValues={setFilterValues}
-                    filterValues={filterValues} filterOptions={filterOptions} filterType={filterType}/>
+                <Filter
+                    handleClearFilter={handleClearFilter}
+                    filterOptions={filterOptions}
+                    filterType={filterType}
+                    handleSearchParams={handleSearchParamsForFilter}
+                    searchParams={searchParams}
+                />
             </div>
         </div>
     );

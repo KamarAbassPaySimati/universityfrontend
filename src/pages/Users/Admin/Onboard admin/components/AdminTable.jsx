@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Image from '../../../../../components/Image/Image';
 import Shimmer from '../../../../../components/Shimmers/Shimmer';
@@ -51,7 +52,8 @@ const AdminTable = (
                             <td title = {user?.user_type}
                                 className='py-2 px-[10px] text-left truncate'>{user?.user_type || '-'}</td>
                             <td className='py-2 px-[10px] text-left truncate'>
-                                <span className={ user?.created_at ? isTimestampFiveMinutesAgo(user?.created_at) ? 'text-[#4F5962]' : 'text-accent-positive' : 'text-[#4F5962]'}>
+                                <span
+                                    className={ user?.created_at ? isTimestampFiveMinutesAgo(user?.created_at) ? 'text-[#4F5962]' : 'text-accent-positive' : 'text-[#4F5962]'}>
                                     { user?.created_at
                                         ? isTimestampFiveMinutesAgo(user?.created_at)
                                             ? formatTimestamp(user?.created_at)

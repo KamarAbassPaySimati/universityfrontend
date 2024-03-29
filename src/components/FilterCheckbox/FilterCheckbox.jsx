@@ -1,6 +1,31 @@
 import React from 'react';
 
-export default function FilterCheckbox ({ id, filterValues, setFilterValues, valueOf, checkboxText }) {
+export default function FilterCheckbox ({
+    id,
+    searchParams,
+    valueOf,
+    checkboxText,
+    handleSearchParams
+}) {
+    /**
+     * The function `handleOnChangeCheckbox` updates the state by toggling the boolean value of a
+     * specific checkbox identified by `valueOf` and `id`.
+     */
+    const handleOnChangeCheckbox = () => {
+        handleSearchParams(valueOf, id);
+    };
+    const getCheckedValue = () => {
+        const params = Object.fromEntries(searchParams);
+        if (params[valueOf]) {
+            if (params[valueOf].split(',').includes(id)) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+    };
     return (
         <div className="filter-checkbox checkbox relative">
             <input
@@ -8,16 +33,9 @@ export default function FilterCheckbox ({ id, filterValues, setFilterValues, val
                 type="checkbox"
                 value={id}
                 id={id}
-                checked={filterValues?.[valueOf]?.[id]}
-                onChange={() => {
-                    setFilterValues(prevState => ({
-                        ...prevState,
-                        [valueOf]: {
-                            ...prevState?.[valueOf],
-                            [id]: !prevState?.[valueOf]?.[id]
-                        }
-                    }));
-                }}
+                checked={getCheckedValue()}
+                // checked={filterValues?.[valueOf]?.[id]}
+                onChange={() => handleOnChangeCheckbox()}
             />
             <label
                 htmlFor={id}
