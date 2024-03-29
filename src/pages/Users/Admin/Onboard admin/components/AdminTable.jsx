@@ -51,13 +51,12 @@ const AdminTable = (
                             <td title = {user?.user_type}
                                 className='py-2 px-[10px] text-left truncate'>{user?.user_type || '-'}</td>
                             <td className='py-2 px-[10px] text-left truncate'>
-                                <span className={ user?.created_at ? isTimestampFiveMinutesAgo(user?.created_at) ? 'text-[#4F5962]' : 'text-accent-positive' : 'text-[#4F5962]'}>
-                                    { user?.created_at
-                                        ? isTimestampFiveMinutesAgo(user?.created_at)
-                                            ? formatTimestamp(user?.created_at)
+                                <span className={ user?.last_logged_in ? isTimestampFiveMinutesAgo(user?.last_logged_in) ?   'text-[#4F5962]': 'text-accent-positive' : 'text-[#4F5962]'}>
+                                    { user?.last_logged_in
+                                        ? isTimestampFiveMinutesAgo(user?.last_logged_in)
+                                            ? formatTimestamp(user?.last_logged_in)
                                             : 'Online'
                                         : '-'
-
                                     }
                                 </span>
                             </td>

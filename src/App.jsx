@@ -31,6 +31,7 @@ function App (props) {
         Hub.listen('auth', async ({ payload }) => {
             switch (payload.event) {
             case 'tokenRefresh':
+            case 'signedIn':
                 // Call api
                 try {
                     const response = await dataService.PatchAPI(updateLoggedIn);
