@@ -36,7 +36,7 @@ const Topbar = ({
 
     const handleSearchParams = (key, value) => {
         const params = Object.fromEntries(searchParams);
-        // params.page_number = 1;
+        params.page = 1;
         if (key === 'search') params[key] = encodeURIComponent(value);
         else params[key] = value;
         if (params.search === '') delete params.search;
@@ -61,7 +61,6 @@ const Topbar = ({
         const filteredOptions = Object.entries(filterValues).filter(
             ([_, value]) => Object.values(value).some((v) => v)
         ).map(([key, value]) => ({ [key]: Object.keys(value).filter((subKey) => value[subKey]).join(',') }));
-
         setSearchParams((prevParams) => ({
             ...prevParams,
             ...filteredOptions.reduce((acc, option) => ({ ...acc, ...option }), {})

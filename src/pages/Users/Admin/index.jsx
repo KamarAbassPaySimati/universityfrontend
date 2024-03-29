@@ -67,8 +67,8 @@ const Admin = () => {
             navigationPath='/users/admins/register-admin'
             table={true}
         >
-            <div>
-                <div className='sticky top-0 left-0 bg-[#fff] h-12 '>
+            <div className='relative thead-border-bottom'>
+                <div className='bg-[#fff] h-12  border-b border-[#E5E9EB]'>
                     <Topbar
                         setSearchParams={setSearchParams}// pass this as its getting updated
                         searchParams={searchParams}// pass this because its used

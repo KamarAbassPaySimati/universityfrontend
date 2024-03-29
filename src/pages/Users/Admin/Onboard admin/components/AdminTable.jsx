@@ -16,8 +16,8 @@ const AdminTable = (
     console.log(error);
     return (
         <table className='w-full'>
-            <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px] '>
-                <tr className=' border-y border-neutral-outline'>
+            <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
+                <tr className=' border-b border-neutral-outline sticky top-0 bg-white'>
                     <th className='py-2 px-[10px] text-left font-[400]'>Paymaart ID</th>
                     <th className='py-2 px-[10px] text-left font-[400]'>
                         <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
@@ -37,7 +37,7 @@ const AdminTable = (
                 ? <Shimmer column={8} row={10} />
                 : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                     {List?.data?.map((user, index) => (
-                        <tr key={index} className='border-y border-neutral-outline h-[48px]'>
+                        <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                             <td title = {user?.paymaart_id}
                                 className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
                             <td title = {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}
