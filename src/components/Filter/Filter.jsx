@@ -5,7 +5,15 @@ import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-const Filter = ({ setFilterValues, filterValues, filterOptions, filterType, handleClearFilter }) => {
+const Filter = ({
+    setFilterValues,
+    filterValues,
+    filterOptions,
+    filterType,
+    handleClearFilter,
+    handleSearchParams,
+    searchParams
+}) => {
     const filterDiv = useRef();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -54,6 +62,8 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, filterType, hand
                                             checkboxText={option} // active
                                             setFilterValues={setFilterValues}
                                             filterValues={filterValues}
+                                            handleSearchParams={handleSearchParams}
+                                            searchParams={searchParams}
                                         />
                                     ))}
                                 </div>
