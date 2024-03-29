@@ -80,7 +80,7 @@ const Topbar = ({
     }, [filterValues]);
 
     return (
-        <div className="relative py-2 border-b border-neutral-outline">
+        <div className="relative py-2">
             <input
                 type="text"
                 value={search}

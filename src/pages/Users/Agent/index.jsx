@@ -91,10 +91,10 @@ const Agent = () => {
             navigationPath='/users/agents/register-agent'
             table={true}
         >
-            <div>
+            <div className='relative thead-border-bottom'>
                 {(List?.data?.length !== 0 ||
                 (param.search || param.status)) && !notFound &&
-                <div className='sticky z-10 top-0 left-0 bg-[#fff] h-12'>
+                <div className='sticky z-10 top-0 left-0 bg-[#fff] h-12 border-b border-neutral-outline'>
                     <Topbar
                         setSearchParams={setSearchParams}
                         searchParams={searchParams}

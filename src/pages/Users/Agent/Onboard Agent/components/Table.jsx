@@ -18,7 +18,7 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
             <table className='w-full min-w-max'>
                 {(List?.data?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
-                    <tr className='border-y border-neutral-outline sticky top-0 left-0 bg-[#fff] !m-0 z-10'>
+                    <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
                         <th className='py-2 px-[10px] text-center font-[400]'>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
                             <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
@@ -39,7 +39,7 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-y border-neutral-outline h-[48px]'>
                                 <td title={user?.paymaart_id} className='py-2 px-[10px] text-center truncate'>{user?.paymaart_id || '-'}</td>
-                                <td className='py-2 px-[10px]'>{`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}</td>
+                                <td className='py-2 px-[10px]'>{`${user?.name}`}</td>
                                 <td className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
                                 <td className='py-2 px-[10px]'>
