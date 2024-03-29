@@ -7,6 +7,7 @@ import objectToQueryString from '../../../CommonMethods/objectToQueryString';
 import { AdminList } from './AdminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Slugify from '../../../CommonMethods/Sulgify';
+import Paginator from '../../../components/Paginator/Paginator';
 
 const Admin = () => {
     // to gte the current user role
@@ -23,7 +24,7 @@ const Admin = () => {
         Status: ['Active', 'Inactive']
     };
     // initially with page 1 as search params
-    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+    const [searchParams, setSearchParams] = useSearchParams();
     if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
         setSearchParams({ page: 1 });
     }
@@ -86,14 +87,13 @@ const Admin = () => {
                     />
                 </div>
 
-                {/* <Paginator Pagination={{
-                    total_pages: 3,
-                    limit: 10,
-                    total_records: 21,
-                    next_page: 2,
-                    current_page: 1
-                }} setSearchParams={setSearchParams} searchParams={searchParams}
-                /> */}
+                {!loading && Math.ceil(List?.totalRecords / 10) > 1 &&
+                    <Paginator
+                        currentPage={searchParams.get('page')}
+                        totalPages={Math.ceil(List.totalRecords / 10)}
+                        setSearchParams={setSearchParams}
+                        searchParams={searchParams}
+                    />}
             </div>
         </CardHeader>
     );

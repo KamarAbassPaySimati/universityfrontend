@@ -53,16 +53,20 @@ const Topbar = ({
         setFilterValues(initialState);
     };
     useEffect(() => {
-        // // Skip the first render
-        // if (isFirstRender.current) {
-        //     isFirstRender.current = false;
-        //     return;
-        // }
+        // Skip the first render
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
+
         const filteredOptions = Object.entries(filterValues).filter(
             ([_, value]) => Object.values(value).some((v) => v)
         ).map(([key, value]) => ({ [key]: Object.keys(value).filter((subKey) => value[subKey]).join(',') }));
+
+        const params = Object.fromEntries(searchParams);
         setSearchParams((prevParams) => ({
             ...prevParams,
+            ...params,
             ...filteredOptions.reduce((acc, option) => ({ ...acc, ...option }), {})
         }));
     }, [filterValues]);

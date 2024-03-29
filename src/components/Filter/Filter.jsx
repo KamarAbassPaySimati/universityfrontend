@@ -15,7 +15,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, filterType, hand
     });
 
     return (
-        <div ref={filterDiv} className="z-10">
+        <div ref={filterDiv} className="z-1">
             <Image
                 src="filter_icon"
                 data-testid='filter-btn'
@@ -28,7 +28,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, filterType, hand
                 place="left"
                 content="Filter"
             />
-            {isFilterOpen && <div className='relative z-[1]'>
+            {isFilterOpen && <div className='relative z-[12]'>
                 <div className="absolute top-[15px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
                         <div className='font-[600]'>

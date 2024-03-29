@@ -17,7 +17,7 @@ const AdminTable = (
     return (
         <table className='w-full'>
             <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
-                <tr className=' border-b border-neutral-outline sticky top-0 bg-white'>
+                <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                     <th className='py-2 px-[10px] text-left font-[400]'>Paymaart ID</th>
                     <th className='py-2 px-[10px] text-left font-[400]'>
                         <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
@@ -43,7 +43,8 @@ const AdminTable = (
                             <td title = {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}
                                 className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                 {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}</td>
-                            <td title = {user?.email} className='py-2 px-[10px] text-left truncate max-w-[300px]'>{user?.email}</td>
+                            <td title = {user?.email} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
+                                {user?.email}</td>
                             <td title = {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}
                                 className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                 {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
