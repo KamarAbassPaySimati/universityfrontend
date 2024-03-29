@@ -5,7 +5,15 @@ import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilter }) => {
+const Filter = ({
+    setFilterValues,
+    filterValues,
+    filterOptions,
+    filterType,
+    handleClearFilter,
+    handleSearchParams,
+    searchParams
+}) => {
     const filterDiv = useRef();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -15,7 +23,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilte
     });
 
     return (
-        <div ref={filterDiv} className="">
+        <div ref={filterDiv} className="z-1">
             <Image
                 src="filter_icon"
                 data-testid='filter-btn'
@@ -28,31 +36,34 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilte
                 place="left"
                 content="Filter"
             />
-            {isFilterOpen && <div className=''>
-                <div className="absolute top-[35px] right-1 rounded-[8px] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
+            {isFilterOpen && <div className='relative z-[12]'>
+                <div className="absolute top-[15px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
                         <div className='font-[600]'>
-                            Filter agent list
+                            {filterType}
                         </div>
                         <button onClick={handleClearFilter} className='font-[400]'>
                             Clear
                         </button>
                     </div>
                     <div className='p-4 flex flex-col gap-4'>
-                        { Object.keys(filterOptions).map((key) => (
+
+                        { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2'>
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
-                                    {filterOptions[key].map((option) => (
+                                    {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
-                                            key={option}
-                                            id={option.toLowerCase()}
-                                            valueOf={key.toLowerCase()}
-                                            checkboxText={option}
+                                            key={option} // active
+                                            id={option} // active
+                                            valueOf={key} // status
+                                            checkboxText={option} // active
                                             setFilterValues={setFilterValues}
                                             filterValues={filterValues}
+                                            handleSearchParams={handleSearchParams}
+                                            searchParams={searchParams}
                                         />
                                     ))}
                                 </div>

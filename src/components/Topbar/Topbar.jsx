@@ -5,7 +5,9 @@ import Filter from '../Filter/Filter';
 const Topbar = ({
     searchParams,
     setSearchParams,
-    filterOptions
+    filterOptions,
+    filterType,
+    placeHolder
 
 }) => {
     const [timer, setTimer] = useState(null);
@@ -40,6 +42,21 @@ const Topbar = ({
         if (params.search === '') delete params.search;
         setSearchParams({ ...params });
     };
+    const handleSearchParamsForFilter = (key, value) => {
+        const params = Object.fromEntries(searchParams);
+        params.page = 1;
+        if (searchParams.get(key) !== null) {
+            if (!params[key].split(',').includes(value)) {
+                params[key] = `${searchParams.get(key)},${value}`;
+            } else {
+                params[key] = params[key].split(',').filter(item => item !== value).join();
+            }
+        } else {
+            params[key] = value;
+        }
+        if (params[key] === '') delete params[key];
+        setSearchParams({ ...params });
+    };
 
     const handleClearSearch = () => {
         setSearch('');
@@ -48,9 +65,11 @@ const Topbar = ({
 
     const handleClearFilter = () => {
         // Reset filterValues to an empty object or default values
-        setFilterValues(initialState);
+        const params = Object.fromEntries(searchParams);
+        delete params.role;
+        delete params.status;
+        setSearchParams({ ...params });
     };
-
     useEffect(() => {
         // Skip the first render
         if (isFirstRender.current) {
