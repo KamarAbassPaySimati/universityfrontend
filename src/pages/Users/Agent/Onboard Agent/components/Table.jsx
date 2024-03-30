@@ -21,7 +21,7 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                     <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
                         <th className='py-2 px-[10px] text-center font-[400]'>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
-                            <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
+                            <div data-testid="sort_agent_name" className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
                                 <span>Name</span>
                                 <Image src='sort_icon' />
                             </div>
@@ -37,12 +37,12 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                     ? <Shimmer column={6} row={10}/>
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <tr key={index} className='border-y border-neutral-outline h-[48px]'>
-                                <td title={user?.paymaart_id} className='py-2 px-[10px] text-center truncate'>{user?.paymaart_id || '-'}</td>
-                                <td className='py-2 px-[10px]'>{`${user?.name}`}</td>
+                            <tr key={index} className='border-b border-neutral-outline h-[48px]'>
+                                <td title={user?.paymaart_id} className='py-2 px-[10px] text-center truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
+                                <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate max-w-[100px]'>{`${user?.name}`}</td>
                                 <td className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
-                                <td className='py-2 px-[10px]'>
+                                <td data-testid="status" className='py-2 px-[10px]'>
                                     <span className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize 
                         ${user?.status === 'active'
                                 ? 'bg-[#ECFDF5] text-accent-positive'
@@ -56,19 +56,19 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                                     <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
                                     <Tooltip
                                         id={`eye-${index}`}
-                                        className='my-tooltip'
+                                        className='my-tooltip z-30'
                                         place="top"
                                         content="View"
                                     />
                                     <Tooltip
                                         id={`edit-${index}`}
-                                        className='my-tooltip'
+                                        className='my-tooltip z-30'
                                         place="top"
                                         content="Edit"
                                     />
                                     <Tooltip
                                         id={`payin-${index}`}
-                                        className='my-tooltip'
+                                        className='my-tooltip z-30'
                                         place="top"
                                         content="Payin"
                                     />
@@ -79,8 +79,6 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
             </table>
             {!notFound && error &&
             (<NoDataError heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
-            {List?.data?.length === 0 && !loading && !(param.search || param.status) &&
-            (<NoDataError heading='No data found' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&
             (param.status || param.search) &&
             (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}

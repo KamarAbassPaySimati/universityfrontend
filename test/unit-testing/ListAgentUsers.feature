@@ -39,7 +39,7 @@ Feature: Paymaart- agent Web- View all Agent list
         Given I navigate to agent users listing screen
         When I click on filter tab
         Then I should see filter popup modal
-        And I select filter by status as "Active"
+        And I select filter by status as "active"
         Then I should see list of agent users where status is "Active"
 
     @delete_admin_account

@@ -5,7 +5,14 @@ import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilter }) => {
+const Filter = ({
+    filterOptions,
+    filterType,
+    handleClearFilter,
+    handleSearchParams,
+    searchParams,
+    isLoading
+}) => {
     const filterDiv = useRef();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -18,7 +25,7 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilte
         <div ref={filterDiv} className="z-1">
             <Image
                 src="filter_icon"
-                data-testid='filter-btn'
+                testId='filter-tab'
                 className="filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer"
                 onClick={() => setIsFilterOpen(prevState => !prevState)}
             />
@@ -29,30 +36,32 @@ const Filter = ({ setFilterValues, filterValues, filterOptions, handleClearFilte
                 content="Filter"
             />
             {isFilterOpen && <div className='relative z-[12]'>
-                <div className="absolute top-[15px] right-2 z-[999] rounded-[8px] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
+                <div data-testid='filter-modal' className="absolute top-[10px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
                         <div className='font-[600]'>
-                            Filter agent list
+                            {filterType}
                         </div>
-                        <button onClick={handleClearFilter} className='font-[400]'>
+                        <button onClick={() => { setIsFilterOpen(false); handleClearFilter(); } } className='font-[400]'>
                             Clear
                         </button>
                     </div>
                     <div className='p-4 flex flex-col gap-4'>
-                        { Object.keys(filterOptions).map((key) => (
+
+                        { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2'>
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
-                                    {filterOptions[key].map((option) => (
+                                    {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
-                                            key={option}
-                                            id={option.toLowerCase()}
-                                            valueOf={key.toLowerCase()}
-                                            checkboxText={option}
-                                            setFilterValues={setFilterValues}
-                                            filterValues={filterValues}
+                                            isLoading={isLoading}
+                                            key={option.toLowerCase()} // active
+                                            id={option.toLowerCase()} // active
+                                            valueOf={key.toLowerCase()} // status
+                                            checkboxText={option} // active
+                                            handleSearchParams={handleSearchParams}
+                                            searchParams={searchParams}
                                         />
                                     ))}
                                 </div>

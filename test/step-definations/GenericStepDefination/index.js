@@ -49,6 +49,10 @@ When('I click on the sort by {string}', async function (sortBy) {
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_admin_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
+    case 'Agent Name':
+        await driver.wait(until.elementLocated(By.css('[data-testid="sort_agent_name"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        break;
     default:
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_admin_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -58,7 +62,9 @@ When('I click on the sort by {string}', async function (sortBy) {
 
 When('I click on filter tab', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await driver.wait(until.elementLocated(By.css("[data-testid='filter-tab']"))).click();
+    const element = await driver.wait(until.elementLocated(By.css("[data-testid='filter-tab']")));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
 });
 
 Then('I should see filter popup modal', async function () {

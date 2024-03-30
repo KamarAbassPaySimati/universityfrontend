@@ -380,7 +380,7 @@ const OnboardAgent = () => {
         <CardHeader
             activePath='Register Agent'
             paths={['Users', 'Agent']}
-            pathurls={['users/agent']}
+            pathurls={['users/agents']}
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful

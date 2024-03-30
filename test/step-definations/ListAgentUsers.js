@@ -4,7 +4,7 @@ const { Key, until, By } = require('selenium-webdriver');
 const { driver } = require('./Driver.js');
 
 Given('I navigate to agent users listing screen', async function () {
-    await driver.get('http://localhost:3000/users/agent-users');
+    await driver.get('http://localhost:3000/users/agents');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
@@ -13,8 +13,8 @@ When('I search for particular agent as {string}', async function (searchTerm) {
     await driver.wait(until.elementLocated(By.css('[data-testid="search"]')))
         .sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.findElement(By.css('[data-testid="search"]')).sendKeys(searchTerm);
-    await driver.findElement(By.css('[data-testid="search"]')).sendKeys(Key.ENTER);
+    await driver.wait(until.elementLocated(By.css('[data-testid="search"]'))).sendKeys(searchTerm);
+    await new Promise(resolve => setTimeout(resolve, 500));
 });
 
 Then('I should see the agent user sorted in descending order based on {string}', async function (sortBy) {

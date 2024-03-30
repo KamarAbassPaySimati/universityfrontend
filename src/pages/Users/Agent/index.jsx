@@ -91,18 +91,22 @@ const Agent = () => {
             navigationPath='/users/agents/register-agent'
             table={true}
         >
-            <div className='relative thead-border-bottom'>
+            <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(List?.data?.length !== 0 ||
                 (param.search || param.status)) && !notFound &&
-                <div className='sticky z-10 top-0 left-0 bg-[#fff] h-12 border-b border-neutral-outline'>
+                <div className='bg-[#fff] h-12 border-b border-neutral-outline'>
                     <Topbar
                         setSearchParams={setSearchParams}
                         searchParams={searchParams}
                         filterOptions={filterOptions}
+                        placeHolder="Paymaart ID, name or phone number "
+                        filterType='Filter agent list'
+                        isLoading={loading}
                     />
                 </div>
                 }
-                {!notFound && <div className='overflow-auto scrollBar h-tableHeight'>
+                {!notFound && !(List?.data?.length === 0 && !loading && !(param.search || param.status)) &&
+                <div className='overflow-auto scrollBar h-tableHeight'>
                     <Table
                         error={error}
                         loading={loading}
@@ -115,7 +119,9 @@ const Agent = () => {
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
-                {!loading && !error && !notFound && <Paginator
+                {List?.data?.length === 0 && !loading && !(param.search || param.status) &&
+                (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
+                {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
                     setSearchParams={setSearchParams}
