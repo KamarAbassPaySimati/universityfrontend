@@ -38,6 +38,7 @@ definitions:
         size: 2x
         script:
           - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
+          - export NODE_OPTIONS=--max-old-space-size=8192
           - echo "sitespeed is skipped"
           - source .env
           - export BASE_URL='http://localhost:3000'
@@ -106,6 +107,7 @@ definitions:
         services:
           - docker
         script:
+          - export NODE_OPTIONS=--max-old-space-size=8192
           - source .env
           - docker run -u zap -p 8080:8080 -d softwaresecurityproject/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
           - sleep 30
