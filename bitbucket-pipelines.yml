@@ -84,7 +84,7 @@ definitions:
         image: python:latest
         script:
           - pip install detect-secrets
-          - detect-secrets scan --exclude-files dist/**
+          - detect-secrets scan
           #- pipe: atlassian/git-secrets-scan:0.4.3
 
     - step: &SAST
