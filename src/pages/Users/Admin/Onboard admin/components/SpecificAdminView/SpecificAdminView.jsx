@@ -6,8 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { SpecificView } from './SpecificAdminViewSlice';
 import ProfileName from '../../../../../../components/ProfileName/ProfileName';
-// import { formatInputPhone } from '../../../../../../CommonMethods/phoneNumberFormat';
-// import formatTimestamp from '../../../../../../CommonMethods/formatTimestamp';
 import ViewDetail from '../../../../../../components/ViewDeatilComponent/ViewDeatil';
 
 export default function SpecificAdminView () {
@@ -21,18 +19,10 @@ export default function SpecificAdminView () {
             console.error(error);
         }
     };
-    // const loading = true;
     useEffect(() => {
         getAdminView();
     }, []);
-    // const userDetails = {
-    //     'Phone Number': View?.phone_number ? `${View?.country_code} ${formatInputPhone(View?.phone_number)}` : '',
-    //     Email: View?.email,
-    //     Role: View?.user_type,
-    //     Created_Date: formatTimestamp(View?.last_logged_in),
-    //     Last_Logged_In: View?.last_logged_in
-    // };
-    // const keys = Object.keys(userDetails);
+
     return (
         <CardHeader
             activePath='Admin Profile'
