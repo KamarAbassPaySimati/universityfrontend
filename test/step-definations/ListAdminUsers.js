@@ -4,7 +4,7 @@ const { Key, until, By } = require('selenium-webdriver');
 const { driver } = require('./Driver.js');
 
 Given('I navigate to admin users listing screen', async function () {
-    await driver.get('http://localhost:3000/users/admin-users');
+    await driver.get('http://localhost:3000/users/admins/?page=1');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
