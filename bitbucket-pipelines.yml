@@ -37,20 +37,18 @@ definitions:
           - docker-high-memory
         size: 2x
         script:
-          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
           - export NODE_OPTIONS=--max-old-space-size=8192
-          - echo "sitespeed is skipped"
           - source .env
           - export BASE_URL='http://localhost:3000'
           - npm install pm2 sitespeed.io -g
-          # - npm install express --force
+          - npm install express
           - pm2 start scripts/sitespeed-server.js
           - sleep 30
           - sitespeed.io  --multi scripts/sitespeed/testMultipleURLs.js --preScript scripts/sitespeed/login.js --budget.configPath scripts/budget.json -n 1 --firstParty ".amazon.com" --firstParty "sdk.relicx.ai" --headless true --browsertime.chrome.args no-sandbox
         artifacts:
           - sitespeed-result/**
 
-    - step: &ESlint
+    - step: &CodeQuality
         name: Code Quality
         image: node:latest
         caches:
@@ -72,8 +70,6 @@ definitions:
         services:
           - docker
         script:
-          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
-          - echo "Dependency Scanning"
           - npm i --force
           - pipe: docker://aligent/owasp-dependency-check-pipe
             variables:
@@ -87,10 +83,8 @@ definitions:
         name: Secret Detection
         image: python:latest
         script:
-          - echo "Secret Checking"
-          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
           - pip install detect-secrets
-          - detect-secrets scan
+          - detect-secrets scan --exclude-files dist/**
           #- pipe: atlassian/git-secrets-scan:0.4.3
 
     - step: &SAST
@@ -298,7 +292,7 @@ pipelines:
     BDD:
       - step: *RunBDD
     ESLint:
-      - step: *ESlint
+      - step: *CodeQuality
     BDDDryRun:
       - variables:
           - name: Version
@@ -358,7 +352,7 @@ pipelines:
       - parallel:
           fail-fast: true
           steps:
-            - step: *ESlint
+            - step: *CodeQuality
             - step: *LicenseCompliance
             - step: *DependencyScanning
       - step: *UnitTestCase
@@ -377,7 +371,7 @@ pipelines:
       - parallel:
           fail-fast: true
           steps:
-            - step: *ESlint
+            - step: *CodeQuality
             - step: *LicenseCompliance
             - step: *DependencyScanning
       - step: *UnitTestCase
@@ -395,7 +389,7 @@ pipelines:
       - parallel:
           fail-fast: true
           steps:
-            - step: *ESlint
+            - step: *CodeQuality
             - step: *LicenseCompliance
             - step: *DependencyScanning
       - step: *UnitTestCase
