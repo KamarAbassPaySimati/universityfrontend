@@ -5,8 +5,11 @@
 @tailwind utilities;
 
 body {
+  margin: 0;
   font-family: "Inter", sans-serif;
   background-color: #FFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 
@@ -41,7 +44,7 @@ body {
   font-size: 12px !important;
   padding: 6px 10px !important;
   border-radius: 4px !important;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.12) !important;
   cursor: pointer;
 }
 
@@ -82,7 +85,7 @@ body {
 }
 
 .scrollBar::-webkit-scrollbar-thumb {
-  background-color: #816cbe;
+  background-color: #A79FBE;
   border: transparent;
   border-radius: 22px;
   width: 4px;
@@ -137,6 +140,11 @@ body {
   left: 4px;
 }
 
+/* filter check box  */
+.filter-checkbox label::before {
+  top: 50%;
+}
+
 .whiteScrollBar::-webkit-scrollbar-thumb {
   background-color: #FFF;
   border: transparent;
@@ -161,4 +169,14 @@ input[type='number']::-webkit-inner-spin-button {
 }
 input[type='number'] {
   -moz-appearance: textfield; /* Optional - for Firefox */
+}
+
+.thead-border-bottom::before{
+  content: '';
+  position: absolute;
+  top: 88px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #E5E9EB;
 }
