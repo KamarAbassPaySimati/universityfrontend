@@ -3,7 +3,7 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import Admin from '../pages/Users/Admin';
 import OnboardAdmin from '../pages/Users/Admin/Onboard admin/OnboardAdmin';
 import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
-import SpecificAdminView from '../pages/Users/Admin/Onboard admin/components/SpecificAdminView/SpecificAdminView';
+import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView/SpecificAdminView';
 
 export const ComponentsBasedOnRole = {
     'super-admin':

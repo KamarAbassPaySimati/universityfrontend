@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React from 'react';
-import Image from '../../../../../components/Image/Image';
-import Shimmer from '../../../../../components/Shimmers/Shimmer';
-import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
-import isTimestampFiveMinutesAgo from '../../../../../CommonMethods/lastLoggedInTimeStamp';
+import Image from '../../../../components/Image/Image';
+import Shimmer from '../../../../components/Shimmers/Shimmer';
+import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
+import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
+import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 import { useNavigate } from 'react-router-dom';
 
 const AdminTable = (
@@ -70,7 +70,7 @@ const AdminTable = (
                                 </span>
                             </td>
                             <td className='py-3 px-[10px] mr-1 ml-10 flex gap-[19px] text-center align-center justify-end'>
-                                <Image src='eye' onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
+                                <Image src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
                                 <Image src='edit' />
                             </td>
                         </tr>))}

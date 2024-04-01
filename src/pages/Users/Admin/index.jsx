@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
-import AdminTable from './Onboard admin/components/AdminTable';
+import AdminTable from './Components/AdminTable';
 import { useSearchParams } from 'react-router-dom';
 import objectToQueryString from '../../../CommonMethods/objectToQueryString';
 import { AdminList } from './AdminSlice';

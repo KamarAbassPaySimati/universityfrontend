@@ -1,12 +1,12 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
 import React, { useEffect } from 'react';
-import CardHeader from '../../../../../../components/CardHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { SpecificView } from './SpecificAdminViewSlice';
-import ProfileName from '../../../../../../components/ProfileName/ProfileName';
-import ViewDetail from '../../../../../../components/ViewDeatilComponent/ViewDeatil';
+import CardHeader from '../../../../../components/CardHeader';
+import ProfileName from '../../../../../components/ProfileName/ProfileName';
+import ViewDetail from '../../../../../components/ViewDeatilComponent/ViewDeatil';
 
 export default function SpecificAdminView () {
     const dispatch = useDispatch();
