@@ -84,6 +84,7 @@ const Admin = () => {
                         loading={loading}
                         List={List}
                         handleSortByName={handleSortByName}
+                        CurrentUserRole={CurrentUserRole}
                     />
                 </div>
 

@@ -11,7 +11,8 @@ const AdminTable = (
     {
         loading,
         List,
-        handleSortByName
+        handleSortByName,
+        CurrentUserRole
     }
 ) => {
     const navigate = useNavigate();
@@ -70,8 +71,8 @@ const AdminTable = (
                                 </span>
                             </td>
                             <td className='py-3 px-[10px] mr-1 ml-10 flex gap-[19px] text-center align-center justify-end'>
-                                <Image src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
-                                <Image src='edit' />
+                                {CurrentUserRole === 'super-admin' && <><Image src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
+                                    <Image src='edit' /></>}
                             </td>
                         </tr>))}
                 </tbody>
