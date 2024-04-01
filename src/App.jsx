@@ -5,7 +5,6 @@ import { Amplify } from 'aws-amplify';
 import { awsConfig } from './config';
 import Toast from './components/Toast/Toast';
 import GlobalContext from './components/Context/GlobalContext';
-import useGlobalSignout from './CommonMethods/globalSignout';
 import { Hub } from 'aws-amplify/utils';
 import { dataService } from './services/data.services';
 import { useDispatch } from 'react-redux';
@@ -26,7 +25,7 @@ function App (props) {
     const { updateLoggedIn } = endpoints;
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    useGlobalSignout();
+
     useEffect(() => {
         Hub.listen('auth', async ({ payload }) => {
             switch (payload.event) {

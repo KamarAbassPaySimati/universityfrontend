@@ -2,9 +2,9 @@
 import 'react-responsive-modal/styles.css';
 import React, { useContext, useEffect, useState } from 'react';
 import Image from '../Image/Image';
-import { fetchUserAttributes, signOut } from 'aws-amplify/auth';
+import { signOut } from 'aws-amplify/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { logout, setUser } from '../../pages/auth/authSlice';
+import { logout } from '../../pages/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
@@ -14,7 +14,9 @@ import Slugify from '../../CommonMethods/Sulgify.js';
 import { sideNavObject } from './sideNavObject.js';
 import { setDropdown } from '../../redux/GlobalSlice.js';
 
-// border border-neutral-outline
+// want to add a sidebar content add it to the sideNavObject
+// check the side also has some privelages based object
+// also add it to the global context inside the dropdown object
 const SideBar = ({ role }) => {
     const location = useLocation();
 
@@ -29,20 +31,20 @@ const SideBar = ({ role }) => {
 
     const { dropdown } = useSelector(state => state.globalData);
 
-    const checkLoggedInUserForGlobalSignout = async () => {
-        try {
-            // eslint-disable-next-line no-unused-vars
-            const userAttributes = await fetchUserAttributes();
-        } catch (error) {
-            dispatch(setUser(''));
-            dispatch(logout());
-            navigate('/');
-        }
-    };
+    // const checkLoggedInUserForGlobalSignout = async () => {
+    //     try {
+    //         // eslint-disable-next-line no-unused-vars
+    //         const userAttributes = await fetchUserAttributes();
+    //     } catch (error) {
+    //         dispatch(setUser(''));
+    //         dispatch(logout());
+    //         navigate('/');
+    //     }
+    // };
 
-    useEffect(() => {
-        checkLoggedInUserForGlobalSignout();
-    }, []);
+    // useEffect(() => {
+    //     checkLoggedInUserForGlobalSignout();
+    // }, []);
 
     async function handleSignOut () {
         try {
