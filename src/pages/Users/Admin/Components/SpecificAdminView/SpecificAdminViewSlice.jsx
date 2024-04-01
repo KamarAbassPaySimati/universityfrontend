@@ -45,7 +45,7 @@ const SpecificAdminViewSlice = createSlice({
                         Email: state.View.email,
                         Role: state.View.user_type,
                         Created_Date: formatTimestamp(state.View.last_logged_in),
-                        Last_Logged_In: state.View.last_logged_in
+                        Last_Logged_In: formatTimestamp(state.View.last_logged_in)
                     };
                     state.keys = Object.keys(state.userDetails);
                 } else {

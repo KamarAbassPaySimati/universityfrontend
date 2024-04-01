@@ -200,6 +200,157 @@ Before('@add_admin_user', async function () {
             paymaart_id: paymaart_ID,
             phone_number_without_country_code: phone_number
         };
+        console.log('global.admin_user', global.admin_user);
+        await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+Before('@add_finance_admin_user', async function () {
+    try {
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
+        const countryCode = '+265';
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
+
+        const payload = {
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
+            password: 'Admin@123',
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
+            country_code: countryCode,
+            role: 'Finance admin',
+            phone_number: phone_number.replaceAll(' ', '')
+        };
+
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
+            pass: 'Admin@123',
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
+            role: 'Finance admin',
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
+        };
+        await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+Before('@add_support_admin_user', async function () {
+    try {
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
+        const countryCode = '+265';
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
+
+        const payload = {
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
+            password: 'Admin@123',
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
+            country_code: countryCode,
+            role: 'Support admin',
+            phone_number: phone_number.replaceAll(' ', '')
+        };
+
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
+            pass: 'Admin@123',
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
+            role: 'Support admin',
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
+        };
+        await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+Before('@add_normal_admin_user', async function () {
+    try {
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
+        const countryCode = '+265';
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
+
+        const payload = {
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
+            password: 'Admin@123',
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
+            country_code: countryCode,
+            role: 'Admin',
+            phone_number: phone_number.replaceAll(' ', '')
+        };
+
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
+            pass: 'Admin@123',
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
+            role: 'Admin',
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
+        };
         await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
@@ -214,6 +365,7 @@ Before('@create_new_user_and_login', async function () {
         console.log('err', error);
     }
 });
+
 After('@delete_admin_account', async function () {
     try {
         const payload = {
