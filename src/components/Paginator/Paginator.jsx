@@ -19,7 +19,7 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                         previousLabel={
                             <div className='flex'>
                                 <div data-testid="paginate-prev" onClick={() => handlePage(currentPage - 1)}
-                                    className={`rounded-[5px] flex justify-center ${currentPage > 1 ? '' : 'pointer-events-none cursor-default'}`}>
+                                    className={`rounded-[5px] flex justify-center items-center ${currentPage > 1 ? '' : 'pointer-events-none cursor-default'}`}>
                                     <Image src={currentPage > 1 ? 'paginator_left_arrow' : 'active_paginator_left_arrow'} className='w-[20px]' />
                                 </div>
                             </div>
@@ -27,7 +27,7 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                         nextLabel={
                             <div className='flex'>
                                 <div data-testid="paginate-next" onClick={() => handlePage(currentPage + 1)}
-                                    className={currentPage === totalPages ? 'pointer-events-none cursor-default mt-[3px]' : 'mt-[3px]'}>
+                                    className={`ml-2 rounded-[5px] flex justify-center items-center  ${currentPage === totalPages ? 'pointer-events-none cursor-default' : ''}`}>
                                     <Image src={(currentPage && (currentPage !== totalPages)) ? 'paginator_right_arrow' : 'active_paginator_right_arrow'}
                                         className={(currentPage === totalPages) ? 'pointer-events-none w-[20px]' : 'w-[20px]'}
                                     />

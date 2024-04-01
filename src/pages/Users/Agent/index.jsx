@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AgentList } from './agentSlice';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import NoDataError from '../../../components/NoDataError/NoDataError';
+import Slugify from '../../../CommonMethods/Sulgify';
 const Agent = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
     const [notFound, setNotFound] = useState(false);
@@ -16,6 +17,12 @@ const Agent = () => {
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentUsers);
     const { setToastError } = useContext(GlobalContext);
+
+    const { user } = useSelector((state) => state.auth);
+    let { user_type: CurrentUserRole } = user;
+    if (CurrentUserRole) {
+        CurrentUserRole = Slugify(CurrentUserRole);
+    }
 
     const filterOptions = {
         Status: ['Active', 'Inactive']
@@ -38,6 +45,7 @@ const Agent = () => {
     const handleSortByName = () => {
         const params = Object.fromEntries(searchParams);
         params.sortBy = 'name';
+        params.page = 1;
         if (params.sortOrder === 'asc') {
             params.sortOrder = 'desc';
         } else {
@@ -87,7 +95,7 @@ const Agent = () => {
             pathurls={['users/agents']}
             header='Agent list'
             minHeightRequired={true}
-            buttonText='Register Agent'
+            buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Agent'}`}
             navigationPath='/users/agents/register-agent'
             table={true}
         >

@@ -99,6 +99,12 @@ const OnboardAgent = () => {
             });
             return;
         }
+        if (id === 'middleName' || id === 'firstName') {
+            setFormData(prevState => {
+                return { ...prevState, [id]: e.target.value.replace(/^\w/, (c) => c.toUpperCase()) };
+            });
+            return;
+        }
         if (id === 'email') {
             setVerified(prevState => {
                 return { ...prevState, [id]: false };
