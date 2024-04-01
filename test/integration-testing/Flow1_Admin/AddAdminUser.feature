@@ -24,6 +24,10 @@ Feature: Paymaart - Admin Web - Onboard Admin
     When I navigate to onboard admin user
     Then I should view "404" page not found screen
 
+  Scenario: View Admin Profile as admin finance admin
+    Given I navigate to admin users listing screen
+    Then I should see view admin users button is hidden
+
   @perform_logout
   @wait
   Scenario: Support Admin User login with valid credentials and validate access permission for register admin
@@ -38,8 +42,8 @@ Feature: Paymaart - Admin Web - Onboard Admin
     Then I should view "404" page not found screen
 
   Scenario: View Admin Profile as support admin
-    Given I am viewing the admin user profile
-    Then I should view "404" page not found screen
+    Given I navigate to admin users listing screen
+    Then I should see view admin users button is hidden
 
   @perform_logout
   @wait
@@ -55,8 +59,8 @@ Feature: Paymaart - Admin Web - Onboard Admin
     Then I should view "404" page not found screen
 
   Scenario: View Admin Profile as admin
-    Given I am viewing the admin user profile
-    Then I should view "404" page not found screen
+    Given I navigate to admin users listing screen
+    Then I should see view admin users button is hidden
 
   @perform_logout
   @wait
@@ -68,10 +72,6 @@ Feature: Paymaart - Admin Web - Onboard Admin
     When I enter the TOTP obtained from the previously scanned device
     And I submit the TOTP form
     Then I should be redirected to the '/dashboard' page
-
-  Scenario: View Admin Profile as admin super admin
-    Given I am viewing the admin user profile
-    Then I should view "404" page not found screen
 
   Scenario: Add admin users with invalid credentials
     Given I navigate to onboard admin user

@@ -15,7 +15,19 @@ Feature: Paymaart - Admin Web- Specific Admin view
     6.Last Logged in(Date & Time/Online)
     7. Actions (edit / payin)
     8.Status(Active/ inactive)
-    
+
+    @perform_logout
+    @wait
+    Scenario: Super Admin User login with valid credentials
+        Given I am on the login screen
+        When I enter the email address as "bharath.shet+super_admin@7edge.com" and password as "Admin@123"
+        And I submit the login form
+        Then I should be navigated to the TOTP screen
+        When I enter the TOTP obtained from the previously scanned device
+        And I submit the TOTP form
+        Then I should be redirected to the '/dashboard' page
+
+
     Scenario: Admin View profile
         Given I navigate to admin users listing screen
         When I click on view for particular admin user
