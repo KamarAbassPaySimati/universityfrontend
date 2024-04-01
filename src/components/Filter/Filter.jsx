@@ -21,10 +21,15 @@ const Filter = ({
         setIsFilterOpen(false);
     });
 
+    const params = Object.fromEntries(searchParams);
+    const paramsKeys = Object.keys(params).map(key => key.toLowerCase());
+    const filterOptionsKeys = Object.keys(filterOptions).map(key => key.toLowerCase());
+    const keysMatch = filterOptionsKeys.some(optionKey => paramsKeys.includes(optionKey));
+
     return (
         <div ref={filterDiv} className="z-1">
             <Image
-                src="filter_icon"
+                src={`${keysMatch ? 'active_' : ''}filter_icon`}
                 testId='filter-tab'
                 className="filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer"
                 onClick={() => setIsFilterOpen(prevState => !prevState)}

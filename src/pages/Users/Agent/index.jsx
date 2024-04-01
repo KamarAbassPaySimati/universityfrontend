@@ -10,6 +10,7 @@ import { AgentList } from './agentSlice';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import NoDataError from '../../../components/NoDataError/NoDataError';
 import Slugify from '../../../CommonMethods/Sulgify';
+
 const Agent = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
     const [notFound, setNotFound] = useState(false);
@@ -102,7 +103,7 @@ const Agent = () => {
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(List?.data?.length !== 0 ||
                 (param.search || param.status)) && !notFound &&
-                <div className='bg-[#fff] h-12 border-b border-neutral-outline'>
+                <div className='bg-[#fff] border-b border-neutral-outline'>
                     <Topbar
                         setSearchParams={setSearchParams}
                         searchParams={searchParams}
