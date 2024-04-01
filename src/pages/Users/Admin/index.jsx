@@ -43,7 +43,6 @@ const Admin = () => {
     // as soon as the search params changes getlist gets called
     useEffect(() => {
         GetList();
-        console.log(searchParams, 'searchParams');
     }, [searchParams]);
     // In the table as soon as the button tapped of the sort this function will be triggered
     const handleSortByName = () => {

@@ -23,7 +23,7 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+            dropdown: ['Agents', 'Merchants', 'Customers']
         }
     },
     'finance-admin': {
@@ -32,7 +32,7 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+            dropdown: ['Agents', 'Merchants', 'Customers']
         }
     }
 };

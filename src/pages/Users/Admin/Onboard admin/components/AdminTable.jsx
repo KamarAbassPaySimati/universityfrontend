@@ -5,16 +5,16 @@ import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
 import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
 import isTimestampFiveMinutesAgo from '../../../../../CommonMethods/lastLoggedInTimeStamp';
+import { useNavigate } from 'react-router-dom';
 
 const AdminTable = (
     {
-        error,
         loading,
         List,
         handleSortByName
     }
 ) => {
-    console.log(error);
+    const navigate = useNavigate();
     return (
         <table className='w-full'>
             <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
@@ -35,15 +35,15 @@ const AdminTable = (
                 </tr>
             </thead>
             {loading
-                ? <Shimmer column={8} row={10} />
+                ? <Shimmer column={8} row={10}/>
                 : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                     {List?.data?.map((user, index) => (
                         <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                             <td title = {user?.paymaart_id}
                                 className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
-                            <td title = {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}
+                            <td title = {`${user?.name}`}
                                 className='py-2 px-[10px] text-left truncate max-w-[300px]'>
-                                {`${user?.first_name} ${user?.middle_name} ${user?.last_name}`}</td>
+                                {`${user?.name}`}</td>
                             <td title = {user?.email} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                 {user?.email}</td>
                             <td title = {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}
@@ -70,7 +70,7 @@ const AdminTable = (
                                 </span>
                             </td>
                             <td className='py-3 px-[10px] mr-1 ml-10 flex gap-[19px] text-center align-center justify-end'>
-                                <Image src='eye' />
+                                <Image src='eye' onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
                                 <Image src='edit' />
                             </td>
                         </tr>))}
