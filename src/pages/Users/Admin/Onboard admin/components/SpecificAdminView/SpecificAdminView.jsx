@@ -52,7 +52,7 @@ export default function SpecificAdminView () {
                     <div className='flex justify-between items-center'>
                         <ProfileName
                             userButtonName={`${View?.first_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`}
-                            UserName={`${View?.first_name || '-'} ${View?.middle_name || '-'} ${View?.last_name.toUpperCase() || '-'}`}
+                            UserName={`${View?.first_name || '-'} ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
                             payMaartID={View?.paymaart_id}
                             loading={loading}
                         />
