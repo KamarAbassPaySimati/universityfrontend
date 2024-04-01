@@ -15,7 +15,10 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 
-const CardHeader = ({ children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, navigationPath }) => {
+const CardHeader = ({
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
+    navigationPath, table
+}) => {
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
@@ -74,12 +77,17 @@ const CardHeader = ({ children, paths, activePath, pathurls, testId, header, but
                     </button>}
                 </div>
                 }
-                <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
+                {!table
+                    ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 ${header ? 'max-h-[calc(100vh-240px)]' : ''} 
                 ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
-                    {children}
-                </div>
+                        {children}
+                    </div>
+                    : <div className='min-h-[calc(100vh-240px)] max-h-[calc(100vh-120px)] mx-10 my-6
+                     bg-[#FFFFFF] rounded-[6px] border border-neutral-outline'>
+                        {children}
+                    </div>}
             </div>
         </div>
     );

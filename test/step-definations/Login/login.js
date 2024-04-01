@@ -63,7 +63,12 @@ async function create_new_user_and_login () {
 
     await new Promise(resolve => setTimeout(resolve, 750));
 
-    await new Promise(resolve => setTimeout(resolve, 750));
+    const email_address = await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]')));
+    await driver.wait(until.elementIsVisible(email_address));
+
+    const password = await driver.wait(until.elementLocated(By.css('[data-testid="password"]')));
+    await driver.wait(until.elementIsVisible(password));
+
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
     await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
 
@@ -75,6 +80,7 @@ async function create_new_user_and_login () {
 
     const canvasElement = await driver.wait(until.elementLocated(By.css('canvas')));
     await driver.wait(until.elementIsVisible(canvasElement));
+    await new Promise(resolve => setTimeout(resolve, 750));
 
     const canvas_data = await driver.executeScript(() => {
         const canvas = document.querySelector('canvas');
@@ -107,7 +113,7 @@ async function create_new_user_and_login () {
     await driver.wait(until.elementIsVisible(proceed_to_next));
     await proceed_to_next.click();
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 750));
     for (let i = 5; i >= 0; i--) {
         await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -128,6 +134,8 @@ async function create_new_user_and_login () {
     const done_button = await driver.wait(until.elementLocated(By.css('[data-testid="done_button"]')));
     await driver.wait(until.elementIsVisible(done_button));
     done_button.click();
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
 }
 Before('@perform_logout', async function () {
     await new Promise(resolve => setTimeout(resolve, 500));
