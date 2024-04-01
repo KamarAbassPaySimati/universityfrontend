@@ -48,6 +48,8 @@ Then('I should see the agent user sorted in ascending order based on {string}', 
         items = await driver.wait(until.elementsLocated(By.css('[data-testid="agent_name"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
         sortedItemTexts = [...itemTexts].sort();
+        console.log(itemTexts, 'real items');
+        console.log(sortedItemTexts, 'sorted');
         assert.deepStrictEqual(itemTexts, sortedItemTexts, 'Items are not sorted in ascending order');
         await new Promise(resolve => setTimeout(resolve, 500));
         break;

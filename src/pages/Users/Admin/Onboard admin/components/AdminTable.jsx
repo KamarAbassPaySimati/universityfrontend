@@ -19,7 +19,7 @@ const AdminTable = (
         <table className='w-full'>
             <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                 <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                    <th className='py-2 px-[10px] text-left font-[400]'>Paymaart ID</th>
+                    <th className='py-2 px-[10px] text-left font-[400] min-w-[150px]'>Paymaart ID</th>
                     <th className='py-2 px-[10px] text-left font-[400]'>
                         <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
                             <span>Name</span>
