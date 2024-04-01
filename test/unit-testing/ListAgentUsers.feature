@@ -27,6 +27,8 @@ Feature: Paymaart- agent Web- View all Agent list
         When I search for particular agent as "agent 88732914"
         Then I should read a message stating that "No data found"
         And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
+        When I click on clear search
+        Then I should see list of table records
 
     Scenario: Sort functionality
         Given I navigate to agent users listing screen
@@ -41,6 +43,8 @@ Feature: Paymaart- agent Web- View all Agent list
         Then I should see filter popup modal
         And I select filter by status as "active"
         Then I should see list of agent users where status is "Active"
+        When I click on clear filter
+        Then I should see filter popup modal closed
 
     @delete_admin_account
     Scenario: Checking Pagination

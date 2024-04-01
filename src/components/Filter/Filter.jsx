@@ -41,7 +41,7 @@ const Filter = ({
                         <div className='font-[600]'>
                             {filterType}
                         </div>
-                        <button onClick={() => { setIsFilterOpen(false); handleClearFilter(); } } className='font-[400]'>
+                        <button data-testid="clear-filter" onClick={() => { setIsFilterOpen(false); handleClearFilter(); } } className='font-[400]'>
                             Clear
                         </button>
                     </div>

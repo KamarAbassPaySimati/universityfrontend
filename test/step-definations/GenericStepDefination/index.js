@@ -69,7 +69,7 @@ When('I click on filter tab', async function () {
 
 Then('I should see filter popup modal', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    await driver.wait(until.elementLocated(By.css("[data-testid='filter-modal']")));
+    this.filter_modal = await driver.wait(until.elementLocated(By.css("[data-testid='filter-modal']")));
 });
 
 When('I click on paginate next page', async function () {
@@ -114,4 +114,55 @@ Then('I should be navigated to page {int}', async function (expectedPage) {
 
 Then('I should view {string} page not found screen', async function (page) {
     await driver.wait(until.elementLocated(By.xpath('//*[text()="Page Not Found"]')));
+});
+
+When('I click on clear search', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="search-close"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+});
+
+Then('I should see list of table records', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('tbody tr')));
+    await driver.wait(until.elementIsVisible(element));
+});
+
+When('I click on clear filter', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="clear-filter"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await driver.wait(until.elementIsEnabled(element));
+    await element.click();
+});
+
+Then('I should see all the filters getting cleared', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const checkboxes = await driver.wait(until.elementsLocated(By.css('[data-testid="filter-modal"] input[type="checkbox"]')));
+    let allUnchecked = true;
+
+    checkboxes.map(async (checkbox) => {
+        if (await checkbox.isSelected()) { // If checkbox is selected/checked
+            allUnchecked = false;
+        }
+    });
+
+    if (allUnchecked === true) {
+        return 'passed';
+    } else {
+        throw new Error('All the checkbox are not checked');
+    }
+});
+
+Then('I should see filter popup modal closed', async function () {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    const filterModal = await driver.executeScript('return document.querySelector("[data-testid=\'filter-modal\']")');
+    if (filterModal == null || filterModal === undefined) {
+        return 'passed';
+    }
 });

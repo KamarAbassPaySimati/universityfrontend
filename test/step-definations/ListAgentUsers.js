@@ -9,7 +9,9 @@ Given('I navigate to agent users listing screen', async function () {
 });
 
 When('I search for particular agent as {string}', async function (searchTerm) {
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="search"]')));
+    await driver.wait(until.elementIsVisible(element));
+
     await driver.wait(until.elementLocated(By.css('[data-testid="search"]')))
         .sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -19,13 +21,12 @@ When('I search for particular agent as {string}', async function (searchTerm) {
 
 Then('I should see the agent user sorted in descending order based on {string}', async function (sortBy) {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     let items;
     let itemTexts;
     let sortedItemTexts;
     switch (sortBy) {
     case 'Agent Name':
-        // Write code here that turns the phrase above into concrete actions
         items = await driver.wait(until.elementsLocated(By.css('[data-testid="agent_name"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
         sortedItemTexts = [...itemTexts].sort().reverse();
@@ -71,5 +72,7 @@ Then('I should see list of agent users where status is {string}', async function
 
 Given('I select filter by status as {string}', async function (role) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 500));
     await driver.wait(until.elementLocated(By.css(`[data-testid='filter-modal'] [for='${role}']`))).click();
+    await new Promise(resolve => setTimeout(resolve, 4000));
 });
