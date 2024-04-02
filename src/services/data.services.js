@@ -6,9 +6,7 @@ import authHeader from './authHeader';
 async function PostAPIWithoutHeader (endpoint, body) {
     try {
         const url = `${baseURL}${endpoint}`;
-        console.log('URL:', url); // Print the URL
         const data = await axios.post(url, body);
-        console.log('body:', body);
         return { error: false, data };
     } catch (error) {
         return { error: true, data: error.response };
