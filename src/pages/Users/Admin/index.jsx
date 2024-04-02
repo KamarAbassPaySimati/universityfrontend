@@ -103,6 +103,7 @@ const Admin = () => {
         } else {
             params.sortOrder = 'asc';
         }
+        console.log('test');
         setSearchParams({ ...params });
     };
 
