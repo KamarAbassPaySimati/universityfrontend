@@ -5,6 +5,7 @@ function PageInfo ({ totalCount, currentPage }) {
     const resultsPerPage = 10; // Assuming 10 results per page
     const startIndex = (currentPage - 1) * resultsPerPage + 1;
     const endIndex = Math.min(currentPage * resultsPerPage, totalCount);
+    console.log(startIndex, endIndex, totalCount, 'data');
 
     return (
         <div className='font-[400] text-[14px] leading-[24px] text-neutral-primary
