@@ -56,14 +56,12 @@ const Agent = () => {
     };
 
     useEffect(() => {
-        console.log('first how may times');
         GetList();
     }, [GetList]);
 
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
-            console.log('i am here');
             setNotFound(false);
             params.page = 1;
         }
@@ -79,9 +77,6 @@ const Agent = () => {
             }
         }
     }, [error]);
-
-    /// Dont remove the below code it is being used
-    const param = Object.fromEntries(searchParams);
 
     useEffect(() => {
         if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
@@ -102,7 +97,7 @@ const Agent = () => {
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(List?.data?.length !== 0 ||
-                (param.search || param.status)) && !notFound &&
+                (searchParams.get('status') !== null || searchParams.get('search') !== null)) && !notFound &&
                 <div className='bg-[#fff] border-b border-neutral-outline'>
                     <Topbar
                         setSearchParams={setSearchParams}
@@ -111,10 +106,12 @@ const Agent = () => {
                         placeHolder="Paymaart ID, name or phone number "
                         filterType='Filter agent list'
                         isLoading={loading}
+                        filterActive={(searchParams.get('status') !== null)}
                     />
                 </div>
                 }
-                {!notFound && !(List?.data?.length === 0 && !loading && !(param.search || param.status)) &&
+                {!notFound && !(List?.data?.length === 0 && !loading &&
+                !(searchParams.get('status') !== null || searchParams.get('search') !== null)) &&
                 <div className='overflow-auto scrollBar h-tableHeight'>
                     <Table
                         error={error}
@@ -128,7 +125,8 @@ const Agent = () => {
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
-                {List?.data?.length === 0 && !loading && !(param.search || param.status) &&
+                {List?.data?.length === 0 && !loading &&
+                !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                 (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}

@@ -6,4 +6,4 @@ export default function isTimestampFiveMinutesAgo (timestamp) {
     //  console.log(fiveMinutesInMilliseconds, 'mili')
     //  console.log(currentTimestamp - timestamp)
     return currentTimestamp - timestamp >= fiveMinutesInMilliseconds;
-}
+};
