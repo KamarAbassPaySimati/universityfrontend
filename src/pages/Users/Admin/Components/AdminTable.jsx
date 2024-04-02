@@ -24,7 +24,7 @@ const AdminTable = (
                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                         <th className='py-2 px-[10px] text-left font-[400] '>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
-                            <div className='cursor-pointer flex gap-1 w-fit' onClick={() => handleSort('name', searchParams, setSearchParams)}>
+                            <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_admin_name" onClick={() => handleSort('name', searchParams, setSearchParams)}>
                                 <span>Name</span>
                                 <Image src='sort_icon' />
                             </div>

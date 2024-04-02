@@ -15,6 +15,17 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
   Paymaart ID generation should be in non-sequential order
   Note: Resend can be allowed to 3 limit
 
+  @perform_logout
+  @wait
+  Scenario: Super Admin User login with valid credentials
+    Given I am on the login screen
+    When I enter the email address as "bharath.shet+super_admin@7edge.com" and password as "Admin@123"
+    And I submit the login form
+    Then I should be navigated to the TOTP screen
+    When I enter the TOTP obtained from the previously scanned device
+    And I submit the TOTP form
+    Then I should be redirected to the '/dashboard' page
+
   Scenario Outline: Register user with invalid details
     Given I navigate to agent onboarding screen
     When I enter the first name as <first_name> for agent registration

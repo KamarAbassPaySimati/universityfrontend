@@ -40,7 +40,7 @@ export default function FilterCheckbox ({
             />
             <label
                 htmlFor={id}
-                className={`inline-block pl-4 hover:cursor-pointer text-base font-normal text-neutral-primary capitalize-first 
+                className={`inline-block pl-4 hover:cursor-pointer text-base font-normal text-neutral-primary capitalize 
                 ${isLoading ? 'opacity-50' : ''}`}
             >
                 {checkboxText}
