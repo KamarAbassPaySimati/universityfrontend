@@ -180,3 +180,13 @@ input[type='number'] {
   height: 1px;
   background-color: #E5E9EB;
 }
+.neutral-secondary-img {
+  filter: opacity(0.4);
+}
+.capitalize-first {
+  text-transform: lowercase;
+}
+
+.capitalize-first:first-letter {
+  text-transform: uppercase;
+}

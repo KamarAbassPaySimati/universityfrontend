@@ -4,20 +4,18 @@ import Topbar from '../../../components/Topbar/Topbar';
 import Table from './Onboard Agent/components/Table';
 import Paginator from '../../../components/Paginator/Paginator';
 import { useSearchParams } from 'react-router-dom';
-import objectToQueryString from '../../../CommonMethods/objectToQueryString';
 import { useDispatch, useSelector } from 'react-redux';
 import { AgentList } from './agentSlice';
-import GlobalContext from '../../../components/Context/GlobalContext';
 import NoDataError from '../../../components/NoDataError/NoDataError';
 import Slugify from '../../../CommonMethods/Sulgify';
+import GlobalContext from '../../../components/Context/GlobalContext';
 
 const Agent = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
     const [notFound, setNotFound] = useState(false);
-
+    const { setToastError } = useContext(GlobalContext);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentUsers);
-    const { setToastError } = useContext(GlobalContext);
 
     const { user } = useSelector((state) => state.auth);
     let { user_type: CurrentUserRole } = user;
@@ -26,64 +24,42 @@ const Agent = () => {
     }
 
     const filterOptions = {
-        Status: ['Active', 'Inactive']
+        status: ['active', 'inactive']
     };
 
+    /* The `GetList` constant is a function created using the `useCallback` hook in React. This
+    function is responsible for fetching the list of agents based on the search parameters provided.
+    Here's a breakdown of what it does: */
     const GetList = useCallback(async () => {
-        let params = Object.fromEntries(searchParams);
-        if (Object.keys(params).length === 0) {
-            return;
-        }
-        delete params.tab;
         try {
-            params = objectToQueryString(params);
-            dispatch(AgentList(params));
+            dispatch(AgentList(searchParams)).then((response) => {
+                if (response.payload.error) {
+                    if (error.status === 400) {
+                        setNotFound(true);
+                    } else {
+                        setToastError('Something went wrong!');
+                    }
+                } else {
+                    if (response.payload.data.length !== 0) {
+                        setNotFound(false);
+                    }
+                }
+            });
         } catch (error) {
-            console.error(error);
+            console.error('geterror', error);
         }
     }, [searchParams]);
 
-    const handleSortByName = () => {
-        const params = Object.fromEntries(searchParams);
-        params.sortBy = 'name';
-        params.page = 1;
-        if (params.sortOrder === 'asc') {
-            params.sortOrder = 'desc';
-        } else {
-            params.sortOrder = 'asc';
-        }
-        setSearchParams({ ...params });
-    };
-
+    /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
+    specified in the dependency array change. In this case, the effect will run when the `GetList`
+    function changes. */
     useEffect(() => {
-        GetList();
-    }, [GetList]);
-
-    useEffect(() => {
-        const params = Object.fromEntries(searchParams);
-        if (List?.data?.length !== 0) {
-            setNotFound(false);
-            params.page = 1;
-        }
-    }, [List]);
-
-    useEffect(() => {
-        console.log(error, 'error');
-        if (error) {
-            if (error.status === 400) {
-                setNotFound(true);
-            } else {
-                setToastError('Something went wrong!');
-            }
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
+        if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
+        } else {
+            GetList();
         }
-    }, []);
-
+    }, [GetList]);
     return (
         <CardHeader
             activePath='Agents'
@@ -117,7 +93,7 @@ const Agent = () => {
                         error={error}
                         loading={loading}
                         List={List}
-                        handleSortByName={handleSortByName}
+                        setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
                     />

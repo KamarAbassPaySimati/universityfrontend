@@ -10,7 +10,7 @@ const initialState = {
 export const AdminList = createAsyncThunk('adminUsers', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     const safeUrl =
-        `get-admin${searchParams.toString()}`;// api end point
+        `get-admin?${searchParams.toString()}`;// api end point
 
     try {
         const res = await dataService.GetAPI(safeUrl);
@@ -33,18 +33,19 @@ const adminSlice = createSlice({
             .addCase(AdminList.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.List = [];
             })
-            .addCase(AdminList.fulfilled, (state, action) => {
+            .addCase(AdminList.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                if (!action.payload.error && action.payload.data.success_status) {
-                    state.List = action.payload.data;
+                if (!payload?.error) {
+                    state.List = payload?.data;
                 } else {
-                    state.error = action?.payload?.data?.message;
+                    state.error = payload?.data;
                 }
             })
-            .addCase(AdminList.rejected, (state, action) => {
+            .addCase(AdminList.rejected, (state, { payload }) => {
                 state.loading = false;
-                state.error = action.payload.message.message;
+                state.error = payload?.message;
             });
     }
 });
