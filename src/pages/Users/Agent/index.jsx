@@ -27,6 +27,9 @@ const Agent = () => {
         status: ['active', 'inactive']
     };
 
+    /* The `GetList` constant is a function created using the `useCallback` hook in React. This
+    function is responsible for fetching the list of agents based on the search parameters provided.
+    Here's a breakdown of what it does: */
     const GetList = useCallback(async () => {
         try {
             dispatch(AgentList(searchParams)).then((response) => {
@@ -47,6 +50,9 @@ const Agent = () => {
         }
     }, [searchParams]);
 
+    /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
+    specified in the dependency array change. In this case, the effect will run when the `GetList`
+    function changes. */
     useEffect(() => {
         if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
@@ -54,7 +60,6 @@ const Agent = () => {
             GetList();
         }
     }, [GetList]);
-
     return (
         <CardHeader
             activePath='Agents'
