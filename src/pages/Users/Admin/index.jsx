@@ -24,8 +24,8 @@ const Admin = () => {
     const { List, error, loading } = useSelector(state => state.adminUsers); // to get the api respons
     // filter options
     const filterOptions = {
-        Role: ['Super admin', 'Finance admin', 'Admin', 'Support admin'],
-        Status: ['Active', 'Inactive']
+        role: ['Super admin', 'Finance admin', 'Admin', 'Support admin'],
+        status: ['active', 'inactive']
     };
     // initially with page 1 as search params
     const [searchParams, setSearchParams] = useSearchParams();
@@ -55,6 +55,7 @@ const Admin = () => {
             dispatch(AdminList(params));
         } catch (error) {
             console.error(error);
+            console.log('first hello');
         }
     }, [searchParams]);
 
@@ -87,7 +88,6 @@ const Admin = () => {
             }
         }
     }, [error]);
-    const param = Object.fromEntries(searchParams);
 
     useEffect(() => {
         if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
@@ -120,7 +120,8 @@ const Admin = () => {
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(List?.data?.length !== 0 ||
-                (param.search || param.status)) && !notFound &&
+                (searchParams.get('status') !== null || searchParams.get('search') !== null ||
+                searchParams.get('role') !== null)) && !notFound &&
                 <div className='bg-[#fff] h-12  border-b border-[#E5E9EB]'>
                     <Topbar
                         setSearchParams={setSearchParams}// pass this as its getting updated
@@ -129,10 +130,12 @@ const Admin = () => {
                         filterType= 'Filter admin list'
                         placeHolder= 'Paymaart ID, name, email or phone number'
                         isLoading={loading}
+                        filterColor={searchParams.get('role') === null && searchParams.get('status') === null}
                     />
                 </div>
                 }
-                {!notFound && !(List?.data?.length === 0 && !loading && !(param.search || param.status)) &&
+                {!notFound && !(List?.data?.length === 0 && !loading && (searchParams.get('status') !== null ||
+                searchParams.get('search') !== null || searchParams.get('role') !== null)) &&
                 <div className='h-tableHeight scrollBar overflow-auto'>
                     <AdminTable
                         // error={error}
@@ -151,7 +154,8 @@ const Admin = () => {
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
-                {List?.data?.length === 0 && !loading && !(param.search || param.status) &&
+                {List?.data?.length === 0 && !loading && (searchParams.get('status') !== null ||
+                searchParams.get('search') !== null || searchParams.get('role') !== null) &&
                 (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Admin ” to add admin' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}

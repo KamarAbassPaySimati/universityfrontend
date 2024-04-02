@@ -7,6 +7,7 @@ import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 import { useNavigate } from 'react-router-dom';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
+import { Tooltip } from 'react-tooltip';
 
 const AdminTable = (
     {
@@ -14,13 +15,12 @@ const AdminTable = (
     }
 ) => {
     const navigate = useNavigate();
-    const param = Object.fromEntries(searchParams);
     return (
         <>
             <table className='w-full'>
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                        <th className='py-2 px-[10px] text-left font-[400] min-w-[150px]'>Paymaart ID</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
                             <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
                                 <span>Name</span>
@@ -41,7 +41,7 @@ const AdminTable = (
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title = {user?.paymaart_id}
-                                    className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
+                                    className='py-2 px-[10px] text-left truncate max-w-[40px]'>{user?.paymaart_id || '-'}</td>
                                 <td data-testid="name" title = {`${user?.name}`}
                                     className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {`${user?.name}`}</td>
@@ -71,8 +71,21 @@ const AdminTable = (
                                     </span>
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-10 flex gap-[19px] text-center align-center justify-end'>
-                                    {CurrentUserRole === 'super-admin' && <><Image testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
-                                        <Image src='edit' /></>}
+                                    {CurrentUserRole === 'super-admin' && <><Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
+                                        <Image src='edit' toolTipId={`edit-${index}`}/></>}
+                                    <Tooltip
+                                        id={`eye-${index}`}
+                                        className='my-tooltip z-30'
+                                        place="top"
+                                        content="View"
+                                    />
+                                    <Tooltip
+                                        id={`edit-${index}`}
+                                        className='my-tooltip z-30'
+                                        place="top"
+                                        content="Edit"
+                                    />
+
                                 </td>
                             </tr>))}
                     </tbody>
@@ -81,7 +94,7 @@ const AdminTable = (
             {!notFound && error &&
             (<NoDataError heading='There are no admins added yet' text='Click “Register Admin ” to add admin' />)}
             {List?.data?.length === 0 && !loading &&
-            (param.status || param.search) &&
+            (searchParams.get('status') !== null || searchParams.get('search') !== null || searchParams.get('role') !== null) &&
             (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
         </>
     );

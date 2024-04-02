@@ -36,15 +36,15 @@ const adminSlice = createSlice({
             })
             .addCase(AdminList.fulfilled, (state, action) => {
                 state.loading = false;
-                if (!action.payload.error && action.payload.data.success_status) {
+                if (!action.payload.error) {
                     state.List = action.payload.data;
                 } else {
-                    state.error = action?.payload?.data?.message;
+                    state.error = action?.payload?.data;
                 }
             })
             .addCase(AdminList.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload.message.message;
+                state.error = action.payload.message;
             });
     }
 });

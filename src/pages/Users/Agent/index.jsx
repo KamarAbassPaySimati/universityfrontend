@@ -16,7 +16,6 @@ const Agent = () => {
 
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentUsers);
-    
 
     const { user } = useSelector((state) => state.auth);
     let { user_type: CurrentUserRole } = user;
@@ -25,7 +24,7 @@ const Agent = () => {
     }
 
     const filterOptions = {
-        Status: ['Active', 'Inactive']
+        status: ['active', 'inactive']
     };
 
     const GetList = useCallback(async () => {

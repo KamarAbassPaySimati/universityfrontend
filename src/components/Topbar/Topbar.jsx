@@ -8,7 +8,8 @@ const Topbar = ({
     filterOptions,
     filterType,
     placeHolder,
-    isLoading
+    isLoading,
+    filterColor
 }) => {
     const [timer, setTimer] = useState(null);
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
