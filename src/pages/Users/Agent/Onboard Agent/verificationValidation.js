@@ -8,7 +8,6 @@ export default function verificationValidation (state, setErrorState, ignoreKey)
 
     for (const key in state) {
         if (key === ignoreKey) {
-            console.log('ignored');
             continue;
         }
         if (state[key].trim() === '') {

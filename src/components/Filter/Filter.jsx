@@ -11,7 +11,8 @@ const Filter = ({
     handleClearFilter,
     handleSearchParams,
     searchParams,
-    isLoading
+    isLoading,
+    filterActive
 }) => {
     const filterDiv = useRef();
 
@@ -24,7 +25,7 @@ const Filter = ({
     return (
         <div ref={filterDiv} className="z-1">
             <Image
-                src="filter_icon"
+                src={`${filterActive ? 'active_' : ''}filter_icon`}
                 testId='filter-tab'
                 className="filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer"
                 onClick={() => setIsFilterOpen(prevState => !prevState)}

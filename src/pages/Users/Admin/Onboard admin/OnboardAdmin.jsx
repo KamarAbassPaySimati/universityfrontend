@@ -56,6 +56,12 @@ const OnboardAdmin = () => {
             });
             return;
         }
+        if (id === 'firstName' || id === 'middleName') {
+            setFormData(prevState => {
+                return { ...prevState, [id]: e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1) };
+            });
+            return;
+        }
         setFormData(prevState => {
             return { ...prevState, [id]: e.target.value };
         });

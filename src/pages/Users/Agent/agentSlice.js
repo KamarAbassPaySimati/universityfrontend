@@ -37,7 +37,6 @@ const agentSlice = createSlice({
             })
             .addCase(AgentList.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                console.log(payload, 'payload');
                 if (!payload?.error) {
                     state.List = payload?.data;
                 } else {

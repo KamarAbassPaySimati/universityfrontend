@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
-import AdminTable from './Onboard admin/components/AdminTable';
+import AdminTable from './Components/AdminTable';
 import { useSearchParams } from 'react-router-dom';
 import objectToQueryString from '../../../CommonMethods/objectToQueryString';
 import { AdminList } from './AdminSlice';
@@ -43,7 +43,6 @@ const Admin = () => {
     // as soon as the search params changes getlist gets called
     useEffect(() => {
         GetList();
-        console.log(searchParams, 'searchParams');
     }, [searchParams]);
     // In the table as soon as the button tapped of the sort this function will be triggered
     const handleSortByName = () => {
@@ -85,6 +84,7 @@ const Admin = () => {
                         loading={loading}
                         List={List}
                         handleSortByName={handleSortByName}
+                        CurrentUserRole={CurrentUserRole}
                     />
                 </div>
 
