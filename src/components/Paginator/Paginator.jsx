@@ -11,7 +11,7 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
         setSearchParams({ ...params, page: page + 1 });
     };
     return (
-        <div className="flex items-center w-full mt-1 py-3 relative">
+        <div className="flex items-center w-full mt-1 py-5 relative">
             {totalPages > 1 &&
             <div className="flex items-center justify-end sticky bottom-0 z-[9] w-[60%]">
                 <div className=" flex items-center rounded-lg p-1" data-testid="paginator">
