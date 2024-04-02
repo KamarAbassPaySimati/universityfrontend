@@ -41,7 +41,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams }
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status
                                         ? (
-                                            <span className={`text-[13px] font-[600] capitalize 
+                                            <span className={`py-[2px] px-[10px] rounded text-[13px] font-[600] capitalize 
                                              ${user.status === 'active'
                                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                                 : 'bg-neutral-grey text-neutral-secondary'}`}>

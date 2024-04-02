@@ -67,7 +67,7 @@ const AdminTable = (
                                 <td data-testid="status" className='py-2 px-[10px] text-left truncate'>
                                     {user?.status
                                         ? (
-                                            <span className={`text-[13px] font-[600] capitalize 
+                                            <span className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded
                                              ${user.status === 'active'
                                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                                 : 'bg-neutral-grey text-neutral-secondary'}`}>
