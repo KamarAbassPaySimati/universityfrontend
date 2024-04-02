@@ -8,10 +8,11 @@ import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTim
 import { useNavigate } from 'react-router-dom';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
+import handleSort from '../../../../CommonMethods/ListFunctions';
 
 const AdminTable = (
     {
-        loading, error, List, handleSortByName, notFound, searchParams, CurrentUserRole
+        loading, error, List, setSearchParams, notFound, searchParams, CurrentUserRole
     }
 ) => {
     const navigate = useNavigate();
@@ -23,7 +24,7 @@ const AdminTable = (
                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                         <th className='py-2 px-[10px] text-left font-[400] '>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
-                            <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
+                            <div className='cursor-pointer flex gap-1 w-fit' onClick={() => handleSort('name', searchParams, setSearchParams)}>
                                 <span>Name</span>
                                 <Image src='sort_icon' />
                             </div>

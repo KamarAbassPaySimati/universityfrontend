@@ -3,7 +3,6 @@ import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import AdminTable from './Components/AdminTable';
 import { useSearchParams } from 'react-router-dom';
-import objectToQueryString from '../../../CommonMethods/objectToQueryString';
 import { AdminList } from './AdminSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import Slugify from '../../../CommonMethods/Sulgify';
@@ -29,9 +28,9 @@ const Admin = () => {
     };
     // initially with page 1 as search params
     const [searchParams, setSearchParams] = useSearchParams();
-    if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
-        setSearchParams({ page: 1 });
-    }
+    // if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
+    //     setSearchParams({ page: 1 });
+    // }
     const dispatch = useDispatch();
     // const GetList = useCallback(async () => {
     //     let params = Object.fromEntries(searchParams);
@@ -45,17 +44,22 @@ const Admin = () => {
     // }, [searchParams]);
 
     const GetList = useCallback(async () => {
-        let params = Object.fromEntries(searchParams);
-        if (Object.keys(params).length === 0) {
-            return;
-        }
-        delete params.tab;
         try {
-            params = objectToQueryString(params);
-            dispatch(AdminList(params));
+            dispatch(AdminList(searchParams)).then((response) => {
+                if (response.payload.error) {
+                    if (error.status === 400) {
+                        setNotFound(true);
+                    } else {
+                        setToastError('Something went wrong!');
+                    }
+                } else {
+                    if (response.payload.data.length !== 0) {
+                        setNotFound(false);
+                    }
+                }
+            });
         } catch (error) {
-            console.error(error);
-            console.log('first hello');
+            console.error('geterror', error);
         }
     }, [searchParams]);
 
@@ -65,47 +69,25 @@ const Admin = () => {
     // }, [searchParams]);
 
     useEffect(() => {
-        GetList();
+        if (searchParams.get('page') === null) {
+            setSearchParams({ page: 1 });
+        } else {
+            GetList();
+        }
     }, [GetList]);
 
-    useEffect(() => {
-        const params = Object.fromEntries(searchParams);
-        if (List?.data?.length !== 0) {
-            console.log('i am here');
-            setNotFound(false);
-            params.page = 1;
-        }
-    }, [List]);
-
-    useEffect(() => {
-        console.log(error, 'error');
-        if (error) {
-            if (error.status === 400) {
-                setNotFound(true);
-            } else {
-                setToastError('Something went wrong!');
-            }
-        }
-    }, [error]);
-
-    useEffect(() => {
-        if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
-            setSearchParams({ page: 1 });
-        }
-    }, []);
-
     // In the table as soon as the button tapped of the sort this function will be triggered
-    const handleSortByName = () => {
-        const params = Object.fromEntries(searchParams);
-        params.sortBy = 'name';
-        if (params.sortOrder === 'asc') {
-            params.sortOrder = 'desc';
-        } else {
-            params.sortOrder = 'asc';
-        }
-        console.log('test');
-        setSearchParams({ ...params });
-    };
+    // const handleSortByName = () => {
+    //     const params = Object.fromEntries(searchParams);
+    //     params.sortBy = 'name';
+    //     if (params.sortOrder === 'asc') {
+    //         params.sortOrder = 'desc';
+    //     } else {
+    //         params.sortOrder = 'asc';
+    //     }
+    //     console.log('test');
+    //     setSearchParams({ ...params });
+    // };
 
     return (
         <CardHeader
@@ -146,7 +128,7 @@ const Admin = () => {
                         error={error}
                         loading={loading}
                         List={List}
-                        handleSortByName={handleSortByName}
+                        setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
                     />
