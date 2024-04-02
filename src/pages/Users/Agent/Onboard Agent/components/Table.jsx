@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect } from 'react';
+import React from 'react';
 import Image from '../../../../../components/Image/Image';
 import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
 import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
@@ -8,11 +8,6 @@ import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
 
 const Table = ({ loading, error, List, handleSortByName, notFound, searchParams }) => {
-    const param = Object.fromEntries(searchParams);
-
-    useEffect(() => {
-        console.log(notFound, 'not');
-    }, []);
     return (
         <>
             <table className='w-full min-w-max'>
@@ -38,19 +33,27 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
-                                <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate max-w-[100px]'>{`${user?.name}`}</td>
+                                <td title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
+                                <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
                                 <td className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
                                 <td data-testid="status" className='py-2 px-[10px]'>
-                                    <span className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize 
-                        ${user?.status === 'active'
-                                ? 'bg-[#ECFDF5] text-accent-positive'
-                                : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                        {user?.status}
-                                    </span>
+                                    {user?.status
+                                        ? (
+                                            <span className={`text-[13px] font-[600] capitalize 
+                                             ${user.status === 'active'
+                                                ? 'bg-[#ECFDF5] text-accent-positive'
+                                                : 'bg-neutral-grey text-neutral-secondary'}`}>
+                                                {user.status}
+                                            </span>
+                                        )
+                                        : (
+                                            <span className='text-neutral-secondary'>
+                                                -
+                                            </span>
+                                        )}
                                 </td>
-                                <td className='py-2 px-3 mr-3 flex gap-[19px] justify-end'>
+                                <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' />
                                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
                                     <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
@@ -80,7 +83,7 @@ const Table = ({ loading, error, List, handleSortByName, notFound, searchParams 
             {!notFound && error &&
             (<NoDataError heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&
-            (param.status || param.search) &&
+            (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
             (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
         </>
     );

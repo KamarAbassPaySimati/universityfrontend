@@ -44,7 +44,7 @@ const AdminTable = (
                                 <td data-testid="paymaart_id" title = {user?.paymaart_id}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
                                 <td data-testid="name" title = {`${user?.name}`}
-                                    className='py-2 px-[10px] text-left truncate max-w-[100px]'>
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                     {`${user?.name}`}</td>
                                 <td data-testid="email" title = {user?.email} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {user?.email}</td>
@@ -64,14 +64,22 @@ const AdminTable = (
                                     </span>
                                 </td>
                                 <td className='py-2 px-[10px] text-left truncate'>
-                                    <span className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize 
-                                 ${user?.status === 'active'
-                                ? 'bg-[#ECFDF5] text-accent-positive'
-                                : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                        {user?.status}
-                                    </span>
+                                    {user?.status
+                                        ? (
+                                            <span className={`text-[13px] font-[600] capitalize 
+                                             ${user.status === 'active'
+                                                ? 'bg-[#ECFDF5] text-accent-positive'
+                                                : 'bg-neutral-grey text-neutral-secondary'}`}>
+                                                {user.status}
+                                            </span>
+                                        )
+                                        : (
+                                            <span className='text-neutral-secondary'>
+                                                -
+                                            </span>
+                                        )}
                                 </td>
-                                <td className='py-3 px-[10px] mr-1 ml-10 flex gap-[19px] text-center align-center justify-end'>
+                                <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     {CurrentUserRole === 'super-admin' && <><Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
                                         <Image src='edit' toolTipId={`edit-${index}`}/></>}
                                     <Tooltip

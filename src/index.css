@@ -12,7 +12,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-
 .react-responsive-modal-modal {
   padding: 0 !important;
 }
@@ -167,6 +166,7 @@ input[type='number']::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0; /* Optional - if you want to remove the margin */
 }
+
 input[type='number'] {
   -moz-appearance: textfield; /* Optional - for Firefox */
 }
@@ -174,9 +174,9 @@ input[type='number'] {
 .thead-border-bottom::before{
   content: '';
   position: absolute;
-  top: 88px;
+  top: 81px;
   left: 0;
-  width: 100%;
+  width: calc(100% - 4px);
   height: 1px;
   background-color: #E5E9EB;
 }

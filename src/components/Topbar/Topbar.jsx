@@ -9,7 +9,7 @@ const Topbar = ({
     filterType,
     placeHolder,
     isLoading,
-    filterColor
+    filterActive
 }) => {
     const [timer, setTimer] = useState(null);
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
@@ -70,38 +70,37 @@ const Topbar = ({
     };
 
     return (
-        <div>
-            <div className="relative my-2 ">
-                <input
-                    type="text"
-                    value={search}
-                    data-testid="search"
-                    onChange={handleSearch}
-                    placeholder= {placeHolder}
-                    className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
-                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8 
+        <div className="relative my-2 ">
+            <input
+                type="text"
+                value={search}
+                data-testid="search"
+                onChange={handleSearch}
+                placeholder= {placeHolder}
+                className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
+                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8 rounded-[4px]
                 ${search?.length > 1 ? 'bg-[#F8F8F8]' : ''}`}
-                />
-                <Image
-                    src={search?.length > 1 ? 'small_search_icon' : 'search_icon'}
-                    testId='search-btn'
-                    className="absolute top-1/2 -translate-y-1/2 left-[26px] cursor-pointer"
-                />
-                {search?.length > 1 && <Image
-                    src="search_close"
-                    onClick={handleClearSearch}
-                    testId='search-close'
-                    className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer bg-[#F8F8F8]"
-                />}
-                <Filter
-                    handleClearFilter={handleClearFilter}
-                    filterOptions={filterOptions}
-                    filterType={filterType}
-                    handleSearchParams={handleSearchParamsForFilter}
-                    searchParams={searchParams}
-                    isLoading={isLoading}
-                />
-            </div>
+            />
+            <Image
+                src={search?.length > 1 ? 'small_search_icon' : 'search_icon'}
+                testId='search-btn'
+                className="absolute top-1/2 -translate-y-1/2 left-[26px] cursor-pointer"
+            />
+            {search?.length > 1 && <Image
+                src="search_close"
+                onClick={handleClearSearch}
+                testId='search-close'
+                className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer bg-[#F8F8F8]"
+            />}
+            <Filter
+                handleClearFilter={handleClearFilter}
+                filterOptions={filterOptions}
+                filterType={filterType}
+                handleSearchParams={handleSearchParamsForFilter}
+                searchParams={searchParams}
+                isLoading={isLoading}
+                filterActive={filterActive}
+            />
         </div>
     );
 };

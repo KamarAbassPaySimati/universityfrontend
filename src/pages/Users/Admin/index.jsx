@@ -121,7 +121,7 @@ const Admin = () => {
                 {(List?.data?.length !== 0 ||
                 (searchParams.get('status') !== null || searchParams.get('search') !== null ||
                 searchParams.get('role') !== null)) && !notFound &&
-                <div className='bg-[#fff] h-12  border-b border-[#E5E9EB]'>
+                <div className='bg-[#fff] border-b border-[#E5E9EB]'>
                     <Topbar
                         setSearchParams={setSearchParams}// pass this as its getting updated
                         searchParams={searchParams}// pass this because its used
