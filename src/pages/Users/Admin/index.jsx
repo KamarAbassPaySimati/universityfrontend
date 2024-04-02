@@ -111,7 +111,8 @@ const Admin = () => {
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
                 {List?.data?.length === 0 && !loading &&
-                !(searchParams.get('status') === null || searchParams.get('search') === null || searchParams.get('role') === null) &&
+                !(searchParams.get('status') === null || searchParams.get('search') === null ||
+                searchParams.get('role') === null) &&
                 (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
