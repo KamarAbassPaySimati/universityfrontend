@@ -47,7 +47,8 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                     />
                 </div>
             </div>}
-            <PageInfo totalCount={totalRecords} currentPage={currentPage} />
+            {console.log(totalRecords, currentPage, 'cnwuic')}
+            <PageInfo totalCount={totalRecords} currentPage={Number(currentPage)} />
         </div>
     );
 };

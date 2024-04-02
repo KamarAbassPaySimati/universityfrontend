@@ -16,7 +16,7 @@ const Agent = () => {
 
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentUsers);
-    const { setToastError } = useContext(GlobalContext);
+    
 
     const { user } = useSelector((state) => state.auth);
     let { user_type: CurrentUserRole } = user;
