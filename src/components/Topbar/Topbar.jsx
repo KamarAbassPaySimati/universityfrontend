@@ -64,7 +64,9 @@ const Topbar = ({
     const handleClearFilter = () => {
         // Reset filterValues to an empty object or default values
         const params = Object.fromEntries(searchParams);
-        params.page = 1;
+        if (filterActive) {
+            params.page = 1;
+        }
         delete params.role;
         delete params.status;
         setSearchParams({ ...params });
