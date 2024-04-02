@@ -42,7 +42,10 @@ const SpecificAdminViewSlice = createSlice({
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data[0];
                     state.userDetails = {
-                        'Phone Number': `${state?.View?.country_code} ${state?.View?.phone_number ? formatInputPhone(state?.View?.phone_number) : ''}`,
+                        'Phone Number':
+                            `${state?.View?.country_code} ${state?.View?.phone_number
+                                ? formatInputPhone(state?.View?.phone_number)
+                                : ''}`,
                         Email: state?.View?.email,
                         Role: state?.View?.user_type,
                         Created_Date: formatTimestamp(state?.View?.created_at),
