@@ -17,10 +17,11 @@ const AdminTable = (
     const navigate = useNavigate();
     return (
         <>
-            <table className='w-full'>
+            <table className='w-full min-w-max'>
+                {(List?.data?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Paymaart ID</th>
+                        <th className='py-2 px-[10px] text-left font-[400] '>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
                             <div className='cursor-pointer flex gap-1 w-fit' onClick={handleSortByName}>
                                 <span>Name</span>
@@ -34,16 +35,16 @@ const AdminTable = (
                         <th className='py-2 px-[10px] text-left font-[400]'>Status</th>
                         <th className='py-2 px-[10px]'></th>
                     </tr>
-                </thead>
+                </thead>}
                 {loading
-                    ? <Shimmer column={8} row={10}/>
+                    ? <Shimmer column={8} row={10} firstIndex/>
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title = {user?.paymaart_id}
-                                    className='py-2 px-[10px] text-left truncate max-w-[40px]'>{user?.paymaart_id || '-'}</td>
+                                    className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
                                 <td data-testid="name" title = {`${user?.name}`}
-                                    className='py-2 px-[10px] text-left truncate max-w-[300px]'>
+                                    className='py-2 px-[10px] text-left truncate max-w-[100px]'>
                                     {`${user?.name}`}</td>
                                 <td data-testid="email" title = {user?.email} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {user?.email}</td>

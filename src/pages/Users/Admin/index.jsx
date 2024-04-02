@@ -65,7 +65,6 @@ const Admin = () => {
     // }, [searchParams]);
 
     useEffect(() => {
-        console.log('first how may times');
         GetList();
     }, [GetList]);
 
