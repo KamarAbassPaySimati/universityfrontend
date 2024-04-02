@@ -19,32 +19,22 @@ const Admin = () => {
     if (CurrentUserRole) {
         CurrentUserRole = Slugify(CurrentUserRole);
     }
-    // to get the data from authslice
     const { List, error, loading } = useSelector(state => state.adminUsers); // to get the api respons
     // filter options
     const filterOptions = {
         role: ['Super admin', 'Finance admin', 'Admin', 'Support admin'],
         status: ['active', 'inactive']
     };
-    // initially with page 1 as search params
     const [searchParams, setSearchParams] = useSearchParams();
-    // if (Object.keys(Object.fromEntries(searchParams)).length === 0) {
-    //     setSearchParams({ page: 1 });
-    // }
-    const dispatch = useDispatch();
-    // const GetList = useCallback(async () => {
-    //     let params = Object.fromEntries(searchParams);
-    //     delete params.tab;
-    //     try {
-    //         params = objectToQueryString(params);// convert the param object into string
-    //         dispatch(AdminList(params));
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }, [searchParams]);
 
+    const dispatch = useDispatch();
+
+    /* The `GetList` constant is a function created using the `useCallback` hook in React. It is an
+    asynchronous function that is responsible for fetching data using the `dispatch` function to
+    call the `AdminList` action creator with the `searchParams` as a parameter. */
     const GetList = useCallback(async () => {
         try {
+            // to get the data from authslice
             dispatch(AdminList(searchParams)).then((response) => {
                 if (response.payload.error) {
                     if (error.status === 400) {
@@ -63,11 +53,8 @@ const Admin = () => {
         }
     }, [searchParams]);
 
-    // as soon as the search params changes getlist gets called
-    // useEffect(() => {
-    //     GetList();
-    // }, [searchParams]);
-
+    /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
+    when the component mounts or when the dependencies change. */
     useEffect(() => {
         if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
@@ -75,19 +62,6 @@ const Admin = () => {
             GetList();
         }
     }, [GetList]);
-
-    // In the table as soon as the button tapped of the sort this function will be triggered
-    // const handleSortByName = () => {
-    //     const params = Object.fromEntries(searchParams);
-    //     params.sortBy = 'name';
-    //     if (params.sortOrder === 'asc') {
-    //         params.sortOrder = 'desc';
-    //     } else {
-    //         params.sortOrder = 'asc';
-    //     }
-    //     console.log('test');
-    //     setSearchParams({ ...params });
-    // };
 
     return (
         <CardHeader
@@ -116,7 +90,7 @@ const Admin = () => {
                     />
                 </div>
                 }
-                {!notFound && !(List?.data?.length === 0 && !loading && (searchParams.get('status') !== null ||
+                {!notFound && !(List?.data?.length === 0 && !loading && !(searchParams.get('status') !== null ||
                 searchParams.get('search') !== null || searchParams.get('role') !== null)) &&
                 <div className='h-tableHeight scrollBar overflow-auto'>
                     <AdminTable
@@ -136,9 +110,9 @@ const Admin = () => {
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
-                {List?.data?.length === 0 && !loading && (searchParams.get('status') !== null ||
-                searchParams.get('search') !== null || searchParams.get('role') !== null) &&
-                (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Admin ” to add admin' />)}
+                {List?.data?.length === 0 && !loading &&
+                !(searchParams.get('status') === null || searchParams.get('search') === null || searchParams.get('role') === null) &&
+                (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
