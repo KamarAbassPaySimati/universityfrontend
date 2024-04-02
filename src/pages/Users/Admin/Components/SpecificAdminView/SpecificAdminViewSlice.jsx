@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
 import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
 import { dataService } from '../../../../../services/data.services';
+import isTimestampFiveMinutesAgo from '../../../../../CommonMethods/lastLoggedInTimeStamp';
 
 const initialState = {
     loading: true,
@@ -44,8 +45,12 @@ const SpecificAdminViewSlice = createSlice({
                         'Phone Number': `${state.View.country_code} ${formatInputPhone(state.View.phone_number)}`,
                         Email: state.View.email,
                         Role: state.View.user_type,
-                        Created_Date: formatTimestamp(state.View.last_logged_in),
-                        Last_Logged_In: formatTimestamp(state.View.last_logged_in)
+                        Created_Date: formatTimestamp(state?.View?.created_at),
+                        Last_Logged_In: state.View?.last_logged_in
+                            ? isTimestampFiveMinutesAgo(state.View?.last_logged_in)
+                                ? formatTimestamp(state.View?.last_logged_in)
+                                : 'Online'
+                            : ''
                     };
                     state.keys = Object.keys(state.userDetails);
                 } else {
