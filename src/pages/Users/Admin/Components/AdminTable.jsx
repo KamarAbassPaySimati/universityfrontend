@@ -64,7 +64,7 @@ const AdminTable = (
                                         }
                                     </span>
                                 </td>
-                                <td className='py-2 px-[10px] text-left truncate'>
+                                <td data-testid="status" className='py-2 px-[10px] text-left truncate'>
                                     {user?.status
                                         ? (
                                             <span className={`text-[13px] font-[600] capitalize 
