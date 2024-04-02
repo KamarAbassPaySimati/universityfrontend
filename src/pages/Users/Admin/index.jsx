@@ -86,7 +86,7 @@ const Admin = () => {
                         filterType= 'Filter admin list'
                         placeHolder= 'Paymaart ID, name, email or phone number'
                         isLoading={loading}
-                        filterColor={searchParams.get('role') === null && searchParams.get('status') === null}
+                        filterActive={(searchParams.get('status') !== null) || searchParams.get('role') !== null}
                     />
                 </div>
                 }

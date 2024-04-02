@@ -79,14 +79,14 @@ const Topbar = ({
                 placeholder= {placeHolder}
                 className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
                 outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8 rounded-[4px]
-                ${search?.length > 1 ? 'bg-[#F8F8F8]' : ''}`}
+                ${search?.length > 0 ? 'bg-[#F8F8F8]' : ''}`}
             />
             <Image
-                src={search?.length > 1 ? 'small_search_icon' : 'search_icon'}
+                src={search?.length > 0 ? 'small_search_icon' : 'search_icon'}
                 testId='search-btn'
                 className="absolute top-1/2 -translate-y-1/2 left-[26px] cursor-pointer"
             />
-            {search?.length > 1 && <Image
+            {search?.length > 0 && <Image
                 src="search_close"
                 onClick={handleClearSearch}
                 testId='search-close'
