@@ -67,7 +67,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm ci --cache .npm
+            npm install --cache .npm
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
@@ -146,7 +146,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm ci --cache .npm
+            npm install --cache .npm
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
@@ -173,7 +173,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm ci --cache .npm
+            npm install --cache .npm
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
