@@ -145,11 +145,11 @@ stages:
           inputs:
             artifact: Environment
             targetPath: '$(System.DefaultWorkingDirectory)'
-        - task: DownloadPipelineArtifact@2
-          name: bundle
-          inputs:
-            artifact: bundle
-            targetPath: '$(System.DefaultWorkingDirectory)'
+        # - task: DownloadPipelineArtifact@2
+          # name: bundle
+          # inputs:
+          #   artifact: bundle
+          #   targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
             npm install pm2 -g
             source .env
