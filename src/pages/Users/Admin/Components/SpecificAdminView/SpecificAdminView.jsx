@@ -11,6 +11,9 @@ import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../../../../components/ConfirmationPopup/ConfirmationPopup';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 
+import { dataService } from '../../../../../services/data.services';
+import { endpoints } from '../../../../../services/endpoints';
+
 export default function SpecificAdminView () {
     const dispatch = useDispatch();
     const { id } = useParams();
@@ -18,6 +21,10 @@ export default function SpecificAdminView () {
     const [isModalOpen, setModalOpen] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const { adminActivateDeactivate } = endpoints;
+    const { user } = useSelector((state) => state.auth);
+    const { paymaart_id: PaymaartId } = user;
+
     const getAdminView = () => {
         try {
             dispatch(SpecificView(id));
@@ -36,14 +43,27 @@ export default function SpecificAdminView () {
     const handleClose = () => {
         setModalOpen(false);
     };
-    const handleConfirmAction = () => {
-        console.log('hi');
-        // handleSignOut();
-        // dispatch(logout());
-        // navigate('/');
-        // setToastSuccessBottom('You have been logged out');
+    const handleConfirmAction = async () => {
+        try {
+            setIsLoading(true);
+            const response = await dataService.PatchAPI(adminActivateDeactivate,
+                { username: userDetails?.Email, status: View.status === 'active' ? 'false' : 'true' });
+            if (!response.error) {
+                setIsLoading(false);
+                setModalOpen(false);
+                getAdminView();
+                setToastSuccess(`Admin user ${View.status === 'active' ? 'deactivated' : 'activated'} successfully`);
+            } else {
+                setIsLoading(false);
+                setModalOpen(false);
+                setToastError('Something went wrong!');
+            }
+        } catch (error) {
+            setIsLoading(false);
+            setModalOpen(false);
+            setToastError('Something went wrong!');
+        }
     };
-
     return (
         <>
             <CardHeader
@@ -54,7 +74,7 @@ export default function SpecificAdminView () {
                 minHeightRequired={true}
                 updateButton={loading}
                 updateButtonPath
-                statusButton={loading || (View?.status !== 'active' ? 'Activate' : 'DeActivate')}
+                statusButton={PaymaartId === View?.paymaart_id ? undefined : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
                 ChildrenElement
                 onHandleStatusChange={handleStatusClick}
             >
