@@ -163,7 +163,7 @@ stages:
             node scripts/bdd_unit_testing.js
     - job: UnitTestingResult
       displayName: "Unit Testing Result"
-      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'))
       dependsOn: UnitTesting
       pool:
         vmImage: "ubuntu-latest"
