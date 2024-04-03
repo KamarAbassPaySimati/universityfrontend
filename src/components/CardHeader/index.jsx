@@ -19,7 +19,7 @@ import Shimmer from '../Shimmers/Shimmer';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
-    navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement
+    navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange
 }) => {
     const navigate = useNavigate();
 
@@ -81,11 +81,13 @@ const CardHeader = ({
                         {statusButton === true
                             ? <Shimmer hight={'h-10'}/>
                             : (statusButton !== undefined &&
-                            <button onClick={() => { navigate(updateButtonPath); }}
-                                className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center
+                                <button onClick={onHandleStatusChange}
+
+                                    // <button onClick={() => { () => onFocus(statusButton === 'Activate' ? 'Activate' : 'Deactivate'); }}
+                                    className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]`}>
-                                <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
-                            </button>)
+                                    <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
+                                </button>)
                         }
                         {updateButton === false
                             ? (

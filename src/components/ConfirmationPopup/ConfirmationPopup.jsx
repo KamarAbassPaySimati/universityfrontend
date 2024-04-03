@@ -3,7 +3,8 @@ import React from 'react';
 import Button2 from '../Button2/Button2';
 import Button from '../Button/Button';
 
-export default function ConfirmationPopup ({ message, title, handleSubmit, isLoading, handleClose }) {
+export default function ConfirmationPopup ({ message, title, handleSubmit, isLoading, handleClose, buttonColor }) {
+    console.log(buttonColor, 'color');
     return (
         <div className="p-6 w-full bg-white rounded-[8px]" data-testid="modal">
             <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
@@ -20,6 +21,7 @@ export default function ConfirmationPopup ({ message, title, handleSubmit, isLoa
                     isLoading={isLoading}
                     text='Confirm'
                     testId="confirm_button"
+                    buttonColor= {buttonColor}
                 />
             </div>
         </div>
