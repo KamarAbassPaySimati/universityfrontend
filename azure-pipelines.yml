@@ -116,7 +116,7 @@ stages:
             sudo pip3 install --upgrade pip
             pip3 install awscli --upgrade --user
             export PATH="/home/vsts/.local/bin:$PATH"
-            sh scripts/envs.sh
+            sh azure_envs.sh
           displayName: 'Copy Environment Files'
         - publish: $(System.DefaultWorkingDirectory)/.env
           artifact: Environment
