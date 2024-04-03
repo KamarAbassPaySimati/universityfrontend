@@ -9,7 +9,6 @@ pr:
     include:
       - qa
 variables:
-  npm_config_cache: $(Pipeline.Workspace)/.npm
   - group: general
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     - group: master
@@ -64,7 +63,7 @@ stages:
             key: 'npm | "$(Agent.OS)" | package-lock.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
-            path: $(npm_config_cache)
+            path: "$(System.DefaultWorkingDirectory)/.npm"
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
@@ -143,7 +142,7 @@ stages:
             key: 'npm | "$(Agent.OS)" | package-lock.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
-            path: $(npm_config_cache)
+            path: "$(System.DefaultWorkingDirectory)/.npm"
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
@@ -165,6 +164,17 @@ stages:
       pool:
         vmImage: "ubuntu-latest"
       steps:
+        - task: Cache@2
+          inputs:
+            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/.npm"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm i --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
           inputs:
