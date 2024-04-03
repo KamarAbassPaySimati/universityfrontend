@@ -63,7 +63,7 @@ stages:
             key: 'npm | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
-            path: "$(System.DefaultWorkingDirectory)/.npm"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
@@ -142,7 +142,7 @@ stages:
             key: 'npm | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
-            path: "$(System.DefaultWorkingDirectory)/.npm"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
@@ -169,7 +169,7 @@ stages:
             key: 'npm | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
-            path: "$(System.DefaultWorkingDirectory)/.npm"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
