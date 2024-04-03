@@ -4,6 +4,7 @@ import Admin from '../pages/Users/Admin';
 import OnboardAdmin from '../pages/Users/Admin/Onboard admin/OnboardAdmin';
 import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
 import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView/SpecificAdminView';
+import RegisterKYC from '../pages/Users/Agent/Onboard Agent/components/RegisterKYC';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -32,6 +33,11 @@ export const ComponentsBasedOnRole = {
             name: 'Onboard Agent Users',
             element: <OnboardAgent />,
             path: '/users/agents/register-agent'
+        },
+        {
+            name: 'Agent KYC Registration',
+            element: <RegisterKYC />,
+            path: '/users/agents/register-agent/kyc-registration'
         }
     ],
     admin:

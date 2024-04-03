@@ -190,3 +190,43 @@ input[type='number'] {
 .capitalize-first:first-letter {
   text-transform: uppercase;
 }
+
+/* custom radio button  */
+
+[type="radio"]:checked + label:before, [type="radio"]:not(:checked) + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(50% - 9px);
+  width: 17px;
+  height: 17px;
+  border: 1px solid #3B2A6F;
+  border-radius: 100%;
+  background: #FFFFFF;
+  cursor: pointer;
+}
+
+.custom-radioBlue [type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+.custom-radioBlue [type="radio"]:checked + label:after {
+  background-color: #3B2A6F !important;
+}
+.custom-radioBlue [type="radio"]:checked + label:after, .custom-radioBlue [type="radio"]:not(:checked) + label:after {
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: calc(50% - 5px);
+  content: '';
+  left: 4px;
+  border-radius: 100%;
+  background: #FFFFFF;
+  transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  cursor: pointer;
+}
+.custom-radioBlue [type="radio"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}

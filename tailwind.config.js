@@ -37,6 +37,7 @@ export default {
                 'accent-positive': '#13B681',
                 'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
+                'background-dark': '#67389A',
                 'neutral-grey': '#F8F8F8',
 
                 error: '#FF4343',
@@ -46,6 +47,7 @@ export default {
             height: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
+                heightFullWithPadding: 'calc(100vh - 57px)',
                 noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
             },
             minHeight: {

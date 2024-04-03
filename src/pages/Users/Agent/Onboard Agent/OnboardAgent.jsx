@@ -61,7 +61,7 @@ const OnboardAgent = () => {
     });
 
     const [otpToken, setOtpToken] = useState('');
-    const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
+    const [registrationSuccessful, setRegistrationSuccessful] = useState(true);
     const [timer, setTimer] = useState(0);
     const [resendCount, setResendCount] = useState(0);
     const [countryCode, setCountryCode] = useState('+265');
