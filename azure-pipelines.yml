@@ -60,7 +60,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            key: 'npm | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/.npm"
@@ -139,7 +139,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            key: 'npm | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/.npm"
@@ -166,7 +166,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            key: 'npm | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/.npm"
