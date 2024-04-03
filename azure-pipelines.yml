@@ -276,32 +276,32 @@ stages:
     #           displayName: 'Deployment'
     
     # - deployment: staging
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
-      pool:
-        vmImage: "macOS-13"
-      environment: Pre-Production
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-              - checkout: self
-              - task: JavaToolInstaller@0
-                inputs:
-                  versionSpec: '17'
-                  jdkArchitectureOption: 'x64'
-                  jdkSourceOption: 'PreInstalled'
-              - task: DownloadPipelineArtifact@2
-                name: environment
-                inputs:
-                  artifact: Environment
-                  targetPath: '$(System.DefaultWorkingDirectory)'
-              - task: DownloadPipelineArtifact@2
-                name: SecretFiles
-                inputs:
-                  artifact: SecretFiles
-                  targetPath: '$(System.DefaultWorkingDirectory)'
-              - script: |
-                  cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
-                  brew install fastlane
-                  fastlane android production
-                displayName: 'Deployment'
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
+      # pool:
+      #   vmImage: "macOS-13"
+      # environment: Pre-Production
+      # strategy:
+      #   runOnce:
+      #     deploy:
+      #       steps:
+      #         - checkout: self
+      #         - task: JavaToolInstaller@0
+      #           inputs:
+      #             versionSpec: '17'
+      #             jdkArchitectureOption: 'x64'
+      #             jdkSourceOption: 'PreInstalled'
+      #         - task: DownloadPipelineArtifact@2
+      #           name: environment
+      #           inputs:
+      #             artifact: Environment
+      #             targetPath: '$(System.DefaultWorkingDirectory)'
+      #         - task: DownloadPipelineArtifact@2
+      #           name: SecretFiles
+      #           inputs:
+      #             artifact: SecretFiles
+      #             targetPath: '$(System.DefaultWorkingDirectory)'
+      #         - script: |
+      #             cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
+      #             brew install fastlane
+      #             fastlane android production
+      #           displayName: 'Deployment'
