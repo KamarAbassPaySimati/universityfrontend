@@ -167,7 +167,7 @@ stages:
         vmImage: "ubuntu-latest"
       steps:
       - script: |
-          if [[ ${{ stageDependencies.Build.result }} == "succeeded" ]]; then
+          if [[ ${{ dependencies.UnitTesting.result }} == "succeeded" ]]; then
             source .env
             mkdir coverage
             npm install nyc --save-dev --force
