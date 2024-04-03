@@ -9,6 +9,7 @@ pr:
     include:
       - qa
 variables:
+  - npm_config_cache: $(Pipeline.Workspace)/.npm
   - group: general
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     - group: master
@@ -58,8 +59,19 @@ stages:
       pool:
           vmImage: "ubuntu-latest"
       steps:
+        - task: Cache@2
+          inputs:
+            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: $(npm_config_cache)
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
         - script: |
             npm i --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
+          displayName: 'Dependencies'
+        - script: |
             npm run eslint
           displayName: 'Lint'
     - job: "secret"
@@ -126,11 +138,24 @@ stages:
       pool:
         vmImage: "ubuntu-latest"
       steps:
+        - task: Cache@2
+          inputs:
+            key: 'npm | "$(Agent.OS)" | package-lock.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: $(npm_config_cache)
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
         - script: |
             npm i --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
+          displayName: 'Dependencies'
+        - script: |
             npm run build
+            mkdir artifact
+            mv dist artifact
           displayName: 'Build'
-        - publish: $(System.DefaultWorkingDirectory)/dist
+        - publish: $(System.DefaultWorkingDirectory)/artifact
           artifact: bundle
 - stage: Test
   jobs:
@@ -145,17 +170,15 @@ stages:
           inputs:
             artifact: Environment
             targetPath: '$(System.DefaultWorkingDirectory)'
-        # - task: DownloadPipelineArtifact@2
-          # name: bundle
-          # inputs:
-          #   artifact: bundle
-          #   targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
             npm install pm2 -g
             source .env
-            cat .env
             npm install express --force
-            npm run build
             pm2 start scripts/server.js
             sleep 60
             mkdir reports
