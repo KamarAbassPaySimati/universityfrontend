@@ -6,9 +6,9 @@ const { exec } = require('child_process');
 const readdir = util.promisify(fs.readdir);
 
 const featureDirectory = 'test/unit-testing';
-const DELAY_BETWEEN_TESTS = 5000; // 5 seconds
-const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 40000; // 40 seconds
-const MAX_PARALLEL_EXECUTIONS = 10;
+const DELAY_BETWEEN_TESTS = 1000; // 5 seconds
+const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 5000; // 40 seconds
+const MAX_PARALLEL_EXECUTIONS = 15;
 
 async function runTestQueue () {
     const featureFiles = await readdir(featureDirectory);
