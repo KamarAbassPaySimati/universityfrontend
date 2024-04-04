@@ -193,6 +193,7 @@ stages:
         - script: |
             npm install pm2 -g
             source .env
+            npm run build
             npm install express --force
             pm2 start scripts/server.js
             sleep 60
