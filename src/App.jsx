@@ -41,9 +41,9 @@ function App (props) {
                 console.log('auth tokens have been refreshed.');
                 break;
             case 'tokenRefresh_failure':
-                dispatch(logout());
-                navigate('/');
-                setToastError('Logged out due to session expiration');
+                // dispatch(logout());
+                // navigate('/');
+                // setToastError('Logged out due to session expiration');
                 break;
             }
         });
