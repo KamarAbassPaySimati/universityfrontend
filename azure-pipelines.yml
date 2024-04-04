@@ -161,98 +161,111 @@ stages:
           displayName: 'Build'
         - publish: $(System.DefaultWorkingDirectory)/artifact
           artifact: bundle
-# - stage: Test
-#   jobs:
-#     - job: UnitTesting
-#       displayName: "Unit Testing"
-#       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-#       pool:
-#         vmImage: "ubuntu-latest"
-#       steps:
-#         - task: Cache@2
-#           inputs:
-#             key: 'npmV2 | "$(Agent.OS)" | package.json'
-#             restoreKeys: |
-#               npm | "$(Agent.OS)"
-#             path: "$(System.DefaultWorkingDirectory)/node_modules"
-#             cacheHitVar: CACHE_RESTORED
-#           displayName: Cache npm
-#         - script: |
-#             npm install --cache .npm
-#           condition: ne(variables.CACHE_RESTORED, 'true')
-#         - task: DownloadPipelineArtifact@2
-#           name: environment
-#           inputs:
-#             artifact: Environment
-#             targetPath: '$(System.DefaultWorkingDirectory)'
-#         - task: DownloadPipelineArtifact@2
-#           name: bundle
-#           inputs:
-#             artifact: bundle
-#             targetPath: '$(System.DefaultWorkingDirectory)'
-#         - script: |
-#             npm install pm2 -g
-#             source .env
-#             npm run build
-#             npm install express --force
-#             pm2 start scripts/server.js
-#             sleep 60
-#             mkdir reports
-#             npm install nyc --save-dev --force
-#             node scripts/bdd_unit_testing.js
-#         - publish: $(System.DefaultWorkingDirectory)/reports # Assuming logs are in working directory
-#           artifact: reports
-#           condition: always()
-#     - job: UnitTestingResult
-#       displayName: "Unit Testing Result"
-#       condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'))
-#       dependsOn: UnitTesting
-#       pool:
-#         vmImage: "ubuntu-latest"
-#       steps:
-#       - script: |
-#          mkdir reports
-#       - task: DownloadPipelineArtifact@2
-#         name: reports
-#         inputs:
-#           artifact: reports
-#           targetPath: '$(System.DefaultWorkingDirectory)/reports'
-#       - script: |
-#           source .env
-#           mkdir coverage
-#           npm install nyc --save-dev --force
-#           npm run generate_report
-#           node scripts/livingdoc_azure.js ${Build.Repository.Name}
-#           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
-#           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-#           aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/${variables['build.SourceBranch']}/
-#           aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/${variables['build.SourceBranch']}
-#         displayName: 'BDD Living documentation'
-#     - job: IntegrationTesting
-#       displayName: "Integration Testing"
-#       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-#       pool:
-#         vmImage: "ubuntu-latest"
-#       steps:
-#         - task: DownloadPipelineArtifact@2
-#           name: environment
-#           inputs:
-#             artifact: Environment
-#             targetPath: '$(System.DefaultWorkingDirectory)'
-#         - task: DownloadPipelineArtifact@2
-#           name: bundle
-#           inputs:
-#             artifact: bundle
-#             targetPath: '$(System.DefaultWorkingDirectory)'
-#         - script: |
-#             npm install pm2 -g
-#             source .env
-#             npm install express --force
-#             pm2 start scripts/server.js
-#             sleep 60
-#             mkdir reports
-#             npm install nyc --save-dev --force
-#             node scripts/bdd-execution-split1.js
+- stage: Test
+  jobs:
+    - job: UnitTesting
+      displayName: "Unit Testing"
+      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --cache .npm
+          condition: ne(variables.CACHE_RESTORED, 'true')
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            npm install pm2 -g
+            source .env
+            npm run build
+            npm install express --force
+            pm2 start scripts/server.js
+            sleep 60
+            mkdir reports
+            npm install nyc --save-dev --force
+            node scripts/bdd_unit_testing_azure.js
+        - publish: $(System.DefaultWorkingDirectory)/reports # Assuming logs are in working directory
+          artifact: reports
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+          artifact: coverage
+          condition: always()
+    - job: UnitTestingResult
+      variables:
+        myVariable: $[replace(variables['BUILD.SOURCEBRANCH'], 'refs/heads/', '')]
+      displayName: "Unit Testing Result"
+      condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'))
+      dependsOn: UnitTesting
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+      - script: |
+         mkdir reports
+         mkdir test/step-definations/coverageData/
+      - task: DownloadPipelineArtifact@2
+        name: reports
+        inputs:
+          artifact: reports
+          targetPath: '$(System.DefaultWorkingDirectory)/reports'
+      - task: DownloadPipelineArtifact@2
+        name: coverage
+        inputs:
+          artifact: coverage
+          targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData/'
+      - script: |
+          echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
+          echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
+          source .env
+          mkdir coverage
+          npm install nyc --save-dev --force
+          npm run generate_report
+          node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
+          export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+          export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+          aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/$SourceBranch/
+          aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/$SourceBranch
+        displayName: 'BDD Living documentation'
+    - job: IntegrationTesting
+      displayName: "Integration Testing"
+      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            npm install pm2 -g
+            source .env
+            npm install express --force
+            pm2 start scripts/server.js
+            sleep 60
+            mkdir reports
+            npm install nyc --save-dev --force
+            node scripts/bdd-execution-split1.js
     
 - stage: Deploy
   jobs:
@@ -279,65 +292,4 @@ stages:
             aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*"
           displayName: 'Deployment'
 
-    # - deployment: production
-    #   condition: and(succeeded(), contains(variables['build.SourceBranch'], 'master'))
-    #   pool:
-    #     vmImage: "macOS-13"
-    #   environment: Production
-    #   strategy:
-    #     runOnce:
-    #       deploy:
-    #         steps:
-    #         - checkout: self
-    #         - task: JavaToolInstaller@0
-    #           inputs:
-    #             versionSpec: '17'
-    #             jdkArchitectureOption: 'x64'
-    #             jdkSourceOption: 'PreInstalled'
-    #         - task: DownloadPipelineArtifact@2
-    #           name: environment
-    #           inputs:
-    #             artifact: Environment
-    #             targetPath: '$(System.DefaultWorkingDirectory)'
-    #         - task: DownloadPipelineArtifact@2
-    #           name: SecretFiles
-    #           inputs:
-    #             artifact: SecretFiles
-    #             targetPath: '$(System.DefaultWorkingDirectory)'
-    #         - script: |
-    #             cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
-    #             export BUILD_NUMBER=$(Build.BuildId)
-    #             brew install fastlane
-    #             fastlane android production
-    #           displayName: 'Deployment'
     
-    # - deployment: staging
-      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'pre-production'))
-      # pool:
-      #   vmImage: "macOS-13"
-      # environment: Pre-Production
-      # strategy:
-      #   runOnce:
-      #     deploy:
-      #       steps:
-      #         - checkout: self
-      #         - task: JavaToolInstaller@0
-      #           inputs:
-      #             versionSpec: '17'
-      #             jdkArchitectureOption: 'x64'
-      #             jdkSourceOption: 'PreInstalled'
-      #         - task: DownloadPipelineArtifact@2
-      #           name: environment
-      #           inputs:
-      #             artifact: Environment
-      #             targetPath: '$(System.DefaultWorkingDirectory)'
-      #         - task: DownloadPipelineArtifact@2
-      #           name: SecretFiles
-      #           inputs:
-      #             artifact: SecretFiles
-      #             targetPath: '$(System.DefaultWorkingDirectory)'
-      #         - script: |
-      #             cp $(System.DefaultWorkingDirectory)/paymaart_agent.jks $(System.DefaultWorkingDirectory)/app/paymaart_agent.jks
-      #             brew install fastlane
-      #             fastlane android production
-      #           displayName: 'Deployment'
