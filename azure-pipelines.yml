@@ -207,6 +207,9 @@ stages:
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
           artifact: coverage
           condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+          artifact: failedScenarios
+          condition: always()
     - job: UnitTestingResult
       variables:
         myVariable: $[replace(variables['BUILD.SOURCEBRANCH'], 'refs/heads/', '')]
