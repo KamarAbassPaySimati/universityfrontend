@@ -196,10 +196,11 @@ stages:
             npm run build
             npm install express --force
             pm2 start scripts/server.js
-            sleep 60
+            sleep 5
             mkdir reports
             npm install nyc --save-dev --force
             node scripts/bdd_unit_testing_azure.js
+          displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/reports # Assuming logs are in working directory
           artifact: reports
           condition: always()
@@ -215,6 +216,17 @@ stages:
       pool:
         vmImage: "ubuntu-latest"
       steps:
+      - task: Cache@2
+        inputs:
+          key: 'npmV2 | "$(Agent.OS)" | package.json'
+          restoreKeys: |
+            npm | "$(Agent.OS)"
+          path: "$(System.DefaultWorkingDirectory)/node_modules"
+          cacheHitVar: CACHE_RESTORED
+        displayName: Cache npm
+      - script: |
+          npm install --cache .npm
+        condition: ne(variables.CACHE_RESTORED, 'true')
       - script: |
          mkdir reports
          mkdir test/step-definations/coverageData/
