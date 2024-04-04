@@ -7,6 +7,7 @@ module.exports = {
             'test/integration-testing/Flow1_Admin/OnboardAgent.feature',
             'test/integration-testing/Flow1_Admin/ListAgent.feature',
             'test/integration-testing/Flow1_Admin/ViewAdmin.feature'
+            // 'test/integration-testing/Flow1_Admin/ActivateDeactivateAdminUser.feature'
         ]
     }
 };
