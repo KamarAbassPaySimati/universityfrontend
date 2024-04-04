@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import 'react-responsive-modal/styles.css';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from '../Image/Image';
 import { signOut } from 'aws-amplify/auth';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
-import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 import Slugify from '../../CommonMethods/Sulgify.js';
 import { sideNavObject } from './sideNavObject.js';
 import { setDropdown } from '../../redux/GlobalSlice.js';

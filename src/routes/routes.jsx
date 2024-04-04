@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import React, { Suspense, useContext, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
 import Login from '../pages/auth/Login';
@@ -16,7 +16,6 @@ import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
 import Slugify from '../CommonMethods/Sulgify';
 import Agent from '../pages/Users/Agent';
-import GlobalContext from '../components/Context/GlobalContext';
 import Toast from '../components/Toast/Toast';
 
 export default function NavigationRoutes (props) {
