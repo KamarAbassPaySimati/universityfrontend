@@ -5,17 +5,24 @@ import Login from '../pages/auth/Login';
 import ForgotPassword from '../pages/auth/ForgotPassword';
 import SetNewPassword from '../pages/auth/SetNewPassword';
 import { fetchUserAttributes } from 'aws-amplify/auth';
-import Dashboard from '../pages/Dashboard/Dashboard';
 import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
+import Dashboard from '../pages/Dashboard/Dashboard';
 import Profile from '../pages/Profile';
 import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
+import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
+import Slugify from '../CommonMethods/Sulgify';
+import Agent from '../pages/Users/Agent';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
-    const { loggedIn } = auth;
+    const { loggedIn, user } = auth;
+    let { user_type: CurrentUserRole } = user;
+    if (CurrentUserRole) {
+        CurrentUserRole = Slugify(CurrentUserRole);
+    }
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -32,9 +39,11 @@ export default function NavigationRoutes (props) {
                 dispatch(login());
             }
         } catch (error) {
-            setPageLoading(false);
-            dispatch(setUser(''));
-            dispatch(logout());
+            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException')) {
+                setPageLoading(false);
+                dispatch(setUser(''));
+                dispatch(logout());
+            }
         }
     };
 
@@ -58,7 +67,7 @@ export default function NavigationRoutes (props) {
                 <Routes location={location} key={location.pathname}>
                     {pageLoading
                         ? <Route path="*" element={<Loading />} />
-                        : !loggedIn
+                        : !user
                             ? <>
                                 <Route path="/" element={<Login />} />
                                 <Route
@@ -68,13 +77,18 @@ export default function NavigationRoutes (props) {
                                     path={'/set-new-password'}
                                     element={<SetNewPassword />} />
                             </>
-                            : <>
-                                <Route element={<Layout />}>
+                            : (
+                                ComponentsBasedOnRole[CurrentUserRole] &&
+                                <Route element={<Layout {...props}/>} key={location.key}>
+                                    {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
+                                        <Route path={nav.path} element={React.cloneElement(nav.element, props)} key={nav.path}/>
+                                    ))}
                                     <Route path="/dashboard" element={<Dashboard />} />
                                     <Route path="/profile" element={<Profile />} />
                                     <Route path="/profile/update-password" element={<UpdatePassword />} />
+                                    <Route path="/users/agents" element={<Agent />} />
                                 </Route>
-                            </>
+                            )
                     }
                     <Route path="*" element={<NotFound />} />
                 </Routes>

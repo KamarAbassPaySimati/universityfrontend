@@ -1,13 +1,16 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 const assert = require('assert');
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given, When, Then, Before } = require('@cucumber/cucumber');
 const webdriver = require('selenium-webdriver');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const Keys = webdriver.Key;
-const { driver } = require('./Driver.js');
+const { driver } = require('../Driver.js');
 
+Before('@wait_for_few_time', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3500));
+});
 Given('I navigate to update password page', async function () {
     // Write code here that turns the phrase above into concrete actions
     await driver.get('http://localhost:3000/profile/update-password');

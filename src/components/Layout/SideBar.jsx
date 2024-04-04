@@ -1,24 +1,50 @@
+/* eslint-disable max-len */
 import 'react-responsive-modal/styles.css';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { signOut } from 'aws-amplify/auth';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logout } from '../../pages/auth/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
 import useGlobalSignout from '../../CommonMethods/globalSignout.js';
+import Slugify from '../../CommonMethods/Sulgify.js';
+import { sideNavObject } from './sideNavObject.js';
+import { setDropdown } from '../../redux/GlobalSlice.js';
 
-// border border-neutral-outline
+// want to add a sidebar content add it to the sideNavObject
+// check the side also has some privelages based object
+// also add it to the global context inside the dropdown object
 const SideBar = ({ role }) => {
+    const location = useLocation();
+
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
+    const [hoveringOn, setHoveringOn] = useState('');
 
     const { setToastSuccessBottom } = useContext(GlobalContext);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const { dropdown } = useSelector(state => state.globalData);
+
+    // const checkLoggedInUserForGlobalSignout = async () => {
+    //     try {
+    //         // eslint-disable-next-line no-unused-vars
+    //         const userAttributes = await fetchUserAttributes();
+    //     } catch (error) {
+    //         dispatch(setUser(''));
+    //         dispatch(logout());
+    //         navigate('/');
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     checkLoggedInUserForGlobalSignout();
+    // }, []);
 
     async function handleSignOut () {
         try {
@@ -42,6 +68,28 @@ const SideBar = ({ role }) => {
         setToastSuccessBottom('You have been logged out');
     };
 
+    const handleMouseEnter = (key) => {
+        setHoveringOn(key);
+    };
+    const handleMouseLeave = () => {
+        setHoveringOn('');
+    };
+
+    const handleDropDown = (key, dropDown) => {
+        if (dropDown === undefined) {
+            navigate(key);
+        }
+        dispatch(setDropdown(key));
+    };
+
+    const handleOptionClick = (nav, option, key) => {
+        navigate(nav.toLowerCase() + '/' + Slugify(option));
+    };
+
+    useEffect(() => {
+
+    }, []);
+
     useGlobalSignout();
 
     return (
@@ -52,14 +100,32 @@ const SideBar = ({ role }) => {
                 </div>
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
                     <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4'>
-                        <div className='flex gap-2 items-center px-2 py-1'>
-                            <Image src='dashboard' />
-                            <div className='font-[400] text-[14px] leading-[24px] text-neutral-secondary'>Dashboard</div>
-                        </div>
-                        {/* <div className='flex gap-2 items-center px-2 py-1'>
-                            <Image src='dashboard' />
-                            <div className='font-[400] text-[14px] leading-[24px] text-neutral-secondary'>Dashboard</div>
-                        </div> */}
+
+                        {sideNavObject && sideNavObject[role] && Object.keys(sideNavObject[role]).map((nav) => (
+                            <div key={nav} className='flex flex-col'>
+                                <div className={`flex gap-2 justify-between px-2 py-1 pr-3 rounded-[6px] cursor-pointer
+                    ${location.pathname.includes(nav.toLowerCase()) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(nav.toLowerCase(), sideNavObject[role][nav]?.dropdown)}>
+                                    <div className='flex gap-2 items-center'>
+                                        <Image src={`${hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? `active-${nav.toLowerCase()}` : nav.toLowerCase()}`} />
+                                        <div className={`font-[400] text-[14px] leading-[24px]
+                        ${hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'text-primary-normal' : location.pathname.includes(nav.toLowerCase()) ? 'font-[600]' : 'text-neutral-secondary '}`}>
+                                            {nav}
+                                        </div>
+                                    </div>
+                                    {sideNavObject[role][nav]?.dropdown && <Image className={`duration-300 ${dropdown[nav.toLowerCase()] ? 'rotate-180' : ''}`} src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
+                                </div>
+                                {dropdown[nav.toLowerCase()] &&
+                                <>
+                                    {sideNavObject[role][nav]?.dropdown?.map((option) => (
+                                        <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
+                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown)} >
+                                            {option}
+                                        </div>
+                                    ))}
+                                </>}
+                            </div>
+                        ))}
+
                     </div>
                     <div className='flex justify-center items-center'>
                         <button

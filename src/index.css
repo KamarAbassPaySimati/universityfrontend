@@ -5,8 +5,11 @@
 @tailwind utilities;
 
 body {
+  margin: 0;
   font-family: "Inter", sans-serif;
   background-color: #FFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 
@@ -41,8 +44,19 @@ body {
   font-size: 12px !important;
   padding: 6px 10px !important;
   border-radius: 4px !important;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.12) !important;
   cursor: pointer;
+}
+
+/* Tooltip styling rules */
+.info-tooltip {
+  width: 419px !important;
+  background-color: #3B2A6F !important;
+  color: #FFFFFF !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  padding: 24px !important;
+  border-radius: 16px !important;
 }
 
 .scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
@@ -71,13 +85,66 @@ body {
 }
 
 .scrollBar::-webkit-scrollbar-thumb {
-  background-color: #816cbe;
+  background-color: #A79FBE;
   border: transparent;
   border-radius: 22px;
   width: 4px;
   height: 45px;
   right: 20px;
 }
+
+/* check box  */
+.checkbox input{
+  opacity: 0;
+  position: relative;
+}
+.checkbox-error input[type="checkbox"]:checked ~ label::before {
+  border: 1px solid #FF6363 !important;
+}
+.checkbox input[type="checkbox"]:checked ~ label::before {
+  background-color: #3B2A6F !important;
+  border-radius: 4px;
+  border: 1px solid #3B2A6F;
+}
+.checkbox-error label::before{
+  border: 1px solid #FF6363 !important;
+}
+.checkbox label::before {
+  content: '';
+  position: absolute;
+  top: 30%;
+  left: 0;
+  margin: 0;
+  height: 18px;
+  width: 18px;
+  border-radius: 4px;
+  transition: transform 0.28s ease;
+  transform: translateY(-50%);
+  border: 1px solid #3B2A6F;
+}
+.checkbox input[type="checkbox"]:checked ~ label::after {
+  transform: rotate(-45deg) scale(1);
+}
+.checkbox label::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 5px;
+  border-bottom: 2px solid #fff;
+  border-left: 2px solid #fff;
+  transform: rotate(-45deg) scale(0);
+  transition: transform ease 0.25s;
+  will-change: transform;
+  position: absolute;
+  top: 9px;
+  left: 4px;
+}
+
+/* filter check box  */
+.filter-checkbox label::before {
+  top: 50%;
+}
+
 .whiteScrollBar::-webkit-scrollbar-thumb {
   background-color: #FFF;
   border: transparent;
@@ -89,9 +156,27 @@ body {
 
 .setNewPassword::before{
   position: fixed;
-  content: url(images/login_img.svg);
+  content: url(/images/login_img.svg);
   z-index: 10;
   bottom: 30px;
   right: 100px 
+}
 
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; /* Optional - if you want to remove the margin */
+}
+input[type='number'] {
+  -moz-appearance: textfield; /* Optional - for Firefox */
+}
+
+.thead-border-bottom::before{
+  content: '';
+  position: absolute;
+  top: 88px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: #E5E9EB;
 }

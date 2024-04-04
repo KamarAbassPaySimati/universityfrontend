@@ -22,17 +22,17 @@ async function login () {
     await driver.wait(until.elementLocated(By.xpath('//*[text()="Login"]')));
 
     await new Promise(resolve => setTimeout(resolve, 750));
-    global.adminUser = {
+    global.admin_user = {
         pass: 'Admin@123',
         email_address: 'bharath.shet+admin@7edge.com'
     };
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
-    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.admin_user.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.admin_user.pass);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
 
-    const response = await getMFASecret({ username: global.adminUser.email_address });
+    const response = await getMFASecret({ username: global.admin_user.email_address });
     const secret = response.mfa_code;
     console.log('secret 123', secret);
     global.TOTP = await generateTOTP(secret, 0);
@@ -63,9 +63,14 @@ async function create_new_user_and_login () {
 
     await new Promise(resolve => setTimeout(resolve, 750));
 
-    await new Promise(resolve => setTimeout(resolve, 750));
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
-    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+    const email = await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]')));
+    await driver.wait(until.elementIsVisible(email));
+
+    const password = await driver.wait(until.elementLocated(By.css('[data-testid="password"]')));
+    await driver.wait(until.elementIsVisible(password));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.admin_user.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.admin_user.pass);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
 
@@ -75,6 +80,7 @@ async function create_new_user_and_login () {
 
     const canvasElement = await driver.wait(until.elementLocated(By.css('canvas')));
     await driver.wait(until.elementIsVisible(canvasElement));
+    await new Promise(resolve => setTimeout(resolve, 750));
 
     const canvas_data = await driver.executeScript(() => {
         const canvas = document.querySelector('canvas');
@@ -107,7 +113,7 @@ async function create_new_user_and_login () {
     await driver.wait(until.elementIsVisible(proceed_to_next));
     await proceed_to_next.click();
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 750));
     for (let i = 5; i >= 0; i--) {
         await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
@@ -128,6 +134,8 @@ async function create_new_user_and_login () {
     const done_button = await driver.wait(until.elementLocated(By.css('[data-testid="done_button"]')));
     await driver.wait(until.elementIsVisible(done_button));
     done_button.click();
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
 }
 Before('@perform_logout', async function () {
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -151,44 +159,200 @@ Before('@login', async function () {
 
 Before('@add_admin_user', async function () {
     try {
-        const random_number = faker.string.alphanumeric(5);
-        const email = `bharath.shet+${random_number}@7edge.com`;
-        const firstName = faker.person.firstName();
-        const middleName = faker.person.middleName();
-        const lastName = faker.person.lastName();
-        const phoneNumber = `${faker.phone.number('## ### ####')}`;
-        const paymaartId = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
-        const fullName = `${firstName} ${middleName} ${lastName.toUpperCase()}`;
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
-        const mainPhoneNumber = `${countryCode} ${phoneNumber}`;
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
 
         const payload = {
-            first_name: firstName,
-            username: email,
-            middle_name: middleName,
-            last_name: lastName,
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
             password: 'Admin@123',
-            paymaart_id: paymaartId,
-            email,
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
             country_code: countryCode,
-            role: 'Super Admin',
-            phone_number: phoneNumber.replaceAll(' ', '')
+            role: 'Super admin',
+            phone_number: phone_number.replaceAll(' ', '')
         };
 
-        console.log('payload', payload);
-        global.adminUser = {
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
             pass: 'Admin@123',
-            email_address: email,
-            first_name: firstName,
-            username: email,
-            middle_name: middleName,
-            last_name: lastName,
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
             role: 'Super Admin',
-            phone_number: mainPhoneNumber,
-            paymaart_id: paymaartId,
-            fullName
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
+        };
+        console.log('global.admin_user', global.admin_user);
+        await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+Before('@add_finance_admin_user', async function () {
+    try {
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
+        const countryCode = '+265';
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
+
+        const payload = {
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
+            password: 'Admin@123',
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
+            country_code: countryCode,
+            role: 'Finance admin',
+            phone_number: phone_number.replaceAll(' ', '')
+        };
+
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
+            pass: 'Admin@123',
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
+            role: 'Finance admin',
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
         };
         await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+Before('@add_support_admin_user', async function () {
+    try {
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
+        const countryCode = '+265';
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
+
+        const payload = {
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
+            password: 'Admin@123',
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
+            country_code: countryCode,
+            role: 'Support admin',
+            phone_number: phone_number.replaceAll(' ', '')
+        };
+
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
+            pass: 'Admin@123',
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
+            role: 'Support admin',
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
+        };
+        await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
+    } catch (error) {
+        console.log('error', error);
+    }
+});
+
+Before('@add_normal_admin_user', async function () {
+    try {
+        const random_alpha = faker.string.alpha(10);
+        const email = `bharath.shet+${random_alpha}@7edge.com`;
+        const first_name = faker.person.firstName();
+        const middle_name = faker.person.middleName();
+        const last_name = faker.person.lastName();
+        let phone_number = `${faker.phone.number('## ### ####')}`;
+        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
+        const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
+        const countryCode = '+265';
+        if (phone_number.startsWith('0')) {
+            // Replace the first character with '9'
+            phone_number = '9' + phone_number.substring(1);
+        }
+        const main_phone_number = `${countryCode} ${phone_number}`;
+
+        const payload = {
+            first_name,
+            username: email.toLowerCase(),
+            middle_name,
+            last_name,
+            password: 'Admin@123',
+            paymaart_id: paymaart_ID,
+            email: email.toLowerCase(),
+            country_code: countryCode,
+            role: 'Admin',
+            phone_number: phone_number.replaceAll(' ', '')
+        };
+
+        global.admin_user = {
+            first_name,
+            middle_name,
+            last_name,
+            full_name,
+            pass: 'Admin@123',
+            email_address: email.toLowerCase(),
+            username: email.toLowerCase(),
+            role: 'Admin',
+            phone_number: main_phone_number,
+            paymaart_id: paymaart_ID,
+            phone_number_without_country_code: phone_number
+        };
+        await addAdminUser(payload);
+        await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('error', error);
     }
@@ -201,10 +365,11 @@ Before('@create_new_user_and_login', async function () {
         console.log('err', error);
     }
 });
+
 After('@delete_admin_account', async function () {
     try {
         const payload = {
-            username: global.adminUser.email_address
+            username: global.admin_user.email_address
         };
         const response = await deleteAdminAccount(payload);
         console.log('response of deleted acc', response);
@@ -221,19 +386,19 @@ Given('I am on the login screen', async function () {
 
 When('I enter valid email address and password', async function () {
     await new Promise(resolve => setTimeout(resolve, 750));
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
-    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.admin_user.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.admin_user.pass);
 });
 
 When('I enter the email address as {string} and password as {string}', async function (email_address, password) {
     await new Promise(resolve => setTimeout(resolve, 750));
-    global.adminUser = {
+    global.admin_user = {
         pass: password,
         email_address
     };
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.adminUser.email_address);
-    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.adminUser.pass);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.admin_user.email_address);
+    await driver.wait(until.elementLocated(By.css('[data-testid="password"]'))).sendKeys(global.admin_user.pass);
 });
 
 When('I submit the login form', async function () {
@@ -348,7 +513,9 @@ When('I submit the TOTP form', async function () {
 });
 
 When('I enter the TOTP obtained from the previously scanned device', async function () {
-    const response = await getMFASecret({ username: global.adminUser.email_address });
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
+    const response = await getMFASecret({ username: global.admin_user.email_address });
     const secret = response.mfa_code;
     console.log('secret 123', secret);
     global.TOTP = await generateTOTP(secret, 0);
@@ -368,6 +535,8 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 });
 
 Then('I should be presented with 2FA Enabled successfully page', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const element_header = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-header"]')));
     await driver.wait(until.elementIsVisible(element_header));
     const element_header_content = await element_header.getText();

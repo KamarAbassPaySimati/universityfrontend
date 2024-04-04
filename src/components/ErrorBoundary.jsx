@@ -1,4 +1,5 @@
 import React from 'react';
+import NotFound from '../pages/NotFound';
 class ErrorBoundary extends React.Component {
     constructor (props) {
         super(props);
@@ -13,7 +14,7 @@ class ErrorBoundary extends React.Component {
         if (this.state.hasError) {
             // You can render any custom fallback UI
             return <>
-                <h1 className="text-center font-bold text-[100px]">Something went wrong.</h1>
+                <NotFound />
             </>;
         }
 
