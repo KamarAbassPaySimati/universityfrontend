@@ -11,14 +11,11 @@ Feature: Paymaart - Admin Web - Onboard Admin
   Super admin
   Admin
 
+  @add_admin_user
+  @create_new_user_and_login
   Scenario: Super Admin User login with valid credentials
-    Given I am on the login screen
-    When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
-    And I submit the login form
-    Then I should be navigated to the TOTP screen
-    When I enter the TOTP obtained from the previously scanned device
-    And I submit the TOTP form
-    Then I should be redirected to the '/dashboard' page
+        Given I navigate to admin users listing screen
+        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
 
   Scenario: Add admin users with invalid credentials
     Given I navigate to onboard admin user
