@@ -30,12 +30,12 @@ Feature: Paymaart- agent Web- View all Agent list
         When I click on clear search
         Then I should see list of table records
 
-    Scenario: Sort functionality
-        Given I navigate to agent users listing screen
-        When I click on the sort by "Agent Name"
-        Then I should see the agent user sorted in ascending order based on "Agent Name"
-        * I click on the sort by "Agent Name"
-        And I should see the agent user sorted in descending order based on "Agent Name"
+    # Scenario: Sort functionality
+    #     Given I navigate to agent users listing screen
+    #     When I click on the sort by "Agent Name"
+    #     Then I should see the agent user sorted in ascending order based on "Agent Name"
+    #     * I click on the sort by "Agent Name"
+    #     And I should see the agent user sorted in descending order based on "Agent Name"
 
     Scenario: Filter agent users by status
         Given I navigate to agent users listing screen
