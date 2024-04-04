@@ -81,7 +81,7 @@ const CardHeader = ({
                         {statusButton === true
                             ? <Shimmer hight={'h-10'}/>
                             : (statusButton !== undefined &&
-                                <button onClick={onHandleStatusChange}
+                                <button data-testid="activate_deactivate_button" onClick={onHandleStatusChange}
 
                                     // <button onClick={() => { () => onFocus(statusButton === 'Activate' ? 'Activate' : 'Deactivate'); }}
                                     className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center

@@ -90,7 +90,7 @@ When('I search for the recently created admin user', async function () {
 
     await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await new Promise(resolve => setTimeout(resolve, 500));
-    await element.sendKeys(global.payload.name);
+    await element.sendKeys(global.admin_user.paymaart_id);
 
     await new Promise(resolve => setTimeout(resolve, 500));
 });

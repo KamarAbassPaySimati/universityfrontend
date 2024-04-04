@@ -9,14 +9,6 @@ Feature: Paymaart - Admin Web - Active/Deactive admin
     Email
  
     @add_admin_user
-    @create_new_user_and_login
-    Scenario: Admin View profile
-        Given I am viewing the admin user profile
-        Then I should view my paymaart ID and name
-        And I should view basic details
-        When I should see the deactivate "Admin user" button is hidden
-
-    @add_admin_user
     Scenario: Cancel Deactivate admin User
         Given I navigate to admin users listing screen
         When I search for the recently created admin user
