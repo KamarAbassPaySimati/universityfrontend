@@ -1,6 +1,7 @@
 import React from 'react';
 import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
 import CardHeader from '../../../../../components/CardHeader';
+import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
 
 export default function RegisterKYC () {
     return (
@@ -12,7 +13,8 @@ export default function RegisterKYC () {
             ChildrenElement
         >
 
-            <KYCRegistration />
+            {/* <KYCRegistration /> */}
+            <FelidDivision />
         </CardHeader>
     );
 }
