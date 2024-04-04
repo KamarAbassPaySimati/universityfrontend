@@ -28,12 +28,12 @@ Feature: Paymaart - Admin Web -Admin List
         Then I should read a message stating that "No data found"
         And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
 
-    # Scenario: Sort functionality
-    #     Given I navigate to admin users listing screen
-    #     When I click on the sort by "Admin Name"
-    #     Then I should see the admin user sorted in ascending order based on "Admin Name"
-    #     * I click on the sort by "Admin Name"
-    #     And I should see the admin user sorted in descending order based on "Admin Name"
+    Scenario: Sort functionality
+        Given I navigate to admin users listing screen
+        When I click on the sort by "Admin Name"
+        Then I should see the admin user sorted in ascending order based on "Admin Name"
+        * I click on the sort by "Admin Name"
+        And I should see the admin user sorted in descending order based on "Admin Name"
 
     Scenario Outline: Filter admin users by role
         Given I navigate to admin users listing screen
