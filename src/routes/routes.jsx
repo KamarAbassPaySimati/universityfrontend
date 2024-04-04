@@ -88,7 +88,8 @@ export default function NavigationRoutes (props) {
                                     ComponentsBasedOnRole[CurrentUserRole] &&
                                     <Route element={<Layout {...props}/>} key={location.key}>
                                         {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
-                                            <Route path={nav.path} element={React.cloneElement(nav.element, props)} key={nav.path}/>
+                                            <Route path={nav.path} element={React.cloneElement(nav.element, props)}
+                                                key={nav.path}/>
                                         ))}
                                         <Route path="/dashboard" element={<Dashboard />} />
                                         <Route path="/profile" element={<Profile />} />
