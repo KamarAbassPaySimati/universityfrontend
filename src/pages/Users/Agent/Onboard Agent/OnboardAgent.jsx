@@ -99,6 +99,12 @@ const OnboardAgent = () => {
             });
             return;
         }
+        if (id === 'middleName' || id === 'firstName') {
+            setFormData(prevState => {
+                return { ...prevState, [id]: e.target.value.replace(/^\w/, (c) => c.toUpperCase()) };
+            });
+            return;
+        }
         if (id === 'email') {
             setVerified(prevState => {
                 return { ...prevState, [id]: false };
@@ -380,7 +386,7 @@ const OnboardAgent = () => {
         <CardHeader
             activePath='Register Agent'
             paths={['Users', 'Agent']}
-            pathurls={['users/agent']}
+            pathurls={['users/agents']}
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful

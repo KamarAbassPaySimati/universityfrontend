@@ -17,6 +17,7 @@ export default {
                 'primary-dark-hover': '#231943',
                 'primary-dark-active': '#1B1332',
                 'primary-darker': '#150F27',
+                'primary-negative': '#FF6363',
 
                 'secondary-light': '#FDF1E9',
                 'secondary-light-hover': '#FCEADE',
@@ -37,10 +38,26 @@ export default {
                 'accent-positive': '#13B681',
                 'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
+                'neutral-grey': '#F8F8F8',
 
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
+            },
+            height: {
+                tableHeight: 'calc(100vh - 370px)',
+                tablebodyHeight: 'calc(100vh - 411px)',
+                noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
+            },
+            minHeight: {
+                tableHeight: 'calc(100vh - 370px)',
+                tablebodyHeight: 'calc(100vh - 411px)',
+                noDataError: 'calc(100vh - 240px)'
+            },
+            maxHeight: {
+                tableHeight: 'calc(100vh - 370px)',
+                tablebodyHeight: 'calc(100vh - 411px)',
+                noDataError: 'calc(100vh - 240px)'
             }
         }
     },

@@ -36,7 +36,7 @@ const SetNewPassword = () => {
     }, []);
 
     return (
-        <div className='whiteScrollBar overflow-auto h-[100vh] w-[100vw] setNewPassword'>
+        <div className={`whiteScrollBar overflow-auto h-[100vh] w-[100vw] ${screenLoading ? '' : 'setNewPassword'}`}>
             {screenLoading
                 ? <Loading/>
                 : <div className='bg-primary-normal'>

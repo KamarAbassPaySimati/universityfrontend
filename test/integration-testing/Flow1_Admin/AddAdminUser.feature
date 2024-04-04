@@ -24,6 +24,10 @@ Feature: Paymaart - Admin Web - Onboard Admin
     When I navigate to onboard admin user
     Then I should view "404" page not found screen
 
+  Scenario: View Admin Profile as admin finance admin
+    Given I navigate to admin users listing screen
+    Then I should see view admin users button is hidden
+
   @perform_logout
   @wait
   Scenario: Support Admin User login with valid credentials and validate access permission for register admin
@@ -37,6 +41,10 @@ Feature: Paymaart - Admin Web - Onboard Admin
     When I navigate to onboard admin user
     Then I should view "404" page not found screen
 
+  Scenario: View Admin Profile as support admin
+    Given I navigate to admin users listing screen
+    Then I should see view admin users button is hidden
+
   @perform_logout
   @wait
   Scenario: Admin User login with valid credentials and validate access permission for register admin
@@ -49,6 +57,10 @@ Feature: Paymaart - Admin Web - Onboard Admin
     Then I should be redirected to the '/dashboard' page
     When I navigate to onboard admin user
     Then I should view "404" page not found screen
+
+  Scenario: View Admin Profile as admin
+    Given I navigate to admin users listing screen
+    Then I should see view admin users button is hidden
 
   @perform_logout
   @wait
