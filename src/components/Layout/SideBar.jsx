@@ -85,12 +85,7 @@ const SideBar = ({ role }) => {
     const handleOptionClick = (nav, option, key) => {
         navigate(nav.toLowerCase() + '/' + Slugify(option));
     };
-
-    useEffect(() => {
-
-    }, []);
-
-    useGlobalSignout();
+    // useGlobalSignout();
 
     return (
         <>

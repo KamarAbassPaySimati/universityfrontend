@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useContext, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
 import Login from '../pages/auth/Login';
@@ -15,9 +15,11 @@ import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
 import Slugify from '../CommonMethods/Sulgify';
 import Agent from '../pages/Users/Agent';
+import GlobalContext from '../components/Context/GlobalContext';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
+    const { setToastError } = useContext(GlobalContext);
     const { loggedIn, user } = auth;
     let { user_type: CurrentUserRole } = user;
     if (CurrentUserRole) {
@@ -39,10 +41,15 @@ export default function NavigationRoutes (props) {
                 dispatch(login());
             }
         } catch (error) {
-            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException')) {
+            console.log(error, 'jikfromroute``');
+            console.log(error.message, 'errorMessage');
+            console.log(error.name, 'error name');
+            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException') ||
+               (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException')) {
                 setPageLoading(false);
                 dispatch(setUser(''));
                 dispatch(logout());
+                setToastError('user session failed!');
             }
         }
     };
