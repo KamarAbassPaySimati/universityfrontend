@@ -29,7 +29,7 @@ Then('I should see a confirmation prompt for deactivating {string}', async funct
         await driver.wait(until.elementIsVisible(element));
 
         modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
-        assert.equal(modalBody, "This action will temporarily suspend the admin user's account.");
+        assert.equal(modalBody, "This action will suspend Admin user's account");
         break;
     default:
         break;
@@ -61,7 +61,7 @@ Then('I should see a confirmation prompt for activate {string}', async function 
         await driver.wait(until.elementIsVisible(element));
 
         modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
-        assert.equal(modalBody, "This action will activate the admin user's account.");
+        assert.equal(modalBody, "This action will activate Admin user's account");
         break;
     default:
         break;
