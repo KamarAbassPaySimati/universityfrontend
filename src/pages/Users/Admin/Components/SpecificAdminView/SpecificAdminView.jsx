@@ -129,7 +129,7 @@ export default function SpecificAdminView () {
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={`Confirm to ${View?.status === 'active' ? 'Deactivate' : 'Activate'}?`}
-                        message={`${View?.status === 'active' ? 'This action will temporarily suspend the admin user\'s account.' : 'This action will activate the admin user\'s account.'}`}
+                        message={`${View?.status === 'active' ? 'This action will suspend Admin user\'s account' : 'This action will activate Admin user\'s account'}`}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
