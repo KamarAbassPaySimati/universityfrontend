@@ -27,7 +27,8 @@ Feature: Paymaart - Admin Web - Onboard Admin
   Scenario: View Admin Profile as admin finance admin
     Given I navigate to admin users listing screen
     Then I should see view admin users button is hidden
-
+    And I should see edit admin users button is hidden
+    
   @perform_logout
   @wait
   Scenario: Support Admin User login with valid credentials and validate access permission for register admin
@@ -44,6 +45,7 @@ Feature: Paymaart - Admin Web - Onboard Admin
   Scenario: View Admin Profile as support admin
     Given I navigate to admin users listing screen
     Then I should see view admin users button is hidden
+    And I should see edit admin users button is hidden
 
   @perform_logout
   @wait
@@ -61,6 +63,7 @@ Feature: Paymaart - Admin Web - Onboard Admin
   Scenario: View Admin Profile as admin
     Given I navigate to admin users listing screen
     Then I should see view admin users button is hidden
+    And I should see edit admin users button is hidden
 
   @perform_logout
   @wait
