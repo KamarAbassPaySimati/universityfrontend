@@ -20,7 +20,8 @@ const InputField = ({
     setEnteredLetter,
     className,
     notShowErrorBottom,
-    maxLength
+    maxLength,
+    divClassName
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -31,7 +32,7 @@ const InputField = ({
     };
 
     return (
-        <div className='flex flex-col gap-2 relative'>
+        <div className={`flex flex-col gap-2 relative ${divClassName || ''}`}>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
                 autoComplete={autoComplete || 'off'}

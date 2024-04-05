@@ -39,7 +39,7 @@ export default {
                 'background-light': '#F0ECFF',
                 'background-dark': '#67389A',
                 'neutral-grey': '#F8F8F8',
-
+                'accent-positive-secondary': '#DDF7F0',
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
