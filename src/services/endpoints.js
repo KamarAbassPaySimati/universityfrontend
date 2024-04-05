@@ -8,5 +8,6 @@ export const endpoints = {
     resendCredentials: 'resend-credentials-secure',
     adminOnboard: 'onboard-admin',
     updateLoggedIn: 'update-logged-in-time',
-    adminActivateDeactivate: 'activate-deactivate'
+    adminActivateDeactivate: 'activate-deactivate',
+    updateAdmin: 'update-admin'
 };
