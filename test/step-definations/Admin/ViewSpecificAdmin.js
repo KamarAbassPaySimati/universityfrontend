@@ -85,3 +85,14 @@ Then('I should see view admin users button is hidden', async function () {
         throw new Error('View button is not hidden');
     }
 });
+
+Then('I should see edit admin users button is hidden', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    const viewButton = await driver.executeScript('return document.querySelector("[data-testid=\'edit-0\']")');
+    if (viewButton == null || viewButton === undefined) {
+        return 'passed';
+    } else {
+        throw new Error('View button is not hidden');
+    }
+});
