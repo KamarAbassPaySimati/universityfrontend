@@ -20,7 +20,8 @@ const InputField = ({
     setEnteredLetter,
     className,
     notShowErrorBottom,
-    maxLength
+    maxLength,
+    editAction
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -38,7 +39,9 @@ const InputField = ({
                 data-testid={testId}
                 value={value}
                 type={givenType ? isPasswordType ? 'password' : 'text' : type || 'text'}
-                className={`placeholder:text-neutral-secondary text-neutral-primary bg-[#F8F8F8] px-[10px] py-[11px]
+                className={`placeholder:text-neutral-secondary text-neutral-primary 
+                ${editAction === 'yes' ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'} 
+                px-[10px] py-[11px]
                     font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal 
                     ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr`}
                 id={id}
@@ -47,6 +50,8 @@ const InputField = ({
                 onChange={(e) => onChange(e, id)}
                 onKeyDown={handleKeyDown}
                 maxLength={maxLength}
+                disabled = {editAction === 'yes'}
+
             />
             {/* && value.length > 0 */}
             {givenType === 'password' && value.length > 0 &&

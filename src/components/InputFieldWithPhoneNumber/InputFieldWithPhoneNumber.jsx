@@ -15,7 +15,10 @@ const InputFieldWithPhoneNumber = ({
     setEnteredLetter,
     className,
     maxLength,
-    notifyFocusChange
+    notifyFocusChange,
+    editAction,
+    countryCode
+
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -38,7 +41,7 @@ const InputFieldWithPhoneNumber = ({
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
-            <div className={` bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px]
+            <div className={` ${editAction === 'yes' ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'}  text-neutral-primary px-[10px] py-[11px]
                      leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
                     ${error ? 'border-error' : 'border-[#DDDDDD]'} 
                     ${className} rounded-tl rounded-tr`} style={{ borderBottomColor: isFocused ? '#3B2A6F' : '' }}>
@@ -64,6 +67,7 @@ const InputFieldWithPhoneNumber = ({
                     style={{ outline: 'none' }}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
+                    disabled = {editAction === 'yes'}
                 />
             </div>
             {error && <ErrorMessage error={error} />}

@@ -3,7 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { SpecificView } from './SpecificAdminViewSlice';
+import { SpecificView } from '../SpecificAdminViewSlice';
 import CardHeader from '../../../../../components/CardHeader';
 import ProfileName from '../../../../../components/ProfileName/ProfileName';
 import ViewDetail from '../../../../../components/ViewDeatilComponent/ViewDeatil';
@@ -73,7 +73,7 @@ export default function SpecificAdminView () {
                 header='Admin Profile'
                 minHeightRequired={true}
                 updateButton={loading}
-                updateButtonPath
+                updateButtonPath={`/users/admins/update-admin/${id}`}
                 statusButton={PaymaartId === View?.paymaart_id ? undefined : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
                 ChildrenElement
                 onHandleStatusChange={handleStatusClick}
