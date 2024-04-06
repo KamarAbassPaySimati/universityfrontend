@@ -212,7 +212,6 @@ const OnboardAdmin = ({ actionKey }) => {
         }
     };
     useEffect(() => {
-        console.log(actionKey, 'actionkey');
         if (actionKey === 'update') {
             getAdminView();
         }
@@ -229,13 +228,8 @@ const OnboardAdmin = ({ actionKey }) => {
                 <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                     Basic Details
                 </h1>
-                {/* {true && [...Array(5)].map((_, ind) => (
-                    <div className='' key={ind}>
-                        <InputFieldShimmer
-                        />
-                    </div>
-                ))} */}
-                {loading
+                {console.log(loading, 'loaderrrrr')}
+                {actionKey === 'update' && loading
                     ? <div className='flex flex-wrap'>
                         {[...Array(3)].map((_, ind) => (
 
@@ -286,7 +280,7 @@ const OnboardAdmin = ({ actionKey }) => {
                         />
                     </div>}
 
-                {loading
+                { actionKey === 'update' && loading
                     ? <div className='flex flex-wrap'>
                         {[...Array(3)].map((_, ind) => (
                             <InputFieldShimmer key={ind}

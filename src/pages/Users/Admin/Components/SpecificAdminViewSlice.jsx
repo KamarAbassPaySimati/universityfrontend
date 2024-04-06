@@ -5,7 +5,7 @@ import { dataService } from '../../../../services/data.services';
 import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 
 const initialState = {
-    loading: true,
+    loading: false,
     error: '',
     success: ''
 };
