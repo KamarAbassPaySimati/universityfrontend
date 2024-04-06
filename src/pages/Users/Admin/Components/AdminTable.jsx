@@ -80,7 +80,7 @@ const AdminTable = (
                                             </span>
                                         )}
                                 </td>
-                                <td className={`py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center ${paymaartId === user?.paymaart_id ? 'justify-start' : 'justify-end'}`}>
+                                <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
                                     {/* {CurrentUserRole === 'super-admin' && <><Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
                                         <Image src='edit' toolTipId={`edit-${index}`}/></>} */}
 

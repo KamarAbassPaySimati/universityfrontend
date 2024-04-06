@@ -2,7 +2,6 @@ import React from 'react';
 import { BeatLoader } from 'react-spinners';
 
 const Button = ({ text, className, onClick, isLoading, color, smallLoader, disabled, testId, buttonColor }) => {
-    console.log(disabled, 'color');
     return (
         <button
             data-testid={testId}
