@@ -349,7 +349,7 @@ const OnboardAdmin = ({ actionKey }) => {
                                 )
                             )
                             : (
-                                !loading && (
+                                (
                                     <Button
                                         text='Register'
                                         testId='submit_button'
