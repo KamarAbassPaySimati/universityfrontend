@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
-import { dataService } from '../../../../../services/data.services';
-import isTimestampFiveMinutesAgo from '../../../../../CommonMethods/lastLoggedInTimeStamp';
+import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
+import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
+import { dataService } from '../../../../services/data.services';
+import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 
 const initialState = {
     loading: true,

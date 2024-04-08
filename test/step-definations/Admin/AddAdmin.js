@@ -1,10 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 const { Given, When, Before } = require('@cucumber/cucumber');
-const webdriver = require('selenium-webdriver');
-const until = require('selenium-webdriver').until;
-const By = require('selenium-webdriver').By;
-const Keys = webdriver.Key;
+const { Key, until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const { faker } = require('@faker-js/faker');
 const { createAdminAccountSecure } = require('../../bdd_api/index.js');
@@ -62,7 +59,7 @@ When('I enter first name as {string} for admin onboarding', async function (firs
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (first_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
     }
@@ -71,7 +68,7 @@ When('I enter middle name as {string} for admin onboarding', async function (mid
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (middle_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
     }
@@ -81,7 +78,7 @@ When('I enter last name as {string} for admin onboarding', async function (last_
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (last_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
     }
@@ -91,7 +88,7 @@ When('I enter email address as {string} for admin onboarding', async function (e
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (email_address !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email_address);
     }
@@ -101,7 +98,7 @@ When('I enter phone number as {string} for admin onboarding', async function (ph
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (phone_number !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
     }
@@ -146,15 +143,15 @@ When('I enter valid basic details for admin onboarding', async function () {
     await driver.wait(until.elementIsVisible(element));
 
     const first_name = faker.person.firstName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
 
     const middle_name = faker.person.firstName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
 
     const last_name = faker.person.lastName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
 });
 
@@ -165,7 +162,7 @@ When('I enter valid email address for admin onboarding', async function () {
 
     const random_number = faker.string.alpha(10);
     const email = `bharath.shet+${random_number}@7edge.com`;
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email);
 });
 
@@ -182,7 +179,7 @@ When('I enter valid phone number for admin onboarding', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
 });
 
@@ -194,19 +191,19 @@ When('I enter already existing {string}', async function (field) {
     let email;
     switch (field) {
     case 'Email':
-        await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+        await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
         await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(global.admin_user.email_address);
 
-        await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+        await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
         await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(faker.phone.number('+265#######'));
         break;
     case 'Phone Number':
         random_number = faker.string.alphanumeric(5);
         email = `bharath.shet+${random_number}@7edge.com`;
-        await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+        await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
         await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email);
 
-        await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+        await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
         await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(global.admin_user.phone_number_without_country_code.replaceAll(' ', ''));
         break;
     default:

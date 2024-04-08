@@ -16,6 +16,11 @@ const {
 const { getMFASecret, addAdminUser, deleteAdminAccount } = require('../../bdd_api/index.js');
 const { driver } = require('../Driver.js');
 
+function replaceTextWithSpecialChars (text) {
+    const regex = /[^\w\s]/g; // Matches any character that's not alphanumeric or whitespace
+    return text.replace(regex, '');
+}
+
 async function login () {
     await driver.get('http://localhost:3000/');
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -161,9 +166,9 @@ Before('@add_admin_user', async function () {
     try {
         const random_alpha = faker.string.alpha(10);
         const email = `bharath.shet+${random_alpha}@7edge.com`;
-        const first_name = faker.person.firstName();
-        const middle_name = faker.person.middleName();
-        const last_name = faker.person.lastName();
+        const first_name = replaceTextWithSpecialChars(faker.person.firstName());
+        const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
+        const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
         const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
@@ -212,9 +217,9 @@ Before('@add_finance_admin_user', async function () {
     try {
         const random_alpha = faker.string.alpha(10);
         const email = `bharath.shet+${random_alpha}@7edge.com`;
-        const first_name = faker.person.firstName();
-        const middle_name = faker.person.middleName();
-        const last_name = faker.person.lastName();
+        const first_name = replaceTextWithSpecialChars(faker.person.firstName());
+        const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
+        const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
         const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
@@ -262,9 +267,9 @@ Before('@add_support_admin_user', async function () {
     try {
         const random_alpha = faker.string.alpha(10);
         const email = `bharath.shet+${random_alpha}@7edge.com`;
-        const first_name = faker.person.firstName();
-        const middle_name = faker.person.middleName();
-        const last_name = faker.person.lastName();
+        const first_name = replaceTextWithSpecialChars(faker.person.firstName());
+        const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
+        const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
         const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
@@ -312,9 +317,9 @@ Before('@add_normal_admin_user', async function () {
     try {
         const random_alpha = faker.string.alpha(10);
         const email = `bharath.shet+${random_alpha}@7edge.com`;
-        const first_name = faker.person.firstName();
-        const middle_name = faker.person.middleName();
-        const last_name = faker.person.lastName();
+        const first_name = replaceTextWithSpecialChars(faker.person.firstName());
+        const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
+        const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
         const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
