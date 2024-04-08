@@ -1,9 +1,10 @@
 import React, { useRef, useState } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import Image from '../Image/Image';
 
 function InputFieldWithDropDown (props) {
-    const { labelName, value, placeholder, options, id, error, handleInput, testId } = props;
+    const { labelName, value, placeholder, options, id, error, handleInput, testId, information } = props;
     const [show, setShow] = useState(false);
 
     const outsideClickRef = useRef();
@@ -12,7 +13,13 @@ function InputFieldWithDropDown (props) {
     });
     return (
         <div className=" flex flex-col relative gap-2">
-            <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{labelName}</label>
+            <div className='flex items-center'>
+                <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
+                    {labelName}</label>
+                {information &&
+                    <Image src="info_icon" className="w-5 h-5 cursor-pointer info-icon"/>
+                }
+            </div>
             <div ref={outsideClickRef} className={` bg-[#F8F8F8] text-neutral-primary
                      leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
                      rounded-tl rounded-tr  ${error ? 'border-error' : 'border-[#DDDDDD]'}

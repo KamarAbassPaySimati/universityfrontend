@@ -20,7 +20,6 @@ const ProgressBarComponent = ({ ProgressBar, LineClass }) => {
                 <div className='w-[500px] flex justify-around'>
                     {Object.keys(ProgressBar).map((progressItem, index = 0) => (
                         <div key={progressItem} className={`rounded-full ${getColors(ProgressBar[progressItem].status).outer} w-8 h-8 relative flex items-center justify-center`}>
-                            {console.log('progressItem', getColors(ProgressBar[progressItem].status))}
                             <div className={`rounded-full ${getColors(ProgressBar[progressItem].status).inner} w-[18px] h-[18px]`}></div>
                             {index === 0 && <div className={`${LineClass}`}></div>}
                         </div>

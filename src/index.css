@@ -241,3 +241,6 @@ input[type='number'] {
   right: 0;
 
 }
+
+.lower-alpha {list-style-type: lower-alpha;}
+.list-circle {list-style-type: circle;}
