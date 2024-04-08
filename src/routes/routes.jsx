@@ -1,3 +1,4 @@
+/* eslint-disable quotes */
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
@@ -15,6 +16,7 @@ import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
 import Slugify from '../CommonMethods/Sulgify';
 import Agent from '../pages/Users/Agent';
+import Toast from '../components/Toast/Toast';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -23,6 +25,7 @@ export default function NavigationRoutes (props) {
     if (CurrentUserRole) {
         CurrentUserRole = Slugify(CurrentUserRole);
     }
+    const [ToastError, setToastError] = useState('');
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -39,9 +42,13 @@ export default function NavigationRoutes (props) {
                 dispatch(login());
             }
         } catch (error) {
-            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException')) {
+            if ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException') ||
+               (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException')) {
                 setPageLoading(false);
                 dispatch(setUser(''));
+                if (localStorage.getItem("userLogedIn")) {
+                    setToastError('user session failed!');
+                }
                 dispatch(logout());
             }
         }
@@ -61,39 +68,45 @@ export default function NavigationRoutes (props) {
     }, [pageLoading]);
 
     return (
-
-        <Suspense fallback={<div>Loading...</div>}>{
-            <>
-                <Routes location={location} key={location.pathname}>
-                    {pageLoading
-                        ? <Route path="*" element={<Loading />} />
-                        : !user
-                            ? <>
-                                <Route path="/" element={<Login />} />
-                                <Route
-                                    path={'/forgot-password'}
-                                    element={<ForgotPassword />} />
-                                <Route
-                                    path={'/set-new-password'}
-                                    element={<SetNewPassword />} />
-                            </>
-                            : (
-                                ComponentsBasedOnRole[CurrentUserRole] &&
-                                <Route element={<Layout {...props}/>} key={location.key}>
-                                    {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
-                                        <Route path={nav.path} element={React.cloneElement(nav.element, props)} key={nav.path}/>
-                                    ))}
-                                    <Route path="/dashboard" element={<Dashboard />} />
-                                    <Route path="/profile" element={<Profile />} />
-                                    <Route path="/profile/update-password" element={<UpdatePassword />} />
-                                    <Route path="/users/agents" element={<Agent />} />
-                                </Route>
-                            )
-                    }
-                    <Route path="*" element={<NotFound />} />
-                </Routes>
-            </>
-        }
-        </Suspense>
+        <>
+            <Suspense fallback={<div>Loading...</div>}>{
+                <>
+                    <Routes location={location} key={location.pathname}>
+                        {pageLoading
+                            ? <Route path="*" element={<Loading />} />
+                            : !user
+                                ? <>
+                                    <Route path="/" element={<Login />} />
+                                    <Route
+                                        path={'/forgot-password'}
+                                        element={<ForgotPassword />} />
+                                    <Route
+                                        path={'/set-new-password'}
+                                        element={<SetNewPassword />} />
+                                </>
+                                : (
+                                    ComponentsBasedOnRole[CurrentUserRole] &&
+                                    <Route element={<Layout {...props}/>} key={location.key}>
+                                        {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
+                                            <Route path={nav.path} element={React.cloneElement(nav.element, props)}
+                                                key={nav.path}/>
+                                        ))}
+                                        <Route path="/dashboard" element={<Dashboard />} />
+                                        <Route path="/profile" element={<Profile />} />
+                                        <Route path="/profile/update-password" element={<UpdatePassword />} />
+                                        <Route path="/users/agents" element={<Agent />} />
+                                    </Route>
+                                )
+                        }
+                        <Route path="*" element={<NotFound />} />
+                    </Routes>
+                </>
+            }
+            </Suspense>
+            {ToastError !== '' && <Toast
+                message={ToastError}
+                type="error"
+                setToastmessage={setToastError} />}
+        </>
     );
 }

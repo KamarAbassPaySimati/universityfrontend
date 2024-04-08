@@ -81,3 +81,16 @@ Given('I select filter by admin role as {string}', async function (role) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css(`[data-testid='filter-modal'] [for='${role}']`))).click();
 });
+
+When('I search for the recently created admin user', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="search"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await element.sendKeys(global.admin_user.paymaart_id);
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+});

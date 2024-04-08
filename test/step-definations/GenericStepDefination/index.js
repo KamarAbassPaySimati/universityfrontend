@@ -166,3 +166,27 @@ Then('I should see filter popup modal closed', async function () {
         return 'passed';
     }
 });
+
+When('I click on cancel button', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="cancel_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+});
+
+When('I click on confirm button', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="confirm_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+});
+
+When('I log out from the application', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 500));
+    await driver.executeScript('window.localStorage.clear();');
+    await driver.executeScript('window.location.reload();');
+    await new Promise(resolve => setTimeout(resolve, 2000));
+});
