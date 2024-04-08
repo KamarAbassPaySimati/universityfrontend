@@ -10,6 +10,8 @@ Feature: Paymaart - Admin Web- Update admin profile
     Access privilage list
     Email template
 
+    @perform_logout
+    @wait
     @add_admin_user
     @create_new_user_and_login
     Scenario: Admin View profile
