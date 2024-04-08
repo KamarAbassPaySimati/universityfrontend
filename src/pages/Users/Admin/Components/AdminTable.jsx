@@ -12,7 +12,7 @@ import handleSort from '../../../../CommonMethods/ListFunctions';
 
 const AdminTable = (
     {
-        loading, error, List, setSearchParams, notFound, searchParams, CurrentUserRole
+        loading, error, List, setSearchParams, notFound, searchParams, CurrentUserRole, paymaartId
     }
 ) => {
     const navigate = useNavigate();
@@ -80,9 +80,19 @@ const AdminTable = (
                                             </span>
                                         )}
                                 </td>
-                                <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
-                                    {CurrentUserRole === 'super-admin' && <><Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
-                                        <Image src='edit' toolTipId={`edit-${index}`}/></>}
+                                <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
+                                    {/* {CurrentUserRole === 'super-admin' && <><Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
+                                        <Image src='edit' toolTipId={`edit-${index}`}/></>} */}
+
+                                    {
+                                        CurrentUserRole === 'super-admin' && (
+                                            <>
+                                                <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)} />
+                                                {paymaartId !== user?.paymaart_id && <Image src='edit' testId={`edit-${index}`} className={'cursor-pointer'} toolTipId={`edit-${index}`} onClick={() => navigate(`/users/admins/update-admin/${user?.paymaart_id}`)}/>}
+                                            </>
+                                        )
+                                    }
+
                                     <Tooltip
                                         id={`eye-${index}`}
                                         className='my-tooltip z-30'
