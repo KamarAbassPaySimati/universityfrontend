@@ -38,7 +38,7 @@ const Admin = () => {
             // to get the data from authslice
             dispatch(AdminList(searchParams)).then((response) => {
                 if (response.payload.error) {
-                    if (error.status === 400) {
+                    if (error.status === 400 || error.status === 401) {
                         setNotFound(true);
                     } else {
                         setToastError('Something went wrong!');
