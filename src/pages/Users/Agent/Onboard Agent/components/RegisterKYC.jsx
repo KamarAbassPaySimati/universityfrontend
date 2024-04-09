@@ -9,9 +9,10 @@ import Button from '../../../../../components/Button/Button';
 import DocumentSidebar from '../../../../../components/DocumentTab/DocumentSidebar';
 import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
 import { Tooltip } from 'react-tooltip';
+import InformationList from '../../../../../components/InformationList/InformationList';
+import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlaceholder';
 
 export default function RegisterKYC () {
-    const [onHover, setOnHover] = useState(false);
     const AddressDetails = {
         nothing_to_show: {
             po_box_no: {
@@ -74,29 +75,32 @@ export default function RegisterKYC () {
 
     const Infomation = {
         List1: {
-            text: 'List 1',
+            text: 'Please provide one of these documents for additional verification of your primary ID:',
             insideList1: {
-                text: 'insideList1',
+                text: 'Valid Driver\'s Licence issued by an appropriate authority',
                 insideList1: {
-                    text: ' insideList1.1'
-                },
-                insideList2: {
-                    text: ' insideList1.2'
+                    text: 'Front and back'
                 }
             },
             insideList2: {
-                text: 'insideList2',
+                text: 'Valid Traffic Register Card issued by an appropriate authority',
                 insideList1: {
-                    text: ' insideList2'
+                    text: 'Front and back'
                 }
-            }
-        },
-        List2: {
-            text: 'List 2',
-            insideList1: {
-                text: 'insideList1',
+            },
+            insideList3: {
+                text: 'Birth certificate'
+            },
+            insideList4: {
+                text: 'Stamped Letter with Verifiable Particulars of an employer',
                 insideList1: {
-                    text: ' insideList2'
+                    text: 'Signed by Head of the employer'
+                }
+            },
+            insideList5: {
+                text: 'Stamped Letter with Verifiable Particulars of a learning institution',
+                insideList1: {
+                    text: 'Signed by Head of the institution'
                 }
             }
         }
@@ -133,8 +137,8 @@ export default function RegisterKYC () {
                         <DocumentSidebar
                             documentTypes={documentTypes}
                         />
-                        <div className='ml-[60px]'>
-                            <div className="w-[339px] relative">
+                        <div className='ml-[30px] w-[70%]'>
+                            <div className="w-[48%] relative">
                                 <InputFieldWithDropDown
                                     labelName="ID Document"
                                     value={''}
@@ -153,37 +157,25 @@ export default function RegisterKYC () {
                                     effect="solid"
                                     arrowColor="transparent"
                                 >
-                                    <h1 className='mb-2 font-normal text-[16px] leading-6'>Your ID Verification Document Options</h1>
-
-                                    <ol class="space-y-4 lower-alpha list-inside text-[14px] font-normal leading-6 text-[#FFF]">
-                                        { Object.keys(Infomation).map((itemText, itemIndex = 0) => (<li key={itemIndex}>
-                                            {Infomation[itemText].text}
-                                            {Object.keys(Infomation[itemText]).map((insideText, insideIndex = 0) => (
-                                                <ul class="ps-5 mt-2 space-y-1 list-disc list-inside"
-                                                    key={insideIndex}>
-                                                    {console.log('Infomation[itemText][insideText]', Infomation[itemText][insideText].text)}
-                                                    <li>{Infomation[itemText][insideText].text}</li>
-                                                    {Object.keys(Infomation[itemText][insideText]).map((liText, liIndex = 0) => (<ul class="ps-5 mt-2 space-y-1 list-circle list-inside">
-                                                        <li>You might feel like you are being really "organized" o</li>
-                                                    </ul>))}
-                                                </ul>))}
-                                        </li>))}
-                                        <li>
-                                            List item one
-                                            <ul class="ps-5 mt-2 space-y-1 list-disc list-inside">
-                                                <li>You might feel like you are being really "organized" </li>
-                                                <ul class="ps-5 mt-2 space-y-1 list-circle list-inside">
-                                                    <li>You might feel like you are being really "organized" o</li>
-                                                    <li>Nested navigation in UIs is a bad idea too, keep things as flat as possible.</li>
-                                                    <li>Nesting tons of folders in your source code is also not helpful.</li>
-                                                </ul>
-                                                <li>Nested navigation in UIs is a bad idea too, keep things as flat as possible.</li>
-                                                <li>Nesting tons of folders in your source code is also not helpful.</li>
-                                            </ul>
-                                        </li>
-                                    </ol>
-
+                                    <InformationList
+                                        heading="Your ID Verification Document Options"
+                                        information={Infomation}
+                                    />
                                 </Tooltip>
+
+                            </div>
+                            <div className='flex'>
+                                <div className="w-[48%] relative">
+                                    <UploadPlaceholder
+                                        label="Front"
+                                    />
+                                </div>
+                                <div className="w-[48%] relative ml-[4%]">
+                                    <UploadPlaceholder
+                                        label="Back"
+                                    />
+                                </div>
+
                             </div>
                         </div>
                     </div>

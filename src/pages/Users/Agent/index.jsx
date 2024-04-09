@@ -60,6 +60,7 @@ const Agent = () => {
             GetList();
         }
     }, [GetList]);
+
     return (
         <CardHeader
             activePath='Agents'
