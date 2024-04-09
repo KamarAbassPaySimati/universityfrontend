@@ -5,14 +5,17 @@ import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 
-const Filter = ({
+const FilterWithSingleOption = ({
     filterOptions,
     filterType,
     handleClearFilter,
     handleSearchParams,
     searchParams,
     isLoading,
-    filterActive
+    filterActive,
+    filterOptionOne,
+    filterOptionTwo,
+    filterOptionThree
 }) => {
     const filterDiv = useRef();
 
@@ -45,14 +48,33 @@ const Filter = ({
                             Clear
                         </button>
                     </div>
-                    <div className='p-4 flex flex-col gap-4'>
-                        { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
+                    <div className='p-4'>
+                        { Object.keys(filterOptionOne).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2 capitalize'>
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
-                                    {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
+                                    {filterOptionOne[key].map((option) => ( // in a key number of options (active, inactive)
+                                        <SingleCheck
+                                            SingsingleCheckText={option} // active
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+
+                    
+                    <div className='p-4'>
+                        { Object.keys(filterOptionTwo).map((key) => ( // go through the number of keys  (for eg role, status)
+                            <div key={key}>
+                                <div className='font-[600] mb-2 capitalize'>
+                                    {key}
+                                </div>
+                                <div className='flex gap-10'>
+                                    {filterOptionOne[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
                                             isLoading={isLoading}
                                             key={option} // active
@@ -67,6 +89,32 @@ const Filter = ({
                             </div>
                         ))}
                     </div>
+
+                    <div className='p-4'>
+                        { Object.keys(filterOptionThree).map((key) => ( // go through the number of keys  (for eg role, status)
+                            <div key={key}>
+                                <div className='font-[600] mb-2 capitalize'>
+                                    {key}
+                                </div>
+                                <div className='flex gap-10'>
+                                    {filterOptionTwo[key].map((option) => ( // in a key number of options (active, inactive)
+                                        <FilterCheckbox
+                                            isLoading={isLoading}
+                                            key={option} // active
+                                            id={option} // active
+                                            valueOf={key} // status
+                                            checkboxText={option} // active
+                                            handleSearchParams={handleSearchParams}
+                                            searchParams={searchParams}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+
+
                 </div>
             </div>
             }
@@ -74,4 +122,4 @@ const Filter = ({
     );
 };
 
-export default Filter;
+export default FilterWithSingleOption;
