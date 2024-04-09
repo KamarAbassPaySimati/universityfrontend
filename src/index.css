@@ -244,3 +244,8 @@ input[type='number'] {
 
 .lower-alpha {list-style-type: lower-alpha;}
 .list-circle {list-style-type: circle;}
+
+
+.capture-img img, video {
+    border-radius: 7px !important;
+}

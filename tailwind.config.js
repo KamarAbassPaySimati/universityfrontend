@@ -55,6 +55,7 @@ export default {
             minHeight: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
+                loaderHight: 'calc(100vh - 343px)',
                 noDataError: 'calc(100vh - 240px)'
             },
             maxHeight: {

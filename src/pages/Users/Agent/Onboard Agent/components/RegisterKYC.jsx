@@ -8,9 +8,11 @@ import Button2 from '../../../../../components/Button2/Button2';
 import Button from '../../../../../components/Button/Button';
 import DocumentSidebar from '../../../../../components/DocumentTab/DocumentSidebar';
 import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
-import { Tooltip } from 'react-tooltip';
 import InformationList from '../../../../../components/InformationList/InformationList';
 import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlaceholder';
+import Capture from '../../../../../components/CameraCapture/Capture';
+import RulesList from '../../../../../components/InformationList/RulesList';
+import Documents from './Documents';
 
 export default function RegisterKYC () {
     const AddressDetails = {
@@ -71,40 +73,7 @@ export default function RegisterKYC () {
         'ID Document': 'clear',
         'Verification Document': 'pending'
     };
-    const IdDocumentList = ['National ID', 'Passport'];
 
-    const Infomation = {
-        List1: {
-            text: 'Please provide one of these documents for additional verification of your primary ID:',
-            insideList1: {
-                text: 'Valid Driver\'s Licence issued by an appropriate authority',
-                insideList1: {
-                    text: 'Front and back'
-                }
-            },
-            insideList2: {
-                text: 'Valid Traffic Register Card issued by an appropriate authority',
-                insideList1: {
-                    text: 'Front and back'
-                }
-            },
-            insideList3: {
-                text: 'Birth certificate'
-            },
-            insideList4: {
-                text: 'Stamped Letter with Verifiable Particulars of an employer',
-                insideList1: {
-                    text: 'Signed by Head of the employer'
-                }
-            },
-            insideList5: {
-                text: 'Stamped Letter with Verifiable Particulars of a learning institution',
-                insideList1: {
-                    text: 'Signed by Head of the institution'
-                }
-            }
-        }
-    };
     return (
         <CardHeader
             activePath='Register Agent'
@@ -137,47 +106,12 @@ export default function RegisterKYC () {
                         <DocumentSidebar
                             documentTypes={documentTypes}
                         />
-                        <div className='ml-[30px] w-[70%]'>
-                            <div className="w-[48%] relative">
-                                <InputFieldWithDropDown
-                                    labelName="ID Document"
-                                    value={''}
-                                    placeholder="Select ID document"
-                                    // error={formErrors.role}
-                                    options={IdDocumentList}
-                                    id="passport"
-                                    testId="passport"
-                                    information
-                                // handleInput={handleInput}
-                                />
-                                <Tooltip
-                                    className='info-tooltip'
-                                    anchorSelect=".info-icon"
-                                    place='right-start'
-                                    effect="solid"
-                                    arrowColor="transparent"
-                                >
-                                    <InformationList
-                                        heading="Your ID Verification Document Options"
-                                        information={Infomation}
-                                    />
-                                </Tooltip>
-
-                            </div>
-                            <div className='flex'>
-                                <div className="w-[48%] relative">
-                                    <UploadPlaceholder
-                                        label="Front"
-                                    />
-                                </div>
-                                <div className="w-[48%] relative ml-[4%]">
-                                    <UploadPlaceholder
-                                        label="Back"
-                                    />
-                                </div>
-
-                            </div>
-                        </div>
+                        {/* <Documents
+                            type={'ID Document'}
+                        /> */}
+                        <Documents
+                            type={'Verification Document'}
+                        />
                     </div>
                 </div>
                 <div className='flex justify-between items-center'>
