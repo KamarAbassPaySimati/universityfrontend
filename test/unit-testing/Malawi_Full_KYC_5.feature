@@ -1,4 +1,4 @@
-Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full
+Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verification Doc - Institution letter, Occupation - Self Employed
     As an Agent, I want an option to do my Malawi FULL KYC so that I can avail the services
     Conditions of Satisfaction
     Clear instructions and guidance should be provided on what documents are required and in which format.
@@ -130,11 +130,6 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full
         When I click on proceed button
         Then I should be redirected to KYC address details screen
 
-    Scenario: Enter KYC Address details with invalid credentails
-        Given I am in KYC address details screen
-        When I click on save and continue button
-        Then I should read a message stating that "Required field"
-
     Scenario: Enter valid KYC Address details
         Given I am in KYC address details screen
         When I enter street name as "Maple Avenue"
@@ -142,33 +137,26 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
 
-    # two types have to be handled
-    # uploading national ID then front/back - done
-    # uploading passport then only front - pending
     Scenario: Upload invalid ID document details
         Given I am in KYC identity document details screen
-        When I select the ID document as "National ID"
+        When I select the ID document as "Passport"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
-        And I upload the front image of document as <image_back>
-        Then I should read a message stating that <message>
         Examples:
-            | image_front | image_back  | message                               |
-            | "image.png" | "image.jpg" | "Image size should be less than 10mb" |
-            | "doc.csv"   | "doc.csv"   | "File format not supported"           |
+            | image_front | message                               |
+            | "image.png" | "Image size should be less than 10mb" |
+            | "doc.csv"   | "File format not supported"           |
 
-    Scenario: Upload valid ID document details
+    Scenario: Upload valid ID document details and Capture selfie
         Given I am in KYC identity document details screen
-        When I select the ID document as "National ID"
+        When I select the ID document as "Passport"
         And I upload the front image of document as "document_front.png"
-        And I upload the front image of document as "document_back.png"
-        Then I should be able to view the preview of the document front and back
+        Then I should be able to view the preview of the document front
         When I click on view document front preview
         Then I should view the preview of the uploaded document
 
     Scenario: Capture selfie
         Given I am in KYC identity document details screen
-        When I select the ID document as "National ID"
         When I click on capture
         Then I should view the selfie capture modal
         When I click on capture selfie
@@ -179,19 +167,11 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full
         And I click on proceed button
         Then I should view the image getting captured
 
-    # 5 types have to be handled
-    # uploading Drivers license then front/back - done
-    # uploading traffic register card then front/back - pending
-    # uploading birth certificate card then only front - pending
-    # uploading employer letter card then only front - pending
-    # uploading institution letter card then only front - pending
     Scenario: Upload verification document
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Drivers License"
+        When I select the verification document as "Institution letter"
         And I upload the front image of document as <image_front>
-        Then I should read a message stating that <message>
-        And I upload the front image of document as <image_back>
         Then I should read a message stating that <message>
         Examples:
             | image_front | image_back  | message                               |
@@ -201,10 +181,9 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Drivers License"
+        When I select the verification document as "Institution letter"
         And I upload the front image of document as "document_front.png"
-        And I upload the front image of document as "document_back.png"
-        Then I should be able to view the preview of the document front and back
+        Then I should be able to view the preview of the document front
         When I click on view document front preview
         Then I should view the preview of the uploaded document
 
@@ -218,21 +197,14 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full
         When I click on save and continue button
         Then I should read a message stating that "Required field"
 
-    # Occupation types to be handled
-    # Employed -- select the name of the employer name, industry, sector -- pending
-    # Self-Employed -- specify if self employed -- pending 
-    # In Full Time Education -- specify the instituion, and if selected other then sepcify other -- done
-    # Seeking employment --  just select this and done -- pending
-    # Retired -- just select this and done -- pending
-    # Others -- specify -- pending
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
         When I select the date of birth as "04/08/1999"
-        When I select the Occupation as "In Full time education"
-        When I search and select institution as "Other"
-        And I enter the other institution name as "BDD institute"
+        When I select the Occupation as "Self Employed"
+        When I enter the other occupation as "Self Bussiness"
         When I select the applicable purpose and nature of business
         When I select valid monthly income and monthly withdrawal
         When I click on save and continue button
         Then I should read a message stating KYC submission successful
+        And I should view the status of the KYC as "In review"
