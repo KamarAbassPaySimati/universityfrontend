@@ -13,6 +13,8 @@ import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlacehol
 import Capture from '../../../../../components/CameraCapture/Capture';
 import RulesList from '../../../../../components/InformationList/RulesList';
 import Documents from './Documents';
+import InputTypeRadio from '../../../../../components/InputField/InputTypeRadio';
+import PersonalDetails from './PersonalDetails';
 
 export default function RegisterKYC () {
     const AddressDetails = {
@@ -102,17 +104,15 @@ export default function RegisterKYC () {
                         divisionClassName = {'w-1/3'}
                         divisionObject = {AddressDetails}
                     /> */}
-                    <div className='flex'>
+                    {/* <div className='flex'>
                         <DocumentSidebar
                             documentTypes={documentTypes}
                         />
-                        {/* <Documents
-                            type={'ID Document'}
-                        /> */}
                         <Documents
                             type={'Verification Document'}
                         />
-                    </div>
+                    </div> */}
+                    <PersonalDetails />
                 </div>
                 <div className='flex justify-between items-center'>
                     <div className='flex'>

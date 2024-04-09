@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from '../Image/Image';
+import InputTypeRadio from '../InputField/InputTypeRadio';
 
 export default function KYCRegistration () {
     return (
@@ -67,22 +68,8 @@ export default function KYCRegistration () {
                         </div>
                     </div>
                     <p className='font-normal text-header-dark text-[16px] leading-[24px] pb-3'>Personal Customer</p>
-                    <div class="relative custom-radioBlue py-2" >
-                        <input id='mandatory' type="radio" name='mandatory'
-                        />
-                        <label
-                            for='mandatory'
-                            className="ml-[30px] text-neutral-primary text-[16px]
-                        leading-[20px] font-normal cursor-pointer">Full KYC</label>
-                    </div>
-                    <div class="relative custom-radioBlue py-2 pt-3" >
-                        <input id='mandatory' type="radio" name='mandatory'
-                        />
-                        <label
-                            for='mandatory'
-                            className="ml-[30px] text-neutral-primary text-[16px]
-                        leading-[20px] font-normal cursor-pointer">Simplified KYC*</label>
-                    </div>
+                    <InputTypeRadio id='mandatory' label="Full KYC"/>
+                    <InputTypeRadio id='simplified' label="Simplified KYC*"/>
                     <p className="ml-[40px] text-neutral-primary text-[12px]
                         leading-[20px] font-normal cursor-pointer mb-[36px]">
                         *Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed
