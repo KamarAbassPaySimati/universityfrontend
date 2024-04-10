@@ -31,26 +31,25 @@ definitions:
           - dist/**
           
     - step: &SiteSpeed
-        name: Browser Performance
+        name: Browser Performance Testing
         image: timbru31/node-chrome
         services:
           - docker-high-memory
         size: 2x
         script:
-          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
-          - echo "sitespeed is skipped"
+          - export NODE_OPTIONS=--max-old-space-size=8192
           - source .env
           - export BASE_URL='http://localhost:3000'
-          - npm install pm2 sitespeed.io -g
-          - npm install express --force
-          - pm2 start scripts/sitespeed-server.js
-          - sleep 30
-          - sitespeed.io  --multi scripts/sitespeed/testMultipleURLs.js --preScript scripts/sitespeed/login.js --budget.configPath scripts/budget.json -n 1 --firstParty ".amazon.com" --firstParty "sdk.relicx.ai" --headless true --browsertime.chrome.args no-sandbox
+          # - npm install pm2 sitespeed.io -g
+          # - npm install express
+          # - pm2 start scripts/sitespeed-server.js
+          # - sleep 30
+          # - sitespeed.io  --multi scripts/sitespeed/testMultipleURLs.js --preScript scripts/sitespeed/login.js --budget.configPath scripts/budget.json -n 1 --firstParty ".amazon.com" --firstParty "sdk.relicx.ai" --headless true --browsertime.chrome.args no-sandbox
         artifacts:
           - sitespeed-result/**
 
-    - step: &ESlint
-        name: ESLint
+    - step: &CodeQuality
+        name: Code Quality
         image: node:latest
         caches:
           - node
@@ -59,7 +58,7 @@ definitions:
            - npm run eslint
            
     - step: &LicenseCompliance
-        name: License Compliance
+        name: License Scanning
         script:
           - echo "License Compliance"
           - npm install -g license-checker 
@@ -71,13 +70,12 @@ definitions:
         services:
           - docker
         script:
-          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
-          - echo "Dependency Scanning"
           - npm i --force
           - pipe: docker://aligent/owasp-dependency-check-pipe
             variables:
               SCAN_PATH: "./package-lock.json"
               CVSS_FAIL_LEVEL: "8"
+              EXTRA_ARGS: "--noupdate"
         artifacts:
           - test_results/**
 
@@ -85,8 +83,6 @@ definitions:
         name: Secret Detection
         image: python:latest
         script:
-          - echo "Secret Checking"
-          - if [ "$BITBUCKET_PR_DESTINATION_BRANCH" == staging ]; then exit 0 ; fi
           - pip install detect-secrets
           - detect-secrets scan
           #- pipe: atlassian/git-secrets-scan:0.4.3
@@ -105,6 +101,7 @@ definitions:
         services:
           - docker
         script:
+          - export NODE_OPTIONS=--max-old-space-size=8192
           - source .env
           - docker run -u zap -p 8080:8080 -d softwaresecurityproject/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
           - sleep 30
@@ -163,7 +160,7 @@ definitions:
           - reports/**
           - test/step-definations/coverageData/**
           - living-documentation/**
-          
+          - test/step-definations/failedScenarios/**
 
     - step: &UnitTestCase
         name: Unit Testing
@@ -182,6 +179,8 @@ definitions:
           - node scripts/bdd_unit_testing.js
         after-script:
           - cat log.txt
+        artifacts: # defining the artifacts to be passed to each future step.
+          - test/step-definations/failedScenarios/**
 
     - step: &BDDReports
         name: Integration Testing Reports
@@ -218,38 +217,6 @@ definitions:
           - aws s3 cp ./reports/cucumber_report.html s3://$DOCS_S3_BUCKET/living-documenation-feature/$BITBUCKET_REPO_SLUG/$Version.html
           - aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
    
-    - step: &Danger
-        name: Git Compliance - Danger
-        caches:
-          - node
-        script:
-          - export LANG="C.UTF-8"
-          - npm install -g danger
-          - npx danger ci 
-
-    - step: &Relicx
-        name: Relicx Automation Execution
-        caches:
-            - node
-        image: node:latest
-        script:
-            - echo "Relicx is skipped"
-            # - apt-get update && apt-get install python-is-python3 -y && apt-get install python3-pip -y
-            # - pip install pip==22.3.1 --break-system-packages
-            # - pip install urllib3
-            # - wget https://s3.us-west-1.amazonaws.com/apiclient.relicx.ai/prod/relicx.tar.gz
-            # - pip install relicx.tar.gz
-            # - npm install axios --f
-            # - node relicx.js
-
-    - step: &RelicxResult
-        name: Relicx Automation Result
-        trigger: manual
-        image: python:3.7.2
-        script:
-          - pip install requests
-          - pip install urllib3==1.26.7
-          # - python3 relicx-result.py
     
     - step: &RunBDD1
         name: Integration Testing
@@ -325,7 +292,7 @@ pipelines:
     BDD:
       - step: *RunBDD
     ESLint:
-      - step: *ESlint
+      - step: *CodeQuality
     BDDDryRun:
       - variables:
           - name: Version
@@ -385,7 +352,7 @@ pipelines:
       - parallel:
           fail-fast: true
           steps:
-            - step: *ESlint
+            - step: *CodeQuality
             - step: *LicenseCompliance
             - step: *DependencyScanning
       - step: *UnitTestCase
@@ -404,7 +371,7 @@ pipelines:
       - parallel:
           fail-fast: true
           steps:
-            - step: *ESlint
+            - step: *CodeQuality
             - step: *LicenseCompliance
             - step: *DependencyScanning
       - step: *UnitTestCase
@@ -422,7 +389,7 @@ pipelines:
       - parallel:
           fail-fast: true
           steps:
-            - step: *ESlint
+            - step: *CodeQuality
             - step: *LicenseCompliance
             - step: *DependencyScanning
       - step: *UnitTestCase

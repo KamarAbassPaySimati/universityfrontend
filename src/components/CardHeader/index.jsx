@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /**
  * The CardHeader component in JavaScript React renders a header with breadcrumbs, active path, and a
  * profile icon with a tooltip.
@@ -14,15 +15,19 @@ import React from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
+import Shimmer from '../Shimmers/Shimmer';
 
-const CardHeader = ({ children, paths, activePath, pathurls, testId }) => {
+const CardHeader = ({
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
+    navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement
+}) => {
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
         const result = [];
         let sum = '';
         for (const str of arr) {
-            sum += str;
+            sum += str + '/';
             result.push(sum);
         }
         return result;
@@ -61,10 +66,56 @@ const CardHeader = ({ children, paths, activePath, pathurls, testId }) => {
                 </div>
             </div>
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
-                <div className='max-h-[calc(100vh-120px)] scrollBar
-                overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF]' data-testid={testId}>
-                    {children}
+                {header &&
+                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                 text-header-dark flex flex-row justify-between `}>
+                    {header}
+                    <div className='flex'>
+                        {buttonText && <button onClick={() => { navigate(navigationPath); }}
+                            className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
+                    h-[40px] rounded-[6px]'>
+                            <img src='/images/onboardIcon.svg'
+                                className='mr-[8px]'/>
+                            <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
+                        </button>}
+                        {statusButton === true
+                            ? <Shimmer hight={'h-10'}/>
+                            : (statusButton !== undefined &&
+                            <button onClick={() => { navigate(updateButtonPath); }}
+                                className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center
+                    h-[40px] rounded-[6px]`}>
+                                <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
+                            </button>)
+                        }
+                        {updateButton === false
+                            ? (
+                                <button onClick={() => { navigate(updateButtonPath); }}
+                                    className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
+                    h-[40px] rounded-[6px]'>
+                                    <Image src='update'
+                                        className='mr-[8px]'/>
+                                    <p className='text-[14px] font-[600] text-[#ffffff]'>Update</p>
+                                </button>)
+                            : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>)
+                        }
+                    </div>
                 </div>
+                }
+                {ChildrenElement !== true
+                    ? (!table
+                        ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
+                flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
+                ${header ? 'max-h-[calc(100vh-240px)]' : ''} 
+                ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
+                            {children}
+                        </div>
+                        : <div className='min-h-[calc(100vh-240px)] max-h-[calc(100vh-120px)] mx-10 my-6
+                     bg-[#FFFFFF] rounded-[6px] border border-neutral-outline'>
+                            {children}
+                        </div>)
+                    : <div>
+                        {children}
+                    </div> }
             </div>
         </div>
     );

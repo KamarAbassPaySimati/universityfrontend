@@ -25,6 +25,7 @@ Feature: Paymaart -Admin Web - Forgot Password
     Randomness:
     a. Require random combinations of characters.
 
+    @wait_for_few_time
     Scenario: Admin Login
         Given I am on the login screen
         When I enter the email address as "bharath.shet+admin@7edge.com" and password as "Admin@123"
