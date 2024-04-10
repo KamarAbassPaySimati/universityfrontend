@@ -249,3 +249,48 @@ input[type='number'] {
 .capture-img img, video {
     border-radius: 7px !important;
 }
+
+
+/* CustomDatePicker.css */
+.custom-datepicker {
+  border: none;
+  border-bottom: 1px solid #DDDDDD;
+  background-color: transparent;
+  width: 339px;
+  padding: 10px;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  background-color: #F8F8F8;
+  border-radius: 0; /* Remove border-radius */
+}
+
+.custom-datepicker input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.custom-datepicker input:focus,
+.custom-datepicker input:hover {
+  border-bottom: none !important; /* Remove bottom border on input focus and hover */
+  box-shadow: none !important; /* Remove box-shadow */
+}
+
+:where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:hover {
+  border-color: #DDDDDD !important;
+  background-color: #F8F8F8;
+}
+:where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:focus, :where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:focus-within {
+  border-color: #DDDDDD !important;
+  box-shadow: none !important;
+  outline: 0;
+  background-color: #F8F8F8;
+}
+
+/* Target the calendar icon and change its color to black */
+.ant-picker-suffix > svg {
+  fill: black !important;
+}
+
+
+

@@ -87,7 +87,7 @@ export default function KYCRegistration () {
                     >Proceed</button>
                     <p className=" text-neutral-primary text-[12px] mt-2
                         leading-[20px] font-normal cursor-pointer mb-10">
-                        Paymaart's
+                        Paymaart&apos;s
                         <span className='text-accent-information cursor-pointer'> KYC Registration process </span>
                         is defined according to provisions of the Financial Crimes Act 2019
                     </p>

@@ -7,7 +7,7 @@ export default function InputTypeRadio ({ label, id }) {
             />
             <label
                 for={id}
-                className="ml-[30px] text-neutral-primary text-[16px]
+                className="ml-5 text-neutral-primary text-[16px]
                         leading-[20px] font-normal cursor-pointer">{label}</label>
         </div>
     );

@@ -1,62 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
 import CardHeader from '../../../../../components/CardHeader';
-import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
 import StatusProgressBar from '../../../../../components/StatusProgressBar/StatusProgressBar';
 import KYCTopWithType from '../../../../../components/KYC/KYCTopWithType';
 import Button2 from '../../../../../components/Button2/Button2';
 import Button from '../../../../../components/Button/Button';
-import DocumentSidebar from '../../../../../components/DocumentTab/DocumentSidebar';
-import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
-import InformationList from '../../../../../components/InformationList/InformationList';
-import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlaceholder';
-import Capture from '../../../../../components/CameraCapture/Capture';
-import RulesList from '../../../../../components/InformationList/RulesList';
-import Documents from './Documents';
-import InputTypeRadio from '../../../../../components/InputField/InputTypeRadio';
 import PersonalDetails from './PersonalDetails';
+import Address from './Address';
+import IdentityDetails from './IdentityDetails';
 
 export default function RegisterKYC () {
-    const AddressDetails = {
-        nothing_to_show: {
-            po_box_no: {
-                label: 'P.O Box NO',
-                type: 'input',
-                key: 'po_box_no',
-                require: false
-            },
-            street_name: {
-                label: 'Street Name',
-                type: 'input',
-                key: 'street_name',
-                require: true
-            },
-            house_number: {
-                label: 'House Name/Number ',
-                type: 'input',
-                key: 'house_number',
-                require: false
-            },
-            landmark: {
-                label: 'Landmark',
-                type: 'input',
-                key: 'landmark',
-                require: false
-            },
-            town_village_ta: {
-                label: 'Town/Village/TA',
-                type: 'input',
-                key: 'town_village_ta',
-                require: true
-            },
-            district: {
-                label: 'District',
-                type: 'input',
-                key: 'district',
-                require: true
-            }
-        }
-    };
     const ProgressBar = {
         address_details: {
             status: 'current',
@@ -71,11 +24,6 @@ export default function RegisterKYC () {
             label: 'Personal Details'
         }
     };
-    const documentTypes = {
-        'ID Document': 'clear',
-        'Verification Document': 'pending'
-    };
-
     return (
         <CardHeader
             activePath='Register Agent'
@@ -85,7 +33,7 @@ export default function RegisterKYC () {
             ChildrenElement
         >
 
-            {/* <KYCRegistration /> */}
+            <KYCRegistration />
             <KYCTopWithType
                 Name={'KYC Registration'}
                 type={'Malawi Full KYC'}
@@ -100,18 +48,8 @@ export default function RegisterKYC () {
                         ProgressBar={ProgressBar}
                         LineClass={'line-class'}
                     />
-                    {/* <FelidDivision
-                        divisionClassName = {'w-1/3'}
-                        divisionObject = {AddressDetails}
-                    /> */}
-                    {/* <div className='flex'>
-                        <DocumentSidebar
-                            documentTypes={documentTypes}
-                        />
-                        <Documents
-                            type={'Verification Document'}
-                        />
-                    </div> */}
+                    <Address />
+                    <IdentityDetails />
                     <PersonalDetails />
                 </div>
                 <div className='flex justify-between items-center'>
