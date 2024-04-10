@@ -253,8 +253,8 @@ stages:
           node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-          aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/
-          aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/
+          aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
+          aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
         displayName: 'BDD Living documentation'
     - job: IntegrationTesting
       displayName: "Integration Testing"
@@ -262,6 +262,17 @@ stages:
       pool:
         vmImage: "ubuntu-latest"
       steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --cache .npm
+          condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
           inputs:
@@ -281,7 +292,15 @@ stages:
             mkdir reports
             npm install nyc --save-dev --force
             node scripts/bdd-execution-split1.js
-    
+        - publish: $(System.DefaultWorkingDirectory)/reports # Assuming logs are in working directory
+          artifact: reports
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+          artifact: coverage
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+          artifact: failedScenarios
+          condition: always()
 - stage: Deploy
   jobs:
     - job: deployment
@@ -302,9 +321,8 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
             source .env
-            ls -R
-            aws s3 sync dist s3://$ADMIN_S3_BUCKET
-            aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*"
+            aws s3 sync dist s3://$ADMIN_S3_BUCKET --acl public-read
+            aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*" 
           displayName: 'Deployment'
 
     

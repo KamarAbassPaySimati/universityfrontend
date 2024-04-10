@@ -89,16 +89,16 @@ const CardHeader = ({
                                     <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
                                 </button>)
                         }
-                        {updateButton === false
+                        {statusButton && (updateButton === false
                             ? (
-                                <button onClick={() => { navigate(updateButtonPath); }}
+                                <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
                                     className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                                     <Image src='update'
                                         className='mr-[8px]'/>
                                     <p className='text-[14px] font-[600] text-[#ffffff]'>Update</p>
                                 </button>)
-                            : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>)
+                            : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>))
                         }
                     </div>
                 </div>

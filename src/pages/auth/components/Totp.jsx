@@ -96,7 +96,7 @@ const Totp = ({ Qrcode }) => {
             } else {
                 handleFetchUserAttributes();
             }
-            localStorage.setItem('userLogedIn', 'useLogedIn');
+            // localStorage.setItem('userLogedIn', 'useLogedIn');
         } catch (error) {
             if (error.message.includes('session is expired')) {
                 setOtpError('session has expired');

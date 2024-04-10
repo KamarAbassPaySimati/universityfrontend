@@ -27,7 +27,7 @@ When('I should see the update {string} button is hidden', async function (type) 
         if (element == null || element === undefined) {
             return 'passed';
         } else {
-            throw new Error('View button is not hidden');
+            throw new Error('Edit button is not hidden');
         }
     default:
         break;

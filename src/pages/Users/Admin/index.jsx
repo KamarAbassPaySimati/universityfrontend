@@ -16,6 +16,7 @@ const Admin = () => {
     const [notFound, setNotFound] = useState(false);
     const { setToastError } = useContext(GlobalContext);
     let { user_type: CurrentUserRole } = user;
+    const { paymaart_id: userPaymaartId } = user;
     if (CurrentUserRole) {
         CurrentUserRole = Slugify(CurrentUserRole);
     }
@@ -37,7 +38,7 @@ const Admin = () => {
             // to get the data from authslice
             dispatch(AdminList(searchParams)).then((response) => {
                 if (response.payload.error) {
-                    if (error.status === 400) {
+                    if (error.status === 400 || error.status === 401) {
                         setNotFound(true);
                     } else {
                         setToastError('Something went wrong!');
@@ -90,6 +91,7 @@ const Admin = () => {
                     />
                 </div>
                 }
+                {console.log(userPaymaartId, 'iddddd')}
                 {!notFound && !(List?.data?.length === 0 && !loading && !(searchParams.get('status') !== null ||
                 searchParams.get('search') !== null || searchParams.get('role') !== null)) &&
                 <div className='h-tableHeight scrollBar overflow-auto'>
@@ -105,6 +107,7 @@ const Admin = () => {
                         setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
+                        paymaartId= {userPaymaartId}
                     />
                 </div>}
                 {notFound &&
