@@ -11,7 +11,7 @@ const MyComponent = () => {
         <div className='google-key'>
             <GoogleComponent
                 apiKey={GOOGLE_API}
-                options={{ types: ['(cities)'], componentRestrictions: { country: 'us' } }}
+                options={{ types: ['(cities)'] }}
                 onChange={handlePlaceSelect}
             />
         </div>
