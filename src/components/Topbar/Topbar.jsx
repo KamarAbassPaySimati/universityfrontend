@@ -124,7 +124,7 @@ const Topbar = ({
                             filterType={filterType}
                             searchParams={searchParams}
                             setSearchParams={setSearchParams}
-                            handleSearchParams={handleSearchParamsForFilter}
+                            handleSearchParamValue={handleSearchParamsForFilter}
                            
                     />
                     : <Filter

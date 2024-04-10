@@ -6,7 +6,7 @@ import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import SingleTickButton from '../SingleTickButton/SingleTickButton';
 import { compose } from '@reduxjs/toolkit';
-import { handleSearchParams } from '../../CommonMethods/ListFunctions';
+import { handleDeleteSearchParams, handleSearchParams } from '../../CommonMethods/ListFunctions';
 
 const FilterWithSingleOption = ({
     filterOptions,
@@ -19,7 +19,7 @@ const FilterWithSingleOption = ({
     filterOptionOne,
     filterOptionTwo,
     filterOptionThree,
-    handleSearchParams
+    handleSearchParamValue
 }) => {
     const filterDiv = useRef();
 
@@ -30,6 +30,11 @@ const FilterWithSingleOption = ({
     });
     const handleSingleButtonClick = (selectedText) => {
         handleSearchParams('citizen', selectedText.toLowerCase(), searchParams, setSearchParams);
+        console.log(searchParams.get('citizen'), 'citizennnnnn');
+        // if (searchParams.get('citizen') === 'non malawi citizen') {
+        //     console.log('enters');
+        //     handleDeleteSearchParams('simplifiedkyc', searchParams, setSearchParams);
+        // }
     };
 
     return (
@@ -63,13 +68,12 @@ const FilterWithSingleOption = ({
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
-                                    {console.log(searchParams.get('citizen'), 'citizen')}
                                     {filterOptionOne[key].map((option) => ( // in a key number of options (active, inactive)
                                         <SingleTickButton
                                             singleCheckText={option} // active
                                             key={option} // active
-                                            isSelected={searchParams.get('citizen') === option?.toLowerCase()}
                                             onClick={handleSingleButtonClick}
+                                            isSelected={searchParams.get('citizen') === option?.toLowerCase()}
                                         />
                                     ))}
                                 </div>
@@ -89,7 +93,7 @@ const FilterWithSingleOption = ({
                                             id={option} // active
                                             valueOf={key} // status
                                             checkboxText={option} // active
-                                            handleSearchParams={handleSearchParams}
+                                            handleSearchParams={handleSearchParamValue}
                                             searchParams={searchParams}
 
                                         />
@@ -98,8 +102,7 @@ const FilterWithSingleOption = ({
                             </div>
                         ))}
                     </div>
-
-                    { <div className='p-4'>
+                    { searchParams.get('citizen') !== 'non malawi citizen' && <div className='p-4'>
                         { Object.keys(filterOptionThree).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2 capitalize'>
@@ -113,7 +116,7 @@ const FilterWithSingleOption = ({
                                             id={`Simplifiedkyc_${option}`} // active
                                             valueOf={key} // status
                                             checkboxText={option} // active
-                                            handleSearchParams={handleSearchParams}
+                                            handleSearchParams={handleSearchParamValue}
                                             searchParams={searchParams}
                                         />
                                     ))}

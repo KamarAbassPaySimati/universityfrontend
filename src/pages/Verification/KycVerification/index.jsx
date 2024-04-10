@@ -1,17 +1,19 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useCallback } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import { useSearchParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Paginator from '../../../components/Paginator/Paginator';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import NoDataError from '../../../components/NoDataError/NoDataError';
 import KycVerificationTable from './Components/KycVerificationTable';
+import { KycVerificationList } from './KycVerificationSlice';
 
 const KycVerification = () => {
     const [notFound, setNotFound] = useState(false);
-    // const { setToastError } = useContext(GlobalContext);
-    // const { List, error, loading } = useSelector(state => state.kycVerifications); // to get the api respons
+    let url = '';
+    const { setToastError } = useContext(GlobalContext);
+    const { List, error, loading } = useSelector(state => state.kycVerifications); // to get the api respons
     // filter options
     const initialToggleButtons = [
         { key: 'Agents', status: true },
@@ -45,26 +47,33 @@ const KycVerification = () => {
     /* The `GetList` constant is a function created using the `useCallback` hook in React. It is an
     asynchronous function that is responsible for fetching data using the `dispatch` function to
     call the `AdminList` action creator with the `searchParams` as a parameter. */
-    // const GetList = useCallback(async () => {
-    //     try {
-    //         // to get the data from authslice
-    //         dispatch(KycVerificationList(searchParams)).then((response) => {
-    //             if (response.payload.error) {
-    //                 if (error.status === 400) {
-    //                     setNotFound(true);
-    //                 } else {
-    //                     setToastError('Something went wrong!');
-    //                 }
-    //             } else {
-    //                 if (response.payload.data.length !== 0) {
-    //                     setNotFound(false);
-    //                 }
-    //             }
-    //         });
-    //     } catch (error) {
-    //         console.error('geterror', error);
-    //     }
-    // }, [searchParams]);
+    const GetList = useCallback(async () => {
+        if (searchParams.get('type') === 'agents') {
+            url = 'agent-users/get-agent-kyc';
+        } else if (searchParams.get('type') === 'customers') {
+            url = 'agent-users/get-agent-kyc';
+        } else if (searchParams.get('type') === 'merchants') {
+            url = 'agent-users/get-agent-kyc';
+        }
+        try {
+            // to get the data from authslice
+            dispatch(KycVerificationList(searchParams, url)).then((response) => {
+                if (response.payload.error) {
+                    if (error.status === 400) {
+                        setNotFound(true);
+                    } else {
+                        setToastError('Something went wrong!');
+                    }
+                } else {
+                    if (response.payload.data.length !== 0) {
+                        setNotFound(false);
+                    }
+                }
+            });
+        } catch (error) {
+            setToastError('Something went wrong!');
+        }
+    }, [searchParams]);
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
@@ -73,8 +82,8 @@ const KycVerification = () => {
             setSearchParams({ page: 1, type: 'agents' });
         } else {
             setSearchParams({ page: searchParams.get('page'), type: 'agents', citizen: 'all' });
-            // GetList();
         }
+        GetList();
     }, []);
 
     return (
@@ -102,13 +111,13 @@ const KycVerification = () => {
                         filter3={simplifedKycOptions}
                         filterType= 'Filter KYC Status'
                         placeHolder= 'Paymaart ID or name '
-                        // isLoading={loading}
+                        isLoading={loading}
                         filterActive={true}
                         singleSelectFilter={true}
                     />
                 </div>
 
-                {/* <div className='h-tableHeight scrollBar overflow-auto'>
+                { <div className='h-tableHeight scrollBar overflow-auto'>
                     <KycVerificationTable
                         // error={error}
                         // loading={loading}
@@ -120,23 +129,23 @@ const KycVerification = () => {
                         setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
-                        paymaartId= {userPaymaartId}
                     />
-                </div> */}
-                {/* {notFound &&
+                </div> }
+                {notFound &&
                 <NoDataError
-                    className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
+                    className='h-noDataError' heading='No Data Found'
+                    text = "No profiles currently require verification. Please check back later."/>}
                 {List?.data?.length === 0 && !loading &&
-                !(searchParams.get('status') === null || searchParams.get('search') === null ||
-                searchParams.get('role') === null) &&
-                (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
+                !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
+                searchParams.get('simplifiedkyc') === null) &&
+                (<NoDataError className='h-noDataError' heading='No profiles for verification' text='No profiles currently require verification. Please check back later.' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}
                     totalRecords={List?.totalRecords}
-                />} */}
+                />}
             </div>
         </CardHeader>
     );

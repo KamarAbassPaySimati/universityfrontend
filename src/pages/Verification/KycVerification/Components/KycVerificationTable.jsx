@@ -5,6 +5,7 @@ import Shimmer from '../../../../components/Shimmers/Shimmer';
 import { useNavigate } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
+import NoDataError from '../../../../components/NoDataError/NoDataError';
 
 const KycVerificationTable = (
     {
@@ -65,6 +66,11 @@ const KycVerificationTable = (
                     </tbody>
                 }
             </table>
+            {(!notFound && error) &&
+            (<NoDataError heading='There are no admins added yet' text='Click “Register Admin ” to add admin' />)}
+            {(List?.data?.length === 0 && !loading &&
+            (searchParams.get('status') !== null || searchParams.get('search') !== null || searchParams.get('role') !== null)) &&
+            (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
         </>
     );
 };

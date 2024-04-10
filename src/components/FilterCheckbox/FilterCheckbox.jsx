@@ -13,11 +13,9 @@ export default function FilterCheckbox ({
      * specific checkbox identified by `valueOf` and `id`.
      */
     const handleOnChangeCheckbox = () => {
-        console.log('cs');
         handleSearchParams(valueOf, id);
     };
     const getCheckedValue = () => {
-        console.log('ce');
         const params = Object.fromEntries(searchParams);
         if (params[valueOf]) {
             if (params[valueOf].split(',').includes(id)) {
