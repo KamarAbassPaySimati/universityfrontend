@@ -47,6 +47,7 @@ const Topbar = ({
         setSearchParams({ ...params });
     };
     const handleSearchParamsForFilter = (key, value) => {
+        console.log('tea');
         const params = Object.fromEntries(searchParams);
         params.page = 1;
         if (searchParams.get(key) !== null) {
@@ -120,6 +121,11 @@ const Topbar = ({
                             filterOptionThree={filter3}
                             handleClearFilter={handleClearFilterForSingleCheck}
                             filterActive={filterActive}
+                            filterType={filterType}
+                            searchParams={searchParams}
+                            setSearchParams={setSearchParams}
+                            handleSearchParams={handleSearchParamsForFilter}
+                           
                     />
                     : <Filter
                         handleClearFilter={handleClearFilter}

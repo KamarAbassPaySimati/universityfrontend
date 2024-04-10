@@ -7,6 +7,7 @@ export const handleSort = (sortBy, searchParams, setSearchParams) => {
 };
 
 export const handleSearchParams = (key, value, searchParams, setSearchParams) => {
+    console.log('caammemmeee');
     const params = Object.fromEntries(searchParams);
     params[key] = value;
     params.page = 1;

@@ -16,11 +16,12 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
+import { handleSearchParams } from '../../CommonMethods/ListFunctions';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    onToggle
+    onToggle, searchParams, setSearchParams
 }) => {
     const navigate = useNavigate();
 
@@ -36,9 +37,10 @@ const CardHeader = ({
     const handleToggle = (index) => {
         const updatedButtons = toggleButtons.map((button, i) => {
             if (i === index) {
-                return { ...button, status: !button.status };
+                return { ...button, status: true };
+            } else {
+                return { ...button, status: false };
             }
-            return button;
         });
         onToggle(updatedButtons); // Notify the parent component of the updated button values
     };
@@ -116,16 +118,16 @@ const CardHeader = ({
                 }
                 {/* checks for card has only toggles down */}
                 {header && headerWithoutButton &&
-                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-col gap-2`}>
                     {header}
-                    <div className='mt-[10px] flex gap-2'>
+                    <div className='mt-[6px] flex gap-6'>
                         {/* toggle buttons  */}
                         {toggleButtons && toggleButtons.map((item, index) => (
                             <button
                                 key={index}
-                                onClick={() => handleToggle(index)}
-                                className={`py-2 px-4 h-10 text-[14px] text-neutral-primary ${item.status ? ' border-b-1 border-neutral-primary font-[600]' : 'font-[400]'}`}
+                                onClick={() => handleSearchParams('type', item.key.toLowerCase(), searchParams, setSearchParams)}
+                                className={`-py-4  h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
                             >
                                 {item.key}
                             </button>

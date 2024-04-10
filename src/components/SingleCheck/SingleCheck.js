@@ -28,11 +28,10 @@ export default function SingleCheck ({
     //     }
     // };
     return (
-        <div>
-            <button className='bg-primary-normal px-6 py-1 rounded-8 text-[#ffffff] font-400 text-[14px]'>
-                {singleCheckText}
-            </button>
-        </div>
+
+        <button className='bg-primary-normal px-6 py-1 rounded-8 text-[#ffffff] font-400 text-[14px]'>
+            {singleCheckText}
+        </button>
 
     // <div className="filter-checkbox checkbox relative">
     //     <input

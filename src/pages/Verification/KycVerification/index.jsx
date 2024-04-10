@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import { useSearchParams } from 'react-router-dom';
@@ -68,14 +68,14 @@ const KycVerification = () => {
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
-    // useEffect(() => {
-    //     if (searchParams.get('page') === null) {
-    //         setSearchParams({ page: 1 });
-    //         setSearchParams({ type: 'customers' });
-    //     } else {
-    //         // GetList();
-    //     }
-    // }, []);
+    useEffect(() => {
+        if (searchParams.get('page') === null) {
+            setSearchParams({ page: 1, type: 'agents' });
+        } else {
+            setSearchParams({ page: searchParams.get('page'), type: 'agents', citizen: 'all' });
+            // GetList();
+        }
+    }, []);
 
     return (
         <CardHeader
@@ -88,25 +88,27 @@ const KycVerification = () => {
             toggleButtons={toggleButtons}
             onToggle={handleToggle}
             table={true}
+            searchParams={searchParams}// pass this because its used
+            setSearchParams={setSearchParams}
         >
             <div className={`relative ${notFound ? '' : 'thead-border-bottom'}`}>
                 <div className='bg-[#fff] border-b border-[#E5E9EB]'>
                     <Topbar
                         setSearchParams={setSearchParams}// pass this as its getting updated
                         searchParams={searchParams}// pass this because its used
-                        // filterOptions={filterOptions}
+                        filterOptions={filterOptions}
                         filter1={singleCheckOptions}
                         filter2={fullKycOptions}
                         filter3={simplifedKycOptions}
                         filterType= 'Filter KYC Status'
                         placeHolder= 'Paymaart ID or name '
-                        isLoading={loading}
+                        // isLoading={loading}
                         filterActive={true}
                         singleSelectFilter={true}
                     />
                 </div>
 
-                <div className='h-tableHeight scrollBar overflow-auto'>
+                {/* <div className='h-tableHeight scrollBar overflow-auto'>
                     <KycVerificationTable
                         // error={error}
                         // loading={loading}
@@ -120,8 +122,8 @@ const KycVerification = () => {
                         searchParams={searchParams}
                         paymaartId= {userPaymaartId}
                     />
-                </div>
-                {notFound &&
+                </div> */}
+                {/* {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
                 {List?.data?.length === 0 && !loading &&
@@ -134,7 +136,7 @@ const KycVerification = () => {
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}
                     totalRecords={List?.totalRecords}
-                />}
+                />} */}
             </div>
         </CardHeader>
     );

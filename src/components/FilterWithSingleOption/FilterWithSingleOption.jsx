@@ -4,18 +4,22 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
+import SingleTickButton from '../SingleTickButton/SingleTickButton';
+import { compose } from '@reduxjs/toolkit';
+import { handleSearchParams } from '../../CommonMethods/ListFunctions';
 
 const FilterWithSingleOption = ({
     filterOptions,
     filterType,
     handleClearFilter,
-    handleSearchParams,
     searchParams,
+    setSearchParams,
     isLoading,
     filterActive,
     filterOptionOne,
     filterOptionTwo,
-    filterOptionThree
+    filterOptionThree,
+    handleSearchParams
 }) => {
     const filterDiv = useRef();
 
@@ -24,6 +28,10 @@ const FilterWithSingleOption = ({
     useOnClickOutside(filterDiv, () => {
         setIsFilterOpen(false);
     });
+    const handleSingleButtonClick = (selectedText) => {
+        handleSearchParams('citizen', selectedText.toLowerCase(), searchParams, setSearchParams);
+    };
+
     return (
         <div ref={filterDiv} className="z-1">
             <Image
@@ -55,18 +63,19 @@ const FilterWithSingleOption = ({
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
+                                    {console.log(searchParams.get('citizen'), 'citizen')}
                                     {filterOptionOne[key].map((option) => ( // in a key number of options (active, inactive)
-                                        <SingleCheck
-                                            SingsingleCheckText={option} // active
+                                        <SingleTickButton
+                                            singleCheckText={option} // active
+                                            key={option} // active
+                                            isSelected={searchParams.get('citizen') === option?.toLowerCase()}
+                                            onClick={handleSingleButtonClick}
                                         />
                                     ))}
                                 </div>
                             </div>
                         ))}
                     </div>
-
-
-                    
                     <div className='p-4'>
                         { Object.keys(filterOptionTwo).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
@@ -74,15 +83,15 @@ const FilterWithSingleOption = ({
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
-                                    {filterOptionOne[key].map((option) => ( // in a key number of options (active, inactive)
+                                    {filterOptionTwo[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
-                                            isLoading={isLoading}
                                             key={option} // active
                                             id={option} // active
                                             valueOf={key} // status
                                             checkboxText={option} // active
                                             handleSearchParams={handleSearchParams}
                                             searchParams={searchParams}
+
                                         />
                                     ))}
                                 </div>
@@ -90,18 +99,18 @@ const FilterWithSingleOption = ({
                         ))}
                     </div>
 
-                    <div className='p-4'>
+                    { <div className='p-4'>
                         { Object.keys(filterOptionThree).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2 capitalize'>
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
-                                    {filterOptionTwo[key].map((option) => ( // in a key number of options (active, inactive)
+                                    {filterOptionThree[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
                                             isLoading={isLoading}
                                             key={option} // active
-                                            id={option} // active
+                                            id={`Simplifiedkyc_${option}`} // active
                                             valueOf={key} // status
                                             checkboxText={option} // active
                                             handleSearchParams={handleSearchParams}
@@ -112,9 +121,7 @@ const FilterWithSingleOption = ({
                             </div>
                         ))}
                     </div>
-
-
-
+                    }
                 </div>
             </div>
             }

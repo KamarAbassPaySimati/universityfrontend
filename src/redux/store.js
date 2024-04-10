@@ -4,7 +4,7 @@ import GlobalSlice from './GlobalSlice';
 import agentSlice from '../pages/Users/Agent/agentSlice';
 import AdminSlice from '../pages/Users/Admin/AdminSlice';
 import SpecificAdminViewSlice from '../pages/Users/Admin/Components/SpecificAdminViewSlice';
-import KycVerificationSlice from '../pages/Verification/KycVerification/KycVerificationSlice';
+import KycVerificationSlice from '../pages/Verification/KYCVerification/KycVerificationSlice';
 
 export const store = configureStore({
     reducer: {
