@@ -10,7 +10,7 @@ const initialState = {
 export const AgentList = createAsyncThunk('agentUsers', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     const safeUrl =
-        `agent-list?${new URLSearchParams(searchParams).toString()}`;
+        `agent-list?${searchParams.toString()}`;
 
     try {
         const res = await dataService.GetAPI(safeUrl);
@@ -37,7 +37,6 @@ const agentSlice = createSlice({
             })
             .addCase(AgentList.fulfilled, (state, { payload }) => {
                 state.loading = false;
-                console.log(payload, 'payload');
                 if (!payload?.error) {
                     state.List = payload?.data;
                 } else {

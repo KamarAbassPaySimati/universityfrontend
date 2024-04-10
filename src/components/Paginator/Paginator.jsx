@@ -11,7 +11,7 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
         setSearchParams({ ...params, page: page + 1 });
     };
     return (
-        <div className="flex items-center w-full mt-1 py-3 relative">
+        <div className="flex items-center w-full mt-1 py-5 relative">
             {totalPages > 1 &&
             <div className="flex items-center justify-end sticky bottom-0 z-[9] w-[60%]">
                 <div className=" flex items-center rounded-lg p-1" data-testid="paginator">
@@ -20,17 +20,15 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                             <div className='flex'>
                                 <div data-testid="paginate-prev" onClick={() => handlePage(currentPage - 1)}
                                     className={`rounded-[5px] flex justify-center items-center ${currentPage > 1 ? '' : 'pointer-events-none cursor-default'}`}>
-                                    <Image src={currentPage > 1 ? 'paginator_left_arrow' : 'active_paginator_left_arrow'} className='w-[20px]' />
+                                    <Image src='paginator_left_arrow' className={`w-[20px] ${currentPage > 1 ? '' : 'opacity-50'}`} />
                                 </div>
                             </div>
                         }
                         nextLabel={
                             <div className='flex'>
                                 <div data-testid="paginate-next" onClick={() => handlePage(currentPage + 1)}
-                                    className={`ml-2 rounded-[5px] flex justify-center items-center  ${currentPage === totalPages ? 'pointer-events-none cursor-default' : ''}`}>
-                                    <Image src={(currentPage && (currentPage !== totalPages)) ? 'paginator_right_arrow' : 'active_paginator_right_arrow'}
-                                        className={(currentPage === totalPages) ? 'pointer-events-none w-[20px]' : 'w-[20px]'}
-                                    />
+                                    className={`ml-2 rounded-[5px] flex justify-center items-center  ${+currentPage === totalPages ? 'pointer-events-none cursor-default' : ''}`}>
+                                    <Image src='paginator_right_arrow' className={`w-[20px] ${(+currentPage === totalPages) ? 'opacity-50' : ''}`} />
                                 </div>
                             </div>
                         }
@@ -47,7 +45,7 @@ export default function Paginator ({ setSearchParams, searchParams, currentPage,
                     />
                 </div>
             </div>}
-            <PageInfo totalCount={totalRecords} currentPage={currentPage} />
+            <PageInfo totalCount={totalRecords} currentPage={Number(currentPage)} />
         </div>
     );
 };

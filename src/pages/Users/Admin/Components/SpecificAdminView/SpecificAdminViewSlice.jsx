@@ -42,13 +42,16 @@ const SpecificAdminViewSlice = createSlice({
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data[0];
                     state.userDetails = {
-                        'Phone Number': `${state.View.country_code} ${formatInputPhone(state.View.phone_number)}`,
-                        Email: state.View.email,
-                        Role: state.View.user_type,
+                        'Phone Number':
+                            `${state?.View?.country_code} ${state?.View?.phone_number
+                                ? formatInputPhone(state?.View?.phone_number)
+                                : ''}`,
+                        Email: state?.View?.email,
+                        Role: state?.View?.user_type,
                         Created_Date: formatTimestamp(state?.View?.created_at),
-                        Last_Logged_In: state.View?.last_logged_in
-                            ? isTimestampFiveMinutesAgo(state.View?.last_logged_in)
-                                ? formatTimestamp(state.View?.last_logged_in)
+                        Last_Logged_In: state?.View?.last_logged_in
+                            ? isTimestampFiveMinutesAgo(state?.View?.last_logged_in)
+                                ? formatTimestamp(state?.View?.last_logged_in)
                                 : 'Online'
                             : ''
                     };

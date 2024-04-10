@@ -16,8 +16,6 @@ Feature: Paymaart - Admin Web -Admin List
     6.Last Logged in(Date & Time/Online)
     7.Actions(View & Edit)
 
-    @add_admin_user
-    @create_new_user_and_login
     Scenario: List all the admin users
         Given I navigate to admin users listing screen
         Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
@@ -48,7 +46,6 @@ Feature: Paymaart - Admin Web -Admin List
             | "Support admin" |"Support Admin"|
             | "Finance admin" |"Finance Admin"|
 
-    @delete_admin_account
     Scenario: Checking Pagination
         Given I navigate to admin users listing screen
         When I click on paginate next page

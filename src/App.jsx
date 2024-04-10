@@ -7,11 +7,7 @@ import Toast from './components/Toast/Toast';
 import GlobalContext from './components/Context/GlobalContext';
 import { Hub } from 'aws-amplify/utils';
 import { dataService } from './services/data.services';
-import { useDispatch } from 'react-redux';
-
-import { useNavigate } from 'react-router-dom';
 import { endpoints } from './services/endpoints';
-import { logout } from './pages/auth/authSlice';
 
 Amplify.configure(awsConfig);
 
@@ -23,8 +19,6 @@ function App (props) {
     const [ToastWarning, setToastWarning] = useState('');
     const [ToastInformation, setToastInformation] = useState('');
     const { updateLoggedIn } = endpoints;
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
     useEffect(() => {
         Hub.listen('auth', async ({ payload }) => {
@@ -41,9 +35,9 @@ function App (props) {
                 console.log('auth tokens have been refreshed.');
                 break;
             case 'tokenRefresh_failure':
-                dispatch(logout());
-                navigate('/');
-                setToastError('Logged out due to session expiration');
+                // dispatch(logout());
+                // navigate('/');
+                // setToastError('Logged out due to session expiration');
                 break;
             }
         });
