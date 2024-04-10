@@ -9,6 +9,7 @@ import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams } from 'react-router-dom';
+import StreetNameDropdown from './GoogleApi';
 
 export default function RegisterKYC () {
     const [states, setStates] = useState({
@@ -127,6 +128,7 @@ export default function RegisterKYC () {
                             {searchParams.get('tab') === 'address_details' && <Address />}
                             {searchParams.get('tab') === 'identity_details' && <IdentityDetails />}
                             {searchParams.get('tab') === 'personal_details' && <PersonalDetails />}
+                            <StreetNameDropdown />
                         </div>
                         <div className='flex justify-between items-center'>
                             <div className='flex'>
