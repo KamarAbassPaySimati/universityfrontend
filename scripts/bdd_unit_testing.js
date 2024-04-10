@@ -45,7 +45,7 @@ async function runTestQueue () {
 
 async function runTest (featureFile, isLogin) {
     return new Promise((resolve, reject) => {
-        const command = `./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test-${featureFile}.json ${featureDirectory}/${featureFile} --world-parameters '{"login": ${isLogin}}' >> log.txt`;
+        const command = `./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test-${featureFile}.json ${featureDirectory}/${featureFile} --world-parameters '{"login": ${isLogin}}'`;
 
         console.log('started executing file --', featureFile);
 

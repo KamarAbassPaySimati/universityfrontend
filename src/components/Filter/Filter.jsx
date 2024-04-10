@@ -11,7 +11,8 @@ const Filter = ({
     handleClearFilter,
     handleSearchParams,
     searchParams,
-    isLoading
+    isLoading,
+    filterActive
 }) => {
     const filterDiv = useRef();
 
@@ -20,13 +21,12 @@ const Filter = ({
     useOnClickOutside(filterDiv, () => {
         setIsFilterOpen(false);
     });
-
     return (
         <div ref={filterDiv} className="z-1">
             <Image
-                src="filter_icon"
+                src={`${filterActive ? 'active_' : ''}filter_icon`}
                 testId='filter-tab'
-                className="filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer"
+                className={'filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer'}
                 onClick={() => setIsFilterOpen(prevState => !prevState)}
             />
             <Tooltip
@@ -49,16 +49,16 @@ const Filter = ({
 
                         { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
-                                <div className='font-[600] mb-2'>
+                                <div className='font-[600] mb-2 capitalize'>
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>
                                     {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
                                             isLoading={isLoading}
-                                            key={option.toLowerCase()} // active
-                                            id={option.toLowerCase()} // active
-                                            valueOf={key.toLowerCase()} // status
+                                            key={option} // active
+                                            id={option} // active
+                                            valueOf={key} // status
                                             checkboxText={option} // active
                                             handleSearchParams={handleSearchParams}
                                             searchParams={searchParams}

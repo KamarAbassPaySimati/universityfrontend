@@ -24,6 +24,11 @@ export const ComponentsBasedOnRole = {
             path: '/users/admins/:id'
         },
         {
+            name: 'Admin Users Update',
+            element: <OnboardAdmin actionKey={'update'}/>,
+            path: '/users/admins/update-admin/:id'
+        },
+        {
             name: 'Register Admin Users',
             element: <OnboardAdmin />,
             path: '/users/admins/register-admin'
