@@ -64,6 +64,7 @@ const FilterWithSingleOption = ({
                                             searchParams={searchParams}
                                             setSearchParams={setSearchParams}
                                             isSelected={searchParams.get('citizen') === option?.toLowerCase()}
+                                            isLoading={isLoading}
                                         />
                                     ))}
                                 </div>
@@ -85,6 +86,7 @@ const FilterWithSingleOption = ({
                                             checkboxText={option} // active
                                             handleSearchParams={handleSearchParamValue}
                                             searchParams={searchParams}
+                                            isLoading={isLoading}
 
                                         />
                                     ))}
@@ -108,6 +110,7 @@ const FilterWithSingleOption = ({
                                             checkboxText={option} // active
                                             handleSearchParams={handleSearchParamValue}
                                             searchParams={searchParams}
+                                            isLoading={isLoading}
                                         />
                                     ))}
                                 </div>

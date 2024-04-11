@@ -48,7 +48,6 @@ const KycVerification = () => {
     asynchronous function that is responsible for fetching data using the `dispatch` function to
     call the `AdminList` action creator with the `searchParams` as a parameter. */
     const GetList = useCallback(async () => {
-        console.log('got trigger');
         if (searchParams.get('type') === 'agents') {
             url = 'get-agent-kyc-list?';
             if (searchParams.get('page') !== null) {
@@ -111,30 +110,39 @@ const KycVerification = () => {
         } else if (searchParams.get('type') === 'merchants') {
             url = 'get-agent-kyc';
         }
-        console.log(url, 'urllll');
-        console.log(searchParams.get('citizen'), 'citi');
 
         try {
             // to get the data from authslice
-            console.log('heree2');
-            dispatch(KycVerificationList(url)).then((response) => {
-                console.log(response, 'response');
-                if (response.payload.error) {
-                    if (error.status === 400) {
-                        setNotFound(true);
-                    } else {
-                        setToastError('Something went wrong!');
-                    }
-                } else {
-                    if (response.payload.data.length !== 0) {
-                        setNotFound(false);
-                    }
-                }
-            });
+            dispatch(KycVerificationList(url));
         } catch (error) {
             setToastError('Something went wrong!');
         }
     }, [searchParams]);
+    // const GetList = useCallback(async () => {
+    //     try {
+    //         dispatch(AdminList(searchParams));
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }, [searchParams]);
+
+    useEffect(() => {
+        console.log(error, 'error');
+        if (error) {
+            if (error.status === 400) {
+                setNotFound(true);
+            } else {
+                setToastError('Something went wrong!');
+            }
+        }
+    }, [error]);
+    useEffect(() => {
+        const params = Object.fromEntries(searchParams);
+        if (List?.data?.length !== 0) {
+            setNotFound(false);
+            params.page = 1;
+        }
+    }, [List]);
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
@@ -160,12 +168,13 @@ const KycVerification = () => {
             searchParams={searchParams}// pass this because its used
             setSearchParams={setSearchParams}
         >
-            <div className={`relative ${notFound ? '' : 'thead-border-bottom'}`}>
+            <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(List?.data?.length !== 0 ||
-                (searchParams.get('citizen') !== null || searchParams.get('search') !== null ||
+                (searchParams.get('search') !== null ||
                 searchParams.get('fullkyc') !== null ||
                 searchParams.get('simplifiedkyc') !== null)) && !notFound &&
                 <div className='bg-[#fff] border-b border-[#E5E9EB]'>
+                    {console.log('camhjjjj')}
                     <Topbar
                         setSearchParams={setSearchParams}// pass this as its getting updated
                         searchParams={searchParams}// pass this because its used
@@ -176,23 +185,26 @@ const KycVerification = () => {
                         filterType= 'Filter KYC Status'
                         placeHolder= 'Paymaart ID or name '
                         isLoading={loading}
-                        filterActive={true}
+                        filterActive={(searchParams.get('citizen') !== null) || searchParams.get('simplifiedkyc') !== null ||
+                        searchParams.get('fullkyc') !== null}
                         singleSelectFilter={true}
                     />
                 </div>
                 }
-
+                {console.log(notFound, 'say')}
                 {
+                  
+
+
+
+
                     !notFound && !(List?.data?.length === 0 && !loading && !(searchParams.get('citizen') !== null ||
                 searchParams.get('search') !== null || searchParams.get('simplifiedkyc') !== null ||
                 searchParams.get('fullkyc') !== null)) &&
 
                 <div className='h-tableHeight scrollBar overflow-auto'>
+                    {console.log('comi')}
                     <KycVerificationTable
-                        // error={error}
-                        // loading={loading}
-                        // List={List}
-                        // handleSortByName={handleSortByName}
                         error={error}
                         loading={loading}
                         List={List}
@@ -204,13 +216,16 @@ const KycVerification = () => {
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No Data Found'
-                    text = "No profiles currently require verification. Please check back later."/>}
+                    text = "404 could not find what you are looking for."/>}
                 {List?.data?.length === 0 && !loading &&
-                !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
-                searchParams.get('simplifiedkyc') === null) &&
-                (<NoDataError className='h-noDataError'
-                    heading='No profiles for verification'
-                    text='No profiles currently require verification. Please check back later.' />)}
+    ((searchParams.get('fullkyc') === null && searchParams.get('search') === null &&
+    searchParams.get('simplifiedkyc') === null && searchParams.get('citizen') === 'all') ||
+    !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
+    searchParams.get('simplifiedkyc') === null)) &&
+    (<NoDataError className='h-noDataError'
+        heading='No profiles for verification'
+        text='No profiles currently require verification. Please check back later.' />)}
+
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}

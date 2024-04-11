@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useState } from 'react';
 import Image from '../Image/Image';
 import Filter from '../Filter/Filter';
@@ -125,16 +126,17 @@ const Topbar = ({
                             searchParams={searchParams}
                             setSearchParams={setSearchParams}
                             handleSearchParamValue={handleSearchParamsForFilter}
-                           
+                            isLoading={isLoading}
+
                     />
                     : <Filter
-                        handleClearFilter={handleClearFilter}
-                        filterOptions={filterOptions}
-                        filterType={filterType}
-                        handleSearchParams={handleSearchParamsForFilter}
-                        searchParams={searchParams}
-                        isLoading={isLoading}
-                        filterActive={filterActive}
+                            handleClearFilter={handleClearFilter}
+                            filterOptions={filterOptions}
+                            filterType={filterType}
+                            handleSearchParams={handleSearchParamsForFilter}
+                            searchParams={searchParams}
+                            isLoading={isLoading}
+                            filterActive={filterActive}
 
                     />
             }

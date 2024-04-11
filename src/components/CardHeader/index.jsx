@@ -79,7 +79,7 @@ const CardHeader = ({
             </div>
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
                 {/* checks for card has buttons */}
-                {header && (headerWithoutButton === false || headerWithoutButton === 'undefined') &&
+                {header && (headerWithoutButton === false || headerWithoutButton === undefined) &&
                 <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-row justify-between `}>
                     {header}

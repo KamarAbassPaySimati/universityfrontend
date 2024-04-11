@@ -5,7 +5,7 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
         },
         Verification: {
             path: 'verification',
