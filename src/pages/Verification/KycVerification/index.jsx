@@ -48,16 +48,77 @@ const KycVerification = () => {
     asynchronous function that is responsible for fetching data using the `dispatch` function to
     call the `AdminList` action creator with the `searchParams` as a parameter. */
     const GetList = useCallback(async () => {
+        console.log('got trigger');
         if (searchParams.get('type') === 'agents') {
-            url = 'agent-users/get-agent-kyc';
+            url = 'get-agent-kyc-list?';
+            if (searchParams.get('page') !== null) {
+                url += `page=${searchParams.get('page')}`;
+            }
+            if (searchParams.get('search') !== null) {
+                url += `&search=${searchParams.get('search')}`;
+            }
+            if (searchParams.get('sortOrder') !== null) {
+                url += `&sortOrder=${searchParams.get('sortOrder')}`;
+            }
+            if (searchParams.get('citizen') !== null) {
+                const citizenValue = searchParams.get('citizen').replace('citizen', '').trim();
+                url += `&citizenship=${citizenValue}`;
+            }
+            if (searchParams.get('simplifiedkyc') !== null) {
+                // Get the value of 'simplifiedkyc' from the searchParams and split it by ','
+                const simplifiedValues = searchParams.get('simplifiedkyc').split(',').map(value => {
+                    // Trim and convert the value to lowercase, removing the prefix 'simplifiedkyc_'
+                    const trimmedValue = value.trim().toLowerCase().replace(/^simplifiedkyc_/i, '');
+                    switch (trimmedValue) {
+                    // If the trimmedValue matches any of these cases, replace it with the corrected value
+                    case 'in-progress':
+                        return 'in_progress';
+                    case 'completed':
+                        return 'completed';
+                    case 'further information required':
+                        return 'info_required';
+                    default:
+                        // If no correction needed, use the original value
+                        return trimmedValue;
+                    }
+                });
+                // Join the corrected values back into a string separated by ','
+                const correctedValues = simplifiedValues.join(',');
+                // Append the correctedValues directly to the URL
+                url += `&simplifiedStatus=${correctedValues}`;
+            }
+
+            if (searchParams.get('fullkyc') !== null) {
+                const fullKycValues = searchParams.get('fullkyc').split(',').map(value => {
+                    const trimmedValue = value.trim().toLowerCase();
+                    switch (trimmedValue) {
+                    case 'in-progress':
+                        return 'in_progress';
+                    case 'completed':
+                        return 'completed';
+                    case 'further information required':
+                        return 'info_required';
+                    default:
+                        return trimmedValue; // Use original value if no correction needed
+                    }
+                });
+
+                const correctedValues = fullKycValues.join(',');
+                url += `&fullStatus=${correctedValues}`;
+            }
         } else if (searchParams.get('type') === 'customers') {
-            url = 'agent-users/get-agent-kyc';
+            url = 'get-agent-kyc';
         } else if (searchParams.get('type') === 'merchants') {
-            url = 'agent-users/get-agent-kyc';
+            url = 'get-agent-kyc';
         }
+        console.log(url, 'urllll');
+        console.log(searchParams.get('citizen'), 'citi');
+
         try {
             // to get the data from authslice
-            dispatch(KycVerificationList(searchParams, url)).then((response) => {
+            console.log('heree2');
+            dispatch(KycVerificationList(url)).then((response) => {
+                console.log(response, 'response');
                 if (response.payload.error) {
                     if (error.status === 400) {
                         setNotFound(true);
@@ -79,12 +140,11 @@ const KycVerification = () => {
     when the component mounts or when the dependencies change. */
     useEffect(() => {
         if (searchParams.get('page') === null) {
-            setSearchParams({ page: 1, type: 'agents' });
+            setSearchParams({ page: 1, type: 'agents', citizen: 'all' });
         } else {
-            setSearchParams({ page: searchParams.get('page'), type: 'agents', citizen: 'all' });
+            GetList();
         }
-        GetList();
-    }, []);
+    }, [GetList]);
 
     return (
         <CardHeader
@@ -101,6 +161,10 @@ const KycVerification = () => {
             setSearchParams={setSearchParams}
         >
             <div className={`relative ${notFound ? '' : 'thead-border-bottom'}`}>
+                {(List?.data?.length !== 0 ||
+                (searchParams.get('citizen') !== null || searchParams.get('search') !== null ||
+                searchParams.get('fullkyc') !== null ||
+                searchParams.get('simplifiedkyc') !== null)) && !notFound &&
                 <div className='bg-[#fff] border-b border-[#E5E9EB]'>
                     <Topbar
                         setSearchParams={setSearchParams}// pass this as its getting updated
@@ -116,8 +180,14 @@ const KycVerification = () => {
                         singleSelectFilter={true}
                     />
                 </div>
+                }
 
-                { <div className='h-tableHeight scrollBar overflow-auto'>
+                {
+                    !notFound && !(List?.data?.length === 0 && !loading && !(searchParams.get('citizen') !== null ||
+                searchParams.get('search') !== null || searchParams.get('simplifiedkyc') !== null ||
+                searchParams.get('fullkyc') !== null)) &&
+
+                <div className='h-tableHeight scrollBar overflow-auto'>
                     <KycVerificationTable
                         // error={error}
                         // loading={loading}
@@ -138,7 +208,9 @@ const KycVerification = () => {
                 {List?.data?.length === 0 && !loading &&
                 !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
                 searchParams.get('simplifiedkyc') === null) &&
-                (<NoDataError className='h-noDataError' heading='No profiles for verification' text='No profiles currently require verification. Please check back later.' />)}
+                (<NoDataError className='h-noDataError'
+                    heading='No profiles for verification'
+                    text='No profiles currently require verification. Please check back later.' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}

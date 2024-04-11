@@ -5,8 +5,6 @@ import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import FilterCheckbox from '../FilterCheckbox/FilterCheckbox';
 import SingleTickButton from '../SingleTickButton/SingleTickButton';
-import { compose } from '@reduxjs/toolkit';
-import { handleDeleteSearchParams, handleSearchParams } from '../../CommonMethods/ListFunctions';
 
 const FilterWithSingleOption = ({
     filterOptions,
@@ -28,15 +26,6 @@ const FilterWithSingleOption = ({
     useOnClickOutside(filterDiv, () => {
         setIsFilterOpen(false);
     });
-    const handleSingleButtonClick = (selectedText) => {
-        handleSearchParams('citizen', selectedText.toLowerCase(), searchParams, setSearchParams);
-        console.log(searchParams.get('citizen'), 'citizennnnnn');
-        // if (searchParams.get('citizen') === 'non malawi citizen') {
-        //     console.log('enters');
-        //     handleDeleteSearchParams('simplifiedkyc', searchParams, setSearchParams);
-        // }
-    };
-
     return (
         <div ref={filterDiv} className="z-1">
             <Image
@@ -72,7 +61,8 @@ const FilterWithSingleOption = ({
                                         <SingleTickButton
                                             singleCheckText={option} // active
                                             key={option} // active
-                                            onClick={handleSingleButtonClick}
+                                            searchParams={searchParams}
+                                            setSearchParams={setSearchParams}
                                             isSelected={searchParams.get('citizen') === option?.toLowerCase()}
                                         />
                                     ))}

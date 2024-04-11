@@ -10,18 +10,12 @@ export const handleSearchParams = (key, value, searchParams, setSearchParams) =>
     const params = Object.fromEntries(searchParams);
     params[key] = value;
     params.page = 1;
-    setSearchParams({ ...params });
-};
-export const handleDeleteSearchParams = (key, searchParams, setSearchParams) => {
     console.log(key, 'key');
-    const params = Object.fromEntries(searchParams);
-
-    params.page = 1;
-    delete params[key];
-    setSearchParams({ ...params });
-    if (searchParams.get(key) !== null) {
-        console.log('not nullllllllllll');
-       
+    console.log(value, 'valueee');
+    if (value === 'non malawi citizen') {
+        delete params.simplifiedkyc;
     }
-   
+    setSearchParams({ ...params });
+    console.log(params, 'pa');
+    console.log(searchParams.get('citizen'), 'came here 2');
 };

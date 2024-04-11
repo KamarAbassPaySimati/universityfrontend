@@ -86,7 +86,7 @@ const Topbar = ({
         }
         delete params.fullkyc;
         delete params.simplifiedkyc;
-        delete params.citizen;
+        params.citizen = 'all';
         setSearchParams({ ...params });
     };
 

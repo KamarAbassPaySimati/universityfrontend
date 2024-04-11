@@ -7,13 +7,15 @@ const initialState = {
     success: ''
 };
 
-export const KycVerificationList = createAsyncThunk('kycVerifications', async (searchParams, url, { rejectWithValue }) => {
+export const KycVerificationList = createAsyncThunk('kycVerifications', async (url, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     const safeUrl =
-        `${url}?${searchParams.toString()}`;// api end point
+        `${url}`;// api end point
+
+    console.log(safeUrl, 'safeurl');
 
     try {
-        const res = await dataService.GetAPI(safeUrl);
+        const res = await dataService.GetAPIAgent(safeUrl);
         return res;
     } catch (error) {
         // Log error or send notification
@@ -23,7 +25,7 @@ export const KycVerificationList = createAsyncThunk('kycVerifications', async (s
 });
 
 const kycVerificationSlice = createSlice({
-    name: 'admin-list',
+    name: 'agent-kyc-list',
     initialState,
     reducers: {
 
