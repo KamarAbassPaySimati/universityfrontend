@@ -11,6 +11,11 @@ Given('I am viewing the admin user profile', async function () {
     await driver.get(`http://localhost:3000/users/admins/${global.admin_user.paymaart_id}`);
 });
 
+When('I navigate to view admin profile', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await driver.get(`http://localhost:3000/users/admins/${global.admin_user.paymaart_id}`);
+});
+
 Then('I should view my paymaart ID and name', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));

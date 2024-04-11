@@ -18,7 +18,7 @@ Feature: Paymaart- agent Web- View all Agent list
 
     @add_admin_user
     @create_new_user_and_login
-    Scenario: List all the agent users
+    Scenario: Login as super admin and view list all the agent users
         Given I navigate to agent users listing screen
         Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
 
@@ -53,3 +53,30 @@ Feature: Paymaart- agent Web- View all Agent list
         Then I should be navigated to page 2
         When I click on paginate to previous page
         Then I should be navigated to page 1
+
+    @perform_logout
+    @wait
+    @add_finance_admin_user
+    @create_new_user_and_login
+    @delete_admin_account
+    Scenario: Login as finance admin and view list of agents
+        Given I navigate to agent users listing screen
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+
+    @perform_logout
+    @wait
+    @add_normal_admin_user
+    @create_new_user_and_login
+    @delete_admin_account
+    Scenario: Login as normal admin and view list of agents
+        Given I navigate to agent users listing screen
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+
+    @perform_logout
+    @wait
+    @add_support_admin_user
+    @create_new_user_and_login
+    @delete_admin_account
+    Scenario: Login as support admin and view list of agents
+        Given I navigate to agent users listing screen
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'

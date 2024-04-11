@@ -61,7 +61,7 @@ Feature: Paymaart - Admin Web -Admin List
     @add_finance_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as finance admin
+    Scenario: Login as finance admin and navigate to admin user listing
         Given I navigate to admin users listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
@@ -71,7 +71,7 @@ Feature: Paymaart - Admin Web -Admin List
     @add_support_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as support admin
+    Scenario: Login as support admin and navigate to admin user listing
         When I navigate to admin users listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
@@ -81,6 +81,9 @@ Feature: Paymaart - Admin Web -Admin List
     @add_normal_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as support admin
+    Scenario: Login as normal admin and view admin listing
         When I navigate to admin users listing screen
         Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
+        Then I should see view admin users button is hidden
+        And I should see edit admin users button is hidden
+        And I should see "onboard admin user" button is hidden

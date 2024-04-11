@@ -47,6 +47,9 @@ Feature: Paymaart -Admin Web - Forgot Password
       | "Admin@123"      | "Admin@123"   | "Admin@123"      | "Old password and new password cannot be the same" |
       | "Admin!1234"     | "Admin@1235"  | "Admin@1235"     | "Incorrect Password"                               |
       | "Admin@123"      | "Admin@12354" | "Admin@12431"    | "Password does not match"                          |
+      | ""               | ""            | ""               | "This field is mandatory"                          |
+      | ""               | ""            | "Admin@12355"    | "This field is mandatory"                          |
+      | ""               | "Admin@12354" | ""               | "This field is mandatory"                          |
 
   Scenario: Check for password requirement
     Given I navigate to update password page
@@ -55,16 +58,17 @@ Feature: Paymaart -Admin Web - Forgot Password
     When I submit the update password form
     Then I should read a message stating that <message>
     Examples:
-      | current_password | password      | confirm_password | message                        |
-      | "Admin@123"      | "abcpassword" | "abcpassword"    | "Password criteria is not met" |
-      | "Admin@123"      | "1"           | "1"              | "Password criteria is not met" |
-      | "Admin@123"      | "c"           | "c"              | "Password criteria is not met" |
-      | "Admin@123"      | "@"           | "@"              | "Password criteria is not met" |
-      | "Admin@123"      | "bharath@"    | "bharath@"       | "Password criteria is not met" |
-      | "Admin@123"      | "B"           | "B"              | "Password criteria is not met" |
-      | "Admin@123"      | "Ba"          | "Ba"             | "Password criteria is not met" |
-      | "Admin@123"      | "Ba1"         | "Ba1"            | "Password criteria is not met" |
-      | "Admin@123"      | "Pass!1"      | "Pass!1"         | "Password criteria is not met" |
+      | current_password | password      | confirm_password | message                                                 |
+      | "Admin@123"      | "abcpassword" | "abcpassword"    | "Password criteria is not met"                          |
+      | "Admin@123"      | "1"           | "1"              | "Password criteria is not met"                          |
+      | "Admin@123"      | "c"           | "c"              | "Password criteria is not met"                          |
+      | "Admin@123"      | "@"           | "@"              | "Password criteria is not met"                          |
+      | "Admin@123"      | "bharath@"    | "bharath@"       | "Password criteria is not met"                          |
+      | "Admin@123"      | "B"           | "B"              | "Password criteria is not met"                          |
+      | "Admin@123"      | "Ba"          | "Ba"             | "Password criteria is not met"                          |
+      | "Admin@123"      | "Ba1"         | "Ba1"            | "Password criteria is not met"                          |
+      | "Admin@123"      | "Pass!1"      | "Pass!1"         | "Password criteria is not met"                          |
+      | "Admin@12345"    | "Admin@12345" | "Admin@12345"    | "Weak password. Check guidelines for strong passwords." |
 
   Scenario: Set New Password with valid information
     Given I navigate to update password page
@@ -90,4 +94,3 @@ Feature: Paymaart -Admin Web - Forgot Password
     And I submit the update password form
     Then I should read a message stating that "Your password has been updated successfully"
     Then I should be redirected to login
-    

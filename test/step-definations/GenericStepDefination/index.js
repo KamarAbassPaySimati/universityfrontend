@@ -190,3 +190,19 @@ When('I log out from the application', async function () {
     await driver.executeScript('window.location.reload();');
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
+
+Then('I should see {string} button is hidden', async function (type) {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    let element;
+    switch (type) {
+    case 'onboard admin user':
+        element = await driver.executeScript('return document.querySelector("[data-testid=\'Register Admin\']")');
+        if (element == null || element === undefined) {
+            return 'passed';
+        } else {
+            throw new Error('Onboard Admin button is not hidden');
+        }
+    default:
+        break;
+    }
+});
