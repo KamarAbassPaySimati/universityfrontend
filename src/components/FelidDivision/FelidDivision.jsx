@@ -25,14 +25,14 @@ export default function FelidDivision ({
                                         ? (
                                             <div className='mx-[10px]'>
                                                 <InputFieldWithDropDown
-                                                    labelName={`${divObj.label} 
-                                                    ${(divObj.require === undefined || divObj.require) ? '' : '(Optional)'}`}
+                                                    labelName={`${divObj?.label} 
+                                                    ${(divObj?.require === undefined || divObj?.require) ? '' : '(Optional)'}`}
                                                     value={''}
-                                                    placeholder={`Select ${divObj.label}`}
+                                                    placeholder={`Select ${divObj?.label}`}
                                                     // error={formErrors.role}
-                                                    options={divObj.options}
-                                                    id={divObj.key}
-                                                    testId={divObj.key}
+                                                    options={divObj?.options}
+                                                    id={divObj?.key}
+                                                    testId={divObj?.key}
                                                     // information
                                                     // handleInput={handleOnChange}
                                                     // type={divObj.type}
@@ -41,28 +41,31 @@ export default function FelidDivision ({
                                         : divObj.type === 'googleAPI'
                                             ? (
                                                 <GoogleApi
-                                                    id={divObj.key}
-                                                    placeholder={`Enter ${divObj.label}`}
-                                                    testId={divObj.key}
-                                                    labelName={`${divObj.label} 
-                                                ${(divObj.require === undefined || divObj.require) ? '' : '(Optional)'}`} />
+                                                    id={divObj?.key}
+                                                    value={states[divObj?.key]}
+                                                    placeholder={`Enter ${divObj?.label}`}
+                                                    testId={divObj?.key}
+                                                    handleOnChange={handleOnChange}
+                                                    states={states}
+                                                    labelName={`${divObj?.label} 
+                                                ${(divObj.require === undefined || divObj?.require) ? '' : '(Optional)'}`} />
                                             )
                                             : (
                                                 <InputField
                                                     className='mb-6'
                                                     divClassName='mx-2.5'
-                                                    value={states[divObj.key]}
+                                                    value={states[divObj?.key]}
                                                     // onFocus={handleFocus}
-                                                    id={divObj.key}
-                                                    testId={divObj.key}
+                                                    id={divObj?.key}
+                                                    testId={divObj?.key}
                                                     // error={formErrors.firstName}
-                                                    label={`${divObj.label} 
-                                                ${(divObj.require === undefined || divObj.require) ? '' : '(Optional)'}`}
-                                                    placeholder={`Enter ${divObj.label}`}
+                                                    label={`${divObj?.label} 
+                                                ${(divObj?.require === undefined || divObj?.require) ? '' : '(Optional)'}`}
+                                                    placeholder={`Enter ${divObj?.label}`}
                                                     // setEnteredLetter={setEnteredLetter}
                                                     maxLength="100"
                                                     onChange={handleOnChange}
-                                                    inputType={divObj.type}
+                                                    inputType={divObj?.type}
                                                 />)}
                             </div>))}
                     </div>

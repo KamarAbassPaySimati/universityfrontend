@@ -26,7 +26,7 @@ export default function Capture ({ label, handleStates, states }) {
                     </div>
                 </div>
             </div>
-            {isCapture && <CapturePopup 
+            {isCapture && <CapturePopup
                 handleStates={handleStates} Webcam={Webcam} isModalOpen={isCapture} handleClose={() => setIsCapture(false)}/>}
         </>
     );

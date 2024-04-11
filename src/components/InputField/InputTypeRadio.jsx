@@ -1,12 +1,12 @@
 import React from 'react';
 
-export default function InputTypeRadio ({ label, id, handleRadioButton, checkedState }) {
+export default function InputTypeRadio ({ label, id, handleRadioButton, checkedState, name }) {
     return (
         <div class="relative custom-radioBlue py-2" >
             <input
                 id={id}
                 type="radio"
-                name={id}
+                name={name}
                 onChange={handleRadioButton}
                 checked={checkedState}
             />

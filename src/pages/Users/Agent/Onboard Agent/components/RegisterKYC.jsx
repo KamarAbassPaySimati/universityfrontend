@@ -140,7 +140,11 @@ export default function RegisterKYC () {
                                 handleStates={handleStates}
                                 states={states}
                             />}
-                            {searchParams.get('tab') === 'personal_details' && <PersonalDetails />}
+                            {searchParams.get('tab') === 'personal_details' &&
+                            <PersonalDetails
+                                handleStates={handleStates}
+                                states={states}
+                            />}
                         </div>
                         <div className='flex justify-between items-center'>
                             <div className='flex'>
