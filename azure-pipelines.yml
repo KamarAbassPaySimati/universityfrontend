@@ -23,35 +23,6 @@ variables:
 stages:
 - stage: CodeQuality
   jobs:
-    # - job: "Download_Environment"
-    #   displayName: "Dependencies"
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #     - script: |
-    #         sudo pip3 install --upgrade pip
-    #         pip3 install awscli --upgrade --user
-    #         export PATH="/home/vsts/.local/bin:$PATH"
-    #         sh scripts/envs.sh
-    #       displayName: 'Copy Environment Files'
-    #     - publish: $(System.DefaultWorkingDirectory)/.env
-    #       artifact: Environment
-    #     - task: DownloadSecureFile@1
-    #       name: deployment_secrity_file
-    #       displayName: 'Download Environment'
-    #       inputs:
-    #         secureFile: "afrimaxpayplatform-8783245672f3.json"
-    #     - task: DownloadSecureFile@1
-    #       name: deployment_keystore_file
-    #       displayName: 'Download Environment'
-    #       inputs:
-    #         secureFile: "paymaart_agent.jks"
-    #     - script: |
-    #         mkdir secure_files
-    #         cp $(deployment_keystore_file.secureFilePath) secure_files/paymaart_agent.jks
-    #         cp $(deployment_secrity_file.secureFilePath) secure_files/afrimaxpayplatform-8783245672f3.json
-    #     - publish: $(System.DefaultWorkingDirectory)/secure_files
-    #       artifact: SecretFiles
     - job: "lint"
       displayName: "Code Quality"
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
@@ -68,6 +39,10 @@ stages:
           displayName: Cache npm
         - script: |
             npm install --cache .npm
+            node licence_complaiance.js
+            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+            aws s3 sync licenses.json s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/licenses.json
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
@@ -281,7 +256,46 @@ stages:
             mkdir reports
             npm install nyc --save-dev --force
             node scripts/bdd-execution-split1.js
-    
+    - job: BrowserPerformanceTesting
+      displayName: "Browser Performance Testing"
+      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'), contains(variables['build.SourceBranch'], 'qa')), succeeded())
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --cache .npm
+          condition: ne(variables.CACHE_RESTORED, 'true')
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            source .env
+            npm run build
+            npm install express --force
+            npm install pm2 sitespeed.io -g
+            pm2 start scripts/sitespeed-server.js
+            sleep 30
+            sitespeed.io  --multi scripts/sitespeed/testMultipleURLs.js --preScript scripts/sitespeed/login.js --budget.configPath scripts/budget.json -n 1 --firstParty ".amazon.com" --firstParty "sdk.relicx.ai" --headless true --browsertime.chrome.args no-sandbox
+          displayName: BrowserPerformance
+        - publish: $(System.DefaultWorkingDirectory)/sitespeed-result # Assuming logs are in working directory
+          artifact: sitespeed-result
+          condition: always()
+     
 - stage: Deploy
   jobs:
     - job: deployment
@@ -306,5 +320,47 @@ stages:
             aws s3 sync dist s3://$ADMIN_S3_BUCKET
             aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*"
           displayName: 'Deployment'
-
+    - job: DAST
+      displayName: "Dynamic Application Security Testing (DAST)"
+      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'), contains(variables['build.SourceBranch'], 'qa')), succeeded())
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --cache .npm
+          condition: ne(variables.CACHE_RESTORED, 'true')
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            npm install pm2 -g
+            source .env
+            npm run build
+            npm install express --force
+            pm2 start scripts/server.js
+            docker run -u zap -p 8080:8080 -d softwaresecurityproject/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
+            sleep 30
+            mkdir test_results
+            pip install beautifulsoup4
+            python scripts/dast.py
+          displayName: Unit Testing
+        - publish: $(System.DefaultWorkingDirectory)/repotest_resultsrts # Assuming logs are in working directory
+          artifact: dast_test_results
+          condition: always()
+    
     
