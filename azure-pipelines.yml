@@ -42,7 +42,7 @@ stages:
             node licence_complaiance.js
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-            aws s3 sync licenses.json s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/licenses.json
+            aws s3 sync licenses.json s3://$S3_BUCKET_LIVING_DOCUMENTATION/licences-ADMIN/dev/licenses.json
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
