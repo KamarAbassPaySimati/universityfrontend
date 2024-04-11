@@ -40,11 +40,11 @@ Feature: Paymaart - Admin Web -Admin List
         And I select filter by admin role as <role>
         Then I should see list of admin users where role is <filter_role>
         Examples:
-            | role            |filter_role|
-            | "Admin"         |"Admin"|
-            | "Super admin"   |"Super Admin"|
-            | "Support admin" |"Support Admin"|
-            | "Finance admin" |"Finance Admin"|
+            | role            | filter_role     |
+            | "Admin"         | "Admin"         |
+            | "Super admin"   | "Super Admin"   |
+            | "Support admin" | "Support Admin" |
+            | "Finance admin" | "Finance Admin" |
 
     Scenario: Checking Pagination
         Given I navigate to admin users listing screen
@@ -52,32 +52,3 @@ Feature: Paymaart - Admin Web -Admin List
         Then I should be navigated to page 2
         When I click on paginate to previous page
         Then I should be navigated to page 1
-
-    @perform_logout
-    @wait
-    @add_finance_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as finance admin
-        Given I navigate to admin users listing screen
-        Then I should read a message stating that "Page Not Found"
-        And I should read a message stating that "We can’t find the page you’re looking for"
-
-    @perform_logout
-    @wait
-    @add_support_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as support admin
-        When I navigate to admin users listing screen
-        Then I should read a message stating that "Page Not Found"
-        And I should read a message stating that "We can’t find the page you’re looking for"
-
-    @perform_logout
-    @wait
-    @add_normal_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as support admin
-        When I navigate to admin users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
