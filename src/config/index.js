@@ -4,7 +4,6 @@ export const baseURLAgent = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1
 // export const branchLiveKey =process.env.REACT_APP_BRANCH_LIVE_KEY
 export const CDN = 'https://' + import.meta.env.VITE_CDN_URL + '/public/';
 export const GOOGLE_API = import.meta.env.VITE_GOOGLE_API;
-console.log(GOOGLE_API, import.meta.env);
 export const awsConfig = {
     Auth: {
         Cognito: {
@@ -15,7 +14,7 @@ export const awsConfig = {
         }
     },
     Storage: {
-        AWSS3: {
+        S3: {
             bucket: import.meta.env.VITE_BUCKET_NAME,
             region: import.meta.env.VITE_REGION || 'us-east-1'
         }

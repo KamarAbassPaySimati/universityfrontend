@@ -3,8 +3,9 @@ import React from 'react';
 import Webcam from 'react-webcam';
 import Button2 from '../Button2/Button2';
 import Button from '../Button/Button';
+import { handleUpload } from '../S3Upload/S3Functions';
 
-export default function WebCam () {
+export default function WebCam ({ handleStates, handleClose }) {
     const videoConstraints = {
         width: 1280,
         height: 600,
@@ -19,6 +20,12 @@ export default function WebCam () {
         },
         [webcamRef]
     );
+    const handleSubmit = async () => {
+        console.log('submit');
+        handleStates(await handleUpload(image), 'capture');
+        handleClose();
+        setImage(null);
+    };
     return (
         <>
             <div className='mx-[200px] border rounded-lg border-[#000] capture-img'>
@@ -41,7 +48,7 @@ export default function WebCam () {
                     text={image === null ? 'Capture' : 'Submit'}
                     testId= 'submit_button'
                     className = 'max-w-[200px] h-10 ml-4 px-[51px]'
-                    onClick={image === null ? capture : () => {}}
+                    onClick={image === null ? capture : handleSubmit()}
                     isLoading={false}
                 />}
             </div>}

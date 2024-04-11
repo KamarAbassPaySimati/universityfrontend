@@ -3,8 +3,9 @@ import Image from '../Image/Image';
 import CapturePopup from './CapturePopup';
 import Webcam from 'react-webcam';
 
-export default function Capture ({ label }) {
+export default function Capture ({ label, handleStates, states }) {
     const [isCapture, setIsCapture] = useState(false);
+    console.log(states);
     return (
         <>
             <div className=' py-4'>
@@ -25,7 +26,8 @@ export default function Capture ({ label }) {
                     </div>
                 </div>
             </div>
-            {isCapture && <CapturePopup Webcam={Webcam} isModalOpen={isCapture} handleClose={() => setIsCapture(false)}/>}
+            {isCapture && <CapturePopup 
+                handleStates={handleStates} Webcam={Webcam} isModalOpen={isCapture} handleClose={() => setIsCapture(false)}/>}
         </>
     );
 }

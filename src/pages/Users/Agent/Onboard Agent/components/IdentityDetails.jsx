@@ -2,7 +2,7 @@ import React from 'react';
 import DocumentSidebar from '../../../../../components/DocumentTab/DocumentSidebar';
 import Documents from './Documents';
 
-export default function IdentityDetails () {
+export default function IdentityDetails ({ handleStates, states }) {
     const documentTypes = {
         'ID Document': 'clear',
         'Verification Document': 'pending'
@@ -13,7 +13,9 @@ export default function IdentityDetails () {
                 documentTypes={documentTypes}
             />
             <Documents
-                type={'Verification Document'}
+                type={'ID Document'}
+                handleStates={handleStates}
+                states={states}
             />
         </div>
     );

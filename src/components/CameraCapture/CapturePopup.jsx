@@ -3,7 +3,7 @@ import { Modal } from 'react-responsive-modal';
 import Image from '../Image/Image';
 import WebCam from './WebCam';
 
-export default function CapturePopup ({ isModalOpen, handleClose, Webcam }) {
+export default function CapturePopup ({ isModalOpen, handleClose, Webcam, handleStates }) {
     return (
         <Modal center open={isModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
             <div className='customModal'></div>
@@ -19,7 +19,7 @@ export default function CapturePopup ({ isModalOpen, handleClose, Webcam }) {
                     className="text-[14px] text-center leading-[24px] font-[400] text-neutral-secondary Text mb-8">
                     Make sure you are real person
                 </p>
-                <WebCam Webcam={Webcam}/>
+                <WebCam handleStates={handleStates} handleClose={handleClose}/>
             </div>
         </Modal>
     );

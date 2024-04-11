@@ -6,7 +6,7 @@ import InformationList from '../../../../../components/InformationList/Informati
 import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
 import { Tooltip } from 'react-tooltip';
 
-export default function Documents ({ type }) {
+export default function Documents ({ type, handleStates, states }) {
     const IdDocumentList = ['National ID', 'Passport'];
     const VerificationDocumentList = [
         'Driver\'s Licence',
@@ -167,6 +167,8 @@ export default function Documents ({ type }) {
                     <div className="w-[48%] relative">
                         <Capture
                             label="Selfie"
+                            handleStates={handleStates}
+                            states={states}
                         />
 
                     </div>
