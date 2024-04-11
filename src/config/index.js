@@ -2,7 +2,7 @@ export const baseURL = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/admi
 export const baseURLAgent = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/agent-users/';
 // export const exceptThisSymbols = ['e', 'E', '+', '-', '.',''];
 // export const branchLiveKey =process.env.REACT_APP_BRANCH_LIVE_KEY
-export const CDN = 'https://' + import.meta.env.VITE_CDN_URL + '/public/';
+export const CDN = 'https://' + import.meta.env.VITE_CDN_URL + '/private/eu-west-1:e30587a4-d441-c5cd-e5cc-74c0237dd7a6/';
 export const GOOGLE_API = import.meta.env.VITE_GOOGLE_API;
 export const awsConfig = {
     Auth: {

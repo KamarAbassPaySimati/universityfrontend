@@ -38,7 +38,8 @@ export default function WebCam ({ handleStates, handleClose }) {
             // const imageBlob = imageDataURL;
             const fileName = `image-${uuidv4()}.jpeg`;
             var file = dataURLtoFile(image, fileName);
-            handleStates(await handleUpload(file), 'capture');
+            const capture = await handleUpload(file);
+            handleStates(capture.key, 'capture');
             // const val =`${filePath}/${file.name}`;
             // setCapturedImage(val);
             // setImageLoading(false);

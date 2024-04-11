@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Image from '../Image/Image';
 import CapturePopup from './CapturePopup';
 import Webcam from 'react-webcam';
+import { CDN } from '../../config';
 
 export default function Capture ({ label, handleStates, states }) {
     const [isCapture, setIsCapture] = useState(false);
@@ -14,12 +15,14 @@ export default function Capture ({ label, handleStates, states }) {
                         <div className="w-full py-3">
                             <div className=" border border-dashed h-48
                         rounded-lg  border-neutral-secondary flex justify-center items-center" onClick={() => setIsCapture(true)}>
-                                <button
-                                    className='flex items-center rounded border border-neutral-outline p-2.5 text-neutral-primary
+                                {(states.capture !== undefined && states.capture !== '')
+                                    ? <Image src={`${CDN}${states.capture}`} type='jpg' />
+                                    : <button
+                                        className='flex items-center rounded border border-neutral-outline p-2.5 text-neutral-primary
                                     gap-2.5 font-medium text-[14px] leading-4 mb-2'>
-                                    <Image src="camera"/>
-                                    Capture
-                                </button>
+                                        <Image src="camera"/>
+                                        Capture
+                                    </button>}
                             </div>
                         </div>
                     </div>

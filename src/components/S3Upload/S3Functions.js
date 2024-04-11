@@ -7,6 +7,7 @@ export const handleUpload = async (file) => {
             key: file.name,
             data: file,
             options: {
+                contentType: file.type, // optional, automatically inferred if not provided,
                 accessLevel: 'private'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
             }
         }).result;
