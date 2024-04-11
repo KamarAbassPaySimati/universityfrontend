@@ -5,7 +5,6 @@ import Webcam from 'react-webcam';
 
 export default function Capture ({ label, handleStates, states }) {
     const [isCapture, setIsCapture] = useState(false);
-    console.log(states);
     return (
         <>
             <div className=' py-4'>

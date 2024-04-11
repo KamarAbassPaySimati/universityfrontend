@@ -7,7 +7,8 @@ export default function FelidDivision ({
     divisionClassName,
     divisionObject,
     handleOnChange,
-    states
+    states,
+    submitSelected
 }) {
     return (
         <>
@@ -42,6 +43,7 @@ export default function FelidDivision ({
                                             ? (
                                                 <GoogleApi
                                                     id={divObj?.key}
+                                                    submitSelected={submitSelected}
                                                     value={states[divObj?.key]}
                                                     placeholder={`Enter ${divObj?.label}`}
                                                     testId={divObj?.key}

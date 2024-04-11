@@ -1,12 +1,13 @@
 import { uploadData, remove } from 'aws-amplify/storage';
 
 export const handleUpload = async (file) => {
+    console.log('file', file);
     try {
         const result = await uploadData({
             key: file.name,
             data: file,
             options: {
-                accessLevel: 'guest'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
+                accessLevel: 'private'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
             }
         }).result;
         console.log('Succeeded: ', result);

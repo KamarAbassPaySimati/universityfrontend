@@ -125,14 +125,14 @@ export default function Documents ({ type, handleStates, states }) {
             <div className="w-[48%] relative">
                 <InputFieldWithDropDown
                     labelName={type}
-                    value={''}
+                    value={states?.id_type === undefined ? '' : states?.id_type}
                     placeholder={`Select ${type}`}
                     // error={formErrors.role}
                     options={type !== 'ID Document' ? VerificationDocumentList : IdDocumentList}
-                    id="passport"
-                    testId="passport"
+                    id="id_type"
+                    testId="id_type"
                     information
-                    // handleInput={handleInput}
+                    handleInput={handleStates}
                 />
                 <Tooltip
                     className='info-tooltip'
@@ -154,11 +154,11 @@ export default function Documents ({ type, handleStates, states }) {
                         label="Front"
                     />
                 </div>
-                <div className="w-[48%] relative ml-[4%]">
+                {states?.id_type !== 'Passport' && <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder
                         label="Back"
                     />
-                </div>
+                </div>}
 
             </div>
             {type === 'ID Document' && <div>

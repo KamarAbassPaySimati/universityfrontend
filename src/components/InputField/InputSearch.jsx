@@ -16,7 +16,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
         setTimer(newTimer);
     };
     return (
-        <div className='google-key relative'>
+        <div className='google-key google-key-border relative'>
             <input
                 type="text"
                 value={search}

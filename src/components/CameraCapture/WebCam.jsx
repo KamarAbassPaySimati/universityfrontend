@@ -1,17 +1,19 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useRef } from 'react';
 import Webcam from 'react-webcam';
 import Button2 from '../Button2/Button2';
 import Button from '../Button/Button';
 import { handleUpload } from '../S3Upload/S3Functions';
+import { v4 as uuidv4 } from 'uuid';
+import { dataURLtoFile } from '../../CommonMethods/dataURLtoFile';
 
 export default function WebCam ({ handleStates, handleClose }) {
     const videoConstraints = {
         width: 1280,
         height: 600,
-        facingMode: 'user',
-        'border-radius': '8px !important'
+        facingMode: 'user'
     };
+    const canvasRef = useRef(null);
     const [image, setImage] = React.useState(null);
     const webcamRef = React.useRef(null);
     const capture = React.useCallback(
@@ -20,12 +22,31 @@ export default function WebCam ({ handleStates, handleClose }) {
         },
         [webcamRef]
     );
-    const handleSubmit = async () => {
-        console.log('submit');
-        handleStates(await handleUpload(image), 'capture');
-        handleClose();
-        setImage(null);
+
+    const handleCapture = async () => {
+        // const video = document.querySelector('video');
+        // const canvas = document.createElement('canvas');
+        // const context = canvas.getContext('2d');
+        // console.log('video', video, canvas);
+        if (image) {
+            // setImageLoading(true);
+            // canvas.width = 1280;
+            // canvas.height = 600;
+            // context.drawImage(image, 0, 0);
+            // console.log(context.drawImage(image, 0, 0), 'context.drawImage(image, 0, 0)');
+            // const imageDataURL = canvas.toDataURL('image/jpeg');
+            // const imageBlob = imageDataURL;
+            const fileName = `image-${uuidv4()}.jpeg`;
+            var file = dataURLtoFile(image, fileName);
+            handleStates(await handleUpload(file), 'capture');
+            // const val =`${filePath}/${file.name}`;
+            // setCapturedImage(val);
+            // setImageLoading(false);
+            handleClose();
+            setImage(null);
+        }
     };
+
     return (
         <>
             <div className='mx-[200px] border rounded-lg border-[#000] capture-img'>
@@ -48,10 +69,11 @@ export default function WebCam ({ handleStates, handleClose }) {
                     text={image === null ? 'Capture' : 'Submit'}
                     testId= 'submit_button'
                     className = 'max-w-[200px] h-10 ml-4 px-[51px]'
-                    onClick={image === null ? capture : handleSubmit()}
+                    onClick={image === null ? capture : handleCapture}
                     isLoading={false}
                 />}
             </div>}
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
 
         </>
 

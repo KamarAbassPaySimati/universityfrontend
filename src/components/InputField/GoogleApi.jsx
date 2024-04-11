@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import GoogleComponent from 'react-google-autocomplete';
 import { GOOGLE_API } from '../../config';
 import Image from '../Image/Image';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, states }) => {
+const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
     const handlePlaceSelect = (place) => {
         handleOnChange(place.formatted_address, id);
         switch (id) {
@@ -108,19 +109,27 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, states }
                 <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
                     {labelName}
                 </label>
-                <div className='google-key relative'>
-                    <GoogleComponent
-                        placeholder={placeholder}
-                        apiKey={GOOGLE_API}
-                        onPlaceSelected={handlePlaceSelected}
-                        options={autocompleteOptions()}
-                        onChange={handlePlaceSelect}
-                        className='w-full mt-2'
-                        value={componentValue} // Use value prop
-                    />
-                    <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
-                        <Image src={'search_icon'} className="h-6 w-6 text-gray-400" />
+                <div>
+                    <div className={`
+                ${(submitSelected && (componentValue === undefined || componentValue === ''))
+            ? 'google-key-error'
+            : 'google-key-border'} google-key relative`}>
+                        <GoogleComponent
+                            placeholder={placeholder}
+                            apiKey={GOOGLE_API}
+                            onPlaceSelected={handlePlaceSelected}
+                            options={autocompleteOptions()}
+                            onChange={handlePlaceSelect}
+                            className={'w-full mt-2'}
+                            value={componentValue} // Use value prop
+                        />
+                        <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+                            <Image src={'search_icon'} className="h-6 w-6 text-gray-400" />
+                        </div>
                     </div>
+                    {(submitSelected && (componentValue === undefined || componentValue === '')) &&
+                    <ErrorMessage error={'Required field'} />}
+
                 </div>
             </div>
         </div>

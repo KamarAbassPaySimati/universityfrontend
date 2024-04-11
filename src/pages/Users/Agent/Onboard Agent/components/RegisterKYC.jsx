@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { useState } from 'react';
 import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
 import CardHeader from '../../../../../components/CardHeader';
@@ -11,6 +12,7 @@ import IdentityDetails from './IdentityDetails';
 import { useSearchParams } from 'react-router-dom';
 
 export default function RegisterKYC () {
+    const [submitSelected, setSubmitSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
         personal_customer: 'Full KYC',
@@ -34,6 +36,7 @@ export default function RegisterKYC () {
         }
     };
     const handleStates = (value, id, type) => {
+        setSubmitSelected(false);
         if (type === 'input') {
             setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
         } else {
@@ -99,6 +102,33 @@ export default function RegisterKYC () {
             break;
         }
     };
+    const handleValidation = () => {
+        let count = 0;
+        const AddressDetails = ['street_name', 'town_village_ta', 'district'];
+        AddressDetails.map((item) => {
+            if (states[item] === '' || states[item] === undefined) {
+                setSubmitSelected(true);
+                count = count + 1;
+            }
+        }
+        );
+        return count === 0;
+    };
+
+    const handleSaveAndContinue = () => {
+        switch (searchParams.get('tab')) {
+        case 'address_details':
+            if (!handleValidation()) {
+                console.log('error');
+            } else {
+                handleSearchParams('tab', 'identity_details');
+            }
+            break;
+
+        default:
+            break;
+        }
+    };
     return (
         <CardHeader
             activePath='Register Agent'
@@ -135,6 +165,7 @@ export default function RegisterKYC () {
                             <Address
                                 handleStates={handleStates}
                                 states={states}
+                                submitSelected={submitSelected}
                             />}
                             {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                 handleStates={handleStates}
@@ -157,7 +188,7 @@ export default function RegisterKYC () {
                                     text={'Save and continue'}
                                     testId= 'submit_button'
                                     className = 'max-w-[227px] ml-4 px-[51px]'
-                                    // onClick={handleClick}
+                                    onClick={handleSaveAndContinue}
                                     isLoading={false}
                                 />
                             </div>

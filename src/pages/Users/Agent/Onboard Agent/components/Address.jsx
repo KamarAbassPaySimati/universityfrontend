@@ -1,7 +1,7 @@
 import React from 'react';
 import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
 
-export default function Address ({ handleStates, states }) {
+export default function Address ({ handleStates, states, submitSelected }) {
     const AddressDetails = {
         nothing_to_show: {
             po_box_no: {
@@ -49,6 +49,7 @@ export default function Address ({ handleStates, states }) {
                 divisionObject = {AddressDetails}
                 handleOnChange={handleStates}
                 states={states}
+                submitSelected={submitSelected}
             />
         </>
     );
