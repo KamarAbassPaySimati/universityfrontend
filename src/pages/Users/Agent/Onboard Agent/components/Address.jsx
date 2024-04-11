@@ -1,7 +1,7 @@
 import React from 'react';
 import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
 
-export default function Address () {
+export default function Address ({ handleStates, states }) {
     const AddressDetails = {
         nothing_to_show: {
             po_box_no: {
@@ -12,7 +12,7 @@ export default function Address () {
             },
             street_name: {
                 label: 'Street Name',
-                type: 'input',
+                type: 'googleAPI',
                 key: 'street_name',
                 require: true
             },
@@ -30,13 +30,13 @@ export default function Address () {
             },
             town_village_ta: {
                 label: 'Town/Village/TA',
-                type: 'input',
+                type: 'googleAPI',
                 key: 'town_village_ta',
                 require: true
             },
             district: {
                 label: 'District',
-                type: 'input',
+                type: 'googleAPI',
                 key: 'district',
                 require: true
             }
@@ -47,6 +47,8 @@ export default function Address () {
             <FelidDivision
                 divisionClassName = {'w-1/3'}
                 divisionObject = {AddressDetails}
+                handleOnChange={handleStates}
+                states={states}
             />
         </>
     );

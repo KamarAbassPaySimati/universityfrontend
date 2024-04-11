@@ -9,12 +9,14 @@ import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams } from 'react-router-dom';
-import StreetNameDropdown from './GoogleApi';
 
 export default function RegisterKYC () {
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
-        personal_customer: 'Full KYC'
+        personal_customer: 'Full KYC',
+        po_box_no: '',
+        landmark: '',
+        house_number: ''
     });
     const [searchParams, setSearchParams] = useSearchParams();
     const ProgressBar = {
@@ -31,8 +33,12 @@ export default function RegisterKYC () {
             label: 'Personal Details'
         }
     };
-    const handleStates = (id, value) => {
-        setStates((prevState) => ({ ...prevState, [id]: value }));
+    const handleStates = (value, id, type) => {
+        if (type === 'input') {
+            setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+        } else {
+            setStates((prevState) => ({ ...prevState, [id]: value }));
+        }
     };
 
     const handleSearchParams = (id, value) => {
@@ -125,10 +131,13 @@ export default function RegisterKYC () {
                                 ProgressBar={ProgressBar}
                                 LineClass={'line-class'}
                             />
-                            {searchParams.get('tab') === 'address_details' && <Address />}
+                            {searchParams.get('tab') === 'address_details' &&
+                            <Address
+                                handleStates={handleStates}
+                                states={states}
+                            />}
                             {searchParams.get('tab') === 'identity_details' && <IdentityDetails />}
                             {searchParams.get('tab') === 'personal_details' && <PersonalDetails />}
-                            <StreetNameDropdown />
                         </div>
                         <div className='flex justify-between items-center'>
                             <div className='flex'>

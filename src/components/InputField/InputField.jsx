@@ -12,6 +12,7 @@ const InputField = ({
     id,
     error,
     label,
+    inputType,
     placeholder,
     loginError,
     showLoginError,
@@ -48,7 +49,7 @@ const InputField = ({
                 id={id}
                 placeholder={placeholder}
                 onFocus={() => onFocus(id)}
-                onChange={(e) => onChange(e, id)}
+                onChange={(e) => onChange(e, id, inputType)}
                 onKeyDown={handleKeyDown}
                 maxLength={maxLength}
                 disabled = {editAction === 'yes'}

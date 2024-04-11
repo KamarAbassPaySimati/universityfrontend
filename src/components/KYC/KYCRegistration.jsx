@@ -68,7 +68,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                                 className={`w-[240px] flex ${states?.citizen_type === item ? 'bg-background-light ' : ''}
                                 py-2.5 px-3 rounded items-center cursor-pointer ${index !== 0 ? ' ml-[22px]' : ''}`}
                                 key={item}
-                                onClick={() => handleStates('citizen_type', item)}
+                                onClick={() => handleStates(item, 'citizen_type')}
                             >
                                 <Image src={item.replaceAll(' ', '_').toLowerCase()}/>
                                 <p className='px-3 font-medium text-[15px] leading-[20px] text-neutral-primary'>{item}</p>
@@ -81,7 +81,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                             label={radioItem}
                             key={radioItem}
                             checkedState={states?.personal_customer === radioItem}
-                            handleRadioButton={() => handleStates('personal_customer', radioItem)}
+                            handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
                         />))}
                     <p className="ml-[30px] text-neutral-primary text-[12px]
                         leading-[20px] font-normal cursor-pointer mb-[36px]">

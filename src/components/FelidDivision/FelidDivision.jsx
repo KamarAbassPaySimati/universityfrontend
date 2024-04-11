@@ -1,10 +1,13 @@
 import React, { Fragment } from 'react';
 import InputField from '../InputField/InputField';
 import InputFieldWithDropDown from '../InputFieldWithDropDown/InputFieldWithDropDown';
+import GoogleApi from '../InputField/GoogleApi';
 
 export default function FelidDivision ({
     divisionClassName,
-    divisionObject
+    divisionObject,
+    handleOnChange,
+    states
 }) {
     return (
         <>
@@ -21,7 +24,6 @@ export default function FelidDivision ({
                                     divObj.type === 'dropdown'
                                         ? (
                                             <div className='mx-[10px]'>
-                                                {console.log('divObj.require', divObj.require)}
                                                 <InputFieldWithDropDown
                                                     labelName={`${divObj.label} 
                                                     ${(divObj.require === undefined || divObj.require) ? '' : '(Optional)'}`}
@@ -31,26 +33,37 @@ export default function FelidDivision ({
                                                     options={divObj.options}
                                                     id={divObj.key}
                                                     testId={divObj.key}
-                                                // information
-                                                // handleInput={handleInput}
+                                                    // information
+                                                    // handleInput={handleOnChange}
+                                                    // type={divObj.type}
                                                 />
                                             </div>)
-                                        : (
-                                            <InputField
-                                                className='mb-6'
-                                                divClassName='mx-2.5'
-                                                value={'val'}
-                                                // onChange={handleChange}
-                                                // onFocus={handleFocus}
-                                                id={divObj.key}
-                                                testId={divObj.key}
-                                                // error={formErrors.firstName}
-                                                label={`${divObj.label} 
+                                        : divObj.type === 'googleAPI'
+                                            ? (
+                                                <GoogleApi
+                                                    id={divObj.key}
+                                                    placeholder={`Enter ${divObj.label}`}
+                                                    testId={divObj.key}
+                                                    labelName={`${divObj.label} 
+                                                ${(divObj.require === undefined || divObj.require) ? '' : '(Optional)'}`} />
+                                            )
+                                            : (
+                                                <InputField
+                                                    className='mb-6'
+                                                    divClassName='mx-2.5'
+                                                    value={states[divObj.key]}
+                                                    // onFocus={handleFocus}
+                                                    id={divObj.key}
+                                                    testId={divObj.key}
+                                                    // error={formErrors.firstName}
+                                                    label={`${divObj.label} 
                                                 ${(divObj.require === undefined || divObj.require) ? '' : '(Optional)'}`}
-                                                placeholder={`Enter ${divObj.label}`}
-                                                // setEnteredLetter={setEnteredLetter}
-                                                maxLength="100"
-                                            />)}
+                                                    placeholder={`Enter ${divObj.label}`}
+                                                    // setEnteredLetter={setEnteredLetter}
+                                                    maxLength="100"
+                                                    onChange={handleOnChange}
+                                                    inputType={divObj.type}
+                                                />)}
                             </div>))}
                     </div>
                 </Fragment>

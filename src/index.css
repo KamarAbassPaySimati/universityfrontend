@@ -320,3 +320,10 @@ input[type='number'] {
   border-top-left-radius: 8px !important;
   outline: none;
 }
+
+input[type="file"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
