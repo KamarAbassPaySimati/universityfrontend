@@ -4,8 +4,7 @@ import Admin from '../pages/Users/Admin';
 import OnboardAdmin from '../pages/Users/Admin/Onboard admin/OnboardAdmin';
 import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
 import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView/SpecificAdminView';
-import KycVerification from '../pages/Verification/KYCVerification';
-
+import KycVerification from '../pages/Verification/KycVerification';
 export const ComponentsBasedOnRole = {
     'super-admin':
     [
