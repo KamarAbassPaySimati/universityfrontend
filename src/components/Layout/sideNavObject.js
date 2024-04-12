@@ -10,7 +10,11 @@ export const sideNavObject = {
         Verification: {
             path: 'verification',
             dropdown: ['KYC Verifications', 'Del. Account Request']
+        },
+        'Paymaart Banks': {
+            path: 'paymaart-banks/trust-banks'
         }
+
     },
     admin: {
         Dashboard: {
@@ -23,7 +27,11 @@ export const sideNavObject = {
         Verification: {
             path: 'verification',
             dropdown: ['KYC Verifications', 'Del. Account Request']
+        },
+        'Paymaart Banks': {
+            path: 'paymaart-banks/trust-banks'
         }
+
     },
     'support-admin': {
         Dashboard: {
@@ -41,6 +49,10 @@ export const sideNavObject = {
         Users: {
             path: 'users',
             dropdown: ['Agents', 'Merchants', 'Customers']
+        },
+        'Paymaart Banks': {
+            path: 'paymaart-banks/trust-banks'
         }
+
     }
 };

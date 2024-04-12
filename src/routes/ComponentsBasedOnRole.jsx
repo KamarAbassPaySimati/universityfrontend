@@ -5,6 +5,8 @@ import OnboardAdmin from '../pages/Users/Admin/Onboard admin/OnboardAdmin';
 import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
 import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView/SpecificAdminView';
 import KycVerification from '../pages/Verification/KycVerification';
+import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
+
 export const ComponentsBasedOnRole = {
     'super-admin':
     [
@@ -42,6 +44,11 @@ export const ComponentsBasedOnRole = {
             name: 'KYC Verification list',
             element: <KycVerification />,
             path: '/verification/kyc-verifications'
+        },
+        {
+            name: 'Paymaart Trust Banks',
+            element: <TrustBanks />,
+            path: '/paymaart-banks/trust-banks'
         }
     ],
     admin:
@@ -60,6 +67,11 @@ export const ComponentsBasedOnRole = {
             name: 'KYC Verification list',
             element: <KycVerification />,
             path: '/verification/kyc-verification'
+        },
+        {
+            name: 'Paymaart Trust Banks',
+            element: <TrustBanks />,
+            path: '/paymaart-banks/trust-banks'
         }
     ],
     'support-admin':
@@ -72,6 +84,10 @@ export const ComponentsBasedOnRole = {
     ],
     'finance-admin':
     [
-
+        {
+            name: 'Paymaart Trust Banks',
+            element: <TrustBanks />,
+            path: '/paymaart-banks/trust-banks'
+        }
     ]
 };
