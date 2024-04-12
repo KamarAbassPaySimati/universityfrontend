@@ -60,9 +60,22 @@ const KycVerification = () => {
                 url += `&sortOrder=${searchParams.get('sortOrder')}`;
             }
             if (searchParams.get('citizen') !== null) {
-                const citizenValue = searchParams.get('citizen').replace('citizen', '').trim();
-                url += `&citizenship=${citizenValue}`;
+                const citizenValues = searchParams.get('citizen').split(',').map(value => {
+                    const trimmedValue = value.trim().toLowerCase().replace(/citizen$/, '');
+                    switch (trimmedValue) {
+                    case 'malawi ':
+                        return 'malawi';
+                    case 'non malawi ':
+                        return 'nonMalawi';
+                    default:
+                        return trimmedValue; // Use original value if no correction needed
+                    }
+                });
+
+                const correctedValues = citizenValues.join(',');
+                url += `&citizenship=${correctedValues}`;
             }
+
             if (searchParams.get('simplifiedkyc') !== null) {
                 // Get the value of 'simplifiedkyc' from the searchParams and split it by ','
                 const simplifiedValues = searchParams.get('simplifiedkyc').split(',').map(value => {
@@ -105,17 +118,18 @@ const KycVerification = () => {
                 const correctedValues = fullKycValues.join(',');
                 url += `&fullStatus=${correctedValues}`;
             }
+            try {
+                // to get the data from authslice
+                dispatch(KycVerificationList(url));
+            } catch (error) {
+                setToastError('Something went wrong!');
+            }
         } else if (searchParams.get('type') === 'customers') {
-            url = 'get-agent-kyc';
+            setNotFound(true);
         } else if (searchParams.get('type') === 'merchants') {
-            url = 'get-agent-kyc';
-        }
-
-        try {
-            // to get the data from authslice
-            dispatch(KycVerificationList(url));
-        } catch (error) {
-            setToastError('Something went wrong!');
+            setNotFound(true);
+        } else {
+            setNotFound(true);
         }
     }, [searchParams]);
     // const GetList = useCallback(async () => {
@@ -169,62 +183,86 @@ const KycVerification = () => {
             setSearchParams={setSearchParams}
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
-                {(List?.data?.length !== 0 ||
-                (searchParams.get('search') !== null ||
-                searchParams.get('fullkyc') !== null ||
-                searchParams.get('simplifiedkyc') !== null)) && !notFound &&
-                <div className='bg-[#fff] border-b border-[#E5E9EB]'>
-                    {console.log('camhjjjj')}
-                    <Topbar
-                        setSearchParams={setSearchParams}// pass this as its getting updated
-                        searchParams={searchParams}// pass this because its used
-                        filterOptions={filterOptions}
-                        filter1={singleCheckOptions}
-                        filter2={fullKycOptions}
-                        filter3={simplifedKycOptions}
-                        filterType= 'Filter KYC Status'
-                        placeHolder= 'Paymaart ID or name '
-                        isLoading={loading}
-                        filterActive={(searchParams.get('citizen') !== null) || searchParams.get('simplifiedkyc') !== null ||
-                        searchParams.get('fullkyc') !== null}
-                        singleSelectFilter={true}
-                    />
-                </div>
-                }
-                {console.log(notFound, 'say')}
                 {
-                  
+                    (!notFound && List?.data?.length === 0 &&
+                        searchParams.get('page') === 1 && searchParams.get('citizen') === 'all' &&
+                    searchParams.get('search') === null)
+                        ? (
+                            <></>
+                        )
+                        : (<div className='bg-[#fff] border-b border-[#E5E9EB]'>
+                            {console.log('camhjjjj')}
+                            <Topbar
+                                setSearchParams={setSearchParams}// pass this as its getting updated
+                                searchParams={searchParams}// pass this because its used
+                                filterOptions={filterOptions}
+                                filter1={singleCheckOptions}
+                                filter2={fullKycOptions}
+                                filter3={simplifedKycOptions}
+                                filterType= 'Filter KYC Status'
+                                placeHolder= 'Paymaart ID or name '
+                                isLoading={loading}
+                                filterActive={(searchParams.get('citizen') !== null) ||
+                                searchParams.get('simplifiedkyc') !== null ||
+                            searchParams.get('fullkyc') !== null}
+                                singleSelectFilter={true}
+                            />
+                        </div>)
 
+                }
+                {
+                    (List?.data?.length !== 0 && !notFound) &&
 
-
-
-                    !notFound && !(List?.data?.length === 0 && !loading && !(searchParams.get('citizen') !== null ||
-                searchParams.get('search') !== null || searchParams.get('simplifiedkyc') !== null ||
-                searchParams.get('fullkyc') !== null)) &&
-
-                <div className='h-tableHeight scrollBar overflow-auto'>
-                    {console.log('comi')}
-                    <KycVerificationTable
-                        error={error}
-                        loading={loading}
-                        List={List}
-                        setSearchParams={setSearchParams}
-                        notFound={notFound}
-                        searchParams={searchParams}
-                    />
-                </div> }
+                    <div className='h-tableHeight scrollBar overflow-auto'>
+                        {console.log('comi')}
+                        <KycVerificationTable
+                            error={error}
+                            loading={loading}
+                            List={List}
+                            setSearchParams={setSearchParams}
+                            notFound={notFound}
+                            searchParams={searchParams}
+                        />
+                    </div> }
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No Data Found'
                     text = "404 could not find what you are looking for."/>}
-                {List?.data?.length === 0 && !loading &&
-    ((searchParams.get('fullkyc') === null && searchParams.get('search') === null &&
-    searchParams.get('simplifiedkyc') === null && searchParams.get('citizen') === 'all') ||
-    !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
-    searchParams.get('simplifiedkyc') === null)) &&
-    (<NoDataError className='h-noDataError'
-        heading='No profiles for verification'
-        text='No profiles currently require verification. Please check back later.' />)}
+
+                {
+                    (!notFound && List?.data?.length === 0 &&
+                        searchParams.get('page') === 1 && searchParams.get('citizen') === 'all' &&
+                        searchParams.get('search') === null)
+                        ? (
+                            <NoDataError className='h-noDataError'
+                                heading='No profiles for verification'
+                                text='No profiles currently require verification. Please check back later.' />
+                        )
+                        : (List?.data?.length === 0 && <NoDataError className='h-tableHeight'
+                            heading='No data found'
+                                text='Try adjusting your search or filter to find what you’re looking for' />)
+
+                }
+                {/*
+                {!notFound && List?.data?.length === 0 &&
+          (<NoDataError className='h-tableHeight'
+              heading='No data found'
+              text='Try adjusting your search or filter to find what you’re looking for' />)
+                }
+
+                {!notFound && searchParams.get('page') === 1 && List?.data?.length === 0 &&
+                (searchParams.get('citizen') !== 'all' || searchParams.get('citizen') !== 'malawi citizen' || searchParams.get('non malawi citizen')) &&
+                (<NoDataError className='h-tableHeight'
+                    heading='No data found'
+                    text='Try adjusting your search or filter to find what you’re looking for' />)
+                } */}
+
+                {/* { !notFound && List?.data?.length === 0 && !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
+    searchParams.get('simplifiedkyc') === null) || ((searchParams.get('citizen') !== 'all') || (searchParams.get('citizen') !== 'non malawi') || (searchParams.get('citizen') || 'malawi citizen')) &&
+    (<NoDataError className='h-tableHeight'
+        heading='No data found'
+        text='Try adjusting your search or filter to find what you’re looking for' />)
+                } */}
 
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
