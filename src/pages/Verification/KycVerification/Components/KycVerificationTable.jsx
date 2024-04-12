@@ -4,7 +4,6 @@ import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
-import NoDataError from '../../../../components/NoDataError/NoDataError';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 
 const KycVerificationTable = (
@@ -109,11 +108,11 @@ const KycVerificationTable = (
                     </tbody>
                 }
             </table>
-            {!notFound && error &&
+            {/* {!notFound && error &&
             (<NoDataError heading='No profiles for verification' text='No profiles currently require verification. Please check back later' />)}
             {List?.data?.length === 0 && !loading &&
             (searchParams.get('simplifiedkyc') !== null || searchParams.get('fullkyc') !== null || searchParams.get('search') !== null) &&
-            (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
+            (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)} */}
 
         </>
     );

@@ -118,18 +118,16 @@ const KycVerification = () => {
                 const correctedValues = fullKycValues.join(',');
                 url += `&fullStatus=${correctedValues}`;
             }
-            try {
-                // to get the data from authslice
-                dispatch(KycVerificationList(url));
-            } catch (error) {
-                setToastError('Something went wrong!');
-            }
         } else if (searchParams.get('type') === 'customers') {
-            setNotFound(true);
+            console.log('');
         } else if (searchParams.get('type') === 'merchants') {
-            setNotFound(true);
-        } else {
-            setNotFound(true);
+            console.log('');
+        }
+        try {
+            // to get the data from authslice
+            dispatch(KycVerificationList(url));
+        } catch (error) {
+            setToastError('Something went wrong!');
         }
     }, [searchParams]);
     // const GetList = useCallback(async () => {
@@ -143,7 +141,7 @@ const KycVerification = () => {
     useEffect(() => {
         console.log(error, 'error');
         if (error) {
-            if (error.status === 400) {
+            if (error.status === 400 || error.status === 404) {
                 setNotFound(true);
             } else {
                 setToastError('Something went wrong!');
@@ -185,13 +183,13 @@ const KycVerification = () => {
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {
                     (!notFound && List?.data?.length === 0 &&
-                        searchParams.get('page') === 1 && searchParams.get('citizen') === 'all' &&
-                    searchParams.get('search') === null)
+                        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
+                    searchParams.get('search') === null && searchParams.get('search') === null &&
+                    searchParams.get('simplifiedkyc') === null && searchParams.get('fullkyc') === null)
                         ? (
                             <></>
                         )
-                        : (<div className='bg-[#fff] border-b border-[#E5E9EB]'>
-                            {console.log('camhjjjj')}
+                        : (!notFound && <div className='bg-[#fff] border-b border-[#E5E9EB]'>
                             <Topbar
                                 setSearchParams={setSearchParams}// pass this as its getting updated
                                 searchParams={searchParams}// pass this because its used
@@ -231,38 +229,23 @@ const KycVerification = () => {
 
                 {
                     (!notFound && List?.data?.length === 0 &&
-                        searchParams.get('page') === 1 && searchParams.get('citizen') === 'all' &&
-                        searchParams.get('search') === null)
+        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
+        searchParams.get('search') === null &&
+        searchParams.get('search') === null && searchParams.get('simplifiedkyc') === null &&
+        searchParams.get('fullkyc') === null)
                         ? (
+
                             <NoDataError className='h-noDataError'
                                 heading='No profiles for verification'
                                 text='No profiles currently require verification. Please check back later.' />
                         )
-                        : (List?.data?.length === 0 && <NoDataError className='h-tableHeight'
-                            heading='No data found'
-                                text='Try adjusting your search or filter to find what you’re looking for' />)
-
-                }
-                {/*
-                {!notFound && List?.data?.length === 0 &&
-          (<NoDataError className='h-tableHeight'
-              heading='No data found'
-              text='Try adjusting your search or filter to find what you’re looking for' />)
-                }
-
-                {!notFound && searchParams.get('page') === 1 && List?.data?.length === 0 &&
-                (searchParams.get('citizen') !== 'all' || searchParams.get('citizen') !== 'malawi citizen' || searchParams.get('non malawi citizen')) &&
-                (<NoDataError className='h-tableHeight'
+                        : (List?.data?.length === 0 &&
+            (
+                <NoDataError className='h-tableHeight'
                     heading='No data found'
                     text='Try adjusting your search or filter to find what you’re looking for' />)
-                } */}
-
-                {/* { !notFound && List?.data?.length === 0 && !(searchParams.get('fullkyc') === null || searchParams.get('search') === null ||
-    searchParams.get('simplifiedkyc') === null) || ((searchParams.get('citizen') !== 'all') || (searchParams.get('citizen') !== 'non malawi') || (searchParams.get('citizen') || 'malawi citizen')) &&
-    (<NoDataError className='h-tableHeight'
-        heading='No data found'
-        text='Try adjusting your search or filter to find what you’re looking for' />)
-                } */}
+                        )
+                }
 
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
