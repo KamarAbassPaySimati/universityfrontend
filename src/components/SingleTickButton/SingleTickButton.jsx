@@ -6,21 +6,21 @@ const SingleTickButton = ({
     isSelected,
     searchParams,
     setSearchParams,
-    isLoading
+    isLoading,
+    dataTestId
 }) => {
     const handleSingleButtonClick = (selectedText) => {
         handleSearchParams('citizen', selectedText.toLowerCase(), searchParams, setSearchParams);
     };
-
     return (
         <button className={`${isSelected ? 'bg-primary-normal text-[#fff]' : 'text-neutral-primary'} 
         px-6 py-1 rounded-[8px] text-[#ffffff] font-400 text-[14px] ${isLoading ? 'opacity-50' : ''}`}
-                  onClick={() =>
+            onClick={() =>
             handleSingleButtonClick(singleCheckText)}
             disabled={isLoading}
+            data-testid={dataTestId}
         >
             {singleCheckText}
-
         </button>
     );
 };

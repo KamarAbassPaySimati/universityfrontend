@@ -65,6 +65,7 @@ const FilterWithSingleOption = ({
                                             setSearchParams={setSearchParams}
                                             isSelected={searchParams.get('citizen') === option?.toLowerCase()}
                                             isLoading={isLoading}
+                                            dataTestId={option}
                                         />
                                     ))}
                                 </div>
