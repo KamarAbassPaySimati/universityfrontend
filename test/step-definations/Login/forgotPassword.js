@@ -16,7 +16,7 @@ Before('@request_reset_password', async function () {
         const response = await requestResetPassword(payload);
         global.reset_password_link = response.token;
     } catch (err) {
-        console.log('err', err);
+        console.log('API Error', err);
     }
 });
 

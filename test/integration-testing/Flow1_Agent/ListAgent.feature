@@ -16,6 +16,10 @@ Feature: Paymaart- agent Web- View all Agent list
     5.Status(Active/Deactivated)
     6.Action(View,Edit,Payin)
 
+    @perform_logout
+    @wait
+    @add_normal_admin_user
+    @create_new_user_and_login
     Scenario: List all the agent users
         Given I navigate to agent users listing screen
         Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
@@ -43,7 +47,8 @@ Feature: Paymaart- agent Web- View all Agent list
         Then I should see list of agent users where status is "Active"
         When I click on clear filter
         Then I should see filter popup modal closed
-        
+
+    @delete_admin_account
     Scenario: Checking Pagination
         Given I navigate to agent users listing screen
         When I click on paginate next page

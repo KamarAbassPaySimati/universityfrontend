@@ -5,8 +5,6 @@ const { getBddSignedToken, getToken } = require('../bdd_modules/index.js');
 async function getMFASecret (payload) {
     const token = await getBddSignedToken();
 
-    console.log('token', token);
-    console.log('payload', payload);
     const axiosOptions = {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
