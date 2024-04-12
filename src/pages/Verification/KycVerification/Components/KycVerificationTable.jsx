@@ -52,7 +52,7 @@ const KycVerificationTable = (
                         <th className='py-2 px-[10px] text-left font-[400] '>Paymaart ID</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>Name</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
-                            <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_admin_name" onClick={() => handleSort('submission_date', searchParams, setSearchParams)}>
+                            <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_submission_date" onClick={() => handleSort('submission_date', searchParams, setSearchParams)}>
                                 <span>Submission Date</span>
                                 <Image src='sort_icon' />
                             </div>

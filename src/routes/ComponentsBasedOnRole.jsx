@@ -66,7 +66,7 @@ export const ComponentsBasedOnRole = {
         {
             name: 'KYC Verification list',
             element: <KycVerification />,
-            path: '/verification/kyc-verification'
+            path: '/verification/kyc-verifications'
         },
         {
             name: 'Paymaart Trust Banks',

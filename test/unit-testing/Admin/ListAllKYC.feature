@@ -1,5 +1,5 @@
 Feature: Paymaart - Admin Web -KYC verification Listing Page
-    As a super admin/admin, I want the ability to view a list of customers, agents, and merchants awaiting manual KYC verification.
+    As a super admin/admin, I want the ability to view a list of agents awaiting manual KYC verification.
     Condition of Satisfaction
     By default, the list should be in a chronological order
     There should be an option to search based on Paymaart ID and Name
@@ -31,22 +31,22 @@ Feature: Paymaart - Admin Web -KYC verification Listing Page
     Scenario: Sort functionality
         Given I navigate to agent KYC listing screen
         When I click on the sort by "Submission Date"
-        Then I should see the admin user sorted in ascending order based on "Submission Date"
+        Then I should see the KYC sorted in ascending order based on "Submission Date"
         * I click on the sort by "Submission Date"
-        And I should see the admin user sorted in descending order based on "Submission Date"
+        And I should see the KYC sorted in descending order based on "Submission Date"
 
     Scenario: Filter KYC listing KYC status
         Given I navigate to agent KYC listing screen
         When I click on filter tab
         Then I should see filter popup modal
-        And I select filter by KYC status as "In Progress"
-        Then I should see list of KYC where status is "In Progress"
+        And I select filter by KYC status as "Full KYC In Progress"
+        Then I should see list of KYC where status is "In-Progress"
 
     Scenario: Filter KYC listing Citizenship
         Given I navigate to agent KYC listing screen
         When I click on filter tab
         Then I should see filter popup modal
-        And I select filter by citizenship as "Malawi Citizenship"
+        And I select filter by citizenship as "Malawi Citizen"
         Then I should see list of KYC where citizenship is "Malawi"
 
     @delete_admin_account
@@ -62,8 +62,8 @@ Feature: Paymaart - Admin Web -KYC verification Listing Page
     @add_finance_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as finance admin and navigate to admin user listing
-        Given I navigate to admin users listing screen
+    Scenario: Login as finance admin and navigate to KYC listing screen
+        Given I navigate to agent KYC listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
 
@@ -72,8 +72,8 @@ Feature: Paymaart - Admin Web -KYC verification Listing Page
     @add_support_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as support admin and navigate to admin user listing
-        When I navigate to admin users listing screen
+    Scenario: Login as support admin and navigate to KYC listing screen
+        When I navigate to agent KYC listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
 
@@ -83,8 +83,5 @@ Feature: Paymaart - Admin Web -KYC verification Listing Page
     @create_new_user_and_login
     @delete_admin_account
     Scenario: Login as normal admin and view admin listing
-        When I navigate to admin users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
-        Then I should see view admin users button is hidden
-        And I should see edit admin users button is hidden
-        And I should see "onboard admin user" button is hidden
+        When I navigate to agent KYC listing screen
+        Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
