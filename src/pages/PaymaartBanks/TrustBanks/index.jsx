@@ -9,11 +9,10 @@ const TrustBanks = () => {
             pathurls={['paymaart-banks/trust-banks']}
             header='Banks'
             minHeightRequired={true}
-            headerWithoutButton={true}
-           
+            headerWithoutButton={false}
             table={false}
-           
         >
+        
         </CardHeader>
     );
 };
