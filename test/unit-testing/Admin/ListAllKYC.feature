@@ -34,54 +34,54 @@ Feature: Paymaart - Admin Web -KYC verification Listing Page
         Then I should see the KYC sorted in ascending order based on "Submission Date"
         * I click on the sort by "Submission Date"
         And I should see the KYC sorted in descending order based on "Submission Date"
-# 
-#     Scenario: Filter KYC listing KYC status
-#         Given I navigate to agent KYC listing screen
-#         When I click on filter tab
-#         Then I should see filter popup modal
-#         And I select filter by KYC status as "Full KYC In Progress"
-#         Then I should see list of KYC where status is "In-Progress"
-# 
-#     Scenario: Filter KYC listing Citizenship
-#         Given I navigate to agent KYC listing screen
-#         When I click on filter tab
-#         Then I should see filter popup modal
-#         And I select filter by citizenship as "Malawi Citizen"
-#         Then I should see list of KYC where citizenship is "Malawi"
-# 
-#     @delete_admin_account
-#     Scenario: Checking Pagination
-#         Given I navigate to agent KYC listing screen
-#         When I click on paginate next page
-#         Then I should be navigated to page 2
-#         When I click on paginate to previous page
-#         Then I should be navigated to page 1
-# 
-#     @perform_logout
-#     @wait
-#     @add_finance_admin_user
-#     @create_new_user_and_login
-#     @delete_admin_account
-#     Scenario: Login as finance admin and navigate to KYC listing screen
-#         Given I navigate to agent KYC listing screen
-#         Then I should read a message stating that "Page Not Found"
-#         And I should read a message stating that "We can’t find the page you’re looking for"
-# 
-#     @perform_logout
-#     @wait
-#     @add_support_admin_user
-#     @create_new_user_and_login
-#     @delete_admin_account
-#     Scenario: Login as support admin and navigate to KYC listing screen
-#         When I navigate to agent KYC listing screen
-#         Then I should read a message stating that "Page Not Found"
-#         And I should read a message stating that "We can’t find the page you’re looking for"
-# 
-#     @perform_logout
-#     @wait
-#     @add_normal_admin_user
-#     @create_new_user_and_login
-#     @delete_admin_account
-#     Scenario: Login as normal admin and view admin listing
-#         When I navigate to agent KYC listing screen
-#         Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
+
+    Scenario: Filter KYC listing KYC status
+        Given I navigate to agent KYC listing screen
+        When I click on filter tab
+        Then I should see filter popup modal
+        And I select filter by KYC status as "Full KYC In Progress"
+        Then I should see list of KYC where status is "In-Progress"
+
+    Scenario: Filter KYC listing Citizenship
+        Given I navigate to agent KYC listing screen
+        When I click on filter tab
+        Then I should see filter popup modal
+        And I select filter by citizenship as "Malawi Citizen"
+        Then I should see list of KYC where citizenship is "Malawi"
+
+    @delete_admin_account
+    Scenario: Checking Pagination
+        Given I navigate to agent KYC listing screen
+        When I click on paginate next page
+        Then I should be navigated to page 2
+        When I click on paginate to previous page
+        Then I should be navigated to page 1
+
+    @perform_logout
+    @wait
+    @add_finance_admin_user
+    @create_new_user_and_login
+    @delete_admin_account
+    Scenario: Login as finance admin and navigate to KYC listing screen
+        Given I navigate to agent KYC listing screen
+        Then I should read a message stating that "Page Not Found"
+        And I should read a message stating that "We can’t find the page you’re looking for"
+
+    @perform_logout
+    @wait
+    @add_support_admin_user
+    @create_new_user_and_login
+    @delete_admin_account
+    Scenario: Login as support admin and navigate to KYC listing screen
+        When I navigate to agent KYC listing screen
+        Then I should read a message stating that "Page Not Found"
+        And I should read a message stating that "We can’t find the page you’re looking for"
+
+    @perform_logout
+    @wait
+    @add_normal_admin_user
+    @create_new_user_and_login
+    @delete_admin_account
+    Scenario: Login as normal admin and view admin listing
+        When I navigate to agent KYC listing screen
+        Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
