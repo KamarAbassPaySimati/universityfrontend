@@ -5,7 +5,11 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
+        },
+        Verification: {
+            path: 'verification',
+            dropdown: ['KYC Verifications', 'Del. Account Request']
         }
     },
     admin: {
@@ -15,6 +19,10 @@ export const sideNavObject = {
         Users: {
             path: 'users',
             dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+        },
+        Verification: {
+            path: 'verification',
+            dropdown: ['KYC Verifications', 'Del. Account Request']
         }
     },
     'support-admin': {

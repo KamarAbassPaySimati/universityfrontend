@@ -46,7 +46,6 @@ const Filter = ({
                         </button>
                     </div>
                     <div className='p-4 flex flex-col gap-4'>
-
                         { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2 capitalize'>

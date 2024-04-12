@@ -39,7 +39,9 @@ export default {
                 'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
                 'neutral-grey': '#F8F8F8',
-
+                'accent-info-secondary': '#D9E8FE',
+                'accent-negative-secondary': '#FFE8E8',
+                'accent-positive-secondary': '#ECFDF5',
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
