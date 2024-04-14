@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from '../Image/Image';
 
-export default function DocumentSidebar ({ documentTypes }) {
+export default function DocumentSidebar ({ documentTypes, handleOnClick, selectedData }) {
     const getColor = (type) => {
         switch (type) {
         case 'pending':
@@ -21,7 +21,11 @@ export default function DocumentSidebar ({ documentTypes }) {
             {Object.keys(documentTypes).map((docItem) => (
                 <div className='flex items-center mb-[30px]' key={docItem}>
                     {/* for the not selected one we have to give text color as neutral-secondary */}
-                    <p className='cursor-pointer font-bold text-[16px] leading-4 text-neutral-primary mr-[18px]'>{docItem}</p>
+                    <p
+                        className={`cursor-pointer font-bold text-[16px] leading-4 
+                        ${selectedData === docItem ? 'text-neutral-primary' : 'text-neutral-secondary'}  mr-[18px]`}
+                        onClick={() => handleOnClick(docItem)}
+                    >{docItem}</p>
                     {getColor(documentTypes[docItem])}
                 </div>))}
         </div>

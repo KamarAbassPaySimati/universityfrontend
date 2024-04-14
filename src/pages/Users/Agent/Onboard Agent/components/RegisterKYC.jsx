@@ -20,6 +20,13 @@ export default function RegisterKYC () {
         landmark: '',
         house_number: ''
     });
+    const [documentSideBarData, setDocumentSidebarData] = useState({
+        documentTypes: {
+            'ID Document': 'clear',
+            'Verification Document': 'clear'
+        },
+        selectedData: 'ID Document'
+    });
     const [searchParams, setSearchParams] = useSearchParams();
     const ProgressBar = {
         address_details: {
@@ -170,6 +177,8 @@ export default function RegisterKYC () {
                             {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                 handleStates={handleStates}
                                 states={states}
+                                documentSideBarData={documentSideBarData}
+                                setDocumentSidebarData={setDocumentSidebarData}
                             />}
                             {searchParams.get('tab') === 'personal_details' &&
                             <PersonalDetails

@@ -1,10 +1,10 @@
 import { uploadData, remove } from 'aws-amplify/storage';
 
-export const handleUpload = async (file) => {
+export const handleUpload = async (file, path) => {
     console.log('file', file);
     try {
         const result = await uploadData({
-            key: file.name,
+            key: `${path}/${file.name}`,
             data: file,
             options: {
                 contentType: file.type, // optional, automatically inferred if not provided,

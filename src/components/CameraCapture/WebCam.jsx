@@ -24,25 +24,11 @@ export default function WebCam ({ handleStates, handleClose }) {
     );
 
     const handleCapture = async () => {
-        // const video = document.querySelector('video');
-        // const canvas = document.createElement('canvas');
-        // const context = canvas.getContext('2d');
-        // console.log('video', video, canvas);
         if (image) {
-            // setImageLoading(true);
-            // canvas.width = 1280;
-            // canvas.height = 600;
-            // context.drawImage(image, 0, 0);
-            // console.log(context.drawImage(image, 0, 0), 'context.drawImage(image, 0, 0)');
-            // const imageDataURL = canvas.toDataURL('image/jpeg');
-            // const imageBlob = imageDataURL;
             const fileName = `image-${uuidv4()}.jpeg`;
             var file = dataURLtoFile(image, fileName);
-            const capture = await handleUpload(file);
+            const capture = await handleUpload(file, uuidv4());
             handleStates(capture.key, 'capture');
-            // const val =`${filePath}/${file.name}`;
-            // setCapturedImage(val);
-            // setImageLoading(false);
             handleClose();
             setImage(null);
         }
