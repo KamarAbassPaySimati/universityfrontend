@@ -332,3 +332,7 @@ input[type="file"] {
   appearance: none;
   cursor: pointer;
 }
+
+iframe {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+}

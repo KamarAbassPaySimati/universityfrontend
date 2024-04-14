@@ -2,7 +2,7 @@ import React from 'react';
 import { DatePicker } from 'antd';
 import Image from '../Image/Image';
 
-const CustomDatePicker = ({ label }) => {
+const CustomDatePicker = ({ label, handleStates, value }) => {
     const getDisabledDate = (current) => {
         return current && current > Date.now();
     };
@@ -14,8 +14,10 @@ const CustomDatePicker = ({ label }) => {
                 autoComplete="off"
                 data-testid="date_picker"
                 placeholder="DD-MMM-YYYY"
+                value={value}
                 suffixIcon={<Image src='calendar'/>}
                 disabledDate={getDisabledDate}
+                onChange={(date, dateString) => handleStates(date, 'DOB')}
             />
         </div>
     );

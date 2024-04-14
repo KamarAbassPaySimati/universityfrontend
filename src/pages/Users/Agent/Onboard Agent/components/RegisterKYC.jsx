@@ -10,6 +10,7 @@ import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams } from 'react-router-dom';
+import IframeModal from '../../../../../components/Iframe/IframeModal';
 
 export default function RegisterKYC () {
     const [submitSelected, setSubmitSelected] = useState(false);
@@ -185,6 +186,7 @@ export default function RegisterKYC () {
                                 handleStates={handleStates}
                                 states={states}
                             />}
+                            {/* <IframeModal isOpen={true} link='https://example.com/path/to/your/pdf.pdf' /> */}
                         </div>
                         <div className='flex justify-between items-center'>
                             <div className='flex'>
