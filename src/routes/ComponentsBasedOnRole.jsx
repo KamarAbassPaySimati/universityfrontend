@@ -48,7 +48,7 @@ export const ComponentsBasedOnRole = {
         {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
-            path: '/paymaart-banks/trust-banks'
+            path: '/paymaart-banks'
         }
     ],
     admin:
@@ -71,7 +71,7 @@ export const ComponentsBasedOnRole = {
         {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
-            path: '/paymaart-banks/trust-banks'
+            path: '/paymaart-banks'
         }
     ],
     'support-admin':
@@ -87,7 +87,7 @@ export const ComponentsBasedOnRole = {
         {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
-            path: '/paymaart-banks/trust-banks'
+            path: '/paymaart-banks'
         }
     ]
 };

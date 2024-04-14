@@ -48,7 +48,12 @@ export default {
             },
             height: {
                 tableHeight: 'calc(100vh - 370px)',
+                tabledivHeight: 'calc(100vh - 458px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
+                heightSideBar: 'calc(100vh - 500px)',
+                heightSideBarOne: 'calc(100vh - 450px)',
+
+                heightFullWithPadding: 'calc(100vh - 57px)',
                 noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
             },
             minHeight: {

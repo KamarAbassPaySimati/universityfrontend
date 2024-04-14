@@ -12,7 +12,7 @@ export const sideNavObject = {
             dropdown: ['KYC Verifications', 'Del. Account Request']
         },
         'Paymaart Banks': {
-            path: 'paymaart-banks/trust-banks'
+            path: 'paymaart-banks'
         }
 
     },
@@ -29,7 +29,7 @@ export const sideNavObject = {
             dropdown: ['KYC Verifications', 'Del. Account Request']
         },
         'Paymaart Banks': {
-            path: 'paymaart-banks/trust-banks'
+            path: 'paymaart-banks'
         }
 
     },
@@ -51,7 +51,7 @@ export const sideNavObject = {
             dropdown: ['Agents', 'Merchants', 'Customers']
         },
         'Paymaart Banks': {
-            path: 'paymaart-banks/trust-banks'
+            path: 'paymaart-banks'
         }
 
     }
