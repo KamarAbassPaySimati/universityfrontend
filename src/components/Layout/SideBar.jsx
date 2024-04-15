@@ -76,7 +76,6 @@ const SideBar = ({ role }) => {
 
     const handleDropDown = (key, dropDown) => {
         if (dropDown === undefined) {
-            console.log(key, 'keyyyy');
             navigate(key);
         }
         dispatch(setDropdown(key));

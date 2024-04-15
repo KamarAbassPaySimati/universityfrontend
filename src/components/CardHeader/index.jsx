@@ -34,16 +34,16 @@ const CardHeader = ({
         }
         return result;
     }
-    const handleToggle = (index) => {
-        const updatedButtons = toggleButtons.map((button, i) => {
-            if (i === index) {
-                return { ...button, status: true };
-            } else {
-                return { ...button, status: false };
-            }
-        });
-        onToggle(updatedButtons); // Notify the parent component of the updated button values
-    };
+    // const handleToggle = (index) => {
+    //     const updatedButtons = toggleButtons.map((button, i) => {
+    //         if (i === index) {
+    //             return { ...button, status: true };
+    //         } else {
+    //             return { ...button, status: false };
+    //         }
+    //     });
+    //     onToggle(updatedButtons); // Notify the parent component of the updated button values
+    // };
 
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>

@@ -50,13 +50,14 @@ export default function DocumentSidebar ({ documentTypes, height, searchParams, 
             }
         }
     };
+    console.log(height, 'hhhh');
     return (
-        <div className={`w-[30%] border-r-[1px] border-[#000000] h-${height}`} >
+        <div className={`w-[30%] border-r-[1px] border-[#000000] ${height}`}>
             {Object.keys(documentTypes).map((docItem) => (
                 <div className='flex items-center mb-[30px]' key={docItem}>
                     {/* for the not selected one we have to give text color as neutral-secondary */}
-                    <p className= {`cursor-pointer font-bold text-[16px] 
-                    leading-4  mr-[18px] ${searchParams ? getTextColor(docItem) : 'text-neutral-secondary'}`}
+                    <p data-testid={docItem} className= {`cursor-pointer font-bold text-[16px] 
+                    leading-4  mr-[10px] ${searchParams ? getTextColor(docItem) : 'text-neutral-secondary'}`}
                         onClick={() => searchParams
                         ? handleSearchParams('type', docItem.toLowerCase().replace(/ /g, '-').replace(/&/g, 'and'),
                             searchParams, setSearchParams, 'false')
