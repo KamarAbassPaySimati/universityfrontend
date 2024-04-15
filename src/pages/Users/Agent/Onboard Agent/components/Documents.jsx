@@ -6,7 +6,7 @@ import InformationList from '../../../../../components/InformationList/Informati
 import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
 import { Tooltip } from 'react-tooltip';
 
-export default function Documents ({ type, handleStates, states }) {
+export default function Documents ({ type, handleStates, states, submitSelected }) {
     const IdDocumentList = ['National ID', 'Passport'];
     const VerificationDocumentList = [
         'Driver\'s Licence',
@@ -125,12 +125,12 @@ export default function Documents ({ type, handleStates, states }) {
             <div className="w-[48%] relative">
                 <InputFieldWithDropDown
                     labelName={type}
-                    value={states?.id_type === undefined ? '' : states?.id_type}
+                    value={states[type] === undefined ? '' : states[type]}
                     placeholder={`Select ${type}`}
-                    // error={formErrors.role}
+                    error={submitSelected && (states[type] === undefined || states[type] === '') ? 'Required field' : undefined}
                     options={type !== 'ID Document' ? VerificationDocumentList : IdDocumentList}
-                    id="id_type"
-                    testId="id_type"
+                    id={type}
+                    testId={type}
                     information
                     handleInput={handleStates}
                 />
@@ -152,23 +152,28 @@ export default function Documents ({ type, handleStates, states }) {
                 <div className="w-[48%] relative">
                     <UploadPlaceholder
                         label="Front"
-                        disabled={states?.id_type === undefined}
-                        path={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}/front`}
+                        disabled={states[type] === undefined}
+                        path={`${states[type]?.replaceAll(' ', '_').toLowerCase()}/front`}
                         handleUploadImg={handleStates}
-                        selectedUploadImg={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}_img_front`}
+                        selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`}
                         states={states}
                         handleStates={handleStates}
+                        error={submitSelected && (states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`] ===
+                        undefined ||
+                        states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`] === '')}
                     />
                 </div>
-                {states?.id_type !== 'Passport' && <div className="w-[48%] relative ml-[4%]">
+                {states[type] !== 'Passport' && <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder
                         label="Back"
-                        disabled={states?.id_type === undefined}
-                        path={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}/back`}
-                        handleUploadImg={handleStates}
-                        selectedUploadImg={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}_img_back`}
+                        disabled={states[type] === undefined}
+                        path={`${states[type]?.replaceAll(' ', '_').toLowerCase()}/back`}
+                        selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_back`}
                         states={states}
                         handleStates={handleStates}
+                        error={submitSelected && (states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_back`] ===
+                        undefined ||
+                        states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_back`] === '')}
                     />
                 </div>}
 

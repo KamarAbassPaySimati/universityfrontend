@@ -105,13 +105,10 @@ const OnboardAdmin = ({ actionKey }) => {
         if (formData.phoneNumber && (formData.phoneNumber.replace(/\s/g, '').length < 9)) {
             errors.phoneNumber = 'Invalid phone number';
             hasError = true;
-            console.log('true3');
         }
         // Set the form errors
-        console.log('hasError', hasError);
         setFormErrors(errors);
         if (!hasError) {
-            console.log('kkkkkkkk');
             try {
                 setIsLoading(true);
                 const payload = {
@@ -193,8 +190,6 @@ const OnboardAdmin = ({ actionKey }) => {
                 if (response.payload.error) {
                     setToastError('Something went wrong!');
                 } else {
-                    console.log(response, 'response');
-                    console.log(response.payload.data.data[0].first_name, 'firstname');
                     setFormData({
                         firstName: response.payload.data.data[0].first_name || '',
                         middleName: response.payload.data.data[0].middle_name || '',
@@ -228,7 +223,6 @@ const OnboardAdmin = ({ actionKey }) => {
                 <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                     Basic Details
                 </h1>
-                {console.log(loading, 'loaderrrrr')}
                 {actionKey === 'update' && loading
                     ? <div className='flex flex-wrap'>
                         {[...Array(3)].map((_, ind) => (

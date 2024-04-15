@@ -205,7 +205,6 @@ Before('@add_admin_user', async function () {
             paymaart_id: paymaart_ID,
             phone_number_without_country_code: phone_number
         };
-        console.log('global.admin_user', global.admin_user);
         await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
@@ -456,7 +455,6 @@ When('I scan the QR code', { timeout: 20000 }, async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
     const qr_code_data = extractQRCodeData(canvas_data);
 
-    console.log('qr_code_data', qr_code_data);
     // Split the URI by the '?' character to get the parameters
     const uriParts = qr_code_data.split('?');
     // Iterate through the parameters to find the 'secret' parameter
@@ -470,7 +468,6 @@ When('I scan the QR code', { timeout: 20000 }, async function () {
     }
 
     global.TOTP = await generateTOTP(secret, 0);
-    console.log('TOPTP', global.TOTP);
 });
 
 Given('I am on the TOTP screen', async function () {
@@ -522,7 +519,6 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 
     const response = await getMFASecret({ username: global.admin_user.email_address });
     const secret = response.mfa_code;
-    console.log('secret 123', secret);
     global.TOTP = await generateTOTP(secret, 0);
 
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -550,7 +546,6 @@ Then('I should be presented with 2FA Enabled successfully page', async function 
     const element_body = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-content"]')));
     await driver.wait(until.elementIsVisible(element_body));
     const element_body_content = await element_header.getText();
-    console.log('element_body_content', element_body_content);
     assert.notEqual(element_body_content, '');
 });
 

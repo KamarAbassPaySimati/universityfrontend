@@ -10,17 +10,17 @@ export default function Address ({ handleStates, states, submitSelected }) {
                 key: 'po_box_no',
                 require: false
             },
-            street_name: {
-                label: 'Street Name',
-                type: 'googleAPI',
-                key: 'street_name',
-                require: true
-            },
             house_number: {
                 label: 'House Name/Number ',
                 type: 'input',
                 key: 'house_number',
                 require: false
+            },
+            street_name: {
+                label: 'Street Name',
+                type: 'googleAPI',
+                key: 'street_name',
+                require: true
             },
             landmark: {
                 label: 'Landmark',

@@ -78,19 +78,27 @@ export default function RegisterKYC () {
         case 'back':
             switch (searchParams.get('tab')) {
             case 'address_details':
+                setProgressBarStatus(ProgressBar);
                 nextTab = null;
                 break;
             case 'identity_details':
                 nextTab = 'address_details';
-                if (!handleValidation('address_details', 'skip')) {
+                if (!handleValidation('identity_details', 'skip')) {
                     console.log('error');
                     handleStatusBar('address_details', 'current');
                 } else {
-                    handleStatusBar('address_details', 'active');
+                    handleStatusBar('identity_details', 'active');
                 }
                 break;
             case 'personal_details':
                 nextTab = 'identity_details';
+                if (!handleValidation('personal_details', 'skip')) {
+                    console.log('error');
+                    handleStatusBar('personal_details', 'current', 'back');
+                } else {
+                    // handleStatusBar('identity_details', 'current');
+                    // handleStatusBar('personal_details', 'active');
+                }
                 break;
             default:
                 break;
@@ -109,6 +117,12 @@ export default function RegisterKYC () {
                 break;
             case 'identity_details':
                 nextTab = 'personal_details';
+                if (!handleValidation('identity_details', 'skip')) {
+                    console.log('error');
+                    handleStatusBar('personal_details', 'inactive');
+                } else {
+                    handleStatusBar('personal_details', 'active');
+                }
                 break;
             case 'personal_details':
                 nextTab = 'success';
@@ -139,10 +153,17 @@ export default function RegisterKYC () {
     const handleValidation = (type, key) => {
         let count = 0;
         const AddressDetails = ['street_name', 'town_village_ta', 'district'];
-        // const Documents = {
-        //     'National ID' : []
-        //     'Passport' : []
-        // }
+        const IdDocuments = {
+            'National ID': ['national_id_img_front', 'national_id_img_back'],
+            Passport: ['passport_img_front']
+        };
+        const VerificationDocument = {
+            'Driver\'s Licence': ['dl_img_front', 'dl_img_back'],
+            'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
+            'Birth Certificate': ['birth_cert_img_front', 'birth_cert_img_back'],
+            'Employer letter': ['employer_letter_img_front', 'employer_letter_img_back'],
+            'Institute letter': ['institute_letter_img_front', 'institute_letter_img_back']
+        };
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -156,14 +177,57 @@ export default function RegisterKYC () {
             );
             return count === 0;
         case 'identity_details':
-
+            if (states.capture === undefined || states.capture === '') {
+                if (key !== 'skip') {
+                    setSubmitSelected(true);
+                }
+                count = count + 1;
+            }
+            if (documentSideBarData.selectedData === 'ID Document') {
+                if (states[documentSideBarData?.selectedData] !== '' && states[documentSideBarData?.selectedData] !== undefined) {
+                    console.log('iddddd', states[documentSideBarData?.selectedData]);
+                    IdDocuments[states[documentSideBarData?.selectedData]].map((selectedItem) => {
+                        if (states[selectedItem] === undefined || states[selectedItem] === '') {
+                            console.log('diiii')
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        }
+                    });
+                } else {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                    }
+                    count = count + 1;
+                }
+            } else {
+                if (states[documentSideBarData.selectedData] !== '' && states[documentSideBarData.selectedData] !== undefined) {
+                    VerificationDocument[states[documentSideBarData.selectedData]].map((selectedItem) => {
+                        if (states[selectedItem] === undefined || states[selectedItem] === '') {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        }
+                    });
+                } else {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                    }
+                    count = count + 1;
+                }
+            }
+            console.log('count', count);
+            return count === 0;
+        case 'personal_details':
+            
         default:
             break;
         }
-        
     };
 
-    const handleStatusBar = (key, value) => {
+    const handleStatusBar = (key, value, type) => {
         console.log('value', value);
         switch (key) {
         case 'address_details':
@@ -192,6 +256,34 @@ export default function RegisterKYC () {
                 }
             }));
             break;
+        case 'personal_details':
+            if (type === 'back') {
+                setProgressBarStatus((prevState) => ({
+                    ...prevState,
+                    identity_details: {
+                        status: 'current',
+                        label: 'Identity Details'
+                    },
+                    personal_details: {
+                        status: 'inactive',
+                        label: 'Personal Details'
+                    }
+                }));
+            } else {
+                setProgressBarStatus((prevState) => ({
+                    ...prevState,
+                    identity_details: {
+                        status: value,
+                        label: 'Identity Details'
+                    },
+                    personal_details: {
+                        status: 'current',
+                        label: 'Personal Details'
+                    }
+                }));
+            }
+            
+            break;
 
         default:
             break;
@@ -207,7 +299,14 @@ export default function RegisterKYC () {
                 handleSearchParams('tab', 'identity_details');
             }
             break;
-
+        case 'identity_details':
+            if (!handleValidation('identity_details')) {
+                console.log('error');
+            } else {
+                handleStatusBar('personal_details', 'active');
+                handleSearchParams('tab', 'personal_details');
+            }
+            break;
         default:
             break;
         }
@@ -256,6 +355,7 @@ export default function RegisterKYC () {
                                 states={states}
                                 documentSideBarData={documentSideBarData}
                                 setDocumentSidebarData={setDocumentSidebarData}
+                                submitSelected={submitSelected}
                             />}
                             {searchParams.get('tab') === 'personal_details' &&
                             <PersonalDetails

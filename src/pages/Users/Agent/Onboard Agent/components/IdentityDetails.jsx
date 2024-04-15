@@ -2,7 +2,7 @@ import React from 'react';
 import DocumentSidebar from '../../../../../components/DocumentTab/DocumentSidebar';
 import Documents from './Documents';
 
-export default function IdentityDetails ({ handleStates, states, documentSideBarData, setDocumentSidebarData }) {
+export default function IdentityDetails ({ handleStates, states, documentSideBarData, setDocumentSidebarData, submitSelected }) {
     const handleOnClick = (selectedItem) => {
         setDocumentSidebarData(prevState => {
             return { ...prevState, selectedData: selectedItem };
@@ -19,6 +19,7 @@ export default function IdentityDetails ({ handleStates, states, documentSideBar
                 type={documentSideBarData.selectedData}
                 handleStates={handleStates}
                 states={states}
+                submitSelected={submitSelected}
             />
         </div>
     );

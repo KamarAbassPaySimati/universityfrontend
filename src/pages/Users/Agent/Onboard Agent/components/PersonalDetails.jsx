@@ -129,7 +129,6 @@ export default function PersonalDetails ({ handleStates, states }) {
             <div className='ml-2.5'>
                 <DatePickerAntd label={'Date of Birth'} handleStates={handleStates} value={states?.DOB}/>
             </div>
-            {console.log('BBBB', states)}
             <div className='flex w-full items-end'>
                 <div className='w-1/3 mt-6 ml-2.5 '>
                     <div className='pr-[20px]'>

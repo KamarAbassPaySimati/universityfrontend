@@ -4,8 +4,10 @@ import { handleDelete, handleUpload } from './S3Functions';
 import ImageLoader from './ImageLoader';
 import IframeModal from '../Iframe/IframeModal';
 
-export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled }) {
+export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled, error }) {
     const [loadingImg, setLoadingImg] = useState(false);
+    const [showIframe, setShowIframe] = useState(false);
+
     const handleUploadFile = async (e) => {
         try {
             setLoadingImg(true);
@@ -16,7 +18,6 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             console.log('errrr', error);
         }
     };
-    const [showIframe, setShowIframe] = useState(false);
     return (
         <div className=' py-4'>
             <p className='font-medium text-[14px] leading-4'>{label}</p>
@@ -39,8 +40,8 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                 : <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
                     <div className="md:flex">
                         <div className="w-full py-3">
-                            <div className=" border border-dashed h-48
-                        rounded-lg  border-neutral-secondary flex justify-center items-center">
+                            <div className={`border border-dashed h-48
+                        rounded-lg ${error ? 'border-error' : 'border-neutral-secondary'} flex justify-center items-center`}>
                                 {loadingImg
                                     ? <ImageLoader />
                                     : <>
