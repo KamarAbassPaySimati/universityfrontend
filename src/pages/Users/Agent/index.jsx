@@ -32,23 +32,29 @@ const Agent = () => {
     Here's a breakdown of what it does: */
     const GetList = useCallback(async () => {
         try {
-            dispatch(AgentList(searchParams)).then((response) => {
-                if (response.payload.error) {
-                    if (error.status === 400) {
-                        setNotFound(true);
-                    } else {
-                        setToastError('Something went wrong!');
-                    }
-                } else {
-                    if (response.payload.data.length !== 0) {
-                        setNotFound(false);
-                    }
-                }
-            });
+            dispatch(AgentList(searchParams));
         } catch (error) {
-            console.error('geterror', error);
+            console.error(error);
         }
     }, [searchParams]);
+
+    useEffect(() => {
+        console.log(error, 'error');
+        if (error) {
+            if (error.status === 400) {
+                setNotFound(true);
+            } else {
+                setToastError('Something went wrong!');
+            }
+        }
+    }, [error]);
+    useEffect(() => {
+        const params = Object.fromEntries(searchParams);
+        if (List?.data?.length !== 0) {
+            setNotFound(false);
+            params.page = 1;
+        }
+    }, [List]);
 
     /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
@@ -60,6 +66,10 @@ const Agent = () => {
             GetList();
         }
     }, [GetList]);
+
+    useEffect(() => {
+        console.log(notFound, 'not');
+    }, [notFound]);
     return (
         <CardHeader
             activePath='Agents'
@@ -70,6 +80,7 @@ const Agent = () => {
             buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Agent'}`}
             navigationPath='/users/agents/register-agent'
             table={true}
+            headerWithoutButton={false}
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(List?.data?.length !== 0 ||

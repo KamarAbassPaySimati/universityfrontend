@@ -5,8 +5,16 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
+        },
+        Verification: {
+            path: 'verification',
+            dropdown: ['KYC Verifications', 'Del. Account Request']
+        },
+        'Paymaart Banks': {
+            path: 'paymaart-banks'
         }
+
     },
     admin: {
         Dashboard: {
@@ -15,7 +23,15 @@ export const sideNavObject = {
         Users: {
             path: 'users',
             dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+        },
+        Verification: {
+            path: 'verification',
+            dropdown: ['KYC Verifications', 'Del. Account Request']
+        },
+        'Paymaart Banks': {
+            path: 'paymaart-banks'
         }
+
     },
     'support-admin': {
         Dashboard: {
@@ -33,6 +49,10 @@ export const sideNavObject = {
         Users: {
             path: 'users',
             dropdown: ['Agents', 'Merchants', 'Customers']
+        },
+        'Paymaart Banks': {
+            path: 'paymaart-banks'
         }
+
     }
 };

@@ -39,14 +39,20 @@ export default {
                 'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
                 'neutral-grey': '#F8F8F8',
-
+                'accent-info-secondary': '#D9E8FE',
+                'accent-negative-secondary': '#FFE8E8',
+                'accent-positive-secondary': '#ECFDF5',
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
             },
             height: {
                 tableHeight: 'calc(100vh - 370px)',
+                tabledivHeight: 'calc(100vh - 458px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
+                heightSideBar: 'calc(100vh - 500px)',
+                heightSideBarOne: 'calc(100vh - 400px)',
+                heightFullWithPadding: 'calc(100vh - 57px)',
                 noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
             },
             minHeight: {

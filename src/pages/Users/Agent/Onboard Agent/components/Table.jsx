@@ -6,7 +6,7 @@ import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
 import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
-import handleSort from '../../../../../CommonMethods/ListFunctions';
+import { handleSort } from '../../../../../CommonMethods/ListFunctions';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     return (

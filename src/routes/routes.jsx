@@ -34,7 +34,6 @@ export default function NavigationRoutes (props) {
     const [pageLoading, setPageLoading] = useState(true);
 
     const checkLoggedInUser = async () => {
-        console.log(isFirstTimeRender.current, 'qqq');
         try {
             if (isFirstTimeRender.current) {
                 setPageLoading(true);
