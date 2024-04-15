@@ -10,7 +10,6 @@ import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams } from 'react-router-dom';
-import IframeModal from '../../../../../components/Iframe/IframeModal';
 
 export default function RegisterKYC () {
     const [submitSelected, setSubmitSelected] = useState(false);
@@ -39,14 +38,28 @@ export default function RegisterKYC () {
             label: 'Identity Details'
         },
         personal_details: {
-            status: 'active',
+            status: 'inactive',
             label: 'Personal Details'
         }
     };
+    const [progressBarStatus, setProgressBarStatus] = useState(ProgressBar);
     const handleStates = (value, id, type) => {
         setSubmitSelected(false);
         if (type === 'input') {
             setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+        } else if (type === 'checkBox') {
+            let checkBoxArray = states.purpose === undefined ? [] : states.purpose;
+            if (value.target.checked) {
+                // If checkbox is checked, add the value to checkedItems array
+                checkBoxArray = [...checkBoxArray, value.target.value];
+            } else {
+                // If checkbox is unchecked, remove the value from checkedItems array
+                checkBoxArray = checkBoxArray.filter(item => item !== value.target.value);
+            }
+            setStates((prevState) => ({
+                ...prevState,
+                purpose: checkBoxArray
+            }));
         } else {
             setStates((prevState) => ({ ...prevState, [id]: value }));
         }
@@ -59,6 +72,7 @@ export default function RegisterKYC () {
         setSearchParams({ ...params });
     };
     const handleTabChange = (buttonType) => {
+        setSubmitSelected(false);
         let nextTab = searchParams.get('tab');
         switch (buttonType) {
         case 'back':
@@ -68,6 +82,12 @@ export default function RegisterKYC () {
                 break;
             case 'identity_details':
                 nextTab = 'address_details';
+                if (!handleValidation('address_details', 'skip')) {
+                    console.log('error');
+                    handleStatusBar('address_details', 'current');
+                } else {
+                    handleStatusBar('address_details', 'active');
+                }
                 break;
             case 'personal_details':
                 nextTab = 'identity_details';
@@ -80,6 +100,12 @@ export default function RegisterKYC () {
             switch (searchParams.get('tab')) {
             case 'address_details':
                 nextTab = 'identity_details';
+                if (!handleValidation('address_details', 'skip')) {
+                    console.log('error');
+                    handleStatusBar('identity_details', 'inactive');
+                } else {
+                    handleStatusBar('identity_details', 'active');
+                }
                 break;
             case 'identity_details':
                 nextTab = 'personal_details';
@@ -110,25 +136,74 @@ export default function RegisterKYC () {
             break;
         }
     };
-    const handleValidation = () => {
+    const handleValidation = (type, key) => {
         let count = 0;
         const AddressDetails = ['street_name', 'town_village_ta', 'district'];
-        AddressDetails.map((item) => {
-            if (states[item] === '' || states[item] === undefined) {
-                setSubmitSelected(true);
-                count = count + 1;
+        // const Documents = {
+        //     'National ID' : []
+        //     'Passport' : []
+        // }
+        switch (type) {
+        case 'address_details':
+            AddressDetails.map((item) => {
+                if (states[item] === '' || states[item] === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                    }
+                    count = count + 1;
+                }
             }
+            );
+            return count === 0;
+        case 'identity_details':
+
+        default:
+            break;
         }
-        );
-        return count === 0;
+        
     };
 
+    const handleStatusBar = (key, value) => {
+        console.log('value', value);
+        switch (key) {
+        case 'address_details':
+            setProgressBarStatus((prevState) => ({
+                ...prevState,
+                address_details: {
+                    status: value,
+                    label: 'Address Details'
+                },
+                identity_details: {
+                    status: 'inactive',
+                    label: 'Identity Details'
+                }
+            }));
+            break;
+        case 'identity_details':
+            setProgressBarStatus((prevState) => ({
+                ...prevState,
+                address_details: {
+                    status: value,
+                    label: 'Address Details'
+                },
+                identity_details: {
+                    status: 'current',
+                    label: 'Identity Details'
+                }
+            }));
+            break;
+
+        default:
+            break;
+        }
+    };
     const handleSaveAndContinue = () => {
         switch (searchParams.get('tab')) {
         case 'address_details':
-            if (!handleValidation()) {
+            if (!handleValidation('address_details')) {
                 console.log('error');
             } else {
+                handleStatusBar('identity_details', 'active');
                 handleSearchParams('tab', 'identity_details');
             }
             break;
@@ -137,6 +212,7 @@ export default function RegisterKYC () {
             break;
         }
     };
+    console.log('nxnwnxnwnwxn', states);
     return (
         <CardHeader
             activePath='Register Agent'
@@ -166,7 +242,7 @@ export default function RegisterKYC () {
                 `}>
                         <div className='flex flex-col'>
                             <StatusProgressBar
-                                ProgressBar={ProgressBar}
+                                ProgressBar={progressBarStatus}
                                 LineClass={'line-class'}
                             />
                             {searchParams.get('tab') === 'address_details' &&
@@ -186,7 +262,6 @@ export default function RegisterKYC () {
                                 handleStates={handleStates}
                                 states={states}
                             />}
-                            {/* <IframeModal isOpen={true} link='https://example.com/path/to/your/pdf.pdf' /> */}
                         </div>
                         <div className='flex justify-between items-center'>
                             <div className='flex'>

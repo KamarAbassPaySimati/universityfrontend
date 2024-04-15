@@ -152,6 +152,7 @@ export default function Documents ({ type, handleStates, states }) {
                 <div className="w-[48%] relative">
                     <UploadPlaceholder
                         label="Front"
+                        disabled={states?.id_type === undefined}
                         path={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}/front`}
                         handleUploadImg={handleStates}
                         selectedUploadImg={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}_img_front`}
@@ -162,7 +163,9 @@ export default function Documents ({ type, handleStates, states }) {
                 {states?.id_type !== 'Passport' && <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder
                         label="Back"
+                        disabled={states?.id_type === undefined}
                         path={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}/back`}
+                        handleUploadImg={handleStates}
                         selectedUploadImg={`${states?.id_type?.replaceAll(' ', '_').toLowerCase()}_img_back`}
                         states={states}
                         handleStates={handleStates}

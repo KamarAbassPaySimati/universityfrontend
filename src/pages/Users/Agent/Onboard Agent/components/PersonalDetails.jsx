@@ -129,7 +129,7 @@ export default function PersonalDetails ({ handleStates, states }) {
             <div className='ml-2.5'>
                 <DatePickerAntd label={'Date of Birth'} handleStates={handleStates} value={states?.DOB}/>
             </div>
-            {console.log("BBBB", states)}
+            {console.log('BBBB', states)}
             <div className='flex w-full items-end'>
                 <div className='w-1/3 mt-6 ml-2.5 '>
                     <div className='pr-[20px]'>
@@ -165,14 +165,19 @@ export default function PersonalDetails ({ handleStates, states }) {
                 </div>
                 }
                 {states?.occupation === 'In full time education' && <div className='w-1/3'>
-                    <InputSearch handleSearchItem/>
+                    <InputSearch
+                        testId='education'
+                        // id,
+                        // handleInput,
+                        handleSearchItem
+                    />
                 </div>}
                 {(states?.occupation === 'Self Employed' || states?.occupation === 'Others') &&
                 <div className='w-1/3'>
                     <InputField
                         className=''
                         divClassName='mx-2.5'
-                        value={''}
+                        value={states?.self_employed === undefined ? '' : states.self_employed}
                         // onFocus={handleFocus}
                         id='self_employed'
                         testId='self_employed'
@@ -196,7 +201,7 @@ export default function PersonalDetails ({ handleStates, states }) {
                 <FelidDivision
                     divisionClassName = {'w-1/3'}
                     divisionObject = {EmployedFelids}
-                    handleStates={handleStates}
+                    handleOnChange={handleStates}
                     states={states}
                 />
             </div>
@@ -206,9 +211,11 @@ export default function PersonalDetails ({ handleStates, states }) {
                     Purpose and intended nature of the business relationship  (Tick all applicable)</p>
                 {Purpose.map((purposeItem, index) => (
                     <InputTypeCheckbox
-                        key={index}
-                        id={index}
+                        key={purposeItem}
+                        id={purposeItem}
                         checkboxText={purposeItem}
+                        handleOnChange={handleStates}
+                        Checked={states?.purpose !== undefined ? states?.purpose.includes(purposeItem) : false}
                     />
                 ))}
                 {/* <InputTypeCheckbox id={1} checkboxText={'checkboxText'}/> */}
@@ -216,7 +223,7 @@ export default function PersonalDetails ({ handleStates, states }) {
             <FelidDivision
                 divisionClassName = {'w-1/3'}
                 divisionObject = {InputFelids}
-                handleStates={handleStates}
+                handleOnChange={handleStates}
                 states={states}
             />
         </div>

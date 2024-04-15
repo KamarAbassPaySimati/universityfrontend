@@ -15,6 +15,9 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSe
         case 'town_village_ta':
             handleOnChange('', 'street_name');
             break;
+        // case 'street_name':
+        //     autofillTownVillageTAAndDistrict(place);
+        //     break;
         default:
             break;
         }
@@ -23,6 +26,7 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSe
     const autocompleteOptions = () => {
         switch (id) {
         case 'district':
+        case 'town/district':
             return {
                 types: ['(regions)'],
                 componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
@@ -43,6 +47,9 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSe
             handleOnChange(place.formatted_address, 'district');
             handleOnChange('', 'street_name');
             handleOnChange('', 'town_village_ta');
+            break;
+        case 'town/district':
+            handleOnChange(place.formatted_address, 'town/district');
             break;
         case 'street_name':
             handleOnChange(place.formatted_address, 'street_name');

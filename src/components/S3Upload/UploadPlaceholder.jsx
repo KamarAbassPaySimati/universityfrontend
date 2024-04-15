@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import Image from '../Image/Image';
 import { handleDelete, handleUpload } from './S3Functions';
 import ImageLoader from './ImageLoader';
+import IframeModal from '../Iframe/IframeModal';
 
-export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates }) {
+export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled }) {
     const [loadingImg, setLoadingImg] = useState(false);
     const handleUploadFile = async (e) => {
         try {
@@ -15,15 +16,16 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             console.log('errrr', error);
         }
     };
+    const [showIframe, setShowIframe] = useState(false);
     return (
         <div className=' py-4'>
             <p className='font-medium text-[14px] leading-4'>{label}</p>
             {(states[selectedUploadImg] !== undefined && states[selectedUploadImg] !== '')
                 ? <div className='mt-2 bg-background-light w-full h-[52px] rounded-lg flex justify-between items-center'>
-                    <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium'>
+                    <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium break-words w-[70%]'>
                         {states[selectedUploadImg].split('/')[2]}</p>
                     <div className='flex gap-3 px-2'>
-                        <Image src='eyeLight' className='h-6 w-6'/>
+                        <Image src='eyeLight' className='h-6 w-6 cursor-pointer' onClick={() => setShowIframe(true)}/>
                         <Image src='refresh' className='h-6 w-6 cursor-pointer'
                             onClick={() => {
                                 handleDelete(states[selectedUploadImg]);
@@ -58,6 +60,7 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                                         </div>
                                         <input
                                             onChange={(e) => handleUploadFile(e)}
+                                            disabled={disabled}
                                             type="file" className="h-full w-full opacity-0" name=""/>
                                     </>}
 
@@ -66,6 +69,8 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                     </div>
                 </div>
             }
+            <IframeModal
+                isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]} />
 
         </div>
     );

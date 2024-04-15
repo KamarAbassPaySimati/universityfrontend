@@ -1,23 +1,17 @@
 import React from 'react';
 
-export default function InputTypeCheckbox ({ id, checkboxText }) {
+export default function InputTypeCheckbox ({ id, checkboxText, handleOnChange, Checked }) {
     return (
-        <div className="filter-checkbox checkbox relative py-2">
+        <div className="label-checkbox relative my-2 flex items-center">
             <input
                 className="checkbox"
                 type="checkbox"
                 value={id}
                 id={id}
-                // checked={filterValues?.[valueOf]?.[checkboxText]}
-                // onClick={() => {
-                //     setFilterValues(prevState => ({
-                //         ...prevState,
-                //         [valueOf]: {
-                //             ...prevState?.[valueOf],
-                //             [checkboxText]: !prevState?.[valueOf]?.[checkboxText]
-                //         }
-                //     }));
-                // }}
+                checked={Checked}
+                onClick={(e) => {
+                    handleOnChange(e, id, 'checkBox');
+                }}
             />
             <label
                 for={id}

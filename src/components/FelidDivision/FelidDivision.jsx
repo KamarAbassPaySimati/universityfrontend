@@ -28,14 +28,14 @@ export default function FelidDivision ({
                                                 <InputFieldWithDropDown
                                                     labelName={`${divObj?.label} 
                                                     ${(divObj?.require === undefined || divObj?.require) ? '' : '(Optional)'}`}
-                                                    value={''}
+                                                    value={states[divObj?.key] === undefined ? '' : states[divObj?.key]}
                                                     placeholder={`Select ${divObj?.label}`}
                                                     // error={formErrors.role}
                                                     options={divObj?.options}
                                                     id={divObj?.key}
                                                     testId={divObj?.key}
                                                     // information
-                                                    // handleInput={handleOnChange}
+                                                    handleInput={handleOnChange}
                                                     // type={divObj.type}
                                                 />
                                             </div>)

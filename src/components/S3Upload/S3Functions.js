@@ -8,7 +8,7 @@ export const handleUpload = async (file, path) => {
             data: file,
             options: {
                 contentType: file.type, // optional, automatically inferred if not provided,
-                accessLevel: 'private'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
+                accessLevel: 'guest'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
             }
         }).result;
         console.log('Succeeded: ', result);
