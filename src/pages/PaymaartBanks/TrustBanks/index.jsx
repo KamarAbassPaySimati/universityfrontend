@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import DocumentSidebar from '../../../components/DocumentTab/DocumentSidebar';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import FullScreenImage from '../../../components/FullScreenImage/FullScreenImage';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isShownLayer, setIsShwonLayer] = useState(false);
+    const navigate = useNavigate();
     const bankTypes = {
         'Trust Banks': 'clear',
         'Main Capital': 'clear',
@@ -53,7 +54,7 @@ const TrustBanks = () => {
         >
             <div className=''>
                 <div className='flex justify-end mb-[10px]'>
-                    <button data-testid="" onClick={() => { }}
+                    <button data-testid="" onClick={() => { navigate('/paymaart-banks/trust-banks/add-trust-bank'); }}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                         <img src='/images/onboardIcon.svg'
