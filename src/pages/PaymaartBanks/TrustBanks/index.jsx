@@ -3,6 +3,7 @@ import CardHeader from '../../../components/CardHeader';
 import DocumentSidebar from '../../../components/DocumentTab/DocumentSidebar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FullScreenImage from '../../../components/FullScreenImage/FullScreenImage';
+import NotFound from '../../NotFound';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -24,6 +25,11 @@ const TrustBanks = () => {
     function handleCloseOverlay () {
         setIsShwonLayer(false);
     }
+    useEffect(() => {
+        if (searchParams.get('type') === null) {
+            setSearchParams({ type: 'trust-banks' });
+        }
+    }, []);
     function formatType (type) {
         if (type !== undefined || type !== null) {
             return type
@@ -42,12 +48,11 @@ const TrustBanks = () => {
     }
 
     return (
-
         <CardHeader
             activePath= {searchParams.get('type') !== null ? formatType(searchParams.get('type')) : ''}
             paths={['Paymaart Banks']}
             pathurls={['paymaart-banks']}
-            header='Banks'
+            header='Paymaart Banks'
             minHeightRequired={true}
             headerWithoutButton={false}
             table={false}
