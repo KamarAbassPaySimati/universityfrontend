@@ -57,7 +57,7 @@ const TrustBanks = () => {
                     <button data-testid="" onClick={() => { navigate('/paymaart-banks/trust-banks/add-trust-bank'); }}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
-                        <img src='/images/onboardIcon.svg'
+                        <img src='/images/addIcon.svg'
                             className='mr-[8px]'/>
                         <p className='text-[14px] font-[600] text-[#ffffff]'>Add Trust Bank</p>
                     </button>
