@@ -111,7 +111,6 @@ const FilterWithSingleOption = ({
                                             checkboxText={option} // active
                                             handleSearchParams={handleSearchParamValue}
                                             searchParams={searchParams}
-                                            isLoading={isLoading}
                                         />
                                     ))}
                                 </div>

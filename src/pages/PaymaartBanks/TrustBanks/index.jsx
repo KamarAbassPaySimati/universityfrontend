@@ -73,7 +73,8 @@ const TrustBanks = () => {
                      h-[100px] w-full'></div>
                 </div>
                 { <div className='ml-[6px] mt-[20px] font-400 text-[14px] text-primary-normal '>
-                    <button onClick={() => setIsShwonLayer(true)}>Paymaart Banking OverView</button></div> }
+                    <button data-testid="view-bank-overview"
+                        onClick={() => setIsShwonLayer(true)}>Paymaart Banking OverView</button></div> }
             </div>
             {isShownLayer &&
                 <FullScreenImage

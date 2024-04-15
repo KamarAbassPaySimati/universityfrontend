@@ -3,6 +3,7 @@ const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
+const { customSortDateDesc, customSortDateAsc } = require('../../bdd_modules/index.js');
 
 Given('I navigate to agent KYC listing screen', async function () {
     // Write code here that turns the phrase above into concrete actions
@@ -82,7 +83,7 @@ Then('I should see list of KYC where status is {string}', async function (status
 
 Then('I should see the KYC sorted in descending order based on {string}', async function (sortBy) {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     let items;
     let itemTexts;
     let sortedItemTexts;
@@ -91,7 +92,10 @@ Then('I should see the KYC sorted in descending order based on {string}', async 
         // Write code here that turns the phrase above into concrete actions
         items = await driver.wait(until.elementsLocated(By.css('[data-testid="submission_date"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
-        sortedItemTexts = [...itemTexts].sort().reverse();
+        sortedItemTexts = [...itemTexts].sort(customSortDateDesc);
+        console.log('itemTexts', itemTexts);
+        console.log('sortedItemTexts', sortedItemTexts);
+
         assert.deepStrictEqual(itemTexts, sortedItemTexts, 'Items are not sorted in descending order');
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
@@ -110,7 +114,9 @@ Then('I should see the KYC sorted in ascending order based on {string}', async f
         // Write code here that turns the phrase above into concrete actions
         items = await driver.wait(until.elementsLocated(By.css('[data-testid="submission_date"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
-        sortedItemTexts = [...itemTexts].sort();
+        sortedItemTexts = [...itemTexts].sort(customSortDateAsc);
+        console.log('itemTexts asc', itemTexts);
+        console.log('sortedItemTexts asc', sortedItemTexts);
         assert.deepStrictEqual(itemTexts, sortedItemTexts, 'Items are not sorted in ascending order');
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
