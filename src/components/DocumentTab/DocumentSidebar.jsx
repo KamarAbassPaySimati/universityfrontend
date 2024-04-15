@@ -50,7 +50,6 @@ export default function DocumentSidebar ({ documentTypes, height, searchParams, 
             }
         }
     };
-    console.log(height, 'hhhh');
     return (
         <div className={`w-[30%] border-r-[1px] border-[#000000] ${height}`}>
             {Object.keys(documentTypes).map((docItem) => (

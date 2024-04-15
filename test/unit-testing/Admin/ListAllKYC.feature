@@ -85,3 +85,4 @@ Feature: Paymaart - Admin Web -KYC verification Listing Page
     Scenario: Login as normal admin and view admin listing
         When I navigate to agent KYC listing screen
         Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
+        
