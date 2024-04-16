@@ -12,6 +12,8 @@ const BankTable = (
 ) => {
     return (
         <>
+            {console.log(loading, 'loaddd')}
+            {console.log(List?.data?.length, '00000')}
             <table className='w-full min-w-max'>
                 {(List?.data?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
@@ -29,7 +31,7 @@ const BankTable = (
                     ? <Shimmer column={6} row={4} firstIndex/>
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((bank, index) => (
-                            <tr key={index} className='border-b border-neutral-outline h-[48px]'>
+                            <tr key={index} className={`${bank?.ref_no === 'PTBAT' ? 'border-t border-neutral-primary' : 'border-b border-neutral-outline'}  h-[48px]`}>
                                 <td data-testid="paymaart_id" title = {bank?.ref_no}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{bank?.ref_no || '-'}</td>
                                 <td data-testid="name" title = {`${bank?.name}`}
