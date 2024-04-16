@@ -105,7 +105,6 @@ const OnboardAdmin = ({ actionKey }) => {
         if (formData.phoneNumber && (formData.phoneNumber.replace(/\s/g, '').length < 9)) {
             errors.phoneNumber = 'Invalid phone number';
             hasError = true;
-            console.log('true3');
         }
         // Set the form errors
         console.log('hasError', hasError);

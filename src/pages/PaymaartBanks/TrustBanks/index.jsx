@@ -3,6 +3,7 @@ import CardHeader from '../../../components/CardHeader';
 import DocumentSidebar from '../../../components/DocumentTab/DocumentSidebar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FullScreenImage from '../../../components/FullScreenImage/FullScreenImage';
+import NotFound from '../../NotFound';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -20,7 +21,20 @@ const TrustBanks = () => {
         if (searchParams.get('type') === null) {
             setSearchParams({ type: 'trust-banks' });
         }
-    });
+        console.log(searchParams.get('type'), 'gettype');
+        if (searchParams.get('type') !== null) {
+            if (searchParams.get('type') !== 'trust-banks' ||
+            searchParams.get('type') !== 'main-capital' ||
+            searchParams.get('type') !== 'taxes' ||
+            searchParams.get('type') !== 'transaction-fees-and-commissions' ||
+            searchParams.get('type') !== 'suspense') {
+                setSearchParams({ type: 'trust-banks' });
+                // eslint-disable-next-line indent
+                    <NotFound link={'/paymaart-banks'}
+                />;
+            }
+        }
+    }, []);
     function handleCloseOverlay () {
         setIsShwonLayer(false);
     }
