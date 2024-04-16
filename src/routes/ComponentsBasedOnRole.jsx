@@ -6,6 +6,7 @@ import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
 import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView/SpecificAdminView';
 import KycVerification from '../pages/Verification/KycVerification';
 import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
+import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -49,6 +50,11 @@ export const ComponentsBasedOnRole = {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
             path: '/paymaart-banks'
+        },
+        {
+            name: 'Paymaart Add Trust Banks',
+            element: <AddTrustBank />,
+            path: '/paymaart-banks/trust-banks/add-trust-bank'
         }
     ],
     admin:
@@ -72,6 +78,11 @@ export const ComponentsBasedOnRole = {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
             path: '/paymaart-banks'
+        },
+        {
+            name: 'Paymaart Add Trust Banks',
+            element: <AddTrustBank />,
+            path: '/paymaart-banks/trust-banks/add-trust-bank'
         }
     ],
     'support-admin':
@@ -88,6 +99,11 @@ export const ComponentsBasedOnRole = {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
             path: '/paymaart-banks'
+        },
+        {
+            name: 'Paymaart Add Trust Banks',
+            element: <AddTrustBank />,
+            path: '/paymaart-banks/trust-banks/add-trust-bank'
         }
     ]
 };
