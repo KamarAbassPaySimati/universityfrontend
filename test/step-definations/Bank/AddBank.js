@@ -28,6 +28,7 @@ When('I select valid bank ref no.', async function () {
     await driver.wait(until.elementIsVisible(element));
     await driver.wait(until.elementLocated(By.css('[data-testid="refNo"]'))).click();
     await new Promise(resolve => setTimeout(resolve, 1000));
+    global.bank_ref_no = await driver.wait(until.elementLocated(By.css('[data-testid="refNo_0"]'))).getText();
     await driver.wait(until.elementLocated(By.css('[data-testid="refNo_0"]'))).click();
 });
 
