@@ -324,5 +324,3 @@ stages:
             aws s3 sync dist s3://$ADMIN_S3_BUCKET --acl public-read
             aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*" 
           displayName: 'Deployment'
-
-    
