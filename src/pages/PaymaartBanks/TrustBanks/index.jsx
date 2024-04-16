@@ -12,7 +12,6 @@ import BankTable from './Components/BankTable';
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isShownLayer, setIsShwonLayer] = useState(false);
-    const [url, setUrl] = useState('');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { setToastError } = useContext(GlobalContext);
@@ -101,6 +100,7 @@ const TrustBanks = () => {
             table={false}
         >
             <div className=''>
+                {searchParams.get('type') === 'trust-banks' && List?.data?.length !== 4 &&
                 <div className='flex justify-end mb-[10px]'>
                     <button data-testid="add_new_bank" onClick={() => { navigate('/paymaart-banks/trust-banks/add-trust-bank'); }}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
@@ -109,8 +109,8 @@ const TrustBanks = () => {
                             className='mr-[8px]'/>
                         <p className='text-[14px] font-[600] text-[#ffffff]'>Add Trust Bank</p>
                     </button>
-                </div>
-                <div className='flex '>
+                </div>}
+                {<div className='flex mt-[20px]'>
                     <DocumentSidebar
                         documentTypes={bankTypes}
                         height={'h-heightSideBarOne'}
@@ -118,14 +118,17 @@ const TrustBanks = () => {
                         setSearchParams={setSearchParams}
                         width={'w-[200px]'}
                     />
-                    <div className='ml-[10px] w-full overflow-auto scrollBar'>
-                        <BankTable
-                            loading={loading}
-                            List={List}
-                        />
+                    <div className='ml-[10px] w-full overflow-hidden'>
+                        <div className='scrollBar h-[calc(100vh - 10px - 48px)] overflow-auto'>
+                            {!error && <BankTable
+                                loading={loading}
+                                List={List}
+                            />}
+                        </div>
                     </div>
-                </div>
-                { <div className='ml-[6px] mt-[20px] font-400 text-[14px] text-primary-normal '>
+                </div>}
+                { <div className='ml-[6px] mt-[20px] font-400 text-[14px]
+                 text-primary-normal '>
                     <button data-testid="view-bank-overview"
                         onClick={() => setIsShwonLayer(true)}>Paymaart Banking OverView</button></div> }
             </div>
