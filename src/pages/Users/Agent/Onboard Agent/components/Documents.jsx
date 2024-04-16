@@ -150,6 +150,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
             </div>
             <div className='flex'>
                 <div className="w-[48%] relative">
+                    {console.log('xqjxhwqbubuxbq', states[type]?.replaceAll(' ', '_').toLowerCase(), states)}
                     <UploadPlaceholder
                         label="Front"
                         disabled={states[type] === undefined}
@@ -186,6 +187,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                             label="Selfie"
                             handleStates={handleStates}
                             states={states}
+                            submitSelected={submitSelected && (states?.capture === '' || states?.capture === undefined)}
                         />
 
                     </div>

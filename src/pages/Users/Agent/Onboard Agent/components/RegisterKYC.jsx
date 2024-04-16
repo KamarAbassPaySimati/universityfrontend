@@ -14,6 +14,19 @@ import { dataService } from '../../../../../services/data.services';
 
 export default function RegisterKYC () {
     const [submitSelected, setSubmitSelected] = useState(false);
+    const [isLoadingButton, setIsLoadingButton] = useState(false);
+    const IdDocuments = {
+        'National ID': ['national_id_img_front', 'national_id_img_back'],
+        Passport: ['passport_img_front']
+    };
+    const [submitPayload, setSubmitPayload] = useState({});
+    const VerificationDocument = {
+        'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
+        'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
+        'Birth Certificate': ['birth_cert_img_front', 'birth_cert_img_back'],
+        'Employer letter': ['employer_letter_img_front', 'employer_letter_img_back'],
+        'Institute letter': ['institute_letter_img_front', 'institute_letter_img_back']
+    };
     const { id } = useParams();
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
@@ -89,6 +102,11 @@ export default function RegisterKYC () {
                     console.log('error');
                     handleStatusBar('address_details', 'current');
                 } else {
+                    handleAPICall({
+                        kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
+                        citizen: states.citizen_type,
+                        paymaart_id: id
+                    });
                     handleStatusBar('identity_details', 'active');
                 }
                 break;
@@ -139,10 +157,22 @@ export default function RegisterKYC () {
         }
         handleSearchParams('tab', nextTab);
     };
+    const handleAPICall = async (body) => {
+        console.log('api calll', body);
+        const response = await dataService.PostAPIAgent('create-kyc-secure', body);
+        console.log(response, 'response');
+    };
     const handleSubmit = (key) => {
+        setIsLoadingButton(true);
         switch (key) {
         case 'proceed':
             handleSearchParams('tab', 'address_details');
+            handleAPICall({
+                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
+                citizen: states.citizen_type,
+                paymaart_id: id
+            });
+            setIsLoadingButton(false);
             break;
         case 'save_button':
             handleTabChange('identity_details');
@@ -155,22 +185,12 @@ export default function RegisterKYC () {
     const handleValidation = (type, key) => {
         let count = 0;
         const AddressDetails = ['street_name', 'town_village_ta', 'district'];
-        const IdDocuments = {
-            'National ID': ['national_id_img_front', 'national_id_img_back'],
-            Passport: ['passport_img_front']
-        };
-        const VerificationDocument = {
-            'Driver\'s Licence': ['dl_img_front', 'dl_img_back'],
-            'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
-            'Birth Certificate': ['birth_cert_img_front', 'birth_cert_img_back'],
-            'Employer letter': ['employer_letter_img_front', 'employer_letter_img_back'],
-            'Institute letter': ['institute_letter_img_front', 'institute_letter_img_back']
-        };
         const PersonalDetails = ['gender', 'DOB', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
         const occupationEmployed = ['employed', 'employer_name', 'industry_sector', 'town/district'];
         const occupationSelfEmployed = ['please_specify'];
         const occupationEduction = ['education'];
-
+        const sideBarStatus = documentSideBarData.documentTypes;
+        const body = {};
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -184,45 +204,72 @@ export default function RegisterKYC () {
             );
             return count === 0;
         case 'identity_details':
-            if (states.capture === undefined || states.capture === '') {
+            if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
+                IdDocuments[states['ID Document']].map((selectedItem) => {
+                    if (states[selectedItem] === undefined || states[selectedItem] === '') {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                            sideBarStatus['ID Document'] = 'pending';
+                        }
+                        count = count + 1;
+                    } else {
+                        if (selectedItem.split('_')[selectedItem.split('_').length - 1] === 'front') {
+                            body.id_document_front = states[selectedItem];
+                        } else {
+                            body.id_document_back = states[selectedItem];
+                        }
+                        // body[selectedItem] = states[selectedItem];
+                        sideBarStatus['ID Document'] = 'filled';
+                    }
+                });
+            } else {
                 if (key !== 'skip') {
+                    sideBarStatus['ID Document'] = 'pending';
                     setSubmitSelected(true);
                 }
                 count = count + 1;
             }
-            if (documentSideBarData.selectedData === 'ID Document') {
-                if (states[documentSideBarData?.selectedData] !== '' && states[documentSideBarData?.selectedData] !== undefined) {
-                    IdDocuments[states[documentSideBarData?.selectedData]].map((selectedItem) => {
-                        if (states[selectedItem] === undefined || states[selectedItem] === '') {
-                            if (key !== 'skip') {
-                                setSubmitSelected(true);
-                            }
-                            count = count + 1;
-                        }
-                    });
-                } else {
-                    if (key !== 'skip') {
-                        setSubmitSelected(true);
-                    }
-                    count = count + 1;
+            if (states.capture === undefined || states.capture === '') {
+                if (key !== 'skip') {
+                    sideBarStatus['ID Document'] = 'pending';
+                    setSubmitSelected(true);
                 }
+                count = count + 1;
             } else {
-                if (states[documentSideBarData.selectedData] !== '' && states[documentSideBarData.selectedData] !== undefined) {
-                    VerificationDocument[states[documentSideBarData.selectedData]].map((selectedItem) => {
-                        if (states[selectedItem] === undefined || states[selectedItem] === '') {
-                            if (key !== 'skip') {
-                                setSubmitSelected(true);
-                            }
-                            count = count + 1;
-                        }
-                    });
-                } else {
-                    if (key !== 'skip') {
-                        setSubmitSelected(true);
-                    }
-                    count = count + 1;
+                if (count === 0) {
+                    sideBarStatus['ID Document'] = 'filled';
                 }
+                body.capture = states.capture;
             }
+            if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
+                console.log('statesmmwjjjjjjjjjjj', states);
+                VerificationDocument[states['Verification Document']].map((selectedItem) => {
+                    console.log('selectedItem', selectedItem);
+                    if (states[selectedItem] === undefined || states[selectedItem] === '') {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                            sideBarStatus['Verification Document'] = 'pending';
+                        }
+                        count = count + 1;
+                    } else {
+                        sideBarStatus['Verification Document'] = 'filled';
+                        if (selectedItem.split('_')[selectedItem.split('_').length - 1] === 'front') {
+                            body.verification_document_front = states[selectedItem];
+                        } else {
+                            body.verification_document_back = states[selectedItem];
+                        }
+                    }
+                });
+            } else {
+                if (key !== 'skip') {
+                    sideBarStatus['Verification Document'] = 'pending';
+                    setSubmitSelected(true);
+                }
+                count = count + 1;
+            }
+            console.log('sideBarStatus', sideBarStatus, body);
+            setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
+            setSubmitPayload(body);
             return count === 0;
         case 'personal_details':
             PersonalDetails.map((item) => {
@@ -296,7 +343,7 @@ export default function RegisterKYC () {
             break;
         }
     };
-
+    console.log('subjxnne', submitPayload);
     const handleStatusBar = (key, value, type) => {
         console.log('value', value);
         switch (key) {
@@ -365,6 +412,17 @@ export default function RegisterKYC () {
             if (!handleValidation('address_details')) {
                 console.log('error');
             } else {
+                handleAPICall({
+                    po_box_no: states?.po_box_no,
+                    house_number: states?.house_number,
+                    street_name: states?.street_name,
+                    landmark: states?.landmark,
+                    town_village_ta: states?.town_village_ta,
+                    district: states?.district,
+                    paymaart_id: id,
+                    kyc_type: 'full'
+                }
+                );
                 handleStatusBar('identity_details', 'active');
                 handleSearchParams('tab', 'identity_details');
             }
@@ -373,6 +431,16 @@ export default function RegisterKYC () {
             if (!handleValidation('identity_details')) {
                 console.log('error');
             } else {
+                console.log('submitPayload', submitPayload);
+                const body = {
+                    id_document_front: submitPayload.id_document_front,
+                    id_document_back: submitPayload.id_document_back,
+                    verification_document_front: submitPayload.verification_document_front,
+                    verification_document_back: submitPayload.verification_document_back,
+                    selfie: submitPayload.capture,
+                    paymaart_id: id
+                };
+                handleAPICall(body);
                 handleStatusBar('personal_details', 'active');
                 handleSearchParams('tab', 'personal_details');
             }
@@ -389,19 +457,19 @@ export default function RegisterKYC () {
             break;
         }
     };
-    // const getKYCView = async () => {
-    //     try {
-    //         const res = await dataService.GetAPI('view-kyc-secure', { paymaart_id: id });
-    //         console.log('resdnxhjxsxhjja', res);
-    //         return res;
-    //     } catch (error) {
-    //         // Log error or send notification
-    //         console.error('Error fetching orders:', error);
-    //     }
-    // };
-    // useEffect(() => {
-    //     getKYCView();
-    // }, []);
+    const getKYCView = async () => {
+        try {
+            const res = await dataService.GetAPI(`view-kyc-secure?paymaart_id=${id}`, 'agent');
+            console.log('resdnxhjxsxhjja', res);
+            return res;
+        } catch (error) {
+            // Log error or send notification
+            console.error('Error fetching orders:', error);
+        }
+    };
+    useEffect(() => {
+        getKYCView();
+    }, [searchParams]);
     return (
         <CardHeader
             activePath='Register Agent'

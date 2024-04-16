@@ -6,7 +6,7 @@ import Webcam from 'react-webcam';
 import { CDN } from '../../config';
 import { handleDelete } from '../S3Upload/S3Functions';
 
-export default function Capture ({ label, handleStates, states }) {
+export default function Capture ({ label, handleStates, states, submitSelected }) {
     const [isCapture, setIsCapture] = useState(false);
     return (
         <>
@@ -24,8 +24,8 @@ export default function Capture ({ label, handleStates, states }) {
                                         setIsCapture(true);
                                     }
                                 }}
-                                className=" border border-dashed h-48
-                        rounded-lg  border-neutral-secondary flex justify-center items-center" >
+                                className={`border border-dashed h-48 ${submitSelected ? 'border-error' : 'border-neutral-secondary'}
+                        rounded-lg   flex justify-center items-center`} >
                                 {(states.capture !== undefined && states.capture !== '')
                                     ? (
                                         <div className='flex justify-center items-center'>

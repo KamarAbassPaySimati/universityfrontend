@@ -25,10 +25,10 @@ async function PostAPIWithoutHeader (endpoint, body) {
  * 2. If there is an error during the API call, it returns an object with `error` set to `true` and
  * `data` containing the error
  */
-async function GetAPI (endpoint) {
+async function GetAPI (endpoint, agent) {
     const headers = await authHeader();
     try {
-        const data = await axios.get(`${baseURL}${endpoint}`, {
+        const data = await axios.get(`${agent ? baseURLAgent : baseURL}${endpoint}`, {
             headers
         });
         return { error: false, data: data.data };
