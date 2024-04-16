@@ -17,7 +17,7 @@ const BankTable = (
             <table className='w-full min-w-max'>
                 {(List?.data?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
-                    <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
+                    <tr className={`border-b ${List?.data?.length === 1 ? 'border-neutral-primary' : 'border-neutral-outline'} sticky top-0 bg-white z-10`}>
                         <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Ref. No</th>
                         <th className='py-2 px-[10px] text-left font-[400] min-w-[100px] '>Name</th>
                         <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Account Number</th>
@@ -32,7 +32,8 @@ const BankTable = (
                     : <tbody className={` text-neutral-primary whitespace-nowrap text-[14px]
                     leading-[24px]`}>
                         {List?.data?.map((bank, index) => (
-                            <tr key={index} className={`${bank?.ref_no === 'PTBAT' ? 'border-t border-b  border-neutral-primary font-[600]' : 'border-b border-neutral-outline font-[400]'} h-[48px]`}>
+                            <tr key={index} className={`${index > 0 && index < List.data.length ? 'border-b border-neutral-primary' : 'border-b border-neutral-outline'} ${bank?.ref_no === 'PTBAT' ? 'border-t border-neutral-primary' : 'border-t border-neutral-outline'} ${bank?.ref_no === 'PTBAT' ? 'font-[600]' : 'font-[400]'} h-[48px]`}>
+
                                 <td data-testid="paymaart_id" title = {bank?.ref_no}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{bank?.ref_no || '-'}</td>
                                 <td data-testid="name" title = {`${bank?.name}`}
@@ -40,8 +41,10 @@ const BankTable = (
                                     {`${bank?.name}`}</td>
                                 <td data-testid="email" title = {bank?.account_number} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {bank?.account_number}</td>
-                                <td data-testid="user_role" title = {bank?.purpose}
-                                    className='py-2 px-[10px] text-left truncate max-w-[300px]'>{bank?.purpose || '-'}</td>
+                                <td data-testid="user_role" title={bank?.purpose}
+                                    className='py-2 px-[10px] text-left truncate max-w-[300px]'>
+                                    {bank?.purpose == null ? '-' : bank?.purpose}
+                                </td>
                                 <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? formatTimestamp(bank?.updated_at) : '-'}</td>
                                 <td title = {bank?.balance} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{(bank?.balance || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, style: 'currency', currency: 'MWK' }) }</td>
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
