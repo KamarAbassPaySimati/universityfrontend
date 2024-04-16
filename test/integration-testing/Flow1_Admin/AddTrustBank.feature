@@ -15,6 +15,8 @@ Feature: Paymaart -Admin Web - Add Trust Bank
     Standard Bank
     Centenary Bank
 
+    @perform_logout
+    @wait
     @add_admin_user
     @create_new_user_and_login
     Scenario: Login as super admin and navigate to add trust banks

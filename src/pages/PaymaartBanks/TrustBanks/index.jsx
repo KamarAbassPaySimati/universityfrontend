@@ -116,6 +116,7 @@ const TrustBanks = () => {
                         height={'h-heightSideBarOne'}
                         searchParams={searchParams}// pass this because its used
                         setSearchParams={setSearchParams}
+                        width={'w-[200px]'}
                     />
                     <div className='ml-[10px] w-full overflow-auto scrollBar'>
                         <BankTable
