@@ -1,14 +1,22 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import DocumentSidebar from '../../../components/DocumentTab/DocumentSidebar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import FullScreenImage from '../../../components/FullScreenImage/FullScreenImage';
 import NotFound from '../../NotFound';
+import { useDispatch, useSelector } from 'react-redux';
+import { bankAccountList } from './BankSlice';
+import GlobalContext from '../../../components/Context/GlobalContext';
+import BankTable from './Components/BankTable';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isShownLayer, setIsShwonLayer] = useState(false);
+    const [url, setUrl] = useState('');
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const { setToastError } = useContext(GlobalContext);
+    const { List, error, loading } = useSelector(state => state.bankAccounts);
     const bankTypes = {
         'Trust Banks': 'clear',
         'Main Capital': 'clear',
@@ -35,6 +43,28 @@ const TrustBanks = () => {
             }
         }
     }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (searchParams.get('type') !== null) {
+                if (searchParams.get('type') === 'trust-banks') {
+                    try {
+                        // Fetch data using KycVerificationList
+                        dispatch(bankAccountList('list-trust-bank'));
+
+                        // Handle setting params and checking List length
+                    } catch (error) {
+                        console.error(error);
+                        // Handle error
+                        setToastError('Something went wrong!');
+                    }
+                }
+            }
+        };
+
+        // Call fetchData on mount and when searchParams change
+        fetchData();
+    }, [searchParams]);
+
     function handleCloseOverlay () {
         setIsShwonLayer(false);
     }
@@ -87,8 +117,12 @@ const TrustBanks = () => {
                         searchParams={searchParams}// pass this because its used
                         setSearchParams={setSearchParams}
                     />
-                    <div className='ml-[10px] bg-white
-                     h-[100px] w-full'></div>
+                    <div className='ml-[10px] w-full'>
+                        <BankTable
+                            loading={loading}
+                            List={List}
+                        />
+                    </div>
                 </div>
                 { <div className='ml-[6px] mt-[20px] font-400 text-[14px] text-primary-normal '>
                     <button data-testid="view-bank-overview"

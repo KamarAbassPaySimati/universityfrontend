@@ -15,7 +15,7 @@ export const bankAccountList = createAsyncThunk('bankAccounts', async (url, { re
     console.log(safeUrl, 'safeurl');
 
     try {
-        const res = await dataService.GetAPIAgent(safeUrl);
+        const res = await dataService.GetAPI(safeUrl);
         return res;
     } catch (error) {
         // Log error or send notification
