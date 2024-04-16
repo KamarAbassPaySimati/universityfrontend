@@ -2,7 +2,7 @@ import React from 'react';
 import Image from '../Image/Image';
 import { handleSearchParams } from '../../CommonMethods/ListFunctions';
 
-export default function DocumentSidebar ({ documentTypes, height, searchParams, setSearchParams }) {
+export default function DocumentSidebar ({ documentTypes, height, searchParams, setSearchParams, width }) {
     const getColor = (type) => {
         switch (type) {
         case 'pending':
@@ -51,7 +51,7 @@ export default function DocumentSidebar ({ documentTypes, height, searchParams, 
         }
     };
     return (
-        <div className={`w-[30%] border-r-[1px] border-[#000000] ${height}`}>
+        <div className={`${width || width !== undefined ? width : 'w-[30%]'} border-r-[1px] border-[#000000] ${height}`}>
             {Object.keys(documentTypes).map((docItem) => (
                 <div className='flex items-center mb-[30px]' key={docItem}>
                     {/* for the not selected one we have to give text color as neutral-secondary */}

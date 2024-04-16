@@ -82,6 +82,7 @@ const TrustBanks = () => {
                         height={'h-heightSideBarOne'}
                         searchParams={searchParams}// pass this because its used
                         setSearchParams={setSearchParams}
+                        width={'w-[18%]'}
                     />
                     <div className='ml-[10px] bg-white
                      h-[100px] w-full'></div>
