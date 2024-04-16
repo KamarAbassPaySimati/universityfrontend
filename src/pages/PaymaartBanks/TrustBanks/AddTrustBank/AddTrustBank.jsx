@@ -113,6 +113,13 @@ const AddTrustBank = () => {
                     setToastSuccess('Trust bank added successfully');
                     navigate('/paymaart-banks');
                     // take back to listing
+                } else if (response?.data?.status === 409) {
+                    setFormErrors(prevState => ({
+                        ...prevState,
+                        accountNumber: response?.data?.data?.message// Set your error message here
+                    }));
+                    // setFormErrors.accountNumber = response?.data?.data?.message;
+                    setIsUpdateLoading(false);
                 } else {
                     setToastError('Something went wrong!');
                     setIsUpdateLoading(false);
@@ -197,7 +204,7 @@ const AddTrustBank = () => {
                     <Button
                         text='Add'
                         testId='submit_button'
-                        className='max-w-[200px] mt-[15px]'
+                        className='max-w-[200px] mt-[12px]'
                         onClick={handleClick}
                         isLoading={isUpdateLoading}
                     />
