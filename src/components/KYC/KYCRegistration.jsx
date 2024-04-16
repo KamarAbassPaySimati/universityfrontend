@@ -3,11 +3,13 @@ import Image from '../Image/Image';
 import InputTypeRadio from '../InputField/InputTypeRadio';
 import Button from '../Button/Button';
 import KYCGuidPopup from './KYCGuidPopup';
+import KYCRegistrationPopup from './KYCRegistrationPopup';
 
 export default function KYCRegistration ({ states, handleStates, handleSubmit }) {
     const citizenType = ['Malawi citizen', 'Non Malawi citizen'];
     const personalCustomer = ['Full KYC', 'Simplified KYC'];
     const [guidOpen, setGuidOpen] = useState(false);
+    const [registrationProcess, setRegistrationProcess] = useState(false);
     return (
         <div className='flex w-full py-8 px-10 h-heightFullWithPadding'>
             <div className='w-[40%] bg-primary-normal flex flex-col justify-between pt-[10%]'>
@@ -107,14 +109,16 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                         onClick={() => handleSubmit('proceed')}
                     />
                     <p className=" text-neutral-primary text-[12px] mt-2
-                        leading-[20px] font-normal cursor-pointer mb-10">
+                        leading-[20px] font-normal mb-10">
                         Paymaart&apos;s
-                        <span className='text-accent-information cursor-pointer'> KYC Registration process </span>
+                        <span className='text-accent-information cursor-pointer'
+                            onClick={() => setRegistrationProcess(true)}> KYC Registration process </span>
                         is defined according to provisions of the Financial Crimes Act 2019
                     </p>
                 </div>
             </div>
             <KYCGuidPopup handleClose={() => setGuidOpen(false)} isModalOpen={guidOpen}/>
+            <KYCRegistrationPopup handleClose={() => setRegistrationProcess(false)} isModalOpen={registrationProcess}/>
         </div>
     );
 }
