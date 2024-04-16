@@ -51,6 +51,7 @@ const OnboardAgent = () => {
     const [loadingPhoneVerify, setLoadingPhoneVerify] = useState(false);
     const [loadingOtpVerify, setLoadingOtpVerify] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [paymartId, setPaymartId] = useState('');
     const [otpId, setOtpId] = useState({
         email: '',
         phoneNumber: ''
@@ -61,7 +62,7 @@ const OnboardAgent = () => {
     });
 
     const [otpToken, setOtpToken] = useState('');
-    const [registrationSuccessful, setRegistrationSuccessful] = useState(true);
+    const [registrationSuccessful, setRegistrationSuccessful] = useState(false);
     const [timer, setTimer] = useState(0);
     const [resendCount, setResendCount] = useState(0);
     const [countryCode, setCountryCode] = useState('+265');
@@ -374,6 +375,7 @@ const OnboardAgent = () => {
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
+            setPaymartId(response.data.paymaart_id);
         } else {
             setToastError('Something went wrong!');
         }
@@ -390,7 +392,7 @@ const OnboardAgent = () => {
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
-                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} />
+                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} paymartId={paymartId}/>
                 : <>
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details

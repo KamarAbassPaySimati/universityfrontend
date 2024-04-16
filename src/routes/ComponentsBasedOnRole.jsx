@@ -42,7 +42,7 @@ export const ComponentsBasedOnRole = {
         {
             name: 'Agent KYC Registration',
             element: <RegisterKYC />,
-            path: '/users/agents/register-agent/kyc-registration'
+            path: '/users/agents/register-agent/kyc-registration/:id'
         }
     ],
     admin:

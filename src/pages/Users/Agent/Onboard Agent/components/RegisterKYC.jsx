@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
 import CardHeader from '../../../../../components/CardHeader';
 import StatusProgressBar from '../../../../../components/StatusProgressBar/StatusProgressBar';
@@ -9,10 +9,12 @@ import Button from '../../../../../components/Button/Button';
 import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom';
+import { dataService } from '../../../../../services/data.services';
 
 export default function RegisterKYC () {
     const [submitSelected, setSubmitSelected] = useState(false);
+    const { id } = useParams();
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
         personal_customer: 'Full KYC',
@@ -387,7 +389,19 @@ export default function RegisterKYC () {
             break;
         }
     };
-    console.log('nxnwnxnwnwxn', states);
+    // const getKYCView = async () => {
+    //     try {
+    //         const res = await dataService.GetAPI('view-kyc-secure', { paymaart_id: id });
+    //         console.log('resdnxhjxsxhjja', res);
+    //         return res;
+    //     } catch (error) {
+    //         // Log error or send notification
+    //         console.error('Error fetching orders:', error);
+    //     }
+    // };
+    // useEffect(() => {
+    //     getKYCView();
+    // }, []);
     return (
         <CardHeader
             activePath='Register Agent'

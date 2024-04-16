@@ -6,7 +6,7 @@ import { endpoints } from '../../../../../services/endpoints';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
-const RegistrationSuccessful = ({ email }) => {
+const RegistrationSuccessful = ({ email, paymartId }) => {
     const { resendCredentials } = endpoints;
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
     const Navigate = useNavigate();
@@ -46,7 +46,7 @@ const RegistrationSuccessful = ({ email }) => {
                         className='max-w-[200px] mt-2'
                         testId='kyc-btn'
                         text='KYC Registration'
-                        onClick={() => Navigate('/users/agents/register-agent/kyc-registration')}
+                        onClick={() => Navigate(`/users/agents/register-agent/kyc-registration/${paymartId}`)}
                     />
                 </div>
             </div>

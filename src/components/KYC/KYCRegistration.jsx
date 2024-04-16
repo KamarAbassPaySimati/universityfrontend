@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Image from '../Image/Image';
 import InputTypeRadio from '../InputField/InputTypeRadio';
 import Button from '../Button/Button';
+import KYCGuidPopup from './KYCGuidPopup';
 
 export default function KYCRegistration ({ states, handleStates, handleSubmit }) {
     const citizenType = ['Malawi citizen', 'Non Malawi citizen'];
     const personalCustomer = ['Full KYC', 'Simplified KYC'];
+    const [guidOpen, setGuidOpen] = useState(false);
     return (
         <div className='flex w-full py-8 px-10 h-heightFullWithPadding'>
             <div className='w-[40%] bg-primary-normal flex flex-col justify-between pt-[10%]'>
@@ -42,7 +44,11 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                                     Address Details
                                 </p>
                                 <p className=" text-[#ffffff] font-normal text-[12px] leading-[20px] pt-2">
-                                    Identity Details <span className='text-secondary-normal'>Guide</span>
+                                    Identity Details
+                                    <span
+                                        className='text-secondary-normal cursor-pointer'
+                                        onClick={() => setGuidOpen(true)}
+                                    > Guide</span>
                                 </p>
                                 <p className=" text-[#ffffff] font-normal text-[12px] leading-[20px] pt-2">
                                     Basic Details
@@ -108,6 +114,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                     </p>
                 </div>
             </div>
+            <KYCGuidPopup handleClose={() => setGuidOpen(false)} isModalOpen={guidOpen}/>
         </div>
     );
 }
