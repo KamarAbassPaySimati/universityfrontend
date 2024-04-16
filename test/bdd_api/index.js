@@ -75,7 +75,7 @@ async function deletePaymaartTrustBank (params) {
     };
 
     try {
-        const data = await axios.delete(`https://apis-dev.paymaart.net/v1/bdd/delete-trust-bank/${params}`, { headers: axiosOptions });
+        const data = await axios.delete(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-trust-bank/${params}`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);

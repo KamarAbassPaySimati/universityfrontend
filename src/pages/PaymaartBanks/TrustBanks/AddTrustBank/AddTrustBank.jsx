@@ -43,7 +43,7 @@ const AddTrustBank = () => {
         }
     };
     const handleChange = (e, id) => {
-        if (enteredLetter && enteredLetter === ' ') {
+        if (enteredLetter && (enteredLetter === ' ' || !/^[a-zA-Z0-9]+$/.test(enteredLetter))) {
             return;
         }
         if (id === 'accountNumber') {
