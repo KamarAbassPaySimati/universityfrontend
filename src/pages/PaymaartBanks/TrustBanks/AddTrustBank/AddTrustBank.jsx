@@ -108,7 +108,6 @@ const AddTrustBank = () => {
                 };
                 const response = (
                     await dataService.PostAPI(addTrustBank, payload));
-                    console.log(response, 'get');
                 if (!response.error) {
                     setIsUpdateLoading(false);
                     setToastSuccess('Trust bank added successfully');
