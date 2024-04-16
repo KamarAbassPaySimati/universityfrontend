@@ -18,20 +18,21 @@ const BankTable = (
                 {(List?.data?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                        <th className='py-2 px-[10px] text-left font-[400] '>Ref. No</th>
-                        <th className='py-2 px-[10px] text-left font-[400] '>Name</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Account Number</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Purpose</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Last Update Date / Time</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Balance</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Ref. No</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px] '>Name</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Account Number</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Purpose</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Last Update Date / Time</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Balance</th>
                         <th className='py-2 px-[10px]'></th>
                     </tr>
                 </thead>}
                 {loading
                     ? <Shimmer column={6} row={4} firstIndex/>
-                    : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
+                    : <tbody className={` text-neutral-primary whitespace-nowrap text-[14px]
+                    leading-[24px]`}>
                         {List?.data?.map((bank, index) => (
-                            <tr key={index} className={`${bank?.ref_no === 'PTBAT' ? 'border-t border-neutral-primary' : 'border-b border-neutral-outline'}  h-[48px]`}>
+                            <tr key={index} className={`${bank?.ref_no === 'PTBAT' ? 'border-t border-b  border-neutral-primary font-[600]' : 'border-b border-neutral-outline font-[400]'} h-[48px]`}>
                                 <td data-testid="paymaart_id" title = {bank?.ref_no}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{bank?.ref_no || '-'}</td>
                                 <td data-testid="name" title = {`${bank?.name}`}

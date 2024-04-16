@@ -117,7 +117,7 @@ const TrustBanks = () => {
                         searchParams={searchParams}// pass this because its used
                         setSearchParams={setSearchParams}
                     />
-                    <div className='ml-[10px] w-full'>
+                    <div className='ml-[10px] w-full overflow-auto scrollBar'>
                         <BankTable
                             loading={loading}
                             List={List}
