@@ -26,11 +26,14 @@ export default function FelidDivision ({
                                         ? (
                                             <div className='mx-[10px]'>
                                                 <InputFieldWithDropDown
-                                                    labelName={`${divObj?.label} 
-                                                    ${(divObj?.require === undefined || divObj?.require) ? '' : '(Optional)'}`}
+                                                    labelName={`${divObj?.label}`}
                                                     value={states[divObj?.key] === undefined ? '' : states[divObj?.key]}
-                                                    placeholder={`Select ${divObj?.label}`}
-                                                    // error={formErrors.role}
+                                                    placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                    error={divObj?.require &&
+                                                        (submitSelected && (states[divObj?.key] === undefined ||
+                                                        states[divObj?.key] === ''))
+                                                        ? 'Required field'
+                                                        : undefined}
                                                     options={divObj?.options}
                                                     id={divObj?.key}
                                                     testId={divObj?.key}
@@ -45,25 +48,30 @@ export default function FelidDivision ({
                                                     id={divObj?.key}
                                                     submitSelected={submitSelected}
                                                     value={states[divObj?.key]}
-                                                    placeholder={`Enter ${divObj?.label}`}
+                                                    placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                     testId={divObj?.key}
                                                     handleOnChange={handleOnChange}
                                                     states={states}
-                                                    labelName={`${divObj?.label} 
-                                                ${(divObj.require === undefined || divObj?.require) ? '' : '(Optional)'}`} />
+                                                    labelName={`${divObj?.label}`} />
                                             )
                                             : (
                                                 <InputField
-                                                    className='mb-6'
+                                                    className={!(submitSelected && (states[divObj?.key] === undefined ||
+                                                        states[divObj?.key] === ''))
+                                                        ? 'mb-6'
+                                                        : ''}
                                                     divClassName='mx-2.5'
                                                     value={states[divObj?.key]}
                                                     // onFocus={handleFocus}
                                                     id={divObj?.key}
                                                     testId={divObj?.key}
-                                                    // error={formErrors.firstName}
-                                                    label={`${divObj?.label} 
-                                                ${(divObj?.require === undefined || divObj?.require) ? '' : '(Optional)'}`}
-                                                    placeholder={`Enter ${divObj?.label}`}
+                                                    error={divObj?.require &&
+                                                        (submitSelected && (states[divObj?.key] === undefined ||
+                                                        states[divObj?.key] === ''))
+                                                        ? 'Required field'
+                                                        : undefined}
+                                                    label={`${divObj?.label}`}
+                                                    placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                     // setEnteredLetter={setEnteredLetter}
                                                     maxLength="100"
                                                     onChange={handleOnChange}

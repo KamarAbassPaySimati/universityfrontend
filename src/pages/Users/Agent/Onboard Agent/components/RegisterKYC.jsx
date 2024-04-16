@@ -164,6 +164,11 @@ export default function RegisterKYC () {
             'Employer letter': ['employer_letter_img_front', 'employer_letter_img_back'],
             'Institute letter': ['institute_letter_img_front', 'institute_letter_img_back']
         };
+        const PersonalDetails = ['gender', 'DOB', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
+        const occupationEmployed = ['employed', 'employer_name', 'industry_sector', 'town/district'];
+        const occupationSelfEmployed = ['please_specify'];
+        const occupationEduction = ['education'];
+
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -185,10 +190,8 @@ export default function RegisterKYC () {
             }
             if (documentSideBarData.selectedData === 'ID Document') {
                 if (states[documentSideBarData?.selectedData] !== '' && states[documentSideBarData?.selectedData] !== undefined) {
-                    console.log('iddddd', states[documentSideBarData?.selectedData]);
                     IdDocuments[states[documentSideBarData?.selectedData]].map((selectedItem) => {
                         if (states[selectedItem] === undefined || states[selectedItem] === '') {
-                            console.log('diiii')
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -218,10 +221,75 @@ export default function RegisterKYC () {
                     count = count + 1;
                 }
             }
-            console.log('count', count);
             return count === 0;
         case 'personal_details':
-            
+            PersonalDetails.map((item) => {
+                if (item === 'purpose') {
+                    if (states[item] === '' || states[item].length === 0) {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                } else {
+                    if (states[item] === '' || states[item] === undefined) {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                }
+            }
+            );
+            if (states.occupation !== '' || states.occupation !== undefined) {
+                switch (states.occupation) {
+                case 'Employed':
+                    occupationEmployed.map((item) => {
+                        if (states[item] === '' || states[item] === undefined) {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        }
+                    }
+                    );
+                    break;
+                case 'Self Employed':
+                    occupationSelfEmployed.map((item) => {
+                        if (states[item] === '' || states[item] === undefined) {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        }
+                    }
+                    );
+                    break;
+                case 'In full time education':
+                    occupationEduction.map((item) => {
+                        if (states[item] === '' || states[item] === undefined) {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        }
+                    }
+                    );
+                    if ((states.education === undefined || states.education === '') &&
+                    (states.please_specify === '' || states.please_specify === undefined)) {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                    break;
+
+                default:
+                    break;
+                }
+            }
+            // if(states.)
+            return count === 0;
         default:
             break;
         }
@@ -282,7 +350,7 @@ export default function RegisterKYC () {
                     }
                 }));
             }
-            
+
             break;
 
         default:
@@ -305,6 +373,14 @@ export default function RegisterKYC () {
             } else {
                 handleStatusBar('personal_details', 'active');
                 handleSearchParams('tab', 'personal_details');
+            }
+            break;
+        case 'personal_details':
+            if (!handleValidation('identity_details')) {
+                console.log('error');
+            } else {
+                handleStatusBar('personal_details', 'active');
+                handleSearchParams('tab', 'success');
             }
             break;
         default:
@@ -361,6 +437,7 @@ export default function RegisterKYC () {
                             <PersonalDetails
                                 handleStates={handleStates}
                                 states={states}
+                                submitSelected={submitSelected}
                             />}
                         </div>
                         <div className='flex justify-between items-center'>

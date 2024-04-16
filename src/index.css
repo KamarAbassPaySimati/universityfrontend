@@ -303,7 +303,7 @@ input[type='number'] {
   border: none;
   border-bottom: 1px solid #DDDDDD;
   background-color: transparent;
-  width: 339px;
+  width: 100%;
   padding: 10px;
   border-top-right-radius: 8px !important;
   border-top-left-radius: 8px !important;
@@ -322,7 +322,30 @@ input[type='number'] {
   border-bottom: none !important; /* Remove bottom border on input focus and hover */
   box-shadow: none !important; /* Remove box-shadow */
 }
+/* CustomDatePicker.css */
+.custom-datepicker-error {
+  border: none;
+  border-bottom: 1px solid #FF4343;
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  background-color: #F8F8F8;
+  border-radius: 0; /* Remove border-radius */
+}
 
+.custom-datepicker-error input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.custom-datepicker-error input:focus,
+.custom-datepicker-error input:hover {
+  border-bottom: none !important; /* Remove bottom border on input focus and hover */
+  box-shadow: none !important; /* Remove box-shadow */
+}
 :where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:hover {
   border-color: #DDDDDD !important;
   background-color: #F8F8F8;

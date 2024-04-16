@@ -5,13 +5,13 @@ export default function Address ({ handleStates, states, submitSelected }) {
     const AddressDetails = {
         nothing_to_show: {
             po_box_no: {
-                label: 'P.O Box NO',
+                label: 'P.O Box NO (Optional)',
                 type: 'input',
                 key: 'po_box_no',
                 require: false
             },
             house_number: {
-                label: 'House Name/Number ',
+                label: 'House Name/Number (Optional)',
                 type: 'input',
                 key: 'house_number',
                 require: false
@@ -23,7 +23,7 @@ export default function Address ({ handleStates, states, submitSelected }) {
                 require: true
             },
             landmark: {
-                label: 'Landmark',
+                label: 'Landmark (Optional)',
                 type: 'input',
                 key: 'landmark',
                 require: false

@@ -6,8 +6,10 @@ import InputTypeCheckbox from '../../../../../components/InputField/InputTypeChe
 import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
 import InputField from '../../../../../components/InputField/InputField';
 import InputSearch from '../../../../../components/InputField/InputSearch';
+import { dataService } from '../../../../../services/data.services';
+import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
 
-export default function PersonalDetails ({ handleStates, states }) {
+export default function PersonalDetails ({ handleStates, states, submitSelected }) {
     const OccupationList = [
         'Employed', 'Self Employed', 'In full time education', 'Seeking employment', 'Ritired/Pensioner', 'Others'];
     const Purpose = [
@@ -49,7 +51,7 @@ export default function PersonalDetails ({ handleStates, states }) {
                 label: 'Bank Name',
                 type: 'dropdown',
                 key: 'bank_name',
-                require: true,
+                require: false,
                 options: [
                     'CDH Investment Bank',
                     'Ecobank',
@@ -64,12 +66,14 @@ export default function PersonalDetails ({ handleStates, states }) {
             'Account Number': {
                 label: 'Account Number',
                 type: 'input',
-                key: 'account_number'
+                key: 'account_number',
+                require: false
             },
             'Account Name': {
                 label: 'Account Name',
                 type: 'input',
-                key: 'account_name'
+                key: 'account_name',
+                require: false
             }
         }
     };
@@ -79,7 +83,8 @@ export default function PersonalDetails ({ handleStates, states }) {
             'Employer Name': {
                 label: 'Employer Name',
                 type: 'input',
-                key: 'employer_name'
+                key: 'employer_name',
+                require: true
             },
             'Industry Sector': {
                 label: 'Industry Sector',
@@ -100,7 +105,9 @@ export default function PersonalDetails ({ handleStates, states }) {
             'Town/District': {
                 label: 'Town/District',
                 type: 'googleAPI',
-                key: 'town/district'
+                key: 'town/district',
+                require: true
+
             }
         }
     };
@@ -110,11 +117,18 @@ export default function PersonalDetails ({ handleStates, states }) {
         'Professionals/Technical/Managerial',
         'Executive/Director',
         'Board Level/Non-Executive Director'];
+
+    const handleSearchItem = async (id, newValue) => {
+        const res = await dataService.GetAPI(`list-institution?search=${newValue}`);
+        return res?.data?.institutionNames;
+    };
     return (
         <div className='overflow-auto scrollBar h-tabledivHeight'>
-            <p className='ml-2.5 font-medium text-[14px] leading-4 text-neutral-primary py-2'>Gender</p>
+            <p className={`ml-2.5 font-medium text-[14px] leading-4 text-neutral-primary
+            ${(submitSelected && (states.gender === undefined || states.gender === '')) ? 'pt-2' : 'py-2'}`}>Gender</p>
             <div className='flex'>
-                <div className='flex justify-between mb-6 ml-2.5 gap-6'>
+                <div className={`flex justify-between ml-2.5 gap-6 
+                ${(submitSelected && (states.gender === undefined || states.gender === '')) ? '' : 'mb-6'}`}>
                     {Gender.map((item) => (
                         <InputTypeRadio
                             label={item}
@@ -125,9 +139,15 @@ export default function PersonalDetails ({ handleStates, states }) {
                         />))}
                 </div>
             </div>
-
-            <div className='ml-2.5'>
-                <DatePickerAntd label={'Date of Birth'} handleStates={handleStates} value={states?.DOB}/>
+            {(submitSelected && (states.gender === undefined || states.gender === '')) &&
+            <div className='mb-4 ml-2'><ErrorMessage error={'Required field'} /></div>}
+            <div className='px-2.5 w-1/3'>
+                <DatePickerAntd
+                    label={'Date of Birth'}
+                    handleStates={handleStates}
+                    value={states?.DOB}
+                    error={(states.DOB === undefined && submitSelected) ? 'Required field' : undefined}
+                />
             </div>
             <div className='flex w-full items-end'>
                 <div className='w-1/3 mt-6 ml-2.5 '>
@@ -142,11 +162,14 @@ export default function PersonalDetails ({ handleStates, states }) {
                             testId="occupation"
                             // information
                             handleInput={handleStates}
+                            error={(submitSelected && (states.occupation === undefined || states.occupation === ''))
+                                ? 'Required field'
+                                : undefined}
                         />
                     </div>
                 </div>
                 {states?.occupation === 'Employed' &&
-                <div className='w-1/3 mt-6]'>
+                <div className='w-1/3 mt-6'>
                     <div className='mx-[10px]'>
                         <InputFieldWithDropDown
                             labelName={'Employed'}
@@ -158,6 +181,9 @@ export default function PersonalDetails ({ handleStates, states }) {
                             testId="employed"
                             // information
                             handleInput={handleStates}
+                            error={(submitSelected && (states.employed === undefined || states.employed === ''))
+                                ? 'Required field'
+                                : undefined}
                         />
                     </div>
 
@@ -166,12 +192,16 @@ export default function PersonalDetails ({ handleStates, states }) {
                 {states?.occupation === 'In full time education' && <div className='w-1/3'>
                     <InputSearch
                         testId='education'
-                        // id,
-                        // handleInput,
-                        handleSearchItem
+                        id='education'
+                        handleInput={handleStates}
+                        value={states?.education === undefined ? '' : states.education}
+                        handleSearchItem={handleSearchItem}
+                        label={'Search Institute'}
+                        submitSelected={submitSelected}
                     />
                 </div>}
-                {(states?.occupation === 'Self Employed' || states?.occupation === 'Others') &&
+                {(states?.occupation === 'Self Employed' || states?.occupation === 'Others' ||
+                (states?.education === 'Others (Please Specify)' && states?.occupation === 'In full time education')) &&
                 <div className='w-1/3'>
                     <InputField
                         className=''
@@ -180,7 +210,9 @@ export default function PersonalDetails ({ handleStates, states }) {
                         // onFocus={handleFocus}
                         id='self_employed'
                         testId='self_employed'
-                        // error={formErrors.firstName}
+                        error={(submitSelected && (states.self_employed === undefined || states.self_employed === ''))
+                            ? 'Required field'
+                            : undefined}
                         label={'Please Specify'}
                         placeholder={'Enter here'}
                         // setEnteredLetter={setEnteredLetter}
@@ -202,6 +234,7 @@ export default function PersonalDetails ({ handleStates, states }) {
                     divisionObject = {EmployedFelids}
                     handleOnChange={handleStates}
                     states={states}
+                    submitSelected={submitSelected}
                 />
             </div>
             }
@@ -217,6 +250,8 @@ export default function PersonalDetails ({ handleStates, states }) {
                         Checked={states?.purpose !== undefined ? states?.purpose.includes(purposeItem) : false}
                     />
                 ))}
+                {(submitSelected && (states.purpose === undefined || states.purpose.length === 0)) &&
+                <ErrorMessage error={'Required field'} />}
                 {/* <InputTypeCheckbox id={1} checkboxText={'checkboxText'}/> */}
             </div>
             <FelidDivision
@@ -224,6 +259,7 @@ export default function PersonalDetails ({ handleStates, states }) {
                 divisionObject = {InputFelids}
                 handleOnChange={handleStates}
                 states={states}
+                submitSelected={submitSelected}
             />
         </div>
     );
