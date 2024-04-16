@@ -108,13 +108,18 @@ const AddTrustBank = () => {
                 };
                 const response = (
                     await dataService.PostAPI(addTrustBank, payload));
+                    console.log(response, 'get');
                 if (!response.error) {
                     setIsUpdateLoading(false);
                     setToastSuccess('Trust bank added successfully');
                     navigate('/paymaart-banks');
                     // take back to listing
                 } else if (response?.data?.status === 409) {
-                    setFormErrors.accountNumber = response?.data?.data?.message;
+                    setFormErrors(prevState => ({
+                        ...prevState,
+                        accountNumber: response?.data?.data?.message// Set your error message here
+                    }));
+                    // setFormErrors.accountNumber = response?.data?.data?.message;
                     setIsUpdateLoading(false);
                 } else {
                     setToastError('Something went wrong!');
@@ -200,7 +205,7 @@ const AddTrustBank = () => {
                     <Button
                         text='Add'
                         testId='submit_button'
-                        className='max-w-[200px] mt-[15px]'
+                        className='max-w-[200px] mt-[12px]'
                         onClick={handleClick}
                         isLoading={isUpdateLoading}
                     />
