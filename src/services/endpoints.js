@@ -11,5 +11,7 @@ export const endpoints = {
     adminActivateDeactivate: 'activate-deactivate',
     updateAdmin: 'update-admin',
     getBankId: 'get-bank-id',
-    addTrustBank: 'add-trust-bank'
+    addTrustBank: 'add-trust-bank',
+    listTrustBank: 'list-trust-bank',
+    listCapitalBank: 'list-capital-bank'
 };

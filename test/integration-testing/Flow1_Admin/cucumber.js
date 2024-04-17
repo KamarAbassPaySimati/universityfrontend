@@ -9,7 +9,8 @@ module.exports = {
             'test/integration-testing/Flow1_Admin/UpdateAdminUser.feature',
             'test/integration-testing/Flow1_Admin/ViewAllBanks.feature',
             'test/integration-testing/Flow1_Admin/AddTrustBank.feature',
-            'test/integration-testing/Flow1_Admin/ListAllTrustBank.feature'
+            'test/integration-testing/Flow1_Admin/ListAllTrustBank.feature',
+            'test/integration-testing/Flow1_Admin/ViewAllCaptialBanks.feature'
         ]
     }
 };
