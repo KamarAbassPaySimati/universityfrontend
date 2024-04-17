@@ -11,23 +11,18 @@ import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { dataService } from '../../../../../services/data.services';
+import {
+    AddressDetails, IdDocuments, ProgressBar, VerificationDocument,
+    handleStates, handleStatusBar, occupationEduction, occupationEmployed, occupationSelfEmployed
+} from './KYCFunctions';
+import { handleSearchParams } from '../../../../../CommonMethods/ListFunctions';
+import addApostrophe from '../../../../../CommonMethods/textCorrection';
 
 export default function RegisterKYC () {
+    const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
-    const IdDocuments = {
-        'National ID': ['national_id_img_front', 'national_id_img_back'],
-        Passport: ['passport_img_front']
-    };
     const [submitPayload, setSubmitPayload] = useState({});
-    const VerificationDocument = {
-        'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
-        'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
-        'Birth Certificate': ['birth_cert_img_front', 'birth_cert_img_back'],
-        'Employer letter': ['employer_letter_img_front', 'employer_letter_img_back'],
-        'Institute letter': ['institute_letter_img_front', 'institute_letter_img_back']
-    };
-    const { id } = useParams();
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
         personal_customer: 'Full KYC',
@@ -43,49 +38,13 @@ export default function RegisterKYC () {
         selectedData: 'ID Document'
     });
     const [searchParams, setSearchParams] = useSearchParams();
-    const ProgressBar = {
-        address_details: {
-            status: 'current',
-            label: 'Address Details'
-        },
-        identity_details: {
-            status: 'inactive',
-            label: 'Identity Details'
-        },
-        personal_details: {
-            status: 'inactive',
-            label: 'Personal Details'
-        }
-    };
     const [progressBarStatus, setProgressBarStatus] = useState(ProgressBar);
-    const handleStates = (value, id, type) => {
+
+    const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
-        if (type === 'input') {
-            setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
-        } else if (type === 'checkBox') {
-            let checkBoxArray = states.purpose === undefined ? [] : states.purpose;
-            if (value.target.checked) {
-                // If checkbox is checked, add the value to checkedItems array
-                checkBoxArray = [...checkBoxArray, value.target.value];
-            } else {
-                // If checkbox is unchecked, remove the value from checkedItems array
-                checkBoxArray = checkBoxArray.filter(item => item !== value.target.value);
-            }
-            setStates((prevState) => ({
-                ...prevState,
-                purpose: checkBoxArray
-            }));
-        } else {
-            setStates((prevState) => ({ ...prevState, [id]: value }));
-        }
+        handleStates(value, id, type, setStates, states);
     };
 
-    const handleSearchParams = (id, value) => {
-        const params = Object.fromEntries(searchParams);
-        params[id] = value;
-        if (value === null) delete params[id];
-        setSearchParams({ ...params });
-    };
     const handleTabChange = (buttonType) => {
         setSubmitSelected(false);
         let nextTab = searchParams.get('tab');
@@ -100,25 +59,19 @@ export default function RegisterKYC () {
                 nextTab = 'address_details';
                 if (!handleValidation('identity_details', 'skip')) {
                     console.log('error');
-                    handleStatusBar('address_details', 'current');
+                    handleStatusBar('address_details', 'current', '', setProgressBarStatus);
                 } else {
                     handleAPICall({
                         kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
-                        citizen: states.citizen_type,
+                        citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
                         paymaart_id: id
                     });
-                    handleStatusBar('identity_details', 'active');
+                    handleStatusBar('identity_details', 'active', '', setProgressBarStatus);
                 }
                 break;
             case 'personal_details':
                 nextTab = 'identity_details';
-                if (!handleValidation('personal_details', 'skip')) {
-                    console.log('error');
-                    handleStatusBar('personal_details', 'current', 'back');
-                } else {
-                    // handleStatusBar('identity_details', 'current');
-                    // handleStatusBar('personal_details', 'active');
-                }
+                handleStatusBar('personal_details', 'current', 'back', setProgressBarStatus);
                 break;
             default:
                 break;
@@ -130,18 +83,18 @@ export default function RegisterKYC () {
                 nextTab = 'identity_details';
                 if (!handleValidation('address_details', 'skip')) {
                     console.log('error');
-                    handleStatusBar('identity_details', 'inactive');
+                    handleStatusBar('identity_details', 'inactive', '', setProgressBarStatus);
                 } else {
-                    handleStatusBar('identity_details', 'active');
+                    handleStatusBar('identity_details', 'active', '', setProgressBarStatus);
                 }
                 break;
             case 'identity_details':
                 nextTab = 'personal_details';
                 if (!handleValidation('identity_details', 'skip')) {
                     console.log('error');
-                    handleStatusBar('personal_details', 'inactive');
+                    handleStatusBar('personal_details', 'inactive', '', setProgressBarStatus);
                 } else {
-                    handleStatusBar('personal_details', 'active');
+                    handleStatusBar('personal_details', 'active', '', setProgressBarStatus);
                 }
                 break;
             case 'personal_details':
@@ -155,42 +108,24 @@ export default function RegisterKYC () {
         default:
             break;
         }
-        handleSearchParams('tab', nextTab);
+        handleSearchParams('tab', nextTab, searchParams, setSearchParams);
     };
-    const handleAPICall = async (body) => {
-        console.log('api calll', body);
-        const response = await dataService.PostAPIAgent('create-kyc-secure', body);
-        console.log(response, 'response');
-    };
-    const handleSubmit = (key) => {
-        setIsLoadingButton(true);
-        switch (key) {
-        case 'proceed':
-            handleSearchParams('tab', 'address_details');
-            handleAPICall({
-                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
-                citizen: states.citizen_type,
-                paymaart_id: id
-            });
-            setIsLoadingButton(false);
-            break;
-        case 'save_button':
-            handleTabChange('identity_details');
-            break;
 
-        default:
-            break;
+    const handleAPICall = async (body) => {
+        try {
+            await dataService.PostAPIAgent('create-kyc-secure', body);
+            getKYCView();
+            setIsLoadingButton(false);
+        } catch (error) {
+            setIsLoadingButton(false);
+            console.log('error', error);
         }
     };
+
     const handleValidation = (type, key) => {
         let count = 0;
-        const AddressDetails = ['street_name', 'town_village_ta', 'district'];
-        const PersonalDetails = ['gender', 'DOB', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
-        const occupationEmployed = ['employed', 'employer_name', 'industry_sector', 'town/district'];
-        const occupationSelfEmployed = ['please_specify'];
-        const occupationEduction = ['education'];
         const sideBarStatus = documentSideBarData.documentTypes;
-        const body = {};
+        const body = submitPayload;
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -241,10 +176,9 @@ export default function RegisterKYC () {
                 }
                 body.capture = states.capture;
             }
+            console.log('bodydydyddy', body);
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                console.log('statesmmwjjjjjjjjjjj', states);
                 VerificationDocument[states['Verification Document']].map((selectedItem) => {
-                    console.log('selectedItem', selectedItem);
                     if (states[selectedItem] === undefined || states[selectedItem] === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
@@ -267,9 +201,9 @@ export default function RegisterKYC () {
                 }
                 count = count + 1;
             }
-            console.log('sideBarStatus', sideBarStatus, body);
+            console.log('body', body);
             setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
-            setSubmitPayload(body);
+            setSubmitPayload({ ...body });
             return count === 0;
         case 'personal_details':
             PersonalDetails.map((item) => {
@@ -343,125 +277,141 @@ export default function RegisterKYC () {
             break;
         }
     };
-    console.log('subjxnne', submitPayload);
-    const handleStatusBar = (key, value, type) => {
-        console.log('value', value);
-        switch (key) {
-        case 'address_details':
-            setProgressBarStatus((prevState) => ({
-                ...prevState,
-                address_details: {
-                    status: value,
-                    label: 'Address Details'
-                },
-                identity_details: {
-                    status: 'inactive',
-                    label: 'Identity Details'
-                }
-            }));
-            break;
-        case 'identity_details':
-            setProgressBarStatus((prevState) => ({
-                ...prevState,
-                address_details: {
-                    status: value,
-                    label: 'Address Details'
-                },
-                identity_details: {
-                    status: 'current',
-                    label: 'Identity Details'
-                }
-            }));
-            break;
-        case 'personal_details':
-            if (type === 'back') {
-                setProgressBarStatus((prevState) => ({
-                    ...prevState,
-                    identity_details: {
-                        status: 'current',
-                        label: 'Identity Details'
-                    },
-                    personal_details: {
-                        status: 'inactive',
-                        label: 'Personal Details'
+
+    const handleSubmit = (type) => {
+        if (type === 'proceed') {
+            handleAPICall({
+                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
+                citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
+                paymaart_id: id
+            });
+            handleSearchParams('tab', 'address_details', searchParams, setSearchParams);
+        } else {
+            switch (searchParams.get('tab')) {
+            case 'address_details':
+                if (!handleValidation('address_details')) {
+                    console.log('error');
+                } else {
+                    handleAPICall({
+                        po_box_no: states?.po_box_no,
+                        house_number: states?.house_number,
+                        street_name: states?.street_name,
+                        landmark: states?.landmark,
+                        town_village_ta: states?.town_village_ta,
+                        district: states?.district,
+                        paymaart_id: id,
+                        address_details_status: 'completed'
                     }
-                }));
-            } else {
-                setProgressBarStatus((prevState) => ({
-                    ...prevState,
-                    identity_details: {
-                        status: value,
-                        label: 'Identity Details'
-                    },
-                    personal_details: {
-                        status: 'current',
-                        label: 'Personal Details'
-                    }
-                }));
+                    );
+                    handleStatusBar('identity_details', 'active', '', setProgressBarStatus);
+                    handleSearchParams('tab', 'identity_details', searchParams, setSearchParams);
+                }
+                break;
+            case 'identity_details':
+                if (!handleValidation('identity_details')) {
+                    console.log('error');
+                } else {
+                    console.log('submitPayload', submitPayload);
+                    const body = {
+                        id_document_front: submitPayload.id_document_front,
+                        id_document_back: submitPayload.id_document_back,
+                        verification_document_front: submitPayload.verification_document_front,
+                        verification_document_back: submitPayload.verification_document_back,
+                        selfie: submitPayload.capture,
+                        id_document: states['ID Document'],
+                        verification_document: addApostrophe(states['Verification Document']),
+                        paymaart_id: id,
+                        id_details_status: 'completed'
+                    };
+                    handleAPICall(body);
+                    handleStatusBar('personal_details', 'active', '', setProgressBarStatus);
+                    handleSearchParams('tab', 'personal_details', searchParams, setSearchParams);
+                }
+                break;
+            case 'personal_details':
+                if (!handleValidation('identity_details')) {
+                    console.log('error');
+                } else {
+                    handleStatusBar('personal_details', 'active', '', setProgressBarStatus);
+                    handleSearchParams('tab', 'success', searchParams, setSearchParams);
+                }
+                break;
+            default:
+                break;
             }
-
-            break;
-
-        default:
-            break;
         }
     };
-    const handleSaveAndContinue = () => {
-        switch (searchParams.get('tab')) {
-        case 'address_details':
-            if (!handleValidation('address_details')) {
-                console.log('error');
-            } else {
-                handleAPICall({
-                    po_box_no: states?.po_box_no,
-                    house_number: states?.house_number,
-                    street_name: states?.street_name,
-                    landmark: states?.landmark,
-                    town_village_ta: states?.town_village_ta,
-                    district: states?.district,
-                    paymaart_id: id,
-                    kyc_type: 'full'
-                }
-                );
-                handleStatusBar('identity_details', 'active');
-                handleSearchParams('tab', 'identity_details');
-            }
-            break;
-        case 'identity_details':
-            if (!handleValidation('identity_details')) {
-                console.log('error');
-            } else {
-                console.log('submitPayload', submitPayload);
-                const body = {
-                    id_document_front: submitPayload.id_document_front,
-                    id_document_back: submitPayload.id_document_back,
-                    verification_document_front: submitPayload.verification_document_front,
-                    verification_document_back: submitPayload.verification_document_back,
-                    selfie: submitPayload.capture,
-                    paymaart_id: id
-                };
-                handleAPICall(body);
-                handleStatusBar('personal_details', 'active');
-                handleSearchParams('tab', 'personal_details');
-            }
-            break;
-        case 'personal_details':
-            if (!handleValidation('identity_details')) {
-                console.log('error');
-            } else {
-                handleStatusBar('personal_details', 'active');
-                handleSearchParams('tab', 'success');
-            }
-            break;
-        default:
-            break;
-        }
-    };
+
     const getKYCView = async () => {
         try {
             const res = await dataService.GetAPI(`view-kyc-secure?paymaart_id=${id}`, 'agent');
-            console.log('resdnxhjxsxhjja', res);
-            return res;
+            console.log(res.data.data, 'res.data.data');
+            if (res.data.data !== '') {
+                const object = {};
+                const statusObject = {};
+                Object.keys(res.data.data).map((item) => {
+                    if (res.data.data[item] !== null) {
+                        switch (item) {
+                        case 'citizen':
+                            object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
+                            break;
+                        case 'kyc_type':
+                            object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
+                            break;
+                        case 'id_document_back':
+                            object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
+                            res.data.data[item];
+                            break;
+                        case 'id_document_front':
+                            object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
+                            res.data.data[item];
+                            break;
+                        case 'verification_document_back':
+                            object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
+                                res.data.data[item];
+                            break;
+                        case 'verification_document_front':
+                            object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
+                                res.data.data[item];
+                            break;
+                        case 'selfie':
+                            object.capture = res.data.data[item];
+                            break;
+                        case 'id_document':
+                            object['ID Document'] = res.data.data[item];
+                            break;
+                        case 'verification_document':
+                            object['Verification Document'] = res.data.data[item];
+                            break;
+                        case 'address_details_status':
+                            statusObject.address_details = {
+                                status: searchParams.get('tab') === 'address_details' ? 'current' : res.data.data[item],
+                                label: 'Address Details'
+                            };
+                            break;
+                        case 'id_details_status':
+                            statusObject.identity_details = {
+                                status: searchParams.get('tab') === 'identity_details' ? 'current' : res.data.data[item],
+                                label: 'Identity Details'
+                            };
+                            break;
+                        case 'info_details_status':
+                            statusObject.personal_details = {
+                                status: searchParams.get('tab') === 'personal_details' ? 'current' : res.data.data[item],
+                                label: 'Personal Details'
+                            };
+                            break;
+                        default:
+                            object[item] = res.data.data[item];
+                            break;
+                        }
+                    }
+                }
+                );
+                console.log('object', object, statusObject);
+                setProgressBarStatus(statusObject);
+                setStates(object);
+            }
         } catch (error) {
             // Log error or send notification
             console.error('Error fetching orders:', error);
@@ -469,7 +419,7 @@ export default function RegisterKYC () {
     };
     useEffect(() => {
         getKYCView();
-    }, [searchParams]);
+    }, []);
     return (
         <CardHeader
             activePath='Register Agent'
@@ -483,8 +433,9 @@ export default function RegisterKYC () {
                 ? (
                     <KYCRegistration
                         states={states}
-                        handleStates={handleStates}
+                        handleStates={handleInputFelids}
                         handleSubmit={handleSubmit}
+                        isLoadingButton={isLoadingButton}
                     />
                 )
                 : <>
@@ -504,12 +455,12 @@ export default function RegisterKYC () {
                             />
                             {searchParams.get('tab') === 'address_details' &&
                             <Address
-                                handleStates={handleStates}
+                                handleStates={handleInputFelids}
                                 states={states}
                                 submitSelected={submitSelected}
                             />}
                             {searchParams.get('tab') === 'identity_details' && <IdentityDetails
-                                handleStates={handleStates}
+                                handleStates={handleInputFelids}
                                 states={states}
                                 documentSideBarData={documentSideBarData}
                                 setDocumentSidebarData={setDocumentSidebarData}
@@ -517,7 +468,7 @@ export default function RegisterKYC () {
                             />}
                             {searchParams.get('tab') === 'personal_details' &&
                             <PersonalDetails
-                                handleStates={handleStates}
+                                handleStates={handleInputFelids}
                                 states={states}
                                 submitSelected={submitSelected}
                             />}
@@ -533,8 +484,8 @@ export default function RegisterKYC () {
                                     text={'Save and continue'}
                                     testId= 'submit_button'
                                     className = 'max-w-[227px] ml-4 px-[51px]'
-                                    onClick={handleSaveAndContinue}
-                                    isLoading={false}
+                                    onClick={handleSubmit}
+                                    isLoading={isLoadingButton}
                                 />
                             </div>
                             <div

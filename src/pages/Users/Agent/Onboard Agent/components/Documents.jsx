@@ -150,11 +150,12 @@ export default function Documents ({ type, handleStates, states, submitSelected 
             </div>
             <div className='flex'>
                 <div className="w-[48%] relative">
-                    {console.log('xqjxhwqbubuxbq', states[type]?.replaceAll(' ', '_').toLowerCase(), states)}
                     <UploadPlaceholder
                         label="Front"
                         disabled={states[type] === undefined}
-                        path={`${states[type]?.replaceAll(' ', '_').toLowerCase()}/front`}
+                        path={`${states[type] === 'Driver\'s Licence'
+                            ? 'driver_licence/front'
+                            : states[type]?.replaceAll(' ', '_').toLowerCase()}/front`}
                         handleUploadImg={handleStates}
                         selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`}
                         states={states}
@@ -168,7 +169,9 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     <UploadPlaceholder
                         label="Back"
                         disabled={states[type] === undefined}
-                        path={`${states[type]?.replaceAll(' ', '_').toLowerCase()}/back`}
+                        path={`${states[type] === 'Driver\'s Licence'
+                            ? 'driver_licence/back'
+                            : states[type]?.replaceAll(' ', '_').toLowerCase()}/back`}
                         selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_back`}
                         states={states}
                         handleStates={handleStates}

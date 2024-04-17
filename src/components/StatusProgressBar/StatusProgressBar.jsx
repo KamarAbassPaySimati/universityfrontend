@@ -6,9 +6,9 @@ const ProgressBarComponent = ({ ProgressBar, LineClass }) => {
         switch (type) {
         case 'current':
             return { inner: 'bg-primary-normal', outer: 'bg-background-light' };
-        case 'active':
+        case 'completed':
             return { inner: 'bg-accent-positive', outer: 'bg-accent-positive-secondary' };
-        case 'inactive':
+        case 'skip':
             return { inner: 'bg-neutral-secondary', outer: 'bg-neutral-outline' };
         default:
             return { inner: 'bg-neutral-secondary', outer: 'bg-neutral-outline' };

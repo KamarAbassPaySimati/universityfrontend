@@ -9,3 +9,10 @@ export default function handleSort (sortBy, searchParams, setSearchParams) {
     }
     setSearchParams({ ...params });
 }
+
+export const handleSearchParams = (id, value, searchParams, setSearchParams) => {
+    const params = Object.fromEntries(searchParams);
+    params[id] = value;
+    if (value === null) delete params[id];
+    setSearchParams({ ...params });
+};
