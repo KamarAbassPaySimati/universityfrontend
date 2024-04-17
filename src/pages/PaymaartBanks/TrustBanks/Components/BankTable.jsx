@@ -48,7 +48,7 @@ const BankTable = (
                                 </td>
                                 <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? formatTimestamp(bank?.updated_at) : '-'}</td>
                                 <td title={bank?.balance} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
-                                    {(Number(bank?.balance) || 0).toFixed(2).toLocaleString('en-US', { style: 'currency', currency: 'MWK' })}
+                                    {(Number(bank?.balance) || 0).toFixed(2).toLocaleString('en-US', { style: 'currency', currency: 'MWK' })} MWK
                                 </td>
 
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>

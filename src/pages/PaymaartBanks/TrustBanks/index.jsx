@@ -97,7 +97,7 @@ const TrustBanks = () => {
             activePath= {searchParams.get('type') !== null ? formatType(searchParams.get('type')) : ''}
             paths={['Paymaart Banks']}
             pathurls={['paymaart-banks']}
-            header='Paymaart Banks'
+            header='Banks'
             minHeightRequired={true}
             headerWithoutButton={false}
             table={false}
@@ -122,7 +122,7 @@ const TrustBanks = () => {
                         width={'w-[200px]'}
                     />
                     <div className='ml-[10px] w-full overflow-hidden'>
-                        <div className='scrollBar h-[calc(100vh - 10px - 48px)] overflow-auto'>
+                        <div className='scrollBar pb-[8px] h-[calc(100vh - 10px - 48px)] overflow-auto'>
                             {!error && <BankTable
                                 loading={loading}
                                 List={List}
