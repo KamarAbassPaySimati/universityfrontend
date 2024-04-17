@@ -190,3 +190,13 @@ input[type='number'] {
 .capitalize-first:first-letter {
   text-transform: uppercase;
 }
+/* In your CSS file */
+.custom-border-t {
+  border-top: 1.1px solid black; /* Set the top border with desired thickness */
+  padding-top: 1px; /* Adjust padding to compensate for the height of the custom border */
+}
+@layer utilities {
+  .border-t-thin {
+    border-top-width: 1.1px;
+  }
+}

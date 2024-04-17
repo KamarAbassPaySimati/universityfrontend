@@ -39,7 +39,6 @@ export default function NavigationRoutes (props) {
                 setPageLoading(true);
             }
             const userAttributes = await fetchUserAttributes({ bypassCache: true });
-            setPageLoading(false);
             if (isFirstTimeRender.current) {
                 isFirstTimeRender.current = false;
             }
@@ -47,6 +46,7 @@ export default function NavigationRoutes (props) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
             }
+            setPageLoading(false);
         } catch (error) {
             setPageLoading(false);
             console.log(isFirstTimeRender.current, 'ooo');
