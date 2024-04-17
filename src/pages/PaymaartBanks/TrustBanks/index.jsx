@@ -33,10 +33,10 @@ const TrustBanks = () => {
                 setSearchParams({ type: 'trust-banks' });
             }
             if (searchParams.get('type') !== null) {
-                if (searchParams.get('type') !== 'trust-banks' ||
-                searchParams.get('type') !== 'main-capital' ||
-                searchParams.get('type') !== 'taxes' ||
-                searchParams.get('type') !== 'transaction-fees-and-commissions' ||
+                if (searchParams.get('type') !== 'trust-banks' &&
+                searchParams.get('type') !== 'main-capital' &&
+                searchParams.get('type') !== 'taxes' &&
+                searchParams.get('type') !== 'transaction-fees-and-commissions' &&
                 searchParams.get('type') !== 'suspense') {
                     setSearchParams({ type: 'trust-banks' });
                     // eslint-disable-next-line indent
