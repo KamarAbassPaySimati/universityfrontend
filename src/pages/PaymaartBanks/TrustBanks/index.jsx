@@ -28,7 +28,6 @@ const TrustBanks = () => {
 
     };
     useEffect(() => {
-        console.log('firstfds', searchParams.get('type'));
         if (searchParams.get('type') === null) {
             setSearchParams({ type: 'trust-banks' });
         }

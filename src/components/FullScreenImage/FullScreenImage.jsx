@@ -2,7 +2,7 @@ import React from 'react';
 
 const FullScreenImage = ({ onClose, labelValue, imagevalue }) => {
     return (
-        <div data-testid="overview-modal" className="fixed inset-0 bg-black bg-opacity-50 flex flex-col">
+        <div data-testid="overview-modal" className="fixed inset-0 bg-black bg-opacity-50 flex flex-col z-10">
             <div className="flex justify-between items-center  pt-[43px]">
                 <label className="text-[#fff] pl-16 font-600 text-[18px]">{labelValue}</label>
                 <img data-testid="close-button"

@@ -37,7 +37,7 @@ function App (props) {
                     }
                 } catch (error) {
                     if (
-                        ((error.message.includes('User needs to be authenticated')) || 
+                        ((error.message.includes('User needs to be authenticated')) ||
                         (error.name === 'UserUnAuthenticatedException') ||
                        (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException'))) {
                         dispatch(setUser(''));
