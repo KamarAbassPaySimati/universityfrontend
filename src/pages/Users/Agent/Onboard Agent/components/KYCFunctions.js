@@ -95,8 +95,8 @@ export const handleStates = (value, id, type, setStates, states) => {
 };
 
 export const AddressDetails = ['street_name', 'town_village_ta', 'district'];
-export const PersonalDetails = ['gender', 'DOB', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
-export const occupationEmployed = ['employed', 'employer_name', 'industry_sector', 'town/district'];
+export const PersonalDetailsList = ['gender', 'dob', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
+export const occupationEmployed = ['employed_role', 'employer_name', 'industry', 'occupation_town'];
 export const occupationSelfEmployed = ['please_specify'];
 export const occupationEduction = ['education'];
 export const VerificationDocument = {

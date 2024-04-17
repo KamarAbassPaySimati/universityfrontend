@@ -89,7 +89,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
             'Industry Sector': {
                 label: 'Industry Sector',
                 type: 'dropdown',
-                key: 'industry_sector',
+                key: 'industry',
                 require: true,
                 options: [
                     'CDH Investment Bank',
@@ -105,7 +105,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
             'Town/District': {
                 label: 'Town/District',
                 type: 'googleAPI',
-                key: 'town/district',
+                key: 'occupation_town',
                 require: true
 
             }
@@ -145,8 +145,8 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
                 <DatePickerAntd
                     label={'Date of Birth'}
                     handleStates={handleStates}
-                    value={states?.DOB}
-                    error={(states.DOB === undefined && submitSelected) ? 'Required field' : undefined}
+                    value={states?.dob}
+                    error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
                 />
             </div>
             <div className='flex w-full items-end'>
@@ -173,15 +173,15 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
                     <div className='mx-[10px]'>
                         <InputFieldWithDropDown
                             labelName={'Employed'}
-                            value={states?.employed === undefined ? '' : states.employed}
+                            value={states?.employed_role === undefined ? '' : states.employed_role}
                             placeholder={'Select employed'}
                             // error={formErrors.role}
                             options={EmployedList}
-                            id="employed"
-                            testId="employed"
+                            id="employed_role"
+                            testId="employed_role"
                             // information
                             handleInput={handleStates}
-                            error={(submitSelected && (states.employed === undefined || states.employed === ''))
+                            error={(submitSelected && (states.employed_role === undefined || states.employed_role === ''))
                                 ? 'Required field'
                                 : undefined}
                         />

@@ -12,7 +12,7 @@ import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { dataService } from '../../../../../services/data.services';
 import {
-    AddressDetails, IdDocuments, ProgressBar, VerificationDocument,
+    AddressDetails, IdDocuments, PersonalDetailsList, ProgressBar, VerificationDocument,
     handleStates, handleStatusBar, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
 import { handleSearchParams } from '../../../../../CommonMethods/ListFunctions';
@@ -116,6 +116,7 @@ export default function RegisterKYC () {
             await dataService.PostAPIAgent('create-kyc-secure', body);
             getKYCView();
             setIsLoadingButton(false);
+            setSubmitPayload({});
         } catch (error) {
             setIsLoadingButton(false);
             console.log('error', error);
@@ -176,7 +177,6 @@ export default function RegisterKYC () {
                 }
                 body.capture = states.capture;
             }
-            console.log('bodydydyddy', body);
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
                 VerificationDocument[states['Verification Document']].map((selectedItem) => {
                     if (states[selectedItem] === undefined || states[selectedItem] === '') {
@@ -201,17 +201,17 @@ export default function RegisterKYC () {
                 }
                 count = count + 1;
             }
-            console.log('body', body);
             setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
             setSubmitPayload({ ...body });
             return count === 0;
         case 'personal_details':
-            PersonalDetails.map((item) => {
+            PersonalDetailsList.map((item) => {
                 if (item === 'purpose') {
-                    if (states[item] === '' || states[item].length === 0) {
+                    if (states[item] === undefined || states[item].length === 0) {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
+                        console.log('count', count, item);
                         count = count + 1;
                     }
                 } else {
@@ -219,6 +219,7 @@ export default function RegisterKYC () {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
+                        console.log('count1', count, item);
                         count = count + 1;
                     }
                 }
@@ -232,7 +233,14 @@ export default function RegisterKYC () {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
+                            console.log('count2', count, item);
                             count = count + 1;
+                        } else {
+                            // "employed_role" : "Admin/Administrative/Clerical",
+                            // "employer_name": "ABC Inc.",
+                            // "industry": "Technology",
+                            // "occupation_town": "Springfield",
+                            // body[]
                         }
                     }
                     );
@@ -243,6 +251,7 @@ export default function RegisterKYC () {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
+                            console.log('count3', count);
                             count = count + 1;
                         }
                     }
@@ -254,6 +263,7 @@ export default function RegisterKYC () {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
+                            console.log('count4', count);
                             count = count + 1;
                         }
                     }
@@ -263,6 +273,7 @@ export default function RegisterKYC () {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
+                        console.log('count5', count);
                         count = count + 1;
                     }
                     break;
@@ -272,6 +283,7 @@ export default function RegisterKYC () {
                 }
             }
             // if(states.)
+            console.log('bwcwcuwuwc', count);
             return count === 0;
         default:
             break;
@@ -329,9 +341,28 @@ export default function RegisterKYC () {
                 }
                 break;
             case 'personal_details':
-                if (!handleValidation('identity_details')) {
-                    console.log('error');
+                if (!handleValidation('personal_details')) {
+                    console.log('error identttt');
                 } else {
+                    console.log('mothly_incomee', states);
+                    const body = {
+                        gender: states.gender,
+                        dob: (new Date(states.dob).getTime() / 1000).toString(),
+                        occupation: states.occupation,
+                        employed_role: 'Admin/Administrative/Clerical',
+                        employer_name: 'ABC Inc.',
+                        industry: 'Technology',
+                        occupation_town: 'Springfield',
+                        purpose_of_relation: states.purpose.join('\n'),
+                        monthly_income: states.monthly_income,
+                        monthly_withdrawal: states.monthly_withdrawal,
+                        // bank_name: 'Nationl Bank',
+                        // account_number: '234567654',
+                        // account_name: 'Abhishek',
+                        paymaart_id: id,
+                        info_details_status: 'completed'
+                    };
+                    handleAPICall(body);
                     handleStatusBar('personal_details', 'active', '', setProgressBarStatus);
                     handleSearchParams('tab', 'success', searchParams, setSearchParams);
                 }
@@ -400,6 +431,9 @@ export default function RegisterKYC () {
                                 status: searchParams.get('tab') === 'personal_details' ? 'current' : res.data.data[item],
                                 label: 'Personal Details'
                             };
+                            break;
+                        case 'dob':
+                            object.dob = new Date(parseInt(res.data.data[item]) * 1000).toISOString();
                             break;
                         default:
                             object[item] = res.data.data[item];

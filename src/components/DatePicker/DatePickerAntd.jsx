@@ -19,7 +19,7 @@ const CustomDatePicker = ({ label, handleStates, value, error }) => {
                 value={value}
                 suffixIcon={<Image src='calendar'/>}
                 disabledDate={getDisabledDate}
-                onChange={(date, dateString) => handleStates(date, 'DOB')}
+                onChange={(date, dateString) => handleStates(date, 'dob')}
             />
             {error && <ErrorMessage error={error} />}
         </div>
