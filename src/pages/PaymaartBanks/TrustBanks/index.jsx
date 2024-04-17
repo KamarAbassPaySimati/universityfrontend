@@ -78,7 +78,7 @@ const TrustBanks = () => {
     function formatType (type) {
         if (type !== undefined || type !== null) {
             return type
-                .replace(/-/g, ' ') // Replace "-" with space
+                .replace(/-/g, ' ')
                 .replace(/and/g, '&') // Replace "and" with "&"
                 .split(' ') // Split the string into words
                 .map((word, index) => {
