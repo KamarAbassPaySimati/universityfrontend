@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import DocumentSidebar from '../../../components/DocumentTab/DocumentSidebar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -8,14 +8,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import { bankAccountList } from './BankSlice';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import BankTable from './Components/BankTable';
+import { endpoints } from '../../../services/endpoints';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const [isShownLayer, setIsShwonLayer] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const isFirstTimeRender = useRef(true);
     const { setToastError } = useContext(GlobalContext);
     const { List, error, loading } = useSelector(state => state.bankAccounts);
+    const { listTrustBank, listCapitalBank } = endpoints;
     const bankTypes = {
         'Trust Banks': 'clear',
         'Main Capital': 'clear',
@@ -25,44 +28,44 @@ const TrustBanks = () => {
 
     };
     useEffect(() => {
-        if (searchParams.get('type') === null) {
-            setSearchParams({ type: 'trust-banks' });
-        }
-        console.log(searchParams.get('type'), 'gettype');
-        if (searchParams.get('type') !== null) {
-            if (searchParams.get('type') !== 'trust-banks' ||
-            searchParams.get('type') !== 'main-capital' ||
-            searchParams.get('type') !== 'taxes' ||
-            searchParams.get('type') !== 'transaction-fees-and-commissions' ||
-            searchParams.get('type') !== 'suspense') {
+        if (isFirstTimeRender.current) {
+            if (searchParams.get('type') === null) {
                 setSearchParams({ type: 'trust-banks' });
-                // eslint-disable-next-line indent
-                    <NotFound link={'/paymaart-banks'}
-                />;
             }
-        }
-    }, []);
-    useEffect(() => {
-        const fetchData = async () => {
             if (searchParams.get('type') !== null) {
-                if (searchParams.get('type') === 'trust-banks') {
-                    try {
-                        // Fetch data using KycVerificationList
-                        dispatch(bankAccountList('list-trust-bank'));
-
-                        // Handle setting params and checking List length
-                    } catch (error) {
-                        console.error(error);
-                        // Handle error
-                        setToastError('Something went wrong!');
-                    }
+                if (searchParams.get('type') !== 'trust-banks' ||
+                searchParams.get('type') !== 'main-capital' ||
+                searchParams.get('type') !== 'taxes' ||
+                searchParams.get('type') !== 'transaction-fees-and-commissions' ||
+                searchParams.get('type') !== 'suspense') {
+                    setSearchParams({ type: 'trust-banks' });
+                    // eslint-disable-next-line indent
+                        <NotFound link={'/paymaart-banks'}
+                    />;
                 }
             }
-        };
-
-        // Call fetchData on mount and when searchParams change
-        fetchData();
+            isFirstTimeRender.current = false;
+        }
+        if (searchParams.get('type') !== null) {
+            if (searchParams.get('type') === 'trust-banks') {
+                fetchDataByUrl(listTrustBank);
+            } else if (searchParams.get('type') === 'main-capital') {
+                fetchDataByUrl(listCapitalBank);
+            }
+        }
     }, [searchParams]);
+    const fetchDataByUrl = async (url) => {
+        try {
+            // Fetch data using the provided URL
+            await dispatch(bankAccountList(url));
+
+            // Handle setting params and checking List length
+        } catch (error) {
+            console.error(error);
+            // Handle error
+            setToastError('Something went wrong!');
+        }
+    };
 
     function handleCloseOverlay () {
         setIsShwonLayer(false);
@@ -123,6 +126,7 @@ const TrustBanks = () => {
                             {!error && <BankTable
                                 loading={loading}
                                 List={List}
+                                searchParams={searchParams}
                             />}
                         </div>
                     </div>
