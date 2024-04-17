@@ -1,5 +1,5 @@
 /* eslint-disable quotes */
-import React, { Suspense, useEffect, useRef, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
 import Login from '../pages/auth/Login';
@@ -26,7 +26,6 @@ export default function NavigationRoutes (props) {
         CurrentUserRole = Slugify(CurrentUserRole);
     }
     const [ToastError, setToastError] = useState('');
-    const isFirstTimeRender = useRef(true);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -35,13 +34,8 @@ export default function NavigationRoutes (props) {
 
     const checkLoggedInUser = async () => {
         try {
-            if (isFirstTimeRender.current) {
-                setPageLoading(true);
-            }
+            setPageLoading(true);
             const userAttributes = await fetchUserAttributes({ bypassCache: true });
-            if (isFirstTimeRender.current) {
-                isFirstTimeRender.current = false;
-            }
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
@@ -49,12 +43,10 @@ export default function NavigationRoutes (props) {
             setPageLoading(false);
         } catch (error) {
             setPageLoading(false);
-            console.log(isFirstTimeRender.current, 'ooo');
-            if (isFirstTimeRender.current &&
+            if (
                 ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException') ||
                (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException'))) {
                 dispatch(setUser(''));
-                isFirstTimeRender.current = false;
                 if (localStorage.getItem("userLogedIn")) {
                     setToastError('user session failed!');
                 }
@@ -64,7 +56,7 @@ export default function NavigationRoutes (props) {
     };
     useEffect(() => {
         checkLoggedInUser();
-    }, [location]);
+    }, []);
 
     useEffect(() => {
         if (!pageLoading && !loggedIn && (window.location.pathname !== '/forgot-password' &&
