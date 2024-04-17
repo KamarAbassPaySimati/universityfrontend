@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import DocumentSidebar from '../../../components/DocumentTab/DocumentSidebar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -15,7 +15,7 @@ const TrustBanks = () => {
     const [isShownLayer, setIsShwonLayer] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const isFirstTimeRender = useRef(true);
+
     const { setToastError } = useContext(GlobalContext);
     const { List, error, loading } = useSelector(state => state.bankAccounts);
     const { listTrustBank, listCapitalBank } = endpoints;
@@ -28,23 +28,21 @@ const TrustBanks = () => {
 
     };
     useEffect(() => {
-        if (isFirstTimeRender.current) {
-            if (searchParams.get('type') === null) {
-                setSearchParams({ type: 'trust-banks' });
-            }
-            if (searchParams.get('type') !== null) {
-                if (searchParams.get('type') !== 'trust-banks' ||
-                searchParams.get('type') !== 'main-capital' ||
-                searchParams.get('type') !== 'taxes' ||
-                searchParams.get('type') !== 'transaction-fees-and-commissions' ||
+        console.log('firstfds', searchParams.get('type'));
+        if (searchParams.get('type') === null) {
+            setSearchParams({ type: 'trust-banks' });
+        }
+        if (searchParams.get('type') !== null) {
+            if (searchParams.get('type') !== 'trust-banks' &&
+                searchParams.get('type') !== 'main-capital' &&
+                searchParams.get('type') !== 'taxes' &&
+                searchParams.get('type') !== 'transaction-fees-and-commissions' &&
                 searchParams.get('type') !== 'suspense') {
-                    setSearchParams({ type: 'trust-banks' });
-                    // eslint-disable-next-line indent
-                        <NotFound link={'/paymaart-banks'}
-                    />;
-                }
+                setSearchParams({ type: 'trust-banks' });
+                // eslint-disable-next-line indent
+                    <NotFound link={'/paymaart-banks'}
+                />;
             }
-            isFirstTimeRender.current = false;
         }
         if (searchParams.get('type') !== null) {
             if (searchParams.get('type') === 'trust-banks') {

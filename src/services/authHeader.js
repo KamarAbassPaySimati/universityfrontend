@@ -10,7 +10,10 @@ export default async function authHeader () {
         };
         return headers;
     } catch (error) {
-        console.log(error);
-        window.location.reload();
+        if (((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException') ||
+        (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException'))) {
+            console.log(error);
+            window.location.reload();
+        }
     }
 };

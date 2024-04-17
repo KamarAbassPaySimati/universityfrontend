@@ -8,6 +8,9 @@ import GlobalContext from './components/Context/GlobalContext';
 import { Hub } from 'aws-amplify/utils';
 import { dataService } from './services/data.services';
 import { endpoints } from './services/endpoints';
+import { fetchUserAttributes } from 'aws-amplify/auth';
+import { login, logout, setUser } from './pages/auth/authSlice';
+import { useDispatch } from 'react-redux';
 
 Amplify.configure(awsConfig);
 
@@ -19,11 +22,39 @@ function App (props) {
     const [ToastWarning, setToastWarning] = useState('');
     const [ToastInformation, setToastInformation] = useState('');
     const { updateLoggedIn } = endpoints;
+    const dispatch = useDispatch();
 
     useEffect(() => {
         Hub.listen('auth', async ({ payload }) => {
             switch (payload.event) {
             case 'tokenRefresh':
+                try {
+                    const userAttributes = await fetchUserAttributes({ bypassCache: true });
+
+                    if (userAttributes) {
+                        dispatch(setUser(userAttributes));
+                        dispatch(login());
+                    }
+                } catch (error) {
+                    if (
+                        ((error.message.includes('User needs to be authenticated')) || 
+                        (error.name === 'UserUnAuthenticatedException') ||
+                       (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException'))) {
+                        dispatch(setUser(''));
+                        if (localStorage.getItem('userLogedIn')) {
+                            setToastError('user session failed!');
+                        }
+                        dispatch(logout());
+                    }
+                }
+                try {
+                    const response = await dataService.PatchAPI(updateLoggedIn);
+                    console.log('response of hub api', response);
+                } catch (error) {
+                    console.log('auth tokens have not been refreshed.');
+                }
+                console.log('auth tokens have been refreshed.');
+                break;
             case 'signedIn':
                 // Call api
                 try {
