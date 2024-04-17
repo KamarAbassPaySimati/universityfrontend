@@ -98,6 +98,12 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                     </p>
                     <div className='w-full flex items-center justify-between bg-background-light py-2.5 px-3 rounded h-[78px]'>
                         <p className='px-3 font-normal text-[20px] leading-[28px] text-header-dark'>Business Customer</p>
+                        <div class="moving-text-container">
+                            <button class="moving-text-btn">
+                                <span class="moving-text font-normal text-[12px] leading-[18px] text-[#FFFFFF]">Coming Soon</span>
+                            </button>
+                        </div>
+
                     </div>
                 </div>
                 <div>

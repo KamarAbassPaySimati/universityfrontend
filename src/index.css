@@ -413,3 +413,48 @@ iframe {
     user-select: none;
   }
 }
+
+.moving-text-container {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 150px; /* Adjust the width as needed */
+  height: 70px; /* Adjust the height as needed */
+  position: relative;
+}
+
+.moving-text-btn {
+  position: absolute;
+  background: #FD9101; /* Set the background color for the button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 46px;
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
+  border-radius: 28.15px; /* Apply border radius */
+
+}
+
+.moving-text {
+  animation: moveText 2s linear infinite; /* Adjust duration (2s) as needed */
+}
+
+@keyframes moveText {
+  0% {
+    transform: translateX(0) translateY(0); /* Start position */
+  }
+  25% {
+    transform: translateX(-20px) translateY(-1px); /* Move left and up */
+  }
+  50% {
+    transform: translateX(0) translateY(-2px); /* Move up */
+  }
+  75% {
+    transform: translateX(20px) translateY(-1px); /* Move right and up */
+  }
+  100% {
+    transform: translateX(0) translateY(0); /* Back to start */
+  }
+}
