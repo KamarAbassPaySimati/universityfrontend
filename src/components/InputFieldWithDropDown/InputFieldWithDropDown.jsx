@@ -10,6 +10,8 @@ function InputFieldWithDropDown (props) {
     useOnClickOutside(outsideClickRef, () => {
         setShow(false);
     });
+    // Sort the options array before rendering
+    const sortedOptions = options.slice().sort();
     return (
         <div className=" flex flex-col relative gap-2">
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{labelName}</label>
@@ -36,7 +38,7 @@ function InputFieldWithDropDown (props) {
                 border border-[#E5E4E5] !top-3 h-fit transform-none 
                 ${show === true ? 'show' : 'hidden'}`} aria-labelledby="patient-dropdownMenuButton1"
                     style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
-                    {options.map((item, index = 0) => (
+                    {sortedOptions.map((item, index = 0) => (
                         <li onClick={(e) => {
                             e.preventDefault(); setShow(false);
                             handleInput(item, id);
