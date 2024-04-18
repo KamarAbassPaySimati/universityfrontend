@@ -50,11 +50,12 @@ export default function WebCam ({ handleStates, handleClose }) {
                 {image !== null && <Button2
                     text={'Re-capture'}
                     onClick={() => setImage(null)}
+                    testId={'re_capture_selfie'}
                     className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
                 />}
                 {<Button
                     text={image === null ? 'Capture' : 'Submit'}
-                    testId= 'submit_button'
+                    testId= {image === null ? 'capture_selfie' : 'selfie_looks_good'}
                     className = 'max-w-[200px] h-10 ml-4 px-[51px]'
                     onClick={image === null ? capture : handleCapture}
                     isLoading={false}

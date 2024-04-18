@@ -5,7 +5,7 @@ import ImageLoader from './ImageLoader';
 import IframeModal from '../Iframe/IframeModal';
 import GlobalContext from '../Context/GlobalContext';
 
-export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled, error }) {
+export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled, error, testId }) {
     const [loadingImg, setLoadingImg] = useState(false);
     const [showIframe, setShowIframe] = useState(false);
     const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
@@ -38,8 +38,9 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                     <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium break-words w-[70%]'>
                         {states[selectedUploadImg].split('/')[2]}</p>
                     <div className='flex gap-3 px-2'>
-                        <Image src='eyeLight' className='h-6 w-6 cursor-pointer' onClick={() => setShowIframe(true)}/>
-                        <Image src='refresh' className='h-6 w-6 cursor-pointer'
+                        <Image src='eyeLight' testId={`view_${testId}`}
+                            className='h-6 w-6 cursor-pointer' onClick={() => setShowIframe(true)}/>
+                        <Image src='refresh' testId={`remove_${testId}`} className='h-6 w-6 cursor-pointer'
                             onClick={() => {
                                 handleDelete(states[selectedUploadImg]);
                                 handleStates('', selectedUploadImg);
@@ -80,6 +81,7 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                                         <input
                                             onChange={(e) => handleUploadFile(e)}
                                             disabled={disabled}
+                                            data-testid={testId}
                                             accept="image/jpeg, image/png, application/pdf"
                                             type="file" className="h-full w-full opacity-0" name=""/>
                                     </>}

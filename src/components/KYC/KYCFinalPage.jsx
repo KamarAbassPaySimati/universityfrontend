@@ -13,7 +13,8 @@ export default function KYCFinalPage () {
             <div className='w-[60%] bg-[#ffffff] px-[80px] flex flex-col items-center'>
                 <p className='font-normal text-[24px] leading-[32px] py-[26px]'>KYC Registration</p>
                 <p className='mt-[70px] font-bold text-[30px] leading-10 text-accent-positive'>Submission Successful!</p>
-                <p className='text-center text-[18px] leading-[26px] font-normal text-neutral-secondary mt-[18px] mb-[112px]'>
+                <p data-testid="KYC_success_message"
+                    className='text-center text-[18px] leading-[26px] font-normal text-neutral-secondary mt-[18px] mb-[112px]'>
                     Thank you for providing your information. This is received into our review process.
                     We will confirm its acceptance
                     or otherwise shortly. To your registered email address.

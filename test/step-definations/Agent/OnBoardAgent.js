@@ -15,6 +15,7 @@ Before(async function () {
 
 Given('I navigate to agent onboarding screen', async function () {
     // Write code here that turns the phrase above into concrete action
+    await new Promise(resolve => setTimeout(resolve, 3000));
     await driver.get('http://localhost:3000/users/agents/register-agent');
 });
 

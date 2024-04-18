@@ -9,7 +9,7 @@ export default function IdentityDetails ({ handleStates, states, documentSideBar
         });
     };
     return (
-        <div className='flex'>
+        <div data-testid="kyc_identity_details_screen" className='flex'>
             <DocumentSidebar
                 documentTypes={documentSideBarData.documentTypes}
                 selectedData={documentSideBarData.selectedData}

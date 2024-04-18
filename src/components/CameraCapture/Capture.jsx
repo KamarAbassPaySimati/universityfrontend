@@ -29,12 +29,12 @@ export default function Capture ({ label, handleStates, states, submitSelected }
                                 {(states.capture !== undefined && states.capture !== '')
                                     ? (
                                         <div className='flex justify-center items-center'>
-                                            <img src={`${CDN}${states.capture}`} className='relative'/>
-                                            <Image src='refresh' className='h-6 w-6 cursor-pointer absolute'/>
+                                            <img data-testid="uploaded_selfie" src={`${CDN}${states.capture}`} className='relative'/>
+                                            <Image testId="remove_selfie_and_retake" src='refresh' className='h-6 w-6 cursor-pointer absolute'/>
                                         </div>
 
                                     )
-                                    : (<button className='flex items-center rounded border border-neutral-outline p-2.5 text-neutral-primary
+                                    : (<button data-testid="capture" className='flex items-center rounded border border-neutral-outline p-2.5 text-neutral-primary
                                     gap-2.5 font-medium text-[14px] leading-4 mb-2'>
                                         <Image src="camera"/>
                                         Capture

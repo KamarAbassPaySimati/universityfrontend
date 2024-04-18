@@ -92,15 +92,8 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full Skip Everything
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard new agent and navigate to KYC verification
-        Given I am on the login screen
-        When I enter the email address as "bharath.shet+support_admin@7edge.com" and password as "Admin@123"
-        And I submit the login form
-        Then I should be navigated to the TOTP screen
-        When I enter the TOTP obtained from the previously scanned device
-        And I submit the TOTP form
-        Then I should be redirected to the '/dashboard' page
-        When I navigate to agent onboarding screen
-        * I enter a valid first name for agent registration
+        Given I navigate to agent onboarding screen
+        When I enter a valid first name for agent registration
         * I enter a valid middle name for agent registration
         * I enter a valid last name for agent registration
         * I enter a valid email address for agent registration

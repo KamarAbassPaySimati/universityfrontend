@@ -25,6 +25,7 @@ export default function DocumentSidebar ({ documentTypes, handleOnClick, selecte
                         className={`cursor-pointer font-bold text-[16px] leading-4 
                         ${selectedData === docItem ? 'text-neutral-primary' : 'text-neutral-secondary'}  mr-[18px]`}
                         onClick={() => handleOnClick(docItem)}
+                        data-testid={`${docItem.replaceAll(' ', '_').toLowerCase()}_tab`}
                     >{docItem}</p>
                     {getColor(documentTypes[docItem])}
                 </div>))}

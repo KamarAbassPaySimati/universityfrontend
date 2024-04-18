@@ -92,15 +92,8 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard new agent and navigate to KYC verification
-        Given I am on the login screen
-        When I enter the email address as "bharath.shet+support_admin@7edge.com" and password as "Admin@123"
-        And I submit the login form
-        Then I should be navigated to the TOTP screen
-        When I enter the TOTP obtained from the previously scanned device
-        And I submit the TOTP form
-        Then I should be redirected to the '/dashboard' page
-        When I navigate to agent onboarding screen
-        * I enter a valid first name for agent registration
+        Given I navigate to agent onboarding screen
+        When I enter a valid first name for agent registration
         * I enter a valid middle name for agent registration
         * I enter a valid last name for agent registration
         * I enter a valid email address for agent registration
@@ -132,7 +125,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
 
     Scenario: Enter valid KYC Address details
         Given I am in KYC address details screen
-        When I enter street name as "Maple Avenue"
+        When I enter street name as "M1"
         Then I should see the town and district field getting pre-filled with google API data
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
@@ -154,7 +147,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I click on re-capture button
         Then I should view selfie capture again
         And I click on capture selfie
-        And I click on proceed button
+        And I click on selfie looks good button
         Then I should view the image getting captured
 
     Scenario: Upload valid ID document details
@@ -179,7 +172,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
-        When I select the date of birth as "04/08/1999"
+        When I select the date of birth as "04-Aug-1999"
         When I select the applicable purpose and nature of business
         When I select valid monthly income and monthly withdrawal
         When I select the Occupation as "Employed"
@@ -194,28 +187,11 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
             | ""            | "Education services" |
             | "7Edge"       | ""                   |
 
-    Scenario: KYC personal details with invalid details
-        Given I am in KYC personal details screen
-        When I select gender as "male"
-        When I select the date of birth as "04/08/1999"
-        When I select the applicable purpose and nature of business
-        When I select valid monthly income and monthly withdrawal
-        When I select the Occupation as "Employed"
-        When I select employed as "Admin/Administrative/Clerical"
-        When I enter employer name as <employer_name>
-        When I select industry sector as <industry_sector>
-        And I select valid town and district
-        When I click on save and continue button
-        Then I should read a message stating that "Required field"
-        Examples:
-            | employer_name | industry_sector      |
-            | ""            | "Education services" |
-            | "7Edge"       | ""                   |
 
     Scenario: KYC personal details with valid details
         Given I am in KYC personal details screen
         When I select gender as "male"
-        When I select the date of birth as "04/08/1999"
+        When I select the date of birth as "04-Aug-1999"
         When I select the Occupation as "Employed"
         When I select employed as "Admin/Administrative/Clerical"
         When I enter employer name as "7Edge"

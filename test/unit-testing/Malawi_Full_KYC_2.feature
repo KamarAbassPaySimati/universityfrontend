@@ -37,7 +37,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     c. Biometrics|Live selfie
     2b. Verification Documents Options(select any one and upload)
     a. Valid Driver’s Licence issued by an appropriate authority
-    b. Valid Traffic Register card issued by an appropriate authority
+    b. Valid Traffic register card issued by an appropriate authority
     c. Birth Certificate
     d. A stamped letter with verifiable particulars of an employer signed by the head of the employer
     e. A stamped letter with verifiable particulars of a learning institution signed by the head of the institution
@@ -92,15 +92,8 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard new agent and navigate to KYC verification
-        Given I am on the login screen
-        When I enter the email address as "bharath.shet+support_admin@7edge.com" and password as "Admin@123"
-        And I submit the login form
-        Then I should be navigated to the TOTP screen
-        When I enter the TOTP obtained from the previously scanned device
-        And I submit the TOTP form
-        Then I should be redirected to the '/dashboard' page
-        When I navigate to agent onboarding screen
-        * I enter a valid first name for agent registration
+        Given I navigate to agent onboarding screen
+        When I enter a valid first name for agent registration
         * I enter a valid middle name for agent registration
         * I enter a valid last name for agent registration
         * I enter a valid email address for agent registration
@@ -132,7 +125,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
 
     Scenario: Enter valid KYC Address details
         Given I am in KYC address details screen
-        When I enter street name as "Maple Avenue"
+        When I enter street name as "M1"
         Then I should see the town and district field getting pre-filled with google API data
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
@@ -143,9 +136,10 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
         Examples:
-            | image_front | message                               |
-            | "image.png" | "Image size should be less than 10mb" |
-            | "doc.csv"   | "File format not supported"           |
+            | image_front       | message                                                   |
+            | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
+
 
     Scenario: Upload valid ID document details and Capture selfie
         Given I am in KYC identity document details screen
@@ -164,26 +158,26 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I click on re-capture button
         Then I should view selfie capture again
         And I click on capture selfie
-        And I click on proceed button
+        And I click on selfie looks good button
         Then I should view the image getting captured
 
     Scenario: Upload verification document
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Traffic Register Card"
+        When I select the verification document as "Traffic register card"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
         And I upload the back image of document as <image_back>
         Then I should read a message stating that <message>
         Examples:
-            | image_front | image_back  | message                               |
-            | "image.png" | "image.jpg" | "Image size should be less than 10mb" |
-            | "doc.csv"   | "doc.csv"   | "File format not supported"           |
+            | image_front       | image_back        | message                                                   |
+            | "15MBImage.jpg"   | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Traffic Register Card"
+        When I select the verification document as "Traffic register card"
         And I upload the front image of document as "document_front.png"
         And I upload the back image of document as "document_back.png"
         Then I should be able to view the preview of the document front
@@ -203,7 +197,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
-        When I select the date of birth as "04/08/1999"
+        When I select the date of birth as "04-Aug-1999"
         When I select the Occupation as "Seeking employment"
         When I select the applicable purpose and nature of business
         When I select valid monthly income and monthly withdrawal

@@ -14,7 +14,7 @@ Then('I should read a message stating that {string}', { timeout: 35000 }, async 
         if (check) {
             return 'passed';
         } else {
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise(resolve => setTimeout(resolve, 100));
             retries--;
         }
     }

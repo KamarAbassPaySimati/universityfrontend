@@ -92,15 +92,8 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard new agent and navigate to KYC verification
-        Given I am on the login screen
-        When I enter the email address as "bharath.shet+support_admin@7edge.com" and password as "Admin@123"
-        And I submit the login form
-        Then I should be navigated to the TOTP screen
-        When I enter the TOTP obtained from the previously scanned device
-        And I submit the TOTP form
-        Then I should be redirected to the '/dashboard' page
-        When I navigate to agent onboarding screen
-        * I enter a valid first name for agent registration
+        Given I navigate to agent onboarding screen
+        When I enter a valid first name for agent registration
         * I enter a valid middle name for agent registration
         * I enter a valid last name for agent registration
         * I enter a valid email address for agent registration
@@ -137,7 +130,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
 
     Scenario: Enter valid KYC Address details
         Given I am in KYC address details screen
-        When I enter street name as "Maple Avenue"
+        When I enter street name as "M1"
         Then I should see the town and district field getting pre-filled with google API data
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
@@ -150,9 +143,9 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
         And I upload the back image of document as <image_back>
         Then I should read a message stating that <message>
         Examples:
-            | image_front | image_back  | message                               |
-            | "image.png" | "image.jpg" | "Image size should be less than 10mb" |
-            | "doc.csv"   | "doc.csv"   | "File format not supported"           |
+            | image_front       | image_back        | message                                                   |
+            | "15MBImage.jpg"   | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
@@ -164,6 +157,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
         Then I should view the preview of the uploaded document
 
     Scenario: Capture selfie
+        Given I am in KYC identity document details screen
         When I click on capture
         Then I should view the selfie capture modal
         When I click on capture selfie
@@ -171,7 +165,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
         When I click on re-capture button
         Then I should view selfie capture again
         And I click on capture selfie
-        And I click on proceed button
+        And I click on selfie looks good button
         Then I should view the image getting captured
 
     Scenario: Upload verification document
@@ -183,9 +177,9 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
         And I upload the back image of document as <image_back>
         Then I should read a message stating that <message>
         Examples:
-            | image_front | image_back  | message                               |
-            | "image.png" | "image.jpg" | "Image size should be less than 10mb" |
-            | "doc.csv"   | "doc.csv"   | "File format not supported"           |
+            | image_front       | image_back        | message                                                   |
+            | "15MBImage.jpg"   | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
@@ -210,7 +204,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
-        When I select the date of birth as "04/08/1999"
+        When I select the date of birth as "04-Aug-1999"
         When I select the Occupation as "In Full time education"
         When I search and select institution as "Other"
         And I enter the other institution name as "BDD institute"

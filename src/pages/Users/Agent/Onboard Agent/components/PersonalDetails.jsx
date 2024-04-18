@@ -127,7 +127,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
     };
 
     return (
-        <div className='overflow-auto scrollBar h-tabledivHeight'>
+        <div data-testid="kyc_personal_details_screen" className='overflow-auto scrollBar h-tabledivHeight'>
             <p className={`ml-2.5 font-medium text-[14px] leading-4 text-neutral-primary
             ${(submitSelected && (states.gender === undefined || states.gender === '')) ? 'pt-2' : 'py-2'}`}>Gender</p>
             <div className='flex'>
@@ -164,7 +164,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                             // error={formErrors.role}
                             options={OccupationList}
                             id="occupation"
-                            testId="occupation"
+                            testId="occupation_dropdown"
                             // information
                             handleInput={handleStates}
                             error={(submitSelected && (states.occupation === undefined || states.occupation === ''))
@@ -262,6 +262,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     <InputTypeCheckbox
                         key={purposeItem}
                         id={purposeItem}
+                        testId={`purpose_${index}`}
                         checkboxText={purposeItem}
                         handleOnChange={handleStates}
                         Checked={states?.purpose !== undefined ? states?.purpose.includes(purposeItem) : false}

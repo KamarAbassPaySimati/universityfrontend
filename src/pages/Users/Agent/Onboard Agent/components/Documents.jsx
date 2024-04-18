@@ -134,7 +134,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                         : undefined}
                     options={type !== 'ID Document' ? VerificationDocumentList : IdDocumentList}
                     id={type}
-                    testId={type}
+                    testId={`${type.replaceAll(' ', '_').toLowerCase()}_dropdown`}
                     information
                     handleInput={handleStates}
                 />
@@ -156,6 +156,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                 <div className="w-[48%] relative">
                     <UploadPlaceholder
                         label="Front"
+                        testId={'kyc_upload_document_front'}
                         disabled={states[type] === undefined}
                         path={`kyc_data/${id}`}
                         handleUploadImg={handleStates}
@@ -172,6 +173,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                 <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder
                         label="Back"
+                        testId={'kyc_upload_document_back'}
                         disabled={states[type] === undefined}
                         path={`kyc_data/${id}`}
                         selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_back`}

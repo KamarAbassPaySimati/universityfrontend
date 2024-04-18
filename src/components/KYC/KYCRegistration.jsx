@@ -22,6 +22,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                                 className={`w-[240px] flex ${states?.citizen_type === item ? 'bg-background-light ' : ''}
                                 py-2.5 px-3 rounded items-center cursor-pointer ${index !== 0 ? ' ml-[22px]' : ''}`}
                                 key={item}
+                                data-testid={item.replaceAll(' ', '_').toLowerCase()}
                                 onClick={() => handleStates(item, 'citizen_type')}
                             >
                                 <Image src={item.replaceAll(' ', '_').toLowerCase()}/>
@@ -56,7 +57,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                     <Button
                         className='w-full text-[#F6F8F9] h-10 rounded-md
                                  bg-primary-normal p-1 text-[14px] leading-[24px] font-medium'
-                        testId='kyc-btn'
+                        testId='proceed_button'
                         text={'Proceed'}
                         isLoading={isLoading}
                         onClick={() => handleSubmit('proceed')}

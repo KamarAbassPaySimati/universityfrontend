@@ -44,7 +44,7 @@ const RegistrationSuccessful = ({ email, paymartId }) => {
                     </p>
                     <Button
                         className='max-w-[200px] mt-2'
-                        testId='kyc-btn'
+                        testId='verify_KYC'
                         text='KYC Registration'
                         onClick={() => Navigate(`/users/agents/register-agent/kyc-registration/${paymartId}`)}
                     />

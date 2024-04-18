@@ -56,7 +56,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
             ? 'bg-background-light text-background-dark'
             : 'bg-[#FFEED9] text-[#FD9101]'} 
                                     font-normal p-1 text-[14px] leading-[22px]`}
-                                    testId='kyc-btn'
+                                    data-testid='KYC_status'
                                 >{status}</button>
                             </div>
                         </div>

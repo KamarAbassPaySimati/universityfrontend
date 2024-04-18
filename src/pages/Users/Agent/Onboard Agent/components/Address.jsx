@@ -44,13 +44,15 @@ export default function Address ({ handleStates, states, submitSelected }) {
     };
     return (
         <>
-            <FelidDivision
-                divisionClassName = {'w-1/3'}
-                divisionObject = {AddressDetails}
-                handleOnChange={handleStates}
-                states={states}
-                submitSelected={submitSelected}
-            />
+            <div data-testid="kyc_address_details">
+                <FelidDivision
+                    divisionClassName = {'w-1/3'}
+                    divisionObject = {AddressDetails}
+                    handleOnChange={handleStates}
+                    states={states}
+                    submitSelected={submitSelected}
+                />
+            </div>
         </>
     );
 }

@@ -484,7 +484,7 @@ export default function RegisterKYC () {
                             type={'Malawi Full KYC'}
                         />
                         <div
-                            data-testid="view_admin"
+                            data-testid="KYC_Registration"
                             className={`mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] h-noDataError
                 flex flex-col justify-between bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
@@ -521,6 +521,7 @@ export default function RegisterKYC () {
                                         text={'Back'}
                                         className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
                                         onClick={() => handleTabChange('back')}
+                                        testId={'Back_Button'}
                                     />
                                     <Button
                                         text={'Save and continue'}
@@ -532,6 +533,7 @@ export default function RegisterKYC () {
                                 </div>
                                 <div
                                     onClick={() => handleTabChange('skip')}
+                                    data-testid="skip_button"
                                     className='text-primary-normal font-normal text-[14px] leading-[24px] cursor-pointer'>
                                     Skip</div>
                             </div>

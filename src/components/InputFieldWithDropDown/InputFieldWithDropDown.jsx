@@ -61,7 +61,8 @@ function InputFieldWithDropDown (props) {
                         : <img loading="lazy" decoding="async" src="/images/chevron-dark-down.svg" alt="icon" />
                     }
                 </button>
-                <ul id="#patient-dropdownMenuButton1" ref={dropdownRef}
+                <ul id="#patient-dropdownMenuButton1"
+                    data-testid={`${labelName.replaceAll(' ', '_').toLowerCase()}_dropdown_list`} ref={dropdownRef}
                     className={`bg-[#FFFFFF] 
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
                 border border-[#E5E4E5]
@@ -74,7 +75,7 @@ function InputFieldWithDropDown (props) {
                                     e.preventDefault(); setShow(false);
                                     handleInput(item, id);
                                 }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
-                                    <a data-testid={`${testId}_${index}`}className="dropdown-item font-normal text-xs text-[#444652]"
+                                    <a data-testid={`${testId}_${index}`} className="dropdown-item font-normal text-xs text-[#444652]"
                                         href="/">
                                         {item}
                                     </a>

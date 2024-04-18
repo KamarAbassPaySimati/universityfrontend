@@ -21,6 +21,8 @@ options.addArguments('--disable-gpu');
 options.addArguments('--disable-extensions');
 options.addArguments('--dns-prefetch-disable');
 options.addArguments('enable-features=NetworkServiceInProcess');
+options.addArguments('--use-fake-device-for-media-stream');
+options.addArguments('--use-fake-ui-for-media-stream');
 
 global.driver = chrome.Driver.createSession(options, service);
 setDefaultTimeout(35000);

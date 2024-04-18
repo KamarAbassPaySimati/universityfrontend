@@ -65,6 +65,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
                     placeholder="Search"
                     onChange={handleSearch}
                     className='w-full'
+                    data-testid={testId}
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                     <Image src={'search_icon'} className="h-6 w-6 text-gray-400" />

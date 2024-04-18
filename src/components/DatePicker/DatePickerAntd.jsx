@@ -16,7 +16,7 @@ const CustomDatePicker = ({ label, handleStates, value, error }) => {
             <DatePicker
                 className={`${error ? 'custom-datepicker-error' : 'custom-datepicker'} w-full`}
                 autoComplete="off"
-                data-testid="date_picker"
+                data-testid="date_of_birth"
                 placeholder="DD-MMM-YYYY"
                 format={'DD-MMM-YYYY'}
                 value={value && dayjs(value)}

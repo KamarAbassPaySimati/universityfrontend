@@ -4,7 +4,7 @@ import { GOOGLE_API } from '../../config';
 import Image from '../Image/Image';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
+const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
     const handlePlaceSelect = (place) => {
         handleOnChange(place.formatted_address, id);
         switch (id) {
@@ -129,6 +129,7 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSe
                             onChange={handlePlaceSelect}
                             className={'w-full mt-2'}
                             value={componentValue} // Use value prop
+                            data-testid={testId}
                         />
                         <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                             <Image src={'search_icon'} className="h-6 w-6 text-gray-400" />
