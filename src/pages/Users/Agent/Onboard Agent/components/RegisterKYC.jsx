@@ -25,7 +25,7 @@ export default function RegisterKYC () {
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
     const [submitPayload, setSubmitPayload] = useState({});
-    const { setToastError } = useContext(GlobalContext);
+    const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [bankSelected, setBankSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
@@ -58,20 +58,10 @@ export default function RegisterKYC () {
         case 'back':
             switch (searchParams.get('tab')) {
             case 'address_details':
-                setProgressBarStatus(ProgressBar);
                 nextTab = null;
                 break;
             case 'identity_details':
                 nextTab = 'address_details';
-                if (!handleValidation('identity_details', 'skip')) {
-                    console.log('error');
-                } else {
-                    handleAPICall({
-                        kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
-                        citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
-                        paymaart_id: id
-                    });
-                }
                 break;
             case 'personal_details':
                 nextTab = 'identity_details';
@@ -95,7 +85,6 @@ export default function RegisterKYC () {
                 break;
             }
             break;
-
         default:
             break;
         }
@@ -104,14 +93,21 @@ export default function RegisterKYC () {
 
     const handleAPICall = async (body, tab) => {
         try {
-            await dataService.PostAPIAgent('create-kyc-secure', body);
-            getKYCView();
+            const res = await dataService.PostAPIAgent('create-kyc-secure', body);
+            console.log('succccc', res.data);
+            if (res.error) {
+                setToastError(res.data.data.message);
+            } else {
+                getKYCView();
+                setToastSuccess(res.data.message);
+                handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
+                setSubmitPayload({});
+            }
             setIsLoadingButton(false);
-            handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
-            setSubmitPayload({});
         } catch (error) {
             setIsLoadingButton(false);
-            console.log('error', error);
+            setToastError(error.data.message);
+            console.log('errorsjuwq', error);
         }
     };
 
@@ -298,7 +294,6 @@ export default function RegisterKYC () {
                 });
             }
             setSubmitPayload({ ...body });
-            console.log('bwcwcuwuwc', count);
             return count === 0;
         default:
             break;

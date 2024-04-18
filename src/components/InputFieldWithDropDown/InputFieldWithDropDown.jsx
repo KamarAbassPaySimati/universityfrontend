@@ -1,4 +1,5 @@
-import React, { useRef, useState } from 'react';
+/* eslint-disable max-len */
+import React, { useRef, useState, useEffect } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Image from '../Image/Image';
@@ -8,9 +9,31 @@ function InputFieldWithDropDown (props) {
     const [show, setShow] = useState(false);
 
     const outsideClickRef = useRef();
+    const buttonRef = useRef();
+    const dropdownRef = useRef();
     useOnClickOutside(outsideClickRef, () => {
         setShow(false);
     });
+    const calculateDropdownPosition = () => {
+        const buttonRect = buttonRef.current.getBoundingClientRect();
+        const spaceBelow = window.innerHeight - buttonRect.bottom - 40;
+        console.log('spaceBelow', spaceBelow);
+        // 40px
+        const dropdownHeight = dropdownRef.current.clientHeight;
+
+        if (spaceBelow < dropdownHeight) {
+            dropdownRef.current.style.top = `-${dropdownHeight - 22}px`;
+        } else {
+            dropdownRef.current.style.top = '105%';
+        }
+    };
+    useEffect(() => {
+        window.addEventListener('resize', calculateDropdownPosition);
+        calculateDropdownPosition(); // Initial position calculation
+        return () => {
+            window.removeEventListener('resize', calculateDropdownPosition);
+        };
+    }, [show]);
     return (
         <div className=" flex flex-col relative gap-2">
             <div className='flex items-center'>
@@ -25,6 +48,7 @@ function InputFieldWithDropDown (props) {
                      rounded-tl rounded-tr  ${error ? 'border-error' : 'border-[#DDDDDD]'}
                      `} style={{ borderBottomColor: show ? '#3B2A6F' : '' }}>
                 <button
+                    ref={buttonRef}
                     onClick={() => setShow(!show)}
                     data-testid={testId}
                     className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
@@ -37,23 +61,29 @@ function InputFieldWithDropDown (props) {
                         : <img loading="lazy" decoding="async" src="/images/chevron-dark-down.svg" alt="icon" />
                     }
                 </button>
-                <ul id="#patient-dropdownMenuButton1"
-                    className={`bg-[#FFFFFF] dropdown-menu 
+                <ul id="#patient-dropdownMenuButton1" ref={dropdownRef}
+                    className={`bg-[#FFFFFF] 
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
-                border border-[#E5E4E5] !top-3 h-fit transform-none 
+                border border-[#E5E4E5]
                 ${show === true ? 'show' : 'hidden'}`} aria-labelledby="patient-dropdownMenuButton1"
-                    style={{ inset: 'auto auto 0px 0px', transform: 'translate(0px, 60px)' }}>
-                    {options.map((item, index = 0) => (
-                        <li onClick={(e) => {
-                            e.preventDefault(); setShow(false);
-                            handleInput(item, id);
-                        }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
-                            <a data-testid={`${testId}_${index}`}className="dropdown-item font-normal text-xs text-[#444652]"
-                                href="/">
-                                {item}
-                            </a>
-                        </li>
-                    ))}
+                >
+                    <li>
+                        <ul className='max-h-[390px] overflow-auto bg-[#fff]'>
+                            {options.map((item, index = 0) => (
+                                <li onClick={(e) => {
+                                    e.preventDefault(); setShow(false);
+                                    handleInput(item, id);
+                                }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
+                                    <a data-testid={`${testId}_${index}`}className="dropdown-item font-normal text-xs text-[#444652]"
+                                        href="/">
+                                        {item}
+                                    </a>
+                                </li>
+                            ))}
+
+                        </ul>
+                    </li>
+
                 </ul>
             </div>
             {error && <ErrorMessage error={error} />}

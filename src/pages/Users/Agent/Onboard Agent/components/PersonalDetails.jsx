@@ -154,8 +154,8 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
                 />
             </div>
-            <div className='flex w-full items-end'>
-                <div className='w-1/3 mt-6 ml-2.5 '>
+            <div className='flex w-full'>
+                <div className='w-1/3 mt-7 ml-2.5 '>
                     <div className='pr-[20px]'>
                         <InputFieldWithDropDown
                             labelName={'Occupation/Source of Funds'}
@@ -194,7 +194,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
 
                 </div>
                 }
-                {states?.occupation === 'In Full-time Education' && <div className='w-1/3'>
+                {states?.occupation === 'In Full-time Education' && <div className='w-1/3 mt-6'>
                     <InputSearch
                         testId='institute'
                         id='institute'
