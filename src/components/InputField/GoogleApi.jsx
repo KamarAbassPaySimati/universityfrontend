@@ -118,7 +118,7 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSe
                 </label>
                 <div>
                     <div className={`
-                ${(submitSelected && (componentValue === undefined || componentValue === ''))
+                ${(submitSelected && (componentValue === undefined || componentValue?.trim() === ''))
             ? 'google-key-error'
             : 'google-key-border'} google-key relative`}>
                         <GoogleComponent
@@ -134,7 +134,7 @@ const GoogleApi = ({ labelName, id, placeholder, handleOnChange, value, submitSe
                             <Image src={'search_icon'} className="h-6 w-6 text-gray-400" />
                         </div>
                     </div>
-                    {(submitSelected && (componentValue === undefined || componentValue === '')) &&
+                    {(submitSelected && (componentValue === undefined || componentValue?.trim() === '')) &&
                     <ErrorMessage error={'Required field'} />}
 
                 </div>

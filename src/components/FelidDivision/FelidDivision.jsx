@@ -32,7 +32,7 @@ export default function FelidDivision ({
                                                     placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                     error={divObj?.require &&
                                                         (submitSelected && (states[divObj?.key] === undefined ||
-                                                        states[divObj?.key] === ''))
+                                                        states[divObj?.key]?.trim() === ''))
                                                         ? 'Required field'
                                                         : undefined}
                                                     options={divObj?.options}
@@ -58,7 +58,7 @@ export default function FelidDivision ({
                                             : (
                                                 <InputField
                                                     className={!(submitSelected && (states[divObj?.key] === undefined ||
-                                                        states[divObj?.key] === ''))
+                                                        states[divObj?.key]?.trim() === ''))
                                                         ? 'mb-6'
                                                         : ''}
                                                     divClassName='mx-2.5'
@@ -68,7 +68,7 @@ export default function FelidDivision ({
                                                     testId={divObj?.key}
                                                     error={divObj?.require &&
                                                         (submitSelected && (states[divObj?.key] === undefined ||
-                                                        states[divObj?.key] === ''))
+                                                        states[divObj?.key]?.trim() === ''))
                                                         ? 'Required field'
                                                         : undefined}
                                                     label={`${divObj?.label}`}

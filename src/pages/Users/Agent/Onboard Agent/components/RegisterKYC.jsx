@@ -121,7 +121,7 @@ export default function RegisterKYC () {
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
-                if (states[item].trim() === '' || states[item] === undefined) {
+                if (states[item]?.trim() === '' || states[item] === undefined) {
                     if (key !== 'skip') {
                         setSubmitSelected(true);
                     }
@@ -133,7 +133,7 @@ export default function RegisterKYC () {
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
                 IdDocuments[states['ID Document']].map((selectedItem) => {
-                    if (states[selectedItem] === undefined || states[selectedItem].trim() === '') {
+                    if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                             setToastError('Upload the required document');
@@ -172,7 +172,7 @@ export default function RegisterKYC () {
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
                 VerificationDocument[states['Verification Document']].map((selectedItem) => {
-                    if (states[selectedItem] === undefined || states[selectedItem].trim() === '') {
+                    if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                             setToastError('Upload the required document');
@@ -211,7 +211,7 @@ export default function RegisterKYC () {
                         count = count + 1;
                     }
                 } else {
-                    if (states[item].trim() === '' || states[item] === undefined) {
+                    if (states[item]?.trim() === '' || states[item] === undefined) {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
@@ -221,11 +221,11 @@ export default function RegisterKYC () {
                 }
             }
             );
-            if (states.occupation.trim() !== '' || states.occupation !== undefined) {
+            if (states?.occupation?.trim() !== '' || states.occupation !== undefined) {
                 switch (states.occupation) {
                 case 'Employed':
                     occupationEmployed.map((item) => {
-                        if (states[item].trim() === '' || states[item] === undefined) {
+                        if (states[item]?.trim() === '' || states[item] === undefined) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -239,7 +239,7 @@ export default function RegisterKYC () {
                     break;
                 case 'Self Employed':
                     occupationSelfEmployed.map((item) => {
-                        if (states[item].trim() === '' || states[item] === undefined) {
+                        if (states[item]?.trim() === '' || states[item] === undefined) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -253,7 +253,7 @@ export default function RegisterKYC () {
                     break;
                 case 'In Full-time Education':
                     occupationEduction.map((item) => {
-                        if (states[item].trim() === '' || states[item] === undefined) {
+                        if (states[item]?.trim() === '' || states[item] === undefined) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -264,8 +264,8 @@ export default function RegisterKYC () {
                         }
                     }
                     );
-                    if ((states.institute === undefined || states.institute.trim() === '') &&
-                    (states.institute_specify.trim() === '' || states.institute_specify === undefined)) {
+                    if ((states.institute === undefined || states?.institute?.trim() === '') &&
+                    (states?.institute_specify?.trim() === '' || states.institute_specify === undefined)) {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }

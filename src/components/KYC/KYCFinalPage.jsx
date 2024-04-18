@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Button from '../Button/Button';
 import KYCRegistrationPopup from './KYCRegistrationPopup';
 import KYCRegistrationStatusPart from './KYCRegistrationStatusPart';
+import { useNavigate } from 'react-router-dom';
 
-export default function KYCFinalPage ({ states, handleStates, handleSubmit }) {
+export default function KYCFinalPage () {
     const [registrationProcess, setRegistrationProcess] = useState(false);
+    const Navigate = useNavigate();
     return (
         <div className='flex w-full py-8 h-heightFullWithPadding'>
             <KYCRegistrationStatusPart status={'In review'}/>
@@ -22,7 +24,7 @@ export default function KYCFinalPage ({ states, handleStates, handleSubmit }) {
                                  bg-primary-normal p-1 text-[14px] leading-[24px] font-medium'
                         testId='kyc-btn'
                         text={'Finish'}
-                        onClick={() => handleSubmit('Finish')}
+                        onClick={() => Navigate('/users/agents')}
                     />
                 </div>
             </div>

@@ -32,7 +32,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
         <div className='' ref={outsideClickRef}>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
 
-            <div className={`google-key relative mt-1 ${(submitSelected && search === '')
+            <div className={`google-key relative mt-1 ${(submitSelected && search?.trim() === '')
                 ? 'google-key-error'
                 : 'google-key-border'}`}>
                 <input
@@ -65,7 +65,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
                     ))}
                 </ul>
             </div>
-            {(submitSelected && search === '') && <ErrorMessage error={'Required field'} />}
+            {(submitSelected && search?.trim() === '') && <ErrorMessage error={'Required field'} />}
         </div>
 
     );

@@ -30,13 +30,7 @@ export default function Capture ({ label, handleStates, states, submitSelected }
                                     ? (
                                         <div className='flex justify-center items-center'>
                                             <img src={`${CDN}${states.capture}`} className='relative'/>
-                                            <Image src='refresh' className='h-6 w-6 cursor-pointer absolute'
-                                                // onClick={() => {
-                                                //     handleDelete(uploadedFile.key);
-                                                //     setUploadedFile({});
-                                                // }
-                                                // }
-                                            />
+                                            <Image src='refresh' className='h-6 w-6 cursor-pointer absolute'/>
                                         </div>
 
                                     )

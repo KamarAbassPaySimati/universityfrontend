@@ -5,8 +5,10 @@ import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlacehol
 import InformationList from '../../../../../components/InformationList/InformationList';
 import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
 import { Tooltip } from 'react-tooltip';
+import { useParams } from 'react-router-dom';
 
 export default function Documents ({ type, handleStates, states, submitSelected }) {
+    const { id } = useParams();
     const IdDocumentList = ['National ID', 'Passport'];
     const VerificationDocumentList = [
         'Driver\'s Licence',
@@ -127,7 +129,9 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     labelName={type}
                     value={states[type] === undefined ? '' : states[type]}
                     placeholder={`Select ${type}`}
-                    error={submitSelected && (states[type] === undefined || states[type] === '') ? 'Required field' : undefined}
+                    error={submitSelected && (states[type] === undefined || states[type]?.trim() === '')
+                        ? 'Required field'
+                        : undefined}
                     options={type !== 'ID Document' ? VerificationDocumentList : IdDocumentList}
                     id={type}
                     testId={type}
@@ -153,9 +157,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     <UploadPlaceholder
                         label="Front"
                         disabled={states[type] === undefined}
-                        path={`${states[type] === 'Driver\'s Licence'
-                            ? 'driver_licence/front'
-                            : states[type]?.replaceAll(' ', '_').toLowerCase()}/front`}
+                        path={`kyc_data/${id}`}
                         handleUploadImg={handleStates}
                         selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`}
                         states={states}
@@ -165,13 +167,13 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                         states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`] === '')}
                     />
                 </div>
-                {states[type] !== 'Passport' && <div className="w-[48%] relative ml-[4%]">
+                {(states[type] === 'National Id' || states[type] === 'Driver\'s Licence' ||
+                states[type] === 'Traffic Register Card') &&
+                <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder
                         label="Back"
                         disabled={states[type] === undefined}
-                        path={`${states[type] === 'Driver\'s Licence'
-                            ? 'driver_licence/back'
-                            : states[type]?.replaceAll(' ', '_').toLowerCase()}/back`}
+                        path={`kyc_data/${id}`}
                         selectedUploadImg={`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_back`}
                         states={states}
                         handleStates={handleStates}

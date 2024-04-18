@@ -114,11 +114,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
         }
     };
     const EmployedList = [
-        'Administrative /Clerical',
+        'Admin/Administrative /Clerical',
         'Trainee/Intern/Apprentice',
-        'Professionals/Technical/Managerial',
-        'Executive/Director',
-        'Board Level/Non-Executive Director'];
+        'Professionals/Technical',
+        'Professionals/Technical/Manager',
+        'Board Level/Non-Executive'
+    ];
 
     const handleSearchItem = async (id, newValue) => {
         const res = await dataService.GetAPI(`list-institution?search=${newValue}`);
