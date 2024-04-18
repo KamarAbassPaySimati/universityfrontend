@@ -124,6 +124,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
         const res = await dataService.GetAPI(`list-institution?search=${newValue}`);
         return res?.data?.institutionNames;
     };
+
     return (
         <div className='overflow-auto scrollBar h-tabledivHeight'>
             <p className={`ml-2.5 font-medium text-[14px] leading-4 text-neutral-primary
@@ -136,6 +137,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                             label={item}
                             id={item}
                             key={item}
+                            checkedState={states.gender === item}
                             name='gender'
                             handleRadioButton={() => handleStates(item, 'gender')}
                         />))}
@@ -147,7 +149,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 <DatePickerAntd
                     label={'Date of Birth'}
                     handleStates={handleStates}
-                    value={states?.dob}
+                    value={states.dob === undefined ? '' : states.dob}
                     error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
                 />
             </div>

@@ -2,6 +2,9 @@ import React from 'react';
 import { DatePicker } from 'antd';
 import Image from '../Image/Image';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from 'dayjs';
+dayjs.extend(customParseFormat);
 
 const CustomDatePicker = ({ label, handleStates, value, error }) => {
     const getDisabledDate = (current) => {
@@ -16,7 +19,7 @@ const CustomDatePicker = ({ label, handleStates, value, error }) => {
                 data-testid="date_picker"
                 placeholder="DD-MMM-YYYY"
                 format={'DD-MMM-YYYY'}
-                value={value}
+                value={value && dayjs(value)}
                 suffixIcon={<Image src='calendar'/>}
                 disabledDate={getDisabledDate}
                 onChange={(date, dateString) => handleStates(date, 'dob')}
