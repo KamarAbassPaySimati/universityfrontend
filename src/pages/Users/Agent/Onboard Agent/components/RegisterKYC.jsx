@@ -448,10 +448,12 @@ export default function RegisterKYC () {
         }
     };
     useEffect(() => {
-        if (searchParams.get('tab') !== 'address_details' ||
-        searchParams.get('tab') !== 'identity_details' ||
-        searchParams.get('tab') !== 'personal_details' || searchParams.get('tab') !== 'success') {
-            handleSearchParamsValue('tab', null, searchParams, setSearchParams);
+        if (searchParams.get('tab') !== null) {
+            if (searchParams.get('tab') !== 'address_details' &&
+                searchParams.get('tab') !== 'identity_details' &&
+                searchParams.get('tab') !== 'personal_details') {
+                handleSearchParamsValue('tab', null, searchParams, setSearchParams);
+            }
         }
         getKYCView();
     }, []);
