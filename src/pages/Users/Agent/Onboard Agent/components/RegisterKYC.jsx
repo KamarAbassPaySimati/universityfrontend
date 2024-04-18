@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
 import CardHeader from '../../../../../components/CardHeader';
 import StatusProgressBar from '../../../../../components/StatusProgressBar/StatusProgressBar';
@@ -18,12 +18,14 @@ import {
 import { handleSearchParams } from '../../../../../CommonMethods/ListFunctions';
 import addApostrophe from '../../../../../CommonMethods/textCorrection';
 import KYCFinalPage from '../../../../../components/KYC/KYCFinalPage';
+import GlobalContext from '../../../../../components/Context/GlobalContext';
 
 export default function RegisterKYC () {
     const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
     const [submitPayload, setSubmitPayload] = useState({});
+    const { setToastError } = useContext(GlobalContext);
     const [bankSelected, setBankSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
@@ -119,7 +121,7 @@ export default function RegisterKYC () {
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
-                if (states[item] === '' || states[item] === undefined) {
+                if (states[item].trim() === '' || states[item] === undefined) {
                     if (key !== 'skip') {
                         setSubmitSelected(true);
                     }
@@ -131,9 +133,10 @@ export default function RegisterKYC () {
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
                 IdDocuments[states['ID Document']].map((selectedItem) => {
-                    if (states[selectedItem] === undefined || states[selectedItem] === '') {
+                    if (states[selectedItem] === undefined || states[selectedItem].trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
+                            setToastError('Upload the required document');
                             sideBarStatus['ID Document'] = 'pending';
                         }
                         count = count + 1;
@@ -150,6 +153,7 @@ export default function RegisterKYC () {
             } else {
                 if (key !== 'skip') {
                     sideBarStatus['ID Document'] = 'pending';
+                    setToastError('Upload the required document');
                     setSubmitSelected(true);
                 }
                 count = count + 1;
@@ -168,9 +172,10 @@ export default function RegisterKYC () {
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
                 VerificationDocument[states['Verification Document']].map((selectedItem) => {
-                    if (states[selectedItem] === undefined || states[selectedItem] === '') {
+                    if (states[selectedItem] === undefined || states[selectedItem].trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
+                            setToastError('Upload the required document');
                             sideBarStatus['Verification Document'] = 'pending';
                         }
                         count = count + 1;
@@ -186,6 +191,7 @@ export default function RegisterKYC () {
             } else {
                 if (key !== 'skip') {
                     sideBarStatus['Verification Document'] = 'pending';
+                    setToastError('Upload the required document');
                     setSubmitSelected(true);
                 }
                 count = count + 1;
@@ -205,7 +211,7 @@ export default function RegisterKYC () {
                         count = count + 1;
                     }
                 } else {
-                    if (states[item] === '' || states[item] === undefined) {
+                    if (states[item].trim() === '' || states[item] === undefined) {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
@@ -215,11 +221,11 @@ export default function RegisterKYC () {
                 }
             }
             );
-            if (states.occupation !== '' || states.occupation !== undefined) {
+            if (states.occupation.trim() !== '' || states.occupation !== undefined) {
                 switch (states.occupation) {
                 case 'Employed':
                     occupationEmployed.map((item) => {
-                        if (states[item] === '' || states[item] === undefined) {
+                        if (states[item].trim() === '' || states[item] === undefined) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -233,7 +239,7 @@ export default function RegisterKYC () {
                     break;
                 case 'Self Employed':
                     occupationSelfEmployed.map((item) => {
-                        if (states[item] === '' || states[item] === undefined) {
+                        if (states[item].trim() === '' || states[item] === undefined) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -247,7 +253,7 @@ export default function RegisterKYC () {
                     break;
                 case 'In Full-time Education':
                     occupationEduction.map((item) => {
-                        if (states[item] === '' || states[item] === undefined) {
+                        if (states[item].trim() === '' || states[item] === undefined) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -258,8 +264,8 @@ export default function RegisterKYC () {
                         }
                     }
                     );
-                    if ((states.institute === undefined || states.institute === '') &&
-                    (states.institute_specify === '' || states.institute_specify === undefined)) {
+                    if ((states.institute === undefined || states.institute.trim() === '') &&
+                    (states.institute_specify.trim() === '' || states.institute_specify === undefined)) {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
@@ -453,6 +459,11 @@ export default function RegisterKYC () {
         }
     };
     useEffect(() => {
+        if (searchParams.get('tab') !== 'address_details' ||
+        searchParams.get('tab') !== 'identity_details' ||
+        searchParams.get('tab') !== 'personal_details' || searchParams.get('tab') !== 'success') {
+            handleSearchParams('tab', null, searchParams, setSearchParams);
+        }
         getKYCView();
     }, []);
     return (

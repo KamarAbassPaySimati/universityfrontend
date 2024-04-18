@@ -19,7 +19,7 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             if (!imageTypes.includes(e.target.files[0].type) ||
             (e.target.files[0] && e.target.files[0].size > 10 * 1024 * 1024)) {
                 setImageUploadError(true);
-                setToastError('File size should be less than 10MB');
+                setToastError('Upload failed. Unsupported format or file size exceeded');
                 setLoadingImg(false);
                 return;
             }
@@ -71,6 +71,11 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                                                 font-normal text-neutral-primary'>
                                                 <span className='text-neutral-secondary'> Supported file types: </span>
                                                 .png, .jpg, .jpeg for images, and .pdf for documents</div>
+                                            <div
+                                                className='text-center text-[12px] leading-[20px]
+                                                font-normal text-neutral-primary'>
+                                                <span className='text-neutral-secondary'> Max file size: </span>
+                                                10 MB</div>
                                         </div>
                                         <input
                                             onChange={(e) => handleUploadFile(e)}
