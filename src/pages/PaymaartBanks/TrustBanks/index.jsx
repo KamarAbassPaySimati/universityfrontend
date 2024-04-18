@@ -9,6 +9,7 @@ import { bankAccountList } from './BankSlice';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import BankTable from './Components/BankTable';
 import { endpoints } from '../../../services/endpoints';
+import { handleSearchParams } from '../../../CommonMethods/ListFunctions';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -88,7 +89,10 @@ const TrustBanks = () => {
                 .join(' '); // Join the words back together into a single string
         }
     }
-
+    const handleOnClick = (docItem) => {
+        handleSearchParams('type', docItem.toLowerCase().replace(/ /g, '-').replace(/&/g, 'and'),
+            searchParams, setSearchParams, 'false');
+    };
     return (
         <CardHeader
             activePath= {searchParams.get('type') !== null ? formatType(searchParams.get('type')) : ''}
@@ -113,9 +117,9 @@ const TrustBanks = () => {
                 {<div className='flex mt-[20px]'>
                     <DocumentSidebar
                         documentTypes={bankTypes}
+                        handleOnClick={handleOnClick}
+                        selectedData={formatType(searchParams.get('type'))}
                         height={'h-heightSideBarOne'}
-                        searchParams={searchParams}// pass this because its used
-                        setSearchParams={setSearchParams}
                         width={'w-[200px]'}
                     />
                     <div className='ml-[10px] w-full overflow-hidden'>
