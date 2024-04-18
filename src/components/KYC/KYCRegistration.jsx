@@ -5,7 +5,7 @@ import Button from '../Button/Button';
 import KYCRegistrationPopup from './KYCRegistrationPopup';
 import KYCRegistrationStatusPart from './KYCRegistrationStatusPart';
 
-export default function KYCRegistration ({ states, handleStates, handleSubmit }) {
+export default function KYCRegistration ({ states, handleStates, handleSubmit, isLoading }) {
     const citizenType = ['Malawi citizen', 'Non Malawi citizen'];
     const personalCustomer = ['Full KYC', 'Simplified KYC'];
     const [registrationProcess, setRegistrationProcess] = useState(false);
@@ -58,6 +58,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit })
                                  bg-primary-normal p-1 text-[14px] leading-[24px] font-medium'
                         testId='kyc-btn'
                         text={'Proceed'}
+                        isLoading={isLoading}
                         onClick={() => handleSubmit('proceed')}
                     />
                     <p className=" text-neutral-primary text-[12px] mt-2

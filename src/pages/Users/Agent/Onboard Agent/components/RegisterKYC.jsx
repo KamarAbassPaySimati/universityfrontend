@@ -102,11 +102,12 @@ export default function RegisterKYC () {
         handleSearchParams('tab', nextTab, searchParams, setSearchParams);
     };
 
-    const handleAPICall = async (body) => {
+    const handleAPICall = async (body, tab) => {
         try {
             await dataService.PostAPIAgent('create-kyc-secure', body);
             getKYCView();
             setIsLoadingButton(false);
+            handleSearchParams('tab', tab, searchParams, setSearchParams);
             setSubmitPayload({});
         } catch (error) {
             setIsLoadingButton(false);
@@ -305,18 +306,18 @@ export default function RegisterKYC () {
     };
 
     const handleSubmit = (type) => {
+        setIsLoadingButton(true);
         if (type === 'proceed') {
             handleAPICall({
                 kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
                 citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
                 paymaart_id: id
-            });
-            handleSearchParams('tab', 'address_details', searchParams, setSearchParams);
+            }, 'address_details');
         } else {
             switch (searchParams.get('tab')) {
             case 'address_details':
                 if (!handleValidation('address_details')) {
-                    console.log('error');
+                    setIsLoadingButton(false);
                 } else {
                     handleAPICall({
                         po_box_no: states?.po_box_no,
@@ -327,16 +328,14 @@ export default function RegisterKYC () {
                         district: states?.district,
                         paymaart_id: id,
                         address_details_status: 'completed'
-                    }
+                    }, 'identity_details'
                     );
-                    handleSearchParams('tab', 'identity_details', searchParams, setSearchParams);
                 }
                 break;
             case 'identity_details':
                 if (!handleValidation('identity_details')) {
-                    console.log('error');
+                    setIsLoadingButton(false);
                 } else {
-                    console.log('submitPayload', submitPayload);
                     const body = {
                         id_document_front: submitPayload.id_document_front,
                         id_document_back: submitPayload.id_document_back,
@@ -348,15 +347,13 @@ export default function RegisterKYC () {
                         paymaart_id: id,
                         id_details_status: 'completed'
                     };
-                    handleAPICall(body);
-                    handleSearchParams('tab', 'personal_details', searchParams, setSearchParams);
+                    handleAPICall(body, 'personal_details');
                 }
                 break;
             case 'personal_details':
                 if (!handleValidation('personal_details')) {
-                    console.log('error identttt');
+                    setIsLoadingButton(false);
                 } else {
-                    console.log('states.dobstates.dob', states.dob);
                     const body = {
                         gender: states.gender,
                         dob: (new Date(states.dob).getTime() / 1000).toString(),
@@ -367,8 +364,7 @@ export default function RegisterKYC () {
                         paymaart_id: id,
                         info_details_status: 'completed'
                     };
-                    handleAPICall({ ...body, ...submitPayload });
-                    handleSearchParams('tab', 'success', searchParams, setSearchParams);
+                    handleAPICall({ ...body, ...submitPayload }, 'success');
                 }
                 break;
             default:
@@ -380,7 +376,6 @@ export default function RegisterKYC () {
     const getKYCView = async () => {
         try {
             const res = await dataService.GetAPI(`view-kyc-secure?paymaart_id=${id}`, 'agent');
-            console.log(res.data.data, 'res.data.data');
             if (res.data.data !== '') {
                 const object = {};
                 const statusObject = {};
@@ -449,7 +444,6 @@ export default function RegisterKYC () {
                     }
                 }
                 );
-                console.log('object', object, statusObject);
                 setProgressBarStatus(statusObject);
                 setStates(object);
             }
@@ -481,7 +475,7 @@ export default function RegisterKYC () {
                         states={states}
                         handleStates={handleInputFelids}
                         handleSubmit={handleSubmit}
-                        isLoadingButton={isLoadingButton}
+                        isLoading={isLoadingButton}
                     />
                 )
                 : searchParams.get('tab') === 'success'

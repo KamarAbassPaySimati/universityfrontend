@@ -24,7 +24,7 @@ const CustomDatePicker = ({ label, handleStates, value, error }) => {
                 disabledDate={getDisabledDate}
                 onChange={(date, dateString) => handleStates(date, 'dob')}
             />
-            {error && <ErrorMessage error={error} />}
+            {error && <div className='mt-2'><ErrorMessage error={error} /></div>}
         </div>
     );
 };

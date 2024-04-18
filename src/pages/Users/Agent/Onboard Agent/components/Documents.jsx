@@ -167,7 +167,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                         states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`] === '')}
                     />
                 </div>
-                {(states[type] === 'National Id' || states[type] === 'Driver\'s Licence' ||
+                {(states[type] === 'National ID' || states[type] === 'Driver\'s Licence' ||
                 states[type] === 'Traffic Register Card') &&
                 <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder

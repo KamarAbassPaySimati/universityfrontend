@@ -56,6 +56,7 @@ body {
   font-size: 16px !important;
   padding: 24px !important;
   border-radius: 16px !important;
+  z-index: 10;
 }
 
 .scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
