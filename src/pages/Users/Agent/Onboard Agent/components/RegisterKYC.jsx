@@ -17,6 +17,7 @@ import {
 } from './KYCFunctions';
 import { handleSearchParams } from '../../../../../CommonMethods/ListFunctions';
 import addApostrophe from '../../../../../CommonMethods/textCorrection';
+import KYCFinalPage from '../../../../../components/KYC/KYCFinalPage';
 
 export default function RegisterKYC () {
     const { id } = useParams();
@@ -472,63 +473,67 @@ export default function RegisterKYC () {
                         isLoadingButton={isLoadingButton}
                     />
                 )
-                : <>
-                    <KYCTopWithType
-                        Name={'KYC Registration'}
-                        type={'Malawi Full KYC'}
-                    />
-                    <div
-                        data-testid="view_admin"
-                        className={`mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] h-noDataError
+                : searchParams.get('tab') === 'success'
+
+                    ? <KYCFinalPage />
+                    : <>
+                        <KYCTopWithType
+                            Name={'KYC Registration'}
+                            type={'Malawi Full KYC'}
+                        />
+                        <div
+                            data-testid="view_admin"
+                            className={`mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] h-noDataError
                 flex flex-col justify-between bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
-                        <div className='flex flex-col'>
-                            <StatusProgressBar
-                                ProgressBar={progressBarStatus}
-                                LineClass={'line-class'}
-                                currentTab={searchParams.get('tab')}
-                            />
-                            {searchParams.get('tab') === 'address_details' &&
-                            <Address
-                                handleStates={handleInputFelids}
-                                states={states}
-                                submitSelected={submitSelected}
-                            />}
-                            {searchParams.get('tab') === 'identity_details' && <IdentityDetails
-                                handleStates={handleInputFelids}
-                                states={states}
-                                documentSideBarData={documentSideBarData}
-                                setDocumentSidebarData={setDocumentSidebarData}
-                                submitSelected={submitSelected}
-                            />}
-                            {searchParams.get('tab') === 'personal_details' &&
-                            <PersonalDetails
-                                handleStates={handleInputFelids}
-                                states={states}
-                                submitSelected={submitSelected}
-                                bankSelected={bankSelected}
-                            />}
-                        </div>
-                        <div className='flex justify-between items-center'>
-                            <div className='flex'>
-                                <Button2
-                                    text={'Back'}
-                                    className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
-                                    onClick={() => handleTabChange('back')}
+                            <div className='flex flex-col'>
+                                <StatusProgressBar
+                                    ProgressBar={progressBarStatus}
+                                    LineClass={'line-class'}
+                                    currentTab={searchParams.get('tab')}
                                 />
-                                <Button
-                                    text={'Save and continue'}
-                                    testId= 'submit_button'
-                                    className = 'max-w-[227px] ml-4 px-[51px]'
-                                    onClick={handleSubmit}
-                                    isLoading={isLoadingButton}
-                                />
+                                {searchParams.get('tab') === 'address_details' &&
+                                <Address
+                                    handleStates={handleInputFelids}
+                                    states={states}
+                                    submitSelected={submitSelected}
+                                />}
+                                {searchParams.get('tab') === 'identity_details' && <IdentityDetails
+                                    handleStates={handleInputFelids}
+                                    states={states}
+                                    documentSideBarData={documentSideBarData}
+                                    setDocumentSidebarData={setDocumentSidebarData}
+                                    submitSelected={submitSelected}
+                                />}
+                                {searchParams.get('tab') === 'personal_details' &&
+                                <PersonalDetails
+                                    handleStates={handleInputFelids}
+                                    states={states}
+                                    submitSelected={submitSelected}
+                                    bankSelected={bankSelected}
+                                />}
                             </div>
-                            <div
-                                onClick={() => handleTabChange('skip')}
-                                className='text-primary-normal font-normal text-[14px] leading-[24px] cursor-pointer'>Skip</div>
-                        </div>
-                    </div></>}
+                            <div className='flex justify-between items-center'>
+                                <div className='flex'>
+                                    <Button2
+                                        text={'Back'}
+                                        className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
+                                        onClick={() => handleTabChange('back')}
+                                    />
+                                    <Button
+                                        text={'Save and continue'}
+                                        testId= 'submit_button'
+                                        className = 'max-w-[227px] ml-4 px-[51px]'
+                                        onClick={handleSubmit}
+                                        isLoading={isLoadingButton}
+                                    />
+                                </div>
+                                <div
+                                    onClick={() => handleTabChange('skip')}
+                                    className='text-primary-normal font-normal text-[14px] leading-[24px] cursor-pointer'>
+                                    Skip</div>
+                            </div>
+                        </div></>}
         </CardHeader>
     );
 }
