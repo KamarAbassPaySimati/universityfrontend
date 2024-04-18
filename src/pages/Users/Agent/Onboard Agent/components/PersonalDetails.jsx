@@ -10,9 +10,8 @@ import { dataService } from '../../../../../services/data.services';
 import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
 
 export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected }) {
-    console.log('bank_name', bankSelected)
     const OccupationList = [
-        'Employed', 'Self Employed', 'In full time education', 'Seeking employment', 'Ritired/Pensioner', 'Others'];
+        'Employed', 'Self Employed', 'In Full-time Education', 'Seeking Employment', 'Retired/Pensioner', 'Others'];
     const Purpose = [
         'Send and/or receive e-payments to/from individuals and enterprises and/or groups of individuals and/or enterprises',
         'Accept e-payment/s in connection with the sale of goods and/or services',
@@ -192,7 +191,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
 
                 </div>
                 }
-                {states?.occupation === 'In full time education' && <div className='w-1/3'>
+                {states?.occupation === 'In Full-time Education' && <div className='w-1/3'>
                     <InputSearch
                         testId='institute'
                         id='institute'
@@ -204,16 +203,28 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     />
                 </div>}
                 {(states?.occupation === 'Self Employed' || states?.occupation === 'Others' ||
-                (states?.institute === 'Others (Please Specify)' && states?.occupation === 'In full time education')) &&
+                (states?.institute === 'Others (Please Specify)' && states?.occupation === 'In Full-time Education')) &&
                 <div className='w-1/3'>
                     <InputField
                         className=''
                         divClassName='mx-2.5'
-                        value={states?.self_employed === undefined ? '' : states.self_employed}
+                        value={states?.occupation === 'Others'
+                            ? (states.occupation_specify === undefined ? '' : states.occupation_specify)
+                            : states?.occupation === 'Self Employed'
+                                ? (states.self_employed_specify === undefined ? '' : states.self_employed_specify)
+                                : (states.institute_specify === undefined ? '' : states.institute_specify) }
                         // onFocus={handleFocus}
-                        id='self_employed'
-                        testId='self_employed'
-                        error={(submitSelected && (states.self_employed === undefined || states.self_employed === ''))
+                        id={states?.occupation === 'Self Employed'
+                            ? 'self_employed_specify'
+                            : states?.occupation === 'Others' ? 'occupation_specify' : 'institute_specify'}
+                        testId={states?.occupation === 'Self Employed'
+                            ? 'self_employed_specify'
+                            : states?.occupation === 'Others' ? 'occupation_specify' : 'institute_specify'}
+                        error={(submitSelected && (states?.occupation === 'Self Employed'
+                            ? (states.self_employed_specify === undefined || states.self_employed_specify === '')
+                            : states?.occupation === 'Others'
+                                ? (states.occupation_specify === undefined || states.occupation_specify === '')
+                                : (states.institute_specify === undefined || states.institute_specify === '')))
                             ? 'Required field'
                             : undefined}
                         label={'Please Specify'}

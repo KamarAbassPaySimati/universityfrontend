@@ -259,7 +259,7 @@ export default function RegisterKYC () {
                     }
                     );
                     break;
-                case 'In full time education':
+                case 'In Full-time Education':
                     occupationEduction.map((item) => {
                         if (states[item] === '' || states[item] === undefined) {
                             if (key !== 'skip') {
