@@ -12,7 +12,7 @@ import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { dataService } from '../../../../../services/data.services';
 import {
-    AddressDetails, IdDocuments, PersonalDetailsList, ProgressBar, VerificationDocument,
+    AddressDetails, BankDetailsList, IdDocuments, PersonalDetailsList, ProgressBar, VerificationDocument,
     handleStates, handleStatusBar, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
 import { handleSearchParams } from '../../../../../CommonMethods/ListFunctions';
@@ -23,6 +23,7 @@ export default function RegisterKYC () {
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
     const [submitPayload, setSubmitPayload] = useState({});
+    const [bankSelected, setBankSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
         personal_customer: 'Full KYC',
@@ -42,11 +43,13 @@ export default function RegisterKYC () {
 
     const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
+        setBankSelected(false);
         handleStates(value, id, type, setStates, states);
     };
 
     const handleTabChange = (buttonType) => {
         setSubmitSelected(false);
+        setBankSelected(false);
         let nextTab = searchParams.get('tab');
         switch (buttonType) {
         case 'back':
@@ -201,6 +204,7 @@ export default function RegisterKYC () {
                 }
                 count = count + 1;
             }
+
             setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
             setSubmitPayload({ ...body });
             return count === 0;
@@ -236,11 +240,7 @@ export default function RegisterKYC () {
                             console.log('count2', count, item);
                             count = count + 1;
                         } else {
-                            // "employed_role" : "Admin/Administrative/Clerical",
-                            // "employer_name": "ABC Inc.",
-                            // "industry": "Technology",
-                            // "occupation_town": "Springfield",
-                            // body[]
+                            body[item] = states[item];
                         }
                     }
                     );
@@ -253,6 +253,8 @@ export default function RegisterKYC () {
                             }
                             console.log('count3', count);
                             count = count + 1;
+                        } else {
+                            body[item] = states[item];
                         }
                     }
                     );
@@ -265,16 +267,20 @@ export default function RegisterKYC () {
                             }
                             console.log('count4', count);
                             count = count + 1;
+                        } else {
+                            body[item] = states[item];
                         }
                     }
                     );
-                    if ((states.education === undefined || states.education === '') &&
-                    (states.please_specify === '' || states.please_specify === undefined)) {
+                    if ((states.institute === undefined || states.institute === '') &&
+                    (states.institute_specify === '' || states.institute_specify === undefined)) {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
                         console.log('count5', count);
                         count = count + 1;
+                    } else {
+                        body.institute_specify = states.institute_specify;
                     }
                     break;
 
@@ -282,7 +288,25 @@ export default function RegisterKYC () {
                     break;
                 }
             }
-            // if(states.)
+            console.log('stateejdxjhbhxje', states);
+            if (!((states.bank_name === '' || states.bank_name === undefined) &&
+            (states.account_number === '' || states.account_number === undefined) &&
+            (states.account_name === '' || states.account_name === undefined))) {
+                console.log('banckkkbanckkkbanckkk')
+                BankDetailsList.map((bank) => {
+                    console.log('banckkk', bank);
+                    if (states[bank] === '' || states[bank] === undefined) {
+                        if (key !== 'skip') {
+                            setBankSelected(true);
+                        }
+                        console.log('count6', count);
+                        count = count + 1;
+                    } else {
+                        body[bank] = states[bank];
+                    }
+                });
+            }
+            setSubmitPayload({ ...body });
             console.log('bwcwcuwuwc', count);
             return count === 0;
         default:
@@ -344,25 +368,19 @@ export default function RegisterKYC () {
                 if (!handleValidation('personal_details')) {
                     console.log('error identttt');
                 } else {
-                    console.log('mothly_incomee', states);
+                    console.log('mothly_incomee', states, submitPayload);
                     const body = {
                         gender: states.gender,
                         dob: (new Date(states.dob).getTime() / 1000).toString(),
                         occupation: states.occupation,
-                        employed_role: 'Admin/Administrative/Clerical',
-                        employer_name: 'ABC Inc.',
-                        industry: 'Technology',
-                        occupation_town: 'Springfield',
                         purpose_of_relation: states.purpose.join('\n'),
                         monthly_income: states.monthly_income,
                         monthly_withdrawal: states.monthly_withdrawal,
-                        // bank_name: 'Nationl Bank',
-                        // account_number: '234567654',
-                        // account_name: 'Abhishek',
                         paymaart_id: id,
                         info_details_status: 'completed'
                     };
-                    handleAPICall(body);
+                    console.log('nwncnicqniociqnwoc', body, submitPayload)
+                    handleAPICall({ ...body, ...submitPayload });
                     handleStatusBar('personal_details', 'active', '', setProgressBarStatus);
                     handleSearchParams('tab', 'success', searchParams, setSearchParams);
                 }
@@ -505,6 +523,7 @@ export default function RegisterKYC () {
                                 handleStates={handleInputFelids}
                                 states={states}
                                 submitSelected={submitSelected}
+                                bankSelected={bankSelected}
                             />}
                         </div>
                         <div className='flex justify-between items-center'>

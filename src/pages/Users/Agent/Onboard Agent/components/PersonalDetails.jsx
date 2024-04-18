@@ -9,7 +9,8 @@ import InputSearch from '../../../../../components/InputField/InputSearch';
 import { dataService } from '../../../../../services/data.services';
 import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
 
-export default function PersonalDetails ({ handleStates, states, submitSelected }) {
+export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected }) {
+    console.log('bank_name', bankSelected)
     const OccupationList = [
         'Employed', 'Self Employed', 'In full time education', 'Seeking employment', 'Ritired/Pensioner', 'Others'];
     const Purpose = [
@@ -45,13 +46,15 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
                     'Over 10 Million MWK'
                 ]
             }
-        },
+        }
+    };
+    const bankInputFelid = {
         'Banking  Information for Payouts (Optional)': {
             'Bank Name': {
                 label: 'Bank Name',
                 type: 'dropdown',
                 key: 'bank_name',
-                require: false,
+                require: true,
                 options: [
                     'CDH Investment Bank',
                     'Ecobank',
@@ -67,13 +70,13 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
                 label: 'Account Number',
                 type: 'input',
                 key: 'account_number',
-                require: false
+                require: true
             },
             'Account Name': {
                 label: 'Account Name',
                 type: 'input',
                 key: 'account_name',
-                require: false
+                require: true
             }
         }
     };
@@ -191,17 +194,17 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
                 }
                 {states?.occupation === 'In full time education' && <div className='w-1/3'>
                     <InputSearch
-                        testId='education'
-                        id='education'
+                        testId='institute'
+                        id='institute'
                         handleInput={handleStates}
-                        value={states?.education === undefined ? '' : states.education}
+                        value={states?.institute === undefined ? '' : states.institute}
                         handleSearchItem={handleSearchItem}
                         label={'Search Institute'}
                         submitSelected={submitSelected}
                     />
                 </div>}
                 {(states?.occupation === 'Self Employed' || states?.occupation === 'Others' ||
-                (states?.education === 'Others (Please Specify)' && states?.occupation === 'In full time education')) &&
+                (states?.institute === 'Others (Please Specify)' && states?.occupation === 'In full time education')) &&
                 <div className='w-1/3'>
                     <InputField
                         className=''
@@ -260,6 +263,13 @@ export default function PersonalDetails ({ handleStates, states, submitSelected 
                 handleOnChange={handleStates}
                 states={states}
                 submitSelected={submitSelected}
+            />
+            <FelidDivision
+                divisionClassName = {'w-1/3'}
+                divisionObject = {bankInputFelid}
+                handleOnChange={handleStates}
+                states={states}
+                submitSelected={bankSelected}
             />
         </div>
     );

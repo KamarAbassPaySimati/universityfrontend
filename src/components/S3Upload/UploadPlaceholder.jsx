@@ -1,16 +1,28 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from '../Image/Image';
 import { handleDelete, handleUpload } from './S3Functions';
 import ImageLoader from './ImageLoader';
 import IframeModal from '../Iframe/IframeModal';
+import GlobalContext from '../Context/GlobalContext';
 
 export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled, error }) {
     const [loadingImg, setLoadingImg] = useState(false);
     const [showIframe, setShowIframe] = useState(false);
+    const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
+    const { setToastError } = useContext(GlobalContext);
+    const [imageUploadError, setImageUploadError] = useState(false);
 
     const handleUploadFile = async (e) => {
+        setImageUploadError(false);
         try {
             setLoadingImg(true);
+            if (!imageTypes.includes(e.target.files[0].type) ||
+            (e.target.files[0] && e.target.files[0].size > 10 * 1024 * 1024)) {
+                setImageUploadError(true);
+                setToastError('File size should be less than 10MB');
+                setLoadingImg(false);
+                return;
+            }
             const img = await handleUpload(e.target.files[0], path);
             handleStates(img.key, selectedUploadImg);
             setLoadingImg(false);
@@ -34,14 +46,15 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                             }
                             }
                         />
-
                     </div>
                 </div>
                 : <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
                     <div className="md:flex">
                         <div className="w-full py-3">
                             <div className={`border border-dashed h-48
-                        rounded-lg ${error ? 'border-error' : 'border-neutral-secondary'} flex justify-center items-center`}>
+                        rounded-lg ${(error || imageUploadError)
+            ? 'border-error'
+            : 'border-neutral-secondary'} flex justify-center items-center`}>
                                 {loadingImg
                                     ? <ImageLoader />
                                     : <>
@@ -62,6 +75,7 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                                         <input
                                             onChange={(e) => handleUploadFile(e)}
                                             disabled={disabled}
+                                            accept="image/jpeg, image/png, application/pdf"
                                             type="file" className="h-full w-full opacity-0" name=""/>
                                     </>}
 

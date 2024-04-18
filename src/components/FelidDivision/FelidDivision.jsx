@@ -25,6 +25,7 @@ export default function FelidDivision ({
                                     divObj.type === 'dropdown'
                                         ? (
                                             <div className='mx-[10px]'>
+                                                {console.log(divObj.key)}
                                                 <InputFieldWithDropDown
                                                     labelName={`${divObj?.label}`}
                                                     value={states[divObj?.key] === undefined ? '' : states[divObj?.key]}
