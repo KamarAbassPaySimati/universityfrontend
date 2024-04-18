@@ -36,6 +36,17 @@ async function GetAPI (endpoint, agent) {
         return { error: true, data: error.response };
     }
 }
+async function GetAPIAgent (endpoint) {
+    const headers = await authHeader();
+    try {
+        const data = await axios.get(`${baseURLAgent}${endpoint}`, {
+            headers
+        });
+        return { error: false, data: data.data };
+    } catch (error) {
+        return { error: true, data: error.response };
+    }
+}
 
 /**
  * The function `PostAPI` makes a POST request to a specified endpoint with a payload and returns the
@@ -135,5 +146,6 @@ export const dataService = {
     PostAPI,
     DeleteAPI,
     PostAPIWithoutHeader,
-    PostAPIAgent
+    PostAPIAgent,
+    GetAPIAgent
 };

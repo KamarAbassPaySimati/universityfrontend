@@ -59,25 +59,28 @@ Feature: Paymaart -Admin Web - Forgot Password
         And I submit the forgot password form
         Then I should read a message stating that <message>
         Examples:
-            | password    | confirm_password | message                   |
-            | "1234@bhaB" | "1234@bhab"      | "Password does not match" |
-
+            | password      | confirm_password | message                   |
+            | "1234@bhaB"   | "1234@bhab"      | "Password does not match" |
+            | "Admin@12355" | ""               | "This field is mandatory" |
+            | ""            | "Admin@12355"    | "This field is mandatory" |
+            
     Scenario: Check for password requirement
         Given I am in reset password page
         When I enter password as <password> and confirm password as <confirm_password>
         When I submit the forgot password form
         Then I should read a message stating that <message>
         Examples:
-            | password      | confirm_password | message                        |
-            | "abcpassword" | "abcpassword"    | "Password criteria is not met" |
-            | "1"           | "1"              | "Password criteria is not met" |
-            | "c"           | "c"              | "Password criteria is not met" |
-            | "@"           | "@"              | "Password criteria is not met" |
-            | "bharath@"    | "bharath@"       | "Password criteria is not met" |
-            | "B"           | "B"              | "Password criteria is not met" |
-            | "Ba"          | "Ba"             | "Password criteria is not met" |
-            | "Ba1"         | "Ba1"            | "Password criteria is not met" |
-            | "Pass!1"      | "Pass!1"         | "Password criteria is not met" |
+            | password      | confirm_password | message                                                 |
+            | "abcpassword" | "abcpassword"    | "Password criteria is not met"                          |
+            | "1"           | "1"              | "Password criteria is not met"                          |
+            | "c"           | "c"              | "Password criteria is not met"                          |
+            | "@"           | "@"              | "Password criteria is not met"                          |
+            | "bharath@"    | "bharath@"       | "Password criteria is not met"                          |
+            | "B"           | "B"              | "Password criteria is not met"                          |
+            | "Ba"          | "Ba"             | "Password criteria is not met"                          |
+            | "Ba1"         | "Ba1"            | "Password criteria is not met"                          |
+            | "Pass!1"      | "Pass!1"         | "Password criteria is not met"                          |
+            | "Admin@12345" | "Admin@12345"    | "Weak password. Check guidelines for strong passwords." |
 
     Scenario: Set New Password with valid information
         Given I am in reset password page
@@ -86,7 +89,7 @@ Feature: Paymaart -Admin Web - Forgot Password
         Then I should read a message stating that "Your password has been successfully changed"
         When I click on go back to login screen
         Then I should be redirected to login
-        
+
     Scenario: Link Expired
         Given I reopen the reset password link
         Then I should read a message stating that "The link you are trying to access has expired or is invalid."

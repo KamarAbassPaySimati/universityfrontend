@@ -53,6 +53,10 @@ When('I click on the sort by {string}', async function (sortBy) {
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_agent_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
+    case 'Submission Date':
+        await driver.wait(until.elementLocated(By.css('[data-testid="sort_submission_date"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        break;
     default:
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_admin_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
@@ -118,7 +122,7 @@ Then('I should view {string} page not found screen', async function (page) {
 
 When('I click on clear search', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="search-close"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -126,7 +130,7 @@ When('I click on clear search', async function () {
 
 Then('I should see list of table records', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('tbody tr')));
     await driver.wait(until.elementIsVisible(element));
 });
@@ -189,4 +193,20 @@ When('I log out from the application', async function () {
     await driver.executeScript('window.localStorage.clear();');
     await driver.executeScript('window.location.reload();');
     await new Promise(resolve => setTimeout(resolve, 2000));
+});
+
+Then('I should see {string} button is hidden', async function (type) {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    let element;
+    switch (type) {
+    case 'onboard admin user':
+        element = await driver.executeScript('return document.querySelector("[data-testid=\'Register Admin\']")');
+        if (element == null || element === undefined) {
+            return 'passed';
+        } else {
+            throw new Error('Onboard Admin button is not hidden');
+        }
+    default:
+        break;
+    }
 });

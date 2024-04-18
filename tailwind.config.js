@@ -40,7 +40,10 @@ export default {
                 'background-light': '#F0ECFF',
                 'background-dark': '#67389A',
                 'neutral-grey': '#F8F8F8',
-                'accent-positive-secondary': '#DDF7F0',
+                'accent-info-secondary': '#D9E8FE',
+                'accent-negative-secondary': '#FFE8E8',
+                'accent-positive-secondary': '#ECFDF5',
+                'accent-positive-secondary_color': '#DDF7F0',
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
@@ -50,6 +53,7 @@ export default {
                 tabledivHeight: 'calc(100vh - 458px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
                 heightSideBar: 'calc(100vh - 500px)',
+                heightSideBarOne: 'calc(100vh - 400px)',
                 heightFullWithPadding: 'calc(100vh - 57px)',
                 noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
             },

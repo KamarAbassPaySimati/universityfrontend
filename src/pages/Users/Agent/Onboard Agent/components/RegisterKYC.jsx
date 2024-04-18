@@ -15,7 +15,7 @@ import {
     AddressDetails, BankDetailsList, IdDocuments, PersonalDetailsList, ProgressBar, VerificationDocument,
     handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
-import { handleSearchParams } from '../../../../../CommonMethods/ListFunctions';
+import { handleSearchParamsValue } from '../../../../../CommonMethods/ListFunctions';
 import addApostrophe from '../../../../../CommonMethods/textCorrection';
 import KYCFinalPage from '../../../../../components/KYC/KYCFinalPage';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
@@ -99,7 +99,7 @@ export default function RegisterKYC () {
         default:
             break;
         }
-        handleSearchParams('tab', nextTab, searchParams, setSearchParams);
+        handleSearchParamsValue('tab', nextTab, searchParams, setSearchParams);
     };
 
     const handleAPICall = async (body, tab) => {
@@ -107,7 +107,7 @@ export default function RegisterKYC () {
             await dataService.PostAPIAgent('create-kyc-secure', body);
             getKYCView();
             setIsLoadingButton(false);
-            handleSearchParams('tab', tab, searchParams, setSearchParams);
+            handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
             setSubmitPayload({});
         } catch (error) {
             setIsLoadingButton(false);
@@ -456,7 +456,7 @@ export default function RegisterKYC () {
         if (searchParams.get('tab') !== 'address_details' ||
         searchParams.get('tab') !== 'identity_details' ||
         searchParams.get('tab') !== 'personal_details' || searchParams.get('tab') !== 'success') {
-            handleSearchParams('tab', null, searchParams, setSearchParams);
+            handleSearchParamsValue('tab', null, searchParams, setSearchParams);
         }
         getKYCView();
     }, []);

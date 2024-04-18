@@ -8,7 +8,7 @@ const ProgressBarComponent = ({ ProgressBar, LineClass, currentTab }) => {
         } else {
             switch (type) {
             case 'completed':
-                return { inner: 'bg-accent-positive', outer: 'bg-accent-positive-secondary' };
+                return { inner: 'bg-accent-positive', outer: 'bg-accent-positive-secondary_color' };
             case 'skip':
                 return { inner: 'bg-neutral-secondary', outer: 'bg-neutral-outline' };
             default:

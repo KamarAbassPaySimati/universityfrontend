@@ -300,7 +300,7 @@ const OnboardAdmin = ({ actionKey }) => {
                         <InputFieldWithPhoneNumber
                             className='w-[339px]'
                             maxLength="11"
-                            value={formData.phoneNumber}
+                            value={actionKey === 'update' ? formatInputPhone(formData.phoneNumber) : formData.phoneNumber}
                             onChange={handleChange}
                             id='phoneNumber'
                             testId='phone_number'

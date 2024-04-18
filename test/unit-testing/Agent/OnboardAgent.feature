@@ -15,16 +15,11 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
   Paymaart ID generation should be in non-sequential order
   Note: Resend can be allowed to 3 limit
 
-  @perform_logout
-  @wait
-  Scenario: Super Admin User login with valid credentials
-    Given I am on the login screen
-    When I enter the email address as "bharath.shet+super_admin@7edge.com" and password as "Admin@123"
-    And I submit the login form
-    Then I should be navigated to the TOTP screen
-    When I enter the TOTP obtained from the previously scanned device
-    And I submit the TOTP form
-    Then I should be redirected to the '/dashboard' page
+  @add_admin_user
+  @create_new_user_and_login
+  Scenario: List all the agent users
+    Given I navigate to agent users listing screen
+    Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
 
   Scenario Outline: Register user with invalid details
     Given I navigate to agent onboarding screen
@@ -152,31 +147,24 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
     When I submit the agent registration form
     Then I should read a message stating registration successfully
 
+  
   @perform_logout
   @wait
+  @add_finance_admin_user
+  @create_new_user_and_login
+  @delete_admin_account
   Scenario: Finance Admin User login with valid credentials
-    Given I am on the login screen
-    When I enter the email address as "bharath.shet+finance_admin@7edge.com" and password as "Admin@123"
-    And I submit the login form
-    Then I should be navigated to the TOTP screen
-    When I enter the TOTP obtained from the previously scanned device
-    And I submit the TOTP form
-    Then I should be redirected to the '/dashboard' page
     When I navigate to agent onboarding screen
     Then I should view "404" page not found screen
 
   @perform_logout
   @wait
+  @add_support_admin_user
+  @create_new_user_and_login
+  @delete_admin_account
   Scenario: Support Admin User login with valid credentials and onboard the agent with valid information
-    Given I am on the login screen
-    When I enter the email address as "bharath.shet+support_admin@7edge.com" and password as "Admin@123"
-    And I submit the login form
-    Then I should be navigated to the TOTP screen
-    When I enter the TOTP obtained from the previously scanned device
-    And I submit the TOTP form
-    Then I should be redirected to the '/dashboard' page
-    When I navigate to agent onboarding screen
-    * I enter a valid first name for agent registration
+    Given I navigate to agent onboarding screen
+    When I enter a valid first name for agent registration
     * I enter a valid middle name for agent registration
     * I enter a valid last name for agent registration
     * I enter a valid email address for agent registration
@@ -202,16 +190,12 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
 
   @perform_logout
   @wait
+  @add_normal_admin_user
+  @create_new_user_and_login
+  @delete_admin_account
   Scenario: Admin User login with valid credentials and onboard the agent with valid information
-    Given I am on the login screen
-    When I enter the email address as "bharath.shet+normal_admin@7edge.com" and password as "Admin@123"
-    And I submit the login form
-    Then I should be navigated to the TOTP screen
-    When I enter the TOTP obtained from the previously scanned device
-    And I submit the TOTP form
-    Then I should be redirected to the '/dashboard' page
-    When I navigate to agent onboarding screen
-    * I enter a valid first name for agent registration
+    Given I navigate to agent onboarding screen
+    When I enter a valid first name for agent registration
     * I enter a valid middle name for agent registration
     * I enter a valid last name for agent registration
     * I enter a valid email address for agent registration

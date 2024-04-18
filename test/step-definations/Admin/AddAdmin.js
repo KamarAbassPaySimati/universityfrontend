@@ -46,7 +46,7 @@ Before('@create_new_admin_account', async function () {
         await createAdminAccountSecure(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
-        console.log('error', error);
+        console.log('API Error', error);
     }
 });
 
