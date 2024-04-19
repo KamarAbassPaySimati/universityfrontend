@@ -14,8 +14,8 @@ Feature: Paymaart - Admin Web - Onboard Admin
   @add_admin_user
   @create_new_user_and_login
   Scenario: Super Admin User login with valid credentials
-        Given I navigate to admin users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
+    Given I navigate to admin users listing screen
+    Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
 
   Scenario: Add admin users with invalid credentials
     Given I navigate to onboard admin user

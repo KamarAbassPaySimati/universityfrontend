@@ -7,7 +7,6 @@ export const handleSort = (sortBy, searchParams, setSearchParams) => {
 };
 
 export const handleSearchParams = (key, value, searchParams, setSearchParams, page) => {
-    console.log('came hert');
     const params = Object.fromEntries(searchParams);
     params[key] = value;
     if (page !== 'false') {
@@ -19,6 +18,4 @@ export const handleSearchParams = (key, value, searchParams, setSearchParams, pa
         delete params.simplifiedkyc;
     }
     setSearchParams({ ...params });
-    console.log(params, 'pa');
-    console.log(searchParams.get('citizen'), 'came here 2');
 };

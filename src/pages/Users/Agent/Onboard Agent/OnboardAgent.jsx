@@ -193,7 +193,7 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingEmailVerify(true);
         }
-        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
@@ -255,7 +255,7 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingPhoneVerify(true);
         }
-        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
@@ -289,7 +289,7 @@ const OnboardAgent = ({ role }) => {
             token: otpToken
         };
         setLoadingOtpVerify(true);
-        const response = await dataService.PostAPIAgent(verifyOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : await dataService.PostAPIMerchant(verifyOtp, payload);
         setLoadingOtpVerify(false);
         setOtp('');
         if (!response.error) {
@@ -370,7 +370,7 @@ const OnboardAgent = ({ role }) => {
             security_questions: transformArray(securityQuestions)
         };
         setIsLoading(true);
-        const response = await dataService.PostAPIAgent(createAgent, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : await dataService.PostAPIMerchant(createAgent, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
@@ -390,7 +390,7 @@ const OnboardAgent = ({ role }) => {
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
-                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} />
+                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} accessRole={role} />
                 : <>
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details
@@ -592,7 +592,7 @@ const OnboardAgent = ({ role }) => {
                                     id="termsAccepted"
                                     name='checkbox' />
                                 <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px] leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted">
-                                    {role && role.charAt(0).toUpperCase() + role.slice(1)} has read and agree to Paymaart’s
+                                    {role && role.charAt(0).toUpperCase() + role.slice(1)} has read and agreed Paymaart’s
                                     <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : 'https://www.paymaart.net/merchant-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
                                     and
                                     <a target='_blank' href='https://www.paymaart.net/privacy-policy' className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
