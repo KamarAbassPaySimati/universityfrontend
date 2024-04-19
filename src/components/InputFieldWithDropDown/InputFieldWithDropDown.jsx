@@ -16,6 +16,8 @@ function InputFieldWithDropDown (props) {
     useOnClickOutside(outsideClickRef, () => {
         setShow(false);
     });
+    // Sort the options array before rendering
+    const sortedOptions = options.slice().sort();
     useOnClickOutside(infoRef, () => {
         setShowInfo(false);
     });
@@ -82,7 +84,7 @@ function InputFieldWithDropDown (props) {
                 >
                     <li>
                         <ul className='max-h-[390px] overflow-auto bg-[#fff]'>
-                            {options.map((item, index = 0) => (
+                            {sortedOptions.map((item, index = 0) => (
                                 <li data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} onClick={(e) => {
                                     e.preventDefault(); setShow(false);
                                     handleInput(item, id);

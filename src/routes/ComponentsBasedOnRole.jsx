@@ -39,8 +39,13 @@ export const ComponentsBasedOnRole = {
         },
         {
             name: 'Onboard Agent Users',
-            element: <OnboardAgent />,
+            element: <OnboardAgent role={'agent'}/>,
             path: '/users/agents/register-agent'
+        },
+        {
+            name: 'Onboard Merchant Users',
+            element: <OnboardAgent role={'merchant'}/>,
+            path: '/users/merchants/register-merchant'
         },
         {
             name: 'KYC Verification list',
@@ -72,8 +77,13 @@ export const ComponentsBasedOnRole = {
         },
         {
             name: 'Onboard Agent Users',
-            element: <OnboardAgent />,
+            element: <OnboardAgent role={'agent'}/>,
             path: '/users/agents/register-agent'
+        },
+        {
+            name: 'Onboard Merchant Users',
+            element: <OnboardAgent role={'merchant'}/>,
+            path: '/users/merchants/register-merchant'
         },
         {
             name: 'KYC Verification list',
@@ -95,8 +105,13 @@ export const ComponentsBasedOnRole = {
     [
         {
             name: 'Onboard Agent Users',
-            element: <OnboardAgent />,
+            element: <OnboardAgent role={'agent'}/>,
             path: '/users/agents/register-agent'
+        },
+        {
+            name: 'Onboard Merchant Users',
+            element: <OnboardAgent role={'merchant'}/>,
+            path: '/users/merchants/register-merchant'
         }
     ],
     'finance-admin':

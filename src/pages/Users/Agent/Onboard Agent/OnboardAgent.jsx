@@ -20,7 +20,7 @@ import { endpoints } from '../../../../services/endpoints';
 import RegistrationSuccessful from './components/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 
-const OnboardAgent = () => {
+const OnboardAgent = ({ role }) => {
     const initialState = {
         firstName: '',
         middleName: '',
@@ -194,14 +194,14 @@ const OnboardAgent = () => {
         } else {
             setLoadingEmailVerify(true);
         }
-        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
             setVerify(prevState => {
                 return { ...prevState, email: true };
             });
-            setToastInformation("Verification code has been sent to agent’s email. It's valid for 10 minutes");
+            setToastInformation(`Verification code has been sent to ${role}’s email. It's valid for 10 minutes`);
             setTimer(60 * 2);
             setOtpToken(response?.data?.token);
             setResendCount(prevState => prevState + 1);
@@ -256,14 +256,14 @@ const OnboardAgent = () => {
         } else {
             setLoadingPhoneVerify(true);
         }
-        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
             setVerify(prevState => {
                 return { ...prevState, phoneNumber: true };
             });
-            setToastInformation("Verification code has been sent to agent’s phone number. It's valid for 10 minutes");
+            setToastInformation(`Verification code has been sent to ${role}’s phone number. It's valid for 10 minutes`);
             setTimer(60 * 2);
             setResendCount(prevState => prevState + 1);
             setOtpToken(response?.data?.token);
@@ -290,7 +290,7 @@ const OnboardAgent = () => {
             token: otpToken
         };
         setLoadingOtpVerify(true);
-        const response = await dataService.PostAPIAgent(verifyOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : await dataService.PostAPIMerchant(verifyOtp, payload);
         setLoadingOtpVerify(false);
         setOtp('');
         if (!response.error) {
@@ -371,7 +371,7 @@ const OnboardAgent = () => {
             security_questions: transformArray(securityQuestions)
         };
         setIsLoading(true);
-        const response = await dataService.PostAPIAgent(createAgent, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : await dataService.PostAPIMerchant(createAgent, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
@@ -386,13 +386,13 @@ const OnboardAgent = () => {
 
     return (
         <CardHeader
-            activePath='Register Agent'
-            paths={['Users', 'Agent']}
-            pathurls={['users/agents']}
+            activePath={role === 'agent' ? 'Register Agent' : 'Register Merchant'}
+            paths={role === 'agent' ? ['Users', 'Agent'] : ['Users', 'Merchant']}
+            pathurls={role === 'agent' ? ['users/agents'] : ['users/merchants']}
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
-                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} paymartId={paymartId}/>
+                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} accessRole={role} paymartId={paymartId}/>
                 : <>
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details
@@ -593,14 +593,11 @@ const OnboardAgent = () => {
                                     className="w-4 cursor-pointer"
                                     id="termsAccepted"
                                     name='checkbox' />
-                                <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px]
-                            leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted" >
-                                    I have read and agree to Paymaart’s
-                                    <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
-                                        className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
+                                <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px] leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted">
+                                    {role && role.charAt(0).toUpperCase() + role.slice(1)} has read and agreed Paymaart’s
+                                    <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : 'https://www.paymaart.net/merchant-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
                                     and
-                                    <a target='_blank' href='https://www.paymaart.net/privacy-policy'
-                                        className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
+                                    <a target='_blank' href='https://www.paymaart.net/privacy-policy' className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
                                 </label>
                             </div>
                             {termsAcceptedError && <ErrorMessage error='Please accept the Terms & Conditions and Privacy Policies to continue.' />}

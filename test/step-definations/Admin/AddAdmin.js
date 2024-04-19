@@ -133,7 +133,7 @@ When('I submit the onboard admin form', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
     await driver.wait(until.elementIsVisible(element));
-    element.click();
+    await element.click();
     await new Promise(resolve => setTimeout(resolve, 100));
 });
 

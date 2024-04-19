@@ -72,14 +72,15 @@ Before('@wait', async function () {
 });
 
 Before(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 After(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 AfterStep(async function () {
+    await new Promise(resolve => setTimeout(resolve, 50));
     const updatedCoverageData = await driver.executeScript('return __coverage__;');
     const updatedCoverageMap = createCoverageMap(updatedCoverageData);
     global.coverageMap.merge(updatedCoverageMap);
