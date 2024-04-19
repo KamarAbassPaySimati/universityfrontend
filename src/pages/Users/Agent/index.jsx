@@ -67,9 +67,6 @@ const Agent = () => {
         }
     }, [GetList]);
 
-    useEffect(() => {
-        console.log(notFound, 'not');
-    }, [notFound]);
     return (
         <CardHeader
             activePath='Agents'

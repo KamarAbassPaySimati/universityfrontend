@@ -5,11 +5,13 @@ import { dataService } from '../../../../../services/data.services';
 import { endpoints } from '../../../../../services/endpoints';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 
-const RegistrationSuccessful = ({ email }) => {
+const RegistrationSuccessful = ({ email, accessRole }) => {
     const { resendCredentials } = endpoints;
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
     const handleResendCredentials = async () => {
-        const response = await dataService.PostAPIAgent(resendCredentials, { email });
+        const response = accessRole === 'agent'
+            ? await dataService.PostAPIAgent(resendCredentials, { email })
+            : await dataService.PostAPIMerchant(resendCredentials, { email });
         if (!response.error) {
             setToastSuccess('Credentials resent successfully');
         } else {
@@ -38,7 +40,7 @@ const RegistrationSuccessful = ({ email }) => {
                         </span>
                     </p>
                     <p className='mt-[37px]'>
-                        Click below to complete agent’s KYC registration
+                        Click below to complete {accessRole}’s KYC registration
                     </p>
                     <Button className='max-w-[200px] mt-2' testId='kyc-btn' text='KYC Registration' />
                 </div>

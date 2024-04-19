@@ -12,8 +12,6 @@ export const KycVerificationList = createAsyncThunk('kycVerifications', async (u
     const safeUrl =
         `${url}`;// api end point
 
-    console.log(safeUrl, 'safeurl');
-
     try {
         const res = await dataService.GetAPIAgent(safeUrl);
         return res;
