@@ -37,8 +37,6 @@ BeforeAll(async function () {
     if (worldParametersIndex !== -1 && process.argv.length > worldParametersIndex + 1) {
         worldParameters = JSON.parse(process.argv[worldParametersIndex + 1]);
         global.perform_login = worldParameters.login;
-
-        console.log('global.perform_login', global.perform_login);
     }
 
     try {
@@ -69,7 +67,6 @@ AfterAll(async function () {
 
 Before('@wait', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
-    console.log('waiting');
 });
 
 Before(async function () {

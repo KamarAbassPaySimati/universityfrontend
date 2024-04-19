@@ -4,6 +4,9 @@ import Admin from '../pages/Users/Admin';
 import OnboardAdmin from '../pages/Users/Admin/Onboard admin/OnboardAdmin';
 import OnboardAgent from '../pages/Users/Agent/Onboard Agent/OnboardAgent';
 import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView/SpecificAdminView';
+import KycVerification from '../pages/Verification/KycVerification';
+import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
+import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -37,6 +40,21 @@ export const ComponentsBasedOnRole = {
             name: 'Onboard Agent Users',
             element: <OnboardAgent />,
             path: '/users/agents/register-agent'
+        },
+        {
+            name: 'KYC Verification list',
+            element: <KycVerification />,
+            path: '/verification/kyc-verifications'
+        },
+        {
+            name: 'Paymaart Trust Banks',
+            element: <TrustBanks />,
+            path: '/paymaart-banks'
+        },
+        {
+            name: 'Paymaart Add Trust Banks',
+            element: <AddTrustBank />,
+            path: '/paymaart-banks/trust-banks/add-trust-bank'
         }
     ],
     admin:
@@ -50,6 +68,21 @@ export const ComponentsBasedOnRole = {
             name: 'Onboard Agent Users',
             element: <OnboardAgent />,
             path: '/users/agents/register-agent'
+        },
+        {
+            name: 'KYC Verification list',
+            element: <KycVerification />,
+            path: '/verification/kyc-verifications'
+        },
+        {
+            name: 'Paymaart Trust Banks',
+            element: <TrustBanks />,
+            path: '/paymaart-banks'
+        },
+        {
+            name: 'Paymaart Add Trust Banks',
+            element: <AddTrustBank />,
+            path: '/paymaart-banks/trust-banks/add-trust-bank'
         }
     ],
     'support-admin':
@@ -62,6 +95,15 @@ export const ComponentsBasedOnRole = {
     ],
     'finance-admin':
     [
-
+        {
+            name: 'Paymaart Trust Banks',
+            element: <TrustBanks />,
+            path: '/paymaart-banks'
+        },
+        {
+            name: 'Paymaart Add Trust Banks',
+            element: <AddTrustBank />,
+            path: '/paymaart-banks/trust-banks/add-trust-bank'
+        }
     ]
 };
