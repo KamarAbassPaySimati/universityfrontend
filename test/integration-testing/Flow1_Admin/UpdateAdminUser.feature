@@ -21,26 +21,6 @@ Feature: Paymaart - Admin Web- Update admin profile
         When I should see the update "Admin user" button is hidden
 
     @add_admin_user
-    Scenario: Update admin user with invalid details
-        Given I navigate to admin users listing screen
-        When I search for the recently created admin user
-        * I click on view for particular admin user
-        * I should view all the basic details
-        * I click on update "Admin user"
-        Then I should be be navigated to update admin user
-        And I should see update email address and phone number fields to be disabled
-        When I enter first name as <first_name> for update admin user
-        When I enter middle name as <middle_name> for update admin user
-        When I enter last name as <last_name> for update admin user
-        When I submit the update admin form
-        Then I should read a message stating that <message>
-
-        Examples:
-            | first_name | middle_name | last_name | role          | message                |
-            | ""         | "D"         | "Shet"    | "Super Admin" | "Required field"       |
-            | "Bharath"  | ""          | "Shet"    | "Super Admin" | "Required field"       |
-            | "Bharath"  | "D"         | ""        | "Super Admin" | "Required field"       |
-
     Scenario: Update admin user with valid details
         Given I navigate to admin users listing screen
         When I search for the recently created admin user

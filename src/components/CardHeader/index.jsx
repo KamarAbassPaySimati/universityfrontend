@@ -71,7 +71,7 @@ const CardHeader = ({
                  text-header-dark flex flex-row justify-between `}>
                     {header}
                     <div className='flex'>
-                        {buttonText && <button onClick={() => { navigate(navigationPath); }}
+                        {buttonText && <button data-testid={buttonText} onClick={() => { navigate(navigationPath); }}
                             className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                             <img src='/images/onboardIcon.svg'
