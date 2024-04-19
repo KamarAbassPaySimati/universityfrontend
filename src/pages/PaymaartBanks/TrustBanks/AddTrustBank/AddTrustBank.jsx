@@ -180,7 +180,7 @@ const AddTrustBank = () => {
                                     'Centenary Bank'
                                 ]}
                                 id="bankName"
-                                testId="bankName"
+                                testId="bank_name"
                                 handleInput={handleInput}
                             />
                         </div>

@@ -51,6 +51,7 @@ const OnboardAgent = ({ role }) => {
     const [loadingPhoneVerify, setLoadingPhoneVerify] = useState(false);
     const [loadingOtpVerify, setLoadingOtpVerify] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [paymartId, setPaymartId] = useState('');
     const [otpId, setOtpId] = useState({
         email: '',
         phoneNumber: ''
@@ -374,6 +375,7 @@ const OnboardAgent = ({ role }) => {
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
+            setPaymartId(response.data.paymaart_id);
         } else {
             setToastError('Something went wrong!');
         }
@@ -390,7 +392,7 @@ const OnboardAgent = ({ role }) => {
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
-                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} accessRole={role} />
+                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} accessRole={role} paymartId={paymartId}/>
                 : <>
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details

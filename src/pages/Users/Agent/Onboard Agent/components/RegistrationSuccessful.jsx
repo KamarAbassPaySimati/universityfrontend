@@ -4,10 +4,12 @@ import Button from '../../../../../components/Button/Button';
 import { dataService } from '../../../../../services/data.services';
 import { endpoints } from '../../../../../services/endpoints';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
+import { useNavigate } from 'react-router-dom';
 
-const RegistrationSuccessful = ({ email, accessRole }) => {
+const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
     const { resendCredentials } = endpoints;
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
+    const Navigate = useNavigate();
     const handleResendCredentials = async () => {
         const response = accessRole === 'agent'
             ? await dataService.PostAPIAgent(resendCredentials, { email })
@@ -42,7 +44,12 @@ const RegistrationSuccessful = ({ email, accessRole }) => {
                     <p className='mt-[37px]'>
                         Click below to complete {accessRole}’s KYC registration
                     </p>
-                    <Button className='max-w-[200px] mt-2' testId='kyc-btn' text='KYC Registration' />
+                    <Button
+                        className='max-w-[200px] mt-2'
+                        testId='verify_KYC'
+                        text='KYC Registration'
+                        onClick={() => Navigate(`/users/agents/register-agent/kyc-registration/${paymartId}`)}
+                    />
                 </div>
             </div>
         </div>

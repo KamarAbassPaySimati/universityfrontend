@@ -19,3 +19,10 @@ export const handleSearchParams = (key, value, searchParams, setSearchParams, pa
     }
     setSearchParams({ ...params });
 };
+
+export const handleSearchParamsValue = (id, value, searchParams, setSearchParams) => {
+    const params = Object.fromEntries(searchParams);
+    params[id] = value;
+    if (value === null) delete params[id];
+    setSearchParams({ ...params });
+};
