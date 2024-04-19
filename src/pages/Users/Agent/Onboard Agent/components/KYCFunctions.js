@@ -42,9 +42,9 @@ export const occupationEduction = ['institute'];
 export const VerificationDocument = {
     'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
     'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
-    'Birth Certificate': ['birth_cert_img_front', 'birth_cert_img_back'],
-    'Employer letter': ['employer_letter_img_front', 'employer_letter_img_back'],
-    'Institute letter': ['institute_letter_img_front', 'institute_letter_img_back']
+    'Birth Certificate': ['birth_cert_img_front'],
+    'Employer letter': ['employer_letter_img_front'],
+    'Institute letter': ['institute_letter_img_front']
 };
 export const BankDetailsList = ['bank_name', 'account_number', 'account_name'];
 export const IdDocuments = {

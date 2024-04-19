@@ -3,7 +3,7 @@ import { Modal } from 'react-responsive-modal';
 import Image from '../Image/Image';
 import WebCam from './WebCam';
 
-export default function CapturePopup ({ isModalOpen, handleClose, Webcam, handleStates }) {
+export default function CapturePopup ({ isModalOpen, handleClose, handleStates }) {
     return (
         <Modal center open={isModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
             <div className='customModal'></div>

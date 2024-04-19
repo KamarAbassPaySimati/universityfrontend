@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import Image from '../Image/Image';
 import CapturePopup from './CapturePopup';
-import Webcam from 'react-webcam';
 import { CDN } from '../../config';
 import { handleDelete } from '../S3Upload/S3Functions';
 
@@ -45,7 +44,7 @@ export default function Capture ({ label, handleStates, states, submitSelected }
                 </div>
             </div>
             {isCapture && <CapturePopup
-                handleStates={handleStates} Webcam={Webcam} isModalOpen={isCapture} handleClose={() => setIsCapture(false)}/>}
+                handleStates={handleStates} isModalOpen={isCapture} handleClose={() => setIsCapture(false)}/>}
         </>
     );
 }

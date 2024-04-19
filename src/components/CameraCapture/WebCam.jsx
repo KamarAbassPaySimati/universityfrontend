@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import Webcam from 'react-webcam';
 import Button2 from '../Button2/Button2';
 import Button from '../Button/Button';
@@ -15,6 +15,7 @@ export default function WebCam ({ handleStates, handleClose }) {
     };
     const canvasRef = useRef(null);
     const [image, setImage] = React.useState(null);
+    const [loading, setLoading] = useState(false);
     const webcamRef = React.useRef(null);
     const capture = React.useCallback(
         () => {
@@ -25,11 +26,13 @@ export default function WebCam ({ handleStates, handleClose }) {
 
     const handleCapture = async () => {
         if (image) {
+            setLoading(true);
             const fileName = `image-${uuidv4()}.jpeg`;
             var file = dataURLtoFile(image, fileName);
             const capture = await handleUpload(file, uuidv4());
             handleStates(capture.key, 'capture');
             handleClose();
+            setLoading(false);
             setImage(null);
         }
     };
@@ -51,6 +54,7 @@ export default function WebCam ({ handleStates, handleClose }) {
                     text={'Re-capture'}
                     onClick={() => setImage(null)}
                     testId={'re_capture_selfie'}
+                    disabled={loading}
                     className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
                 />}
                 {<Button
@@ -58,7 +62,8 @@ export default function WebCam ({ handleStates, handleClose }) {
                     testId= {image === null ? 'capture_selfie' : 'selfie_looks_good'}
                     className = 'max-w-[200px] h-10 ml-4 px-[51px]'
                     onClick={image === null ? capture : handleCapture}
-                    isLoading={false}
+                    isLoading={loading}
+                    disabled={loading}
                 />}
             </div>}
             <canvas ref={canvasRef} style={{ display: 'none' }} />

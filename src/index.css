@@ -468,3 +468,18 @@ iframe {
     transform: translateX(0) translateY(0); /* Back to start */
   }
 }
+
+
+@layer utilities {
+  .custom-list {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1em;
+    text-indent: -0.825em;
+  }
+  
+  .custom-list li:before {
+    content: attr(data-list-symbol); /* Use the data attribute to set different symbols */
+  }
+}
+

@@ -526,9 +526,10 @@ export default function RegisterKYC () {
                                     <Button
                                         text={'Save and continue'}
                                         testId= 'submit_button'
-                                        className = 'max-w-[227px] ml-4 px-[51px]'
+                                        className = 'w-[227px] ml-4 px-[51px]'
                                         onClick={handleSubmit}
                                         isLoading={isLoadingButton}
+                                        disabled={isLoadingButton}
                                     />
                                 </div>
                                 <div
