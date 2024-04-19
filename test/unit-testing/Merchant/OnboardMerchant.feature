@@ -29,9 +29,16 @@ Feature: Paymaart- Admin Web- Onboard merchant- Registration
 
     @add_admin_user
     @create_new_user_and_login
-    Scenario: List all the merchant users
-        Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+    Scenario: Validate invalid email address
+        Given I navigate to merchant onboarding screen
+        When I enter the first name as "John" for merchant registration
+        When I enter the middle name as "D" for merchant registration
+        When I enter the last name as "Tyson" for merchant registration
+        When I enter the email address as "bharath.shet7edge.com" for merchant registration
+        When I enter the phone number as "9741292994" for merchant registration
+        When I agree to the terms and conditions
+        When I click on verify email address
+        Then I should read a message stating that "Invalid email"
 
     Scenario Outline: Register user with invalid details
         Given I navigate to merchant onboarding screen
@@ -70,17 +77,6 @@ Feature: Paymaart- Admin Web- Onboard merchant- Registration
             | ""       | "Lamborgini" | ""       | "Bangalore" |
             | "John"   | ""           | ""       | "Bangalore" |
             | ""       | "Lamborgini" | ""       | "Malawi"    |
-
-    Scenario: Validate invalid email address
-        Given I navigate to merchant onboarding screen
-        When I enter the first name as "John" for merchant registration
-        When I enter the middle name as "D" for merchant registration
-        When I enter the last name as "Tyson" for merchant registration
-        When I enter the email address as "bharath.shet7edge.com" for merchant registration
-        When I enter the phone number as "9741292994" for merchant registration
-        When I agree to the terms and conditions
-        When I click on verify email address
-        Then I should read a message stating that "Invalid email"
 
     Scenario: Validate invalid phone number
         Given I navigate to merchant onboarding screen

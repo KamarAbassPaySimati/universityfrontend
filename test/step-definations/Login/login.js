@@ -401,6 +401,7 @@ When('I enter the email address as {string} and password as {string}', async fun
 });
 
 When('I submit the login form', async function () {
+    await new Promise(resolve => setTimeout(resolve, 700));
     await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
 });
 
@@ -418,7 +419,7 @@ Given('I am presented with the authenticator QR Code', async function () {
 });
 
 When('I click on the proceed to authenticate button', async function () {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 750));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="proceed_next_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
