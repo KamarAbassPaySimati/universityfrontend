@@ -17,7 +17,11 @@ export default function RuleDropdown ({ heading, rules, textColor, imageSrc, Gui
                     <ul class="ps-5 mt-2 space-y-1 list-disc list-inside">
                         {Object.keys(rules).map((ruleItem) => (
                             rules[ruleItem].text &&
-                            <li key={ruleItem}>{rules[ruleItem].text}</li>))}
+                            <div className='flex' key={ruleItem}>
+                                <li></li>
+                                <span>{rules[ruleItem].text}</span>
+                            </div>
+                        ))}
                     </ul>
                 </ol>)}
 

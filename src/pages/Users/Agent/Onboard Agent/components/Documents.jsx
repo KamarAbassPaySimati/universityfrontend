@@ -2,9 +2,7 @@ import React from 'react';
 import Capture from '../../../../../components/CameraCapture/Capture';
 import RulesList from '../../../../../components/InformationList/RulesList';
 import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlaceholder';
-import InformationList from '../../../../../components/InformationList/InformationList';
 import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
-import { Tooltip } from 'react-tooltip';
 import { useParams } from 'react-router-dom';
 
 export default function Documents ({ type, handleStates, states, submitSelected }) {
@@ -135,21 +133,22 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     options={type !== 'ID Document' ? VerificationDocumentList : IdDocumentList}
                     id={type}
                     testId={`${type.replaceAll(' ', '_').toLowerCase()}_dropdown`}
-                    information
+                    information={{
+                        information: type === 'ID Document'
+                            ? IdInfomation
+                            : VerificationInfomation,
+                        heading: 'Your ID Verification Document Options'
+                    }}
                     handleInput={handleStates}
                 />
-                <Tooltip
+                {/* <Tooltip
                     className='info-tooltip'
                     anchorSelect=".info-icon"
                     place='right-start'
                     effect="solid"
                     arrowColor="transparent"
-                >
-                    <InformationList
-                        heading="Your ID Verification Document Options"
-                        information={type === 'ID Document' ? IdInfomation : VerificationInfomation}
-                    />
-                </Tooltip>
+                > */}
+                {/* </Tooltip> */}
 
             </div>
             <div className='flex'>

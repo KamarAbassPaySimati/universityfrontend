@@ -20,14 +20,17 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             (e.target.files[0] && e.target.files[0].size > 10 * 1024 * 1024)) {
                 setImageUploadError(true);
                 setToastError('Upload failed. Unsupported format or file size exceeded');
+                e.target.value = '';
                 setLoadingImg(false);
                 return;
             }
             const img = await handleUpload(e.target.files[0], path);
             handleStates(img.key, selectedUploadImg);
             setLoadingImg(false);
+            e.target.value = '';
         } catch (error) {
             console.log('errrr', error);
+            e.target.value = '';
         }
     };
     return (
@@ -36,7 +39,7 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             {(states[selectedUploadImg] !== undefined && states[selectedUploadImg] !== '')
                 ? <div className='mt-2 bg-background-light w-full h-[52px] rounded-lg flex justify-between items-center'>
                     <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium break-words w-[70%]'>
-                        {states[selectedUploadImg].split('/')[2]}</p>
+                        {states[selectedUploadImg].split('/')[states[selectedUploadImg].split('/').length - 1]}</p>
                     <div className='flex gap-3 px-2'>
                         <Image src='eyeLight' testId={`view_${testId}`}
                             className='h-6 w-6 cursor-pointer' onClick={() => setShowIframe(true)}/>

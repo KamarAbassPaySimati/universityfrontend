@@ -2,9 +2,10 @@ import { uploadData, remove } from 'aws-amplify/storage';
 import { v4 as uuidv4 } from 'uuid';
 
 export const handleUpload = async (file, path) => {
+    console.log('file.name', file.name);
     try {
         const result = await uploadData({
-            key: `${path}/${uuidv4()}-${file.name}`,
+            key: `${path}/${uuidv4()}/${file.name}`,
             data: file,
             options: {
                 contentType: file.type, // optional, automatically inferred if not provided,

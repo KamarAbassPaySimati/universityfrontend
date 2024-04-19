@@ -37,12 +37,12 @@ export const handleStates = (value, id, type, setStates, states) => {
 export const AddressDetails = ['street_name', 'town_village_ta', 'district'];
 export const PersonalDetailsList = ['gender', 'dob', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
 export const occupationEmployed = ['employed_role', 'employer_name', 'industry', 'occupation_town'];
-export const occupationSelfEmployed = ['occupation_specify'];
+export const occupationSelfEmployed = ['self_employed_specify'];
 export const occupationEduction = ['institute'];
 export const VerificationDocument = {
     'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
     'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
-    'Birth Certificate': ['birth_cert_img_front'],
+    'Birth Certificate': ['birth_certificate_img_front'],
     'Employer letter': ['employer_letter_img_front'],
     'Institute letter': ['institute_letter_img_front']
 };

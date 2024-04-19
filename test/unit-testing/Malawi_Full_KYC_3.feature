@@ -184,7 +184,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         Given I am in KYC personal details screen
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
-        When I select the Occupation as "Retired"
+        When I select the Occupation as "Retired/Pensioner"
         When I select the applicable purpose and nature of business
         When I select valid monthly income and monthly withdrawal
         When I click on save and continue button

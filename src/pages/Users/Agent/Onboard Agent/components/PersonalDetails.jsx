@@ -94,15 +94,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 key: 'industry',
                 require: true,
                 options: [
-                    'CDH Investment Bank',
-                    'Ecobank',
+                    'Education Services',
+                    'Transport & Storage Services',
                     'FDH Bank',
-                    'First Capital Bank',
-                    'National Bank',
-                    'NBS Bank',
-                    'Standard Bank',
-                    'Centenary Bank'
-                ]
+                    'Real Estate Activities',
+                    'Information & Communication',
+                    'Healthcare Services']
             },
             'Town/District': {
                 label: 'Town/District',
@@ -114,7 +111,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
         }
     };
     const EmployedList = [
-        'Admin/Administrative /Clerical',
+        'Admin/Administrative/Clerical',
         'Trainee/Intern/Apprentice',
         'Professionals/Technical',
         'Professionals/Technical/Manager',
@@ -174,7 +171,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     </div>
                 </div>
                 {states?.occupation === 'Employed' &&
-                <div className='w-1/3 mt-6'>
+                <div className='w-1/3 mt-7'>
                     <div className='mx-[10px]'>
                         <InputFieldWithDropDown
                             labelName={'Employed'}
@@ -207,7 +204,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 </div>}
                 {(states?.occupation === 'Self Employed' || states?.occupation === 'Others' ||
                 (states?.institute === 'Others (Please Specify)' && states?.occupation === 'In Full-time Education')) &&
-                <div className='w-1/3'>
+                <div className='w-1/3 mt-7'>
                     <InputField
                         className=''
                         divClassName='mx-2.5'

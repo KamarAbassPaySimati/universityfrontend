@@ -47,7 +47,6 @@ export default function RegisterKYC () {
     const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
         setBankSelected(false);
-        console.log('value, id', value, id);
         handleStates(value, id, type, setStates, states);
     };
     const handleTabChange = (buttonType) => {
@@ -107,7 +106,6 @@ export default function RegisterKYC () {
         } catch (error) {
             setIsLoadingButton(false);
             setToastError(error.data.message);
-            console.log('errorsjuwq', error);
         }
     };
 
@@ -118,7 +116,7 @@ export default function RegisterKYC () {
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
-                if (states[item]?.trim() === '' || states[item] === undefined) {
+                if (states[item] === undefined || states[item]?.trim() === '') {
                     if (key !== 'skip') {
                         setSubmitSelected(true);
                     }
@@ -204,16 +202,23 @@ export default function RegisterKYC () {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
-                        console.log('count', count, item);
                         count = count + 1;
                     }
                 } else {
-                    if (states[item]?.trim() === '' || states[item] === undefined) {
-                        if (key !== 'skip') {
-                            setSubmitSelected(true);
+                    if (item !== 'dob') {
+                        if (states[item] === undefined || states[item]?.trim() === '') {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
                         }
-                        console.log('count1', count, item);
-                        count = count + 1;
+                    } else {
+                        if (states[item] === undefined || Object.keys(states[item]).length === 0) {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        }
                     }
                 }
             }
@@ -222,11 +227,10 @@ export default function RegisterKYC () {
                 switch (states.occupation) {
                 case 'Employed':
                     occupationEmployed.map((item) => {
-                        if (states[item]?.trim() === '' || states[item] === undefined) {
+                        if (states[item] === undefined || states[item]?.trim() === '') {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
-                            console.log('count2', count, item);
                             count = count + 1;
                         } else {
                             body[item] = states[item];
@@ -234,13 +238,22 @@ export default function RegisterKYC () {
                     }
                     );
                     break;
+                case 'Others':
+                    if (states.occupation_specify === undefined || states.occupation_specify.trim() === '') {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                        }
+                        count = count + 1;
+                    } else {
+                        body.occupation_specify = states.occupation_specify;
+                    }
+                    break;
                 case 'Self Employed':
                     occupationSelfEmployed.map((item) => {
-                        if (states[item]?.trim() === '' || states[item] === undefined) {
+                        if (states[item] === undefined || states[item]?.trim() === '') {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
-                            console.log('count3', count);
                             count = count + 1;
                         } else {
                             body[item] = states[item];
@@ -250,11 +263,10 @@ export default function RegisterKYC () {
                     break;
                 case 'In Full-time Education':
                     occupationEduction.map((item) => {
-                        if (states[item]?.trim() === '' || states[item] === undefined) {
+                        if (states[item] === undefined || states[item]?.trim() === '') {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
-                            console.log('count4', count);
                             count = count + 1;
                         } else {
                             body[item] = states[item];
@@ -266,7 +278,6 @@ export default function RegisterKYC () {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
                         }
-                        console.log('count5', count);
                         count = count + 1;
                     } else {
                         body.institute_specify = states.institute_specify;
@@ -281,12 +292,10 @@ export default function RegisterKYC () {
             (states.account_number === '' || states.account_number === undefined) &&
             (states.account_name === '' || states.account_name === undefined))) {
                 BankDetailsList.map((bank) => {
-                    console.log('banckkk', bank);
                     if (states[bank] === '' || states[bank] === undefined) {
                         if (key !== 'skip') {
                             setBankSelected(true);
                         }
-                        console.log('count6', count);
                         count = count + 1;
                     } else {
                         body[bank] = states[bank];
@@ -526,7 +535,7 @@ export default function RegisterKYC () {
                                     <Button
                                         text={'Save and continue'}
                                         testId= 'submit_button'
-                                        className = 'w-[227px] ml-4 px-[51px]'
+                                        className = 'min-w-[227px] ml-4 px-[51px]'
                                         onClick={handleSubmit}
                                         isLoading={isLoadingButton}
                                         disabled={isLoadingButton}

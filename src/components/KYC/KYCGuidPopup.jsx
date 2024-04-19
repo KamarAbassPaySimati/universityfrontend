@@ -174,7 +174,7 @@ export default function KYCGuidPopup ({ handleClose, isModalOpen }) {
                             <div className="">
                                 <div className="w-full">
                                     <div className="h-[500px]
-                        rounded-lg overflow-auto scrollBar" >
+                        rounded-lg overflow-auto whiteScrollBar pl-2" >
                                         {Object.keys(rulesList).map((ruleItem) => (
                                             <Fragment key={ruleItem}>
                                                 <RuleDropdown

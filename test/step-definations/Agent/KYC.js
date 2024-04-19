@@ -40,6 +40,7 @@ Given('I am in KYC address details screen', async function () {
 
 When('I click on save and continue button', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1500));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -122,6 +123,7 @@ When('I select the ID document as {string}', async function (type) {
 When('I upload the front image of document as {string}', async function (card_front) {
     // Write code here that turns the phrase above into concrete actions
     let element;
+    await new Promise(resolve => setTimeout(resolve, 2000));
     if (card_front !== '') {
         element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_upload_document_front"]')));
         const filePath = path.join(__dirname, `../../support/${card_front}`);
@@ -132,6 +134,7 @@ When('I upload the front image of document as {string}', async function (card_fr
 Then('I upload the back image of document as {string}', async function (card_back) {
     // Write code here that turns the phrase above into concrete actions
     let element;
+    await new Promise(resolve => setTimeout(resolve, 2000));
     if (card_back !== '') {
         element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_upload_document_back"]')));
         const filePath = path.join(__dirname, `../../support/${card_back}`);
@@ -179,6 +182,9 @@ Then('I should view the selfie capture modal', async function () {
 
     const selfieModalTitle = await driver.wait(until.elementLocated(By.css('[data-testid="modal-title"]')));
     await driver.wait(until.elementIsVisible(selfie_modal));
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     const selfieModalTitleText = await selfieModalTitle.getText();
     assert.equal(selfieModalTitleText, 'Biometrics | Live selfie');
 });
@@ -237,6 +243,8 @@ When('I select the verification document as {string}', async function (type) {
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     let dropdownElement;
     switch (type) {
     case 'Driver’s licence':
@@ -276,18 +284,33 @@ Then('I should be redirected to KYC personal details screen', async function () 
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
     await driver.wait(until.elementIsVisible(element));
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    await driver.executeScript('window.location.reload();');
+
+    const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element2));
+    await new Promise(resolve => setTimeout(resolve, 500));
 });
 
 Given('I am in KYC personal details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
     await driver.wait(until.elementIsVisible(element));
+
+    await driver.executeScript('window.location.reload();');
+
+    const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element2));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 When('I select gender as {string}', async function (type) {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[for="Male"]')));
     await driver.wait(until.elementIsVisible(element));
+
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     switch (type) {
     case 'male':
@@ -307,6 +330,7 @@ When('I select gender as {string}', async function (type) {
 
 When('I select the date of birth as {string}', async function (dob) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
     await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(dob);
 });
@@ -316,8 +340,8 @@ When('I select the Occupation as {string}', async function (type) {
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 
-    const dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="employed"]')));
-    await driver.wait(until.elementIsVisible(dropdownElement));
+    await new Promise(resolve => setTimeout(resolve, 1000));
+
     switch (type) {
     case 'Employed':
         await driver.wait(until.elementLocated(By.css('[data-testid="employed"]'))).click();
@@ -331,7 +355,7 @@ When('I select the Occupation as {string}', async function (type) {
     case 'Seeking employment':
         await driver.wait(until.elementLocated(By.css('[data-testid="seeking_employment"]'))).click();
         break;
-    case 'Ritired/Pensioner':
+    case 'Retired/Pensioner':
         await driver.wait(until.elementLocated(By.css('[data-testid="retired/pensioner"]'))).click();
         break;
     case 'Others':
@@ -348,6 +372,8 @@ When('I search and select institution as {string}', async function (instituion) 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="institute"]')));
     await driver.wait(until.elementIsVisible(element));
 
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(instituion);
 
@@ -359,12 +385,16 @@ When('I enter the other institution name as {string}', async function (name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="institute_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
 When('I select the applicable purpose and nature of business', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="purpose_0"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -378,11 +408,16 @@ When('I select valid monthly income and monthly withdrawal', async function () {
     const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
     await driver.wait(until.elementIsVisible(monthly_income));
     await monthly_income.click();
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
     await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income_dropdown_list"] [data-testid="up_to_300,000.00_mwk"]'))).click();
 
     const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
     await driver.wait(until.elementIsVisible(monthly_withdrawal));
     await monthly_withdrawal.click();
+
+    await new Promise(resolve => setTimeout(resolve, 100));
 
     await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal_dropdown_list"] [data-testid="up_to_300,000.00_mwk"]'))).click();
 });
@@ -439,7 +474,7 @@ When('I select employed as {string}', async function (type) {
 
     switch (type) {
     case 'Admin/Administrative/Clerical':
-        await driver.wait(until.elementLocated(By.css('[data-testid="admin/administrative_/clerical"]'))).click();
+        await driver.wait(until.elementLocated(By.css('[data-testid="admin/administrative/clerical"]'))).click();
         break;
     case 'Trainee/Intern/Apprentice':
         await driver.wait(until.elementLocated(By.css('[data-testid="trainee/intern/apprentice"]'))).click();
@@ -476,7 +511,7 @@ When('I select industry sector as {string}', async function (sector) {
         await element.click();
 
         switch (sector) {
-        case 'Education Services ':
+        case 'Education services':
             await driver.wait(until.elementLocated(By.css('[data-testid="education_services"]'))).click();
             break;
         case 'Transport & Storage Services':
@@ -500,14 +535,14 @@ When('I select industry sector as {string}', async function (sector) {
 
 When('I select valid town and district', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys('M1');
+    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys('M');
     await new Promise(resolve => setTimeout(resolve, 5000));
-    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
+    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
 });
 
 When('I click on skip button', async function () {

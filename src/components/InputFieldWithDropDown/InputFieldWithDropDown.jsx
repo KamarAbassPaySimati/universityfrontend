@@ -3,21 +3,25 @@ import React, { useRef, useState, useEffect } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Image from '../Image/Image';
+import InformationList from '../InformationList/InformationList';
 
 function InputFieldWithDropDown (props) {
     const { labelName, value, placeholder, options, id, error, handleInput, testId, information } = props;
     const [show, setShow] = useState(false);
-
+    const [showInfo, setShowInfo] = useState(false);
+    const infoRef = useRef();
     const outsideClickRef = useRef();
     const buttonRef = useRef();
     const dropdownRef = useRef();
     useOnClickOutside(outsideClickRef, () => {
         setShow(false);
     });
+    useOnClickOutside(infoRef, () => {
+        setShowInfo(false);
+    });
     const calculateDropdownPosition = () => {
         const buttonRect = buttonRef.current.getBoundingClientRect();
         const spaceBelow = window.innerHeight - buttonRect.bottom - 40;
-        console.log('spaceBelow', spaceBelow);
         // 40px
         const dropdownHeight = dropdownRef.current.clientHeight;
 
@@ -40,7 +44,15 @@ function InputFieldWithDropDown (props) {
                 <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
                     {labelName}</label>
                 {information &&
-                    <Image src="info_icon" className="w-5 h-5 cursor-pointer info-icon"/>
+                <div ref={infoRef} className='flex'>
+                    <Image src="info_icon" className="w-5 h-5 cursor-pointer info-icon relative" onClick={() => setShowInfo(!showInfo)}/>
+                    <div className='absolute z-10 ml-5'>
+                        {showInfo && <InformationList
+                            heading={information.heading}
+                            information={information.information}
+                        />}
+                    </div>
+                </div>
                 }
             </div>
             <div ref={outsideClickRef} className={` bg-[#F8F8F8] text-neutral-primary
@@ -75,7 +87,7 @@ function InputFieldWithDropDown (props) {
                                     e.preventDefault(); setShow(false);
                                     handleInput(item, id);
                                 }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
-                                    <a data-testid={`${testId}_${index}`} className="dropdown-item font-normal text-xs text-[#444652]"
+                                    <a data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} className="dropdown-item font-normal text-xs text-[#444652]"
                                         href="/">
                                         {item}
                                     </a>
@@ -87,7 +99,7 @@ function InputFieldWithDropDown (props) {
 
                 </ul>
             </div>
-            {error && <ErrorMessage error={error} />}
+            {(error && !show) && <ErrorMessage error={error} />}
         </div>
     );
 }

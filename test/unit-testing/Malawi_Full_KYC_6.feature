@@ -153,7 +153,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Institution letter"
+        When I select the verification document as "Institute letter"
         And I upload the front image of document as "document_front.png"
         Then I should be able to view the preview of the document front
         When I click on view document front preview
@@ -178,7 +178,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I select the Occupation as "Employed"
         When I select employed as "Admin/Administrative/Clerical"
         When I enter employer name as <employer_name>
-        When I enter industry sector as <industry_sector>
+        When I select industry sector as <industry_sector>
         And I select valid town and district
         When I click on save and continue button
         Then I should read a message stating that "Required field"
@@ -192,6 +192,8 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         Given I am in KYC personal details screen
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
+        When I select the applicable purpose and nature of business
+        When I select valid monthly income and monthly withdrawal
         When I select the Occupation as "Employed"
         When I select employed as "Admin/Administrative/Clerical"
         When I enter employer name as "7Edge"
