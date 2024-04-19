@@ -14,18 +14,27 @@ export default function GuidList ({ information, heading }) {
                             information[itemText][insideText].text &&
                             <ul class="ps-5 mt-2 space-y-1 lower-alpha  list-inside"
                                 key={insideIndex}>
-                                <li>{information[itemText][insideText].text}</li>
+                                <div className='flex'>
+                                    <li></li>
+                                    <span>{information[itemText][insideText].text}</span>
+                                </div>
                                 {Object.keys(information[itemText][insideText]).length > 0 &&
                                  Object.keys(information[itemText][insideText]).map((liText, liIndex = 0) => (
                                      information[itemText][insideText][liText].text &&
                                      <ul class="ps-5 mt-2 space-y-1 list-disc list-inside" key={liIndex}>
-                                         <li>{information[itemText][insideText][liText].text}</li>
+                                         <div className='flex'>
+                                             <li></li>
+                                             <span>{information[itemText][insideText][liText].text}</span>
+                                         </div>
                                          {Object.keys(information[itemText][insideText][liText]).length > 0 &&
                                             Object.keys(information[itemText][insideText][liText]).map((
                                                 liTextLast, liIndexLast = 0) => (
                                                 information[itemText][insideText][liText][liTextLast].text &&
                                                 <ul class="ps-5 mt-2 space-y-1 list-circle list-inside" key={liIndexLast}>
-                                                    <li>{information[itemText][insideText][liText][liTextLast].text}</li>
+                                                    <div className='flex'>
+                                                        <li></li>
+                                                        <span>{information[itemText][insideText][liText][liTextLast].text}</span>
+                                                    </div>
                                                 </ul>))}
                                      </ul>))}
                             </ul>))}

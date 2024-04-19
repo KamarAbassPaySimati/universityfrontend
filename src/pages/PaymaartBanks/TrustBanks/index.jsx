@@ -118,7 +118,9 @@ const TrustBanks = () => {
                     <DocumentSidebar
                         documentTypes={bankTypes}
                         handleOnClick={handleOnClick}
-                        selectedData={formatType(searchParams.get('type'))}
+                        selectedData={searchParams.get('type') === null
+                            ? 'trust-banks'
+                            : formatType(searchParams.get('type'))}
                         height={'h-heightSideBarOne'}
                         width={'w-[200px]'}
                     />

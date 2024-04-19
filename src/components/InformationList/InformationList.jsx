@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function InformationList ({ information, heading }) {
     return (
-        <div className=' w-[419px] bg-[#3B2A6F] text-[#fff] font-normal text-[16px] p-6 rounded-2xl h-[400px]'>
+        <div className=' w-[419px] bg-[#3B2A6F] text-[#fff] font-normal text-[16px] p-6 rounded-2xl max-h-[400px]'>
             <h1 className='mb-2 font-normal text-[16px] leading-6'>
                 {heading}</h1>
             <ol class="space-y-4 lower-alpha list-inside text-[14px] font-normal leading-6 text-[#FFF] ">

@@ -154,6 +154,8 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         Given I am in KYC identity document details screen
         When I click on verification documents tab
         When I select the verification document as "Institute letter"
+        When I click on save and continue button
+        Then I should read a message stating that "Upload the required document"
         And I upload the front image of document as "document_front.png"
         Then I should be able to view the preview of the document front
         When I click on view document front preview

@@ -83,11 +83,11 @@ function InputFieldWithDropDown (props) {
                     <li>
                         <ul className='max-h-[390px] overflow-auto bg-[#fff]'>
                             {options.map((item, index = 0) => (
-                                <li onClick={(e) => {
+                                <li data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} onClick={(e) => {
                                     e.preventDefault(); setShow(false);
                                     handleInput(item, id);
                                 }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
-                                    <a data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} className="dropdown-item font-normal text-xs text-[#444652]"
+                                    <a className="dropdown-item font-normal text-xs text-[#444652]"
                                         href="/">
                                         {item}
                                     </a>
