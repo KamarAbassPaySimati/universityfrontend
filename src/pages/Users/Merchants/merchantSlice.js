@@ -7,10 +7,10 @@ const initialState = {
     success: ''
 };
 
-export const AgentList = createAsyncThunk('merchantUsers', async (searchParams, { rejectWithValue }) => {
+export const MerchantList = createAsyncThunk('merchantUsers', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     const safeUrl =
-        `agent-list?${searchParams.toString()}`;
+        `merchant-list?${searchParams.toString()}`;
 
     try {
         const res = await dataService.GetAPI(safeUrl);
@@ -23,19 +23,19 @@ export const AgentList = createAsyncThunk('merchantUsers', async (searchParams, 
 });
 
 const merchantSlice = createSlice({
-    name: 'agent-list',
+    name: 'merchant-list',
     initialState,
     reducers: {
 
     },
     extraReducers: (builder) => {
         builder
-            .addCase(AgentList.pending, (state) => {
+            .addCase(MerchantList.pending, (state) => {
                 state.loading = true;
                 state.error = null;
                 state.List = [];
             })
-            .addCase(AgentList.fulfilled, (state, { payload }) => {
+            .addCase(MerchantList.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 if (!payload?.error) {
                     state.List = payload?.data;
@@ -43,7 +43,7 @@ const merchantSlice = createSlice({
                     state.error = payload?.data;
                 }
             })
-            .addCase(AgentList.rejected, (state, { payload }) => {
+            .addCase(MerchantList.rejected, (state, { payload }) => {
                 state.loading = false;
                 state.error = payload?.message;
             });
