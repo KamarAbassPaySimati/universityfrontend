@@ -1,4 +1,4 @@
-@1.1 @login
+@1.1
 Feature: Paymaart -Admin Web - Forgot Password
   As an Super/finance/support/admin, I want an option to update the password so that I can secure my account.
   Conditions of Satisfaction:

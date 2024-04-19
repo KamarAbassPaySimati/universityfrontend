@@ -1,4 +1,4 @@
-@1.1 @Login
+@1.1
 Feature: Paymaart - Admin Web - Login
     As a Super/finance/support/admin, I want an option to log in so that I can access the application.
     Conditions of Satisfaction:
