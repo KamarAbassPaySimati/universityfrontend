@@ -65,6 +65,22 @@ async function deleteAdminAccount (payload) {
         console.log('API Error', error);
     }
 }
+async function deletePaymaartTrustBank (params) {
+    const token = await getBddSignedToken();
+
+    console.log('token', token);
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const data = await axios.delete(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-trust-bank/${params}`, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
 
 async function requestResetPassword (payload) {
     const axiosOptions = {
@@ -84,5 +100,6 @@ module.exports = {
     addAdminUser,
     deleteAdminAccount,
     requestResetPassword,
-    createAdminAccountSecure
+    createAdminAccountSecure,
+    deletePaymaartTrustBank
 };

@@ -39,7 +39,7 @@ function InputFieldWithDropDown (props) {
                     {options.map((item, index = 0) => (
                         <li onClick={(e) => {
                             e.preventDefault(); setShow(false);
-                            handleInput(item);
+                            handleInput(item, id);
                         }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
                             <a data-testid={`${testId}_${index}`}className="dropdown-item font-normal text-xs text-[#444652]"
                                 href="/">

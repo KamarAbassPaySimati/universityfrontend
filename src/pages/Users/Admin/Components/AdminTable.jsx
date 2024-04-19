@@ -8,7 +8,7 @@ import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTim
 import { useNavigate } from 'react-router-dom';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
-import handleSort from '../../../../CommonMethods/ListFunctions';
+import { handleSort } from '../../../../CommonMethods/ListFunctions';
 
 const AdminTable = (
     {

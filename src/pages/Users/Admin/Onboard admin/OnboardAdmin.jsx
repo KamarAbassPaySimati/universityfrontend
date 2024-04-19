@@ -105,7 +105,6 @@ const OnboardAdmin = ({ actionKey }) => {
         if (formData.phoneNumber && (formData.phoneNumber.replace(/\s/g, '').length < 9)) {
             errors.phoneNumber = 'Invalid phone number';
             hasError = true;
-            console.log('true3');
         }
         // Set the form errors
         console.log('hasError', hasError);
@@ -306,7 +305,7 @@ const OnboardAdmin = ({ actionKey }) => {
                         <InputFieldWithPhoneNumber
                             className='w-[339px]'
                             maxLength="11"
-                            value={formData.phoneNumber}
+                            value={actionKey === 'update' ? formatInputPhone(formData.phoneNumber) : formData.phoneNumber}
                             onChange={handleChange}
                             id='phoneNumber'
                             testId='phone_number'
