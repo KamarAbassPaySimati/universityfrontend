@@ -332,7 +332,8 @@ When('I select the date of birth as {string}', async function (dob) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 100));
     await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(dob);
+    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(dob, Key.ENTER));
+    await new Promise(resolve => setTimeout(resolve, 500));
 });
 
 When('I select the Occupation as {string}', async function (type) {
@@ -472,6 +473,8 @@ When('I select employed as {string}', async function (type) {
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     switch (type) {
     case 'Admin/Administrative/Clerical':
         await driver.wait(until.elementLocated(By.css('[data-testid="admin/administrative/clerical"]'))).click();
@@ -509,6 +512,8 @@ When('I select industry sector as {string}', async function (sector) {
         const element = await driver.wait(until.elementLocated(By.css('[data-testid="industry"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
+
+        await new Promise(resolve => setTimeout(resolve, 500));
 
         switch (sector) {
         case 'Education services':
