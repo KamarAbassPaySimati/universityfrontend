@@ -7,6 +7,7 @@ import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView
 import KycVerification from '../pages/Verification/KycVerification';
 import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
 import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
+import RegisterKYC from '../pages/Users/Agent/Onboard Agent/components/RegisterKYC';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -60,6 +61,11 @@ export const ComponentsBasedOnRole = {
             name: 'Paymaart Add Trust Banks',
             element: <AddTrustBank />,
             path: '/paymaart-banks/trust-banks/add-trust-bank'
+        },
+        {
+            name: 'Agent KYC Registration',
+            element: <RegisterKYC />,
+            path: '/users/agents/register-agent/kyc-registration/:id'
         }
     ],
     admin:

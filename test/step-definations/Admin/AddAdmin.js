@@ -111,17 +111,17 @@ When('I select the role as {string}', async function (role) {
     await driver.wait(until.elementLocated(By.css('[data-testid="role"]'))).click();
     await new Promise(resolve => setTimeout(resolve, 1000));
     switch (role) {
-    case 'Admin':
-        await driver.wait(until.elementLocated(By.css('[data-testid="role_0"]'))).click();
+    case 'Super admin':
+        await driver.wait(until.elementLocated(By.css('[data-testid="super_admin"]'))).click();
         break;
     case 'Finance admin':
-        await driver.wait(until.elementLocated(By.css('[data-testid="role_1"]'))).click();
+        await driver.wait(until.elementLocated(By.css('[data-testid="finance_admin"]'))).click();
         break;
-    case 'Super admin':
-        await driver.wait(until.elementLocated(By.css('[data-testid="role_2"]'))).click();
+    case 'Admin':
+        await driver.wait(until.elementLocated(By.css('[data-testid="admin"]'))).click();
         break;
     case 'Support admin':
-        await driver.wait(until.elementLocated(By.css('[data-testid="role_3"]'))).click();
+        await driver.wait(until.elementLocated(By.css('[data-testid="support_admin"]'))).click();
         break;
     default:
         break;
