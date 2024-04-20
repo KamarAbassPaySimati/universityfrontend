@@ -15,6 +15,7 @@ Before(async function () {
 
 Given('I navigate to agent onboarding screen', async function () {
     // Write code here that turns the phrase above into concrete action
+    await new Promise(resolve => setTimeout(resolve, 3000));
     await driver.get('http://localhost:3000/users/agents/register-agent');
 });
 
@@ -118,6 +119,7 @@ When('I click on verify email address', async function () {
 
 When('I click on verify {string}', async function (field) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     let element;
     if (field === 'email') {
         element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_email_address"]')));
@@ -138,6 +140,7 @@ When('I enter a valid email address for agent registration', async function () {
 
 When('I enter the valid OTP and verify', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const OTP_field = await driver.wait(until.elementLocated(By.css('[data-testid="otp"]')));
     await driver.wait(until.elementIsVisible(OTP_field));
 
@@ -145,6 +148,8 @@ When('I enter the valid OTP and verify', async function () {
 
     await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys('355948');
+
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_OTP"]')));
     await driver.wait(until.elementIsVisible(element));
