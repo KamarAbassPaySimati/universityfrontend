@@ -7,7 +7,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
 
     return (
         <>
-            <div className='w-[40%] bg-primary-normal flex flex-col justify-between pt-[10%]'>
+            <div className='w-[40%] bg-primary-normal flex flex-col justify-end'>
                 <div className='flex items-center justify-center'>
                     <div className='flex items-start'>
                         <div>
@@ -18,7 +18,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
                             </div>
                             <div className='border-r border-[#ffffff] h-[80px] w-1/2'></div>
                             <div className="rounded-full bg-white w-8 h-8 flex items-center justify-center">
-                                <Image src={'grayTick'} className="w-5 h-5" />
+                                <Image src={'grayTick'} className="w-[40%] h-[50%]" />
                             </div>
                         </div>
                         <div className='px-5'>
@@ -62,7 +62,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
                         </div>
                     </div>
                 </div>
-                <Image src={'qr_light_img'} className={'h-[200px] w-[200px] m-3'}/>
+                <Image src={'qr_light_img'} className={'h-[150px] w-[150px] m-3 mt-[25%]'}/>
             </div>
             <KYCGuidPopup handleClose={() => setGuidOpen(false)} isModalOpen={guidOpen}/>
 

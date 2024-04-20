@@ -14,8 +14,8 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
             <KYCRegistrationStatusPart status={'Pending'}/>
             <div className='w-[60%] bg-[#ffffff] px-[80px] flex flex-col justify-between'>
                 <div className=''>
-                    <p className='font-normal text-[24px] leading-[32px] py-[26px]'>KYC Registration</p>
-                    <div className='flex justify-start items-center py-10'>
+                    <p className='font-normal text-[24px] leading-[32px] py-[5%]'>KYC Registration</p>
+                    <div className='flex justify-start items-center py-[5%]'>
                         {/* for the active selection bg-background-light */}
                         {citizenType.map((item, index = 0) => (
                             <div
@@ -39,11 +39,11 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                             handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
                         />))}
                     <p className="ml-[30px] text-neutral-primary text-[12px]
-                        leading-[20px] font-normal cursor-pointer mb-[36px]">
+                        leading-[20px] font-normal cursor-pointer mb-[5%]">
                         *Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed
                         300,000 MWK; or whose monthly withdrawals do not exceed 300,000 MWK
                     </p>
-                    <div className='w-full flex items-center justify-between bg-background-light py-2.5 px-3 rounded h-[78px]'>
+                    <div className='w-full flex items-center justify-between bg-background-light px-3 rounded '>
                         <p className='px-3 font-normal text-[20px] leading-[28px] text-header-dark'>Business Customer</p>
                         <div class="moving-text-container">
                             <button class="moving-text-btn">
