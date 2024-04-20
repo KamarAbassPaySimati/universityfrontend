@@ -313,7 +313,7 @@ export default function RegisterKYC () {
         setIsLoadingButton(true);
         if (type === 'proceed') {
             handleAPICall({
-                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
+                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
                 citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
                 paymaart_id: id
             }, 'address_details');
