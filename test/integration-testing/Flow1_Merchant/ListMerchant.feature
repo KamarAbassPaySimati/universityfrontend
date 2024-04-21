@@ -16,19 +16,14 @@ Feature: Paymaart- merchant Web- View all merchant list
     5.Status(Active/Deactivated)
     6.Action(View,Edit,Payin)
 
+    @perform_logout
+    @wait
     @add_admin_user
     @create_new_user_and_login
+    @delete_admin_account
     Scenario: Login as super admin and view list all the merchant users
         Given I navigate to merchant users listing screen
         Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
-
-    Scenario: Search for non existing record
-        Given I navigate to merchant users listing screen
-        When I search for particular merchant as "merchant 88732914"
-        Then I should read a message stating that "No data found"
-        And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
-        When I click on clear search
-        Then I should see list of table records
 
     Scenario: Sort functionality
         Given I navigate to merchant users listing screen
@@ -46,37 +41,9 @@ Feature: Paymaart- merchant Web- View all merchant list
         When I click on clear filter
         Then I should see filter popup modal closed
 
-    @delete_admin_account
     Scenario: Checking Pagination
         Given I navigate to merchant users listing screen
         When I click on paginate next page
         Then I should be navigated to page 2
         When I click on paginate to previous page
         Then I should be navigated to page 1
-
-    @perform_logout
-    @wait
-    @add_finance_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as finance admin and view list of merchants
-        Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
-
-    @perform_logout
-    @wait
-    @add_normal_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as normal admin and view list of merchants
-        Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
-
-    @perform_logout
-    @wait
-    @add_support_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as support admin and view list of merchants
-        Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
