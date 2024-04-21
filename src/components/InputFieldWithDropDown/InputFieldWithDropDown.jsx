@@ -30,7 +30,7 @@ function InputFieldWithDropDown (props) {
         if (spaceBelow < dropdownHeight) {
             dropdownRef.current.style.top = `-${dropdownHeight - 22}px`;
         } else {
-            dropdownRef.current.style.top = '105%';
+            dropdownRef.current.style.top = '100%';
         }
     };
     useEffect(() => {
@@ -77,27 +77,22 @@ function InputFieldWithDropDown (props) {
                 </button>
                 <ul id="#patient-dropdownMenuButton1"
                     data-testid={`${labelName.replaceAll(' ', '_').toLowerCase()}_dropdown_list`} ref={dropdownRef}
-                    className={`bg-[#FFFFFF] 
+                    className={`scrollBar
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
-                border border-[#E5E4E5]
+                border border-[#E5E4E5] max-h-[210px] overflow-auto bg-[#fff]
                 ${show === true ? 'show' : 'hidden'}`} aria-labelledby="patient-dropdownMenuButton1"
                 >
-                    <li>
-                        <ul className='max-h-[390px] overflow-auto bg-[#fff]'>
-                            {sortedOptions.map((item, index = 0) => (
-                                <li data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} onClick={(e) => {
-                                    e.preventDefault(); setShow(false);
-                                    handleInput(item, id);
-                                }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
-                                    <a className="dropdown-item font-normal text-xs text-[#444652]" data-testid={`${testId}_${index}`}
-                                        href="/">
-                                        {item}
-                                    </a>
-                                </li>
-                            ))}
-
-                        </ul>
-                    </li>
+                    {sortedOptions.map((item, index = 0) => (
+                        <li data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} onClick={(e) => {
+                            e.preventDefault(); setShow(false);
+                            handleInput(item, id);
+                        }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
+                            <a className="dropdown-item font-normal text-xs text-[#444652]" data-testid={`${testId}_${index}`}
+                                href="/">
+                                {item}
+                            </a>
+                        </li>
+                    ))}
 
                 </ul>
             </div>

@@ -530,6 +530,7 @@ export default function RegisterKYC () {
                                 <div className='flex'>
                                     <Button2
                                         text={'Back'}
+                                        disabled={isLoadingButton}
                                         className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
                                         onClick={() => handleTabChange('back')}
                                         testId={'Back_Button'}
@@ -546,6 +547,7 @@ export default function RegisterKYC () {
                                 <div
                                     onClick={() => handleTabChange('skip')}
                                     data-testid="skip_button"
+                                    disabled={isLoadingButton}
                                     className='text-primary-normal font-normal text-[14px] leading-[24px] cursor-pointer'>
                                     Skip</div>
                             </div>

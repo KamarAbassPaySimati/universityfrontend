@@ -3,9 +3,9 @@ import Image from '../Image/Image';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-export default function InputSearch ({ testId, id, handleInput, handleSearchItem, label, value, submitSelected }) {
+export default function InputSearch ({ testId, id, handleInput, handleSearchItem, label, value, submitSelected, className }) {
     const [options, setOptions] = useState([]);
-    const [search, setSearch] = useState(value);
+    const [search, setSearch] = useState('');
     const [timer, setTimer] = useState(null);
     const [show, setShow] = useState(false);
 
@@ -30,11 +30,11 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
             }
         }, 500);
         setTimer(newTimer);
+        handleInput('', id);
     };
     const calculateDropdownPosition = () => {
         const buttonRect = buttonRef.current.getBoundingClientRect();
         const spaceBelow = window.innerHeight - buttonRect.bottom - 40;
-        console.log('spaceBelow', spaceBelow);
         // 40px
         const dropdownHeight = dropdownRef.current.clientHeight;
 
@@ -52,10 +52,10 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
         };
     }, [show]);
     return (
-        <div className=''>
+        <div className='ml-2 pr-2'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
 
-            <div ref={outsideClickRef} className={`google-key relative mt-1 ${(submitSelected && search?.trim() === '')
+            <div ref={outsideClickRef} className={`google-key relative mt-1 ${(submitSelected && value?.trim() === '')
                 ? 'google-key-error'
                 : 'google-key-border'}`}>
                 <input
@@ -64,7 +64,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
                     value={search}
                     placeholder="Search"
                     onChange={handleSearch}
-                    className='w-full'
+                    className={'w-full'}
                     data-testid={testId}
                 />
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
@@ -81,6 +81,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
                             {options.map((item, index = 0) => (
                                 <li onClick={(e) => {
                                     e.preventDefault(); setShow(false);
+                                    setSearch(item);
                                     handleInput(item, id);
                                 }} key={index} className="automatic hover:bg-[#F2F4F5] rounded-lg p-2 cursor-pointer">
                                     <a
@@ -97,7 +98,7 @@ export default function InputSearch ({ testId, id, handleInput, handleSearchItem
 
                 </ul>
             </div>
-            {(submitSelected && search?.trim() === '') && <div className='mt-2'><ErrorMessage error={'Required field'} /></div>}
+            {(submitSelected && value?.trim() === '') && <div className='mt-2'><ErrorMessage error={'Required field'} /></div>}
         </div>
 
     );

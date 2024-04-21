@@ -120,7 +120,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                     <div className={`
                 ${(submitSelected && (componentValue === undefined || componentValue?.trim() === ''))
             ? 'google-key-error'
-            : 'google-key-border'} google-key relative w-[339px] mb-6`}>
+            : 'google-key-border'} google-key relative w-[339px]`}>
                         <GoogleComponent
                             placeholder={placeholder}
                             apiKey={GOOGLE_API}

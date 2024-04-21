@@ -19,13 +19,12 @@ export default function FelidDivision ({
                     ${index !== 0 ? 'pt-6' : 'pt-4'}`}>{divItem}</p>}
                     <div className='flex flex-wrap'>
                         {Object.values(divisionObject[divItem]).map((divObj) => (
-                            <div className={''} key={divObj}>
+                            <div className={'mt-4'} key={divObj}>
                                 {/* checking the condition for type input and options */}
                                 {
                                     divObj.type === 'dropdown'
                                         ? (
-                                            <div className='mx-[10px]'>
-                                                {console.log(divObj.key)}
+                                            <div className='mx-[10px] w-[339px]'>
                                                 <InputFieldWithDropDown
                                                     labelName={`${divObj?.label}`}
                                                     value={states[divObj?.key] === undefined ? '' : states[divObj?.key]}
@@ -59,7 +58,7 @@ export default function FelidDivision ({
                                                 <InputField
                                                     className={!(submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
-                                                        ? 'mb-6 w-[339px]'
+                                                        ? 'w-[339px]'
                                                         : 'w-[339px]'}
                                                     divClassName='mx-2.5'
                                                     value={states[divObj?.key]}
@@ -77,7 +76,8 @@ export default function FelidDivision ({
                                                     maxLength="100"
                                                     onChange={handleOnChange}
                                                     inputType={divObj?.type}
-                                                />)}
+                                                />
+                                            )}
                             </div>))}
                     </div>
                 </Fragment>

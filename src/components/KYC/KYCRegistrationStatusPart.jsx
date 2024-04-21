@@ -51,7 +51,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
                                     Basic Details
                                 </p>
                                 <button
-                                    className={`w-[116px] rounded-[23px] mt-2 
+                                    className={`w-[116px] rounded-[23px] mt-2 cursor-auto
                                     ${status === 'Pending'
             ? 'bg-background-light text-background-dark'
             : 'bg-[#FFEED9] text-[#FD9101]'} 
