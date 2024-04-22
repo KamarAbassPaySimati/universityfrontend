@@ -25,7 +25,7 @@ export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn } = auth;
     // const { user_type } = user;
-    const [CurrentUserRole, setCurrentUserRole] = useState('super-admin');
+    const [CurrentUserRole, setCurrentUserRole] = useState('');
     const [ToastError, setToastError] = useState('');
 
     const dispatch = useDispatch();
@@ -74,12 +74,11 @@ export default function NavigationRoutes (props) {
 
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>{
+            <Suspense fallback={<Loading />}>{
                 <>
                     <Routes location={location} key={location.pathname}>
-                        {pageLoading
-                            ? <Route path="*" element={<Loading />} />
-                            : !loggedIn
+                        {
+                            (!loggedIn && CurrentUserRole !== '')
                                 ? <>
                                     <Route path="/" element={<Login />} />
                                     <Route
@@ -105,12 +104,13 @@ export default function NavigationRoutes (props) {
                                                 <Route path="/users/agents" element={<Agent />} />
                                                 <Route path="/users/merchants" element={<Merchant />} />
                                             </Route>
-                                            <Route path="*" element={<NotFound lable={'routing page'}/>} />
+                                            <Route path="*" element={<NotFound />} />
                                         </>
                                     )
 
                                 )
                         }
+                        <Route path="*" element={<Loading />} />
                     </Routes>
                 </>
             }
