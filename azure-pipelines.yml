@@ -194,6 +194,8 @@ stages:
             npm install pm2 -g
             source .env
             npm run build
+            echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
+            echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
             npm install express --force
             pm2 start scripts/server.js
             sleep 5
