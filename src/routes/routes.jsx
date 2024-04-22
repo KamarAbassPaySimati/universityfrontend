@@ -74,7 +74,7 @@ export default function NavigationRoutes (props) {
 
     return (
         <>
-            <Suspense fallback={<Loading />}>{
+            <Suspense >{
                 <>
                     <Routes location={location} key={location.pathname}>
                         {
