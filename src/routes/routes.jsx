@@ -24,8 +24,8 @@ import Merchant from '../pages/Users/Merchants';
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn, user } = auth;
-    const { user_type } = user;
-    const [CurrentUserRole, setCurrentUserRole] = useState(user_type ? Slugify(user_type) : null);
+    // const { user_type } = user;
+    const [CurrentUserRole, setCurrentUserRole] = useState('super-admin');
     const [ToastError, setToastError] = useState('');
 
     const dispatch = useDispatch();
