@@ -579,13 +579,13 @@ When('I select the KYC type as {string}', async function (type) {
     if (type !== '') {
         switch (type) {
         case 'Full KYC':
-            await driver.wait(until.elementLocated(By.css('[data-testid="full_kyc"]'))).click();
+            await driver.wait(until.elementLocated(By.css('[for="Full KYC"]'))).click();
             break;
         case 'Simplified KYC':
-            await driver.wait(until.elementLocated(By.css('[data-testid="simplified_kyc"]'))).click();
+            await driver.wait(until.elementLocated(By.css('[for="Simplified KYC"]'))).click();
             break;
         default:
-            await driver.wait(until.elementLocated(By.css('[data-testid="simplified_kyc"]'))).click();
+            await driver.wait(until.elementLocated(By.css('[for="Simplified KYC"]'))).click();
             break;
         }
     }
