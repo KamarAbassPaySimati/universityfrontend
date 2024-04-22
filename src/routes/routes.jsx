@@ -23,9 +23,9 @@ import Merchant from '../pages/Users/Merchants';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
-    const { loggedIn } = auth;
+    const { loggedIn, user } = auth;
     // const { user_type } = user;
-    const [CurrentUserRole, setCurrentUserRole] = useState('');
+    const [CurrentUserRole, setCurrentUserRole] = useState('super-admin');
     const [ToastError, setToastError] = useState('');
 
     const dispatch = useDispatch();
@@ -74,17 +74,17 @@ export default function NavigationRoutes (props) {
 
     return (
         <>
-            <Suspense >{
+            <Suspense fallback={<div>Loading...</div>}>{
                 <>
                     <Routes location={location} key={location.pathname}>
-                        {
-                            (!loggedIn && CurrentUserRole !== '')
+                        {pageLoading
+                            ? <Route path="*" element={<Loading />} />
+                            : !user
                                 ? <>
                                     <Route path="/" element={<Login />} />
                                     <Route
                                         path={'/forgot-password'}
                                         element={<ForgotPassword />} />
-
                                     <Route
                                         path={'/set-new-password'}
                                         element={<SetNewPassword />} />
@@ -110,7 +110,6 @@ export default function NavigationRoutes (props) {
 
                                 )
                         }
-                        <Route path="*" element={<Loading />} />
                     </Routes>
                 </>
             }
