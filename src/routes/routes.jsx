@@ -23,7 +23,7 @@ import Merchant from '../pages/Users/Merchants';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
-    const { loggedIn, user } = auth;
+    const { loggedIn } = auth;
     // const { user_type } = user;
     const [CurrentUserRole, setCurrentUserRole] = useState('super-admin');
     const [ToastError, setToastError] = useState('');
@@ -79,7 +79,7 @@ export default function NavigationRoutes (props) {
                     <Routes location={location} key={location.pathname}>
                         {pageLoading
                             ? <Route path="*" element={<Loading />} />
-                            : !user
+                            : !loggedIn
                                 ? <>
                                     <Route path="/" element={<Login />} />
                                     <Route
