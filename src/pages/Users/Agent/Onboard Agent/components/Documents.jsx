@@ -25,7 +25,6 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     information={GetDocumentInfomation(states.personal_customer, type)}
                     handleInput={handleStates}
                 />
-
             </div>
             <div className='flex'>
                 <div className="w-[48%] relative">
