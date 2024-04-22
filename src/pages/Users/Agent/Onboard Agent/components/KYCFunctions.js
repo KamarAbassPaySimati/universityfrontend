@@ -19,8 +19,9 @@ export const occupationEduction = ['institute'];
 export const handleStates = (value, id, type, setStates, states) => {
     if (type === 'input') {
         if (id === 'account_number' && value.target.value.trim() !== '') {
-            const regex = /^[a-z0-9]+$/;
-            if (regex.test(value.target.value) && value.target.value.length < 26) {
+            const regex = /^[a-zA-Z0-9]+$/;
+            const currentValue = value.target.value;
+            if (regex.test(currentValue) && value.target.value.length < 26) {
                 setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
             }
         } else {
