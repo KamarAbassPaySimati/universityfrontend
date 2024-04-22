@@ -349,7 +349,7 @@ export default function RegisterKYC () {
                         verification_document_front: submitPayload.verification_document_front,
                         verification_document_back: submitPayload.verification_document_back,
                         selfie: submitPayload.capture,
-                        id_document: states['ID Document'],
+                        id_document: addApostrophe(states['ID Document']),
                         verification_document: addApostrophe(states['Verification Document']),
                         paymaart_id: id,
                         id_details_status: 'completed'
