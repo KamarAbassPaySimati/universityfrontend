@@ -93,7 +93,6 @@ export default function RegisterKYC () {
     const handleAPICall = async (body, tab) => {
         try {
             const res = await dataService.PostAPIAgent('create-kyc-secure', body);
-            console.log('succccc', res.data);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {

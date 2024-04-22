@@ -4,6 +4,7 @@ import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Image from '../Image/Image';
 import InformationList from '../InformationList/InformationList';
+import Modal from 'react-responsive-modal';
 
 function InputFieldWithDropDown (props) {
     const { labelName, value, placeholder, options, id, error, handleInput, testId, information } = props;
@@ -49,10 +50,12 @@ function InputFieldWithDropDown (props) {
                 <div ref={infoRef} className='flex'>
                     <Image src="info_icon" className="w-5 h-5 cursor-pointer info-icon relative" onClick={() => setShowInfo(!showInfo)}/>
                     <div className='absolute z-10 ml-5'>
-                        {showInfo && <InformationList
-                            heading={information.heading}
-                            information={information.information}
-                        />}
+                        <Modal center open={showInfo} onClose={() => setShowInfo(false)} closeIcon={<Image src='x'/>} styles={{ modal: { borderRadius: 10 } }} >
+                            <InformationList
+                                heading={information.heading}
+                                information={information.information}
+                            />
+                        </Modal>
                     </div>
                 </div>
                 }
