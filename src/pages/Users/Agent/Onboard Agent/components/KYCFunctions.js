@@ -75,6 +75,7 @@ export const VerificationDocumentFull = {
 };
 export const BankDetailsList = ['bank_name', 'account_number', 'account_name'];
 export const IdDocumentSimplified = {
+    'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
     'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
     'Birth Certificate': ['birth_certificate_img_front'],
     'Student ID': ['student_id_img_front'],
