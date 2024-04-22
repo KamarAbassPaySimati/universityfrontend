@@ -36,7 +36,7 @@ export default function NavigationRoutes (props) {
     const checkLoggedInUser = async () => {
         try {
             setPageLoading(true);
-            const userAttributes = await fetchUserAttributes({ bypassCache: true });
+            const userAttributes = await fetchUserAttributes();
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
