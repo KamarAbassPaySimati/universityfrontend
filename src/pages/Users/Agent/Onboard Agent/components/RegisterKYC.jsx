@@ -32,7 +32,9 @@ export default function RegisterKYC () {
         personal_customer: 'Full KYC',
         po_box_no: '',
         landmark: '',
-        house_number: ''
+        house_number: '',
+        monthly_income: 'Up to 300,000.00 MWK',
+        monthly_withdrawal: 'Up to 300,00.000 MWK'
     });
     const [documentSideBarData, setDocumentSidebarData] = useState({
         documentTypes: {
@@ -166,7 +168,6 @@ export default function RegisterKYC () {
                 body.capture = states.capture;
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                console.log('GetDocumentValidation(states.personal_', GetDocumentValidation(states.personal_customer, 'Verification Document')['Employer Letter'], states['Verification Document'])
                 GetDocumentValidation(states.personal_customer, 'Verification Document')[states['Verification Document']].map(
                     (selectedItem) => {
                         if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
@@ -393,6 +394,10 @@ export default function RegisterKYC () {
                             break;
                         case 'kyc_type':
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
+                            if (res.data.data.kyc_type !== 'full') {
+                                object.monthly_income = 'Up to 300,000.00 MWK';
+                                object.monthly_withdrawal = 'Up to 300,00.000 MWK';
+                            }
                             break;
                         case 'id_document_back':
                             object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =

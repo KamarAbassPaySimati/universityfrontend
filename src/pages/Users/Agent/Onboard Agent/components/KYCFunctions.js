@@ -69,8 +69,8 @@ export const VerificationDocumentFull = {
     'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
     'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
     'Birth Certificate': ['birth_certificate_img_front'],
-    'Employer letter': ['employer_letter_img_front'],
-    'Institute letter': ['institute_letter_img_front']
+    'Employer Letter': ['employer_letter_img_front'],
+    'Institute Letter': ['institute_letter_img_front']
 };
 export const BankDetailsList = ['bank_name', 'account_number', 'account_name'];
 export const IdDocumentSimplified = {
@@ -80,8 +80,8 @@ export const IdDocumentSimplified = {
     'Employee ID': ['employee_id_img_front']
 };
 export const VerificationDocumentSimplified = {
-    'Employer letter': ['employer_letter_img_front'],
-    'Institute letter': ['institute_letter_img_front'],
+    'Employer Letter': ['employer_letter_img_front'],
+    'Institute Letter': ['institute_letter_img_front'],
     'Religious Institution/ District Commissioner Letter': ['religious_institution/_district_commissioner_letter_img_front']
 };
 export const IdDocumentsFull = {
@@ -90,6 +90,7 @@ export const IdDocumentsFull = {
 };
 
 export const GetDocumentValidation = (kycType, documentType) => {
+    console.log('kycType, documentType', kycType, documentType);
     switch (documentType) {
     case 'ID Document':
         switch (kycType) {
@@ -106,6 +107,7 @@ export const GetDocumentValidation = (kycType, documentType) => {
         case 'Full KYC':
             return VerificationDocumentFull;
         case 'Simplified KYC':
+            console.log('nnnnnn');
             return VerificationDocumentSimplified;
         default:
             break;
@@ -139,8 +141,8 @@ export const GetIdDocumentList = (kycType, documentType) => {
                 'Driver\'s Licence',
                 'Traffic Register Card',
                 'Birth Certificate',
-                'Employer letter',
-                'Institute letter'];
+                'Employer Letter',
+                'Institute Letter'];
         case 'Simplified KYC':
             return [
                 'Employer Letter',
@@ -342,5 +344,62 @@ export const SelfieRules = {
         insideList9: {
             text: 'not have any shadows on your face or behind you'
         }
+    }
+};
+
+export const InputFelidsMonthFull = {
+    'Income status': {
+        'Monthly Income': {
+            label: 'Monthly Income',
+            type: 'dropdown',
+            key: 'monthly_income',
+            require: true,
+            options: [
+                'Up to 300,000.00 MWK',
+                '300,000.00 to 1,000,000.00 MWK',
+                '1,000,000.00 to 2,500,000.00 MWK',
+                '2,500,000.00 to 5,000,000.00 MWK', '5,000,000.00 to 10,000,000.00 MWK', 'Over 10 Million MWK']
+        },
+        'Monthly Withdrawal': {
+            label: 'Monthly Withdrawal',
+            type: 'dropdown',
+            key: 'monthly_withdrawal',
+            require: true,
+            options: [
+                'Up to 300,000.00 MWK',
+                '300,000.00 to 1,000,000.00 MWK',
+                '1,000,000.00 to 2,500,000.00 MWK',
+                '2,500,000.00 to 5,000,000.00 MWK',
+                '5,000,000.00 to 10,000,000.00 MWK',
+                'Over 10 Million MWK'
+            ]
+        }
+    }
+};
+export const InputFelidsMonthSimplified = {
+    'Income status': {
+        'Monthly Income': {
+            label: 'Monthly Income',
+            type: 'input',
+            key: 'monthly_income',
+            disable: true
+        },
+        'Monthly Withdrawal': {
+            label: 'Monthly Withdrawal',
+            type: 'input',
+            key: 'monthly_withdrawal',
+            disable: true
+        }
+    }
+};
+
+export const getMonthInputFelid = (kycType) => {
+    switch (kycType) {
+    case 'Full KYC':
+        return InputFelidsMonthFull;
+    case 'Simplified KYC':
+        return InputFelidsMonthSimplified;
+    default:
+        break;
     }
 };
