@@ -41,6 +41,7 @@ export default function NavigationRoutes (props) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
             }
+            console.log(userAttributes, "userAttributes");
             setPageLoading(false);
         } catch (error) {
             setPageLoading(false);
