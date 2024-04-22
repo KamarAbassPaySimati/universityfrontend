@@ -125,7 +125,8 @@ export const GetIdDocumentList = (kycType, documentType) => {
         case 'Full KYC':
             return ['National ID', 'Passport'];
         case 'Simplified KYC':
-            return ['Driver’s Licence',
+            return [
+                'Driver\'s Licence',
                 'Traffic Register Card',
                 'Birth Certificate',
                 'Student ID',
