@@ -114,6 +114,7 @@ export default function NavigationRoutes (props) {
                     </Routes>
                 </>
             }
+
             </Suspense>
             {ToastError !== '' && <Toast
                 message={ToastError}
