@@ -34,34 +34,75 @@ When('I select valid bank ref no.', async function () {
 
 When('I select bank name as {string}', async function (bankName) {
     // Write code here that turns the phrase above into concrete actions
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="bankName"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="bank_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="bankName"]'))).click();
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    switch (bankName) {
-    case 'CDH Investment Bank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_0"]'))).click();
-        break;
-    case 'Ecobank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_1"]'))).click();
-        break;
-    case 'FDH Bank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_2"]'))).click();
-        break;
-    case 'First Capital Bank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_3"]'))).click();
-        break;
-    case 'National Bank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_4"]'))).click();
-        break;
-    case 'Standard Bank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_5"]'))).click();
-        break;
-    case 'Centenary Bank':
-        await driver.wait(until.elementLocated(By.css('[data-testid="bankName_6"]'))).click();
-        break;
-    default:
-        break;
+
+    await driver.executeScript('arguments[0].scrollIntoView(true);', element);
+    await driver.wait(until.elementIsVisible(element), 5000);
+
+    let dropdownElement;
+    if (bankName !== '') {
+        await driver.wait(until.elementLocated(By.css('[data-testid="bank_name"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        switch (bankName) {
+        case 'CDH Investment Bank':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="cdh_investment_bank"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Ecobank':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="ecobank"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'FDH Bank':
+            await driver.executeScript('return document.querySelector(\'[data-testid="fdh_bank"]\').click()');
+            break;
+        case 'First Capital Bank':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="first_capital_bank"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'National Bank':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="national_bank"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Standard Bank':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="standard_bank"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Centenary Bank':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="centenary_bank"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        default:
+            break;
+        }
+    }
+});
+
+When('I enter the bank account number as {string}', async function (bankAccountNumber) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="account_number"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    if (bankAccountNumber !== '') {
+        await element.sendKeys(bankAccountNumber);
+    }
+});
+
+When('I enter the bank account name as {string}', async function (bankAccountName) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="account_name"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    if (bankAccountName !== '') {
+        await element.sendKeys(bankAccountName);
     }
 });
 

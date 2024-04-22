@@ -21,6 +21,8 @@ options.addArguments('--disable-gpu');
 options.addArguments('--disable-extensions');
 options.addArguments('--dns-prefetch-disable');
 options.addArguments('enable-features=NetworkServiceInProcess');
+options.addArguments('--use-fake-device-for-media-stream');
+options.addArguments('--use-fake-ui-for-media-stream');
 
 global.driver = chrome.Driver.createSession(options, service);
 setDefaultTimeout(35000);
@@ -29,7 +31,7 @@ BeforeAll(async function () {
     await new Promise(resolve => setTimeout(resolve, 3000));
     await driver.get('http://localhost:3000/');
     await driver.wait(until.elementLocated(By.id('root')));
-    global.current_process_name = faker.string.alpha({ count: 10, casing: 'upper' });
+    global.current_process_name = faker.string.alpha(15);
     global.is_user_logged_in = false;
 
     const worldParametersIndex = process.argv.indexOf('--world-parameters');
