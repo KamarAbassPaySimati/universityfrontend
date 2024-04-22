@@ -73,7 +73,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
 
     Scenario: Upload invalid ID document details
         Given I am in KYC identity document details screen
-        When I select the ID document as "Drivers licence"
+        When I select the ID document as "Traffic register card"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
         And I upload the back image of document as <image_back>
@@ -85,7 +85,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
-        When I select the ID document as "Drivers licence"
+        When I select the ID document as "Traffic register card"
         And I upload the front image of document as "document_front.png"
         And I upload the back image of document as "document_back.png"
         Then I should be able to view the preview of the document front and back
@@ -107,7 +107,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
     Scenario: Upload verification document with invalid details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Employer letter"
+        When I select the verification document as "Institute letter"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
         Examples:
@@ -118,7 +118,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Employer letter"
+        When I select the verification document as "Institute letter"
         And I upload the front image of document as "document_front.png"
         Then I should be able to view the preview of the document front
         When I click on view document front preview
@@ -134,6 +134,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
         When I click on save and continue button
         Then I should read a message stating that "Required field"
 
+    @delete_admin_account
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"

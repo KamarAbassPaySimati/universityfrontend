@@ -73,22 +73,19 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
 
     Scenario: Upload invalid ID document details
         Given I am in KYC identity document details screen
-        When I select the ID document as "Drivers licence"
+        When I select the ID document as "Employee ID"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
-        And I upload the back image of document as <image_back>
-        Then I should read a message stating that <message>
         Examples:
-            | image_front       | image_back        | message                                                   |
-            | "15MBImage.jpg"   | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
-            | "10_MB_DOCX.docx" | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
+            | image_front       | message                                                   |
+            | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
-        When I select the ID document as "Drivers licence"
+        When I select the ID document as "Employee ID"
         And I upload the front image of document as "document_front.png"
-        And I upload the back image of document as "document_back.png"
-        Then I should be able to view the preview of the document front and back
+        Then I should be able to view the preview of the document front
         When I click on view document front preview
         Then I should view the preview of the uploaded document
 
@@ -103,17 +100,6 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
         And I click on capture selfie
         And I click on selfie looks good button
         Then I should view the image getting captured
-
-    Scenario: Upload verification document with invalid details
-        Given I am in KYC identity document details screen
-        When I click on verification documents tab
-        When I select the verification document as "Employer letter"
-        And I upload the front image of document as <image_front>
-        Then I should read a message stating that <message>
-        Examples:
-            | image_front       | message                                                   |
-            | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
-            | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
@@ -134,6 +120,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
         When I click on save and continue button
         Then I should read a message stating that "Required field"
 
+    @delete_admin_account
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
