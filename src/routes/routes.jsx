@@ -90,21 +90,23 @@ export default function NavigationRoutes (props) {
                                         element={<SetNewPassword />} />
                                 </>
                                 : (
-                                    CurrentUserRole && ComponentsBasedOnRole[CurrentUserRole] &&
-                                    <>
-                                        <Route element={<Layout {...props}/>} key={location.key}>
-                                            {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
-                                                <Route path={nav.path} element={React.cloneElement(nav.element, props)}
-                                                    key={nav.path}/>
-                                            ))}
-                                            <Route path="/dashboard" element={<Dashboard />} />
-                                            <Route path="/profile" element={<Profile />} />
-                                            <Route path="/profile/update-password" element={<UpdatePassword />} />
-                                            <Route path="/users/agents" element={<Agent />} />
-                                            <Route path="/users/merchants" element={<Merchant />} />
-                                        </Route>
-                                        <Route path="*" element={<NotFound />} />
-                                    </>
+                                    CurrentUserRole && ComponentsBasedOnRole[CurrentUserRole] && (
+                                        <>
+                                            {console.log(ComponentsBasedOnRole[CurrentUserRole])}
+                                            <Route element={<Layout {...props}/>} key={location.key}>
+                                                {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
+                                                    <Route path={nav.path} element={React.cloneElement(nav.element, props)}
+                                                        key={nav.path}/>
+                                                ))}
+                                                <Route path="/dashboard" element={<Dashboard />} />
+                                                <Route path="/profile" element={<Profile />} />
+                                                <Route path="/profile/update-password" element={<UpdatePassword />} />
+                                                <Route path="/users/agents" element={<Agent />} />
+                                                <Route path="/users/merchants" element={<Merchant />} />
+                                            </Route>
+                                            <Route path="*" element={<NotFound />} />
+                                        </>
+                                    )
 
                                 )
                         }
