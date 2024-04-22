@@ -85,6 +85,7 @@ export default function NavigationRoutes (props) {
                                     <Route
                                         path={'/forgot-password'}
                                         element={<ForgotPassword />} />
+
                                     <Route
                                         path={'/set-new-password'}
                                         element={<SetNewPassword />} />
