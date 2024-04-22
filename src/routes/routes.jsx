@@ -104,7 +104,7 @@ export default function NavigationRoutes (props) {
                                                 <Route path="/users/agents" element={<Agent />} />
                                                 <Route path="/users/merchants" element={<Merchant />} />
                                             </Route>
-                                            <Route path="*" element={<NotFound />} />
+                                            <Route path="*" element={<NotFound lable={'routing page'}/>} />
                                         </>
                                     )
 

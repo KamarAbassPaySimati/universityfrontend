@@ -2,7 +2,7 @@ import React from 'react';
 import Image from '../components/Image/Image';
 import { useNavigate } from 'react-router-dom';
 
-function NotFound ({ link }) {
+function NotFound ({ link, lable }) {
     const navigate = useNavigate();
     return (
 
@@ -11,7 +11,7 @@ function NotFound ({ link }) {
             <div className='flex flex-col justify-center items-center gap-1 font-[400]'>
                 <h1 className='text-[#000103] text-[20px] leading-[28px]'>Page Not Found</h1>
                 <p className='text-neutral-secondary text-[14px]
-                    leading-[24px]'>We can’t find the page you’re looking for </p>
+                    leading-[24px]'>{lable || 'We can’t find the page you’re looking for'} </p>
                 <button
                     onClick={() => { link !== undefined || link ? navigate(`${link}`) : navigate(-1); }}
                     className=' text-[14px] font-[400] py-[8px] w-[200px] h-[40px] mt-[30px]
