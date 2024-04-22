@@ -134,6 +134,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
         When I click on save and continue button
         Then I should read a message stating that "Required field"
 
+    @delete_admin_account
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
