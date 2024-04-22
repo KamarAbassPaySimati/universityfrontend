@@ -23,7 +23,8 @@ const InputField = ({
     notShowErrorBottom,
     maxLength,
     divClassName,
-    editAction
+    editAction,
+    disableInput
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -52,7 +53,7 @@ const InputField = ({
                 onChange={(e) => onChange(e, id, inputType)}
                 onKeyDown={handleKeyDown}
                 maxLength={maxLength}
-                disabled = {editAction === 'yes'}
+                disabled = {editAction === 'yes' || disableInput}
 
             />
             {/* && value.length > 0 */}

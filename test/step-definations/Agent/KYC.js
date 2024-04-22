@@ -556,3 +556,52 @@ When('I click on skip button', async function () {
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 });
+
+When('I select the citizenship type as {string}', async function (type) {
+    // Write code here that turns the phrase above into concrete actions
+    if (type !== '') {
+        switch (type) {
+        case 'Malawi':
+            await driver.wait(until.elementLocated(By.css('[data-testid="malawi_citizen"]'))).click();
+            break;
+        case 'Non-Malawi':
+            await driver.wait(until.elementLocated(By.css('[data-testid="non_malawi_citizen"]'))).click();
+            break;
+        default:
+            await driver.wait(until.elementLocated(By.css('[data-testid="non_malawi_citizen"]'))).click();
+            break;
+        }
+    }
+});
+
+When('I select the KYC type as {string}', async function (type) {
+    // Write code here that turns the phrase above into concrete actions
+    if (type !== '') {
+        switch (type) {
+        case 'Full KYC':
+            await driver.wait(until.elementLocated(By.css('[for="Full KYC"]'))).click();
+            break;
+        case 'Simplified KYC':
+            await driver.wait(until.elementLocated(By.css('[for="Simplified KYC"]'))).click();
+            break;
+        default:
+            await driver.wait(until.elementLocated(By.css('[for="Simplified KYC"]'))).click();
+            break;
+        }
+    }
+});
+
+When('I should view monthly income and monthly withdrawal selected as {string}', async function (expectedValue) {
+    // Write code here that turns the phrase above into concrete actions
+    const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
+    await driver.wait(until.elementIsVisible(monthlyIncome));
+    const monthlyIncomeValue = monthlyIncome.getAttribute('value');
+
+    assert.equal(monthlyIncomeValue, expectedValue);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
+    await driver.wait(until.elementIsVisible(monthlyWithdrawal));
+    const monthlyWithdrawalValue = monthlyIncome.getAttribute('value');
+    assert.equal(monthlyWithdrawalValue, expectedValue);
+});
