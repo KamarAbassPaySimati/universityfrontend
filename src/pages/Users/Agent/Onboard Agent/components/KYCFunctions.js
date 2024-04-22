@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export const ProgressBar = {
     address_details: {
         status: 'current',
@@ -64,7 +65,7 @@ export const handleStates = (value, id, type, setStates, states) => {
 
 export const AddressDetails = ['street_name', 'town_village_ta', 'district'];
 export const PersonalDetailsList = ['gender', 'dob', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
-export const VerificationDocument = {
+export const VerificationDocumentFull = {
     'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
     'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],
     'Birth Certificate': ['birth_certificate_img_front'],
@@ -72,9 +73,47 @@ export const VerificationDocument = {
     'Institute letter': ['institute_letter_img_front']
 };
 export const BankDetailsList = ['bank_name', 'account_number', 'account_name'];
-export const IdDocuments = {
+export const IdDocumentSimplified = {
+    'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
+    'Birth Certificate': ['birth_certificate_img_front'],
+    'Student ID': ['student_id_img_front'],
+    'Employee ID': ['employee_id_img_front']
+};
+export const VerificationDocumentSimplified = {
+    'Employer letter': ['employer_letter_img_front'],
+    'Institute letter': ['institute_letter_img_front'],
+    'Religious Institution/ District Commissioner Letter': ['religious_institution/_district_commissioner_letter_img_front']
+};
+export const IdDocumentsFull = {
     'National ID': ['national_id_img_front', 'national_id_img_back'],
     Passport: ['passport_img_front']
+};
+
+export const GetDocumentValidation = (kycType, documentType) => {
+    switch (documentType) {
+    case 'ID Document':
+        switch (kycType) {
+        case 'Full KYC':
+            return IdDocumentsFull;
+        case 'Simplified KYC':
+            return IdDocumentSimplified;
+        default:
+            break;
+        }
+        break;
+    case 'Verification Document':
+        switch (kycType) {
+        case 'Full KYC':
+            return VerificationDocumentFull;
+        case 'Simplified KYC':
+            return VerificationDocumentSimplified;
+        default:
+            break;
+        }
+        break;
+    default:
+        break;
+    }
 };
 
 export const GetIdDocumentList = (kycType, documentType) => {
@@ -161,15 +200,66 @@ export const VerificationInfomationFull = {
         }
     }
 };
-
+export const IdInfomationSimplified = {
+    List1: {
+        text: 'Please provide one of these documents plus a selfie (Biometric ID)',
+        insideList1: {
+            text: 'Valid Driver\'s Licence issued by an appropriate authority',
+            insideList1: {
+                text: 'Front and back'
+            }
+        },
+        insideList2: {
+            text: 'Valid Traffic Register Card issued by an appropriate authority',
+            insideList1: {
+                text: 'Front and back'
+            }
+        },
+        insideList3: {
+            text: 'Birth certificate (for minors only)'
+        },
+        insideList4: {
+            text: 'Valid Student Identification from recognised learning institution'
+        },
+        insideList5: {
+            text: 'Valid Employee Identification authenticated by a Commissioner for Oaths'
+        }
+    }
+};
+export const VerificationInfomationSimplified = {
+    List1: {
+        text: 'Please provide one of these documents for additional verification of your primary ID:',
+        insideList1: {
+            text: 'Stamped Letter with Verifiable Particulars of an employer',
+            insideList1: {
+                text: 'Signed by Head of the employer'
+            }
+        },
+        insideList2: {
+            text: 'Stamped Letter with Verifiable Particulars of a learning institution',
+            insideList1: {
+                text: 'Signed by Head of the institution'
+            }
+        },
+        insideList3: {
+            text: 'Stamped Letter from a Chief, Sub-Chief, Village Headman, leader of a recognized religious institution, or District Commissioner'
+        }
+    }
+};
 export const GetDocumentInfomation = (kycType, documentType) => {
     switch (documentType) {
     case 'ID Document':
         switch (kycType) {
         case 'Full KYC':
-            return IdInfomationFull;
+            return {
+                information: IdInfomationFull,
+                heading: 'Your ID Document Options'
+            };
         case 'Simplified KYC':
-            return VerificationInfomationFull;
+            return {
+                information: IdInfomationSimplified,
+                heading: 'Your ID Document Options'
+            };
         default:
             break;
         }
@@ -177,9 +267,15 @@ export const GetDocumentInfomation = (kycType, documentType) => {
     case 'Verification Document':
         switch (kycType) {
         case 'Full KYC':
-            return IdInfomationFull;
+            return {
+                information: VerificationInfomationFull,
+                heading: 'Your ID Verification Document Options'
+            };
         case 'Simplified KYC':
-            return VerificationInfomationFull;
+            return {
+                information: VerificationInfomationFull,
+                heading: 'Your ID Verification Document Options'
+            };
         default:
             break;
         }

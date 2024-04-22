@@ -12,7 +12,7 @@ import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { dataService } from '../../../../../services/data.services';
 import {
-    AddressDetails, BankDetailsList, IdDocuments, PersonalDetailsList, ProgressBar, VerificationDocument,
+    AddressDetails, BankDetailsList, GetDocumentValidation, PersonalDetailsList, ProgressBar,
     handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
 import { handleSearchParamsValue } from '../../../../../CommonMethods/ListFunctions';
@@ -112,6 +112,7 @@ export default function RegisterKYC () {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
+        console.log(GetDocumentValidation(states.personal_customer, 'Verification Document'));
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -126,7 +127,7 @@ export default function RegisterKYC () {
             return count === 0;
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
-                IdDocuments[states['ID Document']].map((selectedItem) => {
+                GetDocumentValidation(states.personal_customer, 'ID Document')[states['ID Document']].map((selectedItem) => {
                     if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
@@ -165,23 +166,25 @@ export default function RegisterKYC () {
                 body.capture = states.capture;
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                VerificationDocument[states['Verification Document']].map((selectedItem) => {
-                    if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
-                        if (key !== 'skip') {
-                            setSubmitSelected(true);
-                            setToastError('Upload the required document');
-                            sideBarStatus['Verification Document'] = 'pending';
-                        }
-                        count = count + 1;
-                    } else {
-                        sideBarStatus['Verification Document'] = 'filled';
-                        if (selectedItem.split('_')[selectedItem.split('_').length - 1] === 'front') {
-                            body.verification_document_front = states[selectedItem];
+                console.log('GetDocumentValidation(states.personal_', GetDocumentValidation(states.personal_customer, 'Verification Document')['Employer Letter'], states['Verification Document'])
+                GetDocumentValidation(states.personal_customer, 'Verification Document')[states['Verification Document']].map(
+                    (selectedItem) => {
+                        if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                                setToastError('Upload the required document');
+                                sideBarStatus['Verification Document'] = 'pending';
+                            }
+                            count = count + 1;
                         } else {
-                            body.verification_document_back = states[selectedItem];
+                            sideBarStatus['Verification Document'] = 'filled';
+                            if (selectedItem.split('_')[selectedItem.split('_').length - 1] === 'front') {
+                                body.verification_document_front = states[selectedItem];
+                            } else {
+                                body.verification_document_back = states[selectedItem];
+                            }
                         }
-                    }
-                });
+                    });
             } else {
                 if (key !== 'skip') {
                     sideBarStatus['Verification Document'] = 'pending';
@@ -489,7 +492,7 @@ export default function RegisterKYC () {
                     : <>
                         <KYCTopWithType
                             Name={'KYC Registration'}
-                            type={'Malawi Full KYC'}
+                            type={states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'}
                         />
                         <div
                             data-testid="KYC_Registration"
