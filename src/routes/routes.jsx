@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable quotes */
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -22,9 +23,9 @@ import Merchant from '../pages/Users/Merchants';
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn, user } = auth;
-    let { user_type: CurrentUserRole } = user;
-    if (CurrentUserRole) {
-        CurrentUserRole = Slugify(CurrentUserRole);
+    let { user_type, CurrentUserRole } = user;
+    if (user_type) {
+        CurrentUserRole = Slugify(user_type);
     }
     const [ToastError, setToastError] = useState('');
 
@@ -36,11 +37,12 @@ export default function NavigationRoutes (props) {
     const checkLoggedInUser = async () => {
         try {
             setPageLoading(true);
-            const userAttributes = await fetchUserAttributes({ bypassCache: true });
+            const userAttributes = await fetchUserAttributes();
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
             }
+            console.log(userAttributes, "userAttributes");
             setPageLoading(false);
         } catch (error) {
             setPageLoading(false);
