@@ -141,15 +141,6 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     }}
                     handleInput={handleStates}
                 />
-                {/* <Tooltip
-                    className='info-tooltip'
-                    anchorSelect=".info-icon"
-                    place='right-start'
-                    effect="solid"
-                    arrowColor="transparent"
-                > */}
-                {/* </Tooltip> */}
-
             </div>
             <div className='flex'>
                 <div className="w-[48%] relative">
