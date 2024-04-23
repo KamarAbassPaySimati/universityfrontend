@@ -191,7 +191,7 @@ stages:
             artifact: bundle
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
-            npm install pm2 -g
+            npm install pm2@5.3.0 -g
             source .env
             echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
             echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
@@ -285,7 +285,7 @@ stages:
             artifact: bundle
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
-            npm install pm2 -g
+            npm install pm2@5.3.0 -g
             source .env
             npm install express --force
             pm2 start scripts/server.js
