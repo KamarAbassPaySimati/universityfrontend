@@ -3,7 +3,6 @@ const { until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const assert = require('assert');
 Then('I should read a message stating that {string}', { timeout: 35000 }, async function (errorMessage) {
-    // callback(null)
     let check = false;
     let retries = 400;
 
@@ -14,7 +13,7 @@ Then('I should read a message stating that {string}', { timeout: 35000 }, async 
         if (check) {
             return 'passed';
         } else {
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise(resolve => setTimeout(resolve, 100));
             retries--;
         }
     }
@@ -122,7 +121,7 @@ Then('I should view {string} page not found screen', async function (page) {
 
 When('I click on clear search', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="search-close"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -130,7 +129,7 @@ When('I click on clear search', async function () {
 
 Then('I should see list of table records', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('tbody tr')));
     await driver.wait(until.elementIsVisible(element));
 });

@@ -120,6 +120,38 @@ function customSortDateDesc (a, b) {
     return dateObjB - dateObjA; // Reversed order for descending sorting
 }
 
+function customSortDateAsc (a, b) {
+    const [dateA, timeA] = a.split(', ');
+    const [dateB, timeB] = b.split(', ');
+
+    const [dayA, monthA, yearA] = dateA.split(' ');
+    const [hourA, minuteA] = timeA.split(':');
+
+    const [dayB, monthB, yearB] = dateB.split(' ');
+    const [hourB, minuteB] = timeB.split(':');
+
+    const dateObjA = new Date(`${monthA} ${dayA} ${yearA} ${hourA}:${minuteA}`);
+    const dateObjB = new Date(`${monthB} ${dayB} ${yearB} ${hourB}:${minuteB}`);
+
+    return dateObjA - dateObjB;
+}
+
+function customSortDateDesc (a, b) {
+    const [dateA, timeA] = a.split(', ');
+    const [dateB, timeB] = b.split(', ');
+
+    const [dayA, monthA, yearA] = dateA.split(' ');
+    const [hourA, minuteA] = timeA.split(':');
+
+    const [dayB, monthB, yearB] = dateB.split(' ');
+    const [hourB, minuteB] = timeB.split(':');
+
+    const dateObjA = new Date(`${monthA} ${dayA} ${yearA} ${hourA}:${minuteA}`);
+    const dateObjB = new Date(`${monthB} ${dayB} ${yearB} ${hourB}:${minuteB}`);
+
+    return dateObjB - dateObjA; // Reversed order for descending sorting
+}
+
 module.exports = {
     getToken,
     getBddSignedToken,

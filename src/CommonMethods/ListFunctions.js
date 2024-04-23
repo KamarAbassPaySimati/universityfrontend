@@ -6,16 +6,21 @@ export const handleSort = (sortBy, searchParams, setSearchParams) => {
     setSearchParams({ ...params });
 };
 
-export const handleSearchParams = (key, value, searchParams, setSearchParams) => {
+export const handleSearchParams = (key, value, searchParams, setSearchParams, page) => {
     const params = Object.fromEntries(searchParams);
     params[key] = value;
-    params.page = 1;
-    console.log(key, 'key');
-    console.log(value, 'valueee');
+    if (page !== 'false') {
+        params.page = 1;
+    }
     if (value === 'non malawi citizen') {
         delete params.simplifiedkyc;
     }
     setSearchParams({ ...params });
-    console.log(params, 'pa');
-    console.log(searchParams.get('citizen'), 'came here 2');
+};
+
+export const handleSearchParamsValue = (id, value, searchParams, setSearchParams) => {
+    const params = Object.fromEntries(searchParams);
+    params[id] = value;
+    if (value === null) delete params[id];
+    setSearchParams({ ...params });
 };

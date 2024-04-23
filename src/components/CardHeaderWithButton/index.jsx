@@ -17,7 +17,8 @@ const CardHeaderWithButton = ({
                 <div className='flex'>
                     {buttonText && (
                         <button onClick={() => { navigate(navigationPath); }}
-                            className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]'>
+                            className='flex bg-primary-normal py-[8px] px-[16px]
+                            justify-center items-center h-[40px] rounded-[6px]'>
                             <img src='/images/onboardIcon.svg' className='mr-[8px]'/>
                             <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
                         </button>
@@ -28,7 +29,9 @@ const CardHeaderWithButton = ({
                         )
                         : (statusButton !== undefined && (
                             <button data-testid="activate_deactivate_button" onClick={onHandleStatusChange}
-                                className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] 
+                                className={`flex ${statusButton === 'Activate'
+                                    ? 'bg-[#13B681]'
+                                    : 'bg-[#FF6363]'} py-[8px] px-[16px] 
                             justify-center items-center h-[40px] rounded-[6px]`}>
                                 <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
                             </button>

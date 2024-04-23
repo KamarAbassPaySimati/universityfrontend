@@ -56,6 +56,7 @@ body {
   font-size: 16px !important;
   padding: 24px !important;
   border-radius: 16px !important;
+  z-index: 10;
 }
 
 .scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
@@ -144,6 +145,53 @@ body {
   top: 50%;
 }
 
+.label-checkbox input{
+  opacity: 0;
+  position: relative;
+}
+.label-checkbox-error input[type="checkbox"]:checked ~ label::before {
+  border: 1px solid #FF6363 !important;
+}
+.label-checkbox input[type="checkbox"]:checked ~ label::before {
+  background-color: #3B2A6F !important;
+  border-radius: 4px;
+  border: 1px solid #3B2A6F;
+}
+.checkbox-error label::before{
+  border: 1px solid #FF6363 !important;
+}
+.label-checkbox label::before {
+  content: '';
+  position: absolute;
+  top: 7%;
+  left: 0;
+  margin: 0;
+  height: 18px;
+  width: 18px;
+  border-radius: 4px;
+  transition: transform 0.28s ease;
+  transform: translateY(0%);
+  border: 1px solid #3B2A6F;
+}
+.label-checkbox input[type="checkbox"]:checked ~ label::after {
+  transform: rotate(-45deg) scale(1);
+}
+.label-checkbox label::after {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 5px;
+  border-bottom: 2px solid #fff;
+  border-left: 2px solid #fff;
+  transform: rotate(-45deg) scale(0);
+  transition: transform ease 0.25s;
+  will-change: transform;
+  position: absolute;
+  top: 9px;
+  left: 4px;
+}
+
+
 .whiteScrollBar::-webkit-scrollbar-thumb {
   background-color: #FFF;
   border: transparent;
@@ -190,3 +238,254 @@ input[type='number'] {
 .capitalize-first:first-letter {
   text-transform: uppercase;
 }
+/* In your CSS file */
+.custom-border-t {
+  border-top: 1.1px solid black; /* Set the top border with desired thickness */
+  padding-top: 1px; /* Adjust padding to compensate for the height of the custom border */
+}
+@layer utilities {
+  .border-t-thin {
+    border-top-width: 1.1px;
+  }
+}
+/* custom radio button  */
+
+[type="radio"]:checked + label:before, [type="radio"]:not(:checked) + label:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: calc(50% - 9px);
+  width: 17px;
+  height: 17px;
+  border: 1px solid #3B2A6F;
+  border-radius: 100%;
+  background: #FFFFFF;
+  cursor: pointer;
+}
+
+.custom-radioBlue [type="radio"]:not(:checked) + label:after {
+  opacity: 0;
+  transform: scale(0);
+}
+.custom-radioBlue [type="radio"]:checked + label:after {
+  background-color: #3B2A6F !important;
+}
+.custom-radioBlue [type="radio"]:checked + label:after, .custom-radioBlue [type="radio"]:not(:checked) + label:after {
+  width: 9px;
+  height: 9px;
+  position: absolute;
+  top: calc(50% - 5px);
+  content: '';
+  left: 4px;
+  border-radius: 100%;
+  background: #FFFFFF;
+  transition: all 0.2s ease;
+  -webkit-transition: all 0.2s ease;
+  cursor: pointer;
+}
+.custom-radioBlue [type="radio"]:checked + label:after {
+  opacity: 1;
+  transform: scale(1);
+}
+.line-class::after{
+  position: absolute;
+  content: "";
+  width: 304px;
+  height: 0;
+  border-top: 2px solid #A4A9AE;
+  top: 13px;
+  left: 30px;
+  right: 0;
+
+}
+
+.lower-alpha {list-style-type: lower-alpha;}
+.list-circle {list-style-type: circle;}
+
+
+.capture-img img, video {
+    border-radius: 7px !important;
+}
+
+
+/* CustomDatePicker.css */
+.custom-datepicker {
+  border: none;
+  border-bottom: 1px solid #DDDDDD;
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  background-color: #F8F8F8;
+  border-radius: 0; /* Remove border-radius */
+}
+
+.custom-datepicker input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.custom-datepicker input:focus,
+.custom-datepicker input:hover {
+  border-bottom: none !important; /* Remove bottom border on input focus and hover */
+  box-shadow: none !important; /* Remove box-shadow */
+}
+/* CustomDatePicker.css */
+.custom-datepicker-error {
+  border: none;
+  border-bottom: 1px solid #FF4343;
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  background-color: #F8F8F8;
+  border-radius: 0; /* Remove border-radius */
+}
+
+.custom-datepicker-error input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.custom-datepicker-error input:focus,
+.custom-datepicker-error input:hover {
+  border-bottom: 1px solid #3B2A6F;
+  box-shadow: none !important; /* Remove box-shadow */
+}
+:where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:hover {
+  border-color: #DDDDDD !important;
+  background-color: #F8F8F8;
+}
+:where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:focus, :where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:focus-within {
+  border-color: #DDDDDD !important;
+  box-shadow: none !important;
+  outline: 0;
+  background-color: #F8F8F8;
+}
+
+/* Target the calendar icon and change its color to black */
+.ant-picker-suffix > svg {
+  fill: black !important;
+}
+
+.google-key input {
+    border: none;
+    margin: 0;
+    padding: 0;
+    background-color: #F8F8F8 !important;
+    padding: 11px 50px !important;
+    font-size: 400;
+    color: #4F5962 !important;
+    border-top-right-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    text-align: left;
+
+}
+.google-key-border input {
+  border-bottom: 1px solid #DDDDDD;
+}
+.google-key-error input{
+  border-bottom: 1px solid #FF6363 !important;
+}
+.google-key input:focus {
+  background-color: #F8F8F8 !important;
+  padding: 11px 50px !important;
+  font-size: 400;
+  color: #4F5962 !important;
+  border-bottom: 1px solid #3B2A6F;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  outline: none;
+}
+
+input[type="file"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+iframe {
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+}
+
+/* @media print {
+  #embed {
+    display: none;
+    user-select: none;
+  }
+} */
+
+.moving-text-container {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  width: 150px; /* Adjust the width as needed */
+  height: 70px; /* Adjust the height as needed */
+  position: relative;
+}
+
+.moving-text-btn {
+  position: absolute;
+  background: #FD9101; /* Set the background color for the button */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 46px;
+  border: none; /* Remove border */
+  padding: 0; /* Remove padding */
+  border-radius: 28.15px; /* Apply border radius */
+
+}
+
+.moving-text {
+  animation: moveText 2s linear infinite; /* Adjust duration (2s) as needed */
+}
+
+@keyframes moveText {
+  0% {
+    transform: translateX(0) translateY(0); /* Start position */
+  }
+  25% {
+    transform: translateX(-20px) translateY(-1px); /* Move left and up */
+  }
+  50% {
+    transform: translateX(0) translateY(-2px); /* Move up */
+  }
+  75% {
+    transform: translateX(20px) translateY(-1px); /* Move right and up */
+  }
+  100% {
+    transform: translateX(0) translateY(0); /* Back to start */
+  }
+}
+
+
+@layer utilities {
+  .custom-list {
+    list-style: none;
+    margin-left: 0;
+    padding-left: 1em;
+    text-indent: -0.825em;
+  }
+  
+  .custom-list li:before {
+    content: attr(data-list-symbol); /* Use the data attribute to set different symbols */
+  }
+}
+
+
+/* Custom Utility */
+.max-w-max-content {
+  max-width: max-content;
+}
+

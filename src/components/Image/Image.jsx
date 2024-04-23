@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Image = ({ src, alt, type, className, id, onClick, toolTipId, testId }) => {
+const Image = ({ src, alt, type, className, id, onClick, toolTipId, testId, cdnImg }) => {
     return (
         <motion.img
             id={id}
@@ -9,7 +9,7 @@ const Image = ({ src, alt, type, className, id, onClick, toolTipId, testId }) =>
             data-tooltip-id={toolTipId}
             onClick={onClick}
             className={className}
-            src={`/images/${src}.${type || 'svg'}`}
+            src={cdnImg ? `${src}` : `/images/${src}.${type || 'svg'}`}
             alt={alt || src}
             loading='lazy'
         />
