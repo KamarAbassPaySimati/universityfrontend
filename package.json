@@ -20,6 +20,7 @@
     "aws-amplify": "^6.0.28",
     "base32-decode": "^1.0.0",
     "chromedriver": "^123.0.1",
+    "country-list": "^2.3.0",
     "crypto": "^1.0.1",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",

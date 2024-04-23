@@ -18,6 +18,7 @@ export const occupationSelfEmployed = ['self_employed_specify'];
 export const occupationEduction = ['institute'];
 
 export const handleStates = (value, id, type, setStates, states) => {
+    console.log('iddd', id, value.target.value);
     const obj = {};
     if (type === 'input') {
         if (id === 'account_number' && value.target.value.trim() !== '') {
@@ -60,8 +61,8 @@ export const handleStates = (value, id, type, setStates, states) => {
         } else {
             obj[id] = value;
         }
-        setStates((prevState) => ({ ...prevState, ...obj }));
     }
+    setStates((prevState) => ({ ...prevState, ...obj }));
 };
 
 export const AddressDetails = ['street_name', 'town_village_ta', 'district'];
