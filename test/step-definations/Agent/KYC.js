@@ -102,17 +102,42 @@ When('I select the ID document as {string}', async function (type) {
         let dropdownElement;
         switch (type) {
         case 'National ID':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="national_id"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="national_id"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             await dropdownElement.click();
             break;
         case 'Passport':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="passport"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="passport"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Drivers licence':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="driver\'s_licence"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Traffic register card':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="traffic_register_card"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Birth certificate card':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="birth_certificate"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Student ID':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="student_id"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            await dropdownElement.click();
+            break;
+        case 'Employee ID':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="employee_id"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             await dropdownElement.click();
             break;
         default:
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="national_id"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="national_id"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             await dropdownElement.click();
             break;
@@ -246,27 +271,32 @@ When('I select the verification document as {string}', async function (type) {
     let dropdownElement;
     switch (type) {
     case 'Driver’s licence':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="driver\'s_licence"]')));
+        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="driver\'s_licence"]')));
         await driver.wait(until.elementIsVisible(dropdownElement));
         await dropdownElement.click();
         break;
     case 'Traffic register card':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="traffic_register_card"]')));
+        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="traffic_register_card"]')));
         await driver.wait(until.elementIsVisible(dropdownElement));
         await dropdownElement.click();
         break;
     case 'Birth certificate card':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="birth_certificate"]')));
+        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="birth_certificate"]')));
         await driver.wait(until.elementIsVisible(dropdownElement));
         await dropdownElement.click();
         break;
     case 'Employer letter':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="employer_letter"]')));
+        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="employer_letter"]')));
         await driver.wait(until.elementIsVisible(dropdownElement));
         await dropdownElement.click();
         break;
     case 'Institute letter':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="institute_letter"]')));
+        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="institute_letter"]')));
+        await driver.wait(until.elementIsVisible(dropdownElement));
+        await dropdownElement.click();
+        break;
+    case 'Religious Institution/ District Commissioner Letter':
+        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="religious_institution/_district_commissioner_letter"]')));
         await driver.wait(until.elementIsVisible(dropdownElement));
         await dropdownElement.click();
         break;
@@ -553,4 +583,53 @@ When('I click on skip button', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="skip_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
+});
+
+When('I select the citizenship type as {string}', async function (type) {
+    // Write code here that turns the phrase above into concrete actions
+    if (type !== '') {
+        switch (type) {
+        case 'Malawi':
+            await driver.wait(until.elementLocated(By.css('[data-testid="malawi_citizen"]'))).click();
+            break;
+        case 'Non-Malawi':
+            await driver.wait(until.elementLocated(By.css('[data-testid="non_malawi_citizen"]'))).click();
+            break;
+        default:
+            await driver.wait(until.elementLocated(By.css('[data-testid="non_malawi_citizen"]'))).click();
+            break;
+        }
+    }
+});
+
+When('I select the KYC type as {string}', async function (type) {
+    // Write code here that turns the phrase above into concrete actions
+    if (type !== '') {
+        switch (type) {
+        case 'Full KYC':
+            await driver.wait(until.elementLocated(By.css('[for="Full KYC"]'))).click();
+            break;
+        case 'Simplified KYC':
+            await driver.wait(until.elementLocated(By.css('[for="Simplified KYC"]'))).click();
+            break;
+        default:
+            await driver.wait(until.elementLocated(By.css('[for="Simplified KYC"]'))).click();
+            break;
+        }
+    }
+});
+
+When('I should view monthly income and monthly withdrawal selected as {string}', async function (expectedValue) {
+    // Write code here that turns the phrase above into concrete actions
+    const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
+    await driver.wait(until.elementIsVisible(monthlyIncome));
+    const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
+
+    assert.equal(monthlyIncomeValue, expectedValue);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
+    await driver.wait(until.elementIsVisible(monthlyWithdrawal));
+    const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
+    assert.equal(monthlyWithdrawalValue, expectedValue);
 });
