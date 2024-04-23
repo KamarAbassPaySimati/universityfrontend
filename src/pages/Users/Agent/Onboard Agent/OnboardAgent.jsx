@@ -20,7 +20,7 @@ import { endpoints } from '../../../../services/endpoints';
 import RegistrationSuccessful from './components/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 
-const OnboardAgent = () => {
+const OnboardAgent = ({ role }) => {
     const initialState = {
         firstName: '',
         middleName: '',
@@ -40,6 +40,7 @@ const OnboardAgent = () => {
     const [securityQuestionError, setsecurityQuestionError] = useState(false);
 
     const [otp, setOtp] = useState('');
+    const [phoneOtp, setPhoneOtp] = useState('');
 
     const [otpError, setOtpError] = useState();
 
@@ -50,7 +51,9 @@ const OnboardAgent = () => {
     const [loadingEmailVerify, setLoadingEmailVerify] = useState(false);
     const [loadingPhoneVerify, setLoadingPhoneVerify] = useState(false);
     const [loadingOtpVerify, setLoadingOtpVerify] = useState(false);
+    const [loadingPhoneNoOtpVerify, setloadingPhoneNoOtpVerify] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [paymartId, setPaymartId] = useState('');
     const [otpId, setOtpId] = useState({
         email: '',
         phoneNumber: ''
@@ -67,6 +70,7 @@ const OnboardAgent = () => {
     const [countryCode, setCountryCode] = useState('+265');
     const [numberMaxLength, setNumberMaxLength] = useState(11);
     const [isResendLoading, setIsResendLoading] = useState(false);
+    const [isPhoneOtpResendLoading, setisPhoneOtpResendLoading] = useState(false);
 
     useEffect(() => {
         let intervalId;
@@ -112,6 +116,9 @@ const OnboardAgent = () => {
             setFormData(prevState => {
                 return { ...prevState, [id]: e.target.value.toLowerCase() };
             });
+            setVerify(prevState => {
+                return { ...prevState, phoneNumber: false };
+            });
             return;
         }
         if (id === 'phoneNumber') {
@@ -156,6 +163,13 @@ const OnboardAgent = () => {
         }
         setOtp(value);
     };
+    const handlePhoneOtpChange = (e, id) => {
+        const value = e.target.value;
+        if (value.length > 6) {
+            return;
+        }
+        setPhoneOtp(value);
+    };
 
     const handleOtpFocus = (e, id) => {
         setOtpError('');
@@ -193,14 +207,14 @@ const OnboardAgent = () => {
         } else {
             setLoadingEmailVerify(true);
         }
-        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
             setVerify(prevState => {
                 return { ...prevState, email: true };
             });
-            setToastInformation("Verification code has been sent to agent’s email. It's valid for 10 minutes");
+            setToastInformation(`Verification code has been sent to ${role}’s email. It's valid for 10 minutes`);
             setTimer(60 * 2);
             setOtpToken(response?.data?.token);
             setResendCount(prevState => prevState + 1);
@@ -222,7 +236,7 @@ const OnboardAgent = () => {
             setVerify(prevState => {
                 return { ...prevState, phoneNumber: false };
             });
-            setOtp('');
+            setPhoneOtp('');
             setOtpError('');
             setResendCount(0);
             return;
@@ -251,18 +265,18 @@ const OnboardAgent = () => {
         };
 
         if (text.includes('Otp')) {
-            setIsResendLoading(true);
+            setisPhoneOtpResendLoading(true);
         } else {
             setLoadingPhoneVerify(true);
         }
-        const response = await dataService.PostAPIAgent(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
         if (!response.error) {
-            setOtp('');
+            setPhoneOtp('');
             setOtpError('');
             setVerify(prevState => {
                 return { ...prevState, phoneNumber: true };
             });
-            setToastInformation("Verification code has been sent to agent’s phone number. It's valid for 10 minutes");
+            setToastInformation(`Verification code has been sent to ${role}’s phone number. It's valid for 10 minutes`);
             setTimer(60 * 2);
             setResendCount(prevState => prevState + 1);
             setOtpToken(response?.data?.token);
@@ -276,22 +290,44 @@ const OnboardAgent = () => {
             }
         }
         setLoadingPhoneVerify(false);
-        setIsResendLoading(false);
+        setisPhoneOtpResendLoading(false);
     };
 
     const handleVerifyOtp = async (text, id) => {
-        if (otp.trim().length < 6) {
-            setOtpError('Invalid OTP');
-            return;
+        if (id === 'emailOtp') {
+            if (otp.trim().length < 6) {
+                setOtpError('Invalid OTP');
+                return;
+            }
+        } else if (id === 'phoneNumberOtp') {
+            if (phoneOtp.trim().length < 6) {
+                setOtpError('Invalid OTP');
+                return;
+            }
         }
+
         const payload = {
-            otp,
+            otp: id === 'emailOtp' ? otp : phoneOtp,
             token: otpToken
         };
-        setLoadingOtpVerify(true);
-        const response = await dataService.PostAPIAgent(verifyOtp, payload);
-        setLoadingOtpVerify(false);
-        setOtp('');
+        if (id === 'emailOtp') {
+            setLoadingOtpVerify(true);
+        } else if (id === 'phoneNumberOtp') {
+            setloadingPhoneNoOtpVerify(true);
+        }
+
+        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : await dataService.PostAPIMerchant(verifyOtp, payload);
+        if (id === 'emailOtp') {
+            setLoadingOtpVerify(false);
+        } else if (id === 'phoneNumberOtp') {
+            setloadingPhoneNoOtpVerify(false);
+        }
+        if (id === 'emailOtp') {
+            setOtp('');
+        } else if (id === 'phoneNumberOtp') {
+            setPhoneOtp('');
+        }
+
         if (!response.error) {
             let key = '';
             if (id.includes('email')) {
@@ -370,10 +406,11 @@ const OnboardAgent = () => {
             security_questions: transformArray(securityQuestions)
         };
         setIsLoading(true);
-        const response = await dataService.PostAPIAgent(createAgent, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : await dataService.PostAPIMerchant(createAgent, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
+            setPaymartId(response.data.paymaart_id);
         } else {
             setToastError('Something went wrong!');
         }
@@ -384,13 +421,13 @@ const OnboardAgent = () => {
 
     return (
         <CardHeader
-            activePath='Register Agent'
-            paths={['Users', 'Agent']}
-            pathurls={['users/agents']}
+            activePath={role === 'agent' ? 'Register Agent' : 'Register Merchant'}
+            paths={role === 'agent' ? ['Users', 'Agent'] : ['Users', 'Merchant']}
+            pathurls={role === 'agent' ? ['users/agents'] : ['users/merchants']}
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
-                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} />
+                ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} accessRole={role} paymartId={paymartId}/>
                 : <>
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details
@@ -501,7 +538,7 @@ const OnboardAgent = () => {
                             onClick={handleVerifyPhoneNumber}
                             verified={verified.phoneNumber}
                             inputDisabled={verify.phoneNumber}
-                            buttonDisabled={formData.phoneNumber.length < 1 || isResendLoading || loadingOtpVerify}
+                            buttonDisabled={formData.phoneNumber.length < 1 || isPhoneOtpResendLoading || loadingPhoneNoOtpVerify}
                             isLoading={loadingPhoneVerify}
                             phoneNumber={true}
                             countryCode={countryCode}
@@ -511,10 +548,10 @@ const OnboardAgent = () => {
                             setVerified={setVerified}
                             verify={verify.phoneNumber}
                         />
-                        {verify.phoneNumber &&
+                        {verify.phoneNumber && verified.email &&
                             <InputFieldWithButton
                                 className='w-[339px]'
-                                onChange={handleOtpChange}
+                                onChange={handlePhoneOtpChange}
                                 onFocus={handleOtpFocus}
                                 id='phoneNumberOtp'
                                 testId='otp'
@@ -522,17 +559,17 @@ const OnboardAgent = () => {
                                 error={otpError}
                                 label='Verification Code'
                                 placeholder='_ _ _ _ _ _'
-                                value={otp}
+                                value={phoneOtp}
                                 buttonText={'VERIFY'}
                                 setEnteredLetter={setEnteredLetter}
                                 type='number'
                                 onClick={handleVerifyOtp}
-                                inputDisabled={loadingOtpVerify}
-                                buttonDisabled={otp.length < 1 || loadingOtpVerify || isResendLoading}
+                                inputDisabled={loadingPhoneNoOtpVerify}
+                                buttonDisabled={phoneOtp.length < 1 || loadingPhoneNoOtpVerify || isResendLoading}
                                 resend={true && resendCount <= 3}
                                 timer={timer}
                                 handleResend={handleVerifyPhoneNumber}
-                                isLoading={loadingOtpVerify}
+                                isLoading={loadingPhoneNoOtpVerify}
                             />}
                     </div>
                     <div className='flex flex-col gap-6 w-[339px]'>
@@ -591,14 +628,11 @@ const OnboardAgent = () => {
                                     className="w-4 cursor-pointer"
                                     id="termsAccepted"
                                     name='checkbox' />
-                                <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px]
-                            leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted" >
-                                    I have read and agree to Paymaart’s
-                                    <a target='_blank' href='https://www.paymaart.net/agent-terms-conditions'
-                                        className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
+                                <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px] leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted">
+                                    {role && role.charAt(0).toUpperCase() + role.slice(1)} has read and agreed Paymaart’s
+                                    <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : 'https://www.paymaart.net/merchant-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
                                     and
-                                    <a target='_blank' href='https://www.paymaart.net/privacy-policy'
-                                        className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
+                                    <a target='_blank' href='https://www.paymaart.net/privacy-policy' className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
                                 </label>
                             </div>
                             {termsAcceptedError && <ErrorMessage error='Please accept the Terms & Conditions and Privacy Policies to continue.' />}

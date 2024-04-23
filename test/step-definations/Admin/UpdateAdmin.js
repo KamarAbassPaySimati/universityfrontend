@@ -45,7 +45,7 @@ When('I submit the update admin form', async function () {
 
 Then('I should be be navigated to update admin user', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="update_button"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
     await driver.wait(until.elementIsVisible(element));
 });
 

@@ -16,22 +16,38 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
+import { handleSearchParams } from '../../CommonMethods/ListFunctions';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
-    navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange
+    navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
+    onToggle, searchParams, setSearchParams
 }) => {
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
         const result = [];
         let sum = '';
-        for (const str of arr) {
-            sum += str + '/';
+        for (let i = 0; i < arr.length; i++) {
+            if (i === arr.length - 1) {
+                sum += arr[i];
+            } else {
+                sum += arr[i] + '/';
+            }
             result.push(sum);
         }
         return result;
     }
+    // const handleToggle = (index) => {
+    //     const updatedButtons = toggleButtons.map((button, i) => {
+    //         if (i === index) {
+    //             return { ...button, status: true };
+    //         } else {
+    //             return { ...button, status: false };
+    //         }
+    //     });
+    //     onToggle(updatedButtons); // Notify the parent component of the updated button values
+    // };
 
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
@@ -66,12 +82,13 @@ const CardHeader = ({
                 </div>
             </div>
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
-                {header &&
+                {/* checks for card has buttons */}
+                {header && (headerWithoutButton === false || headerWithoutButton === undefined) &&
                 <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-row justify-between `}>
                     {header}
                     <div className='flex'>
-                        {buttonText && <button onClick={() => { navigate(navigationPath); }}
+                        {buttonText && <button data-testid={buttonText} onClick={() => { navigate(navigationPath); }}
                             className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                             <img src='/images/onboardIcon.svg'
@@ -89,20 +106,41 @@ const CardHeader = ({
                                     <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
                                 </button>)
                         }
-                        {updateButton === false
+                        {statusButton && (updateButton === false
                             ? (
-                                <button onClick={() => { navigate(updateButtonPath); }}
+                                <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
                                     className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                                     <Image src='update'
                                         className='mr-[8px]'/>
                                     <p className='text-[14px] font-[600] text-[#ffffff]'>Update</p>
                                 </button>)
-                            : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>)
+                            : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>))
                         }
                     </div>
                 </div>
                 }
+                {/* checks for card has only toggles down */}
+                {header && headerWithoutButton &&
+                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                 text-header-dark flex flex-col gap-2`}>
+                    {header}
+                    <div className='mt-[6px] flex gap-6'>
+                        {/* toggle buttons  */}
+                        {toggleButtons && toggleButtons.map((item, index) => (
+                            <button
+                                key={index}
+                                onClick={() => handleSearchParams('type', item.key.toLowerCase(), searchParams, setSearchParams)}
+                                className={`-py-4  h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
+                            >
+                                {item.key}
+                            </button>
+                        ))}
+                    </div>
+
+                </div>
+                }
+
                 {ChildrenElement !== true
                     ? (!table
                         ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 

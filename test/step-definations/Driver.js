@@ -21,6 +21,8 @@ options.addArguments('--disable-gpu');
 options.addArguments('--disable-extensions');
 options.addArguments('--dns-prefetch-disable');
 options.addArguments('enable-features=NetworkServiceInProcess');
+options.addArguments('--use-fake-device-for-media-stream');
+options.addArguments('--use-fake-ui-for-media-stream');
 
 global.driver = chrome.Driver.createSession(options, service);
 setDefaultTimeout(35000);
@@ -29,7 +31,7 @@ BeforeAll(async function () {
     await new Promise(resolve => setTimeout(resolve, 3000));
     await driver.get('http://localhost:3000/');
     await driver.wait(until.elementLocated(By.id('root')));
-    global.current_process_name = faker.string.alpha({ count: 10, casing: 'upper' });
+    global.current_process_name = faker.string.alpha(15);
     global.is_user_logged_in = false;
 
     const worldParametersIndex = process.argv.indexOf('--world-parameters');
@@ -37,8 +39,6 @@ BeforeAll(async function () {
     if (worldParametersIndex !== -1 && process.argv.length > worldParametersIndex + 1) {
         worldParameters = JSON.parse(process.argv[worldParametersIndex + 1]);
         global.perform_login = worldParameters.login;
-
-        console.log('global.perform_login', global.perform_login);
     }
 
     try {
@@ -69,18 +69,18 @@ AfterAll(async function () {
 
 Before('@wait', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
-    console.log('waiting');
 });
 
 Before(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 After(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 AfterStep(async function () {
+    await new Promise(resolve => setTimeout(resolve, 50));
     const updatedCoverageData = await driver.executeScript('return __coverage__;');
     const updatedCoverageMap = createCoverageMap(updatedCoverageData);
     global.coverageMap.merge(updatedCoverageMap);

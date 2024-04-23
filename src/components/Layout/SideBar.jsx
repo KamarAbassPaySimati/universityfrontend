@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import 'react-responsive-modal/styles.css';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from '../Image/Image';
 import { signOut } from 'aws-amplify/auth';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,7 +9,6 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { Modal } from 'react-responsive-modal';
 import ConfirmationPopup from '../ConfirmationPopup/ConfirmationPopup.jsx';
 import GlobalContext from '../Context/GlobalContext.jsx';
-import useGlobalSignout from '../../CommonMethods/globalSignout.js';
 import Slugify from '../../CommonMethods/Sulgify.js';
 import { sideNavObject } from './sideNavObject.js';
 import { setDropdown } from '../../redux/GlobalSlice.js';
@@ -85,12 +84,7 @@ const SideBar = ({ role }) => {
     const handleOptionClick = (nav, option, key) => {
         navigate(nav.toLowerCase() + '/' + Slugify(option));
     };
-
-    useEffect(() => {
-
-    }, []);
-
-    useGlobalSignout();
+    // useGlobalSignout();
 
     return (
         <>
@@ -99,16 +93,16 @@ const SideBar = ({ role }) => {
                     <Image src='sideNavLogo' />
                 </div>
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
-                    <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4'>
+                    <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4 max-h-[calc(100vh-151px)] overflow-y-auto scrollBar'>
 
                         {sideNavObject && sideNavObject[role] && Object.keys(sideNavObject[role]).map((nav) => (
                             <div key={nav} className='flex flex-col'>
                                 <div className={`flex gap-2 justify-between px-2 py-1 pr-3 rounded-[6px] cursor-pointer
-                    ${location.pathname.includes(nav.toLowerCase()) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(nav.toLowerCase(), sideNavObject[role][nav]?.dropdown)}>
+                    ${location.pathname.includes(Slugify(nav.toLowerCase())) ? 'bg-background-light' : ''}`} onMouseEnter={() => handleMouseEnter(nav.toLowerCase())} onMouseLeave={() => handleMouseLeave()} onClick={() => handleDropDown(sideNavObject[role][nav]?.path, sideNavObject[role][nav]?.dropdown)}>
                                     <div className='flex gap-2 items-center'>
-                                        <Image src={`${hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? `active-${nav.toLowerCase()}` : nav.toLowerCase()}`} />
+                                        <Image src={`${hoveringOn === nav.toLowerCase() || location.pathname.includes(Slugify(nav.toLowerCase())) ? `active-${nav.toLowerCase()}` : nav.toLowerCase()}`} />
                                         <div className={`font-[400] text-[14px] leading-[24px]
-                        ${hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'text-primary-normal' : location.pathname.includes(nav.toLowerCase()) ? 'font-[600]' : 'text-neutral-secondary '}`}>
+                        ${hoveringOn === nav.toLowerCase() || location.pathname.includes(Slugify(nav.toLowerCase())) ? 'text-primary-normal' : location.pathname.includes(nav.toLowerCase()) ? 'font-[600]' : 'text-neutral-secondary '}`}>
                                             {nav}
                                         </div>
                                     </div>
@@ -127,7 +121,7 @@ const SideBar = ({ role }) => {
                         ))}
 
                     </div>
-                    <div className='flex justify-center items-center'>
+                    <div className='flex justify-center items-center mt-2'>
                         <button
                             data-testid='logout'
                             onClick={() => setIsOpen(true)}

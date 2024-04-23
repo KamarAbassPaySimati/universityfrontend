@@ -31,7 +31,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -46,6 +46,8 @@ stages:
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
+            node --version
+            npm --version
             npm run eslint
           displayName: 'Lint'
     - job: "secret"
@@ -79,18 +81,6 @@ stages:
             pip3 install njsscan
             njsscan -w .
           displayName: 'Static Application Security Testing (SAST)'
-    # - job: "dast"
-    #   displayName: 'Dynamic Application Security Testing (DAST)'
-    #   dependsOn: Download_Environment
-    #   condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #       vmImage: "ubuntu-latest"
-    #   steps:
-    #     - script: |
-    #         echo "test"
-    #         # pip install --upgrade mobsfscan
-    #         # mobsfscan -w app/src --config scripts/.mobsf
-    #       displayName: 'Dynamic Application Security Testing (DAST)'
 - stage: Build
   jobs:
     - job: "Download_Environment"
@@ -119,7 +109,7 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)'
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -130,6 +120,8 @@ stages:
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
+            node --version
+            npm --version
             npm run build
             mkdir artifact
             mv dist artifact
@@ -146,7 +138,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -166,24 +158,26 @@ stages:
             artifact: bundle
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
-            npm install pm2 -g
+            npm install pm2@5.3.0 -g
             source .env
-            npm run build
+            echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
+            echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
             npm install express --force
             pm2 start scripts/server.js
+            node --version
             sleep 5
             mkdir reports
             npm install nyc --save-dev --force
             node scripts/bdd_unit_testing_azure.js
           displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/reports # Assuming logs are in working directory
-          artifact: reports
+          artifact: '$(system.JobId)-reports'
           condition: always()
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
-          artifact: coverage
+          artifact: '$(system.JobId)-coverage'
           condition: always()
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-          artifact: failedScenarios
+          artifact: '$(system.JobId)-failedScenarios'
           condition: always()
     - job: UnitTestingResult
       variables:
@@ -196,7 +190,7 @@ stages:
       steps:
       - task: Cache@2
         inputs:
-          key: 'npmV2 | "$(Agent.OS)" | package.json'
+          key: 'npmV3 | "$(Agent.OS)" | package.json'
           restoreKeys: |
             npm | "$(Agent.OS)"
           path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -228,8 +222,9 @@ stages:
           node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-          aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/
-          aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/
+          aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
+          aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
         displayName: 'BDD Living documentation'
     - job: IntegrationTesting
       displayName: "Integration Testing"
@@ -237,6 +232,17 @@ stages:
       pool:
         vmImage: "ubuntu-latest"
       steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --cache .npm
+          condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
           inputs:
@@ -248,7 +254,7 @@ stages:
             artifact: bundle
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
-            npm install pm2 -g
+            npm install pm2@5.3.0 -g
             source .env
             npm install express --force
             pm2 start scripts/server.js
@@ -285,7 +291,6 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
             source .env
-            npm run build
             npm install express --force
             npm install pm2 sitespeed.io -g
             pm2 start scripts/sitespeed-server.js
@@ -298,28 +303,37 @@ stages:
      
 - stage: Deploy
   jobs:
-    - job: deployment
-      displayName: "Deployment"
+    - deployment: Deployment
       condition: succeeded()
+      displayName: Deployment
       pool:
-        vmImage: "macOS-13"
-      steps:
-        - task: DownloadPipelineArtifact@2
-          name: bundle
-          inputs:
-            artifact: bundle
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - task: DownloadPipelineArtifact@2
-          name: environment
-          inputs:
-            artifact: environment
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - script: |
-            source .env
-            ls -R
-            aws s3 sync dist s3://$ADMIN_S3_BUCKET
-            aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*"
-          displayName: 'Deployment'
+        vmImage: 'macos-latest'
+      ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
+          artifact: 'Production'
+      ${{ if eq(variables['Build.SourceBranchName'], 'qa') }}:
+          environment: 'Testing'
+      ${{ else }}:
+          environment: 'Development'
+      strategy:
+        # Default deployment strategy, more coming...
+        runOnce:
+          deploy:
+            steps:
+              - task: DownloadPipelineArtifact@2
+                name: bundle
+                inputs:
+                  artifact: bundle
+                  targetPath: '$(System.DefaultWorkingDirectory)'
+              - task: DownloadPipelineArtifact@2
+                name: environment
+                inputs:
+                  artifact: environment
+                  targetPath: '$(System.DefaultWorkingDirectory)'
+              - script: |
+                  source .env
+                  aws s3 sync dist s3://$ADMIN_S3_BUCKET --acl public-read
+                  aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*" 
+                displayName: 'Deployment'
     - job: DAST
       displayName: "Dynamic Application Security Testing (DAST)"
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'), contains(variables['build.SourceBranch'], 'qa')), succeeded())
@@ -349,8 +363,6 @@ stages:
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
             npm install pm2 -g
-            source .env
-            npm run build
             npm install express --force
             pm2 start scripts/server.js
             docker run -u zap -p 8080:8080 -d softwaresecurityproject/zap-stable zap.sh -daemon -host 0.0.0.0 -port 8080 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true

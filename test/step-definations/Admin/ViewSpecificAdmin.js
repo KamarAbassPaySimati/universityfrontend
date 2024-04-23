@@ -11,6 +11,11 @@ Given('I am viewing the admin user profile', async function () {
     await driver.get(`http://localhost:3000/users/admins/${global.admin_user.paymaart_id}`);
 });
 
+When('I navigate to view admin profile', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await driver.get(`http://localhost:3000/users/admins/${global.admin_user.paymaart_id}`);
+});
+
 Then('I should view my paymaart ID and name', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
@@ -79,6 +84,17 @@ When('I should view all the basic details', async function () {
 Then('I should see view admin users button is hidden', async function () {
     await new Promise(resolve => setTimeout(resolve, 5000));
     const viewButton = await driver.executeScript('return document.querySelector("[data-testid=\'view-0\']")');
+    if (viewButton == null || viewButton === undefined) {
+        return 'passed';
+    } else {
+        throw new Error('View button is not hidden');
+    }
+});
+
+Then('I should see edit admin users button is hidden', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    const viewButton = await driver.executeScript('return document.querySelector("[data-testid=\'edit-0\']")');
     if (viewButton == null || viewButton === undefined) {
         return 'passed';
     } else {

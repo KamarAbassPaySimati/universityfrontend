@@ -39,7 +39,6 @@ async function login () {
 
     const response = await getMFASecret({ username: global.admin_user.email_address });
     const secret = response.mfa_code;
-    console.log('secret 123', secret);
     global.TOTP = await generateTOTP(secret, 0);
 
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -97,7 +96,6 @@ async function create_new_user_and_login () {
     await new Promise(resolve => setTimeout(resolve, 2000));
     const qr_code_data = extractQRCodeData(canvas_data);
 
-    console.log('qr_code_data', qr_code_data);
     // Split the URI by the '?' character to get the parameters
     const uriParts = qr_code_data.split('?');
     // Iterate through the parameters to find the 'secret' parameter
@@ -111,7 +109,6 @@ async function create_new_user_and_login () {
     }
 
     global.TOTP = await generateTOTP(secret, 0);
-    console.log('TOPTP', global.TOTP);
 
     await new Promise(resolve => setTimeout(resolve, 100));
     const proceed_to_next = await driver.wait(until.elementLocated(By.css('[data-testid="proceed_next_button"]')));
@@ -151,7 +148,6 @@ Before('@perform_logout', async function () {
 
 Before('@login', async function () {
     const localStorageFilePath = path.join(__dirname, 'localStorageData.json');
-    console.log('globale', global.is_user_logged_in === false && global.perform_login === true);
     if (global.is_user_logged_in === false && global.perform_login === true) {
         await login();
         await saveLocalStorageData(localStorageFilePath);
@@ -205,11 +201,10 @@ Before('@add_admin_user', async function () {
             paymaart_id: paymaart_ID,
             phone_number_without_country_code: phone_number
         };
-        console.log('global.admin_user', global.admin_user);
         await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
-        console.log('error', error);
+        console.log('API Error', error);
     }
 });
 
@@ -251,7 +246,7 @@ Before('@add_finance_admin_user', async function () {
             pass: 'Admin@123',
             email_address: email.toLowerCase(),
             username: email.toLowerCase(),
-            role: 'Finance admin',
+            role: 'Finance Admin',
             phone_number: main_phone_number,
             paymaart_id: paymaart_ID,
             phone_number_without_country_code: phone_number
@@ -259,7 +254,7 @@ Before('@add_finance_admin_user', async function () {
         await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
-        console.log('error', error);
+        console.log('API Error', error);
     }
 });
 
@@ -301,7 +296,7 @@ Before('@add_support_admin_user', async function () {
             pass: 'Admin@123',
             email_address: email.toLowerCase(),
             username: email.toLowerCase(),
-            role: 'Support admin',
+            role: 'Support Admin',
             phone_number: main_phone_number,
             paymaart_id: paymaart_ID,
             phone_number_without_country_code: phone_number
@@ -309,7 +304,7 @@ Before('@add_support_admin_user', async function () {
         await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
-        console.log('error', error);
+        console.log('API Error', error);
     }
 });
 
@@ -359,7 +354,7 @@ Before('@add_normal_admin_user', async function () {
         await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
-        console.log('error', error);
+        console.log('API Error', error);
     }
 });
 
@@ -367,7 +362,7 @@ Before('@create_new_user_and_login', async function () {
     try {
         await create_new_user_and_login();
     } catch (error) {
-        console.log('err', error);
+        console.log('API Error', error);
     }
 });
 
@@ -376,10 +371,9 @@ After('@delete_admin_account', async function () {
         const payload = {
             username: global.admin_user.email_address
         };
-        const response = await deleteAdminAccount(payload);
-        console.log('response of deleted acc', response);
+        await deleteAdminAccount(payload);
     } catch (error) {
-        console.log('error', error);
+        console.log('API Error', error);
     }
 });
 
@@ -407,6 +401,7 @@ When('I enter the email address as {string} and password as {string}', async fun
 });
 
 When('I submit the login form', async function () {
+    await new Promise(resolve => setTimeout(resolve, 700));
     await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
 });
 
@@ -424,7 +419,7 @@ Given('I am presented with the authenticator QR Code', async function () {
 });
 
 When('I click on the proceed to authenticate button', async function () {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 750));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="proceed_next_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -456,21 +451,19 @@ When('I scan the QR code', { timeout: 20000 }, async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
     const qr_code_data = extractQRCodeData(canvas_data);
 
-    console.log('qr_code_data', qr_code_data);
     // Split the URI by the '?' character to get the parameters
     const uriParts = qr_code_data.split('?');
     // Iterate through the parameters to find the 'secret' parameter
-    let secret;
+    global.secret = '';
     for (const param of uriParts[1].split('&')) {
         const [key, value] = param.split('=');
         if (key === 'secret') {
-            secret = value;
+            global.secret = value;
             break;
         }
     }
 
-    global.TOTP = await generateTOTP(secret, 0);
-    console.log('TOPTP', global.TOTP);
+    global.TOTP = await generateTOTP(global.secret, 0);
 });
 
 Given('I am on the TOTP screen', async function () {
@@ -501,6 +494,7 @@ When('I enter a valid TOTP', async function () {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 100));
+    global.TOTP = await generateTOTP(global.secret, 0);
 
     await driver.wait(until.elementLocated(By.id('digit-1')));
     for (let i = 0; i < global.TOTP.length; i++) {
@@ -522,7 +516,6 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 
     const response = await getMFASecret({ username: global.admin_user.email_address });
     const secret = response.mfa_code;
-    console.log('secret 123', secret);
     global.TOTP = await generateTOTP(secret, 0);
 
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -540,8 +533,6 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 });
 
 Then('I should be presented with 2FA Enabled successfully page', async function () {
-    await new Promise(resolve => setTimeout(resolve, 3000));
-
     const element_header = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-header"]')));
     await driver.wait(until.elementIsVisible(element_header));
     const element_header_content = await element_header.getText();
@@ -550,7 +541,6 @@ Then('I should be presented with 2FA Enabled successfully page', async function 
     const element_body = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-content"]')));
     await driver.wait(until.elementIsVisible(element_body));
     const element_body_content = await element_header.getText();
-    console.log('element_body_content', element_body_content);
     assert.notEqual(element_body_content, '');
 });
 
