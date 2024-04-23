@@ -48,7 +48,6 @@ const Topbar = ({
         setSearchParams({ ...params });
     };
     const handleSearchParamsForFilter = (key, value) => {
-        console.log('tea');
         const params = Object.fromEntries(searchParams);
         params.page = 1;
         if (searchParams.get(key) !== null) {

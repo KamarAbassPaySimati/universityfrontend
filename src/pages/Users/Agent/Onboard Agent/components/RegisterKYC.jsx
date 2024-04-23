@@ -93,7 +93,6 @@ export default function RegisterKYC () {
     const handleAPICall = async (body, tab) => {
         try {
             const res = await dataService.PostAPIAgent('create-kyc-secure', body);
-            console.log('succccc', res.data);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {
@@ -503,31 +502,34 @@ export default function RegisterKYC () {
                                     LineClass={'line-class'}
                                     currentTab={searchParams.get('tab')}
                                 />
-                                {searchParams.get('tab') === 'address_details' &&
-                                <Address
-                                    handleStates={handleInputFelids}
-                                    states={states}
-                                    submitSelected={submitSelected}
-                                />}
-                                {searchParams.get('tab') === 'identity_details' && <IdentityDetails
-                                    handleStates={handleInputFelids}
-                                    states={states}
-                                    documentSideBarData={documentSideBarData}
-                                    setDocumentSidebarData={setDocumentSidebarData}
-                                    submitSelected={submitSelected}
-                                />}
-                                {searchParams.get('tab') === 'personal_details' &&
-                                <PersonalDetails
-                                    handleStates={handleInputFelids}
-                                    states={states}
-                                    submitSelected={submitSelected}
-                                    bankSelected={bankSelected}
-                                />}
+                                <div className='overflow-auto scrollBar h-tabledivHeight'>
+                                    {searchParams.get('tab') === 'address_details' &&
+                                    <Address
+                                        handleStates={handleInputFelids}
+                                        states={states}
+                                        submitSelected={submitSelected}
+                                    />}
+                                    {searchParams.get('tab') === 'identity_details' && <IdentityDetails
+                                        handleStates={handleInputFelids}
+                                        states={states}
+                                        documentSideBarData={documentSideBarData}
+                                        setDocumentSidebarData={setDocumentSidebarData}
+                                        submitSelected={submitSelected}
+                                    />}
+                                    {searchParams.get('tab') === 'personal_details' &&
+                                    <PersonalDetails
+                                        handleStates={handleInputFelids}
+                                        states={states}
+                                        submitSelected={submitSelected}
+                                        bankSelected={bankSelected}
+                                    />}
+                                </div>
                             </div>
                             <div className='flex justify-between items-center'>
                                 <div className='flex'>
                                     <Button2
                                         text={'Back'}
+                                        disabled={isLoadingButton}
                                         className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
                                         onClick={() => handleTabChange('back')}
                                         testId={'Back_Button'}
@@ -544,6 +546,7 @@ export default function RegisterKYC () {
                                 <div
                                     onClick={() => handleTabChange('skip')}
                                     data-testid="skip_button"
+                                    disabled={isLoadingButton}
                                     className='text-primary-normal font-normal text-[14px] leading-[24px] cursor-pointer'>
                                     Skip</div>
                             </div>

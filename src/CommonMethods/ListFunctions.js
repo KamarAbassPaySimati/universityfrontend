@@ -12,8 +12,6 @@ export const handleSearchParams = (key, value, searchParams, setSearchParams, pa
     if (page !== 'false') {
         params.page = 1;
     }
-    console.log(key, 'key');
-    console.log(value, 'valueee');
     if (value === 'non malawi citizen') {
         delete params.simplifiedkyc;
     }
