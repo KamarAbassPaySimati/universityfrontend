@@ -318,7 +318,7 @@ const OnboardAdmin = ({ actionKey }) => {
                                 value={formData.role}
                                 placeholder="Select role"
                                 error={formErrors.role}
-                                options={['Super admin', 'Finance admin', 'Admin', 'Support admin']}
+                                options={['Super admin', 'Finance admin', 'Admin', 'Support admin'].slice().sort()}
                                 id="role"
                                 testId="role"
                                 handleInput={handleInput}

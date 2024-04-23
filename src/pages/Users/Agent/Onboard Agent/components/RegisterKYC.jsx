@@ -216,7 +216,7 @@ export default function RegisterKYC () {
                             count = count + 1;
                         }
                     } else {
-                        if (states[item] === undefined || Object.keys(states[item]).length === 0) {
+                        if (states[item] === undefined || isNaN(new Date(states[item]).getTime() / 1000)) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }

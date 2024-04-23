@@ -169,7 +169,7 @@ export const IdInfomationFull = {
             }
         },
         insideList2: {
-            text: 'Valid Passport issued by Department of Immigration'
+            text: 'Valid Passport issued by Department of Immigration or other appropriate authority'
         }
     }
 };
@@ -278,7 +278,7 @@ export const GetDocumentInfomation = (kycType, documentType) => {
             };
         case 'Simplified KYC':
             return {
-                information: VerificationInfomationFull,
+                information: VerificationInfomationSimplified,
                 heading: 'Your ID Verification Document Options'
             };
         default:
