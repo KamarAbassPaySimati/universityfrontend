@@ -12,21 +12,22 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
     return (
         <div className='flex w-full py-8 px-10 h-heightFullWithPadding'>
             <KYCRegistrationStatusPart status={'Pending'}/>
-            <div className='w-[60%] bg-[#ffffff] px-[80px] flex flex-col justify-between'>
+            <div className='w-[60%] bg-[#ffffff] px-[80px] flex flex-col justify-between  overflow-auto scrollBar'>
                 <div className=''>
-                    <p className='font-normal text-[24px] leading-[32px] py-[26px]'>KYC Registration</p>
-                    <div className='flex justify-start items-center py-10'>
+                    <p className='font-normal text-[24px] leading-[32px] py-[5%]'>KYC Registration</p>
+                    <div className='flex justify-start items-center py-[5%] flex-wrap'>
                         {/* for the active selection bg-background-light */}
                         {citizenType.map((item, index = 0) => (
                             <div
-                                className={`w-[240px] flex ${states?.citizen_type === item ? 'bg-background-light ' : ''}
-                                py-2.5 px-3 rounded items-center cursor-pointer ${index !== 0 ? ' ml-[22px]' : ''}`}
+                                className={`flex ${states?.citizen_type === item ? 'bg-background-light ' : ''}
+                                py-2.5 px-3 rounded items-center cursor-pointer`}
                                 key={item}
                                 data-testid={item.replaceAll(' ', '_').toLowerCase()}
                                 onClick={() => handleStates(item, 'citizen_type')}
                             >
                                 <Image src={item.replaceAll(' ', '_').toLowerCase()}/>
-                                <p className='px-3 font-medium text-[15px] leading-[20px] text-neutral-primary'>{item}</p>
+                                <p className='px-3 font-medium text-[15px] leading-[20px] text-neutral-primary
+                                text-wrap'>{item}</p>
                             </div>))}
                     </div>
                     <p className='font-normal text-header-dark text-[16px] leading-[24px] pb-3'>Personal Customer</p>
@@ -39,11 +40,11 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                             handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
                         />))}
                     <p className="ml-[30px] text-neutral-primary text-[12px]
-                        leading-[20px] font-normal cursor-pointer mb-[36px]">
+                        leading-[20px] font-normal cursor-pointer mb-[5%]">
                         *Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed
                         300,000 MWK; or whose monthly withdrawals do not exceed 300,000 MWK
                     </p>
-                    <div className='w-full flex items-center justify-between bg-background-light py-2.5 px-3 rounded h-[78px]'>
+                    <div className='w-full flex items-center justify-between bg-background-light px-3 rounded '>
                         <p className='px-3 font-normal text-[20px] leading-[28px] text-header-dark'>Business Customer</p>
                         <div class="moving-text-container">
                             <button class="moving-text-btn">
@@ -56,7 +57,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                 <div>
                     <Button
                         className='w-full text-[#F6F8F9] h-10 rounded-md
-                                 bg-primary-normal p-1 text-[14px] leading-[24px] font-medium'
+                                 bg-primary-normal p-1 text-[14px] leading-[24px] font-medium mt-4'
                         testId='proceed_button'
                         text={'Proceed'}
                         isLoading={isLoading}

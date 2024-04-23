@@ -12,10 +12,21 @@ export const ProgressBar = {
         label: 'Personal Details'
     }
 };
+export const occupationEmployed = ['employed_role', 'employer_name', 'industry', 'occupation_town'];
+export const occupationSelfEmployed = ['self_employed_specify'];
+export const occupationEduction = ['institute'];
 
 export const handleStates = (value, id, type, setStates, states) => {
     if (type === 'input') {
-        setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+        if (id === 'account_number' && value.target.value.trim() !== '') {
+            const regex = /^[a-zA-Z0-9]+$/;
+            const currentValue = value.target.value;
+            if (regex.test(currentValue) && value.target.value.length < 26) {
+                setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+            }
+        } else {
+            setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+        }
     } else if (type === 'checkBox') {
         let checkBoxArray = states.purpose === undefined ? [] : states.purpose;
         if (value.target.checked) {
@@ -30,15 +41,30 @@ export const handleStates = (value, id, type, setStates, states) => {
             purpose: checkBoxArray
         }));
     } else {
-        setStates((prevState) => ({ ...prevState, [id]: value }));
+        if (id === 'occupation') {
+            const obj = {};
+            if (states.occupation !== value) {
+                occupationEmployed.forEach((item) => {
+                    obj[item] = '';
+                });
+                occupationSelfEmployed.forEach((item) => {
+                    obj[item] = '';
+                });
+                occupationEduction.forEach((item) => {
+                    obj[item] = '';
+                });
+            }
+            obj[id] = value;
+            console.log('obj111111111', obj);
+            setStates((prevState) => ({ ...prevState, ...obj }));
+        } else {
+            setStates((prevState) => ({ ...prevState, [id]: value }));
+        }
     }
 };
 
 export const AddressDetails = ['street_name', 'town_village_ta', 'district'];
 export const PersonalDetailsList = ['gender', 'dob', 'occupation', 'monthly_income', 'monthly_withdrawal', 'purpose'];
-export const occupationEmployed = ['employed_role', 'employer_name', 'industry', 'occupation_town'];
-export const occupationSelfEmployed = ['self_employed_specify'];
-export const occupationEduction = ['institute'];
 export const VerificationDocument = {
     'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
     'Traffic Register Card': ['traffic_register_card_img_front', 'traffic_register_card_img_back'],

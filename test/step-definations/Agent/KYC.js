@@ -160,12 +160,10 @@ When('I click on view document front preview', async function () {
 
 Then('I should view the preview of the uploaded document', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const document_front = await driver.wait(until.elementLocated(By.css('#embed')));
-    await driver.wait(until.elementIsVisible(document_front));
-
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await driver.wait(until.elementLocated(By.css('[data-testid="overview-modal"]')));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     await driver.executeScript('return document.querySelector(\'[data-testid="close-button"]\').click()');
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1500));
 });
 
 When('I click on capture', async function () {

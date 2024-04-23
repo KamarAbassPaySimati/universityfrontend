@@ -1,51 +1,65 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Modal } from 'react-responsive-modal';
 import { CDN } from '../../config';
-// import { Document, Page, pdfjs } from "react-pdf";
+import FullScreenImage from '../FullScreenImage/FullScreenImage';
 
-export default function IframeModal ({ isOpen, handleClose, link }) {
-    useEffect(() => {
-        const handleContextMenu = (event) => {
-            if (event.target) {
-                event.preventDefault();
-                alert('Context menu is not allowed');
-            }
-        };
+export default function IframeModal ({ isOpen, handleClose, link, labelValue }) {
+    // useEffect(() => {
+    //     const handleContextMenu = (event) => {
+    //         if (event.target) {
+    //             event.preventDefault();
+    //             alert('Context menu is not allowed');
+    //         }
+    //     };
 
-        document.addEventListener('contextmenu', handleContextMenu);
+    //     document.addEventListener('contextmenu', handleContextMenu);
 
-        return () => {
-            document.removeEventListener('contextmenu', handleContextMenu);
-        };
-    }, [isOpen]);
+    //     return () => {
+    //         document.removeEventListener('contextmenu', handleContextMenu);
+    //     };
+    // }, [isOpen]);
+    const imageTypes = ['png', 'jpeg', 'jpg'];
     return (
-        <Modal center open={isOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-            <div className='w-[700px] h-fit' id="embed">
-                <iframe src={`${CDN}${link}` + '#toolbar=0'}
-                    type="application/pdf"
-                    height={600}
-                    width={700}
-                    id='embed'
-                >
-                </iframe>
-                {/* <embed
+        <>
+            {!imageTypes.includes(link?.split('.')[link?.split('.').length - 1])
+                ? <Modal center open={isOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                    <div className='w-[700px] h-fit'>
+                        <iframe src={`${CDN}${link}` + '#toolbar=0'}
+                            type="application/pdf"
+                            height={600}
+                            width={700}
+                            id='embed'
+                        >
+                        </iframe>
+                        {/* <embed
                     src={`${CDN}${link}` + '#toolbar=0'}
                     type="application/pdf"
                     height={600}
                     width={700}
                     id='embed'
                 /> */}
-                {/* <Document
+                        {/* <Document
                     file={`https://dev-cdn.paymaart.net/public/${link}`}
                     onContextMenu={(e) => e.preventDefault()}
                     className="pdf-container"
                 >
                     <Page pageNumber={1} />
                 </Document> */}
-            </div>
-            {/* <iframe src="https://dev-cdn.paymaart.net/public/undefined/front/dummy.pdf"
+                    </div>
+
+                    {/* <iframe src="https://dev-cdn.paymaart.net/public/undefined/front/dummy.pdf"
                 width="800" height="600"></iframe> */}
 
-        </Modal>
+                </Modal>
+                : (isOpen &&
+                    <FullScreenImage
+                        labelValue={labelValue}
+                        onClose={handleClose}
+                        imagevalue={`${CDN}${link}`}
+                        cdnImg
+                    />
+                )
+            }
+        </>
     );
 }
