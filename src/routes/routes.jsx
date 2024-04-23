@@ -103,8 +103,8 @@ export default function NavigationRoutes (props) {
                                                 <Route path="/profile/update-password" element={<UpdatePassword />} />
                                                 <Route path="/users/agents" element={<Agent />} />
                                                 <Route path="/users/merchants" element={<Merchant />} />
+                                                <Route path="/dashboard" element={<Dashboard />} />
                                             </Route>
-                                            <Route path="/dashboard" element={<Dashboard />} />
                                             <Route path="*" element={<NotFound />} />
                                         </>
                                     )
