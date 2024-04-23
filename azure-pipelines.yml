@@ -39,7 +39,7 @@ stages:
           displayName: Cache npm
         - script: |
             npm install --cache .npm
-            node scripts/licence_complaiance.js
+            node scripts/licences_complaince.js
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
             aws s3 sync licenses.json s3://$S3_BUCKET_LIVING_DOCUMENTATION/licences-ADMIN/dev/licenses.json
@@ -89,9 +89,6 @@ stages:
         vmImage: "ubuntu-latest"
       steps:
         - script: |
-            sudo pip3 install --upgrade pip
-            pip3 install awscli --upgrade --user
-            export PATH="/home/vsts/.local/bin:$PATH"
             sh scripts/azure_envs.sh
           displayName: 'Copy Environment Files'
         - publish: $(System.DefaultWorkingDirectory)/.env
@@ -171,10 +168,6 @@ stages:
             npm install nyc --save-dev --force
             node scripts/bdd_unit_testing_azure.js
           displayName: Unit Testing
-        - task: PublishTestResults@2
-          inputs:
-            testResultsFormat: 'JUnit'
-            testResultsFiles: '**/TEST-*.xml'
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
           condition: always()
@@ -185,6 +178,7 @@ stages:
             mkdir coverage
             npm install nyc --save-dev --force
             npm run generate_report
+            npm run generate_report_cobertura
             node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
@@ -193,6 +187,15 @@ stages:
             aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
           displayName: 'BDD Living documentation'
           condition: always()
+        - task: PublishTestResults@2
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/TEST-*.xml'
+        - task: PublishCodeCoverageResults@1
+          condition: always()
+          inputs:
+            codeCoverageTool: 'Cobertura'
+            summaryFileLocation: 'coverage-cobertura/cobertura-coverage.xml'
 
     # - job: UnitTestingResult
     #   variables:
