@@ -1,12 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
-import { countries } from 'country-list';
 
 export default function Address ({ handleStates, states, submitSelected }) {
-    useEffect(() => {
-        const nationalityList = Object.values(countries).map(country => country.nationality);
-        console.log('nnnnnn', nationalityList)
-    }, []);
 
     const AddressDetails = {
         nothing_to_show: {
