@@ -71,6 +71,8 @@ stages:
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
+            node --version
+            npm --version
             npm run eslint
           displayName: 'Lint'
     - job: "secret"
@@ -137,6 +139,9 @@ stages:
       pool:
         vmImage: "ubuntu-latest"
       steps:
+        # - task: UseNode@1
+        #   inputs:
+        #     version: '20.x'
         - task: DownloadPipelineArtifact@2
           name: environment
           inputs:
@@ -155,6 +160,8 @@ stages:
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
+            node --version
+            npm --version
             npm run build
             mkdir artifact
             mv dist artifact
@@ -191,12 +198,13 @@ stages:
             artifact: bundle
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
-            npm install pm2 -g
+            npm install pm2@5.3.0 -g
             source .env
             echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
             echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
             npm install express --force
             pm2 start scripts/server.js
+            node --version
             sleep 5
             mkdir reports
             npm install nyc --save-dev --force
@@ -285,7 +293,7 @@ stages:
             artifact: bundle
             targetPath: '$(System.DefaultWorkingDirectory)'
         - script: |
-            npm install pm2 -g
+            npm install pm2@5.3.0 -g
             source .env
             npm install express --force
             pm2 start scripts/server.js
