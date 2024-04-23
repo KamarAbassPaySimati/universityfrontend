@@ -38,6 +38,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                             key={radioItem}
                             checkedState={states?.personal_customer === radioItem}
                             handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
+                            disabled={states?.citizen_type !== 'Malawi citizen'}
                         />))}
                     <p className="ml-[30px] text-neutral-primary text-[12px]
                         leading-[20px] font-normal cursor-pointer mb-[5%]">

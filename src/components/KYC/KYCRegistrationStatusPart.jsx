@@ -18,7 +18,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
                             </div>
                             <div className='border-r border-[#ffffff] h-[80px] w-1/2'></div>
                             <div className="rounded-full bg-white w-8 h-8 flex items-center justify-center">
-                                <Image src={'grayTick'} className="w-[40%] h-[50%]" />
+                                <Image src={'grayTick'} className="w-5 h-5" />
                             </div>
                         </div>
                         <div className='px-5'>

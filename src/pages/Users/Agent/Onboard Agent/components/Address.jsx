@@ -42,6 +42,7 @@ export default function Address ({ handleStates, states, submitSelected }) {
             }
         }
     };
+    const NonMalawiAddressDetails =  {}
     return (
         <>
             <div data-testid="kyc_address_details">

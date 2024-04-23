@@ -18,15 +18,16 @@ export const occupationSelfEmployed = ['self_employed_specify'];
 export const occupationEduction = ['institute'];
 
 export const handleStates = (value, id, type, setStates, states) => {
+    const obj = {};
     if (type === 'input') {
         if (id === 'account_number' && value.target.value.trim() !== '') {
             const regex = /^[a-zA-Z0-9]+$/;
             const currentValue = value.target.value;
             if (regex.test(currentValue) && value.target.value.length < 26) {
-                setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+                obj[id] = value.target.value;
             }
         } else {
-            setStates((prevState) => ({ ...prevState, [id]: value.target.value }));
+            obj[id] = value.target.value;
         }
     } else if (type === 'checkBox') {
         let checkBoxArray = states.purpose === undefined ? [] : states.purpose;
@@ -37,13 +38,9 @@ export const handleStates = (value, id, type, setStates, states) => {
             // If checkbox is unchecked, remove the value from checkedItems array
             checkBoxArray = checkBoxArray.filter(item => item !== value.target.value);
         }
-        setStates((prevState) => ({
-            ...prevState,
-            purpose: checkBoxArray
-        }));
+        obj.purpose = checkBoxArray;
     } else {
         if (id === 'occupation') {
-            const obj = {};
             if (states.occupation !== value) {
                 occupationEmployed.forEach((item) => {
                     obj[item] = '';
@@ -56,11 +53,14 @@ export const handleStates = (value, id, type, setStates, states) => {
                 });
             }
             obj[id] = value;
-            console.log('obj111111111', obj);
             setStates((prevState) => ({ ...prevState, ...obj }));
+        } else if (id === 'citizen_type' && value === 'Non Malawi citizen') {
+            obj.citizen_type = value;
+            obj.personal_customer = 'Simplified KYC';
         } else {
-            setStates((prevState) => ({ ...prevState, [id]: value }));
+            obj[id] = value;
         }
+        setStates((prevState) => ({ ...prevState, ...obj }));
     }
 };
 
