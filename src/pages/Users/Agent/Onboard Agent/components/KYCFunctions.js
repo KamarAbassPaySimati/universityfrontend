@@ -56,7 +56,7 @@ export const handleStates = (value, id, type, setStates, states) => {
             setStates((prevState) => ({ ...prevState, ...obj }));
         } else if (id === 'citizen_type' && value === 'Non Malawi citizen') {
             obj.citizen_type = value;
-            obj.personal_customer = 'Simplified KYC';
+            obj.personal_customer = 'Full KYC';
         } else {
             obj[id] = value;
         }

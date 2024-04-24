@@ -27,7 +27,7 @@ export default function KYCRegistrationStatusPart ({ status }) {
                             </p>
                             <div className='h-[80px]'>
                                 <button
-                                    className='w-[116px] rounded-[23px] text-[#ffffff]
+                                    className='w-[116px] rounded-[23px] text-[#ffffff] cursor-auto
                                     mt-2 bg-accent-positive font-normal p-1 text-[14px] leading-[22px]'
                                     testId='kyc-btn'
                                     text='Completed'
