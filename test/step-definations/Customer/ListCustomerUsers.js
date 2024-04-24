@@ -1,7 +1,8 @@
 const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
-const { driver } = require('./Driver.js');
+const { driver } = require('../Driver.js');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I navigate to customer users listing screen', async function () {
     await driver.get('http://localhost:3000/users/customers');
@@ -13,7 +14,7 @@ When('I search for particular customer as {string}', async function (searchTerm)
     await driver.wait(until.elementIsVisible(element));
 
     await driver.wait(until.elementLocated(By.css('[data-testid="search"]')))
-        .sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+        .sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await new Promise(resolve => setTimeout(resolve, 500));
     await driver.wait(until.elementLocated(By.css('[data-testid="search"]'))).sendKeys(searchTerm);
     await new Promise(resolve => setTimeout(resolve, 500));

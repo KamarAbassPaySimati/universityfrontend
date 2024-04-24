@@ -43,7 +43,7 @@ export default function ProfileUploadPlaceholder ({ path, selectedUploadImg, sta
                         />
                         <Image
                             src="deleteProfile"
-                            className="absolute top-0 left-0 mt-20 ml-20"
+                            className="absolute cursor-pointer top-0 left-0 mt-20 ml-20"
                             onClick={() => {
                                 handleDelete(states[selectedUploadImg]);
                                 handleStates(selectedUploadImg, '');
