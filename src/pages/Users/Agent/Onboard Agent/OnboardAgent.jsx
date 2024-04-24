@@ -19,6 +19,7 @@ import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
 import RegistrationSuccessful from './components/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
+import ProfileUploadPlaceholder from '../../../../components/S3Upload/ProfileImageUpload';
 
 const OnboardAgent = ({ role }) => {
     const initialState = {
@@ -26,7 +27,10 @@ const OnboardAgent = ({ role }) => {
         middleName: '',
         lastName: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        profileImage: '',
+        makeProfilePublic: false
+
     };
     const [enteredLetter, setEnteredLetter] = useState();
     const [termsAccepted, setTermsAccepted] = useState(false);
@@ -174,6 +178,11 @@ const OnboardAgent = ({ role }) => {
     const handleOtpFocus = (e, id) => {
         setOtpError('');
     };
+    const handleProfileChanges = (id, value) => {
+        setFormData(prevState => {
+            return { ...prevState, [id]: value };
+        });
+    };
 
     const handleVerifyEmail = async (text) => {
         setFormErrors(initialState);
@@ -207,7 +216,7 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingEmailVerify(true);
         }
-        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(sendOtp, payload) : await dataService.PostAPICustomer(sendOtp, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
@@ -230,7 +239,6 @@ const OnboardAgent = ({ role }) => {
         setLoadingEmailVerify(false);
         setIsResendLoading(false);
     };
-
     const handleVerifyPhoneNumber = async (text) => {
         if (text === 'EDIT') {
             setVerify(prevState => {
@@ -269,7 +277,7 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingPhoneVerify(true);
         }
-        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(sendOtp, payload) : await dataService.PostAPICustomer(sendOtp, payload);
         if (!response.error) {
             setPhoneOtp('');
             setOtpError('');
@@ -316,7 +324,7 @@ const OnboardAgent = ({ role }) => {
             setloadingPhoneNoOtpVerify(true);
         }
 
-        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : await dataService.PostAPIMerchant(verifyOtp, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(verifyOtp, payload) : await dataService.PostAPICustomer(verifyOtp, payload);
         if (id === 'emailOtp') {
             setLoadingOtpVerify(false);
         } else if (id === 'phoneNumberOtp') {
@@ -405,8 +413,15 @@ const OnboardAgent = ({ role }) => {
             phone_otp_id: otpId.phoneNumber,
             security_questions: transformArray(securityQuestions)
         };
+        if (role === 'customer') {
+            console.log('came inside');
+            console.log(formData.profileImage, 'data1');
+            console.log(formData.makeProfilePublic, 'data2');
+            payload.profile_pic = formData.profileImage;
+            payload.public_profile = formData.makeProfilePublic;
+        }
         setIsLoading(true);
-        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : await dataService.PostAPIMerchant(createAgent, payload);
+        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(createAgent, payload) : await dataService.PostAPICustomer(createAgent, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
@@ -421,9 +436,9 @@ const OnboardAgent = ({ role }) => {
 
     return (
         <CardHeader
-            activePath={role === 'agent' ? 'Register Agent' : 'Register Merchant'}
-            paths={role === 'agent' ? ['Users', 'Agents'] : ['Users', 'Merchants']}
-            pathurls={role === 'agent' ? ['users/agents'] : ['users/merchants']}
+            activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
+            paths={role === 'agent' ? ['Users', 'Agent'] : role === 'merchant' ? ['Users', 'Merchant'] : ['Users', 'Customer']}
+            pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
@@ -432,6 +447,20 @@ const OnboardAgent = ({ role }) => {
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details
                     </h1>
+
+                    {role === 'customer' && (
+                        <>
+                            <h1 className='mt-[20px] font-500 text-[14px]'>Public Profile</h1>
+                            <ProfileUploadPlaceholder
+                                testId={'profile_image'}
+                                path={'customer_profile'}
+                                states={formData}
+                                selectedUploadImg={'profileImage'}
+                                profilePublic = {'makeProfilePublic'}
+                                handleStates = {handleProfileChanges}
+                            />
+                        </>
+                    )}
                     <div className='my-4 flex gap-[20px] flex-wrap'>
                         <InputField
                             className='w-[339px]'
@@ -630,7 +659,7 @@ const OnboardAgent = ({ role }) => {
                                     name='checkbox' />
                                 <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px] leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted">
                                     {role && role.charAt(0).toUpperCase() + role.slice(1)} has read and agreed Paymaart’s
-                                    <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : 'https://www.paymaart.net/merchant-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
+                                    <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : role === 'merchant' ? 'https://www.paymaart.net/merchant-terms-conditions' : 'https://www.paymaart.net/customer-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
                                     and
                                     <a target='_blank' href='https://www.paymaart.net/privacy-policy' className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
                                 </label>

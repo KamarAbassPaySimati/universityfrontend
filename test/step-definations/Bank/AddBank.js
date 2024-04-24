@@ -3,6 +3,7 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By, Key } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const { faker } = require('@faker-js/faker');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 When('I click on add new trust bank', async function () {
     // Write code here that turns the phrase above into concrete actions
@@ -89,7 +90,7 @@ When('I enter the bank account number as {string}', async function (bankAccountN
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="account_number"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (bankAccountNumber !== '') {
         await element.sendKeys(bankAccountNumber);
     }
@@ -100,7 +101,7 @@ When('I enter the bank account name as {string}', async function (bankAccountNam
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="account_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (bankAccountName !== '') {
         await element.sendKeys(bankAccountName);
     }
@@ -110,7 +111,7 @@ When('I enter bank account number as {string}', async function (bankAccountNumbe
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="accountNumber"]')));
     await driver.wait(until.elementIsVisible(element));
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(bankAccountNumber);
 });
 
@@ -129,6 +130,6 @@ When('I enter valid bank account number', async function () {
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="accountNumber"]')));
     await driver.wait(until.elementIsVisible(element));
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(bankAccountNumber);
 });

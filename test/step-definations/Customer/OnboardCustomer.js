@@ -1,33 +1,30 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
-const { until, By, Key } = require('selenium-webdriver');
+const { Given, When, Then } = require('@cucumber/cucumber');
+const { Key, By, until } = require('selenium-webdriver');
 const assert = require('assert');
-const { driver } = require('../Driver');
+const { driver } = require('../Driver.js');
 const { faker } = require('@faker-js/faker');
+const path = require('path');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 
-Before(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-});
-
-Given('I navigate to merchant onboarding screen', async function () {
+Given('I navigate to customer onboarding screen', async function () {
     // Write code here that turns the phrase above into concrete action
-    await driver.get('http://localhost:3000/users/merchants/register-merchant');
+    await driver.get('http://localhost:3000/users/customers/register-customer');
 });
 
-When('I enter the first name as {string} for merchant registration', async function (first_name) {
+When('I enter the first name as {string} for customer registration', async function (first_name) {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (first_name !== '') {
-        await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
+        await element.sendKeys(first_name);
     }
 });
 
-When('I enter the middle name as {string} for merchant registration', async function (middle_name) {
+When('I enter the middle name as {string} for customer registration', async function (middle_name) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (middle_name !== '') {
@@ -35,7 +32,7 @@ When('I enter the middle name as {string} for merchant registration', async func
     }
 });
 
-When('I enter the last name as {string} for merchant registration', async function (last_name) {
+When('I enter the last name as {string} for customer registration', async function (last_name) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (last_name !== '') {
@@ -43,7 +40,7 @@ When('I enter the last name as {string} for merchant registration', async functi
     }
 });
 
-When('I enter the email address as {string} for merchant registration', async function (email_address) {
+When('I enter the email address as {string} for customer registration', async function (email_address) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (email_address !== '') {
@@ -51,7 +48,7 @@ When('I enter the email address as {string} for merchant registration', async fu
     }
 });
 
-When('I enter the phone number as {string} for merchant registration', async function (phone_number) {
+When('I enter the phone number as {string} for customer registration', async function (phone_number) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css('[data-testid="change_code"]'))).click();
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
@@ -60,7 +57,7 @@ When('I enter the phone number as {string} for merchant registration', async fun
     }
 });
 
-When('I submit the merchant registration form', async function () {
+When('I submit the customer registration form', async function () {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
@@ -68,7 +65,7 @@ When('I submit the merchant registration form', async function () {
     await element.click();
 });
 
-When('I enter a valid email address for merchant registration', async function () {
+When('I enter a valid email address for customer registration', async function () {
     // Write code here that turns the phrase above into concrete actions
     const random_number = faker.string.alphanumeric(5);
     const email = `bharath.shet+${random_number}@7edge.com`;
@@ -76,7 +73,7 @@ When('I enter a valid email address for merchant registration', async function (
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email);
 });
 
-When('I enter a valid phone number for merchant registration', async function () {
+When('I enter a valid phone number for customer registration', async function () {
     // Write code here that turns the phrase above into concrete actions
     let phone_number = `${faker.phone.number('#########')}`;
     if (phone_number.startsWith('0')) {
@@ -87,7 +84,7 @@ When('I enter a valid phone number for merchant registration', async function ()
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
 });
 
-When('I enter a valid first name for merchant registration', async function () {
+When('I enter a valid first name for customer registration', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
@@ -97,7 +94,7 @@ When('I enter a valid first name for merchant registration', async function () {
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
 });
 
-When('I enter a valid middle name for merchant registration', async function () {
+When('I enter a valid middle name for customer registration', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]')));
     await driver.wait(until.elementIsVisible(element));
@@ -107,7 +104,7 @@ When('I enter a valid middle name for merchant registration', async function () 
     await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
 });
 
-When('I enter a valid last name for merchant registration', async function () {
+When('I enter a valid last name for customer registration', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]')));
     await driver.wait(until.elementIsVisible(element));
@@ -117,7 +114,7 @@ When('I enter a valid last name for merchant registration', async function () {
     await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
 });
 
-Then('I should read a message stating merchant registration successfully', async function () {
+Then('I should read a message stating customer registration successfully', async function () {
     // Write code here that turns the phrase above into concrete actions
     const expected_text = 'Registration is a vital step in realising our vision of universal e-payments. Thank you for joining us on this transformative journey. Please now complete online KYC registration to start';
 
@@ -126,4 +123,15 @@ Then('I should read a message stating merchant registration successfully', async
     const element_text = await element.getText();
 
     assert.equal(expected_text, element_text);
+});
+
+When('I upload the customer profile picture as {string}', async function (photo) {
+    // Write code here that turns the phrase above into concrete actions
+    let element;
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    if (photo !== '') {
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="profile_image"]')));
+        const filePath = path.join(__dirname, `../../support/${photo}`);
+        await element.sendKeys(filePath);
+    }
 });
