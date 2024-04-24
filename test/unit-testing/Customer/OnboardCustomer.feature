@@ -157,11 +157,11 @@ Feature: Paymaart - Admin Web- Onboard Customer
         Then I should read a message stating that "Please verify your email address"
         Then I should read a message stating that "Please verify your phone number"
         When I click on verify email address
-        Then I should read a message stating that "Verification code has been sent to customer's email. It's valid for 10 minutes"
+        Then I should read a message stating that "Verification code has been sent to customer’s email. It's valid for 10 minutes"
         When I enter the valid OTP and verify
         Then I should see the verify email address button text changed to "VERIFIED"
         When I click on verify phone number
-        Then I should read a message stating that "Verification code has been sent to customer's phone number. It's valid for 10 minutes"
+        Then I should read a message stating that "Verification code has been sent to customer’s phone number. It's valid for 10 minutes"
         When I enter the valid OTP and verify
         Then I should see the verify phone number button text changed to "VERIFIED"
         When I submit the customer registration form
