@@ -8,6 +8,7 @@ import InputField from '../../../../../components/InputField/InputField';
 import InputSearch from '../../../../../components/InputField/InputSearch';
 import { dataService } from '../../../../../services/data.services';
 import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
+import { getMonthInputFelid } from './KYCFunctions';
 
 export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected }) {
     const OccupationList = [
@@ -18,35 +19,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
         'Distribute e-payments to third party individuals and/or enterprises',
         'Recruit customers/end users, agents and merchants to enrol on the e-payments platform'
     ];
-    const InputFelids = {
-        'Income status': {
-            'Monthly Income': {
-                label: 'Monthly Income',
-                type: 'dropdown',
-                key: 'monthly_income',
-                require: true,
-                options: [
-                    'Up to 300,000.00 MWK',
-                    '300,000.00 to 1,000,000.00 MWK',
-                    '1,000,000.00 to 2,500,000.00 MWK',
-                    '2,500,000.00 to 5,000,000.00 MWK', '5,000,000.00 to 10,000,000.00 MWK', 'Over 10 Million MWK']
-            },
-            'Monthly Withdrawal': {
-                label: 'Monthly Withdrawal',
-                type: 'dropdown',
-                key: 'monthly_withdrawal',
-                require: true,
-                options: [
-                    'Up to 300,000.00 MWK',
-                    '300,000.00 to 1,000,000.00 MWK',
-                    '1,000,000.00 to 2,500,000.00 MWK',
-                    '2,500,000.00 to 5,000,000.00 MWK',
-                    '5,000,000.00 to 10,000,000.00 MWK',
-                    'Over 10 Million MWK'
-                ]
-            }
-        }
-    };
+
     const bankInputFelid = {
         'Banking  Information for Payouts (Optional)': {
             'Bank Name': {
@@ -94,12 +67,22 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 key: 'industry',
                 require: true,
                 options: [
+                    'Accommodation & Food Service Activities',
+                    'Agriculture, Forestry & Fishing',
+                    'Commerce | Wholesale & Retail Trade',
+                    'Construction',
                     'Education Services',
-                    'Transport & Storage Services',
-                    'FDH Bank',
-                    'Real Estate Activities',
+                    'Financial & Insurance Activities',
+                    'Healthcare Services',
                     'Information & Communication',
-                    'Healthcare Services']
+                    'Manufacturing',
+                    'Mining & Quarrying',
+                    'Public Administration & Defence',
+                    'Professional Services',
+                    'Real Estate Activities',
+                    'Transport & Storage Services',
+                    'Utilities | Electricity, Gas & Water'
+                ]
             },
             'Town/District': {
                 label: 'Town/District',
@@ -271,7 +254,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 {/* <InputTypeCheckbox id={1} checkboxText={'checkboxText'}/> */}
             </div>
             <FelidDivision
-                divisionObject = {InputFelids}
+                divisionObject = {getMonthInputFelid(states.personal_customer)}
                 handleOnChange={handleStates}
                 states={states}
                 submitSelected={submitSelected}

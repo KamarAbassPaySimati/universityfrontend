@@ -6,7 +6,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
     const handlePlaceSelect = (place) => {
-        handleOnChange(place.formatted_address, id);
+        handleOnChange(place.target.value, id);
         switch (id) {
         case 'district':
             handleOnChange('', 'street_name');

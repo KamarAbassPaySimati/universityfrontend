@@ -73,7 +73,6 @@ function App (props) {
             }
         });
     }, []);
-
     return (
         <GlobalContext.Provider value={{
             setToastSuccess,

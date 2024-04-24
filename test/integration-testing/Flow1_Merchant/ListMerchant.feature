@@ -20,7 +20,6 @@ Feature: Paymaart- merchant Web- View all merchant list
     @wait
     @add_admin_user
     @create_new_user_and_login
-    @delete_admin_account
     Scenario: Login as super admin and view list all the merchant users
         Given I navigate to merchant users listing screen
         Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
@@ -41,6 +40,7 @@ Feature: Paymaart- merchant Web- View all merchant list
         When I click on clear filter
         Then I should see filter popup modal closed
 
+    @delete_admin_account
     Scenario: Checking Pagination
         Given I navigate to merchant users listing screen
         When I click on paginate next page
