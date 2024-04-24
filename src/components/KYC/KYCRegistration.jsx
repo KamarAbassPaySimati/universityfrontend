@@ -40,7 +40,7 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                             handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
                         />))}
                     <p className="ml-[30px] text-neutral-primary text-[12px]
-                        leading-[20px] font-normal cursor-pointer mb-[5%]">
+                        leading-[20px] font-normal mb-[5%]">
                         *Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed
                         300,000 MWK; or whose monthly withdrawals do not exceed 300,000 MWK
                     </p>

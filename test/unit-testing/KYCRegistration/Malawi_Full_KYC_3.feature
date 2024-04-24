@@ -1,4 +1,4 @@
-Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verification Doc - Institution letter, Occupation - Employed
+Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verification Doc - Birth certificate card, Occupation - Retired
     As an Agent, I want an option to do my Malawi FULL KYC so that I can avail the services
     Conditions of Satisfaction
     Clear instructions and guidance should be provided on what documents are required and in which format.
@@ -150,12 +150,21 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         And I click on selfie looks good button
         Then I should view the image getting captured
 
+    Scenario: Upload verification document
+        Given I am in KYC identity document details screen
+        When I click on verification documents tab
+        When I select the verification document as "Birth certificate card"
+        And I upload the front image of document as <image_front>
+        Then I should read a message stating that <message>
+        Examples:
+            | image_front       | message                                                   |
+            | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
+
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Institute letter"
-        When I click on save and continue button
-        Then I should read a message stating that "Upload the required document"
+        When I select the verification document as "Birth certificate card"
         And I upload the front image of document as "document_front.png"
         Then I should be able to view the preview of the document front
         When I click on view document front preview
@@ -171,36 +180,14 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I click on save and continue button
         Then I should read a message stating that "Required field"
 
+    @delete_admin_account
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
+        When I select the Occupation as "Retired/Pensioner"
         When I select the applicable purpose and nature of business
         When I select valid monthly income and monthly withdrawal
-        When I select the Occupation as "Employed"
-        When I select employed as "Admin/Administrative/Clerical"
-        When I enter employer name as <employer_name>
-        When I select industry sector as <industry_sector>
-        And I select valid town and district
-        When I click on save and continue button
-        Then I should read a message stating that "Required field"
-        Examples:
-            | employer_name | industry_sector      |
-            | ""            | "Education services" |
-            | "7Edge"       | ""                   |
-
-
-    Scenario: KYC personal details with valid details
-        Given I am in KYC personal details screen
-        When I select gender as "male"
-        When I select the date of birth as "04-Aug-1999"
-        When I select the applicable purpose and nature of business
-        When I select valid monthly income and monthly withdrawal
-        When I select the Occupation as "Employed"
-        When I select employed as "Admin/Administrative/Clerical"
-        When I enter employer name as "7Edge"
-        When I select industry sector as "Education services"
-        And I select valid town and district
         When I click on save and continue button
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"

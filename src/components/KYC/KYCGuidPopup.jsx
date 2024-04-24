@@ -7,7 +7,7 @@ import RuleDropdown from '../InformationList/RuleDropdown';
 export default function KYCGuidPopup ({ handleClose, isModalOpen }) {
     const rulesList = {
         List1: {
-            text: 'For Malawian Citizens',
+            text: 'Malawi Simplified KYC Registration',
             insideList1: {
                 text: 'Your ID Document Options:',
                 insideList1: {
@@ -59,7 +59,7 @@ export default function KYCGuidPopup ({ handleClose, isModalOpen }) {
             }
         },
         List2: {
-            text: 'Simplified KYC Registration',
+            text: 'Malawi Full KYC Registration',
             insideList1: {
                 text: 'Your ID Document Options:',
                 insideList1: {
@@ -111,7 +111,7 @@ export default function KYCGuidPopup ({ handleClose, isModalOpen }) {
             }
         },
         List3: {
-            text: 'For Non-Malawi Citizens',
+            text: 'Non-Malawi KYC Registration',
             insideList1: {
                 text: 'Your ID Document Options:',
                 insideList1: {

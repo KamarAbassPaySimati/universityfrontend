@@ -76,6 +76,7 @@ export default function FelidDivision ({
                                                     maxLength="100"
                                                     onChange={handleOnChange}
                                                     inputType={divObj?.type}
+                                                    disableInput={divObj?.disable}
                                                 />
                                             )}
                             </div>))}

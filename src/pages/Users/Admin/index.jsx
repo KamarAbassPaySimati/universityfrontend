@@ -104,23 +104,28 @@ const Admin = () => {
             headerWithoutButton={false}
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
-                {(List?.data?.length !== 0 ||
-                (searchParams.get('status') !== null || searchParams.get('search') !== null ||
-                searchParams.get('role') !== null)) && !notFound &&
-                <div className='bg-[#fff] border-b border-[#E5E9EB]'>
-                    <Topbar
-                        setSearchParams={setSearchParams}// pass this as its getting updated
-                        searchParams={searchParams}// pass this because its used
-                        filterOptions={filterOptions}
-                        filterType= 'Filter admin list'
-                        placeHolder= 'Paymaart ID, name, email or phone number'
-                        isLoading={loading}
-                        filterActive={(searchParams.get('status') !== null) || searchParams.get('role') !== null}
-                    />
-                </div>
+                {(!notFound && List?.data?.length === 0 &&
+                        searchParams.get('status') === null &&
+                    searchParams.get('search') === null && searchParams.get('role') === null)
+                    ? (
+                        <>
+                        </>
+                    )
+                    : (!notFound &&
+                    <div className='bg-[#fff] border-b border-neutral-outline'>
+                        <Topbar
+                            setSearchParams={setSearchParams}// pass this as its getting updated
+                            searchParams={searchParams}// pass this because its used
+                            filterOptions={filterOptions}
+                            filterType= 'Filter admin list'
+                            placeHolder= 'Paymaart ID, name, email or phone number'
+                            isLoading={loading}
+                            filterActive={(searchParams.get('status') !== null) || searchParams.get('role') !== null}
+                        />
+                    </div>)
                 }
-                {!notFound && !(List?.data?.length === 0 && !loading && !(searchParams.get('status') !== null ||
-                searchParams.get('search') !== null || searchParams.get('role') !== null)) &&
+
+                { (List?.data?.length !== 0 && !notFound) &&
                 <div className='h-tableHeight scrollBar overflow-auto'>
                     <AdminTable
                         // error={error}
@@ -137,13 +142,30 @@ const Admin = () => {
                         paymaartId= {userPaymaartId}
                     />
                 </div>}
+
                 {notFound &&
                 <NoDataError
                     className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
-                {List?.data?.length === 0 && !loading &&
-                !(searchParams.get('status') === null || searchParams.get('search') === null ||
-                searchParams.get('role') === null) &&
-                (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
+                {
+                    (!notFound && List?.data?.length === 0 &&
+
+        searchParams.get('search') === null &&
+       searchParams.get('role') === null &&
+        searchParams.get('status') === null)
+                        ? (
+
+                            <NoDataError className='h-noDataError'
+                                heading='There are no admins added yet'
+                                text='Click “Register Admin ” to add admin' />
+                        )
+                        : (List?.data?.length === 0 &&
+            (
+                <NoDataError className='h-tableHeight'
+                    heading='No data found'
+                    text='Try adjusting your search or filter to find what you’re looking for' />)
+                        )
+                }
+
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
