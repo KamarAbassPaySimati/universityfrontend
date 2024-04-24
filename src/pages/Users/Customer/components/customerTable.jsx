@@ -37,7 +37,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
-                                <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[150px] max-w-[150px]'>{`${user?.name}`}</td>
+                                <td data-testid="customer_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[150px] max-w-[150px]'>{`${user?.name}`}</td>
                                 <td className='py-2 px-[10px] truncate min-w-[130px] max-w-[110px]' title={`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}>
                                     {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}
                                 </td>
