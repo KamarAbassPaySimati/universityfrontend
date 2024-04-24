@@ -103,7 +103,7 @@ Feature: Paymaart - Admin Web- Onboard Customer
         When I click on verify phone number
         Then I should read a message stating that "Invalid phone number"
 
-    Scenario: Validate already existing email address/phone number
+    Scenario: Validate already existing email address or phone number
         Given I navigate to customer onboarding screen
         When I enter a valid first name for customer registration
         When I enter a valid middle name for customer registration

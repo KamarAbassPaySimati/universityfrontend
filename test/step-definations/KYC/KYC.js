@@ -1,14 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
+const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
 const assert = require('assert');
 const { driver } = require('../Driver');
 const path = require('path');
-
-Before(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-});
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I click on verify KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
@@ -51,7 +48,7 @@ When('I enter street name as {string}', async function (street_name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (street_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(street_name);
         await new Promise(resolve => setTimeout(resolve, 5000));
@@ -359,7 +356,7 @@ When('I select gender as {string}', async function (type) {
 When('I select the date of birth as {string}', async function (dob) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 100));
-    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(dob, Key.ENTER));
     await new Promise(resolve => setTimeout(resolve, 500));
 });
@@ -403,7 +400,7 @@ When('I search and select institution as {string}', async function (instituion) 
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(instituion);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="institute_0"]'))).click();
@@ -416,7 +413,7 @@ When('I enter the other institution name as {string}', async function (name) {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
@@ -482,7 +479,7 @@ When('I enter the other occupation as {string}', async function (occupation) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(occupation);
 });
 
@@ -491,7 +488,7 @@ When('I enter the other self employed occupation as {string}', async function (o
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="self_employed_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(occupation);
 });
 
@@ -530,7 +527,7 @@ When('I enter employer name as {string}', async function (name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="employer_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
@@ -571,7 +568,7 @@ When('I select valid town and district', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys('M');
     await new Promise(resolve => setTimeout(resolve, 5000));

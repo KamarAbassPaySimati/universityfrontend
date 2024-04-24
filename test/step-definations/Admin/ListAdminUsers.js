@@ -1,7 +1,8 @@
 const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
-const { driver } = require('./Driver.js');
+const { driver } = require('../Driver.js');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I navigate to admin users listing screen', async function () {
     await driver.get('http://localhost:3000/users/admins');
@@ -11,7 +12,7 @@ Given('I navigate to admin users listing screen', async function () {
 When('I search for particular admin as {string}', async function (searchTerm) {
     await new Promise(resolve => setTimeout(resolve, 1500));
     await driver.wait(until.elementLocated(By.css('[data-testid="search"]')))
-        .sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+        .sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await new Promise(resolve => setTimeout(resolve, 500));
     await driver.findElement(By.css('[data-testid="search"]')).sendKeys(searchTerm);
     await driver.findElement(By.css('[data-testid="search"]')).sendKeys(Key.ENTER);
@@ -88,7 +89,7 @@ When('I search for the recently created admin user', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="search"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await new Promise(resolve => setTimeout(resolve, 500));
     await element.sendKeys(global.admin_user.paymaart_id);
 
