@@ -12,7 +12,7 @@ import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { dataService } from '../../../../../services/data.services';
 import {
-    AddressDetails, BankDetailsList, IdDocuments, PersonalDetailsList, ProgressBar, VerificationDocument,
+    AddressDetails, BankDetailsList, GetDocumentValidation, PersonalDetailsList, ProgressBar,
     handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
 import { handleSearchParamsValue } from '../../../../../CommonMethods/ListFunctions';
@@ -32,7 +32,9 @@ export default function RegisterKYC () {
         personal_customer: 'Full KYC',
         po_box_no: '',
         landmark: '',
-        house_number: ''
+        house_number: '',
+        monthly_income: 'Up to 300,000.00 MWK',
+        monthly_withdrawal: 'Up to 300,00.000 MWK'
     });
     const [documentSideBarData, setDocumentSidebarData] = useState({
         documentTypes: {
@@ -93,7 +95,6 @@ export default function RegisterKYC () {
     const handleAPICall = async (body, tab) => {
         try {
             const res = await dataService.PostAPIAgent('create-kyc-secure', body);
-            console.log('succccc', res.data);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {
@@ -113,6 +114,7 @@ export default function RegisterKYC () {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
+        console.log(GetDocumentValidation(states.personal_customer, 'Verification Document'));
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -127,7 +129,7 @@ export default function RegisterKYC () {
             return count === 0;
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
-                IdDocuments[states['ID Document']].map((selectedItem) => {
+                GetDocumentValidation(states.personal_customer, 'ID Document')[states['ID Document']].map((selectedItem) => {
                     if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
@@ -166,23 +168,24 @@ export default function RegisterKYC () {
                 body.capture = states.capture;
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                VerificationDocument[states['Verification Document']].map((selectedItem) => {
-                    if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
-                        if (key !== 'skip') {
-                            setSubmitSelected(true);
-                            setToastError('Upload the required document');
-                            sideBarStatus['Verification Document'] = 'pending';
-                        }
-                        count = count + 1;
-                    } else {
-                        sideBarStatus['Verification Document'] = 'filled';
-                        if (selectedItem.split('_')[selectedItem.split('_').length - 1] === 'front') {
-                            body.verification_document_front = states[selectedItem];
+                GetDocumentValidation(states.personal_customer, 'Verification Document')[states['Verification Document']].map(
+                    (selectedItem) => {
+                        if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                                setToastError('Upload the required document');
+                                sideBarStatus['Verification Document'] = 'pending';
+                            }
+                            count = count + 1;
                         } else {
-                            body.verification_document_back = states[selectedItem];
+                            sideBarStatus['Verification Document'] = 'filled';
+                            if (selectedItem.split('_')[selectedItem.split('_').length - 1] === 'front') {
+                                body.verification_document_front = states[selectedItem];
+                            } else {
+                                body.verification_document_back = states[selectedItem];
+                            }
                         }
-                    }
-                });
+                    });
             } else {
                 if (key !== 'skip') {
                     sideBarStatus['Verification Document'] = 'pending';
@@ -213,7 +216,7 @@ export default function RegisterKYC () {
                             count = count + 1;
                         }
                     } else {
-                        if (states[item] === undefined || Object.keys(states[item]).length === 0) {
+                        if (states[item] === undefined || isNaN(new Date(states[item]).getTime() / 1000)) {
                             if (key !== 'skip') {
                                 setSubmitSelected(true);
                             }
@@ -313,7 +316,7 @@ export default function RegisterKYC () {
         setIsLoadingButton(true);
         if (type === 'proceed') {
             handleAPICall({
-                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : states.personal_customer,
+                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
                 citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
                 paymaart_id: id
             }, 'address_details');
@@ -346,7 +349,7 @@ export default function RegisterKYC () {
                         verification_document_front: submitPayload.verification_document_front,
                         verification_document_back: submitPayload.verification_document_back,
                         selfie: submitPayload.capture,
-                        id_document: states['ID Document'],
+                        id_document: addApostrophe(states['ID Document']),
                         verification_document: addApostrophe(states['Verification Document']),
                         paymaart_id: id,
                         id_details_status: 'completed'
@@ -391,6 +394,10 @@ export default function RegisterKYC () {
                             break;
                         case 'kyc_type':
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
+                            if (res.data.data.kyc_type !== 'full') {
+                                object.monthly_income = 'Up to 300,000.00 MWK';
+                                object.monthly_withdrawal = 'Up to 300,00.000 MWK';
+                            }
                             break;
                         case 'id_document_back':
                             object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
@@ -490,7 +497,7 @@ export default function RegisterKYC () {
                     : <>
                         <KYCTopWithType
                             Name={'KYC Registration'}
-                            type={'Malawi Full KYC'}
+                            type={states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'}
                         />
                         <div
                             data-testid="KYC_Registration"
@@ -503,31 +510,34 @@ export default function RegisterKYC () {
                                     LineClass={'line-class'}
                                     currentTab={searchParams.get('tab')}
                                 />
-                                {searchParams.get('tab') === 'address_details' &&
-                                <Address
-                                    handleStates={handleInputFelids}
-                                    states={states}
-                                    submitSelected={submitSelected}
-                                />}
-                                {searchParams.get('tab') === 'identity_details' && <IdentityDetails
-                                    handleStates={handleInputFelids}
-                                    states={states}
-                                    documentSideBarData={documentSideBarData}
-                                    setDocumentSidebarData={setDocumentSidebarData}
-                                    submitSelected={submitSelected}
-                                />}
-                                {searchParams.get('tab') === 'personal_details' &&
-                                <PersonalDetails
-                                    handleStates={handleInputFelids}
-                                    states={states}
-                                    submitSelected={submitSelected}
-                                    bankSelected={bankSelected}
-                                />}
+                                <div className='overflow-auto scrollBar h-tabledivHeight'>
+                                    {searchParams.get('tab') === 'address_details' &&
+                                    <Address
+                                        handleStates={handleInputFelids}
+                                        states={states}
+                                        submitSelected={submitSelected}
+                                    />}
+                                    {searchParams.get('tab') === 'identity_details' && <IdentityDetails
+                                        handleStates={handleInputFelids}
+                                        states={states}
+                                        documentSideBarData={documentSideBarData}
+                                        setDocumentSidebarData={setDocumentSidebarData}
+                                        submitSelected={submitSelected}
+                                    />}
+                                    {searchParams.get('tab') === 'personal_details' &&
+                                    <PersonalDetails
+                                        handleStates={handleInputFelids}
+                                        states={states}
+                                        submitSelected={submitSelected}
+                                        bankSelected={bankSelected}
+                                    />}
+                                </div>
                             </div>
                             <div className='flex justify-between items-center'>
                                 <div className='flex'>
                                     <Button2
                                         text={'Back'}
+                                        disabled={isLoadingButton}
                                         className={'border-primary-normal text-primary-normal py-2 px-[35px] h-10'}
                                         onClick={() => handleTabChange('back')}
                                         testId={'Back_Button'}
@@ -544,6 +554,7 @@ export default function RegisterKYC () {
                                 <div
                                     onClick={() => handleTabChange('skip')}
                                     data-testid="skip_button"
+                                    disabled={isLoadingButton}
                                     className='text-primary-normal font-normal text-[14px] leading-[24px] cursor-pointer'>
                                     Skip</div>
                             </div>

@@ -4,13 +4,20 @@ const invalidEmail = (email) => {
 };
 
 export default function verificationValidation (state, setErrorState, ignoreKey) {
-    let isValid = true;
+    console.log(state, 'state');
+    console.log(setErrorState, 'er');
+    console.log(ignoreKey, 'ig');
 
-    for (const key in state) {
+    let isValid = true;
+    const stateValiable = { ...state };
+    delete stateValiable.profileImage;
+    delete stateValiable.makeProfilePublic;
+    for (const key in stateValiable) {
         if (key === ignoreKey) {
             continue;
         }
-        if (state[key].trim() === '') {
+        console.log('key', key, state[key]);
+        if (state[key]?.trim() === '') {
             setErrorState((prevState) => ({
                 ...prevState,
                 [key]: 'Required field'

@@ -6,6 +6,8 @@ import AdminSlice from '../pages/Users/Admin/AdminSlice';
 import SpecificAdminViewSlice from '../pages/Users/Admin/Components/SpecificAdminViewSlice';
 import KycVerificationSlice from '../pages/Verification/KycVerification/KycVerificationSlice';
 import BankSlice from '../pages/PaymaartBanks/TrustBanks/BankSlice';
+import merchantSlice from '../pages/Users/Merchants/merchantSlice';
+import customerSlice from '../pages/Users/Customer/customerSlice';
 
 export const store = configureStore({
     reducer: {
@@ -15,6 +17,8 @@ export const store = configureStore({
         adminUsers: AdminSlice,
         SpecificAdminView: SpecificAdminViewSlice,
         kycVerifications: KycVerificationSlice,
-        bankAccounts: BankSlice
+        bankAccounts: BankSlice,
+        merchantUsers: merchantSlice,
+        customerUsers: customerSlice
     }
 });

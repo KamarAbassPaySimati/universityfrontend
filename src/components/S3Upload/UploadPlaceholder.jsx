@@ -38,7 +38,8 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             <p className='font-medium text-[14px] leading-4'>{label}</p>
             {(states[selectedUploadImg] !== undefined && states[selectedUploadImg] !== '')
                 ? <div className='mt-2 bg-background-light w-full h-[52px] rounded-lg flex justify-between items-center'>
-                    <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium break-words w-[70%]'>
+                    <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium w-[70%] truncate'
+                        title={states[selectedUploadImg].split('/')[states[selectedUploadImg].split('/').length - 1]}>
                         {states[selectedUploadImg].split('/')[states[selectedUploadImg].split('/').length - 1]}</p>
                     <div className='flex gap-3 px-2'>
                         <Image src='eyeLight' testId={`view_${testId}`}
@@ -95,7 +96,8 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
                 </div>
             }
             <IframeModal
-                isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]} />
+                isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]}
+                labelValue={selectedUploadImg.replaceAll('_', ' ').replaceAll('img', 'Image')}/>
 
         </div>
     );

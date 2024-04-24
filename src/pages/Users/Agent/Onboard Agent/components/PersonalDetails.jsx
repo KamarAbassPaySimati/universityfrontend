@@ -8,6 +8,7 @@ import InputField from '../../../../../components/InputField/InputField';
 import InputSearch from '../../../../../components/InputField/InputSearch';
 import { dataService } from '../../../../../services/data.services';
 import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
+import { getMonthInputFelid } from './KYCFunctions';
 
 export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected }) {
     const OccupationList = [
@@ -18,35 +19,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
         'Distribute e-payments to third party individuals and/or enterprises',
         'Recruit customers/end users, agents and merchants to enrol on the e-payments platform'
     ];
-    const InputFelids = {
-        'Income status': {
-            'Monthly Income': {
-                label: 'Monthly Income',
-                type: 'dropdown',
-                key: 'monthly_income',
-                require: true,
-                options: [
-                    'Up to 300,000.00 MWK',
-                    '300,000.00 to 1,000,000.00 MWK',
-                    '1,000,000.00 to 2,500,000.00 MWK',
-                    '2,500,000.00 to 5,000,000.00 MWK', '5,000,000.00 to 10,000,000.00 MWK', 'Over 10 Million MWK']
-            },
-            'Monthly Withdrawal': {
-                label: 'Monthly Withdrawal',
-                type: 'dropdown',
-                key: 'monthly_withdrawal',
-                require: true,
-                options: [
-                    'Up to 300,000.00 MWK',
-                    '300,000.00 to 1,000,000.00 MWK',
-                    '1,000,000.00 to 2,500,000.00 MWK',
-                    '2,500,000.00 to 5,000,000.00 MWK',
-                    '5,000,000.00 to 10,000,000.00 MWK',
-                    'Over 10 Million MWK'
-                ]
-            }
-        }
-    };
+
     const bankInputFelid = {
         'Banking  Information for Payouts (Optional)': {
             'Bank Name': {
@@ -94,12 +67,22 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 key: 'industry',
                 require: true,
                 options: [
+                    'Accommodation & Food Service Activities',
+                    'Agriculture, Forestry & Fishing',
+                    'Commerce | Wholesale & Retail Trade',
+                    'Construction',
                     'Education Services',
-                    'Transport & Storage Services',
-                    'FDH Bank',
-                    'Real Estate Activities',
+                    'Financial & Insurance Activities',
+                    'Healthcare Services',
                     'Information & Communication',
-                    'Healthcare Services']
+                    'Manufacturing',
+                    'Mining & Quarrying',
+                    'Public Administration & Defence',
+                    'Professional Services',
+                    'Real Estate Activities',
+                    'Transport & Storage Services',
+                    'Utilities | Electricity, Gas & Water'
+                ]
             },
             'Town/District': {
                 label: 'Town/District',
@@ -120,7 +103,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
 
     const handleSearchItem = async (id, newValue) => {
         const res = await dataService.GetAPI(`list-institution?search=${newValue}`);
-        return res?.data?.institutionNames;
+        return res?.data?.institutionNames.length === 0 ? ['Others (Please Specify)'] : res?.data?.institutionNames;
     };
 
     return (
@@ -143,7 +126,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
             </div>
             {(submitSelected && (states.gender === undefined || states.gender === '')) &&
             <div className='mb-4 ml-2'><ErrorMessage error={'Required field'} /></div>}
-            <div className='px-2.5 w-1/3'>
+            <div className='px-2.5 w-[339px]'>
                 <DatePickerAntd
                     label={'Date of Birth'}
                     handleStates={handleStates}
@@ -151,11 +134,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
                 />
             </div>
-            <div className='flex w-full'>
-                <div className='w-1/3 mt-7 ml-2.5 '>
-                    <div className='pr-[20px]'>
+            <div className='flex w-full flex-wrap'>
+                <div className='mt-7 ml-2.5 '>
+                    <div className='pr-[20px] w-[339px]'>
                         <InputFieldWithDropDown
                             labelName={'Occupation/Source of Funds'}
+                            className={'w-[339px]'}
                             value={states?.occupation === undefined ? '' : states.occupation}
                             placeholder={'Select Occupation/Source of Funds'}
                             // error={formErrors.role}
@@ -171,8 +155,8 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     </div>
                 </div>
                 {states?.occupation === 'Employed' &&
-                <div className='w-1/3 mt-7'>
-                    <div className='mx-[10px]'>
+                <div className='w-[339px] mt-7'>
+                    <div className='mx-[10px] w-[339px]'>
                         <InputFieldWithDropDown
                             labelName={'Employed'}
                             value={states?.employed_role === undefined ? '' : states.employed_role}
@@ -191,11 +175,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
 
                 </div>
                 }
-                {states?.occupation === 'In Full-time Education' && <div className='w-1/3 mt-6'>
+                {states?.occupation === 'In Full-time Education' && <div className='mt-6 w-[339px]'>
                     <InputSearch
                         testId='institute'
                         id='institute'
                         handleInput={handleStates}
+                        className={'w-[339px]'}
                         value={states?.institute === undefined ? '' : states.institute}
                         handleSearchItem={handleSearchItem}
                         label={'Search Institute'}
@@ -204,7 +189,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 </div>}
                 {(states?.occupation === 'Self Employed' || states?.occupation === 'Others' ||
                 (states?.institute === 'Others (Please Specify)' && states?.occupation === 'In Full-time Education')) &&
-                <div className='w-1/3 mt-7'>
+                <div className='mt-7 w-[339px]'>
                     <InputField
                         className=''
                         divClassName='mx-2.5'
@@ -244,7 +229,6 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                     whichever is applicable
                 </p>
                 <FelidDivision
-                    divisionClassName = {'w-1/3'}
                     divisionObject = {EmployedFelids}
                     handleOnChange={handleStates}
                     states={states}
@@ -270,14 +254,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 {/* <InputTypeCheckbox id={1} checkboxText={'checkboxText'}/> */}
             </div>
             <FelidDivision
-                divisionClassName = {'w-1/3'}
-                divisionObject = {InputFelids}
+                divisionObject = {getMonthInputFelid(states.personal_customer)}
                 handleOnChange={handleStates}
                 states={states}
                 submitSelected={submitSelected}
             />
             <FelidDivision
-                divisionClassName = {'w-1/3'}
                 divisionObject = {bankInputFelid}
                 handleOnChange={handleStates}
                 states={states}

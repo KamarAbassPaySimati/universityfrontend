@@ -122,16 +122,16 @@ const CardHeader = ({
                 }
                 {/* checks for card has only toggles down */}
                 {header && headerWithoutButton &&
-                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-5 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-col gap-2`}>
                     {header}
-                    <div className='mt-[6px] flex gap-6'>
+                    <div className='-mt-[2px] flex gap-6'>
                         {/* toggle buttons  */}
                         {toggleButtons && toggleButtons.map((item, index) => (
                             <button
                                 key={index}
                                 onClick={() => handleSearchParams('type', item.key.toLowerCase(), searchParams, setSearchParams)}
-                                className={`-py-4  h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
+                                className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
                             >
                                 {item.key}
                             </button>
@@ -149,7 +149,7 @@ const CardHeader = ({
                 ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
                             {children}
                         </div>
-                        : <div className='min-h-[calc(100vh-240px)] max-h-[calc(100vh-120px)] mx-10 my-6
+                        : <div className='min-h-[calc(100vh-240px)] max-h-[calc(100vh-120px)] mx-10 my-4
                      bg-[#FFFFFF] rounded-[6px] border border-neutral-outline'>
                             {children}
                         </div>)

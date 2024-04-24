@@ -178,7 +178,7 @@ const AddTrustBank = () => {
                                     'NBS Bank',
                                     'Standard Bank',
                                     'Centenary Bank'
-                                ]}
+                                ].slice().sort()}
                                 id="bankName"
                                 testId="bank_name"
                                 handleInput={handleInput}

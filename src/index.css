@@ -353,7 +353,7 @@ input[type='number'] {
 
 .custom-datepicker-error input:focus,
 .custom-datepicker-error input:hover {
-  border-bottom: none !important; /* Remove bottom border on input focus and hover */
+  border-bottom: 1px solid #3B2A6F;
   box-shadow: none !important; /* Remove box-shadow */
 }
 :where(.css-dev-only-do-not-override-1kuana8).ant-picker-outlined:hover {
@@ -400,7 +400,7 @@ input[type='number'] {
   padding: 11px 50px !important;
   font-size: 400;
   color: #4F5962 !important;
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid #3B2A6F;
   border-top-right-radius: 8px !important;
   border-top-left-radius: 8px !important;
   outline: none;
@@ -417,12 +417,12 @@ iframe {
   background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
 }
 
-@media print {
+/* @media print {
   #embed {
     display: none;
     user-select: none;
   }
-}
+} */
 
 .moving-text-container {
   overflow: hidden;
@@ -481,5 +481,11 @@ iframe {
   .custom-list li:before {
     content: attr(data-list-symbol); /* Use the data attribute to set different symbols */
   }
+}
+
+
+/* Custom Utility */
+.max-w-max-content {
+  max-width: max-content;
 }
 

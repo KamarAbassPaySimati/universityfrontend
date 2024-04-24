@@ -29,7 +29,7 @@ function App (props) {
             switch (payload.event) {
             case 'tokenRefresh':
                 try {
-                    const userAttributes = await fetchUserAttributes({ bypassCache: true });
+                    const userAttributes = await fetchUserAttributes();
 
                     if (userAttributes) {
                         dispatch(setUser(userAttributes));
@@ -73,7 +73,6 @@ function App (props) {
             }
         });
     }, []);
-
     return (
         <GlobalContext.Provider value={{
             setToastSuccess,

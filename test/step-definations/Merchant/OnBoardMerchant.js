@@ -1,11 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 const { Given, When, Then, Before } = require('@cucumber/cucumber');
-const webdriver = require('selenium-webdriver');
-const until = require('selenium-webdriver').until;
-const By = require('selenium-webdriver').By;
+const { until, By, Key } = require('selenium-webdriver');
 const assert = require('assert');
-const Keys = webdriver.Key;
 const { driver } = require('../Driver');
 const { faker } = require('@faker-js/faker');
 
@@ -23,7 +20,7 @@ When('I enter the first name as {string} for merchant registration', async funct
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (first_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
     }
@@ -31,7 +28,7 @@ When('I enter the first name as {string} for merchant registration', async funct
 
 When('I enter the middle name as {string} for merchant registration', async function (middle_name) {
     // Write code here that turns the phrase above into concrete actions
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (middle_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
     }
@@ -39,7 +36,7 @@ When('I enter the middle name as {string} for merchant registration', async func
 
 When('I enter the last name as {string} for merchant registration', async function (last_name) {
     // Write code here that turns the phrase above into concrete actions
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (last_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
     }
@@ -47,7 +44,7 @@ When('I enter the last name as {string} for merchant registration', async functi
 
 When('I enter the email address as {string} for merchant registration', async function (email_address) {
     // Write code here that turns the phrase above into concrete actions
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (email_address !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email_address);
     }
@@ -56,7 +53,7 @@ When('I enter the email address as {string} for merchant registration', async fu
 When('I enter the phone number as {string} for merchant registration', async function (phone_number) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css('[data-testid="change_code"]'))).click();
-    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     if (phone_number !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
     }
@@ -74,7 +71,7 @@ When('I enter a valid email address for merchant registration', async function (
     // Write code here that turns the phrase above into concrete actions
     const random_number = faker.string.alphanumeric(5);
     const email = `bharath.shet+${random_number}@7edge.com`;
-    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="email_address"]'))).sendKeys(email);
 });
 
@@ -85,7 +82,7 @@ When('I enter a valid phone number for merchant registration', async function ()
         // Replace the first character with '9'
         phone_number = '9' + phone_number.substring(1);
     }
-    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
 });
 
@@ -95,7 +92,7 @@ When('I enter a valid first name for merchant registration', async function () {
     await driver.wait(until.elementIsVisible(element));
 
     const first_name = faker.person.firstName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
 });
 
@@ -105,7 +102,7 @@ When('I enter a valid middle name for merchant registration', async function () 
     await driver.wait(until.elementIsVisible(element));
 
     const middle_name = faker.person.middleName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
 });
 
@@ -115,7 +112,7 @@ When('I enter a valid last name for merchant registration', async function () {
     await driver.wait(until.elementIsVisible(element));
 
     const last_name = faker.person.lastName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
 });
 

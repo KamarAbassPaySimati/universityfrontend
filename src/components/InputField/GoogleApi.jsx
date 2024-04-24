@@ -6,7 +6,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
     const handlePlaceSelect = (place) => {
-        handleOnChange(place.formatted_address, id);
+        handleOnChange(place.target.value, id);
         switch (id) {
         case 'district':
             handleOnChange('', 'street_name');
@@ -111,7 +111,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
     };
 
     return (
-        <div>
+        <div className=''>
             <div className='mx-[10px]'>
                 <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
                     {labelName}
@@ -120,7 +120,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                     <div className={`
                 ${(submitSelected && (componentValue === undefined || componentValue?.trim() === ''))
             ? 'google-key-error'
-            : 'google-key-border'} google-key relative`}>
+            : 'google-key-border'} google-key relative w-[339px]`}>
                         <GoogleComponent
                             placeholder={placeholder}
                             apiKey={GOOGLE_API}

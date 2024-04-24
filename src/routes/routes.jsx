@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+/* eslint-disable camelcase */
 /* eslint-disable quotes */
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
@@ -18,14 +20,13 @@ import Slugify from '../CommonMethods/Sulgify';
 import Agent from '../pages/Users/Agent';
 import Toast from '../components/Toast/Toast';
 import Merchant from '../pages/Users/Merchants';
+import Customer from '../pages/Users/Customer';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn, user } = auth;
-    let { user_type: CurrentUserRole } = user;
-    if (CurrentUserRole) {
-        CurrentUserRole = Slugify(CurrentUserRole);
-    }
+    // const { user_type } = user;
+    const [CurrentUserRole, setCurrentUserRole] = useState('super-admin');
     const [ToastError, setToastError] = useState('');
 
     const dispatch = useDispatch();
@@ -36,10 +37,14 @@ export default function NavigationRoutes (props) {
     const checkLoggedInUser = async () => {
         try {
             setPageLoading(true);
-            const userAttributes = await fetchUserAttributes({ bypassCache: true });
+            const userAttributes = await fetchUserAttributes();
             if (userAttributes) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
+                if (userAttributes['custom:user_type']) {
+                    console.log(Slugify(userAttributes['custom:user_type']));
+                    setCurrentUserRole(Slugify(userAttributes['custom:user_type']));
+                }
             }
             setPageLoading(false);
         } catch (error) {
@@ -70,7 +75,7 @@ export default function NavigationRoutes (props) {
 
     return (
         <>
-            <Suspense fallback={<div>Loading...</div>}>{
+            <Suspense fallback={<Loading />}>{
                 <>
                     <Routes location={location} key={location.pathname}>
                         {pageLoading
@@ -86,21 +91,27 @@ export default function NavigationRoutes (props) {
                                         element={<SetNewPassword />} />
                                 </>
                                 : (
-                                    ComponentsBasedOnRole[CurrentUserRole] &&
-                                    <Route element={<Layout {...props}/>} key={location.key}>
-                                        {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
-                                            <Route path={nav.path} element={React.cloneElement(nav.element, props)}
-                                                key={nav.path}/>
-                                        ))}
-                                        <Route path="/dashboard" element={<Dashboard />} />
-                                        <Route path="/profile" element={<Profile />} />
-                                        <Route path="/profile/update-password" element={<UpdatePassword />} />
-                                        <Route path="/users/agents" element={<Agent />} />
-                                        <Route path="/users/merchants" element={<Merchant />} />
-                                    </Route>
+                                    CurrentUserRole && ComponentsBasedOnRole[CurrentUserRole] && (
+                                        <>
+                                            {console.log(ComponentsBasedOnRole[CurrentUserRole])}
+                                            <Route element={<Layout {...props}/>} key={location.key}>
+                                                {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
+                                                    <Route path={nav.path} element={React.cloneElement(nav.element, props)}
+                                                        key={nav.path}/>
+                                                ))}
+                                                <Route path="/dashboard" element={<Dashboard />} />
+                                                <Route path="/profile" element={<Profile />} />
+                                                <Route path="/profile/update-password" element={<UpdatePassword />} />
+                                                <Route path="/users/agents" element={<Agent />} />
+                                                <Route path="/users/merchants" element={<Merchant />} />
+                                                <Route path="/users/customers" element={<Customer />} />
+                                            </Route>
+                                            <Route path="*" element={<NotFound />} />
+                                        </>
+                                    )
+
                                 )
                         }
-                        <Route path="*" element={<NotFound />} />
                     </Routes>
                 </>
             }

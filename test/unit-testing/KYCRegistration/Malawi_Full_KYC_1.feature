@@ -1,4 +1,4 @@
-Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verification Doc - Institution letter, Occupation - Self Employed
+Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Verification Doc - Driving License, Occupation - Full Time Education)
     As an Agent, I want an option to do my Malawi FULL KYC so that I can avail the services
     Conditions of Satisfaction
     Clear instructions and guidance should be provided on what documents are required and in which format.
@@ -123,6 +123,11 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I click on proceed button
         Then I should be redirected to KYC address details screen
 
+    Scenario: Enter KYC Address details with invalid credentails
+        Given I am in KYC address details screen
+        When I click on save and continue button
+        Then I should read a message stating that "Required field"
+
     Scenario: Enter valid KYC Address details
         Given I am in KYC address details screen
         When I enter street name as "M1"
@@ -130,14 +135,27 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
 
-    Scenario: Upload valid ID document details and Capture selfie
+    Scenario: Upload invalid ID document details
         Given I am in KYC identity document details screen
-        When I select the ID document as "Passport"
+        When I select the ID document as "National ID"
+        And I upload the front image of document as <image_front>
+        Then I should read a message stating that <message>
+        And I upload the back image of document as <image_back>
+        Then I should read a message stating that <message>
+        Examples:
+            | image_front       | image_back        | message                                                   |
+            | "15MBImage.jpg"   | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
+
+    Scenario: Upload valid ID document details
+        Given I am in KYC identity document details screen
+        When I select the ID document as "National ID"
         And I upload the front image of document as "document_front.png"
-        Then I should be able to view the preview of the document front
+        And I upload the back image of document as "document_back.png"
+        Then I should be able to view the preview of the document front and back
         When I click on view document front preview
         Then I should view the preview of the uploaded document
-   
+
     Scenario: Capture selfie
         Given I am in KYC identity document details screen
         When I click on capture
@@ -153,20 +171,23 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
     Scenario: Upload verification document
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Institute letter"
+        When I select the verification document as "Drivers License"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
+        And I upload the back image of document as <image_back>
+        Then I should read a message stating that <message>
         Examples:
-            | image_front       | message                                                   |
-            | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
-            | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
+            | image_front       | image_back        | message                                                   |
+            | "15MBImage.jpg"   | "15MBImage.jpg"   | "Upload failed. Unsupported format or file size exceeded" |
+            | "10_MB_DOCX.docx" | "10_MB_DOCX.docx" | "Upload failed. Unsupported format or file size exceeded" |
 
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Institute letter"
+        When I select the verification document as "Drivers License"
         And I upload the front image of document as "document_front.png"
-        Then I should be able to view the preview of the document front
+        And I upload the back image of document as "document_back.png"
+        Then I should be able to view the preview of the document front and back
         When I click on view document front preview
         Then I should view the preview of the uploaded document
 
@@ -180,12 +201,14 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
         When I click on save and continue button
         Then I should read a message stating that "Required field"
 
+    @delete_admin_account
     Scenario: KYC personal details with invalid details
         Given I am in KYC personal details screen
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
-        When I select the Occupation as "Self Employed"
-        When I enter the other self employed occupation as "Self Bussiness"
+        When I select the Occupation as "In Full time education"
+        When I search and select institution as "Other"
+        And I enter the other institution name as "BDD institute"
         When I select the applicable purpose and nature of business
         When I select valid monthly income and monthly withdrawal
         When I click on save and continue button
