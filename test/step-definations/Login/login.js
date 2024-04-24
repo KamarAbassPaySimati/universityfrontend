@@ -12,7 +12,6 @@ const {
 } = require('../../bdd_modules/index.js');
 const { getMFASecret, addAdminUser, deleteAdminAccount } = require('../../bdd_api/index.js');
 const { driver } = require('../Driver.js');
-const { getModifierKey } = require('../../bdd_modules/index.js');
 
 function replaceTextWithSpecialChars (text) {
     const regex = /[^\w\s]/g; // Matches any character that's not alphanumeric or whitespace
