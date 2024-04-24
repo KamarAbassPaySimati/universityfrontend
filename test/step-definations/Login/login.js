@@ -1,9 +1,6 @@
 /* eslint-disable camelcase */
 const { Given, When, Then, Before, After } = require('@cucumber/cucumber');
-const webdriver = require('selenium-webdriver');
-const until = require('selenium-webdriver').until;
-const By = require('selenium-webdriver').By;
-const Keys = webdriver.Key;
+const { Key, until, By } = require('selenium-webdriver');
 const { faker } = require('@faker-js/faker');
 const path = require('path');
 const assert = require('assert');
@@ -15,6 +12,7 @@ const {
 } = require('../../bdd_modules/index.js');
 const { getMFASecret, addAdminUser, deleteAdminAccount } = require('../../bdd_api/index.js');
 const { driver } = require('../Driver.js');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 function replaceTextWithSpecialChars (text) {
     const regex = /[^\w\s]/g; // Matches any character that's not alphanumeric or whitespace
@@ -43,7 +41,7 @@ async function login () {
 
     await new Promise(resolve => setTimeout(resolve, 100));
     for (let i = 5; i >= 0; i--) {
-        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -117,7 +115,7 @@ async function create_new_user_and_login () {
 
     await new Promise(resolve => setTimeout(resolve, 750));
     for (let i = 5; i >= 0; i--) {
-        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -475,7 +473,7 @@ When('I enter TOTP as {string}', async function (OTP) {
     // clear already existing TOTP
     await new Promise(resolve => setTimeout(resolve, 100));
     for (let i = 5; i >= 0; i--) {
-        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -490,7 +488,7 @@ When('I enter a valid TOTP', async function () {
     // clear already existing TOTP
     await new Promise(resolve => setTimeout(resolve, 100));
     for (let i = 5; i >= 0; i--) {
-        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -520,7 +518,7 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 
     await new Promise(resolve => setTimeout(resolve, 100));
     for (let i = 5; i >= 0; i--) {
-        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Keys.BACK_SPACE);
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 1000));

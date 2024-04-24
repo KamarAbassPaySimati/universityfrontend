@@ -4,12 +4,13 @@ const { When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const { faker } = require('@faker-js/faker');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 When('I enter first name as {string} for update admin user', async function (first_name) {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (first_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
     }
@@ -18,7 +19,7 @@ When('I enter middle name as {string} for update admin user', async function (mi
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (middle_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
     }
@@ -28,7 +29,7 @@ When('I enter last name as {string} for update admin user', async function (last
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]')));
     await driver.wait(until.elementIsVisible(element));
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (last_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
     }
@@ -67,14 +68,14 @@ When('I enter valid firstname, middle name, last name for update admin user', as
     await driver.wait(until.elementIsVisible(element));
 
     const first_name = faker.person.firstName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="first_name"]'))).sendKeys(first_name);
 
     const middle_name = faker.person.firstName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="middle_name"]'))).sendKeys(middle_name);
 
     const last_name = faker.person.lastName();
-    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="last_name"]'))).sendKeys(last_name);
 });
