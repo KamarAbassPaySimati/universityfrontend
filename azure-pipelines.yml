@@ -390,8 +390,9 @@ stages:
             sleep 30
             mkdir test_results
             pip install beautifulsoup4
+            pip install zaproxy
             python scripts/dast.py
-          displayName: Unit Testing
+          displayName: Dynamic Application Security Testing (DAST)
         - publish: $(System.DefaultWorkingDirectory)/repotest_resultsrts # Assuming logs are in working directory
           artifact: dast_test_results
           condition: always()
