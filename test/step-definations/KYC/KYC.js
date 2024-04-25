@@ -474,6 +474,7 @@ When('I select valid monthly income and monthly withdrawal', async function () {
 });
 
 Then('I should read a message stating KYC submission successful', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
     // Write code here that turns the phrase above into concrete actions
     const expected_text = 'Thank you for providing your information. This is received into our review process. We will confirm its acceptance or otherwise shortly. To your registered email address.';
 
