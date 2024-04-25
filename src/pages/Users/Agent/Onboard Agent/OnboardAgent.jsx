@@ -434,7 +434,7 @@ const OnboardAgent = ({ role }) => {
     return (
         <CardHeader
             activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
-            paths={role === 'agent' ? ['Users', 'Agent'] : role === 'merchant' ? ['Users', 'Merchant'] : ['Users', 'Customer']}
+            paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
             pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={registrationSuccessful ? false : 'Registration'}
         >
