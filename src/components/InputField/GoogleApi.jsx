@@ -5,9 +5,9 @@ import Image from '../Image/Image';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
+    const [key, setKey] = useState(0);
     const handlePlaceSelect = (place) => {
         handleOnChange(place.target.value, id);
-        console.log('ccccc', id);
         switch (id) {
         case 'district':
             handleOnChange('', 'street_name');
@@ -15,6 +15,18 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             break;
         case 'town_village_ta':
             handleOnChange('', 'street_name');
+            break;
+        case 'intl_district':
+            handleOnChange('', 'intl_town_village_ta');
+            handleOnChange('', 'intl_landmark');
+            handleOnChange('', 'intl_street_name');
+            break;
+        case 'intl_town_village_ta':
+            handleOnChange('', 'intl_landmark');
+            handleOnChange('', 'intl_street_name');
+            break;
+        case 'intl_street_name':
+            handleOnChange('', 'intl_landmark');
             break;
         // case 'street_name':
         //     autofillTownVillageTAAndDistrict(place);
@@ -38,6 +50,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             };
         case 'intl_street_name':
         case 'intl_town_village_ta':
+        case 'intl_landmark':
             return {
                 types: ['address']
             };
@@ -52,7 +65,6 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         }
     };
     const handlePlaceSelected = (place) => {
-        console.log('jsdniiiddw', id);
         switch (id) {
         case 'country' :
             handleOnChange(place.formatted_address, 'country');
@@ -68,7 +80,8 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             handleOnChange(place.formatted_address, 'occupation_town');
             break;
         case 'intl_street_name':
-            handleOnChange(place.formatted_address, 'intl_street_name');
+        case 'intl_landmark':
+            handleOnChange(place.formatted_address, id);
             autofillTownVillageTAAndDistrict(place);
             break;
         case 'street_name':
@@ -92,6 +105,9 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
     useEffect(() => {
         // Update component value when the value prop changes
         setComponentValue(value);
+        if (value === undefined || value === '') {
+            setKey(key + 1);
+        }
     }, [value]);
     const autofillTownVillageTAAndDistrict = (place) => {
         const addressComponents = place.address_components;
@@ -120,7 +136,11 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         // Set the values for district and town/village/TA
         if (id === 'intl_street_name') {
             handleOnChange(district, 'intl_district');
+            handleOnChange(townVillageTA, 'intl_landmark');
             handleOnChange(townVillageTA, 'intl_town_village_ta');
+        } else if (id === 'intl_landmark') {
+            handleOnChange(townVillageTA, 'intl_town_village_ta');
+            handleOnChange(district, 'intl_district');
         } else {
             handleOnChange(district, 'district');
             handleOnChange(townVillageTA, 'town_village_ta');
@@ -153,6 +173,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                         <GoogleComponent
                             placeholder={placeholder}
                             apiKey={GOOGLE_API}
+                            key={key}
                             onPlaceSelected={handlePlaceSelected}
                             options={autocompleteOptions()}
                             onChange={handlePlaceSelect}

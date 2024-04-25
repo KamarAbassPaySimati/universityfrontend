@@ -109,7 +109,6 @@ export const GetDocumentValidation = (kycType, documentType) => {
         case 'Full KYC':
             return VerificationDocumentFull;
         case 'Simplified KYC':
-            console.log('nnnnnn');
             return VerificationDocumentSimplified;
         default:
             break;
@@ -133,6 +132,8 @@ export const GetIdDocumentList = (kycType, documentType) => {
                 'Birth Certificate',
                 'Student ID',
                 'Employee ID'];
+        case 'Non Malawi citizen':
+            return ['Refugee ID', 'Asylum ID', 'Passport'];
         default:
             break;
         }
@@ -151,6 +152,8 @@ export const GetIdDocumentList = (kycType, documentType) => {
                 'Employer Letter',
                 'Institute Letter',
                 'Religious Institution/ District Commissioner Letter'];
+        case 'Non Malawi citizen':
+            return ['Driver’s Licence', 'Employer Letter', 'Institute Letter', 'National ID card'];
         default:
             break;
         }
@@ -358,7 +361,6 @@ export const InputFelidsMonthFull = {
             key: 'monthly_income',
             require: true,
             options: [
-                'Up to 300,000.00 MWK',
                 '300,000.00 to 1,000,000.00 MWK',
                 '1,000,000.00 to 2,500,000.00 MWK',
                 '2,500,000.00 to 5,000,000.00 MWK', '5,000,000.00 to 10,000,000.00 MWK', 'Over 10 Million MWK']
@@ -369,7 +371,6 @@ export const InputFelidsMonthFull = {
             key: 'monthly_withdrawal',
             require: true,
             options: [
-                'Up to 300,000.00 MWK',
                 '300,000.00 to 1,000,000.00 MWK',
                 '1,000,000.00 to 2,500,000.00 MWK',
                 '2,500,000.00 to 5,000,000.00 MWK',

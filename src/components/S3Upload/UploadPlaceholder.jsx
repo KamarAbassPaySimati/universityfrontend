@@ -5,7 +5,10 @@ import ImageLoader from './ImageLoader';
 import IframeModal from '../Iframe/IframeModal';
 import GlobalContext from '../Context/GlobalContext';
 
-export default function UploadPlaceholder ({ label, path, selectedUploadImg, states, handleStates, disabled, error, testId }) {
+export default function UploadPlaceholder ({
+    label, path, selectedUploadImg, states, handleStates, disabled, error, testId,
+    labelValue
+}) {
     const [loadingImg, setLoadingImg] = useState(false);
     const [showIframe, setShowIframe] = useState(false);
     const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
@@ -97,8 +100,7 @@ export default function UploadPlaceholder ({ label, path, selectedUploadImg, sta
             }
             <IframeModal
                 isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]}
-                labelValue={selectedUploadImg.replaceAll('_', ' ').replaceAll('img', 'Image')}/>
-
+                labelValue={labelValue}/>
         </div>
     );
 }

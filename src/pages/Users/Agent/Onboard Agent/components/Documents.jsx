@@ -19,7 +19,9 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                     error={submitSelected && (states[type] === undefined || states[type]?.trim() === '')
                         ? 'Required field'
                         : undefined}
-                    options={GetIdDocumentList(states.personal_customer, type)}
+                    options={GetIdDocumentList(states.citizen_type === 'Malawi citizen'
+                        ? states.personal_customer
+                        : 'Non Malawi citizen', type)}
                     id={type}
                     testId={`${type.replaceAll(' ', '_').toLowerCase()}_dropdown`}
                     information={GetDocumentInfomation(states.personal_customer, type)}
@@ -29,7 +31,15 @@ export default function Documents ({ type, handleStates, states, submitSelected 
             <div className='flex'>
                 <div className="w-[48%] relative">
                     <UploadPlaceholder
-                        label="Front"
+                        label={(states[type] === 'National ID' || states[type] === 'Driver\'s Licence' ||
+                        states[type] === 'Traffic Register Card')
+                            ? 'Front'
+                            : 'File Name'}
+                        labelValue={`${states[type]} Image ${
+                            (states[type] === 'National ID' || states[type] === 'Driver\'s Licence' ||
+                        states[type] === 'Traffic Register Card')
+                                ? 'Front'
+                                : ''}`}
                         testId={'kyc_upload_document_front'}
                         disabled={states[type] === undefined}
                         path={`kyc_data/${id}`}
@@ -47,6 +57,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                 <div className="w-[48%] relative ml-[4%]">
                     <UploadPlaceholder
                         label="Back"
+                        labelValue={`${states[type]} Image Back'`}
                         testId={'kyc_upload_document_back'}
                         disabled={states[type] === undefined}
                         path={`kyc_data/${id}`}
@@ -72,7 +83,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                         />
 
                     </div>
-                    <div className='w-[48%] ml-[4%] mt-[15px]'>
+                    <div className='w-[48%] ml-[4%]'>
                         <RulesList
                             heading="Selfie Rules"
                             rulesList={SelfieRules}

@@ -77,9 +77,9 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
             },
             city_town: {
                 label: 'City/Town',
-                type: 'input',
+                type: 'googleAPI',
                 key: 'intl_landmark',
-                require: false
+                require: true
             },
             county_state: {
                 label: 'County/State',
@@ -100,18 +100,18 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
             <div data-testid="kyc_address_details">
                 <FelidDivision
                     divisionClassName = {'w-1/3'}
-                    divisionObject = {NonMalawiAddressDetails}
+                    divisionObject = {states.citizen_type === 'Non Malawi citizen' ? NonMalawiAddressDetails : AddressDetails}
                     handleOnChange={handleStates}
                     states={states}
                     submitSelected={submitSelected}
                 />
-                <FelidDivision
+                {states.citizen_type === 'Non Malawi citizen' && <FelidDivision
                     divisionClassName = {'w-1/3'}
                     divisionObject = {InterNationalAddress}
                     handleOnChange={handleStates}
                     states={states}
                     submitSelected={bankSelected}
-                />
+                />}
             </div>
         </>
     );
