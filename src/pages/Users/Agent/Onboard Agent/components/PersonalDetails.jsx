@@ -259,12 +259,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 states={states}
                 submitSelected={submitSelected}
             />
-            {states.citizen_type === 'Malawi citizen' && <FelidDivision
+            <FelidDivision
                 divisionObject = {bankInputFelid}
                 handleOnChange={handleStates}
                 states={states}
                 submitSelected={bankSelected}
-            />}
+            />
         </div>
     );
 }

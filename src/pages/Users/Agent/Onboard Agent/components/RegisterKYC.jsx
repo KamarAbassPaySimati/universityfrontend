@@ -425,6 +425,7 @@ export default function RegisterKYC () {
                 if (!handleValidation('personal_details')) {
                     setIsLoadingButton(false);
                 } else {
+                    setButtonStatus('In review');
                     const body = {
                         gender: states.gender,
                         dob: (new Date(states.dob).getTime() / 1000).toString(),

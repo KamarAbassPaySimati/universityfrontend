@@ -64,6 +64,7 @@ Feature: Paymaart - Admin Web - Onboard Agent- Non Malawi KYC
     Scenario: Enter valid KYC Address details
         Given I am in KYC address details screen
         When I enter street name as "M1"
+        When I select the Nationality
         Then I should see the town and district field getting pre-filled with google API data
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen

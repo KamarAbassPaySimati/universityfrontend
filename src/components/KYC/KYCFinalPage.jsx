@@ -16,11 +16,12 @@ export default function KYCFinalPage ({ states, handleBackPage, buttonText }) {
                 <p className='mt-[70px] font-bold text-[30px] leading-10 text-accent-positive'>Submission Successful!</p>}
                 <p data-testid="KYC_success_message"
                     className='text-center text-[18px] leading-[26px] font-normal text-neutral-secondary mt-[18px] mb-[112px]'>
-                    {buttonText === 'In review'
-                        ? `Thank you for providing your information. This is received into our review process.
+                    {buttonText !== 'In review'
+                        ? 'Complete registration now for full access to  Paymaart services'
+                        : `Thank you for providing your information. This is received into our review process.
                     We will confirm its acceptance
                     or otherwise shortly. To your registered email address.`
-                        : 'Complete registration now for full access to  Paymaart services'}
+                    }
                 </p>
                 <div className='w-[500px]'>
                     <Button
