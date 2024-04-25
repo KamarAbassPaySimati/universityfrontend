@@ -30,6 +30,7 @@ export default function RegisterKYC () {
         citizen_type: '',
         kyc_type: ''
     });
+    const [buttonStatus, setButtonStatus] = useState('Not Started');
     const [bankSelected, setBankSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
@@ -103,9 +104,11 @@ export default function RegisterKYC () {
                 setToastError(res.data.data.message);
             } else {
                 getKYCView();
-                setToastSuccess(res.data.message);
-                handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
-                setSubmitPayload({});
+                setTimeout(() => {
+                    setToastSuccess(res.data.message);
+                    handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
+                    setSubmitPayload({});
+                }, 1000);
             }
             setIsLoadingButton(false);
         } catch (error) {
@@ -222,7 +225,6 @@ export default function RegisterKYC () {
                 count = count + 1;
             }
             if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
-                console.log('bxbxbbx');
                 if (states.nature_of_permit === '' || states.nature_of_permit === undefined) {
                     if (key !== 'skip') {
                         setSubmitSelected(true);
@@ -453,6 +455,14 @@ export default function RegisterKYC () {
                         citizen_type: res.data.data.citizen === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen',
                         kyc_type: res.data.data.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'
                     });
+                    const buttonText = ['address_details_status', 'id_details_status', 'info_details_status'];
+                    let count = 0;
+                    buttonText.forEach((text) => {
+                        if (res.data.data[text] === 'completed') {
+                            count = count + 1;
+                        }
+                    });
+                    setButtonStatus(count === 3 ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
                     if (res.data.data[item] !== null) {
                         switch (item) {
                         case 'citizen':
@@ -558,11 +568,17 @@ export default function RegisterKYC () {
                         handleStates={handleInputFelids}
                         handleSubmit={handleSubmit}
                         isLoading={isLoadingButton}
+                        buttonText={buttonStatus}
                     />
                 )
                 : searchParams.get('tab') === 'success'
 
-                    ? <KYCFinalPage />
+                    ? (
+                        <KYCFinalPage
+                            states={states}
+                            handleBackPage={() => handleSearchParamsValue('tab', null, searchParams, setSearchParams)}
+                            buttonText={buttonStatus}
+                        />)
                     : <>
                         <KYCTopWithType
                             Name={'KYC Registration'}

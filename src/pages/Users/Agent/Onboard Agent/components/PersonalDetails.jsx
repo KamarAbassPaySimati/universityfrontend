@@ -21,7 +21,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
     ];
 
     const bankInputFelid = {
-        'Banking  Information for Payouts (Optional)': {
+        'Banking Information for Payouts (Optional)': {
             'Bank Name': {
                 label: 'Bank Name',
                 type: 'dropdown',
@@ -259,12 +259,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 states={states}
                 submitSelected={submitSelected}
             />
-            <FelidDivision
+            {states.citizen_type === 'Malawi citizen' && <FelidDivision
                 divisionObject = {bankInputFelid}
                 handleOnChange={handleStates}
                 states={states}
                 submitSelected={bankSelected}
-            />
+            />}
         </div>
     );
 }

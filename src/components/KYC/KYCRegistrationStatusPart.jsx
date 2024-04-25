@@ -2,9 +2,21 @@ import React, { useState } from 'react';
 import Image from '../Image/Image';
 import KYCGuidPopup from './KYCGuidPopup';
 
-export default function KYCRegistrationStatusPart ({ status }) {
+export default function KYCRegistrationStatusPart ({ buttonText }) {
     const [guidOpen, setGuidOpen] = useState(false);
 
+    const getButtonColor = () => {
+        switch (buttonText) {
+        case 'In review':
+            return 'text-[#FD9101] bg-[#FFEED9]';
+        case 'Not Started':
+            return 'text-[#4F5962] bg-[#E5E9EB]';
+        case 'In-progress':
+            return 'text-[#0066F6] bg-[#D9E8FE]';
+        default:
+            return 'text-[#FD9101] bg-[#FFEED9]';
+        }
+    };
     return (
         <>
             <div className='w-[40%] bg-primary-normal flex flex-col justify-end'>
@@ -52,12 +64,10 @@ export default function KYCRegistrationStatusPart ({ status }) {
                                 </p>
                                 <button
                                     className={`w-[116px] rounded-[23px] mt-2 cursor-auto
-                                    ${status === 'Pending'
-            ? 'bg-background-light text-background-dark'
-            : 'bg-[#FFEED9] text-[#FD9101]'} 
+                                    ${getButtonColor()} 
                                     font-normal p-1 text-[14px] leading-[22px]`}
                                     data-testid='KYC_status'
-                                >{status}</button>
+                                >{buttonText}</button>
                             </div>
                         </div>
                     </div>

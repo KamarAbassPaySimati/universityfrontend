@@ -5,13 +5,13 @@ import Button from '../Button/Button';
 import KYCRegistrationPopup from './KYCRegistrationPopup';
 import KYCRegistrationStatusPart from './KYCRegistrationStatusPart';
 
-export default function KYCRegistration ({ states, handleStates, handleSubmit, isLoading }) {
+export default function KYCRegistration ({ states, handleStates, handleSubmit, isLoading, buttonText }) {
     const citizenType = ['Malawi citizen', 'Non Malawi citizen'];
     const personalCustomer = ['Full KYC', 'Simplified KYC'];
     const [registrationProcess, setRegistrationProcess] = useState(false);
     return (
         <div className='flex w-full py-8 px-10 h-heightFullWithPadding'>
-            <KYCRegistrationStatusPart status={'Pending'}/>
+            <KYCRegistrationStatusPart buttonText={buttonText}/>
             <div className='w-[60%] bg-[#ffffff] px-[80px] flex flex-col justify-between  overflow-auto scrollBar'>
                 <div className=''>
                     <p className='font-normal text-[24px] leading-[32px] py-[5%]'>KYC Registration</p>

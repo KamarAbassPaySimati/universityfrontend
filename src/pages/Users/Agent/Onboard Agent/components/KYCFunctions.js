@@ -103,7 +103,6 @@ export const VerificationDocumentNonMalawi = {
 };
 
 export const GetDocumentValidation = (kycType, documentType) => {
-    console.log('kycType, documentType', kycType, documentType);
     switch (documentType) {
     case 'ID Document':
         switch (kycType) {
