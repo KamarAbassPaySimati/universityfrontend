@@ -484,6 +484,17 @@ Then('I should read a message stating KYC submission successful', async function
 
     assert.equal(element_text, expected_text);
 });
+Then('I should read a message stating Complete registration', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Write code here that turns the phrase above into concrete actions
+    const expected_text = 'Complete registration now for full access to Paymaart services';
+
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="KYC_success_message"]')));
+    await driver.wait(until.elementIsVisible(element));
+    const element_text = await element.getText();
+
+    assert.equal(element_text, expected_text);
+});
 
 Then('I should view the status of the KYC as {string}', async function (expected_text) {
     // Write code here that turns the phrase above into concrete actions
