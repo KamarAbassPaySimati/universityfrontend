@@ -282,7 +282,16 @@ stages:
             sleep 60
             mkdir reports
             npm install nyc --save-dev --force
+            mkdir reports-xml
             node scripts/bdd-execution-split1.js
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-failedScenarios'
+          condition: always()
+        - task: PublishTestResults@2
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/TEST-*.xml'
     - job: BrowserPerformanceTesting
       displayName: "Browser Performance Testing"
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'), contains(variables['build.SourceBranch'], 'qa')), succeeded())
