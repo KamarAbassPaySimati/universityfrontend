@@ -28,7 +28,6 @@ const KycVerification = () => {
     const handleToggle = (updatedButtons) => {
         setToggleButtons(updatedButtons);
         // Perform API call or any other action based on the updated button values
-        console.log(updatedButtons);
     };
     const singleCheckOptions = {
         citizen: ['All', 'Malawi Citizen', 'Non Malawi Citizen']

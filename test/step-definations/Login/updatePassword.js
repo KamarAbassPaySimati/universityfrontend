@@ -2,11 +2,9 @@
 /* eslint-disable camelcase */
 const assert = require('assert');
 const { Given, When, Then, Before } = require('@cucumber/cucumber');
-const webdriver = require('selenium-webdriver');
-const until = require('selenium-webdriver').until;
-const By = require('selenium-webdriver').By;
-const Keys = webdriver.Key;
+const { Key, until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Before('@wait_for_few_time', async function () {
     await new Promise(resolve => setTimeout(resolve, 3500));
@@ -18,7 +16,7 @@ Given('I navigate to update password page', async function () {
 
 When('I enter current password as {string}', async function (current_password) {
     await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.wait(until.elementLocated(By.css('[data-testid="current_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="current_password"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
 
     await new Promise(resolve => setTimeout(resolve, 100));
     await driver.wait(until.elementLocated(By.css('[data-testid="current_password"]'))).sendKeys(current_password);
@@ -26,8 +24,8 @@ When('I enter current password as {string}', async function (current_password) {
 
 When('I enter new password as {string} and confirm password as {string}', async function (new_password, confirm_new_password) {
     await new Promise(resolve => setTimeout(resolve, 500));
-    await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="new_confirm_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="new_confirm_password"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
 
     await new Promise(resolve => setTimeout(resolve, 100));
     await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(new_password);

@@ -1,16 +1,17 @@
 {
   "name": "paymaart-admin-web-application",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "eslint": "eslint src/**/*.jsx src/**/**/*.jsx src/**/**/**/*.jsx src/*.jsx src/**/*.js src/**/**/*.js src/**/**/**/*.js test/**/*.js test/**/**/*.js --fix",
-    "bdd_dry_run": "./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run test --require test",
+    "bdd_dry_run": "./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run test --require test junit:./reports-xml/TEST-test-report-unit-test-1.xml",
     "generate_report": "nyc report --temp-dir ./test/step-definations/coverageData --reporter html --report-dir ./coverage",
+    "generate_report_cobertura": "nyc report --temp-dir ./test/step-definations/coverageData --reporter cobertura --report-dir ./coverage-cobertura",
     "code_coverage": "nyc check-coverage --temp-dir ./test/step_definitions/coverageData",
-    "bdd_unit": "./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test-${featureFile}.json test/unit-testing/login.feature",
+    "bdd_unit": "./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test.json test/unit-testing/1_LoginAndUpdatePassword/login.feature -f junit:./reports-xml/TEST-test-report-unit-test-1.xml" ,
     "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
     "aws-amplify": "^6.0.28",
     "base32-decode": "^1.0.0",
     "chromedriver": "^123.0.1",
+    "country-list": "^2.3.0",
     "crypto": "^1.0.1",
     "dayjs": "^1.11.10",
     "dotenv": "^16.4.5",

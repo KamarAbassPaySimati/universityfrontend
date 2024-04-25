@@ -26,6 +26,11 @@ export default function RegisterKYC () {
     const [isLoadingButton, setIsLoadingButton] = useState(false);
     const [submitPayload, setSubmitPayload] = useState({});
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const [oldStateValue, setOldStateValue] = useState({
+        citizen_type: '',
+        kyc_type: ''
+    });
+    const [buttonStatus, setButtonStatus] = useState('Not Started');
     const [bankSelected, setBankSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
@@ -99,9 +104,11 @@ export default function RegisterKYC () {
                 setToastError(res.data.data.message);
             } else {
                 getKYCView();
-                setToastSuccess(res.data.message);
-                handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
-                setSubmitPayload({});
+                setTimeout(() => {
+                    setToastSuccess(res.data.message);
+                    handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
+                    setSubmitPayload({});
+                }, 1000);
             }
             setIsLoadingButton(false);
         } catch (error) {
@@ -114,7 +121,6 @@ export default function RegisterKYC () {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
-        console.log(GetDocumentValidation(states.personal_customer, 'Verification Document'));
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -126,10 +132,32 @@ export default function RegisterKYC () {
                 }
             }
             );
+            if ((states.nationality === undefined || states.nationality === '') && states.citizen_type === 'Non Malawi citizen') {
+                if (key !== 'skip') {
+                    setSubmitSelected(true);
+                }
+                count = count + 1;
+            }
+            if (!((states.intl_street_name === '' || states.intl_street_name === undefined) &&
+            (states.intl_district === '' || states.intl_district === undefined) &&
+            (states.intl_landmark === '' || states.intl_landmark === undefined) &&
+            (states.intl_town_village_ta === '' || states.intl_town_village_ta === undefined))) {
+                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district', 'intl_landmark'];
+                intlData.map((bank) => {
+                    if (states[bank] === '' || states[bank] === undefined) {
+                        if (key !== 'skip') {
+                            setBankSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                });
+            }
             return count === 0;
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
-                GetDocumentValidation(states.personal_customer, 'ID Document')[states['ID Document']].map((selectedItem) => {
+                GetDocumentValidation(states.citizen_type === 'Malawi citizen'
+                    ? states.personal_customer
+                    : 'Non Malawi citizen', 'ID Document')[states['ID Document']].map((selectedItem) => {
                     if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
@@ -168,7 +196,9 @@ export default function RegisterKYC () {
                 body.capture = states.capture;
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                GetDocumentValidation(states.personal_customer, 'Verification Document')[states['Verification Document']].map(
+                GetDocumentValidation(states.citizen_type === 'Malawi citizen'
+                    ? states.personal_customer
+                    : 'Non Malawi citizen', 'Verification Document')[states['Verification Document']].map(
                     (selectedItem) => {
                         if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                             if (key !== 'skip') {
@@ -194,7 +224,24 @@ export default function RegisterKYC () {
                 }
                 count = count + 1;
             }
-
+            if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
+                if (states.nature_of_permit === '' || states.nature_of_permit === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                        sideBarStatus['ID Document'] = 'pending';
+                    }
+                } else {
+                    body.nature_of_permit = states.nature_of_permit;
+                }
+                if (states.ref_no === '' || states.ref_no === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                        sideBarStatus['ID Document'] = 'pending';
+                    }
+                } else {
+                    body.ref_no = states.ref_no;
+                }
+            }
             setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
             setSubmitPayload({ ...body });
             return count === 0;
@@ -315,18 +362,25 @@ export default function RegisterKYC () {
     const handleSubmit = (type) => {
         setIsLoadingButton(true);
         if (type === 'proceed') {
-            handleAPICall({
-                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
-                citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
-                paymaart_id: id
-            }, 'address_details');
+            if (oldStateValue.citizen_type !== states.citizen_type || oldStateValue.kyc_type !== states.personal_customer) {
+                handleAPICall({
+                    kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
+                    citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
+                    paymaart_id: id
+                }, 'address_details');
+            } else {
+                setTimeout(() => {
+                    handleSearchParamsValue('tab', 'address_details', searchParams, setSearchParams);
+                    setIsLoadingButton(false);
+                }, 500);
+            }
         } else {
             switch (searchParams.get('tab')) {
             case 'address_details':
                 if (!handleValidation('address_details')) {
                     setIsLoadingButton(false);
                 } else {
-                    handleAPICall({
+                    const body = {
                         po_box_no: states?.po_box_no,
                         house_number: states?.house_number,
                         street_name: states?.street_name,
@@ -334,8 +388,18 @@ export default function RegisterKYC () {
                         town_village_ta: states?.town_village_ta,
                         district: states?.district,
                         paymaart_id: id,
-                        address_details_status: 'completed'
-                    }, 'identity_details'
+                        address_details_status: 'completed',
+                        intl_po_box_no: states?.intl_po_box_no,
+                        intl_house_number: states?.intl_house_number,
+                        intl_street_name: states?.intl_street_name,
+                        intl_landmark: states?.intl_landmark,
+                        intl_town_village_ta: states?.intl_town_village_ta,
+                        intl_district: states?.intl_district
+                    };
+                    if (states.citizen_type !== 'Malawi citizen') {
+                        body.citizen = states.nationality;
+                    }
+                    handleAPICall(body, 'identity_details'
                     );
                 }
                 break;
@@ -361,6 +425,7 @@ export default function RegisterKYC () {
                 if (!handleValidation('personal_details')) {
                     setIsLoadingButton(false);
                 } else {
+                    setButtonStatus('In review');
                     const body = {
                         gender: states.gender,
                         dob: (new Date(states.dob).getTime() / 1000).toString(),
@@ -387,10 +452,25 @@ export default function RegisterKYC () {
                 const object = {};
                 const statusObject = {};
                 Object.keys(res.data.data).map((item) => {
+                    setOldStateValue({
+                        citizen_type: res.data.data.citizen === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen',
+                        kyc_type: res.data.data.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'
+                    });
+                    const buttonText = ['address_details_status', 'id_details_status', 'info_details_status'];
+                    let count = 0;
+                    buttonText.forEach((text) => {
+                        if (res.data.data[text] === 'completed') {
+                            count = count + 1;
+                        }
+                    });
+                    setButtonStatus(count === 3 ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
                     if (res.data.data[item] !== null) {
                         switch (item) {
                         case 'citizen':
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
+                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawi citizen') {
+                                object.nationality = res.data.data[item];
+                            }
                             break;
                         case 'kyc_type':
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
@@ -489,15 +569,24 @@ export default function RegisterKYC () {
                         handleStates={handleInputFelids}
                         handleSubmit={handleSubmit}
                         isLoading={isLoadingButton}
+                        buttonText={buttonStatus}
                     />
                 )
                 : searchParams.get('tab') === 'success'
 
-                    ? <KYCFinalPage />
+                    ? (
+                        <KYCFinalPage
+                            states={states}
+                            handleBackPage={() => handleSearchParamsValue('tab', null, searchParams, setSearchParams)}
+                            buttonText={buttonStatus}
+                        />)
                     : <>
                         <KYCTopWithType
                             Name={'KYC Registration'}
-                            type={states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'}
+                            type={states.citizen_type === 'Malawi citizen'
+                                ? states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'
+                                : 'Non - Malawi Full KYC'
+                            }
                         />
                         <div
                             data-testid="KYC_Registration"
@@ -516,6 +605,7 @@ export default function RegisterKYC () {
                                         handleStates={handleInputFelids}
                                         states={states}
                                         submitSelected={submitSelected}
+                                        bankSelected={bankSelected}
                                     />}
                                     {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                         handleStates={handleInputFelids}

@@ -60,6 +60,10 @@ When('I click on the sort by {string}', async function (sortBy) {
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_submission_date"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
+    case 'Customer Name':
+        await driver.wait(until.elementLocated(By.css('[data-testid="sort_customer_name"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        break;
     default:
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_admin_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
