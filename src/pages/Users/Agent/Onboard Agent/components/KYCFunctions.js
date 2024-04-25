@@ -90,6 +90,17 @@ export const IdDocumentsFull = {
     'National ID': ['national_id_img_front', 'national_id_img_back'],
     Passport: ['passport_img_front']
 };
+export const IdDocumentsNonMalawi = {
+    'Refugee ID': ['refugee_id_img_front'],
+    'Asylum ID': ['asylum_id_img_front'],
+    Passport: ['passport_img_front', 'passport_img_back']
+};
+export const VerificationDocumentNonMalawi = {
+    'Driver\'s Licence': ['driver\'s_licence_img_front', 'driver\'s_licence_img_back'],
+    'Employer Letter': ['employer_letter_img_front'],
+    'Institute Letter': ['institute_letter_img_front'],
+    'National ID card': ['national_id_card_img_front']
+};
 
 export const GetDocumentValidation = (kycType, documentType) => {
     console.log('kycType, documentType', kycType, documentType);
@@ -100,6 +111,8 @@ export const GetDocumentValidation = (kycType, documentType) => {
             return IdDocumentsFull;
         case 'Simplified KYC':
             return IdDocumentSimplified;
+        case 'Non Malawi citizen':
+            return IdDocumentsNonMalawi;
         default:
             break;
         }
@@ -110,6 +123,8 @@ export const GetDocumentValidation = (kycType, documentType) => {
             return VerificationDocumentFull;
         case 'Simplified KYC':
             return VerificationDocumentSimplified;
+        case 'Non Malawi citizen':
+            return VerificationDocumentNonMalawi;
         default:
             break;
         }
@@ -153,7 +168,7 @@ export const GetIdDocumentList = (kycType, documentType) => {
                 'Institute Letter',
                 'Religious Institution/ District Commissioner Letter'];
         case 'Non Malawi citizen':
-            return ['Driver’s Licence', 'Employer Letter', 'Institute Letter', 'National ID card'];
+            return ['Driver\'s Licence', 'Employer Letter', 'Institute Letter', 'National ID card'];
         default:
             break;
         }
@@ -237,20 +252,67 @@ export const IdInfomationSimplified = {
 export const VerificationInfomationSimplified = {
     List1: {
         text: 'Please provide one of these documents for additional verification of your primary ID:',
-        insideList1: {
+        'Employer Letter': {
             text: 'Stamped Letter with Verifiable Particulars of an employer',
             insideList1: {
                 text: 'Signed by Head of the employer'
             }
         },
-        insideList2: {
+        'Institute Letter': {
             text: 'Stamped Letter with Verifiable Particulars of a learning institution',
             insideList1: {
                 text: 'Signed by Head of the institution'
             }
         },
-        insideList3: {
+        'Religious Institution/ District Commissioner Letter': {
             text: 'Stamped Letter from a Chief, Sub-Chief, Village Headman, leader of a recognized religious institution, or District Commissioner'
+        }
+    }
+};
+
+export const IdInfomationNonMalawi = {
+    List1: {
+        text: 'Please provide one of these documents plus a selfie (Biometric ID)',
+        Passport: {
+            text: 'Valid Passport displaying a business or resident permit or visa',
+            insideList1: {
+                text: 'Data and Visa pages of Passport'
+            }
+        },
+        'Refugee ID': {
+            text: 'Valid Refugee Identity Card displaying a photo and proof of refugee status from an appropriate authority'
+        },
+        'Asylum ID': {
+            text: 'Valid Asylum Seeker Identity Card displaying a photo and proof of asylum seeker status from an appropriate authority'
+        }
+    }
+};
+export const VerificationInfomationNonMalawi = {
+    List1: {
+        text: 'Please provide one of these documents for additional verification of your primary ID:',
+        'Driver\'s Licence': {
+            text: 'Valid Driver\'s Licence issued by an appropriate authority',
+            insideList1: {
+                text: 'Front and back'
+            }
+        },
+        'National ID card': {
+            text: 'Valid National ID Card issued by an appropriate authority',
+            insideList1: {
+                text: 'Front and back'
+            }
+        },
+        'Employer Letter': {
+            text: 'Stamped Letter with Verifiable Particulars of an employer',
+            insideList1: {
+                text: 'Signed by Head of the employer'
+            }
+        },
+        'Institute Letter': {
+            text: 'Stamped Letter with Verifiable Particulars of a learning institution',
+            insideList1: {
+                text: 'Signed by Head of the institution'
+            }
         }
     }
 };
@@ -268,6 +330,12 @@ export const GetDocumentInfomation = (kycType, documentType) => {
                 information: IdInfomationSimplified,
                 heading: 'Your ID Document Options'
             };
+        case 'Non Malawi citizen':
+            return {
+                information: IdInfomationNonMalawi,
+                heading: 'Your ID Document Options'
+
+            };
         default:
             break;
         }
@@ -282,6 +350,11 @@ export const GetDocumentInfomation = (kycType, documentType) => {
         case 'Simplified KYC':
             return {
                 information: VerificationInfomationSimplified,
+                heading: 'Your ID Verification Document Options'
+            };
+        case 'Non Malawi citizen':
+            return {
+                information: VerificationInfomationNonMalawi,
                 heading: 'Your ID Verification Document Options'
             };
         default:
@@ -407,3 +480,10 @@ export const getMonthInputFelid = (kycType) => {
         break;
     }
 };
+
+export const NatureOfPermitOptions = [
+    'Single/Multiple entry visa',
+    'Permanent Resident Permit',
+    'Temporary Resident Permit',
+    'Business Permit'
+];

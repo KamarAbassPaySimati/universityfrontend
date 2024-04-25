@@ -152,7 +152,9 @@ export default function RegisterKYC () {
             return count === 0;
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
-                GetDocumentValidation(states.personal_customer, 'ID Document')[states['ID Document']].map((selectedItem) => {
+                GetDocumentValidation(states.citizen_type === 'Malawi citizen'
+                    ? states.personal_customer
+                    : 'Non Malawi citizen', 'ID Document')[states['ID Document']].map((selectedItem) => {
                     if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
@@ -191,7 +193,9 @@ export default function RegisterKYC () {
                 body.capture = states.capture;
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                GetDocumentValidation(states.personal_customer, 'Verification Document')[states['Verification Document']].map(
+                GetDocumentValidation(states.citizen_type === 'Malawi citizen'
+                    ? states.personal_customer
+                    : 'Non Malawi citizen', 'Verification Document')[states['Verification Document']].map(
                     (selectedItem) => {
                         if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                             if (key !== 'skip') {
@@ -217,7 +221,25 @@ export default function RegisterKYC () {
                 }
                 count = count + 1;
             }
-
+            if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
+                console.log('bxbxbbx');
+                if (states.nature_of_permit === '' || states.nature_of_permit === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                        sideBarStatus['ID Document'] = 'pending';
+                    }
+                } else {
+                    body.nature_of_permit = states.nature_of_permit;
+                }
+                if (states.ref_no === '' || states.ref_no === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                        sideBarStatus['ID Document'] = 'pending';
+                    }
+                } else {
+                    body.ref_no = states.ref_no;
+                }
+            }
             setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
             setSubmitPayload({ ...body });
             return count === 0;

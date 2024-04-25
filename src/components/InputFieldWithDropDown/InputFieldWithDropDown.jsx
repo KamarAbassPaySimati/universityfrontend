@@ -67,6 +67,7 @@ function InputFieldWithDropDown (props) {
                     ref={buttonRef}
                     onClick={() => setShow(!show)}
                     data-testid={testId}
+                    title={value}
                     className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
                     ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
                 outline-0`}/*  */
@@ -98,7 +99,6 @@ function InputFieldWithDropDown (props) {
 
                 </ul>
             </div>
-            {console.log('information', information)}
             {(!show && value !== '' && information) && <p className='text-[#A4A9AE] font-normal text-[14px] leading-[22px]'>{information.information.List1[value].text}</p>}
             {(error && !show) && <ErrorMessage error={error} />}
         </div>
