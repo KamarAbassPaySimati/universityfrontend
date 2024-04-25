@@ -1,26 +1,26 @@
 /* eslint-disable array-callback-return */
 import React, { useContext, useEffect, useState } from 'react';
-import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
-import CardHeader from '../../../../../components/CardHeader';
-import StatusProgressBar from '../../../../../components/StatusProgressBar/StatusProgressBar';
-import KYCTopWithType from '../../../../../components/KYC/KYCTopWithType';
-import Button2 from '../../../../../components/Button2/Button2';
-import Button from '../../../../../components/Button/Button';
+import KYCRegistration from '../KYCRegistration';
+import CardHeader from '../../CardHeader';
+import StatusProgressBar from '../../StatusProgressBar/StatusProgressBar';
+import KYCTopWithType from '../KYCTopWithType';
+import Button2 from '../../Button2/Button2';
+import Button from '../../Button/Button';
 import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
-import { dataService } from '../../../../../services/data.services';
+import { dataService } from '../../../services/data.services';
 import {
     AddressDetails, BankDetailsList, GetDocumentValidation, PersonalDetailsList, ProgressBar,
     handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
-import { handleSearchParamsValue } from '../../../../../CommonMethods/ListFunctions';
-import addApostrophe from '../../../../../CommonMethods/textCorrection';
-import KYCFinalPage from '../../../../../components/KYC/KYCFinalPage';
-import GlobalContext from '../../../../../components/Context/GlobalContext';
+import { handleSearchParamsValue } from '../../../CommonMethods/ListFunctions';
+import addApostrophe from '../../../CommonMethods/textCorrection';
+import KYCFinalPage from '../KYCFinalPage';
+import GlobalContext from '../../Context/GlobalContext';
 
-export default function RegisterKYC () {
+export default function RegisterKYC ({ role }) {
     const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
@@ -447,7 +447,8 @@ export default function RegisterKYC () {
 
     const getKYCView = async () => {
         try {
-            const res = await dataService.GetAPI(`view-kyc-secure?paymaart_id=${id}`, 'agent');
+            const res = await dataService.GetAPI(`admin-users/view-kyc-secure?paymaart_id=${id}`,
+                role === 'agent' ? 'agent' : 'customer-user');
             if (res.data.data !== '') {
                 const object = {};
                 const statusObject = {};
@@ -555,9 +556,9 @@ export default function RegisterKYC () {
     }, []);
     return (
         <CardHeader
-            activePath='Register Agent'
-            paths={['Users', 'Agent']}
-            pathurls={['users/agents']}
+            activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
+            paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
+            pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
             ChildrenElement
         >
@@ -620,6 +621,7 @@ export default function RegisterKYC () {
                                         states={states}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
+                                        role={role}
                                     />}
                                 </div>
                             </div>

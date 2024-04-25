@@ -9,13 +9,8 @@ const initialState = {
 
 export const bankAccountList = createAsyncThunk('bankAccounts', async (url, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
-    const safeUrl =
-        `${url}`;// api end point
-
-    console.log(safeUrl, 'safeurl');
-
     try {
-        const res = await dataService.GetAPI(safeUrl);
+        const res = await dataService.GetAPI(`admin-users/${url}`);
         return res;
     } catch (error) {
         // Log error or send notification

@@ -65,7 +65,7 @@ const AddTrustBank = () => {
     const getBankIds = async () => {
         try {
             setIsLoading(true);
-            const response = await dataService.GetAPI(getBankId);
+            const response = await dataService.GetAPI(`admin-users/${getBankId}`);
             if (!response.error) {
                 setIsLoading(false);
                 setRefNos(response?.data?.ref_no);

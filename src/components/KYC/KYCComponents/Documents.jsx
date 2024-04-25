@@ -1,11 +1,11 @@
 import React from 'react';
-import Capture from '../../../../../components/CameraCapture/Capture';
-import RulesList from '../../../../../components/InformationList/RulesList';
-import UploadPlaceholder from '../../../../../components/S3Upload/UploadPlaceholder';
-import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
+import Capture from '../../CameraCapture/Capture';
+import RulesList from '../../InformationList/RulesList';
+import UploadPlaceholder from '../../S3Upload/UploadPlaceholder';
+import InputFieldWithDropDown from '../../InputFieldWithDropDown/InputFieldWithDropDown';
 import { useParams } from 'react-router-dom';
 import { GetDocumentInfomation, GetIdDocumentList, NatureOfPermitOptions, SelfieRules } from './KYCFunctions';
-import InputField from '../../../../../components/InputField/InputField';
+import InputField from '../../InputField/InputField';
 
 export default function Documents ({ type, handleStates, states, submitSelected }) {
     const { id } = useParams();

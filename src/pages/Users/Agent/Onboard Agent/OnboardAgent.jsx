@@ -17,7 +17,7 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import verificationValidation from './verificationValidation';
 import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
-import RegistrationSuccessful from './components/RegistrationSuccessful';
+import RegistrationSuccessful from '../../../../components/KYC/KYCComponents/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 import ProfileUploadPlaceholder from '../../../../components/S3Upload/ProfileImageUpload';
 

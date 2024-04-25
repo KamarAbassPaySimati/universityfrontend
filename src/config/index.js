@@ -1,4 +1,4 @@
-export const baseURL = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/admin-users/';
+export const baseURL = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/';
 export const baseURLAgent = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/agent-users/';
 export const baseURLMerchant = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/merchant-users/';
 export const baseURLCustomer = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/customer-user/';
