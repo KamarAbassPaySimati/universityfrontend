@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-object-injection */
 import axios from 'axios';
-import { baseURL, baseURLAgent, baseURLMerchant } from '../config';
+import { baseURL, baseURLAgent, baseURLCustomer, baseURLMerchant } from '../config';
 import authHeader from './authHeader';
 
 async function PostAPIWithoutHeader (endpoint, body) {
@@ -99,6 +99,17 @@ async function PostAPIMerchant (endpoint, payload) {
         return { error: true, data: error.response };
     }
 }
+async function PostAPICustomer (endpoint, payload) {
+    try {
+        const headers = await authHeader();
+        const data = await axios.post(`${baseURLCustomer}${endpoint}`, payload, {
+            headers
+        });
+        return { error: false, data: data.data };
+    } catch (error) {
+        return { error: true, data: error.response };
+    }
+}
 
 /**
  * The function `PatchAPI` sends a PATCH request to a specified endpoint with a payload and returns the
@@ -159,5 +170,6 @@ export const dataService = {
     PostAPIWithoutHeader,
     PostAPIAgent,
     GetAPIAgent,
-    PostAPIMerchant
+    PostAPIMerchant,
+    PostAPICustomer
 };

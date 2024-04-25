@@ -20,6 +20,7 @@ import Slugify from '../CommonMethods/Sulgify';
 import Agent from '../pages/Users/Agent';
 import Toast from '../components/Toast/Toast';
 import Merchant from '../pages/Users/Merchants';
+import Customer from '../pages/Users/Customer';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -103,6 +104,7 @@ export default function NavigationRoutes (props) {
                                                 <Route path="/profile/update-password" element={<UpdatePassword />} />
                                                 <Route path="/users/agents" element={<Agent />} />
                                                 <Route path="/users/merchants" element={<Merchant />} />
+                                                <Route path="/users/customers" element={<Customer />} />
                                             </Route>
                                             <Route path="*" element={<NotFound />} />
                                         </>

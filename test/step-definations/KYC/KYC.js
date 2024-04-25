@@ -1,14 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
+const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
 const assert = require('assert');
 const { driver } = require('../Driver');
 const path = require('path');
-
-Before(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-});
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I click on verify KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
@@ -51,7 +48,7 @@ When('I enter street name as {string}', async function (street_name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (street_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(street_name);
         await new Promise(resolve => setTimeout(resolve, 5000));
@@ -133,16 +130,6 @@ When('I select the ID document as {string}', async function (type) {
             break;
         case 'Employee ID':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="employee_id"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
-            break;
-        case 'Refugee ID':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="refugee_id"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
-            break;
-        case 'Asylum ID':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="asylum_id"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             await dropdownElement.click();
             break;
@@ -280,13 +267,8 @@ When('I select the verification document as {string}', async function (type) {
 
     let dropdownElement;
     switch (type) {
-    case 'Drivers licence':
+    case 'Driver’s licence':
         dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="driver\'s_licence"]')));
-        await driver.wait(until.elementIsVisible(dropdownElement));
-        await dropdownElement.click();
-        break;
-    case 'National ID':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown_list"] [data-testid="national_id"]')));
         await driver.wait(until.elementIsVisible(dropdownElement));
         await dropdownElement.click();
         break;
@@ -374,7 +356,7 @@ When('I select gender as {string}', async function (type) {
 When('I select the date of birth as {string}', async function (dob) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 100));
-    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(dob, Key.ENTER));
     await new Promise(resolve => setTimeout(resolve, 500));
 });
@@ -418,7 +400,7 @@ When('I search and select institution as {string}', async function (instituion) 
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(instituion);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="institute_0"]'))).click();
@@ -431,7 +413,7 @@ When('I enter the other institution name as {string}', async function (name) {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
@@ -497,7 +479,7 @@ When('I enter the other occupation as {string}', async function (occupation) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(occupation);
 });
 
@@ -506,7 +488,7 @@ When('I enter the other self employed occupation as {string}', async function (o
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="self_employed_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(occupation);
 });
 
@@ -545,7 +527,7 @@ When('I enter employer name as {string}', async function (name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="employer_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
@@ -586,7 +568,7 @@ When('I select valid town and district', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys('M');
     await new Promise(resolve => setTimeout(resolve, 5000));
@@ -647,53 +629,4 @@ When('I should view monthly income and monthly withdrawal selected as {string}',
     await driver.wait(until.elementIsVisible(monthlyWithdrawal));
     const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
     assert.equal(monthlyWithdrawalValue, expectedValue);
-});
-
-When('I select the nature of permit as {string}', async function (type) {
-    // Write code here that turns the phrase above into concrete actions
-    let dropdownElement;
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown"]')));
-    await driver.wait(until.elementIsVisible(element));
-    await element.click();
-
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    switch (type) {
-    case 'Single/Multiple entry visa':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]')));
-        await driver.wait(until.elementIsVisible(dropdownElement));
-        await dropdownElement.click();
-        break;
-    case 'Business Permit':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="business_permit"]')));
-        await driver.wait(until.elementIsVisible(dropdownElement));
-        await dropdownElement.click();
-        break;
-    case 'Temporary Resident Permit':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="temporary_resident_permit"]')));
-        await driver.wait(until.elementIsVisible(dropdownElement));
-        await dropdownElement.click();
-        break;
-    case 'Permanent Resident Permit':
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="permanent_resident_permit"]')));
-        await driver.wait(until.elementIsVisible(dropdownElement));
-        await dropdownElement.click();
-        break;
-    default:
-        dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]')));
-        await driver.wait(until.elementIsVisible(dropdownElement));
-        await dropdownElement.click();
-        break;
-    }
-});
-
-When('I enter the reference number as {string}', async function (reference_number) {
-    // Write code here that turns the phrase above into concrete actions
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="reference_number"]')));
-    await driver.wait(until.elementIsVisible(element));
-
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
-    if (reference_number !== '') {
-        await element.sendKeys(reference_number);
-    }
 });

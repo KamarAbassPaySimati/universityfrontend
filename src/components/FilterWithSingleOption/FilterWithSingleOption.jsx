@@ -76,7 +76,7 @@ const FilterWithSingleOption = ({
                         { Object.keys(filterOptionTwo).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2 capitalize'>
-                                    {key}
+                                    {key === 'simplifiedkyc' ? 'Simplified KYC' : key === 'fullkyc' ? 'Full KYC' : key}
                                 </div>
                                 <div className='flex gap-10'>
                                     {filterOptionTwo[key].map((option) => ( // in a key number of options (active, inactive)
@@ -99,7 +99,7 @@ const FilterWithSingleOption = ({
                         { Object.keys(filterOptionThree).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-[600] mb-2 capitalize'>
-                                    {key}
+                                    {key === 'simplifiedkyc' ? 'Simplified KYC' : key === 'fullkyc' ? 'Full KYC' : key}
                                 </div>
                                 <div className='flex gap-10'>
                                     {filterOptionThree[key].map((option) => ( // in a key number of options (active, inactive)

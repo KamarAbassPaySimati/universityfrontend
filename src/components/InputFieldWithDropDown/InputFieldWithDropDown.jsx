@@ -17,8 +17,7 @@ function InputFieldWithDropDown (props) {
     useOnClickOutside(outsideClickRef, () => {
         setShow(false);
     });
-    // Sort the options array before rendering
-    const sortedOptions = options.slice().sort();
+
     useOnClickOutside(infoRef, () => {
         setShowInfo(false);
     });
@@ -85,7 +84,7 @@ function InputFieldWithDropDown (props) {
                 border border-[#E5E4E5] max-h-[210px] overflow-auto bg-[#fff]
                 ${show === true ? 'show' : 'hidden'}`} aria-labelledby="patient-dropdownMenuButton1"
                 >
-                    {sortedOptions.map((item, index = 0) => (
+                    {options.map((item, index = 0) => (
                         <li data-testid={`${item.replaceAll(' ', '_').toLowerCase()}`} onClick={(e) => {
                             e.preventDefault(); setShow(false);
                             handleInput(item, id);

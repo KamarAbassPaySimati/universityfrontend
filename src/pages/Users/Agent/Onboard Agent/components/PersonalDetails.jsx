@@ -67,12 +67,22 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 key: 'industry',
                 require: true,
                 options: [
+                    'Accommodation & Food Service Activities',
+                    'Agriculture, Forestry & Fishing',
+                    'Commerce | Wholesale & Retail Trade',
+                    'Construction',
                     'Education Services',
-                    'Transport & Storage Services',
-                    'FDH Bank',
-                    'Real Estate Activities',
+                    'Financial & Insurance Activities',
+                    'Healthcare Services',
                     'Information & Communication',
-                    'Healthcare Services']
+                    'Manufacturing',
+                    'Mining & Quarrying',
+                    'Public Administration & Defence',
+                    'Professional Services',
+                    'Real Estate Activities',
+                    'Transport & Storage Services',
+                    'Utilities | Electricity, Gas & Water'
+                ]
             },
             'Town/District': {
                 label: 'Town/District',

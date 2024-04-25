@@ -281,7 +281,7 @@ export const GetDocumentInfomation = (kycType, documentType) => {
             };
         case 'Simplified KYC':
             return {
-                information: VerificationInfomationFull,
+                information: VerificationInfomationSimplified,
                 heading: 'Your ID Verification Document Options'
             };
         default:

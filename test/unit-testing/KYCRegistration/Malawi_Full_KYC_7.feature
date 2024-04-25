@@ -155,6 +155,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full Skip Everything
             | "CDH Investment Bank" | ""                  | "7Edge"           |
             | "CDH Investment Bank" | "2137987389172983"  | ""                |
 
+    @delete_admin_account
     Scenario: KYC personal details with valid details
         Given I am in KYC personal details screen
         When I click on skip button
