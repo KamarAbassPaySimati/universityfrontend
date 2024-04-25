@@ -165,13 +165,13 @@ export const GetIdDocumentList = (kycType, documentType) => {
 export const IdInfomationFull = {
     List1: {
         text: 'Please provide one of these documents plus a selfie (Biometric ID)',
-        insideList1: {
+        'National ID': {
             text: 'Valid National ID Card issued by National Registration Bureau',
             insideList1: {
                 text: 'Front and back'
             }
         },
-        insideList2: {
+        Passport: {
             text: 'Valid Passport issued by Department of Immigration'
         }
     }
@@ -179,28 +179,28 @@ export const IdInfomationFull = {
 export const VerificationInfomationFull = {
     List1: {
         text: 'Please provide one of these documents for additional verification of your primary ID:',
-        insideList1: {
+        'Driver\'s Licence': {
             text: 'Valid Driver\'s Licence issued by an appropriate authority',
             insideList1: {
                 text: 'Front and back'
             }
         },
-        insideList2: {
+        'Traffic Register Card': {
             text: 'Valid Traffic Register Card issued by an appropriate authority',
             insideList1: {
                 text: 'Front and back'
             }
         },
-        insideList3: {
+        'Birth Certificate': {
             text: 'Birth certificate'
         },
-        insideList4: {
+        'Employer Letter': {
             text: 'Stamped Letter with Verifiable Particulars of an employer',
             insideList1: {
                 text: 'Signed by Head of the employer'
             }
         },
-        insideList5: {
+        'Institute Letter': {
             text: 'Stamped Letter with Verifiable Particulars of a learning institution',
             insideList1: {
                 text: 'Signed by Head of the institution'
@@ -211,25 +211,25 @@ export const VerificationInfomationFull = {
 export const IdInfomationSimplified = {
     List1: {
         text: 'Please provide one of these documents plus a selfie (Biometric ID)',
-        insideList1: {
+        'Driver\'s Licence': {
             text: 'Valid Driver\'s Licence issued by an appropriate authority',
             insideList1: {
                 text: 'Front and back'
             }
         },
-        insideList2: {
+        'Traffic Register Card': {
             text: 'Valid Traffic Register Card issued by an appropriate authority',
             insideList1: {
                 text: 'Front and back'
             }
         },
-        insideList3: {
+        'Birth Certificate': {
             text: 'Birth certificate (for minors only)'
         },
-        insideList4: {
+        'Student ID': {
             text: 'Valid Student Identification from recognised learning institution'
         },
-        insideList5: {
+        'Employee ID': {
             text: 'Valid Employee Identification authenticated by a Commissioner for Oaths'
         }
     }
