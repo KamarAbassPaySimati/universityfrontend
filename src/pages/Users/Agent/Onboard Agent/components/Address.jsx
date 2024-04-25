@@ -2,7 +2,7 @@ import React from 'react';
 import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
 import { nationality } from '../../../../../components/JsonLists/Nationality';
 
-export default function Address ({ handleStates, states, submitSelected }) {
+export default function Address ({ bankSelected, handleStates, states, submitSelected }) {
     const AddressDetails = {
         nothing_to_show: {
             po_box_no: {
@@ -48,12 +48,14 @@ export default function Address ({ handleStates, states, submitSelected }) {
             Nationality: {
                 label: 'Nationality',
                 type: 'dropdown',
-                key: 'industry',
+                key: 'nationality',
                 require: true,
                 options: nationality
             }
         },
-        'Malawi Address': AddressDetails.nothing_to_show,
+        'Malawi Address': AddressDetails.nothing_to_show
+    };
+    const InterNationalAddress = {
         'International Address (Optional)': {
             postal_zip_code: {
                 label: 'Postal/Zip Code',
@@ -102,6 +104,13 @@ export default function Address ({ handleStates, states, submitSelected }) {
                     handleOnChange={handleStates}
                     states={states}
                     submitSelected={submitSelected}
+                />
+                <FelidDivision
+                    divisionClassName = {'w-1/3'}
+                    divisionObject = {InterNationalAddress}
+                    handleOnChange={handleStates}
+                    states={states}
+                    submitSelected={bankSelected}
                 />
             </div>
         </>

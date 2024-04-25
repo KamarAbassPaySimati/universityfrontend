@@ -114,7 +114,6 @@ export default function RegisterKYC () {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
-        console.log(GetDocumentValidation(states.personal_customer, 'Verification Document'));
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -126,6 +125,24 @@ export default function RegisterKYC () {
                 }
             }
             );
+            if ((states.nationality !== undefined || states.nationality !== '') && states.citizen_type !== 'Malawi citizen') {
+                if (key !== 'skip') {
+                    setSubmitSelected(true);
+                }
+                count = count + 1;
+            }
+            if (!((states.intl_street_name === '' || states.intl_street_name === undefined) &&
+            (states.intl_district === '' || states.intl_district === undefined) &&
+            (states.intl_town_village_ta === '' || states.intl_town_village_ta === undefined))) {
+                ['intl_street_name', 'intl_town_village_ta', 'intl_district'].map((bank) => {
+                    if (states[bank] === '' || states[bank] === undefined) {
+                        if (key !== 'skip') {
+                            setBankSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                });
+            }
             return count === 0;
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
@@ -326,8 +343,7 @@ export default function RegisterKYC () {
                 if (!handleValidation('address_details')) {
                     setIsLoadingButton(false);
                 } else {
-                    console.log('states', states);
-                    handleAPICall({
+                    const body = {
                         po_box_no: states?.po_box_no,
                         house_number: states?.house_number,
                         street_name: states?.street_name,
@@ -336,7 +352,11 @@ export default function RegisterKYC () {
                         district: states?.district,
                         paymaart_id: id,
                         address_details_status: 'completed'
-                    }, 'identity_details'
+                    };
+                    if (states.citizen_type !== 'Malawi citizen') {
+                        body.citizen_type = states.nationality;
+                    }
+                    handleAPICall(body, 'identity_details'
                     );
                 }
                 break;
@@ -392,6 +412,9 @@ export default function RegisterKYC () {
                         switch (item) {
                         case 'citizen':
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
+                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawi citizen') {
+                                object.nationality = res.data.data[item];
+                            }
                             break;
                         case 'kyc_type':
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
@@ -498,7 +521,10 @@ export default function RegisterKYC () {
                     : <>
                         <KYCTopWithType
                             Name={'KYC Registration'}
-                            type={states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'}
+                            type={states.citizen_type === 'Malawi citizen'
+                                ? states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'
+                                : 'Non - Malawi Full KYC'
+                            }
                         />
                         <div
                             data-testid="KYC_Registration"
@@ -517,6 +543,7 @@ export default function RegisterKYC () {
                                         handleStates={handleInputFelids}
                                         states={states}
                                         submitSelected={submitSelected}
+                                        bankSelected={bankSelected}
                                     />}
                                     {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                         handleStates={handleInputFelids}

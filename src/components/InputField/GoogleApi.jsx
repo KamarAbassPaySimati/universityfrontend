@@ -7,6 +7,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
     const handlePlaceSelect = (place) => {
         handleOnChange(place.target.value, id);
+        console.log('ccccc', id);
         switch (id) {
         case 'district':
             handleOnChange('', 'street_name');
@@ -25,11 +26,20 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
 
     const autocompleteOptions = () => {
         switch (id) {
+        case 'intl_district':
+            return {
+                types: ['(regions)']
+            };
         case 'district':
         case 'occupation_town':
             return {
                 types: ['(regions)'],
                 componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
+            };
+        case 'intl_street_name':
+        case 'intl_town_village_ta':
+            return {
+                types: ['address']
             };
         case 'street_name':
         case 'town_village_ta':
@@ -42,7 +52,13 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         }
     };
     const handlePlaceSelected = (place) => {
+        console.log('jsdniiiddw', id);
         switch (id) {
+        case 'country' :
+            handleOnChange(place.formatted_address, 'country');
+            handleOnChange('', 'intl_street_name');
+            handleOnChange('', 'intl_town_village_ta');
+            break;
         case 'district':
             handleOnChange(place.formatted_address, 'district');
             handleOnChange('', 'street_name');
@@ -51,9 +67,17 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         case 'occupation_town':
             handleOnChange(place.formatted_address, 'occupation_town');
             break;
+        case 'intl_street_name':
+            handleOnChange(place.formatted_address, 'intl_street_name');
+            autofillTownVillageTAAndDistrict(place);
+            break;
         case 'street_name':
             handleOnChange(place.formatted_address, 'street_name');
             autofillTownVillageTAAndDistrict(place);
+            break;
+        case 'intl_town_village_ta':
+            handleOnChange(place.formatted_address, 'intl_town_village_ta');
+            autofillDistrict(place);
             break;
         case 'town_village_ta':
             handleOnChange(place.formatted_address, 'town_village_ta');
@@ -94,8 +118,13 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             }
         }
         // Set the values for district and town/village/TA
-        handleOnChange(district, 'district');
-        handleOnChange(townVillageTA, 'town_village_ta');
+        if (id === 'intl_street_name') {
+            handleOnChange(district, 'intl_district');
+            handleOnChange(townVillageTA, 'intl_town_village_ta');
+        } else {
+            handleOnChange(district, 'district');
+            handleOnChange(townVillageTA, 'town_village_ta');
+        }
     };
 
     const autofillDistrict = (place) => {
@@ -104,7 +133,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             const component = addressComponents[i];
             const types = component.types;
             if (types.includes('administrative_area_level_1')) {
-                handleOnChange(component.long_name, 'district');
+                handleOnChange(component.long_name, id === 'intl_town_village_ta' ? 'intl_district' : 'district');
                 break;
             }
         }
