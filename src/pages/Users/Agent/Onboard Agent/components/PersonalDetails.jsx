@@ -21,7 +21,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
     ];
 
     const bankInputFelid = {
-        'Banking  Information for Payouts (Optional)': {
+        'Banking Information for Payouts (Optional)': {
             'Bank Name': {
                 label: 'Bank Name',
                 type: 'dropdown',

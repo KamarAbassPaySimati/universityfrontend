@@ -171,7 +171,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
     Scenario: Upload verification document
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Drivers License"
+        When I select the verification document as "Drivers licence"
         And I upload the front image of document as <image_front>
         Then I should read a message stating that <message>
         And I upload the back image of document as <image_back>
@@ -184,7 +184,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
     Scenario: Upload valid ID document details
         Given I am in KYC identity document details screen
         When I click on verification documents tab
-        When I select the verification document as "Drivers License"
+        When I select the verification document as "Drivers licence"
         And I upload the front image of document as "document_front.png"
         And I upload the back image of document as "document_back.png"
         Then I should be able to view the preview of the document front and back

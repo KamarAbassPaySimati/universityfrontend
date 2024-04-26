@@ -414,9 +414,6 @@ const OnboardAgent = ({ role }) => {
             security_questions: transformArray(securityQuestions)
         };
         if (role === 'customer') {
-            console.log('came inside');
-            console.log(formData.profileImage, 'data1');
-            console.log(formData.makeProfilePublic, 'data2');
             payload.profile_pic = formData.profileImage;
             payload.public_profile = formData.makeProfilePublic;
         }

@@ -5,13 +5,13 @@ import Button from '../Button/Button';
 import KYCRegistrationPopup from './KYCRegistrationPopup';
 import KYCRegistrationStatusPart from './KYCRegistrationStatusPart';
 
-export default function KYCRegistration ({ states, handleStates, handleSubmit, isLoading }) {
+export default function KYCRegistration ({ states, handleStates, handleSubmit, isLoading, buttonText }) {
     const citizenType = ['Malawi citizen', 'Non Malawi citizen'];
     const personalCustomer = ['Full KYC', 'Simplified KYC'];
     const [registrationProcess, setRegistrationProcess] = useState(false);
     return (
         <div className='flex w-full py-8 px-10 h-heightFullWithPadding'>
-            <KYCRegistrationStatusPart status={'Pending'}/>
+            <KYCRegistrationStatusPart buttonText={buttonText}/>
             <div className='w-[60%] bg-[#ffffff] px-[80px] flex flex-col justify-between  overflow-auto scrollBar'>
                 <div className=''>
                     <p className='font-normal text-[24px] leading-[32px] py-[5%]'>KYC Registration</p>
@@ -32,27 +32,34 @@ export default function KYCRegistration ({ states, handleStates, handleSubmit, i
                     </div>
                     <p className='font-normal text-header-dark text-[16px] leading-[24px] pb-3'>Personal Customer</p>
                     {personalCustomer.map((radioItem) => (
-                        <InputTypeRadio
-                            id={radioItem}
-                            label={radioItem}
-                            key={radioItem}
-                            checkedState={states?.personal_customer === radioItem}
-                            handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
-                        />))}
-                    <p className="ml-[30px] text-neutral-primary text-[12px]
+                        (states?.citizen_type === 'Non Malawi citizen' && radioItem !== 'Full KYC')
+                            ? null
+                            : (
+                                <InputTypeRadio
+                                    id={radioItem}
+                                    label={radioItem}
+                                    key={radioItem}
+                                    checkedState={states?.personal_customer === radioItem}
+                                    handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
+                                />)))}
+                    {states?.citizen_type === 'Malawi citizen' && <>
+                        <p className="ml-[30px] text-neutral-primary text-[12px]
                         leading-[20px] font-normal mb-[5%]">
-                        *Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed
-                        300,000 MWK; or whose monthly withdrawals do not exceed 300,000 MWK
-                    </p>
-                    <div className='w-full flex items-center justify-between bg-background-light px-3 rounded '>
-                        <p className='px-3 font-normal text-[20px] leading-[28px] text-header-dark'>Business Customer</p>
-                        <div class="moving-text-container">
-                            <button class="moving-text-btn">
-                                <span class="moving-text font-normal text-[12px] leading-[18px] text-[#FFFFFF]">Coming Soon</span>
-                            </button>
-                        </div>
+                            *Simplified KYC Registration is available to Malawi citizens whose monthly income does not exceed
+                            300,000 MWK; or whose monthly withdrawals do not exceed 300,000 MWK
+                        </p>
+                        <div className='w-full flex items-center justify-between bg-background-light px-3 rounded '>
+                            <p className='px-3 font-normal text-[20px] leading-[28px] text-header-dark'>Business Customer</p>
+                            <div className="moving-text-container">
+                                <button className="moving-text-btn">
+                                    <span
+                                        className="moving-text font-normal text-[12px] leading-[18px] text-[#FFFFFF]">
+                                        Coming Soon</span>
+                                </button>
+                            </div>
 
-                    </div>
+                        </div>
+                    </>}
                 </div>
                 <div>
                     <Button

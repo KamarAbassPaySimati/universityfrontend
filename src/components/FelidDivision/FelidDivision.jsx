@@ -4,7 +4,6 @@ import InputFieldWithDropDown from '../InputFieldWithDropDown/InputFieldWithDrop
 import GoogleApi from '../InputField/GoogleApi';
 
 export default function FelidDivision ({
-    divisionClassName,
     divisionObject,
     handleOnChange,
     states,
@@ -15,7 +14,7 @@ export default function FelidDivision ({
             {Object.keys(divisionObject).map((divItem, index = 0) => (
                 <Fragment key={divisionObject[divItem]}>
                     {divItem !== 'nothing_to_show' &&
-                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium mb-6 ml-2.5
+                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
                     ${index !== 0 ? 'pt-6' : 'pt-4'}`}>{divItem}</p>}
                     <div className='flex flex-wrap'>
                         {Object.values(divisionObject[divItem]).map((divObj) => (
