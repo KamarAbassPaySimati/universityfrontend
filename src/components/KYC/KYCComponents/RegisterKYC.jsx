@@ -99,7 +99,8 @@ export default function RegisterKYC ({ role }) {
 
     const handleAPICall = async (body, tab) => {
         try {
-            const res = await dataService.PostAPI('agent-users/create-kyc-secure', body);
+            const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+            const res = await dataService.PostAPI(`${endPoint}/create-kyc-secure`, body);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {

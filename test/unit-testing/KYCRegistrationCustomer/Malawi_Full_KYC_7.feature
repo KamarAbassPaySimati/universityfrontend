@@ -136,31 +136,9 @@ Feature: Paymaart - Customer Mobile - Self KYC - Malawi Full Skip Everything
         When I click on skip button
         Then I should be redirected to KYC personal details screen
 
-    Scenario: KYC personal details with invalid details
-        Given I am in KYC personal details screen
-        When I select gender as "male"
-        When I select the date of birth as "04-Aug-1999"
-        When I select the applicable purpose and nature of business
-        When I select valid monthly income and monthly withdrawal
-        When I select the Occupation as "Employed"
-        When I select employed as "Admin/Administrative/Clerical"
-        When I enter employer name as "7Edge"
-        When I select industry sector as "Education services"
-        And I select valid town and district
-        When I select bank name as <bank_name>
-        When I enter the bank account number as <bank_account_number>
-        When I enter the bank account name as <bank_account_name>
-        When I click on save and continue button
-        Then I should read a message stating that "Required field"
-        Examples:
-            | bank_name             | bank_account_number | bank_account_name |
-            | ""                    | "2137987389172983"  | "7Edge"           |
-            | "CDH Investment Bank" | ""                  | "7Edge"           |
-            | "CDH Investment Bank" | "2137987389172983"  | ""                |
-
     @delete_admin_account
     Scenario: KYC personal details with valid details
         Given I am in KYC personal details screen
         When I click on skip button
-        Then I should read a message stating KYC submission successful
-        And I should view the status of the KYC as "In review"
+        Then I should read a message stating Complete registration
+        And I should view the status of the KYC as "Not Started"

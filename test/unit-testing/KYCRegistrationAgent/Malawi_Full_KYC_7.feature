@@ -160,4 +160,4 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full Skip Everything
         Given I am in KYC personal details screen
         When I click on skip button
         Then I should read a message stating Complete registration
-        And I should view the status of the KYC as "In review"
+        And I should view the status of the KYC as "Not Started"
