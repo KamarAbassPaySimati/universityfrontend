@@ -11,9 +11,8 @@ const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
     const Navigate = useNavigate();
     const handleResendCredentials = async () => {
-        const response = accessRole === 'agent'
-            ? await dataService.PostAPIAgent(resendCredentials, { email })
-            : await dataService.PostAPIMerchant(resendCredentials, { email });
+        const endPoint = accessRole === 'agent' ? 'agent-users' : accessRole === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${resendCredentials}`, { email });
         if (!response.error) {
             setToastSuccess('Credentials resent successfully');
         } else {

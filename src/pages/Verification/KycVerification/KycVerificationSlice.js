@@ -11,7 +11,7 @@ export const KycVerificationList = createAsyncThunk('kycVerifications', async (u
     // Construct URL safely using query parameters instead of string interpolation
 
     try {
-        const res = await dataService.GetAPIAgent(`admin-users/${url}`);
+        const res = await dataService.GetAPI(`agent-users/${url}`);
         return res;
     } catch (error) {
         // Log error or send notification

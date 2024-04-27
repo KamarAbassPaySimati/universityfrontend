@@ -99,7 +99,7 @@ export default function RegisterKYC ({ role }) {
 
     const handleAPICall = async (body, tab) => {
         try {
-            const res = await dataService.PostAPIAgent('create-kyc-secure', body);
+            const res = await dataService.PostAPI('agent-users/create-kyc-secure', body);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {
@@ -447,8 +447,8 @@ export default function RegisterKYC ({ role }) {
 
     const getKYCView = async () => {
         try {
-            const res = await dataService.GetAPI(`admin-users/view-kyc-secure?paymaart_id=${id}`,
-                role === 'agent' ? 'agent' : 'customer-user');
+            const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+            const res = await dataService.GetAPI(`${endPoint}/view-kyc-secure?paymaart_id=${id}`);
             if (res.data.data !== '') {
                 const object = {};
                 const statusObject = {};
