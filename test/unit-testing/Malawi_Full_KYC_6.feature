@@ -190,6 +190,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full ID - Passport, Verific
             | "7Edge"       | ""                   |
 
 
+    @delete_admin_account
     Scenario: KYC personal details with valid details
         Given I am in KYC personal details screen
         When I select gender as "male"
