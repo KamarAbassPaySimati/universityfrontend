@@ -38,10 +38,12 @@ export default {
                 'accent-positive': '#13B681',
                 'accent-information': '#0066F6',
                 'background-light': '#F0ECFF',
+                'background-dark': '#67389A',
                 'neutral-grey': '#F8F8F8',
                 'accent-info-secondary': '#D9E8FE',
                 'accent-negative-secondary': '#FFE8E8',
                 'accent-positive-secondary': '#ECFDF5',
+                'accent-positive-secondary_color': '#DDF7F0',
                 error: '#FF4343',
                 background: '#F6F8F9',
                 'header-dark': '#252C32'
@@ -58,6 +60,8 @@ export default {
             minHeight: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
+                loaderHight: 'calc(100vh - 343px)',
+                heightDropDown: 'calc(100vh - 610px)',
                 noDataError: 'calc(100vh - 240px)'
             },
             maxHeight: {

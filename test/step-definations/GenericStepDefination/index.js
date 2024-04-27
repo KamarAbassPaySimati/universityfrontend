@@ -3,7 +3,6 @@ const { until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const assert = require('assert');
 Then('I should read a message stating that {string}', { timeout: 35000 }, async function (errorMessage) {
-    // callback(null)
     let check = false;
     let retries = 400;
 
@@ -14,7 +13,7 @@ Then('I should read a message stating that {string}', { timeout: 35000 }, async 
         if (check) {
             return 'passed';
         } else {
-            await new Promise(resolve => setTimeout(resolve, 300));
+            await new Promise(resolve => setTimeout(resolve, 100));
             retries--;
         }
     }
@@ -51,6 +50,10 @@ When('I click on the sort by {string}', async function (sortBy) {
         break;
     case 'Agent Name':
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_agent_name"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        break;
+    case 'Merchant Name':
+        await driver.wait(until.elementLocated(By.css('[data-testid="sort_merchant_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
     case 'Submission Date':

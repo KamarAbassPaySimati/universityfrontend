@@ -401,6 +401,7 @@ When('I enter the email address as {string} and password as {string}', async fun
 });
 
 When('I submit the login form', async function () {
+    await new Promise(resolve => setTimeout(resolve, 700));
     await driver.wait(until.elementLocated(By.css('[data-testid="login_button"]'))).click();
 });
 
@@ -418,7 +419,7 @@ Given('I am presented with the authenticator QR Code', async function () {
 });
 
 When('I click on the proceed to authenticate button', async function () {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 750));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="proceed_next_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -453,16 +454,16 @@ When('I scan the QR code', { timeout: 20000 }, async function () {
     // Split the URI by the '?' character to get the parameters
     const uriParts = qr_code_data.split('?');
     // Iterate through the parameters to find the 'secret' parameter
-    let secret;
+    global.secret = '';
     for (const param of uriParts[1].split('&')) {
         const [key, value] = param.split('=');
         if (key === 'secret') {
-            secret = value;
+            global.secret = value;
             break;
         }
     }
 
-    global.TOTP = await generateTOTP(secret, 0);
+    global.TOTP = await generateTOTP(global.secret, 0);
 });
 
 Given('I am on the TOTP screen', async function () {
@@ -493,6 +494,7 @@ When('I enter a valid TOTP', async function () {
         await new Promise(resolve => setTimeout(resolve, 100));
     }
     await new Promise(resolve => setTimeout(resolve, 100));
+    global.TOTP = await generateTOTP(global.secret, 0);
 
     await driver.wait(until.elementLocated(By.id('digit-1')));
     for (let i = 0; i < global.TOTP.length; i++) {
@@ -531,8 +533,6 @@ When('I enter the TOTP obtained from the previously scanned device', async funct
 });
 
 Then('I should be presented with 2FA Enabled successfully page', async function () {
-    await new Promise(resolve => setTimeout(resolve, 3000));
-
     const element_header = await driver.wait(until.elementLocated(By.css('[data-testid="2FA-enabled-header"]')));
     await driver.wait(until.elementIsVisible(element_header));
     const element_header_content = await element_header.getText();

@@ -48,7 +48,6 @@ const Topbar = ({
         setSearchParams({ ...params });
     };
     const handleSearchParamsForFilter = (key, value) => {
-        console.log('tea');
         const params = Object.fromEntries(searchParams);
         params.page = 1;
         if (searchParams.get(key) !== null) {
@@ -92,7 +91,7 @@ const Topbar = ({
     };
 
     return (
-        <div className="relative my-2 ">
+        <div className="relative my-2  ">
             <input
                 type="text"
                 value={search}
@@ -100,7 +99,7 @@ const Topbar = ({
                 onChange={handleSearch}
                 placeholder= {placeHolder}
                 className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
-                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[330px] ml-4 pr-8 rounded-[4px]
+                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[350px] ml-4 pr-8 rounded-[4px]
                 ${search?.length > 0 ? 'bg-[#F8F8F8]' : ''}`}
             />
             <Image
@@ -112,7 +111,7 @@ const Topbar = ({
                 src="search_close"
                 onClick={handleClearSearch}
                 testId='search-close'
-                className="absolute top-1/2 -translate-y-1/2 left-[320px] cursor-pointer bg-[#F8F8F8]"
+                className="absolute top-1/2 -translate-y-1/2 left-[340px] cursor-pointer bg-[#F8F8F8]"
             />}
             {
                 singleSelectFilter

@@ -67,9 +67,6 @@ const Agent = () => {
         }
     }, [GetList]);
 
-    useEffect(() => {
-        console.log(notFound, 'not');
-    }, [notFound]);
     return (
         <CardHeader
             activePath='Agents'
@@ -83,19 +80,24 @@ const Agent = () => {
             headerWithoutButton={false}
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
-                {(List?.data?.length !== 0 ||
-                (searchParams.get('status') !== null || searchParams.get('search') !== null)) && !notFound &&
-                <div className='bg-[#fff] border-b border-neutral-outline'>
-                    <Topbar
-                        setSearchParams={setSearchParams}
-                        searchParams={searchParams}
-                        filterOptions={filterOptions}
-                        placeHolder="Paymaart ID, name or phone number "
-                        filterType='Filter agent list'
-                        isLoading={loading}
-                        filterActive={(searchParams.get('status') !== null)}
-                    />
-                </div>
+                {(!notFound && List?.data?.length === 0 &&
+                        searchParams.get('status') === null &&
+                    searchParams.get('search') === null)
+                    ? (
+                        <></>
+                    )
+                    : (!notFound &&
+                    <div className='bg-[#fff] border-b border-neutral-outline'>
+                        <Topbar
+                            setSearchParams={setSearchParams}
+                            searchParams={searchParams}
+                            filterOptions={filterOptions}
+                            placeHolder="Paymaart ID, name or phone number "
+                            filterType='Filter agent list'
+                            isLoading={loading}
+                            filterActive={(searchParams.get('status') !== null)}
+                        />
+                    </div>)
                 }
                 {!notFound && !(List?.data?.length === 0 && !loading &&
                 !(searchParams.get('status') !== null || searchParams.get('search') !== null)) &&
