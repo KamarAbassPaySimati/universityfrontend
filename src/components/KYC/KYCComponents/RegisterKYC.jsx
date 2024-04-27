@@ -41,13 +41,14 @@ export default function RegisterKYC ({ role }) {
         monthly_income: 'Up to 300,000.00 MWK',
         monthly_withdrawal: 'Up to 300,00.000 MWK'
     });
-    const [documentSideBarData, setDocumentSidebarData] = useState({
+    const initialDocumentSideBarData = {
         documentTypes: {
             'ID Document': 'clear',
             'Verification Document': 'clear'
         },
         selectedData: 'ID Document'
-    });
+    };
+    const [documentSideBarData, setDocumentSidebarData] = useState(initialDocumentSideBarData);
     const [searchParams, setSearchParams] = useSearchParams();
     const [progressBarStatus, setProgressBarStatus] = useState(ProgressBar);
 
@@ -94,6 +95,7 @@ export default function RegisterKYC ({ role }) {
         default:
             break;
         }
+        setDocumentSidebarData(initialDocumentSideBarData);
         handleSearchParamsValue('tab', nextTab, searchParams, setSearchParams);
     };
 
