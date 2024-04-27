@@ -38,7 +38,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm install --cache .npm
+            npm install --force
             node scripts/licences_complaince.js
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
@@ -46,8 +46,6 @@ stages:
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
-            node --version
-            npm --version
             npm run eslint
           displayName: 'Lint'
     - job: "secret"
@@ -113,7 +111,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm install --cache .npm
+            npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
           displayName: 'Dependencies'
         - script: |
@@ -142,7 +140,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm install --cache .npm
+            npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
@@ -262,7 +260,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm install --cache .npm
+            npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
@@ -307,7 +305,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm install --cache .npm
+            npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
@@ -379,7 +377,7 @@ stages:
             cacheHitVar: CACHE_RESTORED
           displayName: Cache npm
         - script: |
-            npm install --cache .npm
+            npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
           name: environment
