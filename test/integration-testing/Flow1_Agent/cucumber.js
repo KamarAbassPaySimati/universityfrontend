@@ -4,7 +4,9 @@ module.exports = {
         paths: [
             'test/integration-testing/Flow1_Agent/OnboardAgent.feature',
             'test/integration-testing/Flow1_Agent/ListAgent.feature',
-            'test/integration-testing/Flow1_Agent/MalawiFullAgentKYC.feature'
+            'test/integration-testing/Flow1_Agent/MalawiFullAgentKYC.feature',
+            'test/integration-testing/Flow1_Agent/MalawiSimplifiedKYC.feature',
+            'test/integration-testing/Flow1_Agent/NonMalawiKYC.feature'
         ]
     }
 };
