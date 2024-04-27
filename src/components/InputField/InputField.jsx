@@ -12,6 +12,7 @@ const InputField = ({
     id,
     error,
     label,
+    inputType,
     placeholder,
     loginError,
     showLoginError,
@@ -21,7 +22,9 @@ const InputField = ({
     className,
     notShowErrorBottom,
     maxLength,
-    editAction
+    divClassName,
+    editAction,
+    disableInput
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -32,7 +35,7 @@ const InputField = ({
     };
 
     return (
-        <div className='flex flex-col gap-2 relative'>
+        <div className={`flex flex-col gap-2 relative ${divClassName || ''}`}>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <input
                 autoComplete={autoComplete || 'off'}
@@ -41,16 +44,16 @@ const InputField = ({
                 type={givenType ? isPasswordType ? 'password' : 'text' : type || 'text'}
                 className={`placeholder:text-neutral-secondary text-neutral-primary 
                 ${editAction === 'yes' ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'} 
-                px-[10px] py-[11px]
+                px-[10px] py-[11px] ${type === 'password' ? 'pr-[62px]' : ''} 
                     font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal 
-                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr`}
+                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr `}
                 id={id}
                 placeholder={placeholder}
                 onFocus={() => onFocus(id)}
-                onChange={(e) => onChange(e, id)}
+                onChange={(e) => onChange(e, id, inputType)}
                 onKeyDown={handleKeyDown}
                 maxLength={maxLength}
-                disabled = {editAction === 'yes'}
+                disabled = {editAction === 'yes' || disableInput}
 
             />
             {/* && value.length > 0 */}

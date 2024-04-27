@@ -16,11 +16,11 @@ Given('I navigate to capital bank listing', async function () {
 
 Then('I should view all the trust banks', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const trustBank1 = await driver.wait(until.elementLocated(By.css('[data-testid="Trust Banks"]')));
-    const trustBank2 = await driver.wait(until.elementLocated(By.css('[data-testid="Main Capital"]')));
-    const trustBank3 = await driver.wait(until.elementLocated(By.css('[data-testid="Suspense"]')));
-    const trustBank4 = await driver.wait(until.elementLocated(By.css('[data-testid="Transaction fees & Commissions"]')));
-    const trustBank5 = await driver.wait(until.elementLocated(By.css('[data-testid="Taxes"]')));
+    const trustBank1 = await driver.wait(until.elementLocated(By.css('[data-testid="trust_banks_tab"]')));
+    const trustBank2 = await driver.wait(until.elementLocated(By.css('[data-testid="main_capital_tab"]')));
+    const trustBank3 = await driver.wait(until.elementLocated(By.css('[data-testid="suspense_tab"]')));
+    const trustBank4 = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_fees_&_commissions_tab"]')));
+    const trustBank5 = await driver.wait(until.elementLocated(By.css('[data-testid="taxes_tab"]')));
 
     await driver.wait(until.elementIsVisible(trustBank1));
     await driver.wait(until.elementIsVisible(trustBank2));
