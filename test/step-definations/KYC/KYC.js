@@ -57,14 +57,14 @@ When('I enter street name as {string}', async function (street_name) {
 });
 
 When('I select the Nationality', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]')));
-    await driver.wait(until.elementIsVisible(monthly_income));
-    await monthly_income.click();
+// Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]')));
+    await driver.wait(until.elementIsVisible(element));
 
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    await driver.wait(until.elementLocated(By.css('[data-testid="nationality_dropdown_list"] [data-testid="afghan"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]'))).sendKeys('indian');
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="nationality_0"]'))).click();
 });
 
 When('I select the nature of permit as {string}', async function (string) {

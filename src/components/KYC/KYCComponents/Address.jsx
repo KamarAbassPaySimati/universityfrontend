@@ -47,10 +47,9 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
         nothing_to_show: {
             Nationality: {
                 label: 'Nationality',
-                type: 'dropdown',
+                type: 'InputSearch',
                 key: 'nationality',
-                require: true,
-                options: nationality
+                require: true
             }
         },
         'Malawi Address': AddressDetails.nothing_to_show
@@ -95,6 +94,12 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
             }
         }
     };
+    const handleSearchItem = async (id, newValue) => {
+        return nationality.filter(item => {
+            // Example: assuming data is an array of objects with a 'name' field
+            return item.toLowerCase().includes(newValue.toLowerCase());
+        });
+    };
     return (
         <>
             <div data-testid="kyc_address_details">
@@ -104,6 +109,7 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
                     handleOnChange={handleStates}
                     states={states}
                     submitSelected={submitSelected}
+                    handleSearchItem={handleSearchItem}
                 />
                 {states.citizen_type === 'Non Malawi citizen' && <FelidDivision
                     divisionClassName = {'w-1/3'}
