@@ -50,7 +50,7 @@ const UpdateToNewPassword = () => {
         } else {
             try {
                 setIsLoading(true);
-                const response = await dataService.PostAPI(updatePassword,
+                const response = await dataService.PostAPI(`admin-users/${updatePassword}`,
                     { old_password: oldPassword, new_password: newPassword });
                 if (!response.error) {
                     setIsLoading(false);

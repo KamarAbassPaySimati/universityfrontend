@@ -46,7 +46,7 @@ export default function SpecificAdminView () {
     const handleConfirmAction = async () => {
         try {
             setIsLoading(true);
-            const response = await dataService.PatchAPI(adminActivateDeactivate,
+            const response = await dataService.PatchAPI(`admin-users/${adminActivateDeactivate}`,
                 { username: userDetails?.Email, status: View.status === 'active' ? 'false' : 'true' });
             if (!response.error) {
                 setIsLoading(false);

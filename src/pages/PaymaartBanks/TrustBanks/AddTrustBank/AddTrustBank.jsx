@@ -107,7 +107,7 @@ const AddTrustBank = () => {
                         : formData.refNo === 'PTBA2' ? 'Trust Bank 2' : 'Trust Bank 3'
                 };
                 const response = (
-                    await dataService.PostAPI(addTrustBank, payload));
+                    await dataService.PostAPI(`admin-users/${addTrustBank}`, payload));
                 if (!response.error) {
                     setIsUpdateLoading(false);
                     setToastSuccess('Trust bank added successfully');
