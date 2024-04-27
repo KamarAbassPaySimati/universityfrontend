@@ -16,7 +16,7 @@ const SetNewPassword = () => {
     const [token, setToken] = useState('');
     useEffect(() => {
         const verifyJWT = async (token) => {
-            const response = await dataService.PostAPIWithoutHeader('verify-token', { token });
+            const response = await dataService.PostAPIWithoutHeader('admin-users/verify-token', { token });
             if (!response.error) {
                 setIsValidToken(true);
             } else {

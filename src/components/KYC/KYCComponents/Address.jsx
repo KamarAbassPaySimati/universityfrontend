@@ -1,6 +1,6 @@
 import React from 'react';
-import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
-import { nationality } from '../../../../../components/JsonLists/Nationality';
+import FelidDivision from '../../FelidDivision/FelidDivision';
+import { nationality } from '../../JsonLists/Nationality';
 
 export default function Address ({ bankSelected, handleStates, states, submitSelected }) {
     const AddressDetails = {

@@ -9,11 +9,9 @@ const initialState = {
 
 export const AgentList = createAsyncThunk('agentUsers', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
-    const safeUrl =
-        `agent-list?${searchParams.toString()}`;
 
     try {
-        const res = await dataService.GetAPI(safeUrl);
+        const res = await dataService.GetAPI(`admin-users/agent-list?${searchParams.toString()}`);
         return res;
     } catch (error) {
         // Log error or send notification

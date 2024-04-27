@@ -48,7 +48,7 @@ function App (props) {
                     }
                 }
                 try {
-                    const response = await dataService.PatchAPI(updateLoggedIn);
+                    const response = await dataService.PatchAPI(`admin-users/${updateLoggedIn}`);
                     console.log('response of hub api', response);
                 } catch (error) {
                     console.log('auth tokens have not been refreshed.');
@@ -58,7 +58,7 @@ function App (props) {
             case 'signedIn':
                 // Call api
                 try {
-                    const response = await dataService.PatchAPI(updateLoggedIn);
+                    const response = await dataService.PatchAPI(`admin-users/${updateLoggedIn}`);
                     console.log('response of hub api', response);
                 } catch (error) {
                     console.log('auth tokens have not been refreshed.');

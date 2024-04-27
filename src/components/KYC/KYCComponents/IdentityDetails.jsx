@@ -1,5 +1,5 @@
 import React from 'react';
-import DocumentSidebar from '../../../../../components/DocumentTab/DocumentSidebar';
+import DocumentSidebar from '../../DocumentTab/DocumentSidebar';
 import Documents from './Documents';
 
 export default function IdentityDetails ({ handleStates, states, documentSideBarData, setDocumentSidebarData, submitSelected }) {

@@ -6,8 +6,6 @@ import InputField from '../../../../components/InputField/InputField';
 import InputFieldWithButton from '../../../../components/InputFieldWithButton/InputFieldWithButton';
 import Image from '../../../../components/Image/Image';
 import { Tooltip } from 'react-tooltip';
-import { baseURLAgent } from '../../../../config';
-import axios from 'axios';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import Button from '../../../../components/Button/Button';
 import SecurityQuestionsShimmer from '../../../../components/Shimmers/SecurityQuestionsShimmer';
@@ -17,7 +15,7 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import verificationValidation from './verificationValidation';
 import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
-import RegistrationSuccessful from './components/RegistrationSuccessful';
+import RegistrationSuccessful from '../../../../components/KYC/KYCComponents/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 import ProfileUploadPlaceholder from '../../../../components/S3Upload/ProfileImageUpload';
 
@@ -216,7 +214,8 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingEmailVerify(true);
         }
-        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(sendOtp, payload) : await dataService.PostAPICustomer(sendOtp, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${sendOtp}`, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
@@ -277,7 +276,8 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingPhoneVerify(true);
         }
-        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(sendOtp, payload) : await dataService.PostAPICustomer(sendOtp, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${sendOtp}`, payload);
         if (!response.error) {
             setPhoneOtp('');
             setOtpError('');
@@ -323,8 +323,8 @@ const OnboardAgent = ({ role }) => {
         } else if (id === 'phoneNumberOtp') {
             setloadingPhoneNoOtpVerify(true);
         }
-
-        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(verifyOtp, payload) : await dataService.PostAPICustomer(verifyOtp, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${verifyOtp}`, payload);
         if (id === 'emailOtp') {
             setLoadingOtpVerify(false);
         } else if (id === 'phoneNumberOtp') {
@@ -371,10 +371,10 @@ const OnboardAgent = ({ role }) => {
         const fetchSecurityQuestions = async () => {
             try {
                 setQuestionsLoading(true);
-                const data = await axios.get(`${baseURLAgent}security-questions`);
+                const response = await dataService.GetAPI('agent-users/security-questions');
                 setQuestionsLoading(false);
-                if (data.status === 200) {
-                    setSecurityQuestions(data.data.data);
+                if (response.data.success_status) {
+                    setSecurityQuestions(response.data.data);
                 } else {
                     setToastError('Something went wrong!');
                 }
@@ -418,7 +418,8 @@ const OnboardAgent = ({ role }) => {
             payload.public_profile = formData.makeProfilePublic;
         }
         setIsLoading(true);
-        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : role === 'merchant' ? await dataService.PostAPIMerchant(createAgent, payload) : await dataService.PostAPICustomer(createAgent, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${createAgent}`, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);

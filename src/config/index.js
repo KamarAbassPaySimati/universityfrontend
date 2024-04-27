@@ -1,7 +1,4 @@
-export const baseURL = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/admin-users/';
-export const baseURLAgent = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/agent-users/';
-export const baseURLMerchant = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/merchant-users/';
-export const baseURLCustomer = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/customer-user/';
+export const baseURL = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/';
 // export const exceptThisSymbols = ['e', 'E', '+', '-', '.',''];
 // export const branchLiveKey =process.env.REACT_APP_BRANCH_LIVE_KEY
 export const CDN = 'https://' + import.meta.env.VITE_CDN_URL + '/public/';

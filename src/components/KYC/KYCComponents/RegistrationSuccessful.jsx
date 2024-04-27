@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
-import Image from '../../../../../components/Image/Image';
-import Button from '../../../../../components/Button/Button';
-import { dataService } from '../../../../../services/data.services';
-import { endpoints } from '../../../../../services/endpoints';
-import GlobalContext from '../../../../../components/Context/GlobalContext';
+import Image from '../../Image/Image';
+import Button from '../../Button/Button';
+import { dataService } from '../../../services/data.services';
+import { endpoints } from '../../../services/endpoints';
+import GlobalContext from '../../Context/GlobalContext';
 import { useNavigate } from 'react-router-dom';
 
 const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
@@ -11,9 +11,8 @@ const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
     const Navigate = useNavigate();
     const handleResendCredentials = async () => {
-        const response = accessRole === 'agent'
-            ? await dataService.PostAPIAgent(resendCredentials, { email })
-            : await dataService.PostAPIMerchant(resendCredentials, { email });
+        const endPoint = accessRole === 'agent' ? 'agent-users' : accessRole === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${resendCredentials}`, { email });
         if (!response.error) {
             setToastSuccess('Credentials resent successfully');
         } else {
@@ -48,7 +47,11 @@ const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
                         className='max-w-[200px] mt-2'
                         testId='verify_KYC'
                         text='KYC Registration'
-                        onClick={() => Navigate(`/users/agents/register-agent/kyc-registration/${paymartId}`)}
+                        onClick={() => Navigate(
+                            accessRole === 'agent'
+                                ? `/users/agents/register-agent/kyc-registration/${paymartId}`
+                                : `/users/customers/register-customer/kyc-registration/${paymartId}`
+                        )}
                     />
                 </div>
             </div>
