@@ -60,7 +60,7 @@ export default function FelidDivision ({
                                                     <InputSearch
                                                         testId={divObj?.key}
                                                         id={divObj?.key}
-                                                        handleInput={() => {}}
+                                                        handleInput={handleOnChange}
                                                         className={'w-[339px]'}
                                                         value={states[divObj?.key]}
                                                         handleSearchItem={handleSearchItem}
