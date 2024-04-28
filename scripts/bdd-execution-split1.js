@@ -42,6 +42,8 @@ async function runBddByFolder (directoryPaths, flow) {
             const childProcess = exec(command, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error executing Cucumber for ${feature}:`, error);
+                    console.log(stdout);
+                    console.error(stderr);
                     const endTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' }); // Record the overall execution end time after all Cucumber tests have completed
                     // Write start and end times to a text file
                     fs.writeFileSync('execution_times.txt', `Execution Start Time: ${startTime}\nExecution End Time: ${endTime}\n\n`);
@@ -51,7 +53,6 @@ async function runBddByFolder (directoryPaths, flow) {
                 console.log(stdout);
                 console.error(stderr);
             });
-
             processes.push(childProcess);
         };
 
