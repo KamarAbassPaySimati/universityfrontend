@@ -20,6 +20,33 @@ Feature: Paymaart - Admin Web - Onboard Customer(Malawi Simplified KYC)
     The user should be able to upload the front and back of the document(multiple uploads) 16. User should be given the option to remove and reupload the documents.
     The system should show the user's the path chosen in KYC selection such as for eg: Malawi Citizen>Personal Customer>Simplified KYC
 
+    Scenario: Super admin onboard the customer with valid information
+        Given I navigate to customer onboarding screen
+        When I upload the customer profile picture as "profile.png"
+        When I enter a valid first name for customer registration
+        When I enter a valid middle name for customer registration
+        When I enter a valid last name for customer registration
+        When I enter a valid email address for customer registration
+        When I enter a valid phone number for customer registration
+        When I answer the security question one as "Answer1"
+        When I answer the security question two as "Answer2"
+        When I answer the security question three as "Answer3"
+        When I answer the security question four as "Answer4"
+        When I agree to the terms and conditions
+        When I submit the customer registration form
+        Then I should read a message stating that "Please verify your email address"
+        Then I should read a message stating that "Please verify your phone number"
+        When I click on verify email address
+        Then I should read a message stating that "Verification code has been sent to customer’s email. It's valid for 10 minutes"
+        When I enter the valid OTP and verify
+        Then I should see the verify email address button text changed to "VERIFIED"
+        When I click on verify phone number
+        Then I should read a message stating that "Verification code has been sent to customer’s phone number. It's valid for 10 minutes"
+        When I enter the valid OTP and verify
+        Then I should see the verify phone number button text changed to "VERIFIED"
+        When I submit the customer registration form
+        Then I should read a message stating customer registration successfully
+        
     Scenario: Navigate to KYC verification
         Given I click on verify KYC
         Then I should be redirected to KYC verification screen
