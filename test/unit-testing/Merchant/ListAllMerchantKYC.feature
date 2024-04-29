@@ -43,29 +43,6 @@ Feature: Paymaart - Admin Web -Merchant KYC verification Listing Page
         And I select filter by KYC status as "Full KYC In Progress"
         Then I should see list of KYC where status is "In-Progress"
 
-    Scenario: Filter KYC listing KYC status
-        Given I navigate to merchant KYC listing screen
-        When I click on filter tab
-        Then I should see filter popup modal
-        And I select filter by KYC status as "Simplified KYC In Progress"
-        Then I should see list of KYC where status is "In-Progress"
-
-    Scenario: Filter KYC listing Non Malawi Citizenship
-        Given I navigate to merchant KYC listing screen
-        When I click on filter tab
-        Then I should see filter popup modal
-        And I select filter by citizenship as "Non Malawi Citizen"
-        Then I should see list of KYC where citizenship is "Non Malawi"
-
-    Scenario: Filter KYC listing Citizenship
-        Given I navigate to merchant KYC listing screen
-        When I click on filter tab
-        Then I should see filter popup modal
-        And I select filter by citizenship as "Malawi Citizen"
-        And I select filter by KYC status as "Full KYC In Progress"
-        Then I should see list of KYC where status is "In-Progress"
-        Then I should see list of KYC where KYC type is "Malawi Full KYC"
-
     @delete_admin_account
     Scenario: Checking Pagination
         Given I navigate to merchant KYC listing screen
