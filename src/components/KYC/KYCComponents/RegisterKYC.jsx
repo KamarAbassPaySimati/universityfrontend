@@ -12,7 +12,7 @@ import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
 import { dataService } from '../../../services/data.services';
 import {
-    AddressDetails, BankDetailsList, GetDocumentValidation, PersonalDetailsList, ProgressBar,
+    AddressDetails, BankDetailsList, GetDocumentValidation, MerchantProgressBar, PersonalDetailsList, ProgressBar,
     handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
 import { handleSearchParamsValue } from '../../../CommonMethods/ListFunctions';
@@ -50,7 +50,7 @@ export default function RegisterKYC ({ role }) {
     };
     const [documentSideBarData, setDocumentSidebarData] = useState(initialDocumentSideBarData);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [progressBarStatus, setProgressBarStatus] = useState(ProgressBar);
+    const [progressBarStatus, setProgressBarStatus] = useState(role === 'merchant' ? MerchantProgressBar : ProgressBar);
 
     const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
@@ -70,8 +70,15 @@ export default function RegisterKYC ({ role }) {
             case 'identity_details':
                 nextTab = 'address_details';
                 break;
-            case 'personal_details':
+            case 'trading_details':
                 nextTab = 'identity_details';
+                break;
+            case 'personal_details':
+                if (role === 'merchant') {
+                    nextTab = 'trading_details';
+                } else {
+                    nextTab = 'identity_details';
+                }
                 break;
             default:
                 break;
@@ -83,6 +90,13 @@ export default function RegisterKYC ({ role }) {
                 nextTab = 'identity_details';
                 break;
             case 'identity_details':
+                if (role === 'merchant') {
+                    nextTab = 'trading_details';
+                } else {
+                    nextTab = 'personal_details';
+                }
+                break;
+            case 'trading_details':
                 nextTab = 'personal_details';
                 break;
             case 'personal_details':
@@ -520,6 +534,12 @@ export default function RegisterKYC ({ role }) {
                                 label: 'Identity Details'
                             };
                             break;
+                        case 'trading_details_status' :
+                            statusObject.trading_details = {
+                                status: res.data.data[item],
+                                label: 'Trading Details'
+                            };
+                            break;
                         case 'info_details_status':
                             statusObject.personal_details = {
                                 status: res.data.data[item],
@@ -600,7 +620,7 @@ export default function RegisterKYC ({ role }) {
                             <div className='flex flex-col'>
                                 <StatusProgressBar
                                     ProgressBar={progressBarStatus}
-                                    LineClass={'line-class'}
+                                    LineClass={role === 'merchant' ? 'line-class-merchant' : 'line-class'}
                                     currentTab={searchParams.get('tab')}
                                 />
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>
