@@ -468,7 +468,7 @@ export default function RegisterKYC ({ role }) {
             const res = await dataService.GetAPI(`${endPoint}/view-kyc-secure?paymaart_id=${id}`);
             if (res.data.data !== '') {
                 const object = {};
-                const statusObject = {};
+                // const statusObject = {};
                 Object.keys(res.data.data).map((item) => {
                     setOldStateValue({
                         citizen_type: res.data.data.citizen === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen',
@@ -523,25 +523,25 @@ export default function RegisterKYC ({ role }) {
                             object['Verification Document'] = res.data.data[item];
                             break;
                         case 'address_details_status':
-                            statusObject.address_details = {
+                            statusbar.address_details = {
                                 status: res.data.data[item],
                                 label: 'Address Details'
                             };
                             break;
                         case 'id_details_status':
-                            statusObject.identity_details = {
+                            progressBarStatus.identity_details = {
                                 status: res.data.data[item],
                                 label: 'Identity Details'
                             };
                             break;
                         case 'trading_details_status' :
-                            statusObject.trading_details = {
+                            progressBarStatus.trading_details = {
                                 status: res.data.data[item],
                                 label: 'Trading Details'
                             };
                             break;
                         case 'info_details_status':
-                            statusObject.personal_details = {
+                            progressBarStatus.personal_details = {
                                 status: res.data.data[item],
                                 label: 'Personal Details'
                             };
@@ -559,7 +559,7 @@ export default function RegisterKYC ({ role }) {
                     }
                 }
                 );
-                setProgressBarStatus(statusObject);
+                setProgressBarStatus(progressBarStatus);
                 setStates(object);
             }
         } catch (error) {
