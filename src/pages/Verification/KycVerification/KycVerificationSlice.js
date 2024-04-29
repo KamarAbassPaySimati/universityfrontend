@@ -11,7 +11,7 @@ export const KycVerificationList = createAsyncThunk('kycVerifications', async (u
     // Construct URL safely using query parameters instead of string interpolation
 
     try {
-        const res = await dataService.GetAPI(`agent-users/${url}`);
+        const res = await dataService.GetAPI(url);
         return res;
     } catch (error) {
         // Log error or send notification
@@ -21,7 +21,7 @@ export const KycVerificationList = createAsyncThunk('kycVerifications', async (u
 });
 
 const kycVerificationSlice = createSlice({
-    name: 'agent-kyc-list',
+    name: 'kyc-list',
     initialState,
     reducers: {
 

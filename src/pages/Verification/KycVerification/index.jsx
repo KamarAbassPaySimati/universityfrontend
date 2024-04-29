@@ -48,8 +48,8 @@ const KycVerification = () => {
     call the `AdminList` action creator with the `searchParams` as a parameter. */
     const GetList = useCallback(async () => {
         url = searchParams.get('type') === 'agents'
-            ? 'get-agent-kyc-list?'
-            : searchParams.get('type') === 'customers' ? 'get-customer-kyc-list?' : 'get-merchant-kyc-list?';
+            ? 'agent-users/get-agent-kyc-list?'
+            : searchParams.get('type') === 'customers' ? 'admin-users/customer-kyc-list?' : 'get-merchant-kyc-list?';
         if (searchParams.get('page') !== null) {
             url += `page=${searchParams.get('page')}`;
         }
@@ -232,7 +232,7 @@ const KycVerification = () => {
                     (!notFound && List?.data?.length === 0 &&
         searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
         searchParams.get('search') === null &&
-        searchParams.get('search') === null && searchParams.get('simplifiedkyc') === null &&
+        searchParams.get('simplifiedkyc') === null &&
         searchParams.get('fullkyc') === null)
                         ? (
 
