@@ -17,6 +17,20 @@ export const handleSearchParams = (key, value, searchParams, setSearchParams, pa
     }
     setSearchParams({ ...params });
 };
+export const handleSearchParamsForKyc = (key, value, searchParams, setSearchParams, page) => {
+    const params = Object.fromEntries(searchParams);
+    params[key] = value;
+    if (page !== 'false') {
+        params.page = 1;
+    }
+    if (value === 'non malawi citizen') {
+        delete params.simplifiedkyc;
+    }
+    if (searchParams.get('search') !== null) {
+        delete params.search;
+    }
+    setSearchParams({ ...params });
+};
 
 export const handleSearchParamsValue = (id, value, searchParams, setSearchParams) => {
     const params = Object.fromEntries(searchParams);

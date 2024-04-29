@@ -17,6 +17,12 @@ Given('I navigate to agent KYC listing screen', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
+Given('I navigate to customer KYC listing screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await driver.get('http://localhost:3000/verify/kyc-registration?page=1&type=customers&citizen=all');
+    await new Promise(resolve => setTimeout(resolve, 4000));
+});
+
 When('I select filter by citizenship as {string}', async function (citizenship) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 500));
@@ -24,7 +30,7 @@ When('I select filter by citizenship as {string}', async function (citizenship) 
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
-Then('I should see list of KYC where KYC type is {string}', async function (kycType) {
+Then('I should see list of KYC where KYC type is {string}', async function (citizenship) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 1500));
     const items = await driver.wait(until.elementsLocated(By.css('[data-testid="kyc_type"]')));
@@ -32,7 +38,7 @@ Then('I should see list of KYC where KYC type is {string}', async function (kycT
     const sortedItemTexts = [...itemTexts].sort();
 
     sortedItemTexts.map(data => {
-        return assert.equal(data, kycType);
+        return assert.equal(data, citizenship);
     });
 });
 
