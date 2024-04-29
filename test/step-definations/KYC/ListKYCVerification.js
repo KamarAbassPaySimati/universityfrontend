@@ -32,7 +32,7 @@ Then('I should see list of KYC where KYC type is {string}', async function (citi
     const sortedItemTexts = [...itemTexts].sort();
 
     sortedItemTexts.map(data => {
-        return assert.equal((data, citizenship), `Expected '${data}' to start with ${citizenship}`);
+        return assert.equal(data, citizenship);
     });
 });
 
