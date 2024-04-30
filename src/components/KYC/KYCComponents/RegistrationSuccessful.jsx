@@ -50,7 +50,9 @@ const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
                         onClick={() => Navigate(
                             accessRole === 'agent'
                                 ? `/users/agents/register-agent/kyc-registration/${paymartId}`
-                                : `/users/customers/register-customer/kyc-registration/${paymartId}`
+                                : accessRole === 'merchant'
+                                    ? `/users/merchants/register-merchant/kyc-registration/${paymartId}`
+                                    : `/users/customers/register-customer/kyc-registration/${paymartId}`
                         )}
                     />
                 </div>

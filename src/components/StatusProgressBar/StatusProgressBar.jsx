@@ -19,7 +19,7 @@ const ProgressBarComponent = ({ ProgressBar, LineClass, currentTab }) => {
     return (
         <>
             <div className='mx-auto mb-10'>
-                <div className='w-[500px] flex justify-around'>
+                <div className={`${Object.keys(ProgressBar).length >= 4 ? 'w-[630px]' : 'w-[500px]'} flex justify-around`}>
                     {Object.keys(ProgressBar).map((progressItem, index = 0) => (
                         <div key={progressItem} className={`rounded-full ${getColors(ProgressBar[progressItem].status, progressItem).outer} w-8 h-8 relative flex items-center justify-center`}>
                             <div className={`rounded-full ${getColors(ProgressBar[progressItem].status, progressItem).inner} w-[18px] h-[18px]`}></div>
@@ -27,7 +27,7 @@ const ProgressBarComponent = ({ ProgressBar, LineClass, currentTab }) => {
                         </div>
                     ))}
                 </div>
-                <div className='w-[500px] mt-2 capitalize flex justify-around text-center text-[16px] leading-[24px] font-medium'>
+                <div className={`${Object.keys(ProgressBar).length >= 4 ? 'w-[630px]' : 'w-[500px]'}  mt-2 capitalize flex justify-around text-center text-[16px] leading-[24px] font-medium`}>
                     {Object.keys(ProgressBar).map((progressItem) => (
                         <p key={progressItem}>
                             {progressItem.replaceAll('_', ' ')}
