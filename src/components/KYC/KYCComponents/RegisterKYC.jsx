@@ -509,8 +509,8 @@ export default function RegisterKYC ({ role }) {
         try {
             const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
             const res = await dataService.GetAPI(`${endPoint}/view-kyc-secure?paymaart_id=${id}`);
+            const object = {};
             if (res.data.data !== '') {
-                const object = {};
                 const statusObject = progressBarStatus;
                 Object.keys(res.data.data).map((item) => {
                     setOldStateValue({
@@ -604,8 +604,13 @@ export default function RegisterKYC ({ role }) {
                 }
                 );
                 setProgressBarStatus({ ...statusObject });
-                setStates(object);
             }
+            if (res.data.bank_details) {
+                object.bank_name = res.data.bank_details.bank_name;
+                object.account_number = res.data.bank_details.account_number;
+                object.account_name = res.data.bank_details.account_name;
+            }
+            setStates(object);
         } catch (error) {
             // Log error or send notification
             console.error('Error fetching orders:', error);
