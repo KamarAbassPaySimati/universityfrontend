@@ -49,7 +49,7 @@ const KycVerification = () => {
     const GetList = useCallback(async () => {
         url = searchParams.get('type') === 'agents'
             ? 'agent-users/get-agent-kyc-list?'
-            : searchParams.get('type') === 'customers' ? 'admin-users/customer-kyc-list?' : 'get-merchant-kyc-list?';
+            : searchParams.get('type') === 'customers' ? 'admin-users/customer-kyc-list?' : 'admin-users/merchant-kyc-list?';
         if (searchParams.get('page') !== null) {
             url += `page=${searchParams.get('page')}`;
         }
