@@ -110,9 +110,9 @@ Feature: Paymaart - Admin Web - Onboard Merchant (Malawi Full KYC)
 
     Scenario: KYC tranding details with valid details
         Given I am in KYC trading document details screen
-        When I enter street name as "M1"
-        Then I should see the town and district field getting pre-filled with google API data
-        When I select the trading types as "Hotels and Resorts"
+        When I enter trading street name as "M1"
+        Then I should see the trading town and district field getting pre-filled with google API data
+        When I select the trading types as "Hotels & Resorts"
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
 
