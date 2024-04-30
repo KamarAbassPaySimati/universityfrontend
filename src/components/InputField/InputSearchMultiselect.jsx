@@ -8,11 +8,12 @@ import Button2 from '../Button2/Button2';
 
 export default function InputSearchMultiselect (
     { testId, id, handleInput, handleSearchItem, label, value, submitSelected, className }) {
+    console.log('value', value);
     const [options, setOptions] = useState([]);
     const [search, setSearch] = useState('');
     const [timer, setTimer] = useState(null);
     const [show, setShow] = useState(false);
-    const [selectedValue, setSelectedValue] = useState(value === undefined || value === '' ? [] : value);
+    const [selectedValue, setSelectedValue] = useState([]);
 
     const outsideClickRef = useRef();
     const buttonRef = useRef();
@@ -35,11 +36,10 @@ export default function InputSearchMultiselect (
             }
         }, 500);
         setTimer(newTimer);
-        handleInput('', id);
     };
 
     const handleCheckBox = (value) => {
-        let checkBoxArray = selectedValue;
+        let checkBoxArray = selectedValue === undefined ? [] : selectedValue;
         if (value.target.checked) {
             // If checkbox is checked, add the value to checkedItems array
             checkBoxArray = [...checkBoxArray, value.target.value];
@@ -62,6 +62,7 @@ export default function InputSearchMultiselect (
         }
     };
     useEffect(() => {
+        setSelectedValue(value === undefined ? [] : value);
         window.addEventListener('resize', calculateDropdownPosition);
         calculateDropdownPosition(); // Initial position calculation
         return () => {
@@ -72,14 +73,14 @@ export default function InputSearchMultiselect (
         <div className='ml-2 pr-2'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
 
-            <div ref={outsideClickRef} className={`google-key relative ${(submitSelected && value?.trim() === '')
+            <div ref={outsideClickRef} className={`google-key relative ${(submitSelected && selectedValue?.length === 0)
                 ? 'google-key-error'
                 : 'google-key-border'}`}>
                 <input
                     type="text"
                     ref={buttonRef}
                     value={search}
-                    placeholder={selectedValue.length !== 0 ? `${selectedValue.length} selected` : 'Search'}
+                    placeholder={(value !== undefined && value?.length !== 0) ? `${value.length} selected` : 'Search'}
                     onChange={handleSearch}
                     className={className}
                     data-testid={testId}
@@ -113,7 +114,12 @@ export default function InputSearchMultiselect (
                     <div className='flex gap-2'>
                         <Button2
                             text={'Clear All'}
-                            onClick={() => setSelectedValue([])}
+                            onClick={() => {
+                                setSearch('');
+                                setShow(false);
+                                setSelectedValue([]);
+                                handleInput([], id);
+                            }}
                             testId={'re_capture_selfie'}
                             // disabled={loading}
                             className={'border-none text-primary-normal py-2 px-[35px] h-10'}
@@ -134,7 +140,8 @@ export default function InputSearchMultiselect (
 
                 </ul>
             </div>
-            {(submitSelected && value?.trim() === '') && <div className='mt-2'><ErrorMessage error={'Required field'} /></div>}
+            {(submitSelected && selectedValue?.length === 0) &&
+            <div className='mt-2'><ErrorMessage error={'Required field'} /></div>}
         </div>
 
     );

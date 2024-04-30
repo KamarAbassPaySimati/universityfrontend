@@ -2,6 +2,7 @@ import React from 'react';
 import FelidDivision from '../../FelidDivision/FelidDivision';
 import { tradingTypes } from '../../JsonLists/TradingTypes';
 import UploadPlaceholder from '../../S3Upload/UploadPlaceholder';
+import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
 
 export default function TradingDetails ({ states, handleStates, bankSelected, submitSelected }) {
     const AddressDetails = {
@@ -25,7 +26,7 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                 label: 'House Name/Number (Optional)',
                 type: 'input',
                 key: 'trading_house_name',
-                require: true
+                require: false
             },
             street_name: {
                 label: 'Street Name',
@@ -64,23 +65,30 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                     submitSelected={submitSelected}
                     handleSearchItem={handleSearchItem}
                 />
-                <div className="w-[48%] relative mr-2">
+                <div className="ml-2 mr-2">
                     <UploadPlaceholder
                         multiselectImage
                         info={'Maximum upload limit is 8 images'}
                         label={'Business images for public display (Optional)'}
                         testId={'business_images'}
-                        // disabled={states[type] === undefined}
                         path={'trading_data/business_image'}
                         handleUploadImg={handleStates}
                         selectedUploadImg={'trading_images'}
                         states={states}
                         handleStates={handleStates}
-                        // error={submitSelected && (states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`] ===
-                        // undefined ||
-                        // states[`${states[type]?.replaceAll(' ', '_').toLowerCase()}_img_front`] === '')}
                     />
                 </div>
+                <div className='ml-2'>
+                    <InputTypeCheckbox
+                        id={'public_images'}
+                        testId={'public_images'}
+                        checkboxText={'Make your business images public '}
+                        handleOnChange={() =>
+                            handleStates(states.public_images === undefined ? true : !states.public_images, 'public_images')}
+                        Checked={states.public_images !== undefined ? states.public_images : false}
+                    />
+                </div>
+
             </div>
         </>
     );
