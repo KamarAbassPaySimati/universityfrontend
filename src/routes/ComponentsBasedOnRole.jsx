@@ -76,6 +76,11 @@ export const ComponentsBasedOnRole = {
             name: 'Customer KYC Registration',
             element: <RegisterKYC role={'customers'}/>,
             path: '/users/customers/register-customer/kyc-registration/:id'
+        },
+        {
+            name: 'Merchant KYC Registration',
+            element: <RegisterKYC role={'merchant'}/>,
+            path: '/users/merchants/register-merchant/kyc-registration/:id'
         }
 
     ],

@@ -296,7 +296,16 @@ input[type='number'] {
   top: 13px;
   left: 30px;
   right: 0;
-
+}
+.line-class-merchant::after{
+  position: absolute;
+  content: "";
+  width: 450px;
+  height: 0;
+  border-top: 2px solid #A4A9AE;
+  top: 13px;
+  left: 30px;
+  right: 0;
 }
 
 .lower-alpha {list-style-type: lower-alpha;}

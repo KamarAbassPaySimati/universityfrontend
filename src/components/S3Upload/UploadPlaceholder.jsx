@@ -7,7 +7,7 @@ import GlobalContext from '../Context/GlobalContext';
 
 export default function UploadPlaceholder ({
     label, path, selectedUploadImg, states, handleStates, disabled, error, testId,
-    labelValue
+    labelValue, multiselectImage
 }) {
     const [loadingImg, setLoadingImg] = useState(false);
     const [showIframe, setShowIframe] = useState(false);
@@ -39,7 +39,7 @@ export default function UploadPlaceholder ({
     return (
         <div className=' py-4'>
             <p className='font-medium text-[14px] leading-4'>{label}</p>
-            {(states[selectedUploadImg] !== undefined && states[selectedUploadImg] !== '')
+            {(states[selectedUploadImg] !== undefined && states[selectedUploadImg] !== '' && multiselectImage === undefined)
                 ? <div className='mt-2 bg-background-light w-full h-[52px] rounded-lg flex justify-between items-center'>
                     <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium w-[70%] truncate'
                         title={states[selectedUploadImg].split('/')[states[selectedUploadImg].split('/').length - 1]}>
@@ -98,9 +98,32 @@ export default function UploadPlaceholder ({
                     </div>
                 </div>
             }
-            <IframeModal
+            {multiselectImage && states[selectedUploadImg] && states[selectedUploadImg].map((item) => (
+                <div className='flex' key={item}>
+                    <div className='mt-2 bg-background-light w-full h-[52px] rounded-lg flex justify-between items-center' >
+                        <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium w-[70%] truncate'
+                            title={item.split('/')[item.split('/').length - 1]}>
+                            {item.split('/')[item.split('/').length - 1]}</p>
+                        <div className='flex gap-3 px-2'>
+                            <Image src='eyeLight' testId={`view_${testId}`}
+                                className='h-6 w-6 cursor-pointer' onClick={() => setShowIframe(true)}/>
+                            <Image src='search_close' testId={`remove_${testId}`} className='h-6 w-6 cursor-pointer'
+                                onClick={() => {
+                                    handleDelete(item);
+                                    handleStates(item, selectedUploadImg);
+                                }
+                                }
+                            />
+                        </div>
+                    </div>
+                    <IframeModal
+                        isOpen={showIframe} handleClose={() => setShowIframe(false)} link={item}
+                        labelValue={labelValue}/>
+                </div>
+            ))}
+            {multiselectImage === undefined && <IframeModal
                 isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]}
-                labelValue={labelValue}/>
+                labelValue={labelValue}/>}
         </div>
     );
 }

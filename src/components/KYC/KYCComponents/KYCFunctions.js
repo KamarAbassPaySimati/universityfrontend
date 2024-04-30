@@ -13,6 +13,24 @@ export const ProgressBar = {
         label: 'Personal Details'
     }
 };
+export const MerchantProgressBar = {
+    address_details: {
+        status: 'current',
+        label: 'Address Details'
+    },
+    identity_details: {
+        status: 'skip',
+        label: 'Identity Details'
+    },
+    trading_details: {
+        status: 'skip',
+        label: 'Trading Details'
+    },
+    personal_details: {
+        status: 'skip',
+        label: 'Personal Details'
+    }
+};
 export const occupationEmployed = ['employed_role', 'employer_name', 'industry', 'occupation_town'];
 export const occupationSelfEmployed = ['self_employed_specify'];
 export const occupationEduction = ['institute'];
@@ -40,7 +58,15 @@ export const handleStates = (value, id, type, setStates, states) => {
         }
         obj.purpose = checkBoxArray;
     } else {
-        if (id === 'occupation') {
+        if (id === 'trading_images') {
+            let imgArray = states.trading_images === undefined ? [] : states.trading_images;
+            if (imgArray.includes(value)) {
+                imgArray = imgArray.filter(item => item !== value);
+            } else {
+                imgArray.push(value);
+            }
+            obj[id] = imgArray;
+        } else if (id === 'occupation') {
             if (states.occupation !== value) {
                 occupationEmployed.forEach((item) => {
                     obj[item] = '';
