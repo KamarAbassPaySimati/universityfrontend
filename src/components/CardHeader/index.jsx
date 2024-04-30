@@ -16,7 +16,7 @@ import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
-import { handleSearchParams } from '../../CommonMethods/ListFunctions';
+import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
@@ -130,7 +130,7 @@ const CardHeader = ({
                         {toggleButtons && toggleButtons.map((item, index) => (
                             <button
                                 key={index}
-                                onClick={() => handleSearchParams('type', item.key.toLowerCase(), searchParams, setSearchParams)}
+                                onClick={() => handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams)}
                                 className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
                             >
                                 {item.key}

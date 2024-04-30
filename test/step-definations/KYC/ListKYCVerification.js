@@ -5,9 +5,21 @@ const { until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const { customSortDateDesc, customSortDateAsc } = require('../../bdd_modules/index.js');
 
+Given('I navigate to merchant KYC listing screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await driver.get('http://localhost:3000/verify/kyc-registration?page=1&type=merchant&citizen=all');
+    await new Promise(resolve => setTimeout(resolve, 4000));
+});
+
 Given('I navigate to agent KYC listing screen', async function () {
     // Write code here that turns the phrase above into concrete actions
     await driver.get('http://localhost:3000/verify/kyc-registration?page=1&type=agents&citizen=all');
+    await new Promise(resolve => setTimeout(resolve, 4000));
+});
+
+Given('I navigate to customer KYC listing screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await driver.get('http://localhost:3000/verify/kyc-registration?page=1&type=customers&citizen=all');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
@@ -16,6 +28,18 @@ When('I select filter by citizenship as {string}', async function (citizenship) 
     await new Promise(resolve => setTimeout(resolve, 500));
     await driver.wait(until.elementLocated(By.css(`[data-testid='filter-modal'] [data-testid='${citizenship}']`))).click();
     await new Promise(resolve => setTimeout(resolve, 4000));
+});
+
+Then('I should see list of KYC where KYC type is {string}', async function (citizenship) {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1500));
+    const items = await driver.wait(until.elementsLocated(By.css('[data-testid="kyc_type"]')));
+    const itemTexts = await Promise.all(items.map((item) => item.getText()));
+    const sortedItemTexts = [...itemTexts].sort();
+
+    sortedItemTexts.map(data => {
+        return assert.equal(data, citizenship);
+    });
 });
 
 Then('I should see list of KYC where citizenship is {string}', async function (citizenship) {

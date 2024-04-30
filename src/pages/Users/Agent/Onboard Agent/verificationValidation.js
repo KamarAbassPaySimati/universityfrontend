@@ -6,7 +6,6 @@ const invalidEmail = (email) => {
 export default function verificationValidation (state, setErrorState, ignoreKey) {
     console.log(state, 'state');
     console.log(setErrorState, 'er');
-    console.log(ignoreKey, 'ig');
 
     let isValid = true;
     const stateValiable = { ...state };
