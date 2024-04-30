@@ -610,7 +610,7 @@ export default function RegisterKYC ({ role }) {
                 object.account_number = res.data.bank_details.account_number;
                 object.account_name = res.data.bank_details.account_name;
             }
-            setStates(object);
+            setStates({ ...object });
         } catch (error) {
             // Log error or send notification
             console.error('Error fetching orders:', error);
@@ -625,7 +625,7 @@ export default function RegisterKYC ({ role }) {
                 handleSearchParamsValue('tab', null, searchParams, setSearchParams);
             }
         }
-        getKYCView();
+        // getKYCView();
     }, []);
     return (
         <CardHeader
