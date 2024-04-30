@@ -47,7 +47,7 @@ function InputFieldWithDropDown (props) {
                     {labelName}</label>
                 {information &&
                 <div ref={infoRef} className='flex'>
-                    <Image src="info_icon" className="w-5 h-5 cursor-pointer info-icon relative" onClick={() => setShowInfo(!showInfo)}/>
+                    <Image src="info_icon" className="w-5 h-5 cursor-pointer relative" onClick={() => setShowInfo(!showInfo)}/>
                     <div className='absolute z-10 ml-5'>
                         <Modal center open={showInfo} onClose={() => setShowInfo(false)} closeIcon={<Image src='x'/>} styles={{ modal: { borderRadius: 10 } }} >
                             <InformationList

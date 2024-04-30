@@ -3,6 +3,7 @@ import InputField from '../InputField/InputField';
 import InputFieldWithDropDown from '../InputFieldWithDropDown/InputFieldWithDropDown';
 import GoogleApi from '../InputField/GoogleApi';
 import InputSearch from '../InputField/InputSearch';
+import InputSearchMultiselect from '../InputField/InputSearchMultiselect';
 
 export default function FelidDivision ({
     divisionObject,
@@ -67,31 +68,43 @@ export default function FelidDivision ({
                                                         label={`${divObj?.label}`}
                                                         submitSelected={submitSelected}
                                                     />)
-                                                : (
-                                                    <InputField
-                                                        className={!(submitSelected && (states[divObj?.key] === undefined ||
+                                                : divObj.type === 'InputSearchMuliSelect'
+                                                    ? (
+                                                        <InputSearchMultiselect
+                                                            testId={divObj?.key}
+                                                            id={divObj?.key}
+                                                            handleInput={handleOnChange}
+                                                            className={'w-[339px]'}
+                                                            value={states[divObj?.key]}
+                                                            handleSearchItem={handleSearchItem}
+                                                            label={`${divObj?.label}`}
+                                                            submitSelected={submitSelected}
+                                                        />)
+                                                    : (
+                                                        <InputField
+                                                            className={!(submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
-                                                            ? 'w-[339px]'
-                                                            : 'w-[339px]'}
-                                                        divClassName='mx-2.5'
-                                                        value={states[divObj?.key]}
-                                                        // onFocus={handleFocus}
-                                                        id={divObj?.key}
-                                                        testId={divObj?.key}
-                                                        error={divObj?.require &&
+                                                                ? 'w-[339px]'
+                                                                : 'w-[339px]'}
+                                                            divClassName='mx-2.5'
+                                                            value={states[divObj?.key]}
+                                                            // onFocus={handleFocus}
+                                                            id={divObj?.key}
+                                                            testId={divObj?.key}
+                                                            error={divObj?.require &&
                                                         (submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
-                                                            ? 'Required field'
-                                                            : undefined}
-                                                        label={`${divObj?.label}`}
-                                                        placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
-                                                        // setEnteredLetter={setEnteredLetter}
-                                                        maxLength="100"
-                                                        onChange={handleOnChange}
-                                                        inputType={divObj?.type}
-                                                        disableInput={divObj?.disable}
-                                                    />
-                                                )}
+                                                                ? 'Required field'
+                                                                : undefined}
+                                                            label={`${divObj?.label}`}
+                                                            placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                            // setEnteredLetter={setEnteredLetter}
+                                                            maxLength="100"
+                                                            onChange={handleOnChange}
+                                                            inputType={divObj?.type}
+                                                            disableInput={divObj?.disable}
+                                                        />
+                                                    )}
                             </div>))}
                     </div>
                 </Fragment>
