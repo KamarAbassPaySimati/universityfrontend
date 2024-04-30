@@ -627,8 +627,8 @@ export default function RegisterKYC ({ role }) {
                 searchParams.get('tab') !== 'personal_details') {
                 handleSearchParamsValue('tab', null, searchParams, setSearchParams);
             }
+            getKYCView();
         }
-        // getKYCView();
     }, []);
     return (
         <CardHeader
