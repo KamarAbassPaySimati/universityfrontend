@@ -212,7 +212,7 @@ export const IdInfomationFull = {
             }
         },
         Passport: {
-            text: 'Valid Passport issued by Department of Immigration'
+            text: 'Valid Passport issued by Department of Immigration or other appropriate authority'
         }
     }
 };
