@@ -56,7 +56,7 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
     };
     return (
         <>
-            <div data-testid="kyc_trading_details">
+            <div data-testid="kyc_trading_details_screen">
                 <FelidDivision
                     divisionClassName = {'w-1/3'}
                     divisionObject = {AddressDetails}

@@ -120,13 +120,13 @@ export default function InputSearchMultiselect (
                                 setSelectedValue([]);
                                 handleInput([], id);
                             }}
-                            testId={'re_capture_selfie'}
+                            testId={`clear_all_${testId}`}
                             // disabled={loading}
                             className={'border-none text-primary-normal py-2 px-[35px] h-10'}
                         />
                         <Button
                             text={'Apply'}
-                            testId= {'selfie_looks_good'}
+                            testId={`apply_${testId}`}
                             className = 'max-w-[150px] h-10 ml-4 px-[51px]'
                             onClick={() => {
                                 setSearch('');
@@ -141,7 +141,7 @@ export default function InputSearchMultiselect (
                 </ul>
             </div>
             {(submitSelected && selectedValue?.length === 0) &&
-            <div className='mt-2'><ErrorMessage error={'Required field'} /></div>}
+            <div className=''><ErrorMessage error={'Required field'} /></div>}
         </div>
 
     );

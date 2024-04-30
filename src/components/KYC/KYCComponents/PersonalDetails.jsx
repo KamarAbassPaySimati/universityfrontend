@@ -259,7 +259,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 states={states}
                 submitSelected={submitSelected}
             />
-            {role !== 'merchant' && <FelidDivision
+            {(role === 'agent' || role === 'merchant') && <FelidDivision
                 divisionObject = {bankInputFelid}
                 handleOnChange={handleStates}
                 states={states}
