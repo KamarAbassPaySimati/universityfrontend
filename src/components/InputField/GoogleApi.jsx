@@ -6,6 +6,8 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, submitSelected }) => {
     const [key, setKey] = useState(0);
+    const [componentValue, setComponentValue] = useState(value);
+
     const handlePlaceSelect = (place) => {
         handleOnChange(place.target.value, id);
         switch (id) {
@@ -43,6 +45,10 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                 types: ['(regions)']
             };
         case 'district':
+            return {
+                types: ['administrative_area_level_2'],
+                componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
+            };
         case 'occupation_town':
             return {
                 types: ['(regions)'],
@@ -55,9 +61,13 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                 types: ['address']
             };
         case 'street_name':
+            return {
+                types: ['street_address', 'route'],
+                componentRestrictions: { country: 'mw' } // No district restriction
+            };
         case 'town_village_ta':
             return {
-                types: ['address'],
+                types: ['(cities)'],
                 componentRestrictions: { country: 'mw' } // No district restriction
             };
         default:
@@ -65,6 +75,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         }
     };
     const handlePlaceSelected = (place) => {
+        console.log('place.formatted_address', place.address_components[0].long_name);
         switch (id) {
         case 'country' :
             handleOnChange(place.formatted_address, 'country');
@@ -72,7 +83,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             handleOnChange('', 'intl_town_village_ta');
             break;
         case 'district':
-            handleOnChange(place.formatted_address, 'district');
+            handleOnChange(place.address_components[0].long_name, 'district');
             handleOnChange('', 'street_name');
             handleOnChange('', 'town_village_ta');
             break;
@@ -90,18 +101,16 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             break;
         case 'intl_town_village_ta':
             handleOnChange(place.formatted_address, 'intl_town_village_ta');
-            autofillDistrict(place);
+            handleOnChange(place.address_components[1].long_name, 'intl_town_village_ta');
             break;
         case 'town_village_ta':
             handleOnChange(place.formatted_address, 'town_village_ta');
-            autofillDistrict(place);
+            handleOnChange(place.address_components[1].long_name, 'town_village_ta');
             break;
         default:
             break;
         }
     };
-    const [componentValue, setComponentValue] = useState(value);
-
     useEffect(() => {
         // Update component value when the value prop changes
         setComponentValue(value);
@@ -147,18 +156,6 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         }
     };
 
-    const autofillDistrict = (place) => {
-        const addressComponents = place.address_components;
-        for (let i = 0; i < addressComponents.length; i++) {
-            const component = addressComponents[i];
-            const types = component.types;
-            if (types.includes('administrative_area_level_1')) {
-                handleOnChange(component.long_name, id === 'intl_town_village_ta' ? 'intl_district' : 'district');
-                break;
-            }
-        }
-    };
-
     return (
         <div className=''>
             <div className='mx-[10px]'>
@@ -170,6 +167,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                 ${(submitSelected && (componentValue === undefined || componentValue?.trim() === ''))
             ? 'google-key-error'
             : 'google-key-border'} google-key relative w-[339px]`}>
+                        {console.log('autocompleteOptions', autocompleteOptions())}
                         <GoogleComponent
                             placeholder={placeholder}
                             apiKey={GOOGLE_API}

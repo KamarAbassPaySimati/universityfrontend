@@ -19,6 +19,7 @@ import { handleSearchParamsValue } from '../../../CommonMethods/ListFunctions';
 import addApostrophe from '../../../CommonMethods/textCorrection';
 import KYCFinalPage from '../KYCFinalPage';
 import GlobalContext from '../../Context/GlobalContext';
+import TradingDetails from './TradingDetails';
 
 export default function RegisterKYC ({ role }) {
     const { id } = useParams();
@@ -468,7 +469,7 @@ export default function RegisterKYC ({ role }) {
             const res = await dataService.GetAPI(`${endPoint}/view-kyc-secure?paymaart_id=${id}`);
             if (res.data.data !== '') {
                 const object = {};
-                // const statusObject = {};
+                const statusObject = progressBarStatus;
                 Object.keys(res.data.data).map((item) => {
                     setOldStateValue({
                         citizen_type: res.data.data.citizen === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen',
@@ -523,25 +524,25 @@ export default function RegisterKYC ({ role }) {
                             object['Verification Document'] = res.data.data[item];
                             break;
                         case 'address_details_status':
-                            statusbar.address_details = {
+                            statusObject.address_details = {
                                 status: res.data.data[item],
                                 label: 'Address Details'
                             };
                             break;
                         case 'id_details_status':
-                            progressBarStatus.identity_details = {
+                            statusObject.identity_details = {
                                 status: res.data.data[item],
                                 label: 'Identity Details'
                             };
                             break;
                         case 'trading_details_status' :
-                            progressBarStatus.trading_details = {
+                            statusObject.trading_details = {
                                 status: res.data.data[item],
                                 label: 'Trading Details'
                             };
                             break;
                         case 'info_details_status':
-                            progressBarStatus.personal_details = {
+                            statusObject.personal_details = {
                                 status: res.data.data[item],
                                 label: 'Personal Details'
                             };
@@ -559,7 +560,7 @@ export default function RegisterKYC ({ role }) {
                     }
                 }
                 );
-                setProgressBarStatus(progressBarStatus);
+                setProgressBarStatus({ ...statusObject });
                 setStates(object);
             }
         } catch (error) {
@@ -646,6 +647,15 @@ export default function RegisterKYC ({ role }) {
                                         bankSelected={bankSelected}
                                         role={role}
                                     />}
+                                    {
+                                        searchParams.get('tab') === 'trading_details' &&
+                                        <TradingDetails
+                                            handleStates={handleInputFelids}
+                                            states={states}
+                                            submitSelected={submitSelected}
+                                            bankSelected={bankSelected}
+                                        />
+                                    }
                                 </div>
                             </div>
                             <div className='flex justify-between items-center'>
