@@ -72,7 +72,7 @@ const Customer = () => {
             activePath='Customers'
             paths={['Users']}
             pathurls={['users/customers']}
-            header='Customer list'
+            header='List of Customers'
             minHeightRequired={true}
             buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Customer'}`}
             navigationPath='/users/customers/register-customer'
