@@ -530,7 +530,7 @@ export default function RegisterKYC ({ role }) {
                             count = count + 1;
                         }
                     });
-                    setButtonStatus(count === 3 ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
+                    setButtonStatus(count === buttonText.length ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
                     if (res.data.data[item] !== null) {
                         switch (item) {
                         case 'citizen':
