@@ -17,7 +17,8 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                 label: 'Trading Types',
                 type: 'InputSearchMuliSelect',
                 key: 'trading_type',
-                require: true
+                require: true,
+                options: tradingTypes
             }
         },
         'Trading Address':

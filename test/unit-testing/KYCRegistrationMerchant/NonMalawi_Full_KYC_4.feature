@@ -20,33 +20,34 @@ Feature: Paymaart - Admin Web - Onboard Agent- Non Malawi KYC
     The system should show the user the path chosen in KYC selection such asfor eg: Non-Malawi KYC
     There should be an option to enter the Banking information(optional)
 
+    @perform_logout
     @add_admin_user
     @create_new_user_and_login
-    Scenario: Onboard new agent and navigate to KYC verification
-        Given I navigate to agent onboarding screen
-        When I enter a valid first name for agent registration
-        * I enter a valid middle name for agent registration
-        * I enter a valid last name for agent registration
-        * I enter a valid email address for agent registration
-        * I enter a valid phone number for agent registration
+    Scenario: Onboard merchant with valid details
+        Given I navigate to merchant onboarding screen
+        When I enter a valid first name for merchant registration
+        * I enter a valid middle name for merchant registration
+        * I enter a valid last name for merchant registration
+        * I enter a valid email address for merchant registration
+        * I enter a valid phone number for merchant registration
         * I answer the security question one as "Answer1"
         * I answer the security question two as "Answer2"
         * I answer the security question three as "Answer3"
         * I answer the security question four as "Answer4"
         * I agree to the terms and conditions
-        * I submit the agent registration form
+        * I submit the merchant registration form
         Then I should read a message stating that "Please verify your email address"
         Then I should read a message stating that "Please verify your phone number"
         When I click on verify email address
-        Then I should read a message stating that "Verification code has been sent to agent’s email. It's valid for 10 minutes"
+        Then I should read a message stating that "Verification code has been sent to merchant’s email. It's valid for 10 minutes"
         When I enter the valid OTP and verify
         Then I should see the verify email address button text changed to "VERIFIED"
         When I click on verify phone number
-        Then I should read a message stating that "Verification code has been sent to agent’s phone number. It's valid for 10 minutes"
+        Then I should read a message stating that "Verification code has been sent to merchant’s phone number. It's valid for 10 minutes"
         When I enter the valid OTP and verify
         Then I should see the verify phone number button text changed to "VERIFIED"
-        When I submit the agent registration form
-        Then I should read a message stating registration successfully
+        When I submit the merchant registration form
+        Then I should read a message stating merchant registration successfully
 
     Scenario: Navigate to KYC verification
         Given I click on verify KYC
@@ -98,15 +99,18 @@ Feature: Paymaart - Admin Web - Onboard Agent- Non Malawi KYC
         When I click on view document front preview
         Then I should view the preview of the uploaded document
 
-    Scenario: Navigate to personal details screen
+    Scenario: Navigate to trading details screen
         Given I am in KYC identity document details screen
         When I click on save and continue button
-        Then I should be redirected to KYC personal details screen
+        Then I should be redirected to KYC trading details screen
 
-    Scenario: KYC personal details with invalid details
-        Given I am in KYC personal details screen
+        Scenario: KYC tranding details with valid details
+        Given I am in KYC trading document details screen
+        When I enter trading street name as "M1"
+        Then I should see the trading town and district field getting pre-filled with google API data
+        When I select the trading types as "Hotels & Resorts"
         When I click on save and continue button
-        Then I should read a message stating that "Required field"
+        Then I should be redirected to KYC personal details screen
 
     @delete_admin_account
     Scenario: KYC personal details with invalid details
