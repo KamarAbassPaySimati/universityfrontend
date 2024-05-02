@@ -7,8 +7,11 @@ import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../../CommonMethods/ListFunctions';
+import { useNavigate } from 'react-router';
 
-const Table = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
+const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
+    const Navigate = useNavigate();
+
     return (
         <>
             <table className='w-full min-w-max'>
@@ -55,7 +58,9 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams }
                                         )}
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
-                                    <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' />
+                                    <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye'
+                                        onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`
+                                        )}/>
                                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
                                     <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
                                     <Tooltip
