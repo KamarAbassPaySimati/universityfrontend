@@ -89,6 +89,7 @@ Feature: Paymaart - Agent Mobile - Self KYC - Malawi Full (ID - National ID, Ver
     Account Number(10-15 characters)
 
 
+    @perform_logout
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard new agent and navigate to KYC verification
