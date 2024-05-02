@@ -39,7 +39,7 @@ export const handleStates = (value, id, type, setStates, states) => {
     const obj = {};
     if (type === 'input') {
         if (id === 'account_number' && value.target.value.trim() !== '') {
-            const regex = /^[a-zA-Z0-9]+$/;
+            const regex = /^[0-9]+$/;
             const currentValue = value.target.value;
             if (regex.test(currentValue) && value.target.value.length < 26) {
                 obj[id] = value.target.value;
@@ -212,7 +212,7 @@ export const IdInfomationFull = {
             }
         },
         Passport: {
-            text: 'Valid Passport issued by Department of Immigration'
+            text: 'Valid Passport issued by Department of Immigration or other appropriate authority'
         }
     }
 };
