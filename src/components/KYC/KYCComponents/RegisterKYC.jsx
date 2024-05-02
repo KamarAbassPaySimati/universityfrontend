@@ -160,8 +160,11 @@ export default function RegisterKYC ({ role }) {
             if (!((states.intl_street_name === '' || states.intl_street_name === undefined) &&
             (states.intl_district === '' || states.intl_district === undefined) &&
             (states.intl_landmark === '' || states.intl_landmark === undefined) &&
+            (states.intl_house_number === '' || states.intl_house_number === undefined) &&
+            (states.intl_po_box_no === '' || states.intl_po_box_no === undefined) &&
             (states.intl_town_village_ta === '' || states.intl_town_village_ta === undefined))) {
-                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district', 'intl_landmark'];
+                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district',
+                    'intl_landmark', 'intl_po_box_no', 'intl_house_number'];
                 intlData.map((bank) => {
                     if (states[bank] === '' || states[bank] === undefined) {
                         if (key !== 'skip') {
@@ -610,7 +613,7 @@ export default function RegisterKYC ({ role }) {
                 object.account_number = res.data.bank_details.account_number;
                 object.account_name = res.data.bank_details.account_name;
             }
-            setStates(object);
+            setStates({ ...object });
         } catch (error) {
             // Log error or send notification
             console.error('Error fetching orders:', error);
@@ -624,8 +627,8 @@ export default function RegisterKYC ({ role }) {
                 searchParams.get('tab') !== 'personal_details') {
                 handleSearchParamsValue('tab', null, searchParams, setSearchParams);
             }
+            getKYCView();
         }
-        getKYCView();
     }, []);
     return (
         <CardHeader

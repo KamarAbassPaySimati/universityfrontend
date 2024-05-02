@@ -8,7 +8,6 @@ import Button2 from '../Button2/Button2';
 
 export default function InputSearchMultiselect (
     { testId, id, handleInput, handleSearchItem, label, value, submitSelected, className }) {
-    console.log('value', value);
     const [options, setOptions] = useState([]);
     const [search, setSearch] = useState('');
     const [timer, setTimer] = useState(null);

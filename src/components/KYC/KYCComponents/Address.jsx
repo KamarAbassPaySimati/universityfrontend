@@ -60,13 +60,13 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
                 label: 'Postal/Zip Code',
                 type: 'input',
                 key: 'intl_po_box_no',
-                require: false
+                require: true
             },
             house_number: {
                 label: 'House Name/Number',
                 type: 'input',
                 key: 'intl_house_number',
-                require: false
+                require: true
             },
             street_name: {
                 label: 'Street Name',
