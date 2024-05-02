@@ -1,15 +1,15 @@
 Feature: Paymaart - Admin Web - Onboard Agent- Non Malawi KYC
-    As an Super/support/admin, I want the ability to onboard new agents and complete the Non Malawi Full KYC
+    As an Super/support/admin, I want the ability to onboard new Merchent and complete the Non Malawi Full KYC
     Conditions of Satisfaction
     Clear instructions and guidance should be provided on the required documents and in which format.
     There should be an option to select whether a user is Non Malawi 
     Agent should be able to upload relevant documents, such as Location details ID details and Personal details, during the onboarding process, according to their KYC selection.
     The platform should have a progress indicator to show agent how far users are in the onboarding process.
     A live selfie should be captured according to predefined rules during the onboarding process.
-    Agents should be able to save their progress and return to complete the onboarding if necessary.
+    Merchent should be able to save their progress and return to complete the onboarding if necessary.
     Upon successful submission of details the request goes to the admin for verification.
     If there are any issues with the submission, clear instructions on what needs to be corrected should be provided by admin.
-    Email and SMS notifications should be sent to agents at different stages of the onboarding process, such as confirmation of submission and approval/rejection.
+    Email and SMS notifications should be sent to Merchent at different stages of the onboarding process, such as confirmation of submission and approval/rejection.
     The user should be able to see the documents to be submitted on each screen as information
     The user should upload document in any of the mentioned formats such as .png,.jpg.jpeg.gif from phone documents or camera
     Users should be able to skip to the next screen if required or come back to the previous screen for any updates/changes.
