@@ -8,13 +8,13 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
     const AddressDetails = {
         nothing_to_show: {
             trading_name: {
-                label: 'Trading Name of Business(Optional)',
+                label: 'Trading Name of Business (Optional)',
                 type: 'input',
                 key: 'trading_name',
                 require: false
             },
             trading_types: {
-                label: 'Trading Types',
+                label: 'Business Types',
                 type: 'InputSearchMuliSelect',
                 key: 'trading_type',
                 require: true,
@@ -79,7 +79,7 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                         handleStates={handleStates}
                     />
                 </div>
-                <div className='ml-2'>
+                {(states.trading_images !== undefined && states.trading_images.length !== 0) && <div className='ml-2'>
                     <InputTypeCheckbox
                         id={'public_images'}
                         testId={'public_images'}
@@ -88,7 +88,7 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                             handleStates(states.public_images === undefined ? true : !states.public_images, 'public_images')}
                         Checked={states.public_images !== undefined ? states.public_images : false}
                     />
-                </div>
+                </div>}
 
             </div>
         </>
