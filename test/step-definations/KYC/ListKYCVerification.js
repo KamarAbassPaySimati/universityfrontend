@@ -2,7 +2,7 @@
 const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const { customSortDateDesc, customSortDateAsc } = require('../../bdd_modules/index.js');
 
 Given('I navigate to merchant KYC listing screen', async function () {

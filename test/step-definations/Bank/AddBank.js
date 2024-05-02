@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By, Key } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const { faker } = require('@faker-js/faker');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 

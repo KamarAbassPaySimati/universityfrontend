@@ -4,7 +4,7 @@ const { Given, Then, When } = require('@cucumber/cucumber');
 const assert = require('assert');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 
 Given('I am viewing the admin user profile', async function () {
     // Write code here that turns the phrase above into concrete actions
