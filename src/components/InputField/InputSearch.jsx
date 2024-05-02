@@ -5,7 +5,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 export default function InputSearch ({ testId, id, handleInput, handleSearchItem, label, value, submitSelected, className }) {
     const [options, setOptions] = useState([]);
-    const [search, setSearch] = useState('');
+    const [search, setSearch] = useState(value);
     const [timer, setTimer] = useState(null);
     const [show, setShow] = useState(false);
 
