@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const assert = require('assert');
 
 Given('I click on deactivate {string}', async function (type) {

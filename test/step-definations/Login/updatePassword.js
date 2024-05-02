@@ -3,7 +3,7 @@
 const assert = require('assert');
 const { Given, When, Then, Before } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Before('@wait_for_few_time', async function () {

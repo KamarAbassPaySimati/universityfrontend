@@ -3,7 +3,7 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, By, until } = require('selenium-webdriver');
 const assert = require('assert');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const { faker } = require('@faker-js/faker');
 const path = require('path');
 const { getModifierKey } = require('../../bdd_modules/index.js');
