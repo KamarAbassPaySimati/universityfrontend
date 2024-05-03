@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { formatInputPhone } from '../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import { dataService } from '../../../services/data.services';
-import isTimestampFiveMinutesAgo from '../../../CommonMethods/lastLoggedInTimeStamp';
 
 const initialState = {
     loading: true,
@@ -10,7 +8,7 @@ const initialState = {
     success: ''
 };
 
-export const KYCProfileView = createAsyncThunk('adminUsers', async (PaymaartId, { rejectWithValue }) => {
+export const KYCProfileView = createAsyncThunk('agentUser', async (PaymaartId, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
         const res = await dataService.GetAPI(`admin-users/view-specific-agent?paymaart_id=${PaymaartId}`);
@@ -21,9 +19,9 @@ export const KYCProfileView = createAsyncThunk('adminUsers', async (PaymaartId, 
         return rejectWithValue({ message: error });
     }
 });
-
+const AddressKeys = ['po_box_no', 'house_number', 'street_name', 'landmark', 'town_village_ta', 'district'];
 const KYCProfileViewSlice = createSlice({
-    name: 'admin-view',
+    name: 'agent-view',
     initialState,
     reducers: {
 
@@ -36,17 +34,31 @@ const KYCProfileViewSlice = createSlice({
             })
             .addCase(KYCProfileView.fulfilled, (state, action) => {
                 state.loading = false;
-                // console.log('state', action?.payload.data.data);
+                console.log('state', action?.payload.data.data);
+
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
+                    const AddressValues = [];
+                    AddressKeys.forEach((item) => {
+                        if (state.View[item] !== null) {
+                            AddressValues.push(state.View[item]);
+                        }
+                    });
                     state.userDetails = {
                         basicDetails: {
                             'Phone Number':
                             `${state?.View?.country_code} ${state?.View?.phone_number
                                 ? formatInputPhone(state?.View?.phone_number)
                                 : ''}`,
-                            Email: state?.View?.email
-                            // Address :s
+                            Email: state?.View?.email,
+                            Address: AddressValues.join(', ')
+                        },
+                        identityDetails: {
+                            'ID Document': [state?.View?.id_document_front, state?.View?.id_document_back],
+                            'Verification Document': [state?.View?.verification_document_front,
+                                state?.View?.verification_document_back],
+                            'Biometrics | Live Selfie': [state?.View?.selfie]
+
                         }
                     };
                     state.keys = Object.keys(state.userDetails);
