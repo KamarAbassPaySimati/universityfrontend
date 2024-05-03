@@ -338,7 +338,7 @@ stages:
         vmImage: 'macos-latest'
       ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           environment: 'Production'
-      ${{ if eq(variables['Build.SourceBranchName'], 'qa') }}:
+      ${{ elseif eq(variables['Build.SourceBranchName'], 'qa') }}:
           environment: 'Testing'
       ${{ else }}:
           environment: 'Development'
