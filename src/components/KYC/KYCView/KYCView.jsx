@@ -40,9 +40,7 @@ export default function KYCView ({ role, viewType }) {
                 approve={loading}
                 updateButton={loading}
                 updateButtonPath={`${getPaths(viewType, role).updateButtonPath}${id}`}
-                statusButton={id === View?.paymaart_id
-                    ? undefined
-                    : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
+                statusButton={loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
                 ChildrenElement
                 // onHandleStatusChange={handleStatusClick}
             >
