@@ -90,8 +90,13 @@ const KYCProfileViewSlice = createSlice({
                         },
                         personalDetails: {
                             Gender: state?.View?.gender,
-                            'Date of Birth': new Date(state?.View.dob * 1000).toLocaleDateString('en-US',
-                                { day: '2-digit', month: 'short', year: 'numeric' })
+                            'Date of Birth': state?.View.dob === null
+                                ? undefined
+                                : new Date(state?.View.dob * 1000).toLocaleDateString('en-UK', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric'
+                                })
 
                         },
                         purpose: state?.View?.purpose_of_relation,
