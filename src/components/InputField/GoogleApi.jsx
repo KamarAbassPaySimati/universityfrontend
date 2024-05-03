@@ -10,32 +10,6 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
 
     const handlePlaceSelect = (place) => {
         handleOnChange(place.target.value, id);
-        switch (id) {
-        case 'district':
-            handleOnChange('', 'street_name');
-            handleOnChange('', 'town_village_ta');
-            break;
-        case 'town_village_ta':
-            handleOnChange('', 'street_name');
-            break;
-        case 'intl_district':
-            handleOnChange('', 'intl_town_village_ta');
-            handleOnChange('', 'intl_landmark');
-            handleOnChange('', 'intl_street_name');
-            break;
-        case 'intl_town_village_ta':
-            handleOnChange('', 'intl_landmark');
-            handleOnChange('', 'intl_street_name');
-            break;
-        case 'intl_street_name':
-            handleOnChange('', 'intl_landmark');
-            break;
-        // case 'street_name':
-        //     autofillTownVillageTAAndDistrict(place);
-        //     break;
-        default:
-            break;
-        }
     };
 
     const autocompleteOptions = () => {
