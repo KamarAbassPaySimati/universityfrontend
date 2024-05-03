@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Image from '../Image/Image';
 import IframeModal from '../Iframe/IframeModal';
 
-export default function ImageViewWithModel ({ item }) {
+export default function ImageViewWithModel ({ item, testId }) {
     const [show, setShow] = useState(false);
     return (
         <>
@@ -13,7 +13,7 @@ export default function ImageViewWithModel ({ item }) {
                         title={item.split('/')[item.split('/').length - 1]}>
                         {item.split('/')[item.split('/').length - 1]}</p>
                     <div className='flex gap-3 px-2'>
-                        <Image src='eyeLight' testId={'view_image'}
+                        <Image src='eyeLight' testId={testId}
                             className='h-6 w-6 cursor-pointer'
                             onClick={() => { setShow(true); } }/>
                     </div>

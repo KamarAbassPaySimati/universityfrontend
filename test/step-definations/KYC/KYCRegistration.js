@@ -45,6 +45,7 @@ When('I click on save and continue button', async function () {
 
 When('I enter street name as {string}', async function (street_name) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]')));
     await driver.wait(until.elementIsVisible(element));
 

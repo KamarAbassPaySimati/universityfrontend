@@ -251,10 +251,12 @@ Feature: Paymaart - Admin Web - Specific Agent View(Full KYC)
     v. 5,000,000.00 to 10,000,000.00 MWK
     vi.Over 1 Million MWK
 
+    @add_admin_user
+    @create_new_user_and_login
     Scenario: View specific agent KYC
         Given I navigate to agent users listing screen
         When I click on view agent
-        Then I should view agent details
+        Then I should view agent information
         Then I should view basic details of agent
         And I should view the identification details of agent
         And I should view the personal details of agent

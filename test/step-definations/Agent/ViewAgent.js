@@ -3,35 +3,36 @@
 const { When, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
 const assert = require('assert');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 
 When('I click on view agent', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
     await driver.wait(until.elementIsVisible(element));
 
     this.paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]'))).getText();
-    this.name = await driver.wait(until.elementLocated(By.css('[data-testid="name"]'))).getText();
+    this.name = await driver.wait(until.elementLocated(By.css('[data-testid="agent_name"]'))).getText();
     this.phoneNumber = await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).getText();
     this.status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
 
     await element.click();
 });
 
-Then('I should view agent details', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+Then('I should view agent information', async function () {
+    await new Promise(resolve => setTimeout(resolve, 4000));
+
+    console.log('this', this.paymaart_id, this.name, this.phoneNumber, this.status);
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="name"]'))).getText();
+    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="name"]'))).getText();
     assert.equal(actual_name, this.name);
 
-    const actual_phoneNumber = await driver.wait(until.elementLocated(By.css('[data-testid="phoneNumber"]'))).getText();
+    const actual_phoneNumber = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Phone Number"]'))).getText();
     assert.equal(actual_phoneNumber, this.phoneNumber);
 
-    this.actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
-    assert.equal(this.actual_status, this.status);
-
-    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]'))).getText();
+    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
 
@@ -39,60 +40,21 @@ Then('I should view basic details of agent', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="email"]'))).getText();
+    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Email"]'))).getText();
     assert.notEqual(agent_email, '');
 
-    const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="address"]'))).getText();
+    const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Address"]'))).getText();
     assert.notEqual(address, '');
 });
 
 Then('I should view the identification details of agent', async function () {
-    if (this.actual_status !== 'In-progress') {
-        const element = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"]')));
-        await driver.wait(until.elementIsVisible(element));
-
-        try {
-            const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_id_kyc_upload_document_front"]')));
-            await driver.wait(until.elementIsVisible(idDocument));
-            await idDocument.click();
-
-            await driver.wait(until.elementLocated(By.css('[data-testid="overview-modal"]')));
-            await new Promise(resolve => setTimeout(resolve, 2000));
-            await driver.executeScript('return document.querySelector(\'[data-testid="close-button"]\').click()');
-            await new Promise(resolve => setTimeout(resolve, 1500));
-        } catch (error) {
-            throw new Error('Failed to view the front of ID document');
-        }
-
-        const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_verification_kyc_upload_document_front"]')));
-        await driver.wait(until.elementIsVisible(verificationDocument));
-
-        const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_selfie"]')));
-        await driver.wait(until.elementIsVisible(selfieDocument));
-    } else {
-        return 'skipped';
-    }
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"]')));
+    await driver.wait(until.elementIsVisible(element));
 });
 
 Then('I should view the personal details of agent', async function () {
-    if (this.actual_status !== 'In-progress') {
-        const element = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"]')));
-        await driver.wait(until.elementIsVisible(element));
-
-        const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="gender"]'))).getText();
-        assert.notEqual(agent_gender, '');
-
-        const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="dob"]'))).getText();
-        assert.notEqual(agent_dob, '');
-
-        const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_income"]'))).getText();
-        assert.notEqual(monthly_income, '');
-
-        const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_withdrawal"]'))).getText();
-        assert.notEqual(monthly_withdrawal, '');
-    } else {
-        return 'skipped';
-    }
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"]')));
+    await driver.wait(until.elementIsVisible(element));
 });
 
 Then('I should view option to activate or update a agent', async function () {

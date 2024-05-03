@@ -50,7 +50,7 @@ export default function KYCView ({ role, viewType }) {
                     <div className={` mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
-                        <div className='flex justify-between items-center'>
+                        <div className='flex justify-between items-center' data-testid="user_details">
                             <ProfileName
                                 userButtonName={`${View?.name.split(' ')[0][0] || ''}${View?.name.split(' ')[1][0] || ''}
                                 ${View?.last_name?.[0] || ''}`}
@@ -67,19 +67,22 @@ export default function KYCView ({ role, viewType }) {
                                         : ''}
                                 CreatedDate={formatTimestamp(View?.user_created_date)}
                             />
+                            {View?.kyc_type &&
                             <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                <p>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
+                                <p data-testid="kyc_type">{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
                                     {View?.citizen === 'Malawian' ? 'Malawi citizen' : View?.citizen}</p>
-                                <span className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
+                                <span data-testid="kyc_status"
+                                    className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
                                  ${getStatusColor(View?.kyc_status)?.color}`}>
                                     {getStatusColor(View?.kyc_status)?.text}
                                 </span>
-                            </div>
+                            </div>}
                         </div>
                     </div>
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
                         <KYCSections
                             heading='Basic Details'
+                            testId='basic_details'
                             childe={
                                 <div className='w-full flex flex-wrap mt-1 -mx-1'>
                                     {loading
@@ -109,6 +112,7 @@ export default function KYCView ({ role, viewType }) {
                         />
                         <KYCSections
                             heading='Identity Details'
+                            testId='identity_details'
                             childe={
                                 <div className='w-full flex flex-wrap mt-1 xl:-mx-[40px]'>
                                     {loading
@@ -128,9 +132,12 @@ export default function KYCView ({ role, viewType }) {
                                                         <h1
                                                             className='mt-4 text-[#A4A9AE] text-[14px] leading-6 font-normal'
                                                         >{itemkey}</h1>
-                                                        {userDetails.identityDetails[itemkey].map((imageItem) => (
+                                                        {userDetails.identityDetails[itemkey].map((imageItem, index = 0) => (
                                                             imageItem !== null && <div key={imageItem} className='pr-2'>
-                                                                <ImageViewWithModel item={imageItem}/>
+                                                                <ImageViewWithModel
+                                                                    item={imageItem}
+                                                                    testId={`${itemkey}_${index}`}
+                                                                />
                                                             </div>
                                                         ))}
                                                     </div>
@@ -143,6 +150,7 @@ export default function KYCView ({ role, viewType }) {
                         />
                         <KYCSections
                             heading='Personal Details'
+                            testId='personal_details'
                             childe={
                                 <div>
                                     <div className='w-full flex flex-wrap mt-1 -mx-1'>
@@ -211,7 +219,7 @@ export default function KYCView ({ role, viewType }) {
                                             </div>
                                         )))
                                         : (
-                                            userDetails?.purpose.map((purposeItem, index) => (
+                                            userDetails?.purpose && userDetails?.purpose.map((purposeItem, index) => (
                                                 <div key={purposeItem}
                                                 >
                                                     <InputTypeCheckbox
@@ -255,6 +263,7 @@ export default function KYCView ({ role, viewType }) {
                         />
                         <KYCSections
                             heading='Bank Details'
+                            testId='bank_details'
                             childe={
                                 <div className='w-full flex flex-wrap mt-1 -mx-1'>
                                     {loading
