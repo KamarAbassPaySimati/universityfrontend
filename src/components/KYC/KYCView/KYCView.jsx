@@ -67,8 +67,9 @@ export default function KYCView ({ role, viewType }) {
                             />
                             {View?.kyc_type &&
                             <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                <p data-testid="kyc_type">{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
-                                    {View?.citizen === 'Malawian' ? 'Malawi citizen' : View?.citizen}</p>
+                                <p data-testid="kyc_type"
+                                    className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
+                                    {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>
                                 <span data-testid="kyc_status"
                                     className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
                                  ${getStatusColor(View?.kyc_status)?.color}`}>
