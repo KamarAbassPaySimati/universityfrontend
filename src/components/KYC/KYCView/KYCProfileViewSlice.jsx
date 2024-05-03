@@ -8,10 +8,10 @@ const initialState = {
     success: ''
 };
 
-export const KYCProfileView = createAsyncThunk('agentUser', async (PaymaartId, { rejectWithValue }) => {
+export const KYCProfileView = createAsyncThunk('agentUser', async (url, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
-        const res = await dataService.GetAPI(`admin-users/view-specific-agent?paymaart_id=${PaymaartId}`);
+        const res = await dataService.GetAPI(`admin-users/${url}`);
         return res;
     } catch (error) {
         // Log error or send notification

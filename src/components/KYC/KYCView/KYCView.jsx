@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import CardHeader from '../../CardHeader';
-import { getPaths, getStatusColor } from './KYCViewFunctions';
+import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
@@ -18,7 +18,7 @@ export default function KYCView ({ role, viewType }) {
 
     const getView = () => {
         try {
-            dispatch(KYCProfileView(id, viewType, role));
+            dispatch(KYCProfileView(getApiurl(id, viewType, role)));
         } catch (error) {
             console.error(error);
         }

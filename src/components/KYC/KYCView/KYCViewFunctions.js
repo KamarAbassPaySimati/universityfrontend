@@ -71,3 +71,35 @@ export const getStatusColor = (status) => {
         break;
     }
 };
+
+export const getApiurl = (id, viewType, role) => {
+    switch (viewType) {
+    case 'specific':
+        switch (role) {
+        case 'agent':
+            return `view-specific-agent?paymaart_id=${id}`;
+        case 'merchant':
+            return `view-specific-merchant?paymaart_id=${id}`;
+        case 'customer':
+            return `view-specific-customer?paymaart_id=${id}`;
+        default:
+            break;
+        }
+        break;
+    case 'kyc':
+        switch (role) {
+        case 'agent':
+            return `view-specific-agent-kyc?paymaart_id=${id}`;
+        case 'merchant':
+            return `view-specific-merchant-kyc?paymaart_id=${id}`;
+        case 'customer':
+            return `view-specific-customer-kyc?paymaart_id=${id}`;
+        default:
+            break;
+        }
+        break;
+
+    default:
+        break;
+    }
+};
