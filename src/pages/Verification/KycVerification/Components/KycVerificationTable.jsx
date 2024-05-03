@@ -5,6 +5,7 @@ import Shimmer from '../../../../components/Shimmers/Shimmer';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
+import { useNavigate } from 'react-router';
 
 const KycVerificationTable = (
     {
@@ -43,6 +44,7 @@ const KycVerificationTable = (
             return '-'; // Default text when status doesn't match any condition
         }
     };
+    const Navigate = useNavigate();
     return (
         <>
             <table className='w-full min-w-max'>
@@ -94,7 +96,10 @@ const KycVerificationTable = (
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-start'}>
                                     {
                                         <>
-                                            <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                            <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
+                                                onClick={() => Navigate(`/verify/kyc-registration/agent-profile/${user?.paymaart_id}`
+                                                )}
+                                            />
                                         </>
                                     }
                                     <Tooltip

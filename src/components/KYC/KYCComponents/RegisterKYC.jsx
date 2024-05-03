@@ -365,14 +365,18 @@ export default function RegisterKYC ({ role }) {
                         }
                     }
                     );
-                    if ((states.institute === undefined || states?.institute?.trim() === '') &&
+                    if (states.institute === 'Others (Please Specify)') {
+                        if ((states.institute === undefined || states?.institute?.trim() === '') &&
                     (states?.institute_specify?.trim() === '' || states.institute_specify === undefined)) {
-                        if (key !== 'skip') {
-                            setSubmitSelected(true);
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        } else {
+                            body.institute_specify = states.institute_specify;
                         }
-                        count = count + 1;
                     } else {
-                        body.institute_specify = states.institute_specify;
+                        body.institute_specify = '';
                     }
                     break;
 

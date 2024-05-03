@@ -4,7 +4,7 @@ const { When, Then } = require('@cucumber/cucumber');
 const assert = require('assert');
 const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 
 When('I navigate to my profile page', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));

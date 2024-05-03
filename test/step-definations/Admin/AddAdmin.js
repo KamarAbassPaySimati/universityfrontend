@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 const { Given, When, Before } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const { faker } = require('@faker-js/faker');
 const { createAdminAccountSecure } = require('../../bdd_api/index.js');
 const { getModifierKey } = require('../../bdd_modules/index.js');
