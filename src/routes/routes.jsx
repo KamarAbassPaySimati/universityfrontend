@@ -20,6 +20,7 @@ import Slugify from '../CommonMethods/Sulgify';
 import Agent from '../pages/Users/Agent';
 import Toast from '../components/Toast/Toast';
 import Merchant from '../pages/Users/Merchants';
+import Customer from '../pages/Users/Customer';
 
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -41,7 +42,6 @@ export default function NavigationRoutes (props) {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
                 if (userAttributes['custom:user_type']) {
-                    console.log(Slugify(userAttributes['custom:user_type']));
                     setCurrentUserRole(Slugify(userAttributes['custom:user_type']));
                 }
             }
@@ -92,7 +92,6 @@ export default function NavigationRoutes (props) {
                                 : (
                                     CurrentUserRole && ComponentsBasedOnRole[CurrentUserRole] && (
                                         <>
-                                            {console.log(ComponentsBasedOnRole[CurrentUserRole])}
                                             <Route element={<Layout {...props}/>} key={location.key}>
                                                 {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
                                                     <Route path={nav.path} element={React.cloneElement(nav.element, props)}
@@ -103,6 +102,7 @@ export default function NavigationRoutes (props) {
                                                 <Route path="/profile/update-password" element={<UpdatePassword />} />
                                                 <Route path="/users/agents" element={<Agent />} />
                                                 <Route path="/users/merchants" element={<Merchant />} />
+                                                <Route path="/users/customers" element={<Customer />} />
                                             </Route>
                                             <Route path="*" element={<NotFound />} />
                                         </>

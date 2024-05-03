@@ -1,14 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
-const { Given, When, Then, Before } = require('@cucumber/cucumber');
+const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
 const assert = require('assert');
-const { driver } = require('../Driver');
+const { driver } = require('../Driver.js');
 const path = require('path');
-
-Before(async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-});
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I click on verify KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
@@ -51,12 +48,47 @@ When('I enter street name as {string}', async function (street_name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (street_name !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(street_name);
         await new Promise(resolve => setTimeout(resolve, 5000));
         await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
     }
+});
+
+When('I enter trading street name as {string}', async function (street_name) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    if (street_name !== '') {
+        await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]'))).sendKeys(street_name);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
+    }
+});
+
+When('I select the Nationality', async function () {
+// Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]'))).sendKeys('indian');
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="nationality_0"]'))).click();
+});
+
+When('I select the nature of permit as {string}', async function (string) {
+    // Write code here that turns the phrase above into concrete actions
+    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown"]')));
+    await driver.wait(until.elementIsVisible(monthly_income));
+    await monthly_income.click();
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]'))).click();
 });
 
 Then('I should see the town and district field getting pre-filled with google API data', async function () {
@@ -68,6 +100,26 @@ Then('I should see the town and district field getting pre-filled with google AP
     await driver.wait(until.elementIsVisible(town));
 
     const district = await driver.wait(until.elementLocated(By.css('[data-testid="district"]')));
+    await driver.wait(until.elementIsVisible(district));
+
+    const street_name_value = street_name.getAttribute('value');
+    const town_value = town.getAttribute('value');
+    const district_value = district.getAttribute('value');
+
+    assert.notEqual(street_name_value, '');
+    assert.notEqual(town_value, '');
+    assert.notEqual(district_value, '');
+});
+
+Then('I should see the trading town and district field getting pre-filled with google API data', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const street_name = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
+    await driver.wait(until.elementIsVisible(street_name));
+
+    const town = await driver.wait(until.elementLocated(By.css('[data-testid="trading_town_village_ta"]')));
+    await driver.wait(until.elementIsVisible(town));
+
+    const district = await driver.wait(until.elementLocated(By.css('[data-testid="trading_district"]')));
     await driver.wait(until.elementIsVisible(district));
 
     const street_name_value = street_name.getAttribute('value');
@@ -103,45 +155,37 @@ When('I select the ID document as {string}', async function (type) {
         switch (type) {
         case 'National ID':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="national_id"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         case 'Passport':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="passport"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         case 'Drivers licence':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="driver\'s_licence"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         case 'Traffic register card':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="traffic_register_card"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         case 'Birth certificate card':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="birth_certificate"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         case 'Student ID':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="student_id"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         case 'Employee ID':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="employee_id"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
+            break;
+        case 'Refugee ID':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="refugee_id"]')));
+            break;
+        case 'Asylum ID':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="asylum_id"]')));
             break;
         default:
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="id_document_dropdown_list"] [data-testid="national_id"]')));
-            await driver.wait(until.elementIsVisible(dropdownElement));
-            await dropdownElement.click();
             break;
         }
+        await driver.wait(until.elementIsVisible(dropdownElement));
+        await dropdownElement.click();
     }
 });
 
@@ -321,6 +365,19 @@ Then('I should be redirected to KYC personal details screen', async function () 
     await new Promise(resolve => setTimeout(resolve, 500));
 });
 
+Then('I should be redirected to KYC trading details screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    await driver.executeScript('window.location.reload();');
+
+    const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element2));
+    await new Promise(resolve => setTimeout(resolve, 500));
+});
+
 Given('I am in KYC personal details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
@@ -329,6 +386,18 @@ Given('I am in KYC personal details screen', async function () {
     await driver.executeScript('window.location.reload();');
 
     const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element2));
+    await new Promise(resolve => setTimeout(resolve, 1000));
+});
+
+Given('I am in KYC trading document details screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.executeScript('window.location.reload();');
+
+    const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
     await driver.wait(until.elementIsVisible(element2));
     await new Promise(resolve => setTimeout(resolve, 1000));
 });
@@ -356,10 +425,45 @@ When('I select gender as {string}', async function (type) {
     }
 });
 
+When('I select the trading types as {string}', async function (type) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]'))).sendKeys(type);
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    switch (type) {
+    case 'Hotels & Resorts':
+        await driver.wait(until.elementLocated(By.css('[for="Hotels & Resorts"]'))).click();
+        break;
+    case 'Restaurants and Cafes':
+        await driver.wait(until.elementLocated(By.css('[for="Restaurants and Cafes"]'))).click();
+        break;
+    case 'Organic Farming':
+        await driver.wait(until.elementLocated(By.css('[for="Organic Farming"]'))).click();
+        break;
+    case 'Online Retailers':
+        await driver.wait(until.elementLocated(By.css('[for="Online Retailers"]'))).click();
+        break;
+    case 'Civil Engineering':
+        await driver.wait(until.elementLocated(By.css('[for="Civil Engineering"]'))).click();
+        break;
+    default:
+        await driver.wait(until.elementLocated(By.css('[for="Undisclosed"]'))).click();
+        break;
+    }
+    await driver.wait(until.elementLocated(By.css('[data-testid="apply_trading_type"]'))).click();
+});
+
 When('I select the date of birth as {string}', async function (dob) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 100));
-    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="date_of_birth"]'))).sendKeys(Key.chord(dob, Key.ENTER));
     await new Promise(resolve => setTimeout(resolve, 500));
 });
@@ -403,7 +507,7 @@ When('I search and select institution as {string}', async function (instituion) 
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="institute"]'))).sendKeys(instituion);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="institute_0"]'))).click();
@@ -416,7 +520,18 @@ When('I enter the other institution name as {string}', async function (name) {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await element.sendKeys(name);
+});
+
+When('I enter the reference number as {string}', async function (name) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="ref_no"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
@@ -440,7 +555,7 @@ When('I select valid monthly income and monthly withdrawal', async function () {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income_dropdown_list"] [data-testid="up_to_300,000.00_mwk"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income_dropdown_list"] [data-testid="300,000.00_to_1,000,000.00_mwk"]'))).click();
 
     const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
     await driver.wait(until.elementIsVisible(monthly_withdrawal));
@@ -448,10 +563,11 @@ When('I select valid monthly income and monthly withdrawal', async function () {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal_dropdown_list"] [data-testid="up_to_300,000.00_mwk"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal_dropdown_list"] [data-testid="300,000.00_to_1,000,000.00_mwk"]'))).click();
 });
 
 Then('I should read a message stating KYC submission successful', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
     // Write code here that turns the phrase above into concrete actions
     const expected_text = 'Thank you for providing your information. This is received into our review process. We will confirm its acceptance or otherwise shortly. To your registered email address.';
 
@@ -459,7 +575,18 @@ Then('I should read a message stating KYC submission successful', async function
     await driver.wait(until.elementIsVisible(element));
     const element_text = await element.getText();
 
-    assert.equal(expected_text, element_text);
+    assert.equal(element_text, expected_text);
+});
+Then('I should read a message stating Complete registration', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // Write code here that turns the phrase above into concrete actions
+    const expected_text = 'Complete registration now for full access to Paymaart services';
+
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="KYC_success_message"]')));
+    await driver.wait(until.elementIsVisible(element));
+    const element_text = await element.getText();
+
+    assert.equal(element_text, expected_text);
 });
 
 Then('I should view the status of the KYC as {string}', async function (expected_text) {
@@ -482,7 +609,7 @@ When('I enter the other occupation as {string}', async function (occupation) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(occupation);
 });
 
@@ -491,7 +618,7 @@ When('I enter the other self employed occupation as {string}', async function (o
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="self_employed_specify"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(occupation);
 });
 
@@ -530,7 +657,7 @@ When('I enter employer name as {string}', async function (name) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="employer_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await element.sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await element.sendKeys(name);
 });
 
@@ -571,7 +698,7 @@ When('I select valid town and district', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(Key.CONTROL, 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
 
     await driver.wait(until.elementLocated(By.css('[data-testid="occupation_town"]'))).sendKeys('M');
     await new Promise(resolve => setTimeout(resolve, 5000));

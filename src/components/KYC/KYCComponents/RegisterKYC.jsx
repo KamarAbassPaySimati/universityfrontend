@@ -1,31 +1,38 @@
 /* eslint-disable array-callback-return */
 import React, { useContext, useEffect, useState } from 'react';
-import KYCRegistration from '../../../../../components/KYC/KYCRegistration';
-import CardHeader from '../../../../../components/CardHeader';
-import StatusProgressBar from '../../../../../components/StatusProgressBar/StatusProgressBar';
-import KYCTopWithType from '../../../../../components/KYC/KYCTopWithType';
-import Button2 from '../../../../../components/Button2/Button2';
-import Button from '../../../../../components/Button/Button';
+import KYCRegistration from '../KYCRegistration';
+import CardHeader from '../../CardHeader';
+import StatusProgressBar from '../../StatusProgressBar/StatusProgressBar';
+import KYCTopWithType from '../KYCTopWithType';
+import Button2 from '../../Button2/Button2';
+import Button from '../../Button/Button';
 import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams } from 'react-router-dom';
-import { dataService } from '../../../../../services/data.services';
+import { dataService } from '../../../services/data.services';
 import {
-    AddressDetails, BankDetailsList, GetDocumentValidation, PersonalDetailsList, ProgressBar,
+    AddressDetails, BankDetailsList, GetDocumentValidation, MerchantProgressBar, PersonalDetailsList, ProgressBar,
     handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
 } from './KYCFunctions';
-import { handleSearchParamsValue } from '../../../../../CommonMethods/ListFunctions';
-import addApostrophe from '../../../../../CommonMethods/textCorrection';
-import KYCFinalPage from '../../../../../components/KYC/KYCFinalPage';
-import GlobalContext from '../../../../../components/Context/GlobalContext';
+import { handleSearchParamsValue } from '../../../CommonMethods/ListFunctions';
+import addApostrophe from '../../../CommonMethods/textCorrection';
+import KYCFinalPage from '../KYCFinalPage';
+import GlobalContext from '../../Context/GlobalContext';
+import TradingDetails from './TradingDetails';
 
-export default function RegisterKYC () {
+export default function RegisterKYC ({ role }) {
     const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
     const [submitPayload, setSubmitPayload] = useState({});
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const [oldStateValue, setOldStateValue] = useState({
+        citizen_type: '',
+        kyc_type: '',
+        trading_name: ''
+    });
+    const [buttonStatus, setButtonStatus] = useState('Not Started');
     const [bankSelected, setBankSelected] = useState(false);
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
@@ -36,15 +43,16 @@ export default function RegisterKYC () {
         monthly_income: 'Up to 300,000.00 MWK',
         monthly_withdrawal: 'Up to 300,00.000 MWK'
     });
-    const [documentSideBarData, setDocumentSidebarData] = useState({
+    const initialDocumentSideBarData = {
         documentTypes: {
             'ID Document': 'clear',
             'Verification Document': 'clear'
         },
         selectedData: 'ID Document'
-    });
+    };
+    const [documentSideBarData, setDocumentSidebarData] = useState(initialDocumentSideBarData);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [progressBarStatus, setProgressBarStatus] = useState(ProgressBar);
+    const [progressBarStatus, setProgressBarStatus] = useState(role === 'merchant' ? MerchantProgressBar : ProgressBar);
 
     const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
@@ -64,8 +72,15 @@ export default function RegisterKYC () {
             case 'identity_details':
                 nextTab = 'address_details';
                 break;
-            case 'personal_details':
+            case 'trading_details':
                 nextTab = 'identity_details';
+                break;
+            case 'personal_details':
+                if (role === 'merchant') {
+                    nextTab = 'trading_details';
+                } else {
+                    nextTab = 'identity_details';
+                }
                 break;
             default:
                 break;
@@ -77,6 +92,13 @@ export default function RegisterKYC () {
                 nextTab = 'identity_details';
                 break;
             case 'identity_details':
+                if (role === 'merchant') {
+                    nextTab = 'trading_details';
+                } else {
+                    nextTab = 'personal_details';
+                }
+                break;
+            case 'trading_details':
                 nextTab = 'personal_details';
                 break;
             case 'personal_details':
@@ -89,19 +111,23 @@ export default function RegisterKYC () {
         default:
             break;
         }
+        setDocumentSidebarData(initialDocumentSideBarData);
         handleSearchParamsValue('tab', nextTab, searchParams, setSearchParams);
     };
 
     const handleAPICall = async (body, tab) => {
         try {
-            const res = await dataService.PostAPIAgent('create-kyc-secure', body);
+            const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+            const res = await dataService.PostAPI(`${endPoint}/create-kyc-secure`, body);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {
                 getKYCView();
-                setToastSuccess(res.data.message);
-                handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
-                setSubmitPayload({});
+                setTimeout(() => {
+                    setToastSuccess(res.data.message);
+                    handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
+                    setSubmitPayload({});
+                }, 1000);
             }
             setIsLoadingButton(false);
         } catch (error) {
@@ -114,7 +140,6 @@ export default function RegisterKYC () {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
-        console.log(GetDocumentValidation(states.personal_customer, 'Verification Document'));
         switch (type) {
         case 'address_details':
             AddressDetails.map((item) => {
@@ -126,10 +151,52 @@ export default function RegisterKYC () {
                 }
             }
             );
+            if ((states.nationality === undefined || states.nationality === '') && states.citizen_type === 'Non Malawi citizen') {
+                if (key !== 'skip') {
+                    setSubmitSelected(true);
+                }
+                count = count + 1;
+            }
+            if (!((states.intl_street_name === '' || states.intl_street_name === undefined) &&
+            (states.intl_district === '' || states.intl_district === undefined) &&
+            (states.intl_landmark === '' || states.intl_landmark === undefined) &&
+            (states.intl_town_village_ta === '' || states.intl_town_village_ta === undefined))) {
+                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district', 'intl_landmark'];
+                intlData.map((bank) => {
+                    if (states[bank] === '' || states[bank] === undefined) {
+                        if (key !== 'skip') {
+                            setBankSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                });
+            }
+            return count === 0;
+        case 'trading_details':
+            ['trading_type', 'trading_street_name', 'trading_town_village_ta', 'trading_district'].map((item) => {
+                if (item === 'trading_type') {
+                    if (states[item] === undefined || states[item].length === 0) {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                } else {
+                    if (states[item] === undefined || states[item]?.trim() === '') {
+                        if (key !== 'skip') {
+                            setSubmitSelected(true);
+                        }
+                        count = count + 1;
+                    }
+                }
+            }
+            );
             return count === 0;
         case 'identity_details':
             if (states['ID Document'] !== '' && states['ID Document'] !== undefined) {
-                GetDocumentValidation(states.personal_customer, 'ID Document')[states['ID Document']].map((selectedItem) => {
+                GetDocumentValidation(states.citizen_type === 'Malawi citizen'
+                    ? states.personal_customer
+                    : 'Non Malawi citizen', 'ID Document')[states['ID Document']].map((selectedItem) => {
                     if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                         if (key !== 'skip') {
                             setSubmitSelected(true);
@@ -168,7 +235,9 @@ export default function RegisterKYC () {
                 body.capture = states.capture;
             }
             if (states['Verification Document'] !== '' && states['Verification Document'] !== undefined) {
-                GetDocumentValidation(states.personal_customer, 'Verification Document')[states['Verification Document']].map(
+                GetDocumentValidation(states.citizen_type === 'Malawi citizen'
+                    ? states.personal_customer
+                    : 'Non Malawi citizen', 'Verification Document')[states['Verification Document']].map(
                     (selectedItem) => {
                         if (states[selectedItem] === undefined || states[selectedItem]?.trim() === '') {
                             if (key !== 'skip') {
@@ -194,7 +263,24 @@ export default function RegisterKYC () {
                 }
                 count = count + 1;
             }
-
+            if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
+                if (states.nature_of_permit === '' || states.nature_of_permit === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                        sideBarStatus['ID Document'] = 'pending';
+                    }
+                } else {
+                    body.nature_of_permit = states.nature_of_permit;
+                }
+                if (states.ref_no === '' || states.ref_no === undefined) {
+                    if (key !== 'skip') {
+                        setSubmitSelected(true);
+                        sideBarStatus['ID Document'] = 'pending';
+                    }
+                } else {
+                    body.ref_no = states.ref_no;
+                }
+            }
             setDocumentSidebarData({ ...documentSideBarData, documentTypes: sideBarStatus });
             setSubmitPayload({ ...body });
             return count === 0;
@@ -315,18 +401,25 @@ export default function RegisterKYC () {
     const handleSubmit = (type) => {
         setIsLoadingButton(true);
         if (type === 'proceed') {
-            handleAPICall({
-                kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
-                citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
-                paymaart_id: id
-            }, 'address_details');
+            if (oldStateValue.citizen_type !== states.citizen_type || oldStateValue.kyc_type !== states.personal_customer) {
+                handleAPICall({
+                    kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
+                    citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
+                    paymaart_id: id
+                }, 'address_details');
+            } else {
+                setTimeout(() => {
+                    handleSearchParamsValue('tab', 'address_details', searchParams, setSearchParams);
+                    setIsLoadingButton(false);
+                }, 500);
+            }
         } else {
             switch (searchParams.get('tab')) {
             case 'address_details':
                 if (!handleValidation('address_details')) {
                     setIsLoadingButton(false);
                 } else {
-                    handleAPICall({
+                    const body = {
                         po_box_no: states?.po_box_no,
                         house_number: states?.house_number,
                         street_name: states?.street_name,
@@ -334,8 +427,18 @@ export default function RegisterKYC () {
                         town_village_ta: states?.town_village_ta,
                         district: states?.district,
                         paymaart_id: id,
-                        address_details_status: 'completed'
-                    }, 'identity_details'
+                        address_details_status: 'completed',
+                        intl_po_box_no: states?.intl_po_box_no,
+                        intl_house_number: states?.intl_house_number,
+                        intl_street_name: states?.intl_street_name,
+                        intl_landmark: states?.intl_landmark,
+                        intl_town_village_ta: states?.intl_town_village_ta,
+                        intl_district: states?.intl_district
+                    };
+                    if (states.citizen_type !== 'Malawi citizen') {
+                        body.citizen = states.nationality;
+                    }
+                    handleAPICall(body, 'identity_details'
                     );
                 }
                 break;
@@ -354,6 +457,27 @@ export default function RegisterKYC () {
                         paymaart_id: id,
                         id_details_status: 'completed'
                     };
+                    handleAPICall(body, role === 'merchant' ? 'trading_details' : 'personal_details');
+                }
+                break;
+            case 'trading_details':
+                if (!handleValidation('trading_details')) {
+                    setIsLoadingButton(false);
+                } else {
+                    const body = {
+                        trading_type: states.trading_type,
+                        trading_house_name: states.trading_house_name,
+                        trading_street_name: states.trading_street_name,
+                        trading_town_village_ta: states.trading_town_village_ta,
+                        trading_district: states.trading_district,
+                        trading_images: states.trading_images,
+                        public_images: states.public_images === undefined ? false : states.public_images,
+                        paymaart_id: id,
+                        trading_details_status: 'completed'
+                    };
+                    if (oldStateValue.trading_name !== states.trading_name) {
+                        body.trading_name = states.trading_name;
+                    }
                     handleAPICall(body, 'personal_details');
                 }
                 break;
@@ -361,6 +485,7 @@ export default function RegisterKYC () {
                 if (!handleValidation('personal_details')) {
                     setIsLoadingButton(false);
                 } else {
+                    setButtonStatus('In review');
                     const body = {
                         gender: states.gender,
                         dob: (new Date(states.dob).getTime() / 1000).toString(),
@@ -382,15 +507,32 @@ export default function RegisterKYC () {
 
     const getKYCView = async () => {
         try {
-            const res = await dataService.GetAPI(`view-kyc-secure?paymaart_id=${id}`, 'agent');
+            const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+            const res = await dataService.GetAPI(`${endPoint}/view-kyc-secure?paymaart_id=${id}`);
+            const object = {};
             if (res.data.data !== '') {
-                const object = {};
-                const statusObject = {};
+                const statusObject = progressBarStatus;
                 Object.keys(res.data.data).map((item) => {
+                    setOldStateValue({
+                        citizen_type: res.data.data.citizen === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen',
+                        kyc_type: res.data.data.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC',
+                        trading_name: res.data.data.trading_name
+                    });
+                    const buttonText = ['address_details_status', 'id_details_status', 'info_details_status'];
+                    let count = 0;
+                    buttonText.forEach((text) => {
+                        if (res.data.data[text] === 'completed') {
+                            count = count + 1;
+                        }
+                    });
+                    setButtonStatus(count === 3 ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
                     if (res.data.data[item] !== null) {
                         switch (item) {
                         case 'citizen':
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
+                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawi citizen') {
+                                object.nationality = res.data.data[item];
+                            }
                             break;
                         case 'kyc_type':
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
@@ -436,6 +578,12 @@ export default function RegisterKYC () {
                                 label: 'Identity Details'
                             };
                             break;
+                        case 'trading_details_status' :
+                            statusObject.trading_details = {
+                                status: res.data.data[item],
+                                label: 'Trading Details'
+                            };
+                            break;
                         case 'info_details_status':
                             statusObject.personal_details = {
                                 status: res.data.data[item],
@@ -455,9 +603,14 @@ export default function RegisterKYC () {
                     }
                 }
                 );
-                setProgressBarStatus(statusObject);
-                setStates(object);
+                setProgressBarStatus({ ...statusObject });
             }
+            if (res.data.bank_details) {
+                object.bank_name = res.data.bank_details.bank_name;
+                object.account_number = res.data.bank_details.account_number;
+                object.account_name = res.data.bank_details.account_name;
+            }
+            setStates({ ...object });
         } catch (error) {
             // Log error or send notification
             console.error('Error fetching orders:', error);
@@ -467,17 +620,18 @@ export default function RegisterKYC () {
         if (searchParams.get('tab') !== null) {
             if (searchParams.get('tab') !== 'address_details' &&
                 searchParams.get('tab') !== 'identity_details' &&
+                searchParams.get('tab') !== 'trading_details' &&
                 searchParams.get('tab') !== 'personal_details') {
                 handleSearchParamsValue('tab', null, searchParams, setSearchParams);
             }
+            getKYCView();
         }
-        getKYCView();
     }, []);
     return (
         <CardHeader
-            activePath='Register Agent'
-            paths={['Users', 'Agent']}
-            pathurls={['users/agents']}
+            activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
+            paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
+            pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
             ChildrenElement
         >
@@ -489,15 +643,24 @@ export default function RegisterKYC () {
                         handleStates={handleInputFelids}
                         handleSubmit={handleSubmit}
                         isLoading={isLoadingButton}
+                        buttonText={buttonStatus}
                     />
                 )
                 : searchParams.get('tab') === 'success'
 
-                    ? <KYCFinalPage />
+                    ? (
+                        <KYCFinalPage
+                            states={states}
+                            handleBackPage={() => handleSearchParamsValue('tab', null, searchParams, setSearchParams)}
+                            buttonText={buttonStatus}
+                        />)
                     : <>
                         <KYCTopWithType
                             Name={'KYC Registration'}
-                            type={states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'}
+                            type={states.citizen_type === 'Malawi citizen'
+                                ? states.personal_customer === 'Full KYC' ? 'Malawi Full KYC' : 'Malawi Simplified KYC'
+                                : 'Non - Malawi Full KYC'
+                            }
                         />
                         <div
                             data-testid="KYC_Registration"
@@ -507,7 +670,7 @@ export default function RegisterKYC () {
                             <div className='flex flex-col'>
                                 <StatusProgressBar
                                     ProgressBar={progressBarStatus}
-                                    LineClass={'line-class'}
+                                    LineClass={role === 'merchant' ? 'line-class-merchant' : 'line-class'}
                                     currentTab={searchParams.get('tab')}
                                 />
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>
@@ -516,6 +679,7 @@ export default function RegisterKYC () {
                                         handleStates={handleInputFelids}
                                         states={states}
                                         submitSelected={submitSelected}
+                                        bankSelected={bankSelected}
                                     />}
                                     {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                         handleStates={handleInputFelids}
@@ -530,7 +694,17 @@ export default function RegisterKYC () {
                                         states={states}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
+                                        role={role}
                                     />}
+                                    {
+                                        searchParams.get('tab') === 'trading_details' &&
+                                        <TradingDetails
+                                            handleStates={handleInputFelids}
+                                            states={states}
+                                            submitSelected={submitSelected}
+                                            bankSelected={bankSelected}
+                                        />
+                                    }
                                 </div>
                             </div>
                             <div className='flex justify-between items-center'>

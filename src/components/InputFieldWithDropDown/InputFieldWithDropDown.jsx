@@ -47,7 +47,7 @@ function InputFieldWithDropDown (props) {
                     {labelName}</label>
                 {information &&
                 <div ref={infoRef} className='flex'>
-                    <Image src="info_icon" className="w-5 h-5 cursor-pointer info-icon relative" onClick={() => setShowInfo(!showInfo)}/>
+                    <Image src="info_icon" className="w-5 h-5 cursor-pointer relative" onClick={() => setShowInfo(!showInfo)}/>
                     <div className='absolute z-10 ml-5'>
                         <Modal center open={showInfo} onClose={() => setShowInfo(false)} closeIcon={<Image src='x'/>} styles={{ modal: { borderRadius: 10 } }} >
                             <InformationList
@@ -67,6 +67,7 @@ function InputFieldWithDropDown (props) {
                     ref={buttonRef}
                     onClick={() => setShow(!show)}
                     data-testid={testId}
+                    title={value}
                     className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
                     ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
                 outline-0`}/*  */
@@ -98,6 +99,7 @@ function InputFieldWithDropDown (props) {
 
                 </ul>
             </div>
+            {(!show && value !== '' && information) && <p className='text-[#A4A9AE] font-normal text-[14px] leading-[22px]'>{information.information.List1[value].text}</p>}
             {(error && !show) && <ErrorMessage error={error} />}
         </div>
     );

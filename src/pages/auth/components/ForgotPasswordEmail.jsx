@@ -26,7 +26,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
         } else {
             try {
                 setIsLoading(true);
-                const response = await dataService.PostAPIWithoutHeader('send-reset-link',
+                const response = await dataService.PostAPIWithoutHeader('admin-users/send-reset-link',
                     { email_address: email.toLowerCase() });
                 if (!response.error) {
                     setIsSuccess(true);

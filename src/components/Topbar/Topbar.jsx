@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import Filter from '../Filter/Filter';
 import FilterWithSingleOption from '../FilterWithSingleOption/FilterWithSingleOption';
@@ -67,6 +67,11 @@ const Topbar = ({
         setSearch('');
         handleSearchParams('search', '');
     };
+    useEffect(() => {
+       if (searchParams.get('search') === null) {
+        setSearch('');
+       }
+    }, [searchParams]);
 
     const handleClearFilter = () => {
         // Reset filterValues to an empty object or default values

@@ -1,16 +1,16 @@
 import React from 'react';
-import InputTypeRadio from '../../../../../components/InputField/InputTypeRadio';
-import DatePickerAntd from '../../../../../components/DatePicker/DatePickerAntd';
-import InputFieldWithDropDown from '../../../../../components/InputFieldWithDropDown/InputFieldWithDropDown';
-import InputTypeCheckbox from '../../../../../components/InputField/InputTypeCheckbox';
-import FelidDivision from '../../../../../components/FelidDivision/FelidDivision';
-import InputField from '../../../../../components/InputField/InputField';
-import InputSearch from '../../../../../components/InputField/InputSearch';
-import { dataService } from '../../../../../services/data.services';
-import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
+import InputTypeRadio from '../../InputField/InputTypeRadio';
+import DatePickerAntd from '../../DatePicker/DatePickerAntd';
+import InputFieldWithDropDown from '../../InputFieldWithDropDown/InputFieldWithDropDown';
+import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
+import FelidDivision from '../../FelidDivision/FelidDivision';
+import InputField from '../../InputField/InputField';
+import InputSearch from '../../InputField/InputSearch';
+import { dataService } from '../../../services/data.services';
+import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import { getMonthInputFelid } from './KYCFunctions';
 
-export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected }) {
+export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected, role }) {
     const OccupationList = [
         'Employed', 'Self Employed', 'In Full-time Education', 'Seeking Employment', 'Retired/Pensioner', 'Others'];
     const Purpose = [
@@ -21,7 +21,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
     ];
 
     const bankInputFelid = {
-        'Banking  Information for Payouts (Optional)': {
+        'Banking Information for Pay-out (Optional)': {
             'Bank Name': {
                 label: 'Bank Name',
                 type: 'dropdown',
@@ -102,7 +102,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
     ];
 
     const handleSearchItem = async (id, newValue) => {
-        const res = await dataService.GetAPI(`list-institution?search=${newValue}`);
+        const res = await dataService.GetAPI(`admin-users/list-institution?search=${newValue}`);
         return res?.data?.institutionNames.length === 0 ? ['Others (Please Specify)'] : res?.data?.institutionNames;
     };
 
@@ -259,12 +259,12 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 states={states}
                 submitSelected={submitSelected}
             />
-            <FelidDivision
+            {(role === 'agent' || role === 'merchant') && <FelidDivision
                 divisionObject = {bankInputFelid}
                 handleOnChange={handleStates}
                 states={states}
                 submitSelected={bankSelected}
-            />
+            />}
         </div>
     );
 }

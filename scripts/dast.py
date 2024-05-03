@@ -26,7 +26,7 @@ def parse_report_html(html_content):
         return "No 'High' value found in the HTML."
 
 # Your existing code
-URLS = [os.environ.get("REACT_APP_BASE_URL_SITE")]
+URLS = [os.environ.get("REACT_APP_BASE_URL_SITE", "http://ocalhost:3000")]
 
 async def run_dast(url, index):
     zap = ZAPv2(apikey=None)

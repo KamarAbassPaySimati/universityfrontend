@@ -10,7 +10,7 @@ export default function Capture ({ label, handleStates, states, submitSelected }
     return (
         <>
             <div className=' py-4'>
-                <p className='font-medium text-[14px] leading-4'>{label}</p>
+                {/* <p className='font-medium text-[14px] leading-4'>{label}</p> */}
                 <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
                     <div className="md:flex">
                         <div className="w-full py-3">
