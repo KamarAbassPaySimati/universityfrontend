@@ -58,6 +58,17 @@ body {
   border-radius: 16px !important;
   z-index: 10;
 }
+/* Tooltip styling rules */
+.info-tooltip-one-line {
+  /* width: 419px !important; */
+  background-color: #3B2A6F !important;
+  color: #FFFFFF !important;
+  font-weight: 400 !important;
+  font-size: 16px !important;
+  padding: 12px !important;
+  border-radius: 16px !important;
+  z-index: 10;
+}
 
 .scrollBar::-webkit-scrollbar, .whiteScrollBar::-webkit-scrollbar {
   -webkit-appearance: none;
@@ -296,7 +307,16 @@ input[type='number'] {
   top: 13px;
   left: 30px;
   right: 0;
-
+}
+.line-class-merchant::after{
+  position: absolute;
+  content: "";
+  width: 450px;
+  height: 0;
+  border-top: 2px solid #A4A9AE;
+  top: 13px;
+  left: 30px;
+  right: 0;
 }
 
 .lower-alpha {list-style-type: lower-alpha;}

@@ -7,7 +7,7 @@ const { customSortDateDesc, customSortDateAsc } = require('../../bdd_modules/ind
 
 Given('I navigate to merchant KYC listing screen', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await driver.get('http://localhost:3000/verify/kyc-registration?page=1&type=merchant&citizen=all');
+    await driver.get('http://localhost:3000/verify/kyc-registration?page=1&type=merchants&citizen=all');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 

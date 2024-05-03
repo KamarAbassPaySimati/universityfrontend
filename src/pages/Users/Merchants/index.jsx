@@ -72,7 +72,7 @@ const Merchant = () => {
             activePath='Merchants'
             paths={['Users']}
             pathurls={['users/merchants']}
-            header='Merchant list'
+            header='List of Merchants'
             minHeightRequired={true}
             buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Merchant'}`}
             navigationPath='/users/merchants/register-merchant'

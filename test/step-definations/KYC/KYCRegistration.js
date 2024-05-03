@@ -56,6 +56,19 @@ When('I enter street name as {string}', async function (street_name) {
     }
 });
 
+When('I enter trading street name as {string}', async function (street_name) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    if (street_name !== '') {
+        await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]'))).sendKeys(street_name);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
+    }
+});
+
 When('I select the Nationality', async function () {
 // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="nationality"]')));
@@ -87,6 +100,26 @@ Then('I should see the town and district field getting pre-filled with google AP
     await driver.wait(until.elementIsVisible(town));
 
     const district = await driver.wait(until.elementLocated(By.css('[data-testid="district"]')));
+    await driver.wait(until.elementIsVisible(district));
+
+    const street_name_value = street_name.getAttribute('value');
+    const town_value = town.getAttribute('value');
+    const district_value = district.getAttribute('value');
+
+    assert.notEqual(street_name_value, '');
+    assert.notEqual(town_value, '');
+    assert.notEqual(district_value, '');
+});
+
+Then('I should see the trading town and district field getting pre-filled with google API data', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const street_name = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
+    await driver.wait(until.elementIsVisible(street_name));
+
+    const town = await driver.wait(until.elementLocated(By.css('[data-testid="trading_town_village_ta"]')));
+    await driver.wait(until.elementIsVisible(town));
+
+    const district = await driver.wait(until.elementLocated(By.css('[data-testid="trading_district"]')));
     await driver.wait(until.elementIsVisible(district));
 
     const street_name_value = street_name.getAttribute('value');
@@ -332,6 +365,19 @@ Then('I should be redirected to KYC personal details screen', async function () 
     await new Promise(resolve => setTimeout(resolve, 500));
 });
 
+Then('I should be redirected to KYC trading details screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    await driver.executeScript('window.location.reload();');
+
+    const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element2));
+    await new Promise(resolve => setTimeout(resolve, 500));
+});
+
 Given('I am in KYC personal details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
@@ -340,6 +386,18 @@ Given('I am in KYC personal details screen', async function () {
     await driver.executeScript('window.location.reload();');
 
     const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element2));
+    await new Promise(resolve => setTimeout(resolve, 1000));
+});
+
+Given('I am in KYC trading document details screen', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.executeScript('window.location.reload();');
+
+    const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
     await driver.wait(until.elementIsVisible(element2));
     await new Promise(resolve => setTimeout(resolve, 1000));
 });
@@ -365,6 +423,41 @@ When('I select gender as {string}', async function (type) {
         await driver.wait(until.elementLocated(By.css('[for="Undisclosed"]'))).click();
         break;
     }
+});
+
+When('I select the trading types as {string}', async function (type) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]'))).sendKeys(type);
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    switch (type) {
+    case 'Hotels & Resorts':
+        await driver.wait(until.elementLocated(By.css('[for="Hotels & Resorts"]'))).click();
+        break;
+    case 'Restaurants and Cafes':
+        await driver.wait(until.elementLocated(By.css('[for="Restaurants and Cafes"]'))).click();
+        break;
+    case 'Organic Farming':
+        await driver.wait(until.elementLocated(By.css('[for="Organic Farming"]'))).click();
+        break;
+    case 'Online Retailers':
+        await driver.wait(until.elementLocated(By.css('[for="Online Retailers"]'))).click();
+        break;
+    case 'Civil Engineering':
+        await driver.wait(until.elementLocated(By.css('[for="Civil Engineering"]'))).click();
+        break;
+    default:
+        await driver.wait(until.elementLocated(By.css('[for="Undisclosed"]'))).click();
+        break;
+    }
+    await driver.wait(until.elementLocated(By.css('[data-testid="apply_trading_type"]'))).click();
 });
 
 When('I select the date of birth as {string}', async function (dob) {

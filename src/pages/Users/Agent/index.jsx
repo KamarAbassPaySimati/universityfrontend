@@ -72,7 +72,7 @@ const Agent = () => {
             activePath='Agents'
             paths={['Users']}
             pathurls={['users/agents']}
-            header='Agent list'
+            header='List of Agents'
             minHeightRequired={true}
             buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Agent'}`}
             navigationPath='/users/agents/register-agent'
