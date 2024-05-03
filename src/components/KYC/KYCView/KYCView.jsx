@@ -55,7 +55,7 @@ export default function KYCView ({ role, viewType }) {
                                 userButtonName={`${View?.name.split(' ')[0][0] || ''}${View?.name.split(' ')[1][0] || ''}
                                 ${View?.last_name?.[0] || ''}`}
                                 UserName={View?.name}
-                                payMaartID={View?.user_id}
+                                payMaartID={View?.paymaart_id}
                                 loading={loading}
                                 viewType={viewType}
                                 lastLoggedIn={View?.last_logged_in === null
