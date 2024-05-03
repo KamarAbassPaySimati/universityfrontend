@@ -168,10 +168,10 @@ const KycVerification = () => {
 
     return (
         <CardHeader
-            activePath='KYC Verification'
-            paths={['Verification']}
-            pathurls={['verification/kyc-verification']}
-            header='KYC Verification'
+            activePath='KYC Registration'
+            paths={['Verify']}
+            pathurls={['verify/kyc-registration']}
+            header='KYC Registration'
             minHeightRequired={true}
             headerWithoutButton={true}
             toggleButtons={toggleButtons}
