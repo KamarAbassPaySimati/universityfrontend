@@ -36,7 +36,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
             // call api
             try {
                 setIsLoading(true);
-                const response = await dataService.PostAPIWithoutHeader('reset-password',
+                const response = await dataService.PostAPIWithoutHeader('admin-users/reset-password',
                     { token, new_password: password });
                 if (!response.error) {
                     setIsSuccess(true);

@@ -6,8 +6,6 @@ import InputField from '../../../../components/InputField/InputField';
 import InputFieldWithButton from '../../../../components/InputFieldWithButton/InputFieldWithButton';
 import Image from '../../../../components/Image/Image';
 import { Tooltip } from 'react-tooltip';
-import { baseURLAgent } from '../../../../config';
-import axios from 'axios';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import Button from '../../../../components/Button/Button';
 import SecurityQuestionsShimmer from '../../../../components/Shimmers/SecurityQuestionsShimmer';
@@ -17,8 +15,9 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import verificationValidation from './verificationValidation';
 import { dataService } from '../../../../services/data.services';
 import { endpoints } from '../../../../services/endpoints';
-import RegistrationSuccessful from './components/RegistrationSuccessful';
+import RegistrationSuccessful from '../../../../components/KYC/KYCComponents/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
+import ProfileUploadPlaceholder from '../../../../components/S3Upload/ProfileImageUpload';
 
 const OnboardAgent = ({ role }) => {
     const initialState = {
@@ -26,7 +25,10 @@ const OnboardAgent = ({ role }) => {
         middleName: '',
         lastName: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        profileImage: '',
+        makeProfilePublic: false
+
     };
     const [enteredLetter, setEnteredLetter] = useState();
     const [termsAccepted, setTermsAccepted] = useState(false);
@@ -174,6 +176,11 @@ const OnboardAgent = ({ role }) => {
     const handleOtpFocus = (e, id) => {
         setOtpError('');
     };
+    const handleProfileChanges = (id, value) => {
+        setFormData(prevState => {
+            return { ...prevState, [id]: value };
+        });
+    };
 
     const handleVerifyEmail = async (text) => {
         setFormErrors(initialState);
@@ -207,7 +214,8 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingEmailVerify(true);
         }
-        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${sendOtp}`, payload);
         if (!response.error) {
             setOtp('');
             setOtpError('');
@@ -230,7 +238,6 @@ const OnboardAgent = ({ role }) => {
         setLoadingEmailVerify(false);
         setIsResendLoading(false);
     };
-
     const handleVerifyPhoneNumber = async (text) => {
         if (text === 'EDIT') {
             setVerify(prevState => {
@@ -269,7 +276,8 @@ const OnboardAgent = ({ role }) => {
         } else {
             setLoadingPhoneVerify(true);
         }
-        const response = role === 'agent' ? await dataService.PostAPIAgent(sendOtp, payload) : await dataService.PostAPIMerchant(sendOtp, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${sendOtp}`, payload);
         if (!response.error) {
             setPhoneOtp('');
             setOtpError('');
@@ -315,8 +323,8 @@ const OnboardAgent = ({ role }) => {
         } else if (id === 'phoneNumberOtp') {
             setloadingPhoneNoOtpVerify(true);
         }
-
-        const response = role === 'agent' ? await dataService.PostAPIAgent(verifyOtp, payload) : await dataService.PostAPIMerchant(verifyOtp, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${verifyOtp}`, payload);
         if (id === 'emailOtp') {
             setLoadingOtpVerify(false);
         } else if (id === 'phoneNumberOtp') {
@@ -363,10 +371,10 @@ const OnboardAgent = ({ role }) => {
         const fetchSecurityQuestions = async () => {
             try {
                 setQuestionsLoading(true);
-                const data = await axios.get(`${baseURLAgent}security-questions`);
+                const response = await dataService.GetAPI('agent-users/security-questions');
                 setQuestionsLoading(false);
-                if (data.status === 200) {
-                    setSecurityQuestions(data.data.data);
+                if (response.data.success_status) {
+                    setSecurityQuestions(response.data.data);
                 } else {
                     setToastError('Something went wrong!');
                 }
@@ -405,8 +413,13 @@ const OnboardAgent = ({ role }) => {
             phone_otp_id: otpId.phoneNumber,
             security_questions: transformArray(securityQuestions)
         };
+        if (role === 'customer') {
+            payload.profile_pic = formData.profileImage;
+            payload.public_profile = formData.makeProfilePublic;
+        }
         setIsLoading(true);
-        const response = role === 'agent' ? await dataService.PostAPIAgent(createAgent, payload) : await dataService.PostAPIMerchant(createAgent, payload);
+        const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
+        const response = await dataService.PostAPI(`${endPoint}/${createAgent}`, payload);
         setIsLoading(false);
         if (!response.error) {
             setRegistrationSuccessful(true);
@@ -421,9 +434,9 @@ const OnboardAgent = ({ role }) => {
 
     return (
         <CardHeader
-            activePath={role === 'agent' ? 'Register Agent' : 'Register Merchant'}
-            paths={role === 'agent' ? ['Users', 'Agents'] : ['Users', 'Merchants']}
-            pathurls={role === 'agent' ? ['users/agents'] : ['users/merchants']}
+            activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
+            paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
+            pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={registrationSuccessful ? false : 'Registration'}
         >
             {registrationSuccessful
@@ -432,6 +445,20 @@ const OnboardAgent = ({ role }) => {
                     <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
                         Basic Details
                     </h1>
+
+                    {role === 'customer' && (
+                        <>
+                            <h1 className='mt-[20px] font-500 text-[14px]'>Public Profile</h1>
+                            <ProfileUploadPlaceholder
+                                testId={'profile_image'}
+                                path={'customer_profile'}
+                                states={formData}
+                                selectedUploadImg={'profileImage'}
+                                profilePublic = {'makeProfilePublic'}
+                                handleStates = {handleProfileChanges}
+                            />
+                        </>
+                    )}
                     <div className='my-4 flex gap-[20px] flex-wrap'>
                         <InputField
                             className='w-[339px]'
@@ -630,7 +657,7 @@ const OnboardAgent = ({ role }) => {
                                     name='checkbox' />
                                 <label data-testid="terms_and_conditions" className="text-neutral-primary text-[14px] leading-[22px] font-[400] cursor-pointer" htmlFor="termsAccepted">
                                     {role && role.charAt(0).toUpperCase() + role.slice(1)} has read and agreed Paymaart’s
-                                    <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : 'https://www.paymaart.net/merchant-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
+                                    <a target='_blank' href={role === 'agent' ? 'https://www.paymaart.net/agent-terms-conditions' : role === 'merchant' ? 'https://www.paymaart.net/merchant-terms-conditions' : 'https://www.paymaart.net/customer-terms-conditions'} className='text-accent-information' rel="noreferrer"> Terms & Conditions </a>
                                     and
                                     <a target='_blank' href='https://www.paymaart.net/privacy-policy' className='text-accent-information' rel="noreferrer"> Privacy Policy</a>.
                                 </label>

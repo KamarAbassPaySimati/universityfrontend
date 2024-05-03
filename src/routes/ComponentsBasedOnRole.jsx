@@ -7,7 +7,7 @@ import SpecificAdminView from '../pages/Users/Admin/Components/SpecificAdminView
 import KycVerification from '../pages/Verification/KycVerification';
 import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
 import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
-import RegisterKYC from '../pages/Users/Agent/Onboard Agent/components/RegisterKYC';
+import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -48,6 +48,11 @@ export const ComponentsBasedOnRole = {
             path: '/users/merchants/register-merchant'
         },
         {
+            name: 'Onboard Customer Users',
+            element: <OnboardAgent role={'customer'}/>,
+            path: '/users/customers/register-customer'
+        },
+        {
             name: 'KYC Verification list',
             element: <KycVerification />,
             path: '/verify/kyc-registration'
@@ -64,9 +69,15 @@ export const ComponentsBasedOnRole = {
         },
         {
             name: 'Agent KYC Registration',
-            element: <RegisterKYC />,
+            element: <RegisterKYC role={'agent'}/>,
             path: '/users/agents/register-agent/kyc-registration/:id'
+        },
+        {
+            name: 'Customer KYC Registration',
+            element: <RegisterKYC role={'customers'}/>,
+            path: '/users/customers/register-customer/kyc-registration/:id'
         }
+
     ],
     admin:
     [
@@ -84,6 +95,11 @@ export const ComponentsBasedOnRole = {
             name: 'Onboard Merchant Users',
             element: <OnboardAgent role={'merchant'}/>,
             path: '/users/merchants/register-merchant'
+        },
+        {
+            name: 'Onboard Customer Users',
+            element: <OnboardAgent role={'customer'}/>,
+            path: '/users/customers/register-customer'
         },
         {
             name: 'KYC Verification list',
@@ -112,6 +128,11 @@ export const ComponentsBasedOnRole = {
             name: 'Onboard Merchant Users',
             element: <OnboardAgent role={'merchant'}/>,
             path: '/users/merchants/register-merchant'
+        },
+        {
+            name: 'Onboard Customer Users',
+            element: <OnboardAgent role={'customer'}/>,
+            path: '/users/customers/register-customer'
         }
     ],
     'finance-admin':

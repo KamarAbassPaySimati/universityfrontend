@@ -1,12 +1,10 @@
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 const { Given, When, Before } = require('@cucumber/cucumber');
-const webdriver = require('selenium-webdriver');
-const until = require('selenium-webdriver').until;
-const By = require('selenium-webdriver').By;
-const Keys = webdriver.Key;
+const { Key, until, By } = require('selenium-webdriver');
 const { driver } = require('../Driver.js');
 const { requestResetPassword } = require('../../bdd_api/index.js');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Before('@request_reset_password', async function () {
     try {
@@ -64,8 +62,8 @@ When('I enter password as {string} and confirm password as {string}', async func
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="new_confirm_password"]'))).sendKeys(Keys.chord(Keys.CONTROL, 'a'), Keys.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="new_confirm_password"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
 
     await new Promise(resolve => setTimeout(resolve, 100));
     await driver.wait(until.elementLocated(By.css('[data-testid="new_password"]'))).sendKeys(new_password);

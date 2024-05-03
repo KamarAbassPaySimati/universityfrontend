@@ -3,8 +3,11 @@ import securityAnswersCheck from './securityAnswersCheck';
 export default function validation (state, setErrorState, verified, securityQuestions, setsecurityQuestionError,
     termsAccepted, setTermsAcceptedError) {
     let isValid = true;
+    const stateValiable = { ...state };
+    delete stateValiable.profileImage;
+    delete stateValiable.makeProfilePublic;
 
-    for (const key in state) {
+    for (const key in stateValiable) {
         if (state[key].trim() === '') {
             setErrorState((prevState) => ({
                 ...prevState,

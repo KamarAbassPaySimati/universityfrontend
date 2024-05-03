@@ -4,7 +4,13 @@ const base32Decode = require('base32-decode');
 const crypto = require('crypto');
 const jsQR = require('jsqr');
 const fs = require('fs');
+const { Key } = require('selenium-webdriver');
 require('dotenv').config();
+const osPlatform = require('os').platform();
+
+function getModifierKey () {
+    return osPlatform === 'darwin' ? Key.COMMAND : Key.CONTROL;
+}
 
 async function getToken () {
     const keys = Object.keys(await driver.executeScript('return window.localStorage'));
@@ -160,5 +166,6 @@ module.exports = {
     saveLocalStorageData,
     loadLocalStorageData,
     customSortDateAsc,
-    customSortDateDesc
+    customSortDateDesc,
+    getModifierKey
 };

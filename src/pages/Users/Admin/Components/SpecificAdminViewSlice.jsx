@@ -12,11 +12,9 @@ const initialState = {
 
 export const SpecificView = createAsyncThunk('adminUsers', async (PaymaartId, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
-    const safeUrl =
-        `view-admin/${PaymaartId}`;// api end point
 
     try {
-        const res = await dataService.GetAPI(safeUrl);
+        const res = await dataService.GetAPI(`admin-users/view-admin/${PaymaartId}`);
         return res;
     } catch (error) {
         // Log error or send notification

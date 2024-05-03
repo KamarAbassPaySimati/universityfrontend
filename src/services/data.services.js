@@ -1,6 +1,6 @@
 /* eslint-disable security/detect-object-injection */
 import axios from 'axios';
-import { baseURL, baseURLAgent, baseURLMerchant } from '../config';
+import { baseURL } from '../config';
 import authHeader from './authHeader';
 
 async function PostAPIWithoutHeader (endpoint, body) {
@@ -25,21 +25,10 @@ async function PostAPIWithoutHeader (endpoint, body) {
  * 2. If there is an error during the API call, it returns an object with `error` set to `true` and
  * `data` containing the error
  */
-async function GetAPI (endpoint, agent) {
+async function GetAPI (endpoint) {
     const headers = await authHeader();
     try {
-        const data = await axios.get(`${agent ? baseURLAgent : baseURL}${endpoint}`, {
-            headers
-        });
-        return { error: false, data: data.data };
-    } catch (error) {
-        return { error: true, data: error.response };
-    }
-}
-async function GetAPIAgent (endpoint) {
-    const headers = await authHeader();
-    try {
-        const data = await axios.get(`${baseURLAgent}${endpoint}`, {
+        const data = await axios.get(`${baseURL}${endpoint}`, {
             headers
         });
         return { error: false, data: data.data };
@@ -69,29 +58,6 @@ async function PostAPI (endpoint, payload) {
     try {
         const headers = await authHeader();
         const data = await axios.post(`${baseURL}${endpoint}`, payload, {
-            headers
-        });
-        return { error: false, data: data.data };
-    } catch (error) {
-        return { error: true, data: error.response };
-    }
-}
-
-async function PostAPIAgent (endpoint, payload) {
-    try {
-        const headers = await authHeader();
-        const data = await axios.post(`${baseURLAgent}${endpoint}`, payload, {
-            headers
-        });
-        return { error: false, data: data.data };
-    } catch (error) {
-        return { error: true, data: error.response };
-    }
-}
-async function PostAPIMerchant (endpoint, payload) {
-    try {
-        const headers = await authHeader();
-        const data = await axios.post(`${baseURLMerchant}${endpoint}`, payload, {
             headers
         });
         return { error: false, data: data.data };
@@ -156,8 +122,5 @@ export const dataService = {
     GetAPI,
     PostAPI,
     DeleteAPI,
-    PostAPIWithoutHeader,
-    PostAPIAgent,
-    GetAPIAgent,
-    PostAPIMerchant
+    PostAPIWithoutHeader
 };

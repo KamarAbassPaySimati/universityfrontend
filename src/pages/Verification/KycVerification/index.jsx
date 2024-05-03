@@ -28,7 +28,6 @@ const KycVerification = () => {
     const handleToggle = (updatedButtons) => {
         setToggleButtons(updatedButtons);
         // Perform API call or any other action based on the updated button values
-        console.log(updatedButtons);
     };
     const singleCheckOptions = {
         citizen: ['All', 'Malawi Citizen', 'Non Malawi Citizen']
@@ -48,81 +47,83 @@ const KycVerification = () => {
     asynchronous function that is responsible for fetching data using the `dispatch` function to
     call the `AdminList` action creator with the `searchParams` as a parameter. */
     const GetList = useCallback(async () => {
-        if (searchParams.get('type') === 'agents') {
-            url = 'get-agent-kyc-list?';
-            if (searchParams.get('page') !== null) {
-                url += `page=${searchParams.get('page')}`;
-            }
-            if (searchParams.get('search') !== null) {
-                url += `&search=${searchParams.get('search')}`;
-            }
-            if (searchParams.get('sortOrder') !== null) {
-                url += `&sortOrder=${searchParams.get('sortOrder')}`;
-            }
-            if (searchParams.get('citizen') !== null) {
-                const citizenValues = searchParams.get('citizen').split(',').map(value => {
-                    const trimmedValue = value.trim().toLowerCase().replace(/citizen$/, '');
-                    switch (trimmedValue) {
-                    case 'malawi ':
-                        return 'malawi';
-                    case 'non malawi ':
-                        return 'nonMalawi';
-                    default:
-                        return trimmedValue; // Use original value if no correction needed
-                    }
-                });
-
-                const correctedValues = citizenValues.join(',');
-                url += `&citizenship=${correctedValues}`;
-            }
-
-            if (searchParams.get('simplifiedkyc') !== null) {
-                // Get the value of 'simplifiedkyc' from the searchParams and split it by ','
-                const simplifiedValues = searchParams.get('simplifiedkyc').split(',').map(value => {
-                    // Trim and convert the value to lowercase, removing the prefix 'simplifiedkyc_'
-                    const trimmedValue = value.trim().toLowerCase().replace(/^simplifiedkyc_/i, '');
-                    switch (trimmedValue) {
-                    // If the trimmedValue matches any of these cases, replace it with the corrected value
-                    case 'in-progress':
-                        return 'in_progress';
-                    case 'completed':
-                        return 'completed';
-                    case 'further information required':
-                        return 'info_required';
-                    default:
-                        // If no correction needed, use the original value
-                        return trimmedValue;
-                    }
-                });
-                // Join the corrected values back into a string separated by ','
-                const correctedValues = simplifiedValues.join(',');
-                // Append the correctedValues directly to the URL
-                url += `&simplifiedStatus=${correctedValues}`;
-            }
-
-            if (searchParams.get('fullkyc') !== null) {
-                const fullKycValues = searchParams.get('fullkyc').split(',').map(value => {
-                    const trimmedValue = value.trim().toLowerCase();
-                    switch (trimmedValue) {
-                    case 'in-progress':
-                        return 'in_progress';
-                    case 'completed':
-                        return 'completed';
-                    case 'further information required':
-                        return 'info_required';
-                    default:
-                        return trimmedValue; // Use original value if no correction needed
-                    }
-                });
-
-                const correctedValues = fullKycValues.join(',');
-                url += `&fullStatus=${correctedValues}`;
-            }
-        } else if (searchParams.get('type') === 'customers') {
-            console.log('');
-        } else if (searchParams.get('type') === 'merchants') {
-            console.log('');
+        url = searchParams.get('type') === 'agents'
+            ? 'agent-users/get-agent-kyc-list?'
+            : searchParams.get('type') === 'customers' ? 'admin-users/customer-kyc-list?' : 'admin-users/merchant-kyc-list?';
+        if (searchParams.get('page') !== null) {
+            url += `page=${searchParams.get('page')}`;
         }
+        if (searchParams.get('search') !== null) {
+            url += `&search=${searchParams.get('search')}`;
+        }
+        if (searchParams.get('sortOrder') !== null) {
+            url += `&sortOrder=${searchParams.get('sortOrder')}`;
+        }
+        if (searchParams.get('citizen') !== null) {
+            const citizenValues = searchParams.get('citizen').split(',').map(value => {
+                const trimmedValue = value.trim().toLowerCase().replace(/citizen$/, '');
+                switch (trimmedValue) {
+                case 'malawi ':
+                    return 'malawi';
+                case 'non malawi ':
+                    return 'nonMalawi';
+                default:
+                    return trimmedValue; // Use original value if no correction needed
+                }
+            });
+
+            const correctedValues = citizenValues.join(',');
+            url += `&citizenship=${correctedValues}`;
+        }
+
+        if (searchParams.get('simplifiedkyc') !== null) {
+            // Get the value of 'simplifiedkyc' from the searchParams and split it by ','
+            const simplifiedValues = searchParams.get('simplifiedkyc').split(',').map(value => {
+                // Trim and convert the value to lowercase, removing the prefix 'simplifiedkyc_'
+                const trimmedValue = value.trim().toLowerCase().replace(/^simplifiedkyc_/i, '');
+                switch (trimmedValue) {
+                // If the trimmedValue matches any of these cases, replace it with the corrected value
+                case 'in-progress':
+                    return 'in_progress';
+                case 'completed':
+                    return 'completed';
+                case 'further information required':
+                    return 'info_required';
+                default:
+                    // If no correction needed, use the original value
+                    return trimmedValue;
+                }
+            });
+                // Join the corrected values back into a string separated by ','
+            const correctedValues = simplifiedValues.join(',');
+            // Append the correctedValues directly to the URL
+            url += `&simplifiedStatus=${correctedValues}`;
+        }
+
+        if (searchParams.get('fullkyc') !== null) {
+            const fullKycValues = searchParams.get('fullkyc').split(',').map(value => {
+                const trimmedValue = value.trim().toLowerCase();
+                switch (trimmedValue) {
+                case 'in-progress':
+                    return 'in_progress';
+                case 'completed':
+                    return 'completed';
+                case 'further information required':
+                    return 'info_required';
+                default:
+                    return trimmedValue; // Use original value if no correction needed
+                }
+            });
+
+            const correctedValues = fullKycValues.join(',');
+            url += `&fullStatus=${correctedValues}`;
+        }
+
+        // else if (searchParams.get('type') === 'customers') {
+        //     console.log('');
+        // } else if (searchParams.get('type') === 'merchants') {
+        //     console.log('');
+        // }
         try {
             // to get the data from authslice
             dispatch(KycVerificationList(url));
@@ -231,7 +232,7 @@ const KycVerification = () => {
                     (!notFound && List?.data?.length === 0 &&
         searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
         searchParams.get('search') === null &&
-        searchParams.get('search') === null && searchParams.get('simplifiedkyc') === null &&
+        searchParams.get('simplifiedkyc') === null &&
         searchParams.get('fullkyc') === null)
                         ? (
 

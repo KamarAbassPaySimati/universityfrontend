@@ -129,8 +129,8 @@ const OnboardAdmin = ({ actionKey }) => {
                 };
 
                 const response = (actionKey === 'update'
-                    ? await dataService.PatchAPI(updateAdmin, updateAdminPayload)
-                    : await dataService.PostAPI(adminOnboard, payload));
+                    ? await dataService.PatchAPI(`admin-users/${updateAdmin}`, updateAdminPayload)
+                    : await dataService.PostAPI(`admin-users/${adminOnboard}`, payload));
                 if (actionKey !== 'update') {
                     if (!response.error) {
                         setIsLoading(false);
