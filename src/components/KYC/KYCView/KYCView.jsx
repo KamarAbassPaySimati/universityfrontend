@@ -10,6 +10,7 @@ import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import KYCSections from './KYCSections';
 import { KYCProfileView } from './KYCProfileViewSlice';
 import ImageViewWithModel from '../../S3Upload/ImageViewWithModel';
+import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
@@ -107,7 +108,7 @@ export default function KYCView ({ role, viewType }) {
                         <KYCSections
                             heading='Identity Details'
                             childe={
-                                <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                <div className='w-full flex flex-wrap mt-1 xl:-mx-[40px]'>
                                     {loading
                                         ? ([...Array(3)].map((_, ind) => (
                                             <div className='w-1/3 px-1' key={ind}>
@@ -120,15 +121,156 @@ export default function KYCView ({ role, viewType }) {
                                         )))
                                         : (
                                             Object.keys(userDetails.identityDetails).map((itemkey, index = 0) => (
-                                                <div key={index} className='w-1/3 px-1 m'>
-                                                    <h1
-                                                        className='mt-6 text-[#A4A9AE] text-[14px] leading-6 font-normal'
-                                                    >{itemkey}</h1>
-                                                    {userDetails.identityDetails[itemkey].map((imageItem) => (
-                                                        imageItem !== null && <div key={imageItem} className='pr-2'>
-                                                            <ImageViewWithModel item={imageItem}/>
-                                                        </div>
-                                                    ))}
+                                                <div key ={index} className='flex flex-wrap xl:px-[40px] xl:w-1/3 w-1/2'>
+                                                    <div key={index} className=''>
+                                                        <h1
+                                                            className='mt-4 text-[#A4A9AE] text-[14px] leading-6 font-normal'
+                                                        >{itemkey}</h1>
+                                                        {userDetails.identityDetails[itemkey].map((imageItem) => (
+                                                            imageItem !== null && <div key={imageItem} className='pr-2'>
+                                                                <ImageViewWithModel item={imageItem}/>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                </div>)
+                                            )
+                                        )
+                                    }
+                                </div>
+                            }
+                        />
+                        <KYCSections
+                            heading='Personal Details'
+                            childe={
+                                <div>
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(2)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                Object.keys(userDetails.personalDetails).map((itemkey, index = 0) => (
+                                                    <div key={index} className='w-1/3 px-1'>
+                                                        <ViewDetail
+                                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                                            userDetails={userDetails.personalDetails[itemkey]}
+                                                            loading={loading}
+                                                        />
+                                                    </div>)
+                                                )
+                                            )
+                                        }
+                                    </div>
+                                    <div className='max-h-[calc(100vh-120px)] scrollBar
+                                    overflow-auto mb-8 px-[30px] pt-[24px] pb-[28px]
+                flex flex-col bg-[#F0ECFF] mt-6 border border-none rounded-[6px]
+                '>
+                                        {loading
+                                            ? ([...Array(2)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                Object.keys(userDetails.personalDetails).map((itemkey, index = 0) => (
+                                                    <div key={index} className='w-1/3 px-1'>
+                                                        <ViewDetail
+                                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                                            userDetails={userDetails.personalDetails[itemkey]}
+                                                            loading={loading}
+                                                        />
+                                                    </div>)
+                                                )
+                                            )
+                                        }
+                                    </div>
+                                    {!loading && <p className='text-neutral-secondary font-medium text-[14px] leading-4 mb-2'>
+                                        Purpose and intended nature of the business relationship</p>}
+                                    {loading
+                                        ? ([...Array(2)].map((_, ind) => (
+                                            <div className='w-1/2 px-1' key={ind}>
+                                                <ViewDetail
+                                                    itemkey='Loading...'
+                                                    userDetails='Loading...'
+                                                    loading={loading}
+                                                />
+                                            </div>
+                                        )))
+                                        : (
+                                            userDetails?.purpose.map((purposeItem, index) => (
+                                                <div key={purposeItem}
+                                                >
+                                                    <InputTypeCheckbox
+                                                        key={purposeItem}
+                                                        id={purposeItem}
+                                                        testId={`purpose_${index}`}
+                                                        checkboxText={purposeItem}
+                                                        disabled={true}
+                                                        Checked={true}
+                                                    />
+                                                </div>
+                                            ))
+                                        )
+                                    }
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(2)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                Object.keys(userDetails.incomeDetails).map((itemkey, index = 0) => (
+                                                    <div key={index} className='w-1/3 px-1'>
+                                                        <ViewDetail
+                                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                                            userDetails={userDetails.incomeDetails[itemkey]}
+                                                            loading={loading}
+                                                        />
+                                                    </div>)
+                                                )
+                                            )
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        />
+                        <KYCSections
+                            heading='Bank Details'
+                            childe={
+                                <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                    {loading
+                                        ? ([...Array(3)].map((_, ind) => (
+                                            <div className='w-1/3 px-1' key={ind}>
+                                                <ViewDetail
+                                                    itemkey='Loading...'
+                                                    userDetails='Loading...'
+                                                    loading={loading}
+                                                />
+                                            </div>
+                                        )))
+                                        : (
+                                            Object.keys(userDetails.bankDetails).map((itemkey, index = 0) => (
+                                                <div key={index} className='w-1/3 px-1'>
+                                                    <ViewDetail
+                                                        itemkey={itemkey.replaceAll('_', ' ')}
+                                                        userDetails={userDetails.bankDetails[itemkey]}
+                                                        loading={loading}
+                                                    />
                                                 </div>)
                                             )
                                         )

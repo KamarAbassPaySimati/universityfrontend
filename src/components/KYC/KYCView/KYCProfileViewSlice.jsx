@@ -34,7 +34,7 @@ const KYCProfileViewSlice = createSlice({
             })
             .addCase(KYCProfileView.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log('state', action?.payload.data.data);
+                console.log('state', action?.payload.data.data.purpose_of_relation);
 
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
@@ -44,6 +44,7 @@ const KYCProfileViewSlice = createSlice({
                             AddressValues.push(state.View[item]);
                         }
                     });
+                    // console.log(state?.View?.purpose_of_relation, 'bbbbbbbbbb');
                     state.userDetails = {
                         basicDetails: {
                             'Phone Number':
@@ -59,8 +60,23 @@ const KYCProfileViewSlice = createSlice({
                                 state?.View?.verification_document_back],
                             'Biometrics | Live Selfie': [state?.View?.selfie]
 
+                        },
+                        personalDetails: {
+                            Gender: state?.View?.gender,
+                            'Date of Birth': new Date(state?.View.dob * 1000).toLocaleDateString('en-US',
+                                { day: '2-digit', month: 'short', year: 'numeric' })
+
+                        },
+                        purpose: state?.View?.purpose_of_relation,
+                        incomeDetails: {
+                            'Monthly Withdrawal': state?.View?.monthly_withdrawal,
+                            'Monthly Income': state?.View?.monthly_income
+                        },
+                        bankDetails: {
+                            'Bank Name': state?.View?.bank_details[0]?.bank_name,
+                            'Account Number': state?.View?.bank_details[0]?.account_number,
+                            'Account Name': state?.View?.bank_details[0]?.account_name
                         }
-                       
                     };
                     state.keys = Object.keys(state.userDetails);
                 } else {
