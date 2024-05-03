@@ -45,7 +45,7 @@ const KYCProfileViewSlice = createSlice({
                         Occupation.Details = action?.payload?.data?.data.employed_role;
                         Occupation['Employer Name'] = action?.payload?.data?.data.employer_name;
                         Occupation['Industry Sector'] = action?.payload?.data?.data.industry;
-                        Occupation['Town/District'] = action?.payload?.data.occupation_town;
+                        Occupation['Town/District'] = action?.payload?.data?.data.occupation_town;
                         break;
                     case 'Others':
                         Occupation.Details = action?.payload?.data?.data.occupation_specify;
