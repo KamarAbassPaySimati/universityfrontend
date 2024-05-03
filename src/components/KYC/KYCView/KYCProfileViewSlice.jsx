@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { formatInputPhone } from '../../../CommonMethods/phoneNumberFormat';
 import { dataService } from '../../../services/data.services';
+import { occupationEduction } from '../KYCComponents/KYCFunctions';
 
 const initialState = {
     loading: true,
@@ -34,11 +35,37 @@ const KYCProfileViewSlice = createSlice({
             })
             .addCase(KYCProfileView.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log('state', action?.payload.data.data.purpose_of_relation);
-
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
                     const AddressValues = [];
+                    const Occupation = {};
+                    const array = [];
+                    switch (action?.payload?.data?.data.occupation) {
+                    case 'Employed':
+                        Occupation.Details = action?.payload?.data?.data.employed_role;
+                        Occupation['Employer Name'] = action?.payload?.data?.data.employer_name;
+                        Occupation['Industry Sector'] = action?.payload?.data?.data.industry;
+                        Occupation['Town/District'] = action?.payload?.data.occupation_town;
+                        break;
+                    case 'Others':
+                        Occupation.Details = action?.payload?.data?.data.occupation_specify;
+                        break;
+                    case 'Self Employed':
+                        Occupation.Details = action?.payload?.data?.data.self_employed_specify;
+                        break;
+                    case 'In Full-time Education':
+                        if (action?.payload?.data?.data.institute === 'Others (Please Specify)') {
+                            array.push(action?.payload?.data?.data.institute_specify);
+                        } else {
+                            occupationEduction.forEach((item) => {
+                                array.push(action?.payload?.data?.data[item]);
+                            });
+                        }
+                        Occupation.Details = array.join(', ');
+                        break;
+                    default:
+                        break;
+                    }
                     AddressKeys.forEach((item) => {
                         if (state.View[item] !== null) {
                             AddressValues.push(state.View[item]);
@@ -76,7 +103,8 @@ const KYCProfileViewSlice = createSlice({
                             'Bank Name': state?.View?.bank_details[0]?.bank_name,
                             'Account Number': state?.View?.bank_details[0]?.account_number,
                             'Account Name': state?.View?.bank_details[0]?.account_name
-                        }
+                        },
+                        Occupation: { 'Occupation / Source of Funds': state?.View?.occupation, ...Occupation }
                     };
                     state.keys = Object.keys(state.userDetails);
                 } else {
