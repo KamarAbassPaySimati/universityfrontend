@@ -104,7 +104,7 @@ When('I answer the security question four as {string}', async function (security
 
 When('I click on verify email address', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_email_address"]')));
     await driver.wait(until.elementIsVisible(element));
@@ -134,7 +134,7 @@ When('I enter a valid email address for agent registration', async function () {
 
 When('I enter the valid OTP and verify', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const OTP_field = await driver.wait(until.elementLocated(By.css('[data-testid="otp"]')));
     await driver.wait(until.elementIsVisible(OTP_field));
 
@@ -162,7 +162,7 @@ Then('I should see the verify email address button text changed to {string}', as
 
 When('I click on verify phone number', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_phone_number"]')));
     await driver.wait(until.elementIsVisible(element));

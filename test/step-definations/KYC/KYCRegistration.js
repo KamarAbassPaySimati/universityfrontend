@@ -9,6 +9,7 @@ const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I click on verify KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_KYC"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -31,6 +32,7 @@ Then('I should be redirected to KYC address details screen', async function () {
 
 Given('I am in KYC address details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_address_details"]')));
     await driver.wait(until.elementIsVisible(element));
 });
@@ -114,6 +116,7 @@ Then('I should see the town and district field getting pre-filled with google AP
 
 Then('I should see the trading town and district field getting pre-filled with google API data', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const street_name = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
     await driver.wait(until.elementIsVisible(street_name));
 
@@ -238,6 +241,7 @@ Then('I should view the preview of the uploaded document', async function () {
 
 When('I click on capture', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const capture = await driver.wait(until.elementLocated(By.css('[data-testid="capture"]')));
     await driver.wait(until.elementIsVisible(capture));
     await capture.click();
