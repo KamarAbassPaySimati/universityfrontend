@@ -169,6 +169,41 @@ async function sendCustomerOTP (payload) {
     }
 }
 
+async function createMerchantAccount (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/create-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function verifyMerchantOTP (token) {
+    const axiosOptions = await getToken();
+
+    const payload = {
+        otp: '355948',
+        token
+    };
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/verify-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function sendMerchantOTP (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/send-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
 module.exports = {
     getMFASecret,
     addAdminUser,
@@ -181,5 +216,8 @@ module.exports = {
     sendAgentOTP,
     verifyCustomerOTP,
     sendCustomerOTP,
-    createCustomerAccount
+    createCustomerAccount,
+    createMerchantAccount,
+    verifyMerchantOTP,
+    sendMerchantOTP
 };
