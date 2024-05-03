@@ -58,11 +58,13 @@ export default function KYCView ({ role, viewType }) {
                                 payMaartID={View?.user_id}
                                 loading={loading}
                                 viewType={viewType}
-                                lastLoggedIn={View?.updated_at
-                                    ? isTimestampFiveMinutesAgo(View?.updated_at)
-                                        ? formatTimestamp(View?.updated_at)
-                                        : 'Online'
-                                    : ''}
+                                lastLoggedIn={View?.last_logged_in === null
+                                    ? '-----'
+                                    : View?.last_logged_in
+                                        ? isTimestampFiveMinutesAgo(View?.last_logged_in)
+                                            ? formatTimestamp(View?.last_logged_in)
+                                            : 'Online'
+                                        : ''}
                                 CreatedDate={formatTimestamp(View?.user_created_date)}
                             />
                             <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
@@ -168,31 +170,33 @@ export default function KYCView ({ role, viewType }) {
                                         }
                                     </div>
                                     <div className='max-h-[calc(100vh-120px)] scrollBar
-                                    overflow-auto mb-8 px-[30px] pt-[24px] pb-[28px]
+                                    overflow-auto mb-8 px-[30px] pb-[28px]
                 flex flex-col bg-[#F0ECFF] mt-6 border border-none rounded-[6px]
                 '>
-                                        {loading
-                                            ? ([...Array(2)].map((_, ind) => (
-                                                <div className='w-1/3 px-1' key={ind}>
-                                                    <ViewDetail
-                                                        itemkey='Loading...'
-                                                        userDetails='Loading...'
-                                                        loading={loading}
-                                                    />
-                                                </div>
-                                            )))
-                                            : (
-                                                Object.keys(userDetails.personalDetails).map((itemkey, index = 0) => (
-                                                    <div key={index} className='w-1/3 px-1'>
+                                        <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                            {loading
+                                                ? ([...Array(2)].map((_, ind) => (
+                                                    <div className='w-1/3 px-1' key={ind}>
                                                         <ViewDetail
-                                                            itemkey={itemkey.replaceAll('_', ' ')}
-                                                            userDetails={userDetails.personalDetails[itemkey]}
+                                                            itemkey='Loading...'
+                                                            userDetails='Loading...'
                                                             loading={loading}
                                                         />
-                                                    </div>)
+                                                    </div>
+                                                )))
+                                                : (
+                                                    Object.keys(userDetails.Occupation).map((itemkey, index = 0) => (
+                                                        <div key={index} className='w-1/3 px-1'>
+                                                            <ViewDetail
+                                                                itemkey={itemkey.replaceAll('_', ' ')}
+                                                                userDetails={userDetails.Occupation[itemkey]}
+                                                                loading={loading}
+                                                            />
+                                                        </div>)
+                                                    )
                                                 )
-                                            )
-                                        }
+                                            }
+                                        </div>
                                     </div>
                                     {!loading && <p className='text-neutral-secondary font-medium text-[14px] leading-4 mb-4'>
                                         Purpose and intended nature of the business relationship</p>}
