@@ -38,7 +38,7 @@ export default function KYCView ({ role, viewType }) {
                 reject={loading}
                 approve={loading}
                 updateButton={loading}
-                updateButtonPath={`/users/admins/update-admin/${id}`}
+                updateButtonPath={`${getPaths(viewType, role).updateButtonPath}${id}`}
                 statusButton={id === View?.paymaart_id
                     ? undefined
                     : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
@@ -56,6 +56,7 @@ export default function KYCView ({ role, viewType }) {
                                 UserName={View?.name}
                                 payMaartID={View?.user_id}
                                 loading={loading}
+                                viewType={viewType}
                                 lastLoggedIn={View?.updated_at
                                     ? isTimestampFiveMinutesAgo(View?.updated_at)
                                         ? formatTimestamp(View?.updated_at)

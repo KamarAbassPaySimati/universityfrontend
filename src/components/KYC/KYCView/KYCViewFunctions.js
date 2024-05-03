@@ -6,21 +6,24 @@ export const getPaths = (viewType, role) => {
             return {
                 activePath: 'Agent Profile',
                 paths: ['Users', 'Agents'],
-                pathurls: ['users/agents']
+                pathurls: ['users/agents'],
+                updateButtonPath: '/users/agents/register-agent/specific-view/update-agent'
 
             };
         case 'merchant':
             return {
                 activePath: 'Merchant Profile',
                 paths: ['Users', 'Merchants'],
-                pathurls: ['users/merchants']
+                pathurls: ['users/merchants'],
+                updateButtonPath: '/users/merchants/register-merchant/specific-view/update-merchant'
 
             };
         case 'customer':
             return {
                 activePath: 'Customer Profile',
                 paths: ['Users', 'Customers'],
-                pathurls: ['users/customers']
+                pathurls: ['users/customers'],
+                updateButtonPath: '/users/customers/register-customer/specific-view/update-customer'
 
             };
         default:
