@@ -337,7 +337,7 @@ stages:
       pool:
         vmImage: 'macos-latest'
       ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
-          artifact: 'Production'
+          environment: 'Production'
       ${{ if eq(variables['Build.SourceBranchName'], 'qa') }}:
           environment: 'Testing'
       ${{ else }}:
