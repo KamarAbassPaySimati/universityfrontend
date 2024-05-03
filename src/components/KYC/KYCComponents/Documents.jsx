@@ -74,7 +74,7 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                             ? 'Front'
                             : (states.citizen_type !== 'Malawi citizen' && states[type] === 'Passport')
                                 ? 'Data page'
-                                : 'File Name'}
+                                : 'Data page'}
                         labelValue={`${states[type]} ${
                             (states[type] === 'National ID' || states[type] === 'Driver\'s Licence' ||
                         states[type] === 'Traffic Register Card')

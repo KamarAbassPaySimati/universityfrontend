@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from '../Image/Image';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
@@ -7,16 +7,14 @@ import Button from '../Button/Button';
 import Button2 from '../Button2/Button2';
 
 export default function InputSearchMultiselect (
-    { testId, id, handleInput, handleSearchItem, label, value, submitSelected, className }) {
-    const [options, setOptions] = useState([]);
+    { testId, id, handleInput, handleSearchItem, label, value, submitSelected, className, allOptions }) {
+    const [options, setOptions] = useState(allOptions);
     const [search, setSearch] = useState('');
     const [timer, setTimer] = useState(null);
     const [show, setShow] = useState(false);
-    const [selectedValue, setSelectedValue] = useState([]);
+    const [selectedValue, setSelectedValue] = useState(value === undefined ? [] : value);
 
     const outsideClickRef = useRef();
-    const buttonRef = useRef();
-    const dropdownRef = useRef();
 
     useOnClickOutside(outsideClickRef, () => {
         setShow(false);
@@ -27,11 +25,10 @@ export default function InputSearchMultiselect (
         clearTimeout(timer);
         const newTimer = setTimeout(async () => {
             const value = await handleSearchItem(id, newValue);
-            setOptions(value);
             if (value.length > 0 && newValue !== '') {
-                setShow(true);
+                setOptions(value);
             } else {
-                setShow(false);
+                setOptions(allOptions);
             }
         }, 500);
         setTimer(newTimer);
@@ -48,26 +45,6 @@ export default function InputSearchMultiselect (
         }
         setSelectedValue(checkBoxArray);
     };
-    const calculateDropdownPosition = () => {
-        const buttonRect = buttonRef.current.getBoundingClientRect();
-        const spaceBelow = window.innerHeight - buttonRect.bottom - 40;
-        // 40px
-        const dropdownHeight = dropdownRef.current.clientHeight;
-
-        if (spaceBelow < dropdownHeight) {
-            dropdownRef.current.style.top = `-${dropdownHeight - 22}px`;
-        } else {
-            dropdownRef.current.style.top = '105%';
-        }
-    };
-    useEffect(() => {
-        setSelectedValue(value === undefined ? [] : value);
-        window.addEventListener('resize', calculateDropdownPosition);
-        calculateDropdownPosition(); // Initial position calculation
-        return () => {
-            window.removeEventListener('resize', calculateDropdownPosition);
-        };
-    }, [show]);
     return (
         <div className='ml-2 pr-2'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
@@ -77,8 +54,8 @@ export default function InputSearchMultiselect (
                 : 'google-key-border'}`}>
                 <input
                     type="text"
-                    ref={buttonRef}
                     value={search}
+                    onClick={() => setShow(true)}
                     placeholder={(value !== undefined && value?.length !== 0) ? `${value.length} selected` : 'Search'}
                     onChange={handleSearch}
                     className={className}
@@ -88,7 +65,7 @@ export default function InputSearchMultiselect (
                 <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
                     <Image src={'search_icon'} className="h-6 w-6 text-gray-400" />
                 </div>
-                <ul id="#patient-dropdownMenuButton1" ref={dropdownRef}
+                <ul id="#patient-dropdownMenuButton1"
                     className={`bg-[#FFFFFF] 
                 m-0 shadow-lg z-[9999] absolute !left-0 w-full p-2 
                 border border-[#E5E4E5]

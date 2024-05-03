@@ -4,7 +4,7 @@ import KYCRegistrationPopup from './KYCRegistrationPopup';
 import KYCRegistrationStatusPart from './KYCRegistrationStatusPart';
 import { useNavigate } from 'react-router-dom';
 
-export default function KYCFinalPage ({ states, handleBackPage, buttonText }) {
+export default function KYCFinalPage ({ states, handleBackPage, buttonText, role }) {
     const [registrationProcess, setRegistrationProcess] = useState(false);
     const Navigate = useNavigate();
     return (
@@ -29,7 +29,9 @@ export default function KYCFinalPage ({ states, handleBackPage, buttonText }) {
                                  bg-primary-normal p-1 text-[14px] leading-[24px] font-medium'
                         testId='kyc-btn'
                         text={'Finish'}
-                        onClick={() => Navigate('/users/agents')}
+                        onClick={() => Navigate(role === ''
+                            ? '/users/agents'
+                            : role === 'merchant' ? '/users/merchants' : '/users/customers')}
                     />
                 </div>
                 {buttonText !== 'In review' &&
