@@ -17,7 +17,7 @@ export const store = configureStore({
         agentUsers: agentSlice,
         adminUsers: AdminSlice,
         SpecificAdminView: SpecificAdminViewSlice,
-        KYCProfileView: KYCProfileViewSlice,
+        KYCProfileSpecificView: KYCProfileViewSlice,
         kycVerifications: KycVerificationSlice,
         bankAccounts: BankSlice,
         merchantUsers: merchantSlice,
