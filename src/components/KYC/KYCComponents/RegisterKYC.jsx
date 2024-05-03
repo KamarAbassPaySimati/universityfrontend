@@ -521,14 +521,16 @@ export default function RegisterKYC ({ role }) {
                         kyc_type: res.data.data.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC',
                         trading_name: res.data.data.trading_name
                     });
-                    const buttonText = ['address_details_status', 'id_details_status', 'info_details_status'];
+                    const buttonText = role === 'merchant'
+                        ? ['address_details_status', 'id_details_status', 'trading_details_status', 'info_details_status']
+                        : ['address_details_status', 'id_details_status', 'info_details_status'];
                     let count = 0;
                     buttonText.forEach((text) => {
                         if (res.data.data[text] === 'completed') {
                             count = count + 1;
                         }
                     });
-                    setButtonStatus(count === 3 ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
+                    setButtonStatus(count === buttonText.length ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
                     if (res.data.data[item] !== null) {
                         switch (item) {
                         case 'citizen':
@@ -656,6 +658,7 @@ export default function RegisterKYC ({ role }) {
                             states={states}
                             handleBackPage={() => handleSearchParamsValue('tab', null, searchParams, setSearchParams)}
                             buttonText={buttonStatus}
+                            role={role}
                         />)
                     : <>
                         <KYCTopWithType
