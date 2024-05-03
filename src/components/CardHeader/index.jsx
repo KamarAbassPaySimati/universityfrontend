@@ -21,7 +21,7 @@ import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    onToggle, searchParams, setSearchParams
+    onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve
 }) => {
     const navigate = useNavigate();
 
@@ -95,27 +95,45 @@ const CardHeader = ({
                                 className='mr-[8px]'/>
                             <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
                         </button>}
-                        {statusButton === true
-                            ? <Shimmer hight={'h-10'}/>
-                            : (statusButton !== undefined &&
+                        {rejectOrApprove && rejectOrApprove !== undefined
+                            ? (reject
+                                ? <Shimmer height={'h-10'}/>
+                                : (
+                                    <button data-testid="reject_button" onClick={onHandleStatusChange}
+                                        className={`flex  bg-primary-negative py-[8px] px-[16px] 
+                                        justify-center items-center h-[40px] rounded-[6px]`}>
+                                        <p className='text-[14px] font-[600] text-[#ffffff]'>Reject</p>
+                                    </button>))
+                            : (statusButton === true
+                                ? <Shimmer height={'h-10'}/>
+                                : (statusButton !== undefined &&
                                 <button data-testid="activate_deactivate_button" onClick={onHandleStatusChange}
-
-                                    // <button onClick={() => { () => onFocus(statusButton === 'Activate' ? 'Activate' : 'Deactivate'); }}
-                                    className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center
-                    h-[40px] rounded-[6px]`}>
+                                    className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]`}>
                                     <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
                                 </button>)
+                            )
                         }
-                        {statusButton && (updateButton === false
-                            ? (
-                                <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
-                                    className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
+
+                        {
+                            rejectOrApprove && rejectOrApprove !== undefined
+                                ? (approve
+                                    ? <Shimmer height={'h-10'}/>
+                                    : (
+                                        <button data-testid="reject_button" onClick={onHandleStatusChange}
+                                            className={`flex ml-6 bg-[#13B681] py-[8px] px-[16px] 
+                                        justify-center items-center h-[40px] rounded-[6px]`}>
+                                            <p className='text-[14px] font-[600] text-[#ffffff]'>Approve</p>
+                                        </button>))
+                                : (statusButton && (updateButton === false
+                                    ? (
+                                        <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
+                                            className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
-                                    <Image src='update'
-                                        className='mr-[8px]'/>
-                                    <p className='text-[14px] font-[600] text-[#ffffff]'>Update</p>
-                                </button>)
-                            : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>))
+                                            <Image src='update'
+                                                className='mr-[8px]'/>
+                                            <p className='text-[14px] font-[600] text-[#ffffff]'>Update</p>
+                                        </button>)
+                                    : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>)))
                         }
                     </div>
                 </div>

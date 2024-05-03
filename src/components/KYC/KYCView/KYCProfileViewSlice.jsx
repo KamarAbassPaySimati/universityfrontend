@@ -12,7 +12,6 @@ const initialState = {
 
 export const KYCProfileView = createAsyncThunk('adminUsers', async (PaymaartId, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
-
     try {
         const res = await dataService.GetAPI(`admin-users/view-specific-agent?paymaart_id=${PaymaartId}`);
         return res;

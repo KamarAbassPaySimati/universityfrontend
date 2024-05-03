@@ -16,7 +16,7 @@ export default function KYCView ({ role, viewType }) {
 
     const getView = () => {
         try {
-            dispatch(KYCProfileView(id));
+            dispatch(KYCProfileView(id, viewType, role));
         } catch (error) {
             console.error(error);
         }
@@ -31,7 +31,10 @@ export default function KYCView ({ role, viewType }) {
                 paths={getPaths(viewType, role).paths}
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
-                minHeightRequired={true}
+                minHeightRequired= {true}
+                rejectOrApprove = {viewType === 'kyc'}
+                reject={loading}
+                approve={loading}
                 updateButton={loading}
                 updateButtonPath={`/users/admins/update-admin/${id}`}
                 statusButton={id === View?.paymaart_id
@@ -76,7 +79,7 @@ export default function KYCView ({ role, viewType }) {
                         <h1 className='text-[#4F5962] font-[600] text-[18px] leading-[26px] my-2'>
                             Basic Details
                         </h1>
-                        <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                        {/* <div className='w-full flex flex-wrap mt-1 -mx-1'>
                             {loading
                                 ? ([...Array(5)].map((_, ind) => (
                                     <div className='w-1/3 px-1' key={ind}>
@@ -99,7 +102,7 @@ export default function KYCView ({ role, viewType }) {
                                     )
                                 )
                             }
-                        </div>
+                        </div> */}
                     </div></>}
             </CardHeader>
         </>

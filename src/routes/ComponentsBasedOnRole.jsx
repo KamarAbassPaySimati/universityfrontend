@@ -58,6 +58,12 @@ export const ComponentsBasedOnRole = {
             element: <KycVerification />,
             path: '/verify/kyc-registration'
         },
+        // Agent Kyc Specific View
+        {
+            name: 'Agent Kyc Specific View',
+            element: <KYCView role={'agent'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/agent-profile/:id'
+        },
         {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,
@@ -72,12 +78,6 @@ export const ComponentsBasedOnRole = {
             name: 'Agent KYC Registration',
             element: <RegisterKYC role={'agent'}/>,
             path: '/users/agents/register-agent/kyc-registration/:id'
-        },
-        // Agent Specific View
-        {
-            name: 'Agent Specific View',
-            element: <KYCView role={'agent'} viewType={'specific'}/>,
-            path: '/users/agents/register-agent/specific-view/:id'
         },
         {
             name: 'Customer KYC Registration',
@@ -117,6 +117,12 @@ export const ComponentsBasedOnRole = {
             name: 'KYC Verification list',
             element: <KycVerification />,
             path: '/verify/kyc-registration'
+        },
+        // Agent Kyc Specific View
+        {
+            name: 'Agent Kyc Specific View',
+            element: <KYCView role={'agent'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/agent-profile/:id'
         },
         {
             name: 'Paymaart Trust Banks',

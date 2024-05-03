@@ -16,7 +16,7 @@ export const getPaths = (viewType, role) => {
                 pathurls: ['users/merchants']
 
             };
-        case 'customers':
+        case 'customer':
             return {
                 activePath: 'Customer Profile',
                 paths: ['Users', 'Customers'],
@@ -28,6 +28,15 @@ export const getPaths = (viewType, role) => {
         }
         break;
     case 'kyc':
+        switch (role) {
+        case 'agent':
+            return {
+                activePath: 'Agent Profile',
+                paths: ['Verify', 'KYC Registration'],
+                pathurls: ['verify/kyc-registration']
+
+            };
+        }
         break;
 
     default:
