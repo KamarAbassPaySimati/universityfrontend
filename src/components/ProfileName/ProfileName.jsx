@@ -7,7 +7,8 @@ export default function ProfileName ({
     payMaartID,
     loading,
     lastLoggedIn,
-    CreatedDate
+    CreatedDate,
+    viewType
 }) {
     return (
         <div className={`flex gap-[27px] justify-center items-center ${loading ? 'animate-pulse z-0 ' : ''}`}>
@@ -23,7 +24,7 @@ export default function ProfileName ({
                 <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Paymaart ID: <span data-testid="paymaart_id" className='font-[600]'>{payMaartID}</span>
                 </div>
-                {lastLoggedIn && <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
+                {viewType === 'specific' && lastLoggedIn && <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Created Date: <span data-testid="paymaart_id" className='font-[600] mr-4'>{CreatedDate}</span>
                     Last Logged in: <span data-testid="paymaart_id" className={`font-[600] ${lastLoggedIn !== 'Online' ? '' : 'text-accent-positive'}`}>{lastLoggedIn}</span>
                 </div>}

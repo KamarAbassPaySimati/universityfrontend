@@ -60,6 +60,7 @@ const KYCProfileViewSlice = createSlice({
                             'Biometrics | Live Selfie': [state?.View?.selfie]
 
                         }
+                       
                     };
                     state.keys = Object.keys(state.userDetails);
                 } else {
