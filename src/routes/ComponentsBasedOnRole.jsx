@@ -8,6 +8,7 @@ import KycVerification from '../pages/Verification/KycVerification';
 import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
 import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
 import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
+import KYCView from '../components/KYC/KYCView/KYCView';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -71,6 +72,12 @@ export const ComponentsBasedOnRole = {
             name: 'Agent KYC Registration',
             element: <RegisterKYC role={'agent'}/>,
             path: '/users/agents/register-agent/kyc-registration/:id'
+        },
+        // Agent Specific View
+        {
+            name: 'Agent Specific View',
+            element: <KYCView role={'agent'} viewType={'specific'}/>,
+            path: '/users/agents/register-agent/specific-view/:id'
         },
         {
             name: 'Customer KYC Registration',
