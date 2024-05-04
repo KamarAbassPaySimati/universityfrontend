@@ -158,7 +158,7 @@ Feature: Paymaart - Admin Web - Specific Agent View(Full KYC)
     a.montly income
     i. Upto 300,000.00 MWK
     b.montly withdrawal
-    i. Upto 300,00.000 MWK
+    i. Upto 300,000.00 MWK
 
     Non-Malawi Nation- Personal - Full KYC
 
