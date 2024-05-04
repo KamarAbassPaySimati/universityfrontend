@@ -21,8 +21,9 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
     }
 });
 const AddressKeys = ['po_box_no', 'house_number', 'street_name', 'landmark', 'town_village_ta', 'district'];
-const internationalAddressKeys = ['intl_po_box_no',
-    'intl_house_number', 'intl_street_name', 'intl_landmark', 'intl_town_village_ta', 'intl_district'];
+const InternatinalAddressKeys = ['intl_po_box_no', 'intl_house_number', 'intl_street_name', 'intl_landmark',
+    'intl_town_village_ta', 'intl_district'];
+
 const KYCProfileViewSlice = createSlice({
     name: 'agent-view',
     initialState,
@@ -40,7 +41,7 @@ const KYCProfileViewSlice = createSlice({
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
                     const AddressValues = [];
-                    const internationalAddressValues = [];
+                    const malawiAddress = [];
                     const Occupation = {};
                     const array = [];
                     switch (action?.payload?.data?.data.occupation) {
@@ -74,31 +75,32 @@ const KYCProfileViewSlice = createSlice({
                             AddressValues.push(state.View[item]);
                         }
                     });
-                    internationalAddressKeys.forEach((item) => {
+                    InternatinalAddressKeys.forEach((item) => {
                         if (state.View[item] !== null) {
-                            internationalAddressValues.push(state.View[item]);
+                            malawiAddress.push(state.View[item]);
                         }
                     });
-                    state.userDetails = {
-                        basicDetails: {
-                            'Phone Number':
-                            `${state?.View?.country_code} ${state?.View?.phone_number
-                                ? formatInputPhone(state?.View?.phone_number)
-                                : ''}`,
-                            Email: state?.View?.email,
-                            Address: AddressValues.join(', ')
-                        },
-                        interNationalBasicDetails: {
-                            'Phone Number':
-                            `${state?.View?.country_code} ${state?.View?.phone_number
-                                ? formatInputPhone(state?.View?.phone_number)
-                                : ''}`,
-                            Email: state?.View?.email,
-                            Nationality: state?.View?.citizen,
-                            'Malawi Address': AddressValues.join(', '),
-                            'International Address': internationalAddressValues.join(', ')
+                    state.address = {
+                        'Phone Number':
+                        `${state?.View?.country_code} ${state?.View?.phone_number
+                            ? formatInputPhone(state?.View?.phone_number)
+                            : ''}`,
+                        Email: state?.View?.email,
+                        Address: AddressValues.join(', ')
+                    };
+                    state.nonMalawiAddress = {
+                        'Phone Number':
+                        `${state?.View?.country_code} ${state?.View?.phone_number
+                            ? formatInputPhone(state?.View?.phone_number)
+                            : ''}`,
+                        Email: state?.View?.email,
+                        Nationality: state?.View?.citizen,
+                        'Malawi Address': AddressValues.join(', '),
+                        'International Address': malawiAddress.join(', ')
 
-                        },
+                    };
+                    state.userDetails = {
+                        basicDetails: state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
                         identityDetails: {
                             'ID Document': [state?.View?.id_document_front, state?.View?.id_document_back],
                             'Verification Document': [state?.View?.verification_document_front,

@@ -67,7 +67,8 @@ export default function KYCView ({ role, viewType }) {
                             />
                             {View?.kyc_type && !loading &&
                             <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                <p data-testid="kyc_type">{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
+                                <p data-testid="kyc_type"
+                                    className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
                                     {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>
                                 <span data-testid="kyc_status"
                                     className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
@@ -94,15 +95,15 @@ export default function KYCView ({ role, viewType }) {
                                             </div>
                                         )))
                                         : (
-                                            Object.keys(View?.citizen === 'Malawian'
-                                                ? userDetails.basicDetails
-                                                : userDetails.interNationalBasicDetails).map((itemkey, index = 0) =>
+                                            Object.keys(
+                                                userDetails.basicDetails
+                                            ).map((itemkey, index = 0) =>
                                                 (<div key={index} className='w-1/3 px-1'>
                                                     <ViewDetail
                                                         itemkey={itemkey.replaceAll('_', ' ')}
-                                                        userDetails= {View?.citizen === 'Malawian'
-                                                            ? userDetails.basicDetails[itemkey]
-                                                            : userDetails.interNationalBasicDetails[itemkey]}
+                                                        userDetails= {
+                                                            userDetails.basicDetails[itemkey]
+                                                        }
                                                         loading={loading}
                                                     />
                                                 </div>)

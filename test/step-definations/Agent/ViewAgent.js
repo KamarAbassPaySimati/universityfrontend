@@ -43,7 +43,9 @@ Then('I should view basic details of agent', async function () {
     const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Email"]'))).getText();
     assert.notEqual(agent_email, '');
 
-    const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Address"]'))).getText();
+    const addressElement = await driver.wait(until.elementLocated(By.xpath('//*[@data-testid="basic_details"]//*[@data-testid="Address" or @data-testid="Malawi Address"]')));
+    const address = await addressElement.getText();
+    console.log('address', address);
     assert.notEqual(address, '');
 });
 
