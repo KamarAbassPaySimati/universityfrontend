@@ -35,7 +35,7 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired= {true}
-                rejectOrApprove = {viewType === 'kyc' ? true : undefined}
+                rejectOrApprove = {viewType === 'kyc' && View?.kyc_status === 'in_progress' ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading}
@@ -77,7 +77,6 @@ export default function KYCView ({ role, viewType }) {
                             </div>}
                         </div>
                     </div>
-                    {console.log(userDetails.interNationalBasicDetails, 'ssssssss')}
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
                         <KYCSections
                             heading='Basic Details'
