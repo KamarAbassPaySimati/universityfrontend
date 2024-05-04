@@ -204,7 +204,8 @@ export default function KYCView ({ role, viewType }) {
                                             }
                                         </div>
                                     </div>
-                                    {!loading && <p className='text-neutral-secondary font-medium text-[14px] leading-4 mb-4'>
+                                    {!loading && userDetails?.purpose &&
+                                    <p className='text-neutral-secondary font-medium text-[14px] leading-4 mb-4'>
                                         Purpose and intended nature of the business relationship</p>}
                                     {loading
                                         ? ([...Array(2)].map((_, ind) => (
