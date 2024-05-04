@@ -99,7 +99,6 @@ const KYCProfileViewSlice = createSlice({
                         'International Address': malawiAddress.join(', ')
 
                     };
-                    // console.log(state?.View?.purpose_of_relation, 'bbbbbbbbbb');
                     state.userDetails = {
                         basicDetails: state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
                         identityDetails: {

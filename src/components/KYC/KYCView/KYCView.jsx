@@ -35,7 +35,7 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired= {true}
-                rejectOrApprove = {viewType === 'kyc' ? true : undefined}
+                rejectOrApprove = {viewType === 'kyc' && View?.kyc_status === 'in_progress' ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading}
@@ -65,10 +65,10 @@ export default function KYCView ({ role, viewType }) {
                                         : ''}
                                 CreatedDate={formatTimestamp(View?.user_created_date)}
                             />
-                            {View?.kyc_type &&
+                            {View?.kyc_type && !loading &&
                             <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
                                 <p data-testid="kyc_type"
-                                    className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
+                                    className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
                                     {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>
                                 <span data-testid="kyc_status"
                                     className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
@@ -95,11 +95,15 @@ export default function KYCView ({ role, viewType }) {
                                             </div>
                                         )))
                                         : (
-                                            Object.keys(userDetails.basicDetails).map((itemkey, index = 0) => (
-                                                <div key={index} className='w-1/3 px-1'>
+                                            Object.keys(
+                                                userDetails.basicDetails
+                                            ).map((itemkey, index = 0) =>
+                                                (<div key={index} className='w-1/3 px-1'>
                                                     <ViewDetail
                                                         itemkey={itemkey.replaceAll('_', ' ')}
-                                                        userDetails={userDetails.basicDetails[itemkey]}
+                                                        userDetails= {
+                                                            userDetails.basicDetails[itemkey]
+                                                        }
                                                         loading={loading}
                                                     />
                                                 </div>)
@@ -116,7 +120,7 @@ export default function KYCView ({ role, viewType }) {
                                 <div className='w-full flex flex-wrap mt-1 xl:-mx-[40px]'>
                                     {loading
                                         ? ([...Array(3)].map((_, ind) => (
-                                            <div className='w-1/3 px-1' key={ind}>
+                                            <div className='w-1/3 pl-8 px-1' key={ind}>
                                                 <ViewDetail
                                                     itemkey='Loading...'
                                                     userDetails='Loading...'

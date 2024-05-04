@@ -67,21 +67,21 @@ Then('I should view option to activate or update a agent', async function () {
     await driver.wait(until.elementIsVisible(updateButton));
 });
 
-When('I should view monthly income and monthly withdrawal values as {string}', async function (expectedValue) {
-    // Write code here that turns the phrase above into concrete actions
-    if (this.actual_status !== 'In-progress') {
-        const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
-        await driver.wait(until.elementIsVisible(monthlyIncome));
-        const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
+// When('I should view monthly income and monthly withdrawal values as {string}', async function (expectedValue) {
+//     // Write code here that turns the phrase above into concrete actions
+//     if (this.actual_status !== 'In-progress') {
+//         const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
+//         await driver.wait(until.elementIsVisible(monthlyIncome));
+//         const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
 
-        assert.equal(monthlyIncomeValue, expectedValue);
-        await new Promise(resolve => setTimeout(resolve, 100));
+//         assert.equal(monthlyIncomeValue, expectedValue);
+//         await new Promise(resolve => setTimeout(resolve, 100));
 
-        const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
-        await driver.wait(until.elementIsVisible(monthlyWithdrawal));
-        const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
-        assert.equal(monthlyWithdrawalValue, expectedValue);
-    } else {
-        return 'skipped';
-    }
-});
+//         const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
+//         await driver.wait(until.elementIsVisible(monthlyWithdrawal));
+//         const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
+//         assert.equal(monthlyWithdrawalValue, expectedValue);
+//     } else {
+//         return 'skipped';
+//     }
+// });

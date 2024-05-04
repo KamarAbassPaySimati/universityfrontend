@@ -29,7 +29,7 @@ export default function KYCFinalPage ({ states, handleBackPage, buttonText, role
                                  bg-primary-normal p-1 text-[14px] leading-[24px] font-medium'
                         testId='kyc-btn'
                         text={'Finish'}
-                        onClick={() => Navigate(role === ''
+                        onClick={() => Navigate(role === 'agent'
                             ? '/users/agents'
                             : role === 'merchant' ? '/users/merchants' : '/users/customers')}
                     />
