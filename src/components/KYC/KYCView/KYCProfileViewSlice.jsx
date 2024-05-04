@@ -21,6 +21,8 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
     }
 });
 const AddressKeys = ['po_box_no', 'house_number', 'street_name', 'landmark', 'town_village_ta', 'district'];
+const internationalAddressKeys = ['intl_po_box_no',
+    'intl_house_number', 'intl_street_name', 'intl_landmark', 'intl_town_village_ta', 'intl_district'];
 const KYCProfileViewSlice = createSlice({
     name: 'agent-view',
     initialState,
@@ -38,6 +40,7 @@ const KYCProfileViewSlice = createSlice({
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
                     const AddressValues = [];
+                    const internationalAddressValues = [];
                     const Occupation = {};
                     const array = [];
                     switch (action?.payload?.data?.data.occupation) {
@@ -71,7 +74,11 @@ const KYCProfileViewSlice = createSlice({
                             AddressValues.push(state.View[item]);
                         }
                     });
-                    // console.log(state?.View?.purpose_of_relation, 'bbbbbbbbbb');
+                    internationalAddressKeys.forEach((item) => {
+                        if (state.View[item] !== null) {
+                            internationalAddressValues.push(state.View[item]);
+                        }
+                    });
                     state.userDetails = {
                         basicDetails: {
                             'Phone Number':
@@ -80,6 +87,17 @@ const KYCProfileViewSlice = createSlice({
                                 : ''}`,
                             Email: state?.View?.email,
                             Address: AddressValues.join(', ')
+                        },
+                        interNationalBasicDetails: {
+                            'Phone Number':
+                            `${state?.View?.country_code} ${state?.View?.phone_number
+                                ? formatInputPhone(state?.View?.phone_number)
+                                : ''}`,
+                            Email: state?.View?.email,
+                            Nationality: state?.View?.citizen,
+                            'Malawi Address': AddressValues.join(', '),
+                            'International Address': internationalAddressValues.join(', ')
+
                         },
                         identityDetails: {
                             'ID Document': [state?.View?.id_document_front, state?.View?.id_document_back],

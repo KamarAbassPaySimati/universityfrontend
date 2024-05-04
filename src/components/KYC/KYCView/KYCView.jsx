@@ -65,10 +65,10 @@ export default function KYCView ({ role, viewType }) {
                                         : ''}
                                 CreatedDate={formatTimestamp(View?.user_created_date)}
                             />
-                            {View?.kyc_type &&
+                            {View?.kyc_type && !loading &&
                             <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                <p data-testid="kyc_type">{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'} ,
-                                    {View?.citizen === 'Malawian' ? 'Malawi citizen' : View?.citizen}</p>
+                                <p data-testid="kyc_type">{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
+                                    {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>
                                 <span data-testid="kyc_status"
                                     className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
                                  ${getStatusColor(View?.kyc_status)?.color}`}>
@@ -77,6 +77,7 @@ export default function KYCView ({ role, viewType }) {
                             </div>}
                         </div>
                     </div>
+                    {console.log(userDetails.interNationalBasicDetails, 'ssssssss')}
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
                         <KYCSections
                             heading='Basic Details'
@@ -94,11 +95,15 @@ export default function KYCView ({ role, viewType }) {
                                             </div>
                                         )))
                                         : (
-                                            Object.keys(userDetails.basicDetails).map((itemkey, index = 0) => (
-                                                <div key={index} className='w-1/3 px-1'>
+                                            Object.keys(View?.citizen === 'Malawian'
+                                                ? userDetails.basicDetails
+                                                : userDetails.interNationalBasicDetails).map((itemkey, index = 0) =>
+                                                (<div key={index} className='w-1/3 px-1'>
                                                     <ViewDetail
                                                         itemkey={itemkey.replaceAll('_', ' ')}
-                                                        userDetails={userDetails.basicDetails[itemkey]}
+                                                        userDetails= {View?.citizen === 'Malawian'
+                                                            ? userDetails.basicDetails[itemkey]
+                                                            : userDetails.interNationalBasicDetails[itemkey]}
                                                         loading={loading}
                                                     />
                                                 </div>)
