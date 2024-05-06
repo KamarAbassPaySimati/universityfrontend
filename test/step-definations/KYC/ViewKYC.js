@@ -294,7 +294,6 @@ Then('I should view basic details of merchant KYC', async function () {
 
     const addressElement = await driver.wait(until.elementLocated(By.xpath('//*[@data-testid="basic_details"]//*[@data-testid="Address" or @data-testid="Malawi Address"]')));
     const address = await addressElement.getText();
-    console.log('address', address);
     assert.notEqual(address, '');
 
     console.log('basic details', agent_kyc_phone_number, agent_email, address);
@@ -341,16 +340,17 @@ Then('I should view the personal details of merchant KYC', async function () {
     const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Withdrawal"]'))).getText();
     assert.notEqual(monthly_withdrawal, '');
     assert.notEqual(monthly_withdrawal, '-');
-    console.log('personal details', agent_gender, agent_dob, monthly_income, monthly_withdrawal);
 });
 
 Then('I should view the trading details of merchant KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="trading_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const merchant_trading_type = await driver.wait(until.elementLocated(By.css('[data-testid="trading_details"] [data-testid="merchant_trading_type"]'))).getText();
+    const merchant_trading_type = await driver.wait(until.elementLocated(By.css('[data-testid="trading_details"] [data-testid="Business Types"]'))).getText();
     assert.notEqual(merchant_trading_type, '');
+    assert.notEqual(merchant_trading_type, '-');
 
-    const merchant_trading_address = await driver.wait(until.elementLocated(By.css('[data-testid="trading_details"] [data-testid="merchant_trading_address"]'))).getText();
+    const merchant_trading_address = await driver.wait(until.elementLocated(By.css('[data-testid="trading_details"] [data-testid="Trading Address"]'))).getText();
     assert.notEqual(merchant_trading_address, '');
+    assert.notEqual(merchant_trading_address, '-');
 });
