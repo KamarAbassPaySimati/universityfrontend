@@ -11,7 +11,7 @@ export default function ViewDetail ({ itemkey, userDetails, loading }) {
                 title={userDetails}
                 data-testid={itemkey}
                 className={`${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : (itemkey === 'Last Logged In' && userDetails === 'Online') ? 'text-accent-positive' : 'text-neutral-primary max-w-[300px]'} 
-                 whitespace-nowrap cursor-default 
+                  cursor-default 
                                     break-words block overflow-hidden text-ellipsis ${itemkey === 'Role' ? 'capitalize' : ''}`}>
                 {userDetails || '-'}
             </span>

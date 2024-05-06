@@ -8,6 +8,7 @@ import KycVerification from '../pages/Verification/KycVerification';
 import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
 import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
 import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
+import KYCView from '../components/KYC/KYCView/KYCView';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -56,6 +57,24 @@ export const ComponentsBasedOnRole = {
             name: 'KYC Verification list',
             element: <KycVerification />,
             path: '/verify/kyc-registration'
+        },
+        // Agent Kyc Specific View
+        {
+            name: 'Agent Kyc Specific View',
+            element: <KYCView role={'agent'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/agent-profile/:id'
+        },
+        // Merchant Kyc Specific View
+        {
+            name: 'Merchant Kyc Specific View',
+            element: <KYCView role={'merchant'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/merchant-profile/:id'
+        },
+        // customer Kyc Specific View
+        {
+            name: 'Customer Kyc Specific View',
+            element: <KYCView role={'customer'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/customer-profile/:id'
         },
         {
             name: 'Paymaart Trust Banks',
@@ -110,6 +129,24 @@ export const ComponentsBasedOnRole = {
             name: 'KYC Verification list',
             element: <KycVerification />,
             path: '/verify/kyc-registration'
+        },
+        // Agent Kyc Specific View
+        {
+            name: 'Agent Kyc Specific View',
+            element: <KYCView role={'agent'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/agent-profile/:id'
+        },
+        // Merchant Kyc Specific View
+        {
+            name: 'Merchant Kyc Specific View',
+            element: <KYCView role={'merchant'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/merchant-profile/:id'
+        },
+        // customer Kyc Specific View
+        {
+            name: 'Customer Kyc Specific View',
+            element: <KYCView role={'customer'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/customer-profile/:id'
         },
         {
             name: 'Paymaart Trust Banks',

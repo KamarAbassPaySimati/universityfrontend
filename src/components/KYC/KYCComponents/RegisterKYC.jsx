@@ -41,7 +41,7 @@ export default function RegisterKYC ({ role }) {
         landmark: '',
         house_number: '',
         monthly_income: 'Up to 300,000.00 MWK',
-        monthly_withdrawal: 'Up to 300,00.000 MWK'
+        monthly_withdrawal: 'Up to 300,000.00 MWK'
     });
     const initialDocumentSideBarData = {
         documentTypes: {
@@ -365,14 +365,18 @@ export default function RegisterKYC ({ role }) {
                         }
                     }
                     );
-                    if ((states.institute === undefined || states?.institute?.trim() === '') &&
+                    if (states.institute === 'Others (Please Specify)') {
+                        if ((states.institute === undefined || states?.institute?.trim() === '') &&
                     (states?.institute_specify?.trim() === '' || states.institute_specify === undefined)) {
-                        if (key !== 'skip') {
-                            setSubmitSelected(true);
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        } else {
+                            body.institute_specify = states.institute_specify;
                         }
-                        count = count + 1;
                     } else {
-                        body.institute_specify = states.institute_specify;
+                        body.institute_specify = '';
                     }
                     break;
 
@@ -543,7 +547,7 @@ export default function RegisterKYC ({ role }) {
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
                             if (res.data.data.kyc_type !== 'full') {
                                 object.monthly_income = 'Up to 300,000.00 MWK';
-                                object.monthly_withdrawal = 'Up to 300,00.000 MWK';
+                                object.monthly_withdrawal = 'Up to 300,000.00 MWK';
                             }
                             break;
                         case 'id_document_back':

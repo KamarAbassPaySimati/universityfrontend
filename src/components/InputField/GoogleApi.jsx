@@ -10,32 +10,6 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
 
     const handlePlaceSelect = (place) => {
         handleOnChange(place.target.value, id);
-        switch (id) {
-        case 'district':
-            handleOnChange('', 'street_name');
-            handleOnChange('', 'town_village_ta');
-            break;
-        case 'town_village_ta':
-            handleOnChange('', 'street_name');
-            break;
-        case 'intl_district':
-            handleOnChange('', 'intl_town_village_ta');
-            handleOnChange('', 'intl_landmark');
-            handleOnChange('', 'intl_street_name');
-            break;
-        case 'intl_town_village_ta':
-            handleOnChange('', 'intl_landmark');
-            handleOnChange('', 'intl_street_name');
-            break;
-        case 'intl_street_name':
-            handleOnChange('', 'intl_landmark');
-            break;
-        // case 'street_name':
-        //     autofillTownVillageTAAndDistrict(place);
-        //     break;
-        default:
-            break;
-        }
     };
 
     const autocompleteOptions = () => {
@@ -48,11 +22,6 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         case 'district':
             return {
                 types: ['administrative_area_level_2'],
-                componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
-            };
-        case 'occupation_town':
-            return {
-                types: ['(regions)'],
                 componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
             };
         case 'intl_street_name':
@@ -69,6 +38,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             };
         case 'trading_town_village_ta':
         case 'town_village_ta':
+        case 'occupation_town':
             return {
                 types: ['(cities)'],
                 componentRestrictions: { country: 'mw' } // No district restriction
@@ -104,7 +74,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             break;
 
         case 'occupation_town':
-            handleOnChange(place.formatted_address, 'occupation_town');
+            handleOnChange(place.address_components[0].long_name, 'occupation_town');
             break;
         case 'intl_street_name':
         case 'intl_landmark':
