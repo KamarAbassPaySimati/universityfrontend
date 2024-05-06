@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Get parameter names from AWS SSM
 specific_params=("ADMIN_COGNITO_USERPOOL_ID " "ADMIN_COGNITO_CLIENT_ID" "ADMIN_COGNITO_IDENTITY_POOL_ID", "DOMAIN_NAME ", "GOOGLE_API", "BUCKET_NAME", "CDN_URL")
