@@ -186,11 +186,11 @@ Then('I should view basic details of customer KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const customer_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="name"]'))).getText();
-    assert.notEqual(customer_kyc_phone_number, '');
+    const agent_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="name"]'))).getText();
+    assert.notEqual(agent_kyc_phone_number, '');
 
-    const customer_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="email"]'))).getText();
-    assert.notEqual(customer_email, '');
+    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="email"]'))).getText();
+    assert.notEqual(agent_email, '');
 
     const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="address"]'))).getText();
     assert.notEqual(address, '');
@@ -224,11 +224,11 @@ Then('I should view the personal details of customer KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const customer_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="gender"]'))).getText();
-    assert.notEqual(customer_gender, '');
+    const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="gender"]'))).getText();
+    assert.notEqual(agent_gender, '');
 
-    const customer_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="dob"]'))).getText();
-    assert.notEqual(customer_dob, '');
+    const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="dob"]'))).getText();
+    assert.notEqual(agent_dob, '');
 
     const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_income"]'))).getText();
     assert.notEqual(monthly_income, '');
