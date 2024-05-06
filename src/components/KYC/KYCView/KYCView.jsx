@@ -151,6 +151,64 @@ export default function KYCView ({ role, viewType }) {
                                 </div>
                             }
                         />
+                        {role === 'merchant' && (
+                            <KYCSections
+                                heading='Trading Details'
+                                testId='trading_details'
+                                childe={
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(4)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                <>
+                                                    {Object.keys(userDetails.tradingDetails).map((itemkey, index = 0) => (
+                                                        <div key={index} className='w-1/3 px-1'>
+                                                            <ViewDetail
+                                                                itemkey={itemkey.replaceAll('_', ' ')}
+                                                                userDetails={userDetails.tradingDetails[itemkey]}
+                                                                loading={loading}
+                                                            />
+                                                        </div>
+                                                    ))}
+                                                    <div className='flex flex-col'>
+                                                        <h1 className='mt-4 text-[#A4A9AE] text-[14px]
+                                                        leading-6 font-normal px-1'>Business Images</h1>
+                                                        {userDetails?.businessImages !== null && (
+                                                            <div className='flex flex-wrap xl:px-[2px] px-[3px]'>
+                                                                {Object.keys(userDetails?.businessImages).map((
+                                                                    imageItem, index) => (
+                                                                    <div key={index}
+                                                                            className='xl:w-1/3 w-1/2'>
+                                                                            <div className='flex flex-row'>
+                                                                            {imageItem !== null && (
+                                                                                <ImageViewWithModel
+                                                                                    item={imageItem}
+                                                                                    testId={`businessImages_${index}`}
+                                                                                />
+                                                                            )}
+                                                                        </div>
+                                                                        </div>
+                                                                ))}
+                                                            </div>
+                                                        )}
+                                                    </div>
+
+                                                </>
+                                            )
+                                        }
+                                    </div>
+                                }
+                            />
+                        )}
+
                         <KYCSections
                             heading='Personal Details'
                             testId='personal_details'

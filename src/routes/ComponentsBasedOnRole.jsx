@@ -64,6 +64,12 @@ export const ComponentsBasedOnRole = {
             element: <KYCView role={'agent'} viewType={'kyc'}/>,
             path: '/verify/kyc-registration/agent-profile/:id'
         },
+        // Merchant Kyc Specific View
+        {
+            name: 'Merchant Kyc Specific View',
+            element: <KYCView role={'merchant'} viewType={'kyc'}/>,
+            path: '/verify/kyc-registration/merchant-profile/:id'
+        },
         {
             name: 'Paymaart Trust Banks',
             element: <TrustBanks />,

@@ -44,6 +44,20 @@ const KycVerificationTable = (
             return '-'; // Default text when status doesn't match any condition
         }
     };
+    const geturl = () => {
+        switch (searchParams.get('type')) {
+        case 'agents':
+            return '/verify/kyc-registration/agent-profile/';
+        case 'merchants':
+            return '/verify/kyc-registration/merchant-profile/';
+        case 'customers':
+            return '/verify/kyc-registration/customer-profile/';
+        default:
+            // Add a fallback return value here
+            return '/verify/kyc-registration/';
+        }
+    };
+
     const Navigate = useNavigate();
     return (
         <>
@@ -96,8 +110,9 @@ const KycVerificationTable = (
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-start'}>
                                     {
                                         <>
+                                            {console.log(geturl(), 'url')}
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
-                                                onClick={() => Navigate(`/verify/kyc-registration/agent-profile/${user?.paymaart_id}`
+                                                onClick={() => Navigate(`${geturl()}${user?.paymaart_id}`
                                                 )}
                                             />
                                         </>
