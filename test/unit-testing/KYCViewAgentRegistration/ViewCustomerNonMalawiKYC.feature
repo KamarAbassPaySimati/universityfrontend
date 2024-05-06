@@ -305,11 +305,11 @@ Feature: Paymaart - Admin Web- Specific Customer KYC verification View
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
     
-    Scenario: View specific agent KYC
-        Given I navigate to agent KYC listing screen
-        When I search for recently created agent
-        When I click on view agent KYC
-        Then I should view agent details
-        Then I should view basic details of agent KYC
-        And I should view the identification details of agent KYC
-        And I should view the personal details of agent KYC
+    Scenario: View specific customer KYC
+        Given I navigate to customer KYC listing screen
+        When I search for recently created customer
+        When I click on view customer KYC
+        Then I should view customer details
+        Then I should view basic details of customer KYC
+        And I should view the identification details of customer KYC
+        And I should view the personal details of customer KYC

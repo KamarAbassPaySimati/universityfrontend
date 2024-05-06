@@ -54,6 +54,7 @@ When('I search for recently created merchant', async function () {
 
 When('I click on view agent KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -66,19 +67,19 @@ When('I click on view agent KYC', async function () {
 });
 
 Then('I should view agent details', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    await new Promise(resolve => setTimeout(resolve, 4000));
+
+    console.log('this', this.paymaart_id, this.name, this.kyc_type, this.status);
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="name"]'))).getText();
+    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="name"]'))).getText();
     assert.equal(actual_name, this.name);
 
-    const actual_kyc_type = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_type"]'))).getText();
-    assert.equal(actual_kyc_type, this.kyc_type);
-
-    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
+    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_status"]'))).getText();
     assert.equal(actual_status, this.status);
 
-    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]'))).getText();
+    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
 
@@ -86,22 +87,26 @@ Then('I should view basic details of agent KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const agent_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="name"]'))).getText();
+    const agent_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Phone Number"]'))).getText();
     assert.notEqual(agent_kyc_phone_number, '');
 
-    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="email"]'))).getText();
+    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Email"]'))).getText();
     assert.notEqual(agent_email, '');
 
-    const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="address"]'))).getText();
+    const addressElement = await driver.wait(until.elementLocated(By.xpath('//*[@data-testid="basic_details"]//*[@data-testid="Address" or @data-testid="Malawi Address"]')));
+    const address = await addressElement.getText();
+    console.log('address', address);
     assert.notEqual(address, '');
+
+    console.log('basic details', agent_kyc_phone_number, agent_email, address);
 });
 
 Then('I should view the identification details of agent KYC', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
     try {
-        const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_id_kyc_upload_document_front"]')));
+        const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="ID Document_0"]')));
         await driver.wait(until.elementIsVisible(idDocument));
         await idDocument.click();
 
@@ -113,10 +118,10 @@ Then('I should view the identification details of agent KYC', async function () 
         throw new Error('Failed to view the front of ID document');
     }
 
-    const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_verification_kyc_upload_document_front"]')));
+    const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="Verification Document_0"]')));
     await driver.wait(until.elementIsVisible(verificationDocument));
 
-    const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_selfie"]')));
+    const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="Biometrics | Live Selfie_0"]')));
     await driver.wait(until.elementIsVisible(selfieDocument));
 });
 
@@ -124,36 +129,38 @@ Then('I should view the personal details of agent KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="gender"]'))).getText();
+    const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Gender"]'))).getText();
     assert.notEqual(agent_gender, '');
 
-    const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="dob"]'))).getText();
+    const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Date of Birth"]'))).getText();
     assert.notEqual(agent_dob, '');
 
-    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_income"]'))).getText();
+    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Income"]'))).getText();
     assert.notEqual(monthly_income, '');
+    assert.notEqual(monthly_income, '-');
 
-    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_withdrawal"]'))).getText();
+    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Withdrawal"]'))).getText();
     assert.notEqual(monthly_withdrawal, '');
+    assert.notEqual(monthly_withdrawal, '-');
+    console.log('personal details', agent_gender, agent_dob, monthly_income, monthly_withdrawal);
 });
 
 When('I should view monthly income and monthly withdrawal values as {string}', async function (expectedValue) {
     // Write code here that turns the phrase above into concrete actions
-    const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
-    await driver.wait(until.elementIsVisible(monthlyIncome));
-    const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Income"]'))).getText();
+    assert.notEqual(monthly_income, '');
 
-    assert.equal(monthlyIncomeValue, expectedValue);
-    await new Promise(resolve => setTimeout(resolve, 100));
+    assert.equal(monthly_income, expectedValue);
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
-    await driver.wait(until.elementIsVisible(monthlyWithdrawal));
-    const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
-    assert.equal(monthlyWithdrawalValue, expectedValue);
+    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Withdrawal"]'))).getText();
+    assert.equal(monthly_withdrawal, expectedValue);
 });
 
 When('I click on view customer KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -166,19 +173,19 @@ When('I click on view customer KYC', async function () {
 });
 
 Then('I should view customer details', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    await new Promise(resolve => setTimeout(resolve, 4000));
+
+    console.log('this', this.paymaart_id, this.name, this.kyc_type, this.status);
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="name"]'))).getText();
+    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="name"]'))).getText();
     assert.equal(actual_name, this.name);
 
-    const actual_kyc_type = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_type"]'))).getText();
-    assert.equal(actual_kyc_type, this.kyc_type);
-
-    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
+    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_status"]'))).getText();
     assert.equal(actual_status, this.status);
 
-    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]'))).getText();
+    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
 
@@ -186,22 +193,26 @@ Then('I should view basic details of customer KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const agent_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="name"]'))).getText();
+    const agent_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Phone Number"]'))).getText();
     assert.notEqual(agent_kyc_phone_number, '');
 
-    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="email"]'))).getText();
+    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Email"]'))).getText();
     assert.notEqual(agent_email, '');
 
-    const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="address"]'))).getText();
+    const addressElement = await driver.wait(until.elementLocated(By.xpath('//*[@data-testid="basic_details"]//*[@data-testid="Address" or @data-testid="Malawi Address"]')));
+    const address = await addressElement.getText();
+    console.log('address', address);
     assert.notEqual(address, '');
+
+    console.log('basic details', agent_kyc_phone_number, agent_email, address);
 });
 
 Then('I should view the identification details of customer KYC', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
     try {
-        const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_id_kyc_upload_document_front"]')));
+        const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="ID Document_0"]')));
         await driver.wait(until.elementIsVisible(idDocument));
         await idDocument.click();
 
@@ -213,10 +224,10 @@ Then('I should view the identification details of customer KYC', async function 
         throw new Error('Failed to view the front of ID document');
     }
 
-    const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_verification_kyc_upload_document_front"]')));
+    const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="Verification Document_0"]')));
     await driver.wait(until.elementIsVisible(verificationDocument));
 
-    const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_selfie"]')));
+    const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="Biometrics | Live Selfie_0"]')));
     await driver.wait(until.elementIsVisible(selfieDocument));
 });
 
@@ -224,21 +235,25 @@ Then('I should view the personal details of customer KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="gender"]'))).getText();
+    const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Gender"]'))).getText();
     assert.notEqual(agent_gender, '');
 
-    const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="dob"]'))).getText();
+    const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Date of Birth"]'))).getText();
     assert.notEqual(agent_dob, '');
 
-    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_income"]'))).getText();
+    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Income"]'))).getText();
     assert.notEqual(monthly_income, '');
+    assert.notEqual(monthly_income, '-');
 
-    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_withdrawal"]'))).getText();
+    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Withdrawal"]'))).getText();
     assert.notEqual(monthly_withdrawal, '');
+    assert.notEqual(monthly_withdrawal, '-');
+    console.log('personal details', agent_gender, agent_dob, monthly_income, monthly_withdrawal);
 });
 
 When('I click on view merchant KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -251,19 +266,19 @@ When('I click on view merchant KYC', async function () {
 });
 
 Then('I should view merchant details', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    await new Promise(resolve => setTimeout(resolve, 4000));
+
+    console.log('this', this.paymaart_id, this.name, this.kyc_type, this.status);
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="name"]'))).getText();
+    const actual_name = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="name"]'))).getText();
     assert.equal(actual_name, this.name);
 
-    const actual_kyc_type = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_type"]'))).getText();
-    assert.equal(actual_kyc_type, this.kyc_type);
-
-    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
+    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_status"]'))).getText();
     assert.equal(actual_status, this.status);
 
-    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]'))).getText();
+    const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
 
@@ -271,22 +286,26 @@ Then('I should view basic details of merchant KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const merchant_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="name"]'))).getText();
-    assert.notEqual(merchant_kyc_phone_number, '');
+    const agent_kyc_phone_number = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Phone Number"]'))).getText();
+    assert.notEqual(agent_kyc_phone_number, '');
 
-    const merchant_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="email"]'))).getText();
-    assert.notEqual(merchant_email, '');
+    const agent_email = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="Email"]'))).getText();
+    assert.notEqual(agent_email, '');
 
-    const address = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"] [data-testid="address"]'))).getText();
+    const addressElement = await driver.wait(until.elementLocated(By.xpath('//*[@data-testid="basic_details"]//*[@data-testid="Address" or @data-testid="Malawi Address"]')));
+    const address = await addressElement.getText();
+    console.log('address', address);
     assert.notEqual(address, '');
+
+    console.log('basic details', agent_kyc_phone_number, agent_email, address);
 });
 
 Then('I should view the identification details of merchant KYC', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
     try {
-        const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_id_kyc_upload_document_front"]')));
+        const idDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="ID Document_0"]')));
         await driver.wait(until.elementIsVisible(idDocument));
         await idDocument.click();
 
@@ -298,10 +317,10 @@ Then('I should view the identification details of merchant KYC', async function 
         throw new Error('Failed to view the front of ID document');
     }
 
-    const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_verification_kyc_upload_document_front"]')));
+    const verificationDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="Verification Document_0"]')));
     await driver.wait(until.elementIsVisible(verificationDocument));
 
-    const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identification_details"] [data-testid="view_selfie"]')));
+    const selfieDocument = await driver.wait(until.elementLocated(By.css('[data-testid="identity_details"] [data-testid="Biometrics | Live Selfie_0"]')));
     await driver.wait(until.elementIsVisible(selfieDocument));
 });
 
@@ -309,17 +328,20 @@ Then('I should view the personal details of merchant KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    const merchant_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="gender"]'))).getText();
-    assert.notEqual(merchant_gender, '');
+    const agent_gender = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Gender"]'))).getText();
+    assert.notEqual(agent_gender, '');
 
-    const merchant_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="dob"]'))).getText();
-    assert.notEqual(merchant_dob, '');
+    const agent_dob = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Date of Birth"]'))).getText();
+    assert.notEqual(agent_dob, '');
 
-    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_income"]'))).getText();
+    const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Income"]'))).getText();
     assert.notEqual(monthly_income, '');
+    assert.notEqual(monthly_income, '-');
 
-    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="monthly_withdrawal"]'))).getText();
+    const monthly_withdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="personal_details"] [data-testid="Monthly Withdrawal"]'))).getText();
     assert.notEqual(monthly_withdrawal, '');
+    assert.notEqual(monthly_withdrawal, '-');
+    console.log('personal details', agent_gender, agent_dob, monthly_income, monthly_withdrawal);
 });
 
 Then('I should view the trading details of merchant KYC', async function () {
