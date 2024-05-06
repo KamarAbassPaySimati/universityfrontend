@@ -50,8 +50,10 @@ export default function KYCView ({ role, viewType }) {
                 `}>
                         <div className='flex justify-between items-center' data-testid="user_details">
                             <ProfileName
-                                userButtonName={`${View?.name.split(' ')[0][0] || ''}${View?.name.split(' ')[1][0] || ''}
-                                ${View?.last_name?.[0] || ''}`}
+                                userButtonName={`${View?.name.split(/\s+/)
+                                    .map(word => word.charAt(0).toUpperCase())
+                                    .join('')}
+                               `}
                                 UserName={View?.name}
                                 payMaartID={View?.paymaart_id}
                                 loading={loading}
