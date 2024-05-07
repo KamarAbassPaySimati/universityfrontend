@@ -39,6 +39,20 @@ export const getPaths = (viewType, role) => {
                 pathurls: ['verify/kyc-registration']
 
             };
+        case 'merchant':
+            return {
+                activePath: 'Merchant Profile',
+                paths: ['Verify', 'KYC Registration'],
+                pathurls: ['verify/kyc-registration']
+
+            };
+        case 'customer':
+            return {
+                activePath: 'Customer Profile',
+                paths: ['Verify', 'KYC Registration'],
+                pathurls: ['verify/kyc-registration']
+
+            };
         }
         break;
 

@@ -13,7 +13,7 @@ const KycVerification = () => {
     const [notFound, setNotFound] = useState(false);
     let url = '';
     const { setToastError } = useContext(GlobalContext);
-    const { List, error, loading } = useSelector(state => state.kycVerifications); // to get the api respons
+    const { List, error, loading } = useSelector(state => state.kycVerifications);
     // filter options
     const initialToggleButtons = [
         { key: 'Agents', status: true },

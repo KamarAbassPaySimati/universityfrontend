@@ -23,6 +23,7 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
 const AddressKeys = ['po_box_no', 'house_number', 'street_name', 'landmark', 'town_village_ta', 'district'];
 const InternatinalAddressKeys = ['intl_po_box_no', 'intl_house_number', 'intl_street_name', 'intl_landmark',
     'intl_town_village_ta', 'intl_district'];
+const TradingAddressKeys = ['trading_house_name', 'trading_street_name', 'trading_town_village_ta', 'trading_district'];
 
 const KYCProfileViewSlice = createSlice({
     name: 'agent-view',
@@ -42,6 +43,8 @@ const KYCProfileViewSlice = createSlice({
                     state.View = action?.payload?.data?.data;
                     const AddressValues = [];
                     const malawiAddress = [];
+                    const tradingAddressValues = [];
+                    const businessTypes = [];
                     const Occupation = {};
                     const array = [];
                     switch (action?.payload?.data?.data.occupation) {
@@ -80,6 +83,19 @@ const KYCProfileViewSlice = createSlice({
                             malawiAddress.push(state.View[item]);
                         }
                     });
+                    TradingAddressKeys.forEach((item) => {
+                        if (state.View[item] !== null) {
+                            tradingAddressValues.push(state.View[item]);
+                        }
+                    });
+
+                    if (state?.View?.trading_type) {
+                        state.View.trading_type.forEach((item) => {
+                            if (item !== null) {
+                                businessTypes.push(item);
+                            }
+                        });
+                    }
                     state.address = {
                         'Phone Number':
                         `${state?.View?.country_code} ${state?.View?.phone_number
@@ -108,6 +124,12 @@ const KYCProfileViewSlice = createSlice({
                             'Biometrics | Live Selfie': [state?.View?.selfie]
 
                         },
+                        tradingDetails: {
+                            'Trading Name': state?.View?.trading_name,
+                            'Business Types': businessTypes.join(', '),
+                            'Trading Address': tradingAddressValues.join(', ')
+                        },
+                        businessImages: state?.View?.trading_images,
                         personalDetails: {
                             Gender: state?.View?.gender,
                             'Date of Birth': state?.View.dob === null
@@ -125,9 +147,13 @@ const KYCProfileViewSlice = createSlice({
                             'Monthly Income': state?.View?.monthly_income
                         },
                         bankDetails: {
-                            'Bank Name': state?.View?.bank_details[0]?.bank_name,
-                            'Account Number': state?.View?.bank_details[0]?.account_number,
-                            'Account Name': state?.View?.bank_details[0]?.account_name
+                            'Bank Name': state?.View?.bank_details ? state?.View?.bank_details[0]?.bank_name : '',
+                            'Account Number': state?.View?.bank_details
+                                ? state?.View?.bank_details[0]?.account_number
+                                : '',
+                            'Account Name': state?.View?.bank_details
+                                ? state?.View?.bank_details[0]?.account_name
+                                : ''
                         },
                         Occupation: { 'Occupation / Source of Funds': state?.View?.occupation, ...Occupation }
                     };
