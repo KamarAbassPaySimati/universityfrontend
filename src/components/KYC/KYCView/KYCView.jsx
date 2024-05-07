@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
@@ -139,7 +140,6 @@ export default function KYCView ({ role, viewType }) {
                                                             <h1
                                                                 className='mt-4 text-[#A4A9AE] text-[14px] leading-6 font-normal'
                                                             >{itemkey}</h1>
-
                                                             {userDetails.identityDetails[itemkey]?.map((imageItem, index) => (
                                                                 (imageItem !== null && imageItem !== '')
                                                                     ? (
@@ -154,9 +154,8 @@ export default function KYCView ({ role, viewType }) {
                                                                                             .identityDetails[itemkey].length === 1
                                                                                             ? `${itemkey === 'ID Document'
                                                                                                 ? View?.id_document
-                                                                                                : View?.verification_document}.
-                                                                                            ${imageItem.slice(imageItem
-                                                                            .lastIndexOf('.') +
+                                                                                                : View?.verification_document}.${imageItem.slice(imageItem
+                                                                                                .lastIndexOf('.') +
                                                                                             1)}`
                                                                                             : index === 0
                                                                                                 ? `${itemkey === 'ID Document'
