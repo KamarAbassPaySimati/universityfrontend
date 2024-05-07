@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,6 +14,8 @@ import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
+    const [isApproveModalOpen] = useState();
+    const [isRejectModalOpen] = useState();
     const { id } = useParams();
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
 
@@ -27,7 +29,12 @@ export default function KYCView ({ role, viewType }) {
     useEffect(() => {
         getView();
     }, []);
-
+    const handleApproveClick = () => {
+        isApproveModalOpen(true);
+    };
+    const handleRejectClick = () => {
+        isRejectModalOpen(true);
+    };
     return (
         <>
             <CardHeader
@@ -42,6 +49,8 @@ export default function KYCView ({ role, viewType }) {
                 updateButton={loading || (View.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update') }
                 updateButtonPath={`${getPaths(viewType, role, loading || View.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
+                onHandleStatusChange={handleApproveClick}
+                onHandleReject = {handleRejectClick}
                 ChildrenElement
             // onHandleStatusChange={handleStatusClick}
             >
