@@ -1,4 +1,4 @@
-export const getPaths = (viewType, role) => {
+export const getPaths = (viewType, role, status) => {
     switch (viewType) {
     case 'specific':
         switch (role) {
@@ -7,8 +7,9 @@ export const getPaths = (viewType, role) => {
                 activePath: 'Agent Profile',
                 paths: ['Users', 'Agents'],
                 pathurls: ['users/agents'],
-                updateButtonPath: '/users/agents/register-agent/specific-view/update-agent'
-
+                updateButtonPath: status === 'not_started'
+                    ? '/users/agents/register-agent/kyc-registration/'
+                    : '/users/agents/register-agent/specific-view/update-agent/'
             };
         case 'merchant':
             return {

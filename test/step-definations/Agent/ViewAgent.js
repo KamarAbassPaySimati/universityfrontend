@@ -67,6 +67,13 @@ Then('I should view option to activate or update a agent', async function () {
     await driver.wait(until.elementIsVisible(updateButton));
 });
 
+Then('I click on complete pending KYC', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    const updateButton = await driver.wait(until.elementLocated(By.css('[data-testid="update_button"]')));
+    await driver.wait(until.elementIsVisible(updateButton));
+    await updateButton.click();
+});
+
 // When('I should view monthly income and monthly withdrawal values as {string}', async function (expectedValue) {
 //     // Write code here that turns the phrase above into concrete actions
 //     if (this.actual_status !== 'In-progress') {

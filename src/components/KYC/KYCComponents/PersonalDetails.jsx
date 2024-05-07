@@ -279,51 +279,53 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 <ErrorMessage error={'Required field'} />}
                 {/* <InputTypeCheckbox id={1} checkboxText={'checkboxText'}/> */}
             </div>
-            <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
-                    pt-6`}>Income status</p>
             {states.personal_customer === 'Full KYC'
-                ? <div className='flex flex-wrap'>
-                    <div className='mt-4'>
-                        <div className='mx-[10px] w-[339px]'>
-                            <InputFieldWithDropDown
-                                labelName={'Monthly Income'}
-                                value={states.monthly_income === undefined ? '' : states.monthly_income}
-                                placeholder={'Enter Monthly Income'}
-                                error={
-                                    (submitSelected && (states.monthly_income === undefined ||
+                ? <>
+                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
+                    pt-6`}>Income status</p>
+                    <div className='flex flex-wrap'>
+                        <div className='mt-4'>
+                            <div className='mx-[10px] w-[339px]'>
+                                <InputFieldWithDropDown
+                                    labelName={'Monthly Income'}
+                                    value={states.monthly_income === undefined ? '' : states.monthly_income}
+                                    placeholder={'Enter Monthly Income'}
+                                    error={
+                                        (submitSelected && (states.monthly_income === undefined ||
                                                             states.monthly_income?.trim() === ''))
-                                        ? 'Required field'
-                                        : undefined}
-                                options={getIncomeDropDown()}
-                                id='monthly_income'
-                                testId='monthly_income'
-                                // information
-                                handleInput={handleStates}
-                            // type={divObj.type}
-                            />
+                                            ? 'Required field'
+                                            : undefined}
+                                    options={getIncomeDropDown()}
+                                    id='monthly_income'
+                                    testId='monthly_income'
+                                    // information
+                                    handleInput={handleStates}
+                                    // type={divObj.type}
+                                />
+                            </div>
                         </div>
-                    </div>
-                    <div className='mt-4'>
-                        <div className='mx-[10px] w-[339px]'>
-                            <InputFieldWithDropDown
-                                labelName={'Monthly Withdrawal'}
-                                value={states.monthly_withdrawal === undefined ? '' : states.monthly_withdrawal}
-                                placeholder={'Enter Monthly Withdrawal'}
-                                error={
-                                    (submitSelected && (states.monthly_withdrawal === undefined ||
+                        <div className='mt-4'>
+                            <div className='mx-[10px] w-[339px]'>
+                                <InputFieldWithDropDown
+                                    labelName={'Monthly Withdrawal'}
+                                    value={states.monthly_withdrawal === undefined ? '' : states.monthly_withdrawal}
+                                    placeholder={'Enter Monthly Withdrawal'}
+                                    error={
+                                        (submitSelected && (states.monthly_withdrawal === undefined ||
                                                             states.monthly_withdrawal?.trim() === ''))
-                                        ? 'Required field'
-                                        : undefined}
-                                options={getWithdrawalDropDown()}
-                                id='monthly_withdrawal'
-                                testId='monthly_withdrawal'
-                                // information
-                                handleInput={handleStates}
-                            // type={divObj.type}
-                            />
+                                            ? 'Required field'
+                                            : undefined}
+                                    options={getWithdrawalDropDown()}
+                                    id='monthly_withdrawal'
+                                    testId='monthly_withdrawal'
+                                    // information
+                                    handleInput={handleStates}
+                                    // type={divObj.type}
+                                />
+                            </div>
                         </div>
                     </div>
-                </div>
+                </>
                 : (
                     <FelidDivision
                         divisionObject = {InputFelidsMonthSimplified}

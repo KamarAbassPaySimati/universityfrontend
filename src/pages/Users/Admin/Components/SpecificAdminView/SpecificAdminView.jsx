@@ -72,7 +72,7 @@ export default function SpecificAdminView () {
                 pathurls={['users/admins']}
                 header='Admin Profile'
                 minHeightRequired={true}
-                updateButton={loading}
+                updateButton={loading || 'Update'}
                 updateButtonPath={`/users/admins/update-admin/${id}`}
                 statusButton={PaymaartId === View?.paymaart_id ? undefined : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
                 ChildrenElement
