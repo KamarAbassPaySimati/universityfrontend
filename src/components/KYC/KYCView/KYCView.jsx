@@ -27,6 +27,7 @@ export default function KYCView ({ role, viewType }) {
     useEffect(() => {
         getView();
     }, []);
+
     return (
         <>
             <CardHeader
