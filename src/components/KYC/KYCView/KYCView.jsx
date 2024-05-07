@@ -45,7 +45,7 @@ export default function KYCView ({ role, viewType }) {
             // onHandleStatusChange={handleStatusClick}
             >
                 {<>
-                    <div className={` mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
+                    <div className={` mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
                         <div className='flex justify-between items-center' data-testid="user_details">
@@ -141,7 +141,7 @@ export default function KYCView ({ role, viewType }) {
                                                         >{itemkey}</h1>
 
                                                         {userDetails.identityDetails[itemkey]?.map((imageItem, index) => (
-                                                            imageItem !== null
+                                                            (imageItem !== null || imageItem !== '')
                                                                 ? (
                                                                     <div key={imageItem} className='pr-2'>
                                                                         <ImageViewWithModel
