@@ -74,24 +74,24 @@ const KYCProfileViewSlice = createSlice({
                         break;
                     }
                     AddressKeys.forEach((item) => {
-                        if (state.View[item] !== null) {
+                        if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             AddressValues.push(state.View[item]);
                         }
                     });
                     InternatinalAddressKeys.forEach((item) => {
-                        if (state.View[item] !== null) {
+                        if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             malawiAddress.push(state.View[item]);
                         }
                     });
                     TradingAddressKeys.forEach((item) => {
-                        if (state.View[item] !== null) {
+                        if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             tradingAddressValues.push(state.View[item]);
                         }
                     });
 
                     if (state?.View?.trading_type) {
                         state.View.trading_type.forEach((item) => {
-                            if (item !== null) {
+                            if (item !== null && item?.trim()?.length !== 0) {
                                 businessTypes.push(item);
                             }
                         });
@@ -115,8 +115,17 @@ const KYCProfileViewSlice = createSlice({
                         'International Address': malawiAddress.join(', ')
 
                     };
+                    state.not_started = {
+                        'Phone Number':
+                        `${state?.View?.country_code} ${state?.View?.phone_number
+                            ? formatInputPhone(state?.View?.phone_number)
+                            : ''}`,
+                        Email: state?.View?.email
+                    };
                     state.userDetails = {
-                        basicDetails: state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
+                        basicDetails: state.View.user_kyc_status === 'not_started'
+                            ? state.not_started
+                            : state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
                         identityDetails: {
                             'ID Document': [state?.View?.id_document_front, state?.View?.id_document_back],
                             'Verification Document': [state?.View?.verification_document_front,
