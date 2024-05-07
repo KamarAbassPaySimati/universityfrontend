@@ -40,23 +40,11 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
 
     const autocompleteOptions = () => {
         switch (id) {
-        case 'trading_district':
-            return {
-                types: ['administrative_area_level_2', 'administrative_area_level_3']
-            };
-        case 'trading_town_village_ta':
-            return {
-                types: ['(cities)']
-            };
-        case 'trading_street_name':
-            return {
-                types: ['street_address', 'route']
-            };
-
         case 'intl_district':
             return {
                 types: ['(regions)']
             };
+        case 'trading_district':
         case 'district':
             return {
                 types: ['administrative_area_level_2'],
@@ -73,11 +61,13 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             return {
                 types: ['address']
             };
+        case 'trading_street_name':
         case 'street_name':
             return {
                 types: ['route'],
                 componentRestrictions: { country: 'mw' } // No district restriction
             };
+        case 'trading_town_village_ta':
         case 'town_village_ta':
             return {
                 types: ['(cities)'],
@@ -88,10 +78,9 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         }
     };
     const handlePlaceSelected = (place) => {
-        console.log('place.formatted_address', place, id);
         switch (id) {
         case 'trading_district':
-            handleOnChange(place.formatted_address, 'trading_district');
+            handleOnChange(place.address_components[0].long_name, 'trading_district');
             handleOnChange('', 'trading_town_village_ta');
             handleOnChange('', 'trading_street_name');
             break;
@@ -101,8 +90,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             break;
         case 'trading_street_name':
             handleOnChange(place.address_components[0].long_name, 'trading_street_name');
-            handleOnChange(place.address_components[0].long_name, 'trading_town_village_ta');
-            handleOnChange(place.address_components[1].long_name, 'trading_district');
+            autofillTownVillageTAAndDistrict(place);
             break;
         case 'country' :
             handleOnChange(place.formatted_address, 'country');
@@ -173,6 +161,9 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
         } else if (id === 'intl_landmark') {
             handleOnChange(townVillageTA, 'intl_town_village_ta');
             handleOnChange(district, 'intl_district');
+        } else if (id === 'trading_street_name') {
+            handleOnChange(district, 'trading_district');
+            handleOnChange(townVillageTA, 'trading_town_village_ta');
         } else {
             handleOnChange(district, 'district');
             handleOnChange(townVillageTA, 'town_village_ta');
