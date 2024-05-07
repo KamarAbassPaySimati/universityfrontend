@@ -119,6 +119,7 @@ export default function KYCView ({ role, viewType }) {
                             }
                         />
                         {!loading && View.user_kyc_status !== 'not_started' && <>
+
                             <KYCSections
                                 heading='Identity Details'
                                 testId='identity_details'
@@ -141,14 +142,51 @@ export default function KYCView ({ role, viewType }) {
                                                             <h1
                                                                 className='mt-4 text-[#A4A9AE] text-[14px] leading-6 font-normal'
                                                             >{itemkey}</h1>
-                                                            {userDetails.identityDetails[itemkey].map((imageItem, index = 0) => (
-                                                                imageItem !== null && <div key={imageItem} className='pr-2'>
-                                                                    <ImageViewWithModel
-                                                                        item={imageItem}
-                                                                        testId={`${itemkey}_${index}`}
-                                                                    />
-                                                                </div>
+
+                                                            {userDetails.identityDetails[itemkey]?.map((imageItem, index) => (
+                                                                (imageItem !== null && imageItem !== '')
+                                                                    ? (
+                                                                        <div key={imageItem} className='pr-2'>
+                                                                            <ImageViewWithModel
+                                                                                name={
+                                                                                    itemkey === 'Biometrics | Live Selfie'
+                                                                                        ? `Biometrics.${imageItem
+                                                                                            .slice(imageItem
+                                                                                                .lastIndexOf('.') + 1)}`
+                                                                                        : userDetails
+                                                                                            .identityDetails[itemkey].length === 1
+                                                                                            ? `${itemkey === 'ID Document'
+                                                                                                ? View?.id_document
+                                                                                                : View?.verification_document}.
+                                                                                            ${imageItem.slice(imageItem
+                                                                            .lastIndexOf('.') +
+                                                                                            1)}`
+                                                                                            : index === 0
+                                                                                                ? `${itemkey === 'ID Document'
+                                                                                                    ? View?.id_document
+                                                                                                    : View?.verification_document
+                                                                                                } 
+                                                                                                Front.${imageItem.slice(imageItem
+                                                                            .lastIndexOf('.') + 1)}`
+                                                                                                : `${itemkey === 'ID Document'
+                                                                                                    ? View?.id_document
+                                                                                                    : View?.verification_document
+                                                                                                } 
+                                                                                                Back.${imageItem.slice(imageItem
+                                                                            .lastIndexOf('.') + 1)}`
+                                                                                }
+                                                                                item={imageItem}
+                                                                                testId={`${itemkey}_${index}`}
+                                                                            />
+                                                                        </div>
+                                                                    )
+                                                                    : (
+                                                                        index === 0 && <h1 key={index}
+                                                                            className='mt-2 text-ellipsis text-[14px] leading-6
+                                                                        font-normal px-1'>-</h1>
+                                                                    )
                                                             ))}
+
                                                         </div>
                                                     </div>)
                                                 )
@@ -201,6 +239,8 @@ export default function KYCView ({ role, viewType }) {
                                                                                     null &&
                                                                                 (
                                                                                     <ImageViewWithModel
+                                                                                        name = { userDetails
+                                                                                            .businessImages[imageKey]}
                                                                                         item={
                                                                                             userDetails.businessImages[imageKey]}
                                                                                         testId={`businessImages_${index}`}
