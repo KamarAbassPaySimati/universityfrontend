@@ -39,8 +39,8 @@ export default function KYCView ({ role, viewType }) {
                 rejectOrApprove={viewType === 'kyc' && View?.user_kyc_status === 'in_progress' ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={loading || (View.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update') }
-                updateButtonPath={`${getPaths(viewType, role, loading || View.user_kyc_status).updateButtonPath}${id}`}
+                updateButton={loading || (View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update') }
+                updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
                 ChildrenElement
             // onHandleStatusChange={handleStatusClick}
@@ -74,8 +74,8 @@ export default function KYCView ({ role, viewType }) {
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
                                     <span data-testid="kyc_status"
                                         className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
-                                 ${getStatusColor(View.user_kyc_status)?.color}`}>
-                                        {getStatusColor(View.user_kyc_status)?.text}
+                                 ${getStatusColor(View?.user_kyc_status)?.color}`}>
+                                        {getStatusColor(View?.user_kyc_status)?.text}
                                     </span>
                                 </div>}
                         </div>
@@ -211,7 +211,7 @@ export default function KYCView ({ role, viewType }) {
                                                 : (
                                                     <>
                                                         {Object.keys(userDetails.tradingDetails).map((itemkey, index = 0) => (
-                                                            <div key={index} className='w-1/3 px-1'>
+                                                            <div key={index} className='w-1/3 px-1 xl:pr-[100px] pr-[40px]'>
                                                                 <ViewDetail
                                                                     itemkey={itemkey.replaceAll('_', ' ')}
                                                                     userDetails={userDetails.tradingDetails[itemkey]}
