@@ -11,5 +11,13 @@ for param_name in "${specific_params[@]}"; do
     # Append to .env file
     echo "${param_name##*/}=\"${param_value}\"" >> .env  # Write key-value pair to .env file
     echo "VITE_${param_name##*/}=\"${param_value}\"" >> .env    # Write key-value pair to .env file
-    echo "Added $param_name to .env file with value: $param_value"
+done
+
+unwanted_variables=("ADMIN_S3_BUCKET" "ADMIN_DISTRIBUTION_ID")
+for param_name in "${unwanted_variables[@]}"; do
+    # Get parameter value
+    param_value=$(aws ssm get-parameter --name "$param_name" --query "Parameter.Value" --output text --region $REGION)
+
+    # Append to .env file
+    echo "${param_name##*/}=\"${param_value}\"" >> .env  # Write key-value pair to .env file
 done
