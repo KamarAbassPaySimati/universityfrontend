@@ -110,7 +110,7 @@ const KYCProfileViewSlice = createSlice({
                             ? formatInputPhone(state?.View?.phone_number)
                             : ''}`,
                         Email: state?.View?.email,
-                        Nationality: state?.View?.citizen,
+                        Nationality: state?.View?.citizen === 'Non Malawian' ? '-' : state?.View?.citizen,
                         'Malawi Address': AddressValues.join(', '),
                         'International Address': malawiAddress.join(', ')
 
