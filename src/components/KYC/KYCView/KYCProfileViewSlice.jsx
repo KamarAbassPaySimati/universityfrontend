@@ -110,7 +110,7 @@ const KYCProfileViewSlice = createSlice({
                             ? formatInputPhone(state?.View?.phone_number)
                             : ''}`,
                         Email: state?.View?.email,
-                        Nationality: state?.View?.citizen,
+                        Nationality: state?.View?.citizen === 'Non Malawian' ? '-' : state?.View?.citizen,
                         'Malawi Address': AddressValues.join(', '),
                         'International Address': malawiAddress.join(', ')
 
@@ -127,9 +127,14 @@ const KYCProfileViewSlice = createSlice({
                             ? state.not_started
                             : state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
                         identityDetails: {
-                            'ID Document': [state?.View?.id_document_front, state?.View?.id_document_back],
-                            'Verification Document': [state?.View?.verification_document_front,
-                                state?.View?.verification_document_back],
+                            'ID Document': state?.View?.id_document_back !== null && state?.View?.id_document_back !== ''
+                                ? [state?.View?.id_document_front, state?.View?.id_document_back]
+                                : [state?.View?.id_document_front],
+                            'Verification Document': state?.View?.verification_document_back !== null &&
+                            state?.View?.verification_document_back !== ''
+                                ? [state?.View?.verification_document_front,
+                                    state?.View?.verification_document_back]
+                                : [state?.View?.verification_document_front],
                             'Biometrics | Live Selfie': [state?.View?.selfie]
 
                         },

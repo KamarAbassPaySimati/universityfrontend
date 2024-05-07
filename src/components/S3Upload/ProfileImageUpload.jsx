@@ -24,7 +24,7 @@ export default function ProfileUploadPlaceholder ({ path, selectedUploadImg, sta
                 return;
             }
             const img = await handleUpload(e.target.files[0], path);
-            handleStates(selectedUploadImg, img.key);
+            handleStates(selectedUploadImg, `public/${img.key}`);
             setLoadingImg(false);
             e.target.value = '';
         } catch (error) {

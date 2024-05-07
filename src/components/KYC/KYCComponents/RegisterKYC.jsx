@@ -411,7 +411,7 @@ export default function RegisterKYC ({ role }) {
             if (oldStateValue.citizen_type !== states.citizen_type || oldStateValue.kyc_type !== states.personal_customer) {
                 handleAPICall({
                     kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
-                    citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
+                    citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawian',
                     paymaart_id: id
                 }, 'address_details');
             } else {
@@ -539,7 +539,7 @@ export default function RegisterKYC ({ role }) {
                         switch (item) {
                         case 'citizen':
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
-                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawi citizen') {
+                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawian') {
                                 object.nationality = res.data.data[item];
                             }
                             break;

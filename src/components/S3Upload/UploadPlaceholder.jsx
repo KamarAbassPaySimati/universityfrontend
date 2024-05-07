@@ -38,7 +38,7 @@ export default function UploadPlaceholder ({
                 return;
             }
             const img = await handleUpload(e.target.files[0], path);
-            handleStates(img.key, selectedUploadImg);
+            handleStates(`public/${img.key}`, selectedUploadImg);
             setLoadingImg(false);
             e.target.value = '';
         } catch (error) {
