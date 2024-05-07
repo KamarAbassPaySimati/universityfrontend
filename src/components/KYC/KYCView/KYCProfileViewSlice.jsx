@@ -115,8 +115,17 @@ const KYCProfileViewSlice = createSlice({
                         'International Address': malawiAddress.join(', ')
 
                     };
+                    state.not_started = {
+                        'Phone Number':
+                        `${state?.View?.country_code} ${state?.View?.phone_number
+                            ? formatInputPhone(state?.View?.phone_number)
+                            : ''}`,
+                        Email: state?.View?.email
+                    };
                     state.userDetails = {
-                        basicDetails: state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
+                        basicDetails: state.View.user_kyc_status === 'not_started'
+                            ? state.not_started
+                            : state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
                         identityDetails: {
                             'ID Document': [state?.View?.id_document_front, state?.View?.id_document_back],
                             'Verification Document': [state?.View?.verification_document_front,

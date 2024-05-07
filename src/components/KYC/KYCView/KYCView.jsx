@@ -36,7 +36,7 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
-                rejectOrApprove={viewType === 'kyc' && View?.kyc_status === 'in_progress' ? true : undefined}
+                rejectOrApprove={viewType === 'kyc' && View?.user_kyc_status === 'in_progress' ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading || (View.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update') }
@@ -118,7 +118,7 @@ export default function KYCView ({ role, viewType }) {
                                 </div>
                             }
                         />
-                        {View.user_kyc_status !== 'not_started' && <>
+                        {!loading && View.user_kyc_status !== 'not_started' && <>
                             <KYCSections
                                 heading='Identity Details'
                                 testId='identity_details'
