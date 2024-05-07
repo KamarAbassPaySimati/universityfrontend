@@ -74,24 +74,24 @@ const KYCProfileViewSlice = createSlice({
                         break;
                     }
                     AddressKeys.forEach((item) => {
-                        if (state.View[item] !== null) {
+                        if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             AddressValues.push(state.View[item]);
                         }
                     });
                     InternatinalAddressKeys.forEach((item) => {
-                        if (state.View[item] !== null) {
+                        if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             malawiAddress.push(state.View[item]);
                         }
                     });
                     TradingAddressKeys.forEach((item) => {
-                        if (state.View[item] !== null) {
+                        if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             tradingAddressValues.push(state.View[item]);
                         }
                     });
 
                     if (state?.View?.trading_type) {
                         state.View.trading_type.forEach((item) => {
-                            if (item !== null) {
+                            if (item !== null && item?.trim()?.length !== 0) {
                                 businessTypes.push(item);
                             }
                         });
