@@ -46,18 +46,15 @@ export default function KYCView ({ role, viewType }) {
             // onHandleStatusChange={handleStatusClick}
             >
                 {<>
-                    <div className={` mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
+                    <div className={` mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
                         <div className='flex justify-between items-center' data-testid="user_details">
                             <ProfileName
-                                userButtonName={View?.name !== undefined
-                                    ? `${View?.name.split(/\s+/)
-                                        .map(word => word.charAt(0).toUpperCase())
-                                        .join('')}
-                               `
-                                    : ''}
-                                UserName={View?.name}
+                                userButtonName={
+                                    `${View?.first_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`}
+                                UserName={`${View?.first_name || '-'} 
+                                ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
                                 payMaartID={View?.paymaart_id}
                                 loading={loading}
                                 viewType={viewType}
@@ -118,7 +115,7 @@ export default function KYCView ({ role, viewType }) {
                                 </div>
                             }
                         />
-                        {!loading && View.user_kyc_status !== 'not_started' && <>
+                        {(View?.user_kyc_status !== 'not_started') && <>
 
                             <KYCSections
                                 heading='Identity Details'

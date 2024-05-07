@@ -12,7 +12,7 @@ export default function ProfileName ({
 }) {
     return (
         <div className={`flex gap-[27px] justify-center items-center ${loading ? 'animate-pulse z-0 ' : ''}`}>
-            <div className={`${loading ? 'bg-slate-200 text-slate-200 ' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] w-[66px] flex justify-center items-center
+            <div className={`${loading ? 'bg-slate-200 text-slate-200 ' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] px-2 w-fit flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px] uppercase`}>
                 {userButtonName}
             </div>

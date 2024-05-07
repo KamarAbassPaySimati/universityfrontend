@@ -10,7 +10,6 @@ export const getPaths = (viewType, role, status) => {
                 updateButtonPath: status === 'not_started'
                     ? '/users/agents/register-agent/kyc-registration/'
                     : '/users/agents/register-agent/specific-view/update-agent/'
-
             };
         case 'merchant':
             return {
