@@ -183,7 +183,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                         className={'w-[339px]'}
                         value={states?.institute === undefined ? '' : states.institute}
                         handleSearchItem={handleSearchItem}
-                        label={'Search Institute'}
+                        label={'Search Institution'}
                         submitSelected={submitSelected}
                     />
                 </div>}

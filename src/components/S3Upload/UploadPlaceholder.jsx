@@ -159,7 +159,7 @@ export default function UploadPlaceholder ({
                             </div>
                             <IframeModal
                                 isOpen={showIframe} handleClose={() => setShowIframe(false)} link={item}
-                                labelValue={labelValue}/>
+                                labelValue={item}/>
                         </div>
                     </div>
                 ))}
