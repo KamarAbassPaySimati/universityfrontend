@@ -18,7 +18,6 @@ export const SpecificView = createAsyncThunk('adminUsers', async (PaymaartId, { 
         return res;
     } catch (error) {
         // Log error or send notification
-        console.error('Error fetching orders:', error);
         return rejectWithValue({ message: error });
     }
 });
