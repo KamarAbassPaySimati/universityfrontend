@@ -17,11 +17,12 @@ import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
 import { dataService } from '../../../services/data.services';
 import GlobalContext from '../../Context/GlobalContext';
 import { endpoints } from '../../../services/endpoints';
+import KYCReject from '../KYCReject';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
-    const [isRejectModalOpen] = useState();
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState();
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
@@ -43,7 +44,7 @@ export default function KYCView ({ role, viewType }) {
         setIsApprovalModalOpen(true);
     };
     const handleRejectClick = () => {
-        isRejectModalOpen(true);
+        setIsRejectModalOpen(true);
     };
     const handleClose = () => {
         setIsApprovalModalOpen(false);
@@ -467,6 +468,10 @@ export default function KYCView ({ role, viewType }) {
                     />
                 </div>
             </Modal>
+            {isRejectModalOpen && <KYCReject
+                View = {View}
+                setIsRejectModalOpen = {setIsRejectModalOpen}
+            /> }
         </>
     );
 }
