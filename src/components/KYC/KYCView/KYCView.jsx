@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -70,7 +70,7 @@ export default function KYCView ({ role, viewType }) {
                             />
                             {!loading &&
                                 <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                    {View?.kyc_type && <p data-testid="kyc_type"
+                                    {View?.user_kyc_status !== 'not_started' && <p data-testid="kyc_type"
                                         className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
                                     <span data-testid="kyc_status"
@@ -154,25 +154,27 @@ export default function KYCView ({ role, viewType }) {
                                                                                             .identityDetails[itemkey].length === 1
                                                                                             ? `${itemkey === 'ID Document'
                                                                                                 ? View?.id_document
-                                                                                                : View?.verification_document}.${imageItem.slice(imageItem
-                                                                                                .lastIndexOf('.') +
-                                                                                            1)}`
+                                                                                                : View?.verification_document}${itemkey === 'ID Document' && View?.id_document === 'Passport'
+                                                                                                ? ` Data Page.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`
+                                                                                                : `.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`}`
+
                                                                                             : index === 0
                                                                                                 ? `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 } 
-                                                                                                Front.${imageItem.slice(imageItem
+                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Data Page' : 'Front'}.${imageItem.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                                 : `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 } 
-                                                                                                Back.${imageItem.slice(imageItem
+                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Visa Page' : 'Back'}.${imageItem.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                 }
                                                                                 item={imageItem}
                                                                                 testId={`${itemkey}_${index}`}
+                                                                                className={'w-[245px]'}
                                                                             />
                                                                         </div>
                                                                     )
@@ -224,26 +226,27 @@ export default function KYCView ({ role, viewType }) {
                                                             {userDetails?.businessImages !== null &&
                                                         userDetails?.businessImages !== undefined
                                                                 ? (
-                                                                    <div className='flex flex-wrap pl-[1px]'>
+                                                                    <div className='flex flex-wrap '>
                                                                         {Object.keys(userDetails?.businessImages).map((imageKey,
                                                                             index) => (
                                                                         // eslint-disable-next-line react/jsx-indent
-                                                                            <div key={imageKey} className='xl:w-1/3 w-1/2'>
-                                                                                <div className='flex flex-row
-                                                                                            xl:pr-[100px] pr-[40px]'>
-                                                                                    {userDetails.businessImages[imageKey] !==
+                                                                            <Fragment key={imageKey}>
+                                                                                {userDetails.businessImages[imageKey] !==
                                                                                     null &&
                                                                                 (
-                                                                                    <ImageViewWithModel
-                                                                                        name = { userDetails
-                                                                                            .businessImages[imageKey]}
-                                                                                        item={
-                                                                                            userDetails.businessImages[imageKey]}
-                                                                                        testId={`businessImages_${index}`}
-                                                                                    />
+                                                                                    <div className='w-1/3 px-1 xl:pr-[100px] pr-[40px]'>
+
+                                                                                        <ImageViewWithModel
+                                                                                            name = { userDetails
+                                                                                                .businessImages[imageKey]}
+                                                                                            item={
+                                                                                                userDetails.businessImages[imageKey]}
+                                                                                            testId={`businessImages_${index}`}
+                                                                                            className={'min-w-[245px]'}
+                                                                                        />
+                                                                                    </div>
                                                                                 )}
-                                                                                </div>
-                                                                            </div>
+                                                                            </Fragment>
 
                                                                         ))}
                                                                     </div>
