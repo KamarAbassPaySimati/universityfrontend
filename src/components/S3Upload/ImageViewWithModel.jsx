@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import Image from '../Image/Image';
 import IframeModal from '../Iframe/IframeModal';
 
-export default function ImageViewWithModel ({ name, item, testId }) {
+export default function ImageViewWithModel ({ name, item, testId, className }) {
     const [show, setShow] = useState(false);
     return (
         <>
             <div className='mr-2'>
-                <div className='mt-2 border-[2px] border-background-light w-[245px] h-[52px]
-                            rounded-lg flex justify-between items-center' >
+                <div className={`mt-2 border-[2px] border-background-light h-[52px]
+                            rounded-lg flex justify-between items-center ${className}`} >
                     <p className='p-2 text-neutral-primary text-[14px] leading-4 font-medium w-[90%] truncate'
                         title={name}>
                         {name}</p>

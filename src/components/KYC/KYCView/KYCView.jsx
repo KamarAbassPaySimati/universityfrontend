@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+/* eslint-disable max-len */
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
 import isTimestampFiveMinutesAgo from '../../../CommonMethods/lastLoggedInTimeStamp';
@@ -11,13 +12,22 @@ import KYCSections from './KYCSections';
 import { KYCProfileView } from './KYCProfileViewSlice';
 import ImageViewWithModel from '../../S3Upload/ImageViewWithModel';
 import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
+import Modal from 'react-responsive-modal';
+import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
+import { dataService } from '../../../services/data.services';
+import GlobalContext from '../../Context/GlobalContext';
+import { endpoints } from '../../../services/endpoints';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
-    const [isApproveModalOpen] = useState();
+    const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
     const [isRejectModalOpen] = useState();
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(false);
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
+    const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const { approveKyc } = endpoints;
+    const navigate = useNavigate();
 
     const getView = () => {
         try {
@@ -30,10 +40,34 @@ export default function KYCView ({ role, viewType }) {
         getView();
     }, []);
     const handleApproveClick = () => {
-        isApproveModalOpen(true);
+        setIsApprovalModalOpen(true);
     };
     const handleRejectClick = () => {
         isRejectModalOpen(true);
+    };
+    const handleClose = () => {
+        setIsApprovalModalOpen(false);
+    };
+    const handleConfirmAction = async () => {
+        try {
+            setIsLoading(true);
+            const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
+                { user_id: View?.paymaart_id });
+            if (!response.error) {
+                setIsLoading(false);
+                setIsApprovalModalOpen(false);
+                setToastSuccess('KYC approved successfully');
+                navigate('/verify/kyc-registration');
+            } else {
+                setIsLoading(false);
+                setIsApprovalModalOpen(false);
+                setToastError('Something went wrong!');
+            }
+        } catch (error) {
+            setIsLoading(false);
+            setIsApprovalModalOpen(false);
+            setToastError('Something went wrong!');
+        }
     };
     return (
         <>
@@ -46,9 +80,9 @@ export default function KYCView ({ role, viewType }) {
                 rejectOrApprove={viewType === 'kyc' && View?.user_kyc_status === 'in_progress' ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={loading || (View.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update') }
-                updateButtonPath={`${getPaths(viewType, role, loading || View.user_kyc_status).updateButtonPath}${id}`}
-                statusButton={loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
+                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined) }
+                updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
+                statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
                 onHandleStatusChange={handleApproveClick}
                 onHandleReject = {handleRejectClick}
                 ChildrenElement
@@ -83,8 +117,8 @@ export default function KYCView ({ role, viewType }) {
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
                                     <span data-testid="kyc_status"
                                         className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
-                                 ${getStatusColor(View.user_kyc_status)?.color}`}>
-                                        {getStatusColor(View.user_kyc_status)?.text}
+                                 ${getStatusColor(View?.user_kyc_status)?.color}`}>
+                                        {getStatusColor(View?.user_kyc_status)?.text}
                                     </span>
                                 </div>}
                         </div>
@@ -148,7 +182,6 @@ export default function KYCView ({ role, viewType }) {
                                                             <h1
                                                                 className='mt-4 text-[#A4A9AE] text-[14px] leading-6 font-normal'
                                                             >{itemkey}</h1>
-
                                                             {userDetails.identityDetails[itemkey]?.map((imageItem, index) => (
                                                                 (imageItem !== null && imageItem !== '')
                                                                     ? (
@@ -163,26 +196,27 @@ export default function KYCView ({ role, viewType }) {
                                                                                             .identityDetails[itemkey].length === 1
                                                                                             ? `${itemkey === 'ID Document'
                                                                                                 ? View?.id_document
-                                                                                                : View?.verification_document}.
-                                                                                            ${imageItem.slice(imageItem
-                                                                            .lastIndexOf('.') +
-                                                                                            1)}`
+                                                                                                : View?.verification_document}${itemkey === 'ID Document' && View?.id_document === 'Passport'
+                                                                                                ? ` Data Page.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`
+                                                                                                : `.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`}`
+
                                                                                             : index === 0
                                                                                                 ? `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 } 
-                                                                                                Front.${imageItem.slice(imageItem
+                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Data Page' : 'Front'}.${imageItem.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                                 : `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 } 
-                                                                                                Back.${imageItem.slice(imageItem
+                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Visa Page' : 'Back'}.${imageItem.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                 }
                                                                                 item={imageItem}
                                                                                 testId={`${itemkey}_${index}`}
+                                                                                className={'w-[245px]'}
                                                                             />
                                                                         </div>
                                                                     )
@@ -220,7 +254,7 @@ export default function KYCView ({ role, viewType }) {
                                                 : (
                                                     <>
                                                         {Object.keys(userDetails.tradingDetails).map((itemkey, index = 0) => (
-                                                            <div key={index} className='w-1/3 px-1'>
+                                                            <div key={index} className='w-1/3 px-1 xl:pr-[100px] pr-[40px]'>
                                                                 <ViewDetail
                                                                     itemkey={itemkey.replaceAll('_', ' ')}
                                                                     userDetails={userDetails.tradingDetails[itemkey]}
@@ -234,26 +268,27 @@ export default function KYCView ({ role, viewType }) {
                                                             {userDetails?.businessImages !== null &&
                                                         userDetails?.businessImages !== undefined
                                                                 ? (
-                                                                    <div className='flex flex-wrap pl-[1px]'>
+                                                                    <div className='flex flex-wrap '>
                                                                         {Object.keys(userDetails?.businessImages).map((imageKey,
                                                                             index) => (
                                                                         // eslint-disable-next-line react/jsx-indent
-                                                                            <div key={imageKey} className='xl:w-1/3 w-1/2'>
-                                                                                <div className='flex flex-row
-                                                                                            xl:pr-[100px] pr-[40px]'>
-                                                                                    {userDetails.businessImages[imageKey] !==
+                                                                            <Fragment key={imageKey}>
+                                                                                {userDetails.businessImages[imageKey] !==
                                                                                     null &&
                                                                                 (
-                                                                                    <ImageViewWithModel
-                                                                                        name = { userDetails
-                                                                                            .businessImages[imageKey]}
-                                                                                        item={
-                                                                                            userDetails.businessImages[imageKey]}
-                                                                                        testId={`businessImages_${index}`}
-                                                                                    />
+                                                                                    <div className='w-1/3 px-1 xl:pr-[100px] pr-[40px]'>
+
+                                                                                        <ImageViewWithModel
+                                                                                            name = { userDetails
+                                                                                                .businessImages[imageKey]}
+                                                                                            item={
+                                                                                                userDetails.businessImages[imageKey]}
+                                                                                            testId={`businessImages_${index}`}
+                                                                                            className={'min-w-[245px]'}
+                                                                                        />
+                                                                                    </div>
                                                                                 )}
-                                                                                </div>
-                                                                            </div>
+                                                                            </Fragment>
 
                                                                         ))}
                                                                     </div>
@@ -419,6 +454,19 @@ export default function KYCView ({ role, viewType }) {
                     </div>
                 </>}
             </CardHeader>
+            <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Confirm to Approve?'}
+                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        handleSubmit={handleConfirmAction}
+                        isLoading={isLoading}
+                        handleClose={handleClose}
+                        buttonText={'Approve'}
+                        buttonColor={'bg-accent-positive'}
+                    />
+                </div>
+            </Modal>
         </>
     );
 }
