@@ -50,8 +50,13 @@ export default function KYCReject () {
     const handleCheckBox = (e, id, type, index, selectedIndex) => {
         const isChecked = e.target.checked;
         if (isChecked) {
+            const newCheckBox = { reason_id: index + 1 };
             if (type === 'main') {
-                const newCheckBox = { reason_id: index + 1 };
+                RejectReasons?.forEach((reasonItem, reasonIndex) => {
+                    if (reasonIndex === index && reasonItem.selectedObj) {
+                        newCheckBox.placeholder = reasonItem.selectedObj;
+                    }
+                });
                 setSelectedCheckBox([...selectedCheckBox, newCheckBox]);
             } else if (type === 'sub') {
                 setSelectedCheckBox(selectedCheckBox.map((item, idx) => {
@@ -68,21 +73,37 @@ export default function KYCReject () {
             if (type === 'main') {
                 setSelectedCheckBox(selectedCheckBox.filter(item => item.reason_id !== index + 1));
             } else if (type === 'sub') {
-                setSelectedCheckBox(selectedCheckBox.map((item, idx) => {
+                let newPlaceholder = [];
+
+                let placeHOlderValue = selectedCheckBox.map((item, idx) => {
                     if (item.reason_id === selectedIndex) {
                         // Remove the id from the placeholder array if the sub-checkbox is unchecked
-                        const newPlaceholder = (item.placeholder || []).filter(placeholderId => placeholderId !== id);
+                        newPlaceholder = (item.placeholder || []).filter(placeholderId => placeholderId !== id);
+                        console.log('newPlaceholder', newPlaceholder);
                         return {
                             ...item,
                             placeholder: newPlaceholder
                         };
                     }
                     return item;
-                }));
+                });
+                if (newPlaceholder.length === 0) {
+                    placeHOlderValue = placeHOlderValue.filter(obj => obj.reason_id === selectedIndex);
+                }
+                console.log('placeHOlderValue' , placeHOlderValue);
+                setSelectedCheckBox(placeHOlderValue);
             }
         }
     };
-
+    console.log('selectedCheckBox', selectedCheckBox);
+    const getChecked = (index, item) => {
+        let flag = false;
+        selectedCheckBox.forEach((itemMapped) => {
+            console.log('itemMapped', itemMapped.placeholder.includes(item), itemMapped.reason_id === index);
+            flag = itemMapped.reason_id === index && itemMapped.placeholder.includes(item);
+        });
+        return flag;
+    };
     return (
         <Modal center open={true}
             styles={{ modal: { borderRadius: 10 } }}
@@ -112,6 +133,7 @@ export default function KYCReject () {
                         <div className='ml-6 px-2 pt-2 flex flex-wrap'>
                             {item.selectedObj.map((reasonItem, reasonIndex = 0) => (
                                 <div key={reasonItem} className='ml-4'>
+                                    {console.log('getChecked(index + 1, reasonItem)', getChecked(index + 1, reasonItem))}
                                     <CheckboxWithReason
                                         item={{
                                             label: reasonItem,
@@ -119,6 +141,7 @@ export default function KYCReject () {
                                         }}
                                         index={reasonIndex}
                                         selectedIndex={index + 1}
+                                        Checked={getChecked(index + 1, reasonItem)}
                                         testId={`reject_sub_${reasonIndex}`}
                                         id={reasonItem}
                                         handleOnChange={handleCheckBox}
