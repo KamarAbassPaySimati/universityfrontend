@@ -3,7 +3,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router';
+import { useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
 import isTimestampFiveMinutesAgo from '../../../CommonMethods/lastLoggedInTimeStamp';
@@ -23,12 +23,12 @@ export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
     const [isRejectModalOpen, setIsRejectModalOpen] = useState();
+    const [isExpanded, setIsExpanded] = useState();
     const { id } = useParams();
     const [isLoading, setIsLoading] = useState(false);
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { approveKyc } = endpoints;
-    const navigate = useNavigate();
 
     const getView = () => {
         try {
@@ -49,6 +49,9 @@ export default function KYCView ({ role, viewType }) {
     const handleClose = () => {
         setIsApprovalModalOpen(false);
     };
+    const toggleExpand = () => {
+        setIsExpanded(prevState => !prevState);
+    };
     const handleConfirmAction = async () => {
         try {
             setIsLoading(true);
@@ -57,8 +60,8 @@ export default function KYCView ({ role, viewType }) {
             if (!response.error) {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
+                getView();
                 setToastSuccess('KYC approved successfully');
-                navigate('/verify/kyc-registration');
             } else {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
@@ -125,6 +128,33 @@ export default function KYCView ({ role, viewType }) {
                         </div>
                     </div>
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
+                        {View?.user_kyc_status === 'info_required' &&
+                        <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
+                            <div className="flex flex-row justify-between">
+                                <h1 className="text-[18px] font-600 text-neutral-primary">Reason for pending KYC</h1>
+                                <button className="text-[14px] font-400 text-primary-normal" onClick={toggleExpand}>
+                                    {isExpanded ? 'Collapse' : 'Expand'}
+                                </button>
+                            </div>
+                            {isExpanded && (
+                                <div className="mt-2">
+                                    {[...Array(5)].map((_, index) => (
+                                        <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
+                                            <div className='flex'>
+                                                <span className="text-[#4F5962] font-[600] text-[14px] mt-[1px]">{index + 1}. </span>
+                                                <div className='ml-1'>
+                                                    <span className="text-[#4F5962] font-[600] text-[14px]">{'This text has a custom font style: '}</span>
+                                                    <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>This text is lighter bbabbababababbababababababaababababbaabbababababaabbabababbabababababbbbbbbbbbbbbbbb.</span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        }
                         <KYCSections
                             heading='Basic Details'
                             testId='basic_details'
@@ -470,7 +500,9 @@ export default function KYCView ({ role, viewType }) {
             </Modal>
             {isRejectModalOpen && <KYCReject
                 View = {View}
+                userDetails={userDetails.basicDetails}
                 setIsRejectModalOpen = {setIsRejectModalOpen}
+                id={id}
             /> }
         </>
     );
