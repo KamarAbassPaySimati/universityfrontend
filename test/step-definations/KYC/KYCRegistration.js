@@ -747,7 +747,7 @@ When('I select the citizenship type as {string}', async function (type) {
 
 When('I select the KYC type as {string}', async function (type) {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 1500));
     if (type !== '') {
         switch (type) {
         case 'Full KYC':
@@ -765,7 +765,7 @@ When('I select the KYC type as {string}', async function (type) {
 
 When('I should view monthly income and monthly withdrawal selected as {string}', async function (expectedValue) {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 5000));
     const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
     await driver.wait(until.elementIsVisible(monthlyIncome));
     const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
