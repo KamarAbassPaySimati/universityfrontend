@@ -228,10 +228,11 @@ After(function (scenario) {
     }
     if (scenario.result.status === 'FAILED') {
         const world = this;
+        const uniqueId = uuidv4();
         return driver.takeScreenshot().then(function (screenShot, error) {
             if (!error) {
                 world.attach(screenShot, 'image/png');
-                failedScenarios = path.join(failedScenarios, `${scenario.pickle.id}_${scenario.pickle.name}.png`);
+                failedScenarios = path.join(failedScenarios, `${uniqueId}_${scenario.pickle.id}_${scenario.pickle.name}.png`);
                 fs.writeFile(failedScenarios, screenShot, 'base64', (err) => {
                     if (err) {
                         console.error('Error writing coverage data:', err);

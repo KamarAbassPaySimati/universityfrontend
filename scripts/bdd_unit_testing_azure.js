@@ -9,7 +9,7 @@ const stat = util.promisify(fs.stat);
 const featureDirectory = 'test/unit-testing';
 const DELAY_BETWEEN_TESTS = 5000; // 5 seconds
 const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 5000; // 40 seconds
-const MAX_PARALLEL_EXECUTIONS = 8;
+const MAX_PARALLEL_EXECUTIONS = 20;
 let COUNTER = 0;
 
 async function getFeatureFiles (directory) {
