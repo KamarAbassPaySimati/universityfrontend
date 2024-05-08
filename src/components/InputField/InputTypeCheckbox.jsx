@@ -1,6 +1,11 @@
 import React from 'react';
 
-export default function InputTypeCheckbox ({ id, checkboxText, handleOnChange, Checked, testId, disabled }) {
+export default function InputTypeCheckbox (
+    {
+        id,
+        checkboxText, handleOnChange, Checked, testId, disabled, index, selectedIndex,
+        type
+    }) {
     return (
         <div className="label-checkbox relative my-2 flex items-center">
             <input
@@ -11,7 +16,7 @@ export default function InputTypeCheckbox ({ id, checkboxText, handleOnChange, C
                 checked={Checked}
                 disabled={disabled}
                 onClick={(e) => {
-                    handleOnChange(e, id, 'checkBox');
+                    handleOnChange(e, id, type || 'checkBox', index, selectedIndex);
                 }}
             />
             <label

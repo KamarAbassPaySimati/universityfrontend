@@ -34,7 +34,9 @@ body {
   min-width: 306px !important;
   border-radius: 8px !important;
 }
-
+.react-responsive-modal-modal {
+  max-width: 900px !important;
+}
 /* Tooltip styling rules */
 .my-tooltip {
   background-color: #FFFFFF !important;
@@ -198,7 +200,7 @@ body {
   transition: transform ease 0.25s;
   will-change: transform;
   position: absolute;
-  top: 8px;
+  top: 7px;
   left: 4px;
 }
 
