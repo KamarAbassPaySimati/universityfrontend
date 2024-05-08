@@ -271,7 +271,6 @@ Before('@add_admin_user', async function () {
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
-        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -286,13 +285,12 @@ Before('@add_admin_user', async function () {
             middle_name,
             last_name,
             password: 'Admin@123',
-            paymaart_id: paymaart_ID,
             email: email.toLowerCase(),
             country_code: countryCode,
             role: 'Super admin',
             phone_number: phone_number.replaceAll(' ', '')
         };
-
+        const response = await addAdminUser(payload);
         global.admin_user = {
             first_name,
             middle_name,
@@ -303,10 +301,9 @@ Before('@add_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Super Admin',
             phone_number: main_phone_number,
-            paymaart_id: paymaart_ID,
+            paymaart_id: response.paymaartId,
             phone_number_without_country_code: phone_number
         };
-        await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('API Error', error);
@@ -321,7 +318,6 @@ Before('@add_finance_admin_user', async function () {
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
-        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -336,13 +332,13 @@ Before('@add_finance_admin_user', async function () {
             middle_name,
             last_name,
             password: 'Admin@123',
-            paymaart_id: paymaart_ID,
             email: email.toLowerCase(),
             country_code: countryCode,
             role: 'Finance admin',
             phone_number: phone_number.replaceAll(' ', '')
         };
 
+        const response = await addAdminUser(payload);
         global.admin_user = {
             first_name,
             middle_name,
@@ -353,10 +349,9 @@ Before('@add_finance_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Finance Admin',
             phone_number: main_phone_number,
-            paymaart_id: paymaart_ID,
+            paymaart_id: response.paymaartId,
             phone_number_without_country_code: phone_number
         };
-        await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('API Error', error);
@@ -371,7 +366,6 @@ Before('@add_support_admin_user', async function () {
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
-        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -386,13 +380,13 @@ Before('@add_support_admin_user', async function () {
             middle_name,
             last_name,
             password: 'Admin@123',
-            paymaart_id: paymaart_ID,
             email: email.toLowerCase(),
             country_code: countryCode,
             role: 'Support admin',
             phone_number: phone_number.replaceAll(' ', '')
         };
 
+        const response = await addAdminUser(payload);
         global.admin_user = {
             first_name,
             middle_name,
@@ -403,10 +397,9 @@ Before('@add_support_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Support Admin',
             phone_number: main_phone_number,
-            paymaart_id: paymaart_ID,
+            paymaart_id: response.paymaartId,
             phone_number_without_country_code: phone_number
         };
-        await addAdminUser(payload);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('API Error', error);
@@ -421,7 +414,6 @@ Before('@add_normal_admin_user', async function () {
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
         let phone_number = `${faker.phone.number('## ### ####')}`;
-        const paymaart_ID = `PMT${faker.string.numeric({ length: { min: 5, max: 7 } })}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -436,13 +428,13 @@ Before('@add_normal_admin_user', async function () {
             middle_name,
             last_name,
             password: 'Admin@123',
-            paymaart_id: paymaart_ID,
             email: email.toLowerCase(),
             country_code: countryCode,
             role: 'Admin',
             phone_number: phone_number.replaceAll(' ', '')
         };
 
+        const response = await addAdminUser(payload);
         global.admin_user = {
             first_name,
             middle_name,
@@ -453,10 +445,10 @@ Before('@add_normal_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Admin',
             phone_number: main_phone_number,
-            paymaart_id: paymaart_ID,
+            paymaart_id: response.paymaartId,
             phone_number_without_country_code: phone_number
         };
-        await addAdminUser(payload);
+        console.log('response', response);
         await new Promise(resolve => setTimeout(resolve, 4000));
     } catch (error) {
         console.log('API Error', error);
