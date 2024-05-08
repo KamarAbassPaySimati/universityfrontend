@@ -16,7 +16,7 @@ export default function InputTypeCheckbox (
                 checked={Checked}
                 disabled={disabled}
                 onClick={(e) => {
-                    handleOnChange(e, id, type || 'checkBox', index, selectedIndex);
+                    handleOnChange(e, id, type || 'checkBox', index, selectedIndex, checkboxText);
                 }}
             />
             <label
