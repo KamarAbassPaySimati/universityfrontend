@@ -2,7 +2,7 @@ import React from 'react';
 import InputTypeCheckbox from './InputTypeCheckbox';
 
 export default function CheckboxWithReason ({ item, id, testId, handleOnChange, index, selectedIndex, type, Checked }) {
-    console.log('Checked', Checked)
+    console.log('Checked', Checked);
     return (
         <div className='pb-2'>
             <InputTypeCheckbox

@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import CheckboxWithReason from '../InputField/CheckboxWithResone';
+import Button2 from '../Button2/Button2';
+import Button from '../Button/Button';
 
 export default function KYCReject () {
-    const [selectedCheckBox, setSelectedCheckBox] = useState([]);
+    const [selectedCheckBox, setSelectedCheckBox] = useState({});
     const [RejectReasons, setRejectReasons] = useState([
         {
             label: 'Incorrect or unreadable personal information',
@@ -57,53 +59,39 @@ export default function KYCReject () {
                         newCheckBox.placeholder = reasonItem.selectedObj;
                     }
                 });
-                setSelectedCheckBox([...selectedCheckBox, newCheckBox]);
+                setSelectedCheckBox({ ...selectedCheckBox, [index + 1]: newCheckBox });
             } else if (type === 'sub') {
-                setSelectedCheckBox(selectedCheckBox.map((item, idx) => {
-                    if (item.reason_id === selectedIndex) {
-                        return {
-                            ...item,
-                            placeholder: item.placeholder ? [...item.placeholder, id] : [id] // Add the placeholder as an array
-                        };
-                    }
-                    return item;
-                }));
+                const value = {
+                    ...selectedCheckBox[selectedIndex],
+                    placeholder: selectedCheckBox[selectedIndex]?.placeholder
+                        ? [...selectedCheckBox[selectedIndex].placeholder, id]
+                        : [id]
+                };
+                setSelectedCheckBox({ ...selectedCheckBox, [selectedIndex]: value });
             }
         } else {
             if (type === 'main') {
-                setSelectedCheckBox(selectedCheckBox.filter(item => item.reason_id !== index + 1));
+                const updatedSelectedCheckBox = { ...selectedCheckBox };
+                delete updatedSelectedCheckBox[index + 1];
+                setSelectedCheckBox(updatedSelectedCheckBox);
             } else if (type === 'sub') {
-                let newPlaceholder = [];
-
-                let placeHOlderValue = selectedCheckBox.map((item, idx) => {
-                    if (item.reason_id === selectedIndex) {
-                        // Remove the id from the placeholder array if the sub-checkbox is unchecked
-                        newPlaceholder = (item.placeholder || []).filter(placeholderId => placeholderId !== id);
-                        console.log('newPlaceholder', newPlaceholder);
-                        return {
-                            ...item,
-                            placeholder: newPlaceholder
-                        };
-                    }
-                    return item;
-                });
-                if (newPlaceholder.length === 0) {
-                    placeHOlderValue = placeHOlderValue.filter(obj => obj.reason_id === selectedIndex);
+                const updatedPlaceholder =
+                (selectedCheckBox[selectedIndex]?.placeholder || []).filter(placeholderId => placeholderId !== id);
+                const updatedValue = {
+                    ...selectedCheckBox[selectedIndex],
+                    placeholder: updatedPlaceholder
+                };
+                if (updatedPlaceholder.length === 0) {
+                    const updatedSelectedCheckBox = { ...selectedCheckBox };
+                    delete updatedSelectedCheckBox[selectedIndex];
+                    setSelectedCheckBox(updatedSelectedCheckBox);
+                } else {
+                    setSelectedCheckBox({ ...selectedCheckBox, [selectedIndex]: updatedValue });
                 }
-                console.log('placeHOlderValue' , placeHOlderValue);
-                setSelectedCheckBox(placeHOlderValue);
             }
         }
     };
-    console.log('selectedCheckBox', selectedCheckBox);
-    const getChecked = (index, item) => {
-        let flag = false;
-        selectedCheckBox.forEach((itemMapped) => {
-            console.log('itemMapped', itemMapped.placeholder.includes(item), itemMapped.reason_id === index);
-            flag = itemMapped.reason_id === index && itemMapped.placeholder.includes(item);
-        });
-        return flag;
-    };
+
     return (
         <Modal center open={true}
             styles={{ modal: { borderRadius: 10 } }}
@@ -128,12 +116,12 @@ export default function KYCReject () {
                             index={index}
                             id={`reject_${index}`}
                             type={'main'}
+                            Checked={selectedCheckBox[index + 1]}
                         />
                         {item.selectedObj &&
                         <div className='ml-6 px-2 pt-2 flex flex-wrap'>
                             {item.selectedObj.map((reasonItem, reasonIndex = 0) => (
                                 <div key={reasonItem} className='ml-4'>
-                                    {console.log('getChecked(index + 1, reasonItem)', getChecked(index + 1, reasonItem))}
                                     <CheckboxWithReason
                                         item={{
                                             label: reasonItem,
@@ -141,7 +129,8 @@ export default function KYCReject () {
                                         }}
                                         index={reasonIndex}
                                         selectedIndex={index + 1}
-                                        Checked={getChecked(index + 1, reasonItem)}
+                                        Checked={selectedCheckBox[index + 1]?.placeholder &&
+                                            selectedCheckBox[index + 1]?.placeholder.includes(reasonItem)}
                                         testId={`reject_sub_${reasonIndex}`}
                                         id={reasonItem}
                                         handleOnChange={handleCheckBox}
@@ -155,6 +144,19 @@ export default function KYCReject () {
 
                     </>
                 ))}
+                <div className="flex justify-end items-center w-[240px] mt-8 gap-6 mr-[24px] ml-auto">
+                    <Button2 className='w-[117px]'
+                        text='Cancel'
+                        testId='cancel_button' />
+                    <Button
+                        className='w-[117px]'
+                        // onClick={handleSubmit}
+                        // isLoading={isLoading}
+                        text= {'Reject'}
+                        testId="reject_button"
+                        buttonColor= {'bg-primary-negative'}
+                    />
+                </div>
             </div>
         </Modal>
     );
