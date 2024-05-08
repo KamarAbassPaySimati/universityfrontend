@@ -166,6 +166,7 @@ BeforeAll(async function () {
     await driver.wait(until.elementLocated(By.id('root')));
     global.current_process_name = uuidv4();
     global.is_user_logged_in = false;
+    await new Promise(resolve => setTimeout(resolve, 1500));
 
     const worldParametersIndex = process.argv.indexOf('--world-parameters');
     let worldParameters;
