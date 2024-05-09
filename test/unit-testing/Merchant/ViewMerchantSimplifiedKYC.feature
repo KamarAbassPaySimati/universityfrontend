@@ -96,4 +96,5 @@ Feature: Paymaart - Admin Web - View Specific Merchant details(simplfied kyc)
         And I should view the trading details of merchant KYC
         And I should view option to activate or update a merchant
         And I should view the KYC status as "In-Progress"
+        And I should view the KYC type as "Simplified KYC, Malawi citizen"
         And I should view monthly income and monthly withdrawal values as "Up to 300,000.00 MWK"
