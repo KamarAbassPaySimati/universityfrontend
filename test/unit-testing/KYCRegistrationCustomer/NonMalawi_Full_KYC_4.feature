@@ -20,6 +20,7 @@ Feature: Paymaart - Admin Web - Onboard Customer (Non- Malawi KYC)
     User should be given the option to remove and reupload the documents.
     The system should show the user's the path chosen in KYC selection such as for eg:Malawi Citizen>Personal Customer>SImplified KYC
 
+    @perform_logout
     @add_admin_user
     @create_new_user_and_login
     Scenario: Super admin onboard the customer with valid information

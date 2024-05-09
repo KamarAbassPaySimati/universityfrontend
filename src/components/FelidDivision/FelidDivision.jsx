@@ -76,6 +76,7 @@ export default function FelidDivision ({
                                                             handleInput={handleOnChange}
                                                             className={'w-[339px]'}
                                                             value={states[divObj?.key]}
+                                                            allOptions={divObj?.options}
                                                             handleSearchItem={handleSearchItem}
                                                             label={`${divObj?.label}`}
                                                             submitSelected={submitSelected}

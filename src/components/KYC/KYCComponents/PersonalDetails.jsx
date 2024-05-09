@@ -8,7 +8,7 @@ import InputField from '../../InputField/InputField';
 import InputSearch from '../../InputField/InputSearch';
 import { dataService } from '../../../services/data.services';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
-import { getMonthInputFelid } from './KYCFunctions';
+import { InputFelidsMonthSimplified } from './KYCFunctions';
 
 export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected, role }) {
     const OccupationList = [
@@ -105,6 +105,32 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
         const res = await dataService.GetAPI(`admin-users/list-institution?search=${newValue}`);
         return res?.data?.institutionNames.length === 0 ? ['Others (Please Specify)'] : res?.data?.institutionNames;
     };
+    const incomeRanges = [
+        '300,000.00 to 1,000,000.00 MWK',
+        '1,000,000.00 to 2,500,000.00 MWK',
+        '2,500,000.00 to 5,000,000.00 MWK',
+        '5,000,000.00 to 10,000,000.00 MWK',
+        'Over 10 Million MWK'
+    ];
+
+    const monthlyIncomeDropdown = {
+        '300,000.00 to 1,000,000.00 MWK': incomeRanges,
+        '1,000,000.00 to 2,500,000.00 MWK': incomeRanges.slice(1),
+        '2,500,000.00 to 5,000,000.00 MWK': incomeRanges.slice(2),
+        '5,000,000.00 to 10,000,000.00 MWK': incomeRanges.slice(3),
+        'Over 10 Million MWK': incomeRanges.slice(4)
+    };
+
+    const monthlyWithdrawalDropdown = {
+        '300,000.00 to 1,000,000.00 MWK': [incomeRanges[0]],
+        '1,000,000.00 to 2,500,000.00 MWK': incomeRanges.slice(0, 2),
+        '2,500,000.00 to 5,000,000.00 MWK': incomeRanges.slice(0, 3),
+        '5,000,000.00 to 10,000,000.00 MWK': incomeRanges.slice(0, 4),
+        'Over 10 Million MWK': incomeRanges
+    };
+
+    const getIncomeDropDown = () => monthlyIncomeDropdown[states.monthly_withdrawal] || incomeRanges;
+    const getWithdrawalDropDown = () => monthlyWithdrawalDropdown[states.monthly_income] || incomeRanges;
 
     return (
         <div data-testid="kyc_personal_details_screen" className='overflow-auto scrollBar h-tabledivHeight'>
@@ -183,7 +209,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                         className={'w-[339px]'}
                         value={states?.institute === undefined ? '' : states.institute}
                         handleSearchItem={handleSearchItem}
-                        label={'Search Institute'}
+                        label={'Search Institution'}
                         submitSelected={submitSelected}
                     />
                 </div>}
@@ -253,12 +279,60 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 <ErrorMessage error={'Required field'} />}
                 {/* <InputTypeCheckbox id={1} checkboxText={'checkboxText'}/> */}
             </div>
-            <FelidDivision
-                divisionObject = {getMonthInputFelid(states.personal_customer)}
-                handleOnChange={handleStates}
-                states={states}
-                submitSelected={submitSelected}
-            />
+            {states.personal_customer === 'Full KYC'
+                ? <>
+                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
+                    pt-6`}>Income status</p>
+                    <div className='flex flex-wrap'>
+                        <div className='mt-4'>
+                            <div className='mx-[10px] w-[339px]'>
+                                <InputFieldWithDropDown
+                                    labelName={'Monthly Income'}
+                                    value={states.monthly_income === undefined ? '' : states.monthly_income}
+                                    placeholder={'Enter Monthly Income'}
+                                    error={
+                                        (submitSelected && (states.monthly_income === undefined ||
+                                                            states.monthly_income?.trim() === ''))
+                                            ? 'Required field'
+                                            : undefined}
+                                    options={getIncomeDropDown()}
+                                    id='monthly_income'
+                                    testId='monthly_income'
+                                    // information
+                                    handleInput={handleStates}
+                                    // type={divObj.type}
+                                />
+                            </div>
+                        </div>
+                        <div className='mt-4'>
+                            <div className='mx-[10px] w-[339px]'>
+                                <InputFieldWithDropDown
+                                    labelName={'Monthly Withdrawal'}
+                                    value={states.monthly_withdrawal === undefined ? '' : states.monthly_withdrawal}
+                                    placeholder={'Enter Monthly Withdrawal'}
+                                    error={
+                                        (submitSelected && (states.monthly_withdrawal === undefined ||
+                                                            states.monthly_withdrawal?.trim() === ''))
+                                            ? 'Required field'
+                                            : undefined}
+                                    options={getWithdrawalDropDown()}
+                                    id='monthly_withdrawal'
+                                    testId='monthly_withdrawal'
+                                    // information
+                                    handleInput={handleStates}
+                                    // type={divObj.type}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </>
+                : (
+                    <FelidDivision
+                        divisionObject = {InputFelidsMonthSimplified}
+                        handleOnChange={handleStates}
+                        states={states}
+                        submitSelected={submitSelected}
+                    />)}
             {(role === 'agent' || role === 'merchant') && <FelidDivision
                 divisionObject = {bankInputFelid}
                 handleOnChange={handleStates}

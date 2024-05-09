@@ -6,7 +6,8 @@ module.exports = {
             'test/integration-testing/Flow1_Agent/ListAgent.feature',
             'test/integration-testing/Flow1_Agent/MalawiFullAgentKYC.feature',
             'test/integration-testing/Flow1_Agent/MalawiSimplifiedKYC.feature',
-            'test/integration-testing/Flow1_Agent/NonMalawiKYC.feature'
+            'test/integration-testing/Flow1_Agent/NonMalawiKYC.feature',
+            'test/integration-testing/Flow1_Agent/ViewAgent.feature'
         ]
     }
 };

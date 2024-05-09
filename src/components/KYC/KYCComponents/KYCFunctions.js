@@ -39,7 +39,7 @@ export const handleStates = (value, id, type, setStates, states) => {
     const obj = {};
     if (type === 'input') {
         if (id === 'account_number' && value.target.value.trim() !== '') {
-            const regex = /^[a-zA-Z0-9]+$/;
+            const regex = /^[0-9]+$/;
             const currentValue = value.target.value;
             if (regex.test(currentValue) && value.target.value.length < 26) {
                 obj[id] = value.target.value;
@@ -212,7 +212,7 @@ export const IdInfomationFull = {
             }
         },
         Passport: {
-            text: 'Valid Passport issued by Department of Immigration'
+            text: 'Valid Passport issued by Department of Immigration or other appropriate authority'
         }
     }
 };
@@ -451,33 +451,6 @@ export const SelfieRules = {
     }
 };
 
-export const InputFelidsMonthFull = {
-    'Income status': {
-        'Monthly Income': {
-            label: 'Monthly Income',
-            type: 'dropdown',
-            key: 'monthly_income',
-            require: true,
-            options: [
-                '300,000.00 to 1,000,000.00 MWK',
-                '1,000,000.00 to 2,500,000.00 MWK',
-                '2,500,000.00 to 5,000,000.00 MWK', '5,000,000.00 to 10,000,000.00 MWK', 'Over 10 Million MWK']
-        },
-        'Monthly Withdrawal': {
-            label: 'Monthly Withdrawal',
-            type: 'dropdown',
-            key: 'monthly_withdrawal',
-            require: true,
-            options: [
-                '300,000.00 to 1,000,000.00 MWK',
-                '1,000,000.00 to 2,500,000.00 MWK',
-                '2,500,000.00 to 5,000,000.00 MWK',
-                '5,000,000.00 to 10,000,000.00 MWK',
-                'Over 10 Million MWK'
-            ]
-        }
-    }
-};
 export const InputFelidsMonthSimplified = {
     'Income status': {
         'Monthly Income': {
@@ -492,17 +465,6 @@ export const InputFelidsMonthSimplified = {
             key: 'monthly_withdrawal',
             disable: true
         }
-    }
-};
-
-export const getMonthInputFelid = (kycType) => {
-    switch (kycType) {
-    case 'Full KYC':
-        return InputFelidsMonthFull;
-    case 'Simplified KYC':
-        return InputFelidsMonthSimplified;
-    default:
-        break;
     }
 };
 
