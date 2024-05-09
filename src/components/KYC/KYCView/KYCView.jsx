@@ -116,7 +116,7 @@ export default function KYCView ({ role, viewType }) {
                             />
                             {!loading &&
                                 <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                    {View?.kyc_type && <p data-testid="kyc_type"
+                                    {View?.user_kyc_status !== 'not_started' && <p data-testid="kyc_type"
                                         className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
                                     <span data-testid="kyc_status"
