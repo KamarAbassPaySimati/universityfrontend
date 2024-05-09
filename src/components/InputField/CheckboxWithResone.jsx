@@ -3,7 +3,7 @@ import InputTypeCheckbox from './InputTypeCheckbox';
 
 export default function CheckboxWithReason ({ item, id, testId, handleOnChange, index, selectedIndex, type, Checked }) {
     return (
-        <div className='pb-2 ml-2'>
+        <div className='pb-2'>
             <InputTypeCheckbox
                 id={id}
                 testId={testId}
@@ -14,7 +14,7 @@ export default function CheckboxWithReason ({ item, id, testId, handleOnChange, 
                 selectedIndex={selectedIndex}
                 Checked={Checked}
             />
-            <p className='ml-7 text-[#4F5962] font-normal leading-5 text-[12px]'>
+            <p className='ml-7 text-[#4F5962] font-normal leading-4 text-[12px]'>
                 {item.reason}
             </p>
         </div>

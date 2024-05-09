@@ -2,18 +2,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Modal } from 'react-responsive-modal';
 import CheckboxWithReason from '../InputField/CheckboxWithResone';
-import Button2 from '../Button2/Button2';
 import Button from '../Button/Button';
 import { dataService } from '../../services/data.services';
 import GlobalContext from '../Context/GlobalContext';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id }) {
-    console.log('View', View);
     const [selectedCheckBox, setSelectedCheckBox] = useState({});
     const [RejectReasons, setRejectReasons] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
-
+    const [errorMessage, setErrorMessage] = useState(false);
     const MalawiInfo = {
         'National ID': 'Valid National ID Card issued by National Registration Bureau',
         Passport: 'Valid Passport issued by Department of Immigration or other appropriate authority',
@@ -26,7 +25,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
         'Employee ID': 'Valid Employee Identification authenticated by a Commissioner for Oaths',
         Biometrics: 'Personal Selfie',
         'Religious Institution/ District Commissioner Letter': 'Stamped Letter from a Chief, Sub-Chief, Village Headman, leader of a recognized religious institution, or District Commissioner',
-        'Malawi address': userDetails['Malawi Address'],
+        'Malawi address': View?.citizen === 'Malawian' ? userDetails.Address : userDetails['Malawi Address'],
         'International address': userDetails['International Address']
 
     };
@@ -39,11 +38,12 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
         'Employer Letter': 'Stamped Letter with Verifiable Particulars of an employer',
         'Institute Letter': 'Stamped Letter with Verifiable Particulars of a learning institution',
         Biometrics: 'Personal Selfie',
-        'Malawi address': userDetails['Malawi Address'],
+        'Malawi address': View?.citizen === 'Malawian' ? userDetails.Address : userDetails['Malawi Address'],
         'International address': userDetails['International Address']
     };
 
     const handleCheckBox = (e, id, type, index, selectedIndex, checkboxText) => {
+        setErrorMessage(false);
         const isChecked = e.target.checked;
         if (isChecked) {
             const newCheckBox = { reason_id: index + 1 };
@@ -144,6 +144,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
 
     const handleSelectAll = () => {
         const obj = {};
+        setErrorMessage(true);
         RejectReasons.forEach((item, index = 0) => {
             if (item.selectedObj) {
                 obj[index + 1] = { reason_id: index + 1, placeholder: item.selectedObj };
@@ -156,39 +157,42 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
 
     const handleReject = async () => {
         const payload = [];
-        Object.keys(selectedCheckBox).forEach((item) => {
-            if (selectedCheckBox[item].placeholder) {
-                payload.push({ reason_id: item, placeholder: selectedCheckBox[item].placeholder });
-            } else {
-                payload.push({ reason_id: item });
-            }
-        });
-        try {
-            setIsLoading(true);
-            const response = await dataService.PostAPI('admin-users/reject-kyc', {
-                user_id: id,
-                rejection_reason: payload
+        if (Object.keys(selectedCheckBox).length === 0) {
+            setErrorMessage(true);
+        } else {
+            Object.keys(selectedCheckBox).forEach((item) => {
+                if (selectedCheckBox[item].placeholder) {
+                    payload.push({ reason_id: item, placeholder: selectedCheckBox[item].placeholder });
+                } else {
+                    payload.push({ reason_id: item });
+                }
             });
-            if (!response.error) {
-                setIsLoading(false);
-                setIsRejectModalOpen(false);
-                setToastSuccess('KYC rejected successfully');
-            } else {
+            try {
+                setIsLoading(true);
+                const response = await dataService.PostAPI('admin-users/reject-kyc', {
+                    user_id: id,
+                    rejection_reason: payload
+                });
+                if (!response.error) {
+                    setIsLoading(false);
+                    setIsRejectModalOpen(false);
+                    setToastSuccess('KYC rejected successfully');
+                } else {
+                    setIsLoading(false);
+                    setIsRejectModalOpen(false);
+                    setToastError('Something went wrong!');
+                }
+            } catch (error) {
                 setIsLoading(false);
                 setIsRejectModalOpen(false);
                 setToastError('Something went wrong!');
             }
-        } catch (error) {
-            setIsLoading(false);
-            setIsRejectModalOpen(false);
-            setToastError('Something went wrong!');
         }
-        console.log('payload', payload);
     };
     return (
         <Modal center open={true}
             styles={{ modal: { borderRadius: 10 } }}
-            onClose={() => {}} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            onClose={() => { setIsRejectModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
             <div className='p-6 min-w-[900px]'>
                 <h1 className='text-[#4F5962] font-normal text-[20px] leading-7'>Confirm to Reject?</h1>
                 <div className='border-t mt-2 w-[483px]'></div>
@@ -199,13 +203,14 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                         <button className='' onClick={() => setSelectedCheckBox({})}>Clear</button>
                     </div>
                 </div>
+                {errorMessage && <ErrorMessage error={'Please select at least one option to proceed.'} />}
                 <div className='overflow-auto mx-auto max-h-[calc(100vh-350px)] scrollBar'>
                     {RejectReasons.map((item, index = 0) => (
                         <>
                             <CheckboxWithReason
                                 key={item}
                                 item={item}
-                                testId={`reject_${index}`}
+                                testId={item}
                                 handleOnChange={handleCheckBox}
                                 index={index}
                                 id={`reject_${index}`}
@@ -225,7 +230,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                                             selectedIndex={index + 1}
                                             Checked={selectedCheckBox[index + 1]?.placeholder &&
                                             selectedCheckBox[index + 1]?.placeholder.includes(reasonItem)}
-                                            testId={`reject_sub_${reasonIndex}`}
+                                            testId={reasonItem}
                                             id={`reject_sub_${reasonIndex}${index}`}
                                             handleOnChange={handleCheckBox}
                                             type={'sub'}
@@ -239,12 +244,12 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                         </>
                     ))}
                 </div>
-                <div className="flex justify-end items-center w-[240px] mt-8 gap-6 mr-[24px] ml-auto">
-                    <Button2 className='w-[117px]'
-                        text='Cancel'
-                        testId='cancel_button' />
+                <div className="flex justify-end items-center w-[240px] mt-4 gap-6 mr-[24px] ml-auto">
+                    <button className='min-w-[117px] text-[#3B2A6F] font-normal text-[14px] leading-6 border-[#3B2A6F] border rounded-[6px] py-2'
+                        onClick={() => setIsRejectModalOpen(false)}
+                        testId='cancel_button'> Cancel </button>
                     <Button
-                        className='w-[117px]'
+                        className='min-w-[117px]'
                         onClick={handleReject}
                         isLoading={isLoading}
                         text= {'Reject'}
