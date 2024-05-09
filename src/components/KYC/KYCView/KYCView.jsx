@@ -128,7 +128,7 @@ export default function KYCView ({ role, viewType }) {
                         </div>
                     </div>
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
-                        {View?.user_kyc_status === 'info_required' &&
+                        {!loading && View?.user_kyc_status === 'info_required' &&
                         <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
                             <div className="flex flex-row justify-between">
                                 <h1 className="text-[18px] font-600 text-neutral-primary">Reason for pending KYC</h1>
@@ -141,10 +141,10 @@ export default function KYCView ({ role, viewType }) {
                                     {[...Array(5)].map((_, index) => (
                                         <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
                                             <div className='flex'>
-                                                <span className="text-[#4F5962] font-[600] text-[14px] mt-[1px]">{index + 1}. </span>
+                                                <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
                                                 <div className='ml-1'>
                                                     <span className="text-[#4F5962] font-[600] text-[14px]">{'This text has a custom font style: '}</span>
-                                                    <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>This text is lighter bbabbababababbababababababaababababbaabbababababaabbabababbabababababbbbbbbbbbbbbbbb.</span>
+                                                    <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>This text is lighter bbabbababababbababababababaababababbaabbabab.</span>
 
                                                 </div>
                                             </div>
