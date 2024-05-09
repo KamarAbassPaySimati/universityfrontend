@@ -22,6 +22,7 @@ Feature: Paymaart - Admin Web - Onboard Merchant (Malawi Full KYC)
     16. User should be given the option to remove and reupload the documents.
     17.The system should show the user's the path chosen in KYC selection such as for eg:Malawi Citizen>Personal Customer>SImplified KYC
 
+    @perform_logout
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard merchant with valid details

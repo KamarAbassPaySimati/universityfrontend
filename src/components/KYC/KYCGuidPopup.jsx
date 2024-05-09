@@ -13,58 +13,6 @@ export default function KYCGuidPopup ({ handleClose, isModalOpen }) {
                 insideList1: {
                     text: 'Please provide one of these documents plus a selfie (Biometric ID)',
                     insideList1: {
-                        text: 'Valid National ID Card issued by National Registration Bureau',
-                        insideList1: {
-                            text: 'Front and back'
-                        }
-                    },
-                    insideList2: {
-                        text: 'Valid Passport issued by Department of Immigration or other appropriate authority'
-                    }
-                }
-            },
-            insideList2: {
-                text: 'Your ID Verification Document Options:',
-                insideList1: {
-                    text: 'Please provide one of these documents for additional verification of your primary ID:',
-                    insideList1: {
-                        text: 'Valid Driver\'s Licence issued by an appropriate authority',
-                        insideList1: {
-                            text: 'Front and back'
-                        }
-                    },
-                    insideList2: {
-                        text: 'Valid Driver\'s Licence issued by an appropriate authority',
-                        insideList1: {
-                            text: 'Front and back'
-                        }
-                    },
-                    insideList3: {
-                        text: 'Birth certificate'
-                    },
-                    insideList4: {
-                        text: 'Stamped Letter with Verifiable Particulars of an employer',
-                        insideList1: {
-                            text: 'Signed by Head of the employer'
-                        }
-                    },
-                    insideList5: {
-                        text: 'Stamped Letter with Verifiable Particulars of a learning institution',
-                        insideList1: {
-                            text: 'Signed by Head of the institution'
-                        }
-                    }
-
-                }
-            }
-        },
-        List2: {
-            text: 'Malawi Full KYC Registration',
-            insideList1: {
-                text: 'Your ID Document Options:',
-                insideList1: {
-                    text: 'Please provide one of these documents plus a selfie (Biometric ID)',
-                    insideList1: {
                         text: 'Valid Driver\'s Licence issued by an appropriate authority',
                         insideList1: {
                             text: 'Front and back'
@@ -105,6 +53,58 @@ export default function KYCGuidPopup ({ handleClose, isModalOpen }) {
                     },
                     insideList3: {
                         text: 'Stamped Letter from a Chief,Sub-Chief, Village Headman, leader of a recognized religious institution, or District Commissioner'
+                    }
+
+                }
+            }
+        },
+        List2: {
+            text: 'Malawi Full KYC Registration',
+            insideList1: {
+                text: 'Your ID Document Options:',
+                insideList1: {
+                    text: 'Please provide one of these documents plus a selfie (Biometric ID)',
+                    insideList1: {
+                        text: 'Valid National ID Card issued by National Registration Bureau',
+                        insideList1: {
+                            text: 'Front and back'
+                        }
+                    },
+                    insideList2: {
+                        text: 'Valid Passport issued by Department of Immigration or other appropriate authority'
+                    }
+                }
+            },
+            insideList2: {
+                text: 'Your ID Verification Document Options:',
+                insideList1: {
+                    text: 'Please provide one of these documents for additional verification of your primary ID:',
+                    insideList1: {
+                        text: 'Valid Driver\'s Licence issued by an appropriate authority',
+                        insideList1: {
+                            text: 'Front and back'
+                        }
+                    },
+                    insideList2: {
+                        text: 'Valid Traffic Register Card issued by an appropriate authority',
+                        insideList1: {
+                            text: 'Front and back'
+                        }
+                    },
+                    insideList3: {
+                        text: 'Birth certificate'
+                    },
+                    insideList4: {
+                        text: 'Stamped Letter with Verifiable Particulars of an employer',
+                        insideList1: {
+                            text: 'Signed by Head of the employer'
+                        }
+                    },
+                    insideList5: {
+                        text: 'Stamped Letter with Verifiable Particulars of a learning institution',
+                        insideList1: {
+                            text: 'Signed by Head of the institution'
+                        }
                     }
 
                 }

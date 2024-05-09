@@ -13,6 +13,7 @@ export default function UploadPlaceholder ({
 }) {
     const [loadingImg, setLoadingImg] = useState(false);
     const [showIframe, setShowIframe] = useState(false);
+    const [selectedIndex, setSelectedIndex] = useState(null);
     const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'application/pdf'];
     const { setToastError } = useContext(GlobalContext);
     const [imageUploadError, setImageUploadError] = useState(false);
@@ -37,7 +38,7 @@ export default function UploadPlaceholder ({
                 return;
             }
             const img = await handleUpload(e.target.files[0], path);
-            handleStates(img.key, selectedUploadImg);
+            handleStates(`public/${img.key}`, selectedUploadImg);
             setLoadingImg(false);
             e.target.value = '';
         } catch (error) {
@@ -137,7 +138,7 @@ export default function UploadPlaceholder ({
                 </div>
             </div>
             <div className='flex justify-start items-center flex-wrap'>
-                {multiselectImage && states[selectedUploadImg] && states[selectedUploadImg].map((item) => (
+                {multiselectImage && states[selectedUploadImg] && states[selectedUploadImg].map((item, index) => (
                     <div className='mr-2' key={item}>
                         <div className='mt-2 bg-background-light w-[350px] h-[52px]
                             rounded-lg flex justify-between items-center' >
@@ -147,7 +148,7 @@ export default function UploadPlaceholder ({
                             <div className='flex gap-3 px-2'>
                                 <Image src='eyeLight' testId={`view_${testId}`}
                                     className='h-6 w-6 cursor-pointer'
-                                    onClick={() => { setShowIframe(true); setLoadingImg(false); } }/>
+                                    onClick={() => { setSelectedIndex(index); setLoadingImg(false); } }/>
                                 <Image src='search_close' testId={`remove_${testId}`} className='h-6 w-6 cursor-pointer'
                                     onClick={() => {
                                         handleDelete(item);
@@ -158,8 +159,9 @@ export default function UploadPlaceholder ({
                                 />
                             </div>
                             <IframeModal
-                                isOpen={showIframe} handleClose={() => setShowIframe(false)} link={item}
-                                labelValue={labelValue}/>
+                                isOpen={selectedIndex === index} handleClose={() => setSelectedIndex(null)} link={item}
+                                labelValue={item.split('/')[item.split('/').length - 1]}
+                            />
                         </div>
                     </div>
                 ))}

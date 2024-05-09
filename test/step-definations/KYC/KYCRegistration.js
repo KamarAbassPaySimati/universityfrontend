@@ -3,12 +3,13 @@
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
 const assert = require('assert');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const path = require('path');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I click on verify KYC', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_KYC"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -31,13 +32,14 @@ Then('I should be redirected to KYC address details screen', async function () {
 
 Given('I am in KYC address details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_address_details"]')));
     await driver.wait(until.elementIsVisible(element));
 });
 
 When('I click on save and continue button', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 1500));
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -45,6 +47,7 @@ When('I click on save and continue button', async function () {
 
 When('I enter street name as {string}', async function (street_name) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -113,6 +116,7 @@ Then('I should see the town and district field getting pre-filled with google AP
 
 Then('I should see the trading town and district field getting pre-filled with google API data', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const street_name = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
     await driver.wait(until.elementIsVisible(street_name));
 
@@ -237,6 +241,7 @@ Then('I should view the preview of the uploaded document', async function () {
 
 When('I click on capture', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const capture = await driver.wait(until.elementLocated(By.css('[data-testid="capture"]')));
     await driver.wait(until.elementIsVisible(capture));
     await capture.click();
@@ -261,6 +266,7 @@ When('I click on capture selfie', async function () {
     const capture_selfie = await driver.wait(until.elementLocated(By.css('[data-testid="capture_selfie"]')));
     await driver.wait(until.elementIsVisible(capture_selfie));
     await capture_selfie.click();
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 Then('I should view re-capture or submit button', async function () {
@@ -270,6 +276,7 @@ Then('I should view re-capture or submit button', async function () {
 
     const submit_button = await driver.wait(until.elementLocated(By.css('[data-testid="selfie_looks_good"]')));
     await driver.wait(until.elementIsVisible(submit_button));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 When('I click on selfie looks good button', async function () {
@@ -277,6 +284,7 @@ When('I click on selfie looks good button', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="selfie_looks_good"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 When('I click on re-capture button', async function () {
@@ -284,17 +292,20 @@ When('I click on re-capture button', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="re_capture_selfie"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 Then('I should view selfie capture again', async function () {
     // Write code here that turns the phrase above into concrete actions
     const capture_selfie = await driver.wait(until.elementLocated(By.css('[data-testid="capture_selfie"]')));
     await driver.wait(until.elementIsVisible(capture_selfie));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 Then('I should view the image getting captured', async function () {
     const uploaded_selfie = await driver.wait(until.elementLocated(By.css('[data-testid="uploaded_selfie"]')));
     await driver.wait(until.elementIsVisible(uploaded_selfie));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 When('I click on verification documents tab', async function () {
@@ -380,6 +391,7 @@ Then('I should be redirected to KYC trading details screen', async function () {
 
 Given('I am in KYC personal details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -387,11 +399,12 @@ Given('I am in KYC personal details screen', async function () {
 
     const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
     await driver.wait(until.elementIsVisible(element2));
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 });
 
 Given('I am in KYC trading document details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -399,7 +412,7 @@ Given('I am in KYC trading document details screen', async function () {
 
     const element2 = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_trading_details_screen"]')));
     await driver.wait(until.elementIsVisible(element2));
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 });
 
 When('I select gender as {string}', async function (type) {
@@ -407,7 +420,7 @@ When('I select gender as {string}', async function (type) {
     const element = await driver.wait(until.elementLocated(By.css('[for="Male"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     switch (type) {
     case 'male':
@@ -430,12 +443,13 @@ When('I select the trading types as {string}', async function (type) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]')));
     await driver.wait(until.elementIsVisible(element));
 
+    await new Promise(resolve => setTimeout(resolve, 1000));
     await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]'))).sendKeys(type);
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     switch (type) {
     case 'Hotels & Resorts':
@@ -707,6 +721,7 @@ When('I select valid town and district', async function () {
 
 When('I click on skip button', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 500));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="skip_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -714,6 +729,7 @@ When('I click on skip button', async function () {
 
 When('I select the citizenship type as {string}', async function (type) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     if (type !== '') {
         switch (type) {
         case 'Malawi':
@@ -731,6 +747,7 @@ When('I select the citizenship type as {string}', async function (type) {
 
 When('I select the KYC type as {string}', async function (type) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1500));
     if (type !== '') {
         switch (type) {
         case 'Full KYC':
@@ -748,6 +765,7 @@ When('I select the KYC type as {string}', async function (type) {
 
 When('I should view monthly income and monthly withdrawal selected as {string}', async function (expectedValue) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 5000));
     const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
     await driver.wait(until.elementIsVisible(monthlyIncome));
     const monthlyIncomeValue = await monthlyIncome.getAttribute('value');

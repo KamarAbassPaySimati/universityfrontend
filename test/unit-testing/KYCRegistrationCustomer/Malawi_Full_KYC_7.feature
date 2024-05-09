@@ -90,7 +90,8 @@ Feature: Paymaart - Customer Mobile - Self KYC - Malawi Full Skip Everything
     iv. 2,500,000.00 to 5,000,000.00 MWK
     v. 5,000,000.00 to 10,000,000.00 MWK
     vi.Over 1 Million MWK
-
+    
+    @perform_logout
     @add_admin_user
     @create_new_user_and_login
     Scenario: Super admin onboard the customer with valid information

@@ -41,7 +41,7 @@ export default function RegisterKYC ({ role }) {
         landmark: '',
         house_number: '',
         monthly_income: 'Up to 300,000.00 MWK',
-        monthly_withdrawal: 'Up to 300,00.000 MWK'
+        monthly_withdrawal: 'Up to 300,000.00 MWK'
     });
     const initialDocumentSideBarData = {
         documentTypes: {
@@ -160,8 +160,11 @@ export default function RegisterKYC ({ role }) {
             if (!((states.intl_street_name === '' || states.intl_street_name === undefined) &&
             (states.intl_district === '' || states.intl_district === undefined) &&
             (states.intl_landmark === '' || states.intl_landmark === undefined) &&
+            (states.intl_house_number === '' || states.intl_house_number === undefined) &&
+            (states.intl_po_box_no === '' || states.intl_po_box_no === undefined) &&
             (states.intl_town_village_ta === '' || states.intl_town_village_ta === undefined))) {
-                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district', 'intl_landmark'];
+                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district',
+                    'intl_landmark', 'intl_po_box_no', 'intl_house_number'];
                 intlData.map((bank) => {
                     if (states[bank] === '' || states[bank] === undefined) {
                         if (key !== 'skip') {
@@ -362,14 +365,18 @@ export default function RegisterKYC ({ role }) {
                         }
                     }
                     );
-                    if ((states.institute === undefined || states?.institute?.trim() === '') &&
+                    if (states.institute === 'Others (Please Specify)') {
+                        if ((states.institute === undefined || states?.institute?.trim() === '') &&
                     (states?.institute_specify?.trim() === '' || states.institute_specify === undefined)) {
-                        if (key !== 'skip') {
-                            setSubmitSelected(true);
+                            if (key !== 'skip') {
+                                setSubmitSelected(true);
+                            }
+                            count = count + 1;
+                        } else {
+                            body.institute_specify = states.institute_specify;
                         }
-                        count = count + 1;
                     } else {
-                        body.institute_specify = states.institute_specify;
+                        body.institute_specify = '';
                     }
                     break;
 
@@ -404,7 +411,7 @@ export default function RegisterKYC ({ role }) {
             if (oldStateValue.citizen_type !== states.citizen_type || oldStateValue.kyc_type !== states.personal_customer) {
                 handleAPICall({
                     kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
-                    citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawi citizen',
+                    citizen: states.citizen_type === 'Malawi citizen' ? 'Malawian' : 'Non Malawian',
                     paymaart_id: id
                 }, 'address_details');
             } else {
@@ -518,19 +525,21 @@ export default function RegisterKYC ({ role }) {
                         kyc_type: res.data.data.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC',
                         trading_name: res.data.data.trading_name
                     });
-                    const buttonText = ['address_details_status', 'id_details_status', 'info_details_status'];
+                    const buttonText = role === 'merchant'
+                        ? ['address_details_status', 'id_details_status', 'trading_details_status', 'info_details_status']
+                        : ['address_details_status', 'id_details_status', 'info_details_status'];
                     let count = 0;
                     buttonText.forEach((text) => {
                         if (res.data.data[text] === 'completed') {
                             count = count + 1;
                         }
                     });
-                    setButtonStatus(count === 3 ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
+                    setButtonStatus(count === buttonText.length ? 'In review' : count === 0 ? 'Not Started' : 'In-progress');
                     if (res.data.data[item] !== null) {
                         switch (item) {
                         case 'citizen':
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
-                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawi citizen') {
+                            if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawian') {
                                 object.nationality = res.data.data[item];
                             }
                             break;
@@ -538,7 +547,7 @@ export default function RegisterKYC ({ role }) {
                             object.personal_customer = res.data.data[item] === 'full' ? 'Full KYC' : 'Simplified KYC';
                             if (res.data.data.kyc_type !== 'full') {
                                 object.monthly_income = 'Up to 300,000.00 MWK';
-                                object.monthly_withdrawal = 'Up to 300,00.000 MWK';
+                                object.monthly_withdrawal = 'Up to 300,000.00 MWK';
                             }
                             break;
                         case 'id_document_back':
@@ -653,6 +662,7 @@ export default function RegisterKYC ({ role }) {
                             states={states}
                             handleBackPage={() => handleSearchParamsValue('tab', null, searchParams, setSearchParams)}
                             buttonText={buttonStatus}
+                            role={role}
                         />)
                     : <>
                         <KYCTopWithType

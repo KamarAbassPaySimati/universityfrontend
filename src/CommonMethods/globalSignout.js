@@ -17,7 +17,6 @@ const useGlobalSignout = () => {
                 const userAttributes = await fetchUserAttributes();
                 return false;
             } catch (error) {
-                console.log(error, 'jik');
                 if (window.location.pathname === '/forgot-password' ||
                 window.location.pathname === '/set-new-password') {
                     return;

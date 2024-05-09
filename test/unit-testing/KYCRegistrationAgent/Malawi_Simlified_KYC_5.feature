@@ -22,7 +22,8 @@ Feature: Paymaart- Admin Web- Onboard Agent- Simplified KYC
     The user should be given the option to remove and reupload the documents.
     The system should show the user the path chosen in KYC selection such as for eg: Malawi Citizen>Personal agent>Simplified KYC
     There should be an option to enter the Banking information(optional)
-
+    
+    @perform_logout
     @add_admin_user
     @create_new_user_and_login
     Scenario: Onboard new agent and navigate to KYC verification

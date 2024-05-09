@@ -95,11 +95,129 @@ async function requestResetPassword (payload) {
     }
 }
 
+async function createAgentAccount (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/create-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function verifyAgentOTP (token) {
+    const axiosOptions = await getToken();
+
+    const payload = {
+        otp: '355948',
+        token
+    };
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/verify-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function sendAgentOTP (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/send-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function createCustomerAccount (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/customer-user/create-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function verifyCustomerOTP (token) {
+    const axiosOptions = await getToken();
+
+    const payload = {
+        otp: '355948',
+        token
+    };
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/customer-user/verify-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function sendCustomerOTP (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/customer-user/send-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function createMerchantAccount (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/create-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function verifyMerchantOTP (token) {
+    const axiosOptions = await getToken();
+
+    const payload = {
+        otp: '355948',
+        token
+    };
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/verify-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function sendMerchantOTP (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/send-otp-secure`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
 module.exports = {
     getMFASecret,
     addAdminUser,
     deleteAdminAccount,
     requestResetPassword,
     createAdminAccountSecure,
-    deletePaymaartTrustBank
+    deletePaymaartTrustBank,
+    createAgentAccount,
+    verifyAgentOTP,
+    sendAgentOTP,
+    verifyCustomerOTP,
+    sendCustomerOTP,
+    createCustomerAccount,
+    createMerchantAccount,
+    verifyMerchantOTP,
+    sendMerchantOTP
 };

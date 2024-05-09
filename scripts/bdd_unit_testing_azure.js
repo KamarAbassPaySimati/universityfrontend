@@ -7,9 +7,9 @@ const readdir = util.promisify(fs.readdir);
 const stat = util.promisify(fs.stat);
 
 const featureDirectory = 'test/unit-testing';
-const DELAY_BETWEEN_TESTS = 3000; // 5 seconds
-const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 3000; // 40 seconds
-const MAX_PARALLEL_EXECUTIONS = 10;
+const DELAY_BETWEEN_TESTS = 5000; // 5 seconds
+const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 5000; // 40 seconds
+const MAX_PARALLEL_EXECUTIONS = 20;
 let COUNTER = 0;
 
 async function getFeatureFiles (directory) {
@@ -62,7 +62,7 @@ async function runTestQueue () {
 async function runTest (featureFile, isLogin) {
     return new Promise((resolve, reject) => {
         COUNTER = COUNTER + 1;
-        const command = `./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test-${featureFile}.json -f junit:./reports-xml/TEST-test-report-unit-test-${COUNTER}.xml ${featureFile} --world-parameters '{"login": ${isLogin}}'`;
+        const command = `./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --retry 1 --force-exit -f json:./reports/test-report-unit-test-${featureFile}.json -f junit:./reports-xml/TEST-test-report-unit-test-${COUNTER}.xml ${featureFile} --world-parameters '{"login": ${isLogin}}'`;
 
         console.log('started executing file --', featureFile);
 

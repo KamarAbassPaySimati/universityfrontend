@@ -12,7 +12,7 @@ export default function GuidList ({ information, heading }) {
                         {Object.keys(information[itemText]).length > 0 &&
                         Object.keys(information[itemText]).map((insideText, insideIndex = 0) => (
                             information[itemText][insideText].text &&
-                            <ul class="ps-5 mt-2 space-y-1 lower-alpha  list-inside"
+                            <ul class="ps-5 mt-2 space-y-1 list-inside"
                                 key={insideIndex}>
                                 <div className='flex'>
                                     <li></li>

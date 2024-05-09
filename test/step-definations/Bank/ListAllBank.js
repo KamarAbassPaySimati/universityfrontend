@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 
 Given('I navigate to banks listing', async function () {
     // Write code here that turns the phrase above into concrete actions

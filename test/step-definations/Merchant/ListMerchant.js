@@ -1,7 +1,7 @@
 const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I navigate to merchant users listing screen', async function () {

@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 const { When } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
-const { driver } = require('../Driver.js');
+const { driver } = require('../1_Driver.js');
 
 When('I click on update {string}', async function (type) {
     // Write code here that turns the phrase above into concrete actions
