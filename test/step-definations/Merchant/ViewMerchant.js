@@ -57,3 +57,10 @@ Then('I should view the KYC status as {string}', async function (status) {
     const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_status"]'))).getText();
     assert.equal(actual_status, status);
 });
+
+Then('I should view the KYC type as {string}', async function (kyc_type) {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    const actual_KYC_type = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_type"]'))).getText();
+    assert.equal(actual_KYC_type, kyc_type);
+});

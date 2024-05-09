@@ -95,3 +95,4 @@ Feature: Paymaart - Admin Web - View Specific Merchant details(full kyc)
         And I should view the trading details of merchant KYC
         And I should view option to activate or update a merchant
         And I should view the KYC status as "In-Progress"
+        And I should view the KYC type as "Full KYC, Malawi citizen"
