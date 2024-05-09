@@ -9,6 +9,7 @@ When('I click on approve {string}', async function (type) {
     let element;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="approve_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -26,6 +27,7 @@ Then('I should see a confirmation prompt for approving {string}', async function
     let modalBody;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
 
@@ -47,6 +49,7 @@ When('I click on reject {string}', async function (type) {
     let element;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="reject_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -65,6 +68,7 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
     let modalBody;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
 
