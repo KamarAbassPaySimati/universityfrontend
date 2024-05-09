@@ -144,7 +144,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
 
     const handleSelectAll = () => {
         const obj = {};
-        setErrorMessage(true);
+        setErrorMessage(false);
         RejectReasons.forEach((item, index = 0) => {
             if (item.selectedObj) {
                 obj[index + 1] = { reason_id: index + 1, placeholder: item.selectedObj };
