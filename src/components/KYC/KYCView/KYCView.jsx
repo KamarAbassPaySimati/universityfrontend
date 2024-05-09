@@ -138,13 +138,14 @@ export default function KYCView ({ role, viewType }) {
                             </div>
                             {isExpanded && (
                                 <div className="mt-2">
-                                    {[...Array(5)].map((_, index) => (
+                                    {View.rejection_reasons.map((itemValue, index) => (
                                         <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
+                                            {console.log('nnssan', itemValue)}
                                             <div className='flex'>
                                                 <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
                                                 <div className='ml-1'>
-                                                    <span className="text-[#4F5962] font-[600] text-[14px]">{'This text has a custom font style: '}</span>
-                                                    <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>This text is lighter bbabbababababbababababababaababababbaabbabab.</span>
+                                                    <span className="text-[#4F5962] font-[600] text-[14px]">{`${itemValue.heading}: `}</span>
+                                                    <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>{itemValue.label}</span>
 
                                                 </div>
                                             </div>

@@ -6,6 +6,7 @@ import Button from '../Button/Button';
 import { dataService } from '../../services/data.services';
 import GlobalContext from '../Context/GlobalContext';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import addApostrophe from '../../CommonMethods/textCorrection';
 
 export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id, getView }) {
     const [selectedCheckBox, setSelectedCheckBox] = useState({});
@@ -162,9 +163,13 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
         } else {
             Object.keys(selectedCheckBox).forEach((item) => {
                 if (selectedCheckBox[item].placeholder) {
-                    payload.push({ reason_id: item, placeholder: selectedCheckBox[item].placeholder });
+                    const allItem = [];
+                    selectedCheckBox[item].placeholder.forEach((allMappedItem) => {
+                        allItem.push(addApostrophe(allMappedItem));
+                    });
+                    payload.push({ reason_id: Number(item), placeholder: allItem });
                 } else {
-                    payload.push({ reason_id: item });
+                    payload.push({ reason_id: Number(item) });
                 }
             });
             try {
