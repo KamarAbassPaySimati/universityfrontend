@@ -1,8 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button/Button';
 import Image from '../../../components/Image/Image';
+import ReCAPTCHA from 'react-google-recaptcha';
+
+const TEST_SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+const DELAY = 1500;
 
 const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
     const navigate = useNavigate();
@@ -26,6 +30,39 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
             return { ...prevState, [id]: e.target.value };
         });
     };
+    const reCaptchaRef = useRef();
+    const [load, setLoad] = useState(false);
+    const [value, setValue] = useState('[empty]');
+    const [expired, setExpired] = useState(false);
+    const [callback, setCallback] = useState('not fired');
+    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setLoad(true);
+        }, DELAY);
+        return () => clearTimeout(timer);
+    }, []);
+    const handleChangeRecap = (value) => {
+        console.log('onChange prop - Captcha value:', value);
+        setValue(value);
+        if (value === null) setExpired(true);
+    };
+
+    const asyncScriptOnLoad = () => {
+        setCallback('called!');
+        setRecaptchaLoaded(true);
+    };
+    const onSubmitValue = (e) => {
+        const token = reCaptchaRef.current.execute();
+        if (token) {
+            handleSubmit(e);
+        } else {
+            alert('Invisible reCAPTCHA active—prove you\'re human to proceed!');
+        }
+    };
+
+    console.log('value', value);
 
     return (
         <div className='bg-primary-normal'>
@@ -44,7 +81,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 Welcome back!
                             </div>
                         </div>
-                        <form onSubmit={handleSubmit} className='flex flex-col gap-[16px]'>
+                        <div className='flex flex-col gap-[16px]'>
                             <InputField
                                 autoComplete='off'
                                 testId='email_address'
@@ -74,8 +111,22 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 showLoginError={true}
                                 setEnteredLetter={setEnteredLetter}
                             />
-                            <Button testId='login_button' isLoading={isLoading} text='Login' className='mt-8' />
-                        </form>
+                            {load && (
+                                <ReCAPTCHA
+                                    style={{ display: 'inline-block', height: '10px !important' }}
+                                    theme="dark"
+                                    size="invisible"
+                                    ref={reCaptchaRef}
+                                    sitekey={TEST_SITE_KEY}
+                                    onChange={handleChangeRecap}
+                                    asyncScriptOnLoad={asyncScriptOnLoad}
+                                />
+                            )}
+                            <Button
+                                disabled={!recaptchaLoaded}
+                                onClick={onSubmitValue}
+                                testId='login_button' isLoading={isLoading} text='Login' className='mt-4' />
+                        </div>
                         {/* <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
                             className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
                             text-center'>
