@@ -7,7 +7,7 @@ import { dataService } from '../../services/data.services';
 import GlobalContext from '../Context/GlobalContext';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id }) {
+export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id, getView }) {
     const [selectedCheckBox, setSelectedCheckBox] = useState({});
     const [RejectReasons, setRejectReasons] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -175,6 +175,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                 });
                 if (!response.error) {
                     setIsLoading(false);
+                    getView();
                     setIsRejectModalOpen(false);
                     setToastSuccess('KYC rejected successfully');
                 } else {

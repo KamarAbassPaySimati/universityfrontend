@@ -503,6 +503,7 @@ export default function KYCView ({ role, viewType }) {
                 userDetails={userDetails.basicDetails}
                 setIsRejectModalOpen = {setIsRejectModalOpen}
                 id={id}
+                getView={getView}
             /> }
         </>
     );

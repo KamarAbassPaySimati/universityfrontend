@@ -163,4 +163,4 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
         And I select the reasons for rejection as "Mismatched information"
         When I click on confirm button
         Then I should read a message stating that "KYC rejected successfully"
-        And I should see the KYC status changed to "Further information Required"
+        And I should see the KYC status changed to "Further Information Required"
