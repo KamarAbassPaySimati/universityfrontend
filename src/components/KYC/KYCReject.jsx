@@ -191,13 +191,14 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
     };
     return (
         <Modal center open={true}
+            data-testid="modal"
             styles={{ modal: { borderRadius: 10 } }}
             onClose={() => { setIsRejectModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-            <div className='p-6 min-w-[900px]'>
+            <div className='p-6 min-w-[900px]' >
                 <h1 className='text-[#4F5962] font-normal text-[20px] leading-7'>Confirm to Reject?</h1>
                 <div className='border-t mt-2 w-[483px]'></div>
                 <div className='flex justify-between mt-2'>
-                    <p className='font-normal text-[#A4A9AE] text-[14px] leading-6'>Select the reason for rejection </p>
+                    <p className='font-normal text-[#A4A9AE] text-[14px] leading-6' data-testid="modal-body">Select the reason for rejection </p>
                     <div className='flex justify-between text-[#4F5962] font-normal text-[14px] leading-6 gap-6'>
                         <button className='' onClick={handleSelectAll}>Select all</button>
                         <button className='' onClick={() => setSelectedCheckBox({})}>Clear</button>
@@ -210,7 +211,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                             <CheckboxWithReason
                                 key={item}
                                 item={item}
-                                testId={item}
+                                testId={item.label}
                                 handleOnChange={handleCheckBox}
                                 index={index}
                                 id={`reject_${index}`}
@@ -246,14 +247,13 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                 </div>
                 <div className="flex justify-end items-center w-[240px] mt-4 gap-6 mr-[24px] ml-auto">
                     <button className='min-w-[117px] text-[#3B2A6F] font-normal text-[14px] leading-6 border-[#3B2A6F] border rounded-[6px] py-2'
-                        onClick={() => setIsRejectModalOpen(false)}
-                        testId='cancel_button'> Cancel </button>
+                        data-testid="cancel_button" onClick={() => setIsRejectModalOpen(false)}> Cancel </button>
                     <Button
                         className='min-w-[117px]'
                         onClick={handleReject}
                         isLoading={isLoading}
                         text= {'Reject'}
-                        testId="reject_button"
+                        testId="confirm_button"
                         buttonColor= {'bg-primary-negative'}
                     />
                 </div>

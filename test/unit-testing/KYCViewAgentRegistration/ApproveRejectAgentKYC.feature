@@ -146,7 +146,7 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
         * I click on reject "Agent KYC"
         Then I should see a confirmation prompt for reject "Agent KYC"
         When I click on cancel button
-        Then I should see the agent KYC status remain as "In-progress"
+        Then I should see the agent KYC status remain as "In-Progress"
 
     Scenario: View specific agent KYC and reject
         Given I navigate to agent KYC listing screen

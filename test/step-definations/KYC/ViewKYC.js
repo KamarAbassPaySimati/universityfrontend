@@ -206,19 +206,19 @@ When('I select the reasons for rejection as {string}', async function (reason) {
     let element;
     switch (reason) {
     case 'Incorrect or unreadable personal information':
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="incorrect_or_unreadable_personal_information"]')));
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Incorrect or unreadable personal information"]')));
         await driver.wait(until.elementIsVisible(element));
         break;
     case 'Unacceptable/incomplete address':
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="unacceptable/incomplete_address"]')));
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Unacceptable/incomplete address"]')));
         await driver.wait(until.elementIsVisible(element));
         break;
     case 'Mismatched information':
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="mismatched_information"]')));
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Mismatched information"]')));
         await driver.wait(until.elementIsVisible(element));
         break;
     default:
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="incorrect_or_unreadable_personal_information"]')));
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Incorrect or unreadable personal information"]')));
         await driver.wait(until.elementIsVisible(element));
         break;
     }

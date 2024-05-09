@@ -119,7 +119,7 @@ const CardHeader = ({
                                 ? (approve
                                     ? <Shimmer height={'h-10'}/>
                                     : (
-                                        <button data-testid="reject_button" onClick={onHandleStatusChange}
+                                        <button data-testid="approve_button" onClick={onHandleStatusChange}
                                             className={`flex ml-6 bg-[#13B681] py-[8px] px-[16px] 
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
                                             <p className='text-[14px] font-[600] text-[#ffffff]'>Approve</p>
