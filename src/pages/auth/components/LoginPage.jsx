@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button/Button';
 import Image from '../../../components/Image/Image';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { siteKey } from '../../../config';
 
-const TEST_SITE_KEY = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
 const DELAY = 1500;
 
 const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
@@ -52,16 +52,18 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     };
     const onSubmitValue = (e) => {
         const token = reCaptchaRef.current.execute();
-        console.log('token', token);
-        if (token) {
+        console.log('token', value, token);
+        // if (window.location.href !== 'http://localhost:3000/') {
+        if (value) {
             handleSubmit(e);
         } else {
             alert('Invisible reCAPTCHA active—prove you\'re human to proceed!');
         }
+        // } else {
+        //     handleSubmit(e);
+        // }
     };
-
-    console.log('value', value);
-
+    console.log('windowww', window.location.href !== 'http://localhost:3000/');
     return (
         <div className='bg-primary-normal'>
             <Image className='fixed bottom-[30px] right-[100px] object-cover z-10' src='login_img' />
@@ -109,13 +111,14 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 showLoginError={true}
                                 setEnteredLetter={setEnteredLetter}
                             />
+                            {/* window.location.href !== 'http://localhost:3000/' */}
                             {load && (
                                 <ReCAPTCHA
                                     style={{ display: 'inline-block', height: '10px !important' }}
                                     theme="dark"
                                     size="invisible"
                                     ref={reCaptchaRef}
-                                    sitekey={TEST_SITE_KEY}
+                                    sitekey={siteKey}
                                     onChange={handleChangeRecap}
                                     asyncScriptOnLoad={asyncScriptOnLoad}
                                 />
