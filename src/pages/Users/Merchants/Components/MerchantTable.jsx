@@ -6,8 +6,9 @@ import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Image from '../../../../components/Image/Image';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
-
+import { useNavigate } from 'react-router';
 const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
+    const Navigate = useNavigate();
     return (
         <>
             <table className='w-full min-w-max'>
@@ -31,7 +32,7 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                     </thead>
                 }
                 {loading
-                    ? <Shimmer column={8} row={10} firstIndex/>
+                    ? <Shimmer column={8} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
@@ -58,7 +59,9 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                                         )}
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
-                                    <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' />
+                                    <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
+                                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
+                                        )} />
                                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
                                     <Tooltip
                                         id={`eye-${index}`}
@@ -78,10 +81,10 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                 }
             </table>
             {!notFound && error &&
-            (<NoDataError heading='There are no merchants added yet' text='Click “Register Merchant” to add merchant' />)}
+                (<NoDataError heading='There are no merchants added yet' text='Click “Register Merchant” to add merchant' />)}
             {List?.data?.length === 0 && !loading &&
-            (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
-            (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
+                (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
+                (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
         </>
     );
 };
