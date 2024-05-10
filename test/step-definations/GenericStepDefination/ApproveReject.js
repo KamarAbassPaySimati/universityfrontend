@@ -10,6 +10,7 @@ When('I click on approve {string}', async function (type) {
     switch (type) {
     case 'Agent KYC':
     case 'Customer KYC':
+    case 'Merchant KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="approve_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -34,6 +35,9 @@ Then('I should see a confirmation prompt for approving {string}', async function
     case 'Customer KYC':
         assert.equal(modalBody, 'This will allow Customer to gain access to Paymaart');
         break;
+    case 'Merchant KYC':
+        assert.equal(modalBody, 'This will allow Merchant to gain access to Paymaart');
+        break;
     default:
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
@@ -46,6 +50,7 @@ When('I click on reject {string}', async function (type) {
     switch (type) {
     case 'Agent KYC':
     case 'Customer KYC':
+    case 'Merchant KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="reject_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -65,6 +70,7 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
     switch (type) {
     case 'Agent KYC':
     case 'Customer KYC':
+    case 'Merchant KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
 
