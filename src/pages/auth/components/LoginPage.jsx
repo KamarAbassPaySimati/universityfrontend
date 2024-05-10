@@ -33,8 +33,6 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     const reCaptchaRef = useRef();
     const [load, setLoad] = useState(false);
     const [value, setValue] = useState('[empty]');
-    const [expired, setExpired] = useState(false);
-    const [callback, setCallback] = useState('not fired');
     const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
 
     useEffect(() => {
@@ -46,15 +44,15 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     const handleChangeRecap = (value) => {
         console.log('onChange prop - Captcha value:', value);
         setValue(value);
-        if (value === null) setExpired(true);
+        if (value === null) alert('Token Expired');
     };
 
     const asyncScriptOnLoad = () => {
-        setCallback('called!');
         setRecaptchaLoaded(true);
     };
     const onSubmitValue = (e) => {
         const token = reCaptchaRef.current.execute();
+        console.log('token', token);
         if (token) {
             handleSubmit(e);
         } else {
