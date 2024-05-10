@@ -12,6 +12,7 @@ Given('I navigate to agent KYC registration screen', async function () {
 });
 
 Given('I navigate to customer KYC registration screen', async function () {
+    console.log('customer_registration_response', global.customer_registration_response);
     await driver.get(`http://localhost:3000/users/customers/register-customer/kyc-registration/${global.customer_registration_response.paymaart_id}`);
 });
 

@@ -23,22 +23,18 @@ When('I click on approve {string}', async function (type) {
 });
 
 Then('I should see a confirmation prompt for approving {string}', async function (type) {
-    let element;
-    let modalBody;
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    const modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
     switch (type) {
     case 'Agent KYC':
-    case 'Customer KYC':
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
-        await driver.wait(until.elementIsVisible(element));
-
-        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
+    case 'Customer KYC':
+        assert.equal(modalBody, 'This will allow Customer to gain access to Paymaart');
+        break;
     default:
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
-        await driver.wait(until.elementIsVisible(element));
-
-        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
     }

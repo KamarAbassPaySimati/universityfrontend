@@ -23,8 +23,8 @@ Feature: Paymaart - Admin Web -Approve/Reject Customer KYC
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
-    @register_new_agent
-    Scenario: Complete Agent Malawi Full KYC
+    @register_new_customer
+    Scenario: Complete Customer Malawi Full KYC
         Given I navigate to customer KYC registration screen
         When I click on proceed button
         Then I should be redirected to KYC address details screen
@@ -89,9 +89,9 @@ Feature: Paymaart - Admin Web -Approve/Reject Customer KYC
         Then I should read a message stating that "KYC approved successfully"
         And I should see the KYC status changed to "Completed"
 
-    @register_new_agent
-    Scenario: Complete Agent Malawi Full KYC
-        Given I navigate to agent KYC registration screen
+    @register_new_customer
+    Scenario: Complete Customer Malawi Full KYC
+        Given I navigate to customer KYC registration screen
         When I click on proceed button
         Then I should be redirected to KYC address details screen
         And I am in KYC address details screen
