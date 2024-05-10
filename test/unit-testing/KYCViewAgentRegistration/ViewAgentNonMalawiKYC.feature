@@ -252,7 +252,7 @@ Feature: Paymaart - Admin Web- Specific Agent KYC verification View
     @add_admin_user
     @create_new_user_and_login
     @register_new_agent
-    Scenario: Complete Agent Malawi Full KYC
+    Scenario: Complete Agent Non Malawi Full KYC
         Given I navigate to agent KYC registration screen
         When I select the citizenship type as "Non-Malawi"
         And I select the KYC type as "Full KYC"
