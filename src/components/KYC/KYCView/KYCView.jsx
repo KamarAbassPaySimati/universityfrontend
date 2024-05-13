@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,12 +12,24 @@ import KYCSections from './KYCSections';
 import { KYCProfileView } from './KYCProfileViewSlice';
 import ImageViewWithModel from '../../S3Upload/ImageViewWithModel';
 import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
+import Modal from 'react-responsive-modal';
+import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
+import { dataService } from '../../../services/data.services';
+import GlobalContext from '../../Context/GlobalContext';
+import { endpoints } from '../../../services/endpoints';
+import KYCReject from '../KYCReject';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
+    const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
+    const [isRejectModalOpen, setIsRejectModalOpen] = useState();
+    const [isExpanded, setIsExpanded] = useState();
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(false);
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
-
+    const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const { approveKyc } = endpoints;
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)));
@@ -28,7 +40,39 @@ export default function KYCView ({ role, viewType }) {
     useEffect(() => {
         getView();
     }, []);
-
+    const handleApproveClick = () => {
+        setIsApprovalModalOpen(true);
+    };
+    const handleRejectClick = () => {
+        setIsRejectModalOpen(true);
+    };
+    const handleClose = () => {
+        setIsApprovalModalOpen(false);
+    };
+    const toggleExpand = () => {
+        setIsExpanded(prevState => !prevState);
+    };
+    const handleConfirmAction = async () => {
+        try {
+            setIsLoading(true);
+            const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
+                { user_id: View?.paymaart_id });
+            if (!response.error) {
+                setIsLoading(false);
+                setIsApprovalModalOpen(false);
+                getView();
+                setToastSuccess('KYC approved successfully');
+            } else {
+                setIsLoading(false);
+                setIsApprovalModalOpen(false);
+                setToastError('Something went wrong!');
+            }
+        } catch (error) {
+            setIsLoading(false);
+            setIsApprovalModalOpen(false);
+            setToastError('Something went wrong!');
+        }
+    };
     return (
         <>
             <CardHeader
@@ -37,12 +81,14 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
-                rejectOrApprove={viewType === 'kyc' && View?.user_kyc_status === 'in_progress' ? true : undefined}
+                rejectOrApprove={viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin) ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={loading || (View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update') }
+                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined) }
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
-                statusButton={loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
+                statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
+                onHandleStatusChange={handleApproveClick}
+                onHandleReject = {handleRejectClick}
                 ChildrenElement
             // onHandleStatusChange={handleStatusClick}
             >
@@ -82,6 +128,34 @@ export default function KYCView ({ role, viewType }) {
                         </div>
                     </div>
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
+                        {!loading && View?.user_kyc_status === 'info_required' &&
+                        <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
+                            <div className="flex flex-row justify-between">
+                                <h1 className="text-[18px] font-600 text-neutral-primary">Reason for pending KYC</h1>
+                                <button className="text-[14px] font-400 text-primary-normal" onClick={toggleExpand}>
+                                    {isExpanded ? 'Collapse' : 'Expand'}
+                                </button>
+                            </div>
+                            {isExpanded && (
+                                <div className="mt-2">
+                                    {View.rejection_reasons.map((itemValue, index) => (
+                                        <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
+                                            {console.log('nnssan', itemValue)}
+                                            <div className='flex'>
+                                                <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
+                                                <div className='ml-1'>
+                                                    <span className="text-[#4F5962] font-[600] text-[14px]">{`${itemValue.heading}: `}</span>
+                                                    <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>{itemValue.label}</span>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        }
                         <KYCSections
                             heading='Basic Details'
                             testId='basic_details'
@@ -412,6 +486,26 @@ export default function KYCView ({ role, viewType }) {
                     </div>
                 </>}
             </CardHeader>
+            <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Confirm to Approve?'}
+                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        handleSubmit={handleConfirmAction}
+                        isLoading={isLoading}
+                        handleClose={handleClose}
+                        buttonText={'Approve'}
+                        buttonColor={'bg-accent-positive'}
+                    />
+                </div>
+            </Modal>
+            {isRejectModalOpen && <KYCReject
+                View = {View}
+                userDetails={userDetails.basicDetails}
+                setIsRejectModalOpen = {setIsRejectModalOpen}
+                id={id}
+                getView={getView}
+            /> }
         </>
     );
 }

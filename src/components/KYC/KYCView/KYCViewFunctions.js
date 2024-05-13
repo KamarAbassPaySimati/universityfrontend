@@ -67,7 +67,7 @@ export const getStatusColor = (status) => {
     case 'completed':
         return {
             color: 'bg-[#ECFDF5] text-accent-positive',
-            text: 'In-progress'
+            text: 'Completed'
         };
     case 'in_progress':
         return {

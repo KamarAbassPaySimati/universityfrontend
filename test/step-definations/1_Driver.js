@@ -214,7 +214,7 @@ After(async function () {
 });
 
 AfterStep(async function () {
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 100));
     const updatedCoverageData = await driver.executeScript('return __coverage__;');
     const updatedCoverageMap = createCoverageMap(updatedCoverageData);
     global.coverageMap.merge(updatedCoverageMap);

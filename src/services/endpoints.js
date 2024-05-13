@@ -13,5 +13,6 @@ export const endpoints = {
     getBankId: 'get-bank-id',
     addTrustBank: 'add-trust-bank',
     listTrustBank: 'list-trust-bank',
-    listCapitalBank: 'list-capital-bank'
+    listCapitalBank: 'list-capital-bank',
+    approveKyc: 'approve-kyc'
 };
