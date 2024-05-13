@@ -51,9 +51,9 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
         setRecaptchaLoaded(true);
     };
     const onSubmitValue = (e) => {
-        const token = reCaptchaRef.current.execute();
-        console.log('token', value, token);
         if (window.location.href !== 'http://localhost:3000/') {
+            const token = reCaptchaRef.current.execute();
+            console.log('token', value, token);
             if (value) {
                 handleSubmit(e);
             } else {
@@ -81,7 +81,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 Welcome back!
                             </div>
                         </div>
-                        <div className='flex flex-col gap-[16px]'>
+                        <form className='flex flex-col gap-[16px]' onSubmit={onSubmitValue}>
                             <InputField
                                 autoComplete='off'
                                 testId='email_address'
@@ -124,9 +124,8 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                             )}
                             <Button
                                 disabled={!recaptchaLoaded && window.location.href !== 'http://localhost:3000/'}
-                                onClick={onSubmitValue}
                                 testId='login_button' isLoading={isLoading} text='Login' className='mt-4' />
-                        </div>
+                        </form>
                         {/* <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
                             className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]
                             text-center'>
