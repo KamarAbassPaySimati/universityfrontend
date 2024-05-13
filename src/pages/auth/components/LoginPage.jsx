@@ -53,15 +53,15 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     const onSubmitValue = (e) => {
         const token = reCaptchaRef.current.execute();
         console.log('token', value, token);
-        // if (window.location.href !== 'http://localhost:3000/') {
-        if (value) {
-            handleSubmit(e);
+        if (window.location.href !== 'http://localhost:3000/') {
+            if (value) {
+                handleSubmit(e);
+            } else {
+                alert('Invisible reCAPTCHA active—prove you\'re human to proceed!');
+            }
         } else {
-            alert('Invisible reCAPTCHA active—prove you\'re human to proceed!');
+            handleSubmit(e);
         }
-        // } else {
-        //     handleSubmit(e);
-        // }
     };
     console.log('windowww', window.location.href !== 'http://localhost:3000/');
     return (
@@ -111,8 +111,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 showLoginError={true}
                                 setEnteredLetter={setEnteredLetter}
                             />
-                            {/* window.location.href !== 'http://localhost:3000/' */}
-                            {load && (
+                            {(load && window.location.href !== 'http://localhost:3000/') && (
                                 <ReCAPTCHA
                                     style={{ display: 'inline-block', height: '10px !important' }}
                                     theme="dark"
@@ -124,7 +123,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 />
                             )}
                             <Button
-                                disabled={!recaptchaLoaded}
+                                disabled={!recaptchaLoaded && window.location.href !== 'http://localhost:3000/'}
                                 onClick={onSubmitValue}
                                 testId='login_button' isLoading={isLoading} text='Login' className='mt-4' />
                         </div>
