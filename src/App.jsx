@@ -23,7 +23,6 @@ function App (props) {
     const [ToastInformation, setToastInformation] = useState('');
     const { updateLoggedIn } = endpoints;
     const dispatch = useDispatch();
-    console.log('hiiiiiiiiii');
 
     useEffect(() => {
         Hub.listen('auth', async ({ payload }) => {

@@ -1,14 +1,11 @@
 /* eslint-disable max-len */
 import React from 'react';
-import { Tooltip } from 'react-tooltip';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Image from '../../../../components/Image/Image';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
-import { useNavigate } from 'react-router';
+import MerchantTableBody from './MerchantTableBody';
 const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
-    const Navigate = useNavigate();
     return (
         <>
             <table className='w-full min-w-max'>
@@ -35,48 +32,8 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                     ? <Shimmer column={8} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
-                                <td data-testid="merchant_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
-                                <td className='py-2 px-[10px]'>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
-                                <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
-                                <td className='py-2 px-[10px]'>{`${user?.till_number ? user?.till_number : '-'}`}</td>
-                                <td className='py-2 px-[10px]'>{`${user?.location ? user?.location : '-'}`}</td>
-                                <td data-testid="status" className='py-2 px-[10px]'>
-                                    {user?.status
-                                        ? (
-                                            <span className={`py-[2px] px-[10px] rounded text-[13px] font-[600] capitalize
-                                             ${user.status === 'active'
-                                                ? 'bg-[#ECFDF5] text-accent-positive'
-                                                : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                                {user.status}
-                                            </span>
-                                        )
-                                        : (
-                                            <span className='text-neutral-secondary'>
-                                                -
-                                            </span>
-                                        )}
-                                </td>
-                                <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
-                                    <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
-                                        )} />
-                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
-                                    <Tooltip
-                                        id={`eye-${index}`}
-                                        className='my-tooltip z-30'
-                                        place="top"
-                                        content="View"
-                                    />
-                                    <Tooltip
-                                        id={`edit-${index}`}
-                                        className='my-tooltip z-30'
-                                        place="top"
-                                        content="Edit"
-                                    />
-                                </td>
-                            </tr>))}
+                            <MerchantTableBody key={index} user={user} index={index}/>
+                        ))}
                     </tbody>
                 }
             </table>
