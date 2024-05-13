@@ -263,6 +263,7 @@ Then('I should view the selfie capture modal', async function () {
 
 When('I click on capture selfie', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const capture_selfie = await driver.wait(until.elementLocated(By.css('[data-testid="capture_selfie"]')));
     await driver.wait(until.elementIsVisible(capture_selfie));
     await capture_selfie.click();
@@ -281,6 +282,7 @@ Then('I should view re-capture or submit button', async function () {
 
 When('I click on selfie looks good button', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="selfie_looks_good"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -289,6 +291,7 @@ When('I click on selfie looks good button', async function () {
 
 When('I click on re-capture button', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="re_capture_selfie"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -297,12 +300,14 @@ When('I click on re-capture button', async function () {
 
 Then('I should view selfie capture again', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const capture_selfie = await driver.wait(until.elementLocated(By.css('[data-testid="capture_selfie"]')));
     await driver.wait(until.elementIsVisible(capture_selfie));
     await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 Then('I should view the image getting captured', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const uploaded_selfie = await driver.wait(until.elementLocated(By.css('[data-testid="uploaded_selfie"]')));
     await driver.wait(until.elementIsVisible(uploaded_selfie));
     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -310,6 +315,7 @@ Then('I should view the image getting captured', async function () {
 
 When('I click on verification documents tab', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_tab"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -317,6 +323,7 @@ When('I click on verification documents tab', async function () {
 
 When('I select the verification document as {string}', async function (type) {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 500));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verification_document_dropdown"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -365,6 +372,8 @@ When('I select the verification document as {string}', async function (type) {
 
 Then('I should be redirected to KYC personal details screen', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_personal_details_screen"]')));
     await driver.wait(until.elementIsVisible(element));
     await new Promise(resolve => setTimeout(resolve, 500));

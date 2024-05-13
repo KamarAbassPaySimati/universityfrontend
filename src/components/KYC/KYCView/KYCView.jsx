@@ -21,6 +21,7 @@ import KYCReject from '../KYCReject';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.auth);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
     const [isRejectModalOpen, setIsRejectModalOpen] = useState();
     const [isExpanded, setIsExpanded] = useState();
@@ -29,7 +30,6 @@ export default function KYCView ({ role, viewType }) {
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { approveKyc } = endpoints;
-
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)));
@@ -81,7 +81,7 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
-                rejectOrApprove={viewType === 'kyc' && View?.user_kyc_status === 'in_progress' ? true : undefined}
+                rejectOrApprove={viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin) ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined) }

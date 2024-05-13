@@ -1,4 +1,4 @@
-Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
+Feature: Paymaart - Admin Web -Approve/Reject Customer KYC
     As a super/admin, I want the ability to approve or reject the KYC of agent
     Conditions of Satisfaction
     There should be an option to approve or reject the KYC verification request
@@ -23,9 +23,9 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
-    @register_new_agent
-    Scenario: Complete Agent Malawi Full KYC
-        Given I navigate to agent KYC registration screen
+    @register_new_merchant
+        Scenario: Complete Merchant Malawi Full KYC
+        Given I navigate to merchant KYC registration screen
         When I click on proceed button
         Then I should be redirected to KYC address details screen
         And I am in KYC address details screen
@@ -59,6 +59,12 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
         Then I should view the preview of the uploaded document
         Given I am in KYC identity document details screen
         When I click on save and continue button
+        Then I should be redirected to KYC trading details screen
+        Given I am in KYC trading document details screen
+        When I enter trading street name as "M1"
+        Then I should see the trading town and district field getting pre-filled with google API data
+        When I select the trading types as "Hotels & Resorts"
+        When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
         When I select gender as "male"
@@ -71,27 +77,27 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
         When I click on save and continue button
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
-        
+
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
-    Scenario: View specific agent KYC and approve kyc
-        Given I navigate to agent KYC listing screen
-        When I search for recently created agent
-        When I click on view agent KYC
-        Then I should view agent details
-        Then I should view basic details of agent KYC
-        And I should view the identification details of agent KYC
-        And I should view the personal details of agent KYC
-        * I click on approve "Agent KYC"
-        Then I should see a confirmation prompt for approving "Agent KYC"
+    Scenario: View specific Merchant KYC and approve kyc
+        Given I navigate to merchant KYC listing screen
+        When I search for recently created merchant
+        When I click on view merchant KYC
+        Then I should view merchant details
+        Then I should view basic details of merchant KYC
+        And I should view the identification details of merchant KYC
+        And I should view the personal details of merchant KYC
+        * I click on approve "Merchant KYC"
+        Then I should see a confirmation prompt for approving "Merchant KYC"
         When I click on confirm button
         Then I should read a message stating that "KYC approved successfully"
         And I should see the KYC status changed to "Completed"
 
-    @register_new_agent
-    Scenario: Complete Agent Malawi Full KYC
-        Given I navigate to agent KYC registration screen
+    @register_new_merchant
+        Scenario: Complete Merchant Malawi Full KYC
+        Given I navigate to merchant KYC registration screen
         When I click on proceed button
         Then I should be redirected to KYC address details screen
         And I am in KYC address details screen
@@ -125,6 +131,12 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
         Then I should view the preview of the uploaded document
         Given I am in KYC identity document details screen
         When I click on save and continue button
+        Then I should be redirected to KYC trading details screen
+        Given I am in KYC trading document details screen
+        When I enter trading street name as "M1"
+        Then I should see the trading town and district field getting pre-filled with google API data
+        When I select the trading types as "Hotels & Resorts"
+        When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
         When I select gender as "male"
@@ -141,29 +153,29 @@ Feature: Paymaart - Admin Web -Approve/Reject Agent KYC
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
-    Scenario: View specific agent KYC and do not reject
-        Given I navigate to agent KYC listing screen
-        When I search for recently created agent
-        When I click on view agent KYC
-        Then I should view agent details
-        Then I should view basic details of agent KYC
-        And I should view the identification details of agent KYC
-        And I should view the personal details of agent KYC
-        * I click on reject "Agent KYC"
-        Then I should see a confirmation prompt for reject "Agent KYC"
+    Scenario: View specific Merchant KYC and do not reject
+        Given I navigate to merchant KYC listing screen
+        When I search for recently created merchant
+        When I click on view merchant KYC
+        Then I should view merchant details
+        Then I should view basic details of merchant KYC
+        And I should view the identification details of merchant KYC
+        And I should view the personal details of merchant KYC
+        * I click on reject "Merchant KYC"
+        Then I should see a confirmation prompt for reject "Merchant KYC"
         When I click on cancel button
         Then I should see the agent KYC status remain as "In-Progress"
-
-    Scenario: View specific agent KYC and reject
-        Given I navigate to agent KYC listing screen
-        When I search for recently created agent
-        When I click on view agent KYC
-        Then I should view agent details
-        Then I should view basic details of agent KYC
-        And I should view the identification details of agent KYC
-        And I should view the personal details of agent KYC
-        * I click on reject "Agent KYC"
-        Then I should see a confirmation prompt for reject "Agent KYC"
+    
+    Scenario: View specific Merchant KYC and reject
+        Given I navigate to merchant KYC listing screen
+        When I search for recently created merchant
+        When I click on view merchant KYC
+        Then I should view merchant details
+        Then I should view basic details of merchant KYC
+        And I should view the identification details of merchant KYC
+        And I should view the personal details of merchant KYC
+        * I click on reject "Merchant KYC"
+        Then I should see a confirmation prompt for reject "Merchant KYC"
         When I select the reasons for rejection as "Incorrect or unreadable personal information"
         And I select the reasons for rejection as "Unacceptable/incomplete address"
         And I select the reasons for rejection as "Mismatched information"
