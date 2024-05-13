@@ -137,7 +137,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
             },
             {
                 label: 'Incomplete or inaccurate KYC documents',
-                reason: `Your ${selectedCheckBox[7]?.placeholder === undefined ? '<named document>' : `${selectedCheckBox[7]?.placeholder.join('; ')}; `}  is expired and cannot be accepted for KYC registration. Please upload a valid document.`,
+                reason: `Your ${selectedCheckBox[7]?.placeholder === undefined ? '<named document>' : `${selectedCheckBox[7]?.placeholder.join('; ')}; `} is incomplete and/or inaccurate. Please provide a full, accurate version of this document.`,
                 selectedObj: arrayValue2
             }
         ]);
