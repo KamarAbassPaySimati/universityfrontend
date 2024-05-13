@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 
-const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError, handleSubmit }) => {
+const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError }) => {
     const inputRefs = useRef([]);
 
     // Otp change handle
