@@ -86,7 +86,8 @@ When('I should view the occupation field prefilled', async function () {
     const occupation_dropdown = await driver.wait(until.elementLocated(By.css('[data-testid="occupation_dropdown"]')));
     await driver.wait(until.elementIsVisible(occupation_dropdown));
 
-    const occupation_field_value = await occupation_dropdown.getAttribute('value');
+    const occupation_field_value = await occupation_dropdown.getText();
+    console.log('occupation_field_value', occupation_field_value);
     assert.notEqual(occupation_field_value, '');
 });
 
@@ -94,13 +95,16 @@ When('I should view the monthly income and withdrawal prefilled', async function
     await new Promise(resolve => setTimeout(resolve, 5000));
     const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
     await driver.wait(until.elementIsVisible(monthlyIncome));
-    const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
+    const monthlyIncomeValue = await monthlyIncome.getText();
+    console.log('monthlyIncomeValue', monthlyIncomeValue);
 
     assert.notEqual(monthlyIncomeValue, '-');
     await new Promise(resolve => setTimeout(resolve, 100));
 
     const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
     await driver.wait(until.elementIsVisible(monthlyWithdrawal));
-    const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
+    const monthlyWithdrawalValue = await monthlyIncome.getText();
+    console.log('monthlyWithdrawalValue', monthlyWithdrawalValue);
+
     assert.notEqual(monthlyWithdrawalValue, '-');
 });
