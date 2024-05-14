@@ -55,47 +55,51 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
         }
     }, [encryptedCode]);
     return (
-        <Modal center open={isOpen} onClose={navigationPath} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-            <div className='customModal '>
-                <div className="p-6 w-full bg-white rounded-[8px]" data-testid="modal">
-                    <Image src={'otp_img'} className={'mx-auto'}/>
-                    <h1 className='font-normal text-[20px] leading-7 text-center'>One Time Password (OTP)</h1>
-                    <p className='font-normal text-[14px] leading-6 text-[#A4A9AE] text-center'>
-                        Enter the one time password sent to
-                        {basicViewDetails?.phone_number
-                            ? ` ${'*'.repeat(Math.max(0, basicViewDetails?.phone_number?.toString().length - 4))}
+        <div className='merchant'>
+            <Modal center open={isOpen} onClose={navigationPath} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal '>
+                    <img src="/images/gray-close.svg"
+                        alt="close-icon" onClick={navigationPath} className='absolute top-4 right-2.5 cursor-pointer'/>
+                    <div className="p-6 w-full bg-white rounded-[8px]" data-testid="modal">
+                        <Image src={'otp_img'} className={'mx-auto'}/>
+                        <h1 className='font-normal text-[20px] leading-7 text-center'>One Time Password (OTP)</h1>
+                        <p className='font-normal text-[14px] leading-6 text-[#A4A9AE] text-center'>
+                            Enter the one time password sent to
+                            {basicViewDetails?.phone_number
+                                ? ` ${'*'.repeat(Math.max(0, basicViewDetails?.phone_number?.toString().length - 4))}
                         ${basicViewDetails?.phone_number?.toString().slice(-4)}`
-                            : '********* '}</p>
-                    <form className='flex flex-col mt-6' onSubmit={(e) => handleSubmit(e)}>
-                        <OtpInputField
-                            numInputs={6}
-                            otp={otp}
-                            setOTP={setOtp}
-                            setError={setError}
-                        />
-                        {error && <ErrorMessage error={error} />}
+                                : '********* '}</p>
+                        <form className='flex flex-col mt-6' onSubmit={(e) => handleSubmit(e)}>
+                            <OtpInputField
+                                numInputs={6}
+                                otp={otp}
+                                setOTP={setOtp}
+                                setError={setError}
+                            />
+                            {error && <ErrorMessage error={error} />}
 
-                        <Button testId='submit_totp_form'
-                            className={'mt-4'} disabled={encryptedCode === ''} isLoading={isLoading} text='Verify' />
-                    </form>
-                    <div className={'flex items-center justify-center mt-6'}>
-                        {(resend < 4
-                            ? <div className='font-[400] text-[12px] leading-[20px] text-neutral-primary'>
-                                Didn’t receive OTP?
-                                {timer > 0
-                                    ? <span> &nbsp;Resend in {formatTime(timer)}</span>
-                                    : <button onClick={handleResendClick} disabled={(resend === 0 || isLoading)} className={`
+                            <Button testId='submit_totp_form'
+                                className={'mt-4'} disabled={encryptedCode === ''} isLoading={isLoading} text='Verify' />
+                        </form>
+                        <div className={'flex items-center justify-center mt-6'}>
+                            {(resend < 4
+                                ? <div className='font-[400] text-[12px] leading-[20px] text-neutral-primary'>
+                                    Didn’t receive OTP?
+                                    {timer > 0
+                                        ? <span> &nbsp;Resend in {formatTime(timer)}</span>
+                                        : <button onClick={handleResendClick} disabled={(resend === 0 || isLoading)} className={`
                                     ${(isLoading || resend === 0) ? 'cursor-default' : 'cursor-pointer'} text-primary-normal`}
-                                    >
+                                        >
                                             &nbsp;Resend
-                                    </button>}
-                            </div>
-                            : <div className='text-accent-information font-[400] text-[12px] leading-[24px]'>
-                                Resend limit is 3 times
-                            </div>)}
+                                        </button>}
+                                </div>
+                                : <div className='text-accent-information font-[400] text-[12px] leading-[24px]'>
+                                    Resend limit is 3 times
+                                </div>)}
+                        </div>
                     </div>
                 </div>
-            </div>
-        </Modal>
+            </Modal>
+        </div>
     );
 }
