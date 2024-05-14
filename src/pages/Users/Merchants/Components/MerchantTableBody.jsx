@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { useNavigate } from 'react-router';
@@ -26,8 +27,8 @@ export default function MerchantTableBody ({ user, index }) {
                 <td className='py-2 px-[10px]'>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
                 <td
-                    className='py-2 px-[10px] cursor-pointer underline'
-                    onClick={() => handleTillNumber()}>{`${user?.till_numbers.length !== 0 ? user?.till_numbers[0] : '-'}`}</td>
+                    className={`py-2 px-[10px] ${user?.till_numbers?.length>1 ? ' cursor-pointer underline' : 'cursor-default'}`}
+                    onClick={() => user?.till_numbers?.length > 1 && handleTillNumber()}>{`${user?.till_numbers.length !== 0 ? user?.till_numbers[0] : '-'}`}</td>
                 <td className='py-2 px-[10px]'>{`${user?.location ? user?.location : '-'}`}</td>
                 <td data-testid="status" className='py-2 px-[10px]'>
                     {user?.status
@@ -64,7 +65,7 @@ export default function MerchantTableBody ({ user, index }) {
                     />
                 </td>
             </tr>
-            <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={user}/>
+            <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={user} />
         </>
     );
 }
