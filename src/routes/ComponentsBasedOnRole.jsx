@@ -100,6 +100,12 @@ export const ComponentsBasedOnRole = {
             name: 'Merchant KYC Registration',
             element: <RegisterKYC role={'merchant'}/>,
             path: '/users/merchants/register-merchant/kyc-registration/:id'
+        },
+        // KYC Update for Agent
+        {
+            name: 'Agent KYC Update',
+            element: <RegisterKYC role={'agent'} type='update'/>,
+            path: '/users/agents/register-agent/kyc-update/:id'
         }
 
     ],
