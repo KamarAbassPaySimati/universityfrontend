@@ -86,7 +86,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Full KYC)
         Then I should view a modal asking for the OTP
         When I enter the OTP as "35598"
         And I click on submit TOTP form
-        Then I should read a message stating that "Invalid code"
+        Then I should read a message stating that "Invalid OTP"
         When I enter the OTP as "355948"
         And I click on submit TOTP form
         Then I should be redirected to agent basic details screen
@@ -107,6 +107,8 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Full KYC)
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
+        When I enter the OTP as "355948"
+        And I click on submit TOTP form
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
         When I should view the occupation field prefilled

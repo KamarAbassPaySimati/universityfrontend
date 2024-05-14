@@ -87,6 +87,7 @@ const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError }) => {
                         id={`digit-${index}`}
                         key={index}
                         type="password"
+                        data-testid={`digit-${index}`}
                         maxLength="1"
                         value={otp[index]}
                         onKeyDown={(e) => {

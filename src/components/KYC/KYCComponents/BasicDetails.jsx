@@ -323,7 +323,7 @@ const BasicDetails = ({
         }
     };
     return (
-        <>
+        <div data-testid="basic_details_screen">
             <FelidDivision
                 divisionClassName = {'w-1/3'}
                 divisionObject = {BasicDetails}
@@ -431,7 +431,7 @@ const BasicDetails = ({
                 />}
             </div>
 
-        </>
+        </div>
     );
 };
 

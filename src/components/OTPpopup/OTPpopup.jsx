@@ -57,7 +57,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
     return (
         <div className='merchant'>
             <Modal center open={isOpen} onClose={navigationPath} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-                <div className='customModal '>
+                <div className='customModal ' data-testid="otp_modal">
                     <img src="/images/gray-close.svg"
                         alt="close-icon" onClick={navigationPath} className='absolute top-4 right-2.5 cursor-pointer'/>
                     <div className="p-6 w-full bg-white rounded-[8px]" data-testid="modal">
@@ -77,8 +77,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
                                 setError={setError}
                             />
                             {error && <ErrorMessage error={error} />}
-
-                            <Button testId='submit_totp_form'
+                            <Button testId="verify_OTP"
                                 className={'mt-4'} disabled={encryptedCode === ''} isLoading={isLoading} text='Verify' />
                         </form>
                         <div className={'flex items-center justify-center mt-6'}>

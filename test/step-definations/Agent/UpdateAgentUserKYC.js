@@ -10,7 +10,7 @@ Then('I should view a modal asking for the OTP', async function () {
     await driver.wait(until.elementIsVisible(element));
 });
 When('I click on submit TOTP form', async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="verify_OTP"]')));
     await driver.wait(until.elementIsVisible(element));

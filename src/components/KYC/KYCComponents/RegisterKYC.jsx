@@ -726,7 +726,9 @@ export default function RegisterKYC ({ role, type }) {
         }
     }, []);
     const handleTabChangeOtp = () => {
-        handleSearchParamsValue('tab', 'basic_details', searchParams, setSearchParams);
+        if (searchParams.get('tab') === null) {
+            handleSearchParamsValue('tab', 'basic_details', searchParams, setSearchParams);
+        }
         getKYCView();
     };
     return (
