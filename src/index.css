@@ -29,6 +29,19 @@ body {
   display: flex;
 }
 
+.react-responsive-modal-closeButton.merchant {
+  padding-top: 0px !important;
+  position: absolute;
+  top: 0px !important;
+  right: 14px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  outline: 0 !important;
+}
+
 .react-responsive-modal-modal:has(.customModal) {
   max-width: fit-content !important;
   min-width: 306px !important;
@@ -314,6 +327,16 @@ input[type='number'] {
   position: absolute;
   content: "";
   width: 450px;
+  height: 0;
+  border-top: 2px solid #A4A9AE;
+  top: 13px;
+  left: 30px;
+  right: 0;
+}
+.line-class-merchant-update::after{
+  position: absolute;
+  content: "";
+  width: 500px;
   height: 0;
   border-top: 2px solid #A4A9AE;
   top: 13px;
