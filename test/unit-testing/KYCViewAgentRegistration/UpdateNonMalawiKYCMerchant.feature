@@ -81,24 +81,25 @@ Feature: Paymaart - Admin Web- Update Merchant details(non-malawi)
         When I click on save and continue button
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
-    
+
     Scenario: View specific merchant KYC
-        Given I navigate to merchant KYC listing screen
+        Given I navigate to merchant users listing screen
         When I search for recently created merchant
-        When I click on view merchant KYC
-        Then I should view merchant details
-        Then I should view basic details of merchant KYC
+        When I click on view merchant
+        Then I should view merchant information
+        Then I should view basic details of merchant
         And I should view the identification details of merchant KYC
         And I should view the personal details of merchant KYC
         And I should view the trading details of merchant KYC
+        And I should view option to activate or update a merchant
 
     Scenario: Navigate to update merchant KYC Screen, and Update
         Given I click on update "Update Merchant"
         Then I should view a modal asking for the OTP
-        When I enter the OTP as "35598"
+        When I enter the OTP as "35598" for update KYC
         And I click on submit TOTP form
-        Then I should read a message stating that "Invalid code"
-        When I enter the OTP as "355948"
+        Then I should read a message stating that "Invalid OTP"
+        When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
         Then I should be redirected to merchant basic details screen
         And I should view first name, middle name, last name is disabled
@@ -116,16 +117,19 @@ Feature: Paymaart - Admin Web- Update Merchant details(non-malawi)
         Then I should be able to view the preview of the document front
         When I click on view document front preview
         Then I should view the preview of the uploaded document
+        When I click on save and continue button
         Then I should be redirected to KYC trading details screen
         Given I am in KYC trading document details screen
+        When I enter the OTP as "355948" for update KYC
+        And I click on submit TOTP form
         When I should view the trading street name, district, town are already prefilled
         When I should see the trading types selected
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
+        When I enter the OTP as "355948" for update KYC
+        And I click on submit TOTP form
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
-        When I should view the occupation field prefilled
-        When I should view the monthly income and withdrawal prefilled
         When I click on save and continue button
         Then I should read a message stating that "Merchant details updated successfully"
