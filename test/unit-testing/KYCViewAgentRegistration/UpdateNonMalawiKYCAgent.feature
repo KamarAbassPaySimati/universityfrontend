@@ -76,7 +76,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Non-Malawi KYC)
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
     
-    Scenario: View specific agent KYC and approve kyc
+    Scenario: View specific agent
         Given I navigate to agent users listing screen
         When I search for recently created agent
         When I click on view agent
@@ -113,6 +113,8 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Non-Malawi KYC)
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
+        When I enter the OTP as "355948"
+        And I click on submit TOTP form
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
         When I should view the occupation field prefilled
