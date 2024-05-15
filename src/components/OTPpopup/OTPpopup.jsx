@@ -75,6 +75,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
                                 otp={otp}
                                 setOTP={setOtp}
                                 setError={setError}
+                                testId={'opt'}
                             />
                             {error && <ErrorMessage error={error} />}
                             <Button testId="verify_OTP"

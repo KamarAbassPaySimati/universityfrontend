@@ -78,21 +78,22 @@ Feature: Paymaart - Admin Web- Update Merchant details(full)
         And I should view the status of the KYC as "In review"
 
     Scenario: View specific merchant KYC
-        Given I navigate to merchant KYC listing screen
+        Given I navigate to merchant users listing screen
         When I search for recently created merchant
-        When I click on view merchant KYC
-        Then I should view merchant details
-        Then I should view basic details of merchant KYC
+        When I click on view merchant
+        Then I should view merchant information
+        Then I should view basic details of merchant
         And I should view the identification details of merchant KYC
         And I should view the personal details of merchant KYC
         And I should view the trading details of merchant KYC
+        And I should view option to activate or update a merchant
 
     Scenario: Navigate to update merchant KYC Screen, and Update
         Given I click on update "Update Merchant"
         Then I should view a modal asking for the OTP
         When I enter the OTP as "35598"
         And I click on submit TOTP form
-        Then I should read a message stating that "Invalid code"
+        Then I should read a message stating that "Invalid OTP"
         When I enter the OTP as "355948"
         And I click on submit TOTP form
         Then I should be redirected to merchant basic details screen
@@ -118,6 +119,8 @@ Feature: Paymaart - Admin Web- Update Merchant details(full)
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
+        When I enter the OTP as "355948"
+        And I click on submit TOTP form
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
         When I should view the occupation field prefilled

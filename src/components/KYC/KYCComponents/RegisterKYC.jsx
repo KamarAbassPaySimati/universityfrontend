@@ -150,7 +150,10 @@ export default function RegisterKYC ({ role, type }) {
             } else {
                 getKYCView();
                 setTimeout(() => {
-                    setToastSuccess(type === 'update' ? 'Agent details updated successfully' : res.data.message);
+                    setToastSuccess(type === 'update'
+                        ? `${role === 'agent' ? 'Agent' : role === 'merchant' ? 'Merchant' : 'Customer'} 
+                    details updated successfully`
+                        : res.data.message);
                     if (type === 'update' && tab !== 'address_details') {
                         setSaveCount(false);
                     }
@@ -544,7 +547,9 @@ export default function RegisterKYC ({ role, type }) {
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
-                    handleAPICall(body, 'personal_details');
+                    handleAPICall(body, 'personal_details', type === 'update'
+                        ? 'kyc-update/update/tradingDetails'
+                        : undefined);
                 }
                 break;
             case 'personal_details':
@@ -696,7 +701,7 @@ export default function RegisterKYC ({ role, type }) {
         }
     };
     const basicDetailsView = async () => {
-        const res = await dataService.GetAPI(`admin-users/view-specific-agent?paymaart_id=${id}`);
+        const res = await dataService.GetAPI(`admin-users/view-specific-${role}?paymaart_id=${id}`);
         setBasicVieDetails(res.data.data);
         const otp = await dataService.PostAPI('kyc-update/send-otp', {
             paymaart_id: id,
@@ -736,7 +741,7 @@ export default function RegisterKYC ({ role, type }) {
             activePath={role === 'agent'
                 ? `
             ${type === 'update' ? 'Update' : 'Register'} Agent`
-                : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
+                : role === 'merchant' ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant` : 'Register Customer'}
             paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
             pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
@@ -778,7 +783,11 @@ export default function RegisterKYC ({ role, type }) {
                             <div className='flex flex-col'>
                                 <StatusProgressBar
                                     ProgressBar={progressBarStatus}
-                                    LineClass={(role === 'merchant' || type === 'update') ? 'line-class-merchant' : 'line-class'}
+                                    LineClass={(role === 'merchant' && type === 'update')
+                                        ? 'line-class-merchant-update'
+                                        : (role === 'merchant' || type === 'update')
+                                            ? 'line-class-merchant'
+                                            : 'line-class'}
                                     currentTab={searchParams.get('tab')}
                                 />
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>

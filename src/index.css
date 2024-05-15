@@ -333,6 +333,16 @@ input[type='number'] {
   left: 30px;
   right: 0;
 }
+.line-class-merchant-update::after{
+  position: absolute;
+  content: "";
+  width: 500px;
+  height: 0;
+  border-top: 2px solid #A4A9AE;
+  top: 13px;
+  left: 30px;
+  right: 0;
+}
 
 .lower-alpha {list-style-type: lower-alpha;}
 .list-circle {list-style-type: circle;}
