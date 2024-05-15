@@ -304,7 +304,7 @@ export default function KYCView ({ role, viewType }) {
                                                             {View?.user_kyc_status === 'completed' &&
                                                                 <div className='my-6'>
                                                                     <p className='font-normal text-[#A4A9AE] text-sm'>Till Numbers</p>
-                                                                    <p className={`mt-1 ${View?.till_numbers?.length > 1 ? 'underline cursor-pointer' : 'cursor-default'}`} onClick={() => View?.till_numbers?.length > 1 && handleTillNumber()}>{(View?.till_numbers && View?.till_numbers.length !== 0) ? View?.till_numbers[0] : '-'}</p>
+                                                                    <p className={`mt-1 ${View?.till_numbers?.length > 1 ? 'underline cursor-pointer' : 'cursor-default'}`} onClick={() => View?.till_numbers?.length > 1 && handleTillNumber()}>{(View?.till_numbers && Object.values(View?.till_numbers)[0] !== '') ? View?.till_numbers[0] : '-'}</p>
                                                                 </div>
                                                             }
                                                             <h1 className='mt-4 text-[#A4A9AE] text-[14px] leading-6
