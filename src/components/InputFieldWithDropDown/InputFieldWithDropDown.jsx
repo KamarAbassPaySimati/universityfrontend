@@ -99,7 +99,7 @@ function InputFieldWithDropDown (props) {
 
                 </ul>
             </div>
-            {(!show && value !== '' && information) && <p className='text-[#A4A9AE] font-normal text-[14px] leading-[22px]'>{information.information.List1[value].text}</p>}
+            {(!show && value !== '' && information) && <p className='text-[#A4A9AE] font-normal text-[14px] leading-[22px]'>{information?.information?.List1[value]?.text}</p>}
             {(error && !show) && <ErrorMessage error={error} />}
         </div>
     );

@@ -621,29 +621,54 @@ export default function RegisterKYC ({ role, type }) {
                             }
                             break;
                         case 'id_document_back':
-                            object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
-                            res.data.data[item];
+                            if (res.data.data.id_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_back'] = res.data.data[item];
+                            } else {
+                                object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
+                                res.data.data[item];
+                            }
                             break;
                         case 'id_document_front':
-                            object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
-                            res.data.data[item];
+                            if (res.data.data.id_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_front'] =
+                                res.data.data[item];
+                            } else {
+                                object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
+                                res.data.data[item];
+                            }
                             break;
                         case 'verification_document_back':
-                            object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
+                            if (res.data.data.verification_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_back'] = res.data.data[item];
+                            } else {
+                                object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
                                 res.data.data[item];
+                            }
                             break;
                         case 'verification_document_front':
-                            object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
+                            if (res.data.data.verification_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_front'] = res.data.data[item];
+                            } else {
+                                object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
                                 res.data.data[item];
+                            }
                             break;
                         case 'selfie':
                             object.capture = res.data.data[item];
                             break;
                         case 'id_document':
-                            object['ID Document'] = res.data.data[item];
+                            if (res.data.data[item] === 'Driver’s Licence') {
+                                object['ID Document'] = 'Driver\'s Licence';
+                            } else {
+                                object['ID Document'] = res.data.data[item];
+                            }
                             break;
                         case 'verification_document':
-                            object['Verification Document'] = res.data.data[item];
+                            if (res.data.data[item] === 'Driver’s Licence') {
+                                object['Verification Document'] = 'Driver\'s Licence';
+                            } else {
+                                object['Verification Document'] = res.data.data[item];
+                            }
                             break;
                         case 'address_details_status':
                             statusObject.address_details = {
