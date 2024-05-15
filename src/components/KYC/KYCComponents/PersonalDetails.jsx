@@ -10,7 +10,7 @@ import { dataService } from '../../../services/data.services';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import { InputFelidsMonthSimplified } from './KYCFunctions';
 
-export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected, role }) {
+export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected, role, type }) {
     const OccupationList = [
         'Employed', 'Self Employed', 'In Full-time Education', 'Seeking Employment', 'Retired/Pensioner', 'Others'];
     const Purpose = [
@@ -27,6 +27,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 type: 'dropdown',
                 key: 'bank_name',
                 require: true,
+                disable: type === 'update' ? true : undefined,
                 options: [
                     'CDH Investment Bank',
                     'Ecobank',
@@ -42,12 +43,14 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                 label: 'Account Number',
                 type: 'input',
                 key: 'account_number',
+                disable: type === 'update' ? true : undefined,
                 require: true
             },
             'Account Name': {
                 label: 'Account Name',
                 type: 'input',
                 key: 'account_name',
+                disable: type === 'update' ? true : undefined,
                 require: true
             }
         }

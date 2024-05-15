@@ -37,6 +37,7 @@ export default function FelidDivision ({
                                                         ? 'Required field'
                                                         : undefined}
                                                     options={divObj?.options}
+                                                    disable={divObj?.disable}
                                                     id={divObj?.key}
                                                     testId={divObj?.key}
                                                     // information
