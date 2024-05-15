@@ -565,7 +565,7 @@ export default function RegisterKYC ({ role, type }) {
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
-                    handleAPICall({ ...body, ...submitPayload }, 'success', type === 'update'
+                    handleAPICall(type === 'update' ? body : { ...body, ...submitPayload }, 'success', type === 'update'
                         ? 'kyc-update/update/infoDetails'
                         : undefined);
                 }
