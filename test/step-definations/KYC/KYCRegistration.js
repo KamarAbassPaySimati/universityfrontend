@@ -802,3 +802,18 @@ When('I should view the monthly income and withdrawal prefilled with value {stri
     const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
     assert.equal(monthlyWithdrawalValue, expectedValue);
 });
+
+When('I enter the OTP as {string} for update KYC', async function (OTP) {
+    // clear already existing TOTP
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    for (let i = 5; i >= 0; i--) {
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    for (let i = 0; i < OTP.length; i++) {
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(OTP[i]);
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+});

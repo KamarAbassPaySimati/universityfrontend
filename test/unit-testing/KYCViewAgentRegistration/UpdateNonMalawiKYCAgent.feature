@@ -89,7 +89,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Non-Malawi KYC)
     Scenario: Navigate to update agent KYC Screen, and Update
         Given I click on update "Update Agent"
         Then I should view a modal asking for the OTP
-        When I enter the OTP as "355948"
+        When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
         Then I should be redirected to agent basic details screen
         And I should view first name, middle name, last name is disabled
@@ -113,7 +113,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Non-Malawi KYC)
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
-        When I enter the OTP as "355948"
+        When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"
