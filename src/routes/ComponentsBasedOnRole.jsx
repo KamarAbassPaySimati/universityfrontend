@@ -194,6 +194,21 @@ export const ComponentsBasedOnRole = {
             name: 'Paymaart Add Trust Banks',
             element: <AddTrustBank />,
             path: '/paymaart-banks/trust-banks/add-trust-bank'
+        },
+        {
+            name: 'Agent KYC Registration',
+            element: <RegisterKYC role={'agent'}/>,
+            path: '/users/agents/register-agent/kyc-registration/:id'
+        },
+        {
+            name: 'Customer KYC Registration',
+            element: <RegisterKYC role={'customers'}/>,
+            path: '/users/customers/register-customer/kyc-registration/:id'
+        },
+        {
+            name: 'Merchant KYC Registration',
+            element: <RegisterKYC role={'merchant'}/>,
+            path: '/users/merchants/register-merchant/kyc-registration/:id'
         }
     ],
     'support-admin':
@@ -212,6 +227,21 @@ export const ComponentsBasedOnRole = {
             name: 'Onboard Customer Users',
             element: <OnboardAgent role={'customer'}/>,
             path: '/users/customers/register-customer'
+        },
+        {
+            name: 'Agent KYC Registration',
+            element: <RegisterKYC role={'agent'}/>,
+            path: '/users/agents/register-agent/kyc-registration/:id'
+        },
+        {
+            name: 'Customer KYC Registration',
+            element: <RegisterKYC role={'customers'}/>,
+            path: '/users/customers/register-customer/kyc-registration/:id'
+        },
+        {
+            name: 'Merchant KYC Registration',
+            element: <RegisterKYC role={'merchant'}/>,
+            path: '/users/merchants/register-merchant/kyc-registration/:id'
         }
     ],
     'finance-admin':
