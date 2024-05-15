@@ -14,7 +14,7 @@ const Toast = ({ message, type, setToastmessage, bottom }) => {
         const timer = setTimeout(() => {
             setShowToast(false);
             setToastmessage('');
-        }, 7000);
+        }, 10000);
 
         return () => {
             clearTimeout(timer);

@@ -48,7 +48,6 @@ const CardHeader = ({
     //     });
     //     onToggle(updatedButtons); // Notify the parent component of the updated button values
     // };
-
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>

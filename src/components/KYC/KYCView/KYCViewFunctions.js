@@ -9,14 +9,16 @@ export const getPaths = (viewType, role, status) => {
                 pathurls: ['users/agents'],
                 updateButtonPath: status === 'not_started'
                     ? '/users/agents/register-agent/kyc-registration/'
-                    : '/users/agents/register-agent/specific-view/update-agent/'
+                    : '/users/agents/register-agent/kyc-update/'
             };
         case 'merchant':
             return {
                 activePath: 'Merchant Profile',
                 paths: ['Users', 'Merchants'],
                 pathurls: ['users/merchants'],
-                updateButtonPath: '/users/merchants/register-merchant/specific-view/update-merchant'
+                updateButtonPath: status === 'not_started'
+                    ? '/users/merchants/register-merchant/kyc-registration/'
+                    : '/users/merchants/register-merchant/kyc-update/'
 
             };
         case 'customer':

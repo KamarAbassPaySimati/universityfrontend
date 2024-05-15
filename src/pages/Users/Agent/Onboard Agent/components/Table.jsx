@@ -61,7 +61,9 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                                         onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`
                                         )}/>
-                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
+                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                                        onClick={() => Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
+                                    />
                                     <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
                                     <Tooltip
                                         id={`eye-${index}`}
