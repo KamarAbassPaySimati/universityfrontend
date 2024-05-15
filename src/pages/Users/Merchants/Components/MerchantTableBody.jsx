@@ -6,7 +6,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import TillNumber from '../../../../components/Modals/TillNumber';
 
-export default function MerchantTableBody ({ user, index }) {1
+export default function MerchantTableBody ({ user, index }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const handleTillNumber = () => {
@@ -51,7 +51,9 @@ export default function MerchantTableBody ({ user, index }) {1
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                         onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
                         )} />
-                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
+                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                        onClick={() => Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
+                    />
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'

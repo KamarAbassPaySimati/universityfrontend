@@ -49,6 +49,28 @@ export const MerchantProgressBar = {
         label: 'Personal Details'
     }
 };
+export const updateMerchantProgressBar = {
+    basic_details: {
+        status: 'current',
+        label: 'Basic Details'
+    },
+    address_details: {
+        status: 'current',
+        label: 'Address Details'
+    },
+    identity_details: {
+        status: 'skip',
+        label: 'Identity Details'
+    },
+    trading_details: {
+        status: 'skip',
+        label: 'Trading Details'
+    },
+    personal_details: {
+        status: 'skip',
+        label: 'Personal Details'
+    }
+};
 export const occupationEmployed = ['employed_role', 'employer_name', 'industry', 'occupation_town'];
 export const occupationSelfEmployed = ['self_employed_specify'];
 export const occupationEduction = ['institute'];

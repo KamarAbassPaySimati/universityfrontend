@@ -7,7 +7,7 @@ import InformationList from '../InformationList/InformationList';
 import Modal from 'react-responsive-modal';
 
 function InputFieldWithDropDown (props) {
-    const { labelName, value, placeholder, options, id, error, handleInput, testId, information } = props;
+    const { labelName, value, placeholder, options, id, error, handleInput, testId, information, disable } = props;
     const [show, setShow] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const infoRef = useRef();
@@ -59,7 +59,7 @@ function InputFieldWithDropDown (props) {
                 </div>
                 }
             </div>
-            <div ref={outsideClickRef} className={` bg-[#F8F8F8] text-neutral-primary
+            <div ref={outsideClickRef} className={` ${disable ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'} text-neutral-primary
                      leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
                      rounded-tl rounded-tr  ${error ? 'border-error' : 'border-[#DDDDDD]'}
                      `} style={{ borderBottomColor: show ? '#3B2A6F' : '' }}>
@@ -68,6 +68,7 @@ function InputFieldWithDropDown (props) {
                     onClick={() => setShow(!show)}
                     data-testid={testId}
                     title={value}
+                    disabled={disable}
                     className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
                     ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
                 outline-0`}/*  */
