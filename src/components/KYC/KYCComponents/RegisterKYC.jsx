@@ -834,6 +834,7 @@ export default function RegisterKYC ({ role, type }) {
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
                                         role={role}
+                                        type={type}
                                     />}
                                     {
                                         searchParams.get('tab') === 'trading_details' &&
