@@ -25,6 +25,10 @@ Then('I should view the trading street name, district, town are already prefille
     const town_value = await town.getAttribute('value');
     const district_value = await district.getAttribute('value');
 
+    console.log('street_name_value', street_name_value);
+    console.log('town_value', town_value);
+    console.log('district_value', district_value);
+
     assert.notEqual(street_name_value, '');
     assert.notEqual(town_value, '');
     assert.notEqual(district_value, '');
@@ -40,28 +44,13 @@ Then('I should view the trading street name, district, town are already prefille
 
 Then('I should see the trading types selected', async function () {
     // Write code here that turns the phrase above into concrete actions
-    const street_name = await driver.wait(until.elementLocated(By.css('[data-testid="trading_street_name"]')));
-    await driver.wait(until.elementIsVisible(street_name));
+    const business_type = await driver.wait(until.elementLocated(By.css('[data-testid="trading_type"]')));
+    await driver.wait(until.elementIsVisible(business_type));
 
-    const town = await driver.wait(until.elementLocated(By.css('[data-testid="trading_town_village_ta"]')));
-    await driver.wait(until.elementIsVisible(town));
+    const business_type_value = await business_type.getAttribute('placeholder');
 
-    const district = await driver.wait(until.elementLocated(By.css('[data-testid="trading_district"]')));
-    await driver.wait(until.elementIsVisible(district));
-
-    const street_name_value = await street_name.getAttribute('value');
-    const town_value = await town.getAttribute('value');
-    const district_value = await district.getAttribute('value');
-
-    assert.notEqual(street_name_value, '');
-    assert.notEqual(town_value, '');
-    assert.notEqual(district_value, '');
-
-    assert.notEqual(street_name_value, '-');
-    assert.notEqual(town_value, '-');
-    assert.notEqual(district_value, '-');
-
-    assert.notEqual(street_name_value, ' ');
-    assert.notEqual(town_value, ' ');
-    assert.notEqual(district_value, ' ');
+    console.log('business_type_value', business_type_value);
+    assert.notEqual(business_type_value, '');
+    assert.notEqual(business_type_value, '-');
+    assert.notEqual(business_type_value, 'Search');
 });

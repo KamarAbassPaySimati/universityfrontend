@@ -114,6 +114,8 @@ Feature: Paymaart - Admin Web- Update Merchant details(full)
         When I click on save and continue button
         Then I should be redirected to KYC trading details screen
         Given I am in KYC trading document details screen
+        When I enter the OTP as "355948" for update KYC
+        And I click on submit TOTP form
         When I should view the trading street name, district, town are already prefilled
         When I should see the trading types selected
         When I click on save and continue button
