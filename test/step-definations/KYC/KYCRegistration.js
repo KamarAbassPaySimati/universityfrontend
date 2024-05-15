@@ -787,3 +787,18 @@ When('I should view monthly income and monthly withdrawal selected as {string}',
     const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
     assert.equal(monthlyWithdrawalValue, expectedValue);
 });
+
+When('I should view the monthly income and withdrawal prefilled with value {string}', async function (expectedValue) {
+    await new Promise(resolve => setTimeout(resolve, 5000));
+    const monthlyIncome = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
+    await driver.wait(until.elementIsVisible(monthlyIncome));
+    const monthlyIncomeValue = await monthlyIncome.getAttribute('value');
+
+    assert.equal(monthlyIncomeValue, expectedValue);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    const monthlyWithdrawal = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_withdrawal"]')));
+    await driver.wait(until.elementIsVisible(monthlyWithdrawal));
+    const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
+    assert.equal(monthlyWithdrawalValue, expectedValue);
+});
