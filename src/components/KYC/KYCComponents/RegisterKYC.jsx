@@ -156,10 +156,7 @@ export default function RegisterKYC ({ role, type }) {
             } else {
                 getKYCView();
                 setTimeout(() => {
-                    setToastSuccess(type === 'update'
-                        ? `${role === 'agent' ? 'Agent' : role === 'merchant' ? 'Merchant' : 'Customer'} 
-                    details updated successfully`
-                        : res.data.message);
+                    setToastSuccess(res.data.message);
                     if (type === 'update' && tab !== 'address_details') {
                         setSaveCount(false);
                     }
