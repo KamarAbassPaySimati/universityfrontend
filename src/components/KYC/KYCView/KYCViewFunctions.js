@@ -9,7 +9,7 @@ export const getPaths = (viewType, role, status) => {
                 pathurls: ['users/agents'],
                 updateButtonPath: status === 'not_started'
                     ? '/users/agents/register-agent/kyc-registration/'
-                    : '/users/agents/register-agent/specific-view/update-agent/'
+                    : '/users/agents/register-agent/kyc-update/'
             };
         case 'merchant':
             return {
@@ -67,7 +67,7 @@ export const getStatusColor = (status) => {
     case 'completed':
         return {
             color: 'bg-[#ECFDF5] text-accent-positive',
-            text: 'In-progress'
+            text: 'Completed'
         };
     case 'in_progress':
         return {

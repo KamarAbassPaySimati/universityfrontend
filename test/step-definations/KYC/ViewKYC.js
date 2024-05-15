@@ -12,6 +12,7 @@ Given('I navigate to agent KYC registration screen', async function () {
 });
 
 Given('I navigate to customer KYC registration screen', async function () {
+    console.log('customer_registration_response', global.customer_registration_response);
     await driver.get(`http://localhost:3000/users/customers/register-customer/kyc-registration/${global.customer_registration_response.paymaart_id}`);
 });
 
@@ -188,7 +189,42 @@ Then('I should view customer details', async function () {
     const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
+Then('I should see the KYC status changed to {string}', async function (status) {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_status"]'))).getText();
+    assert.equal(actual_status, status);
+});
 
+Then('I should see the agent KYC status remain as {string}', async function (status) {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="kyc_status"]'))).getText();
+    assert.equal(actual_status, status);
+});
+
+When('I select the reasons for rejection as {string}', async function (reason) {
+    let element;
+    switch (reason) {
+    case 'Incorrect or unreadable personal information':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Incorrect or unreadable personal information"]')));
+        await driver.wait(until.elementIsVisible(element));
+        break;
+    case 'Unacceptable/incomplete address':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Unacceptable/incomplete address"]')));
+        await driver.wait(until.elementIsVisible(element));
+        break;
+    case 'Mismatched information':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Mismatched information"]')));
+        await driver.wait(until.elementIsVisible(element));
+        break;
+    default:
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="Incorrect or unreadable personal information"]')));
+        await driver.wait(until.elementIsVisible(element));
+        break;
+    }
+    await element.click();
+});
 Then('I should view basic details of customer KYC', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="basic_details"]')));
     await driver.wait(until.elementIsVisible(element));

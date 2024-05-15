@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 
-const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError, handleSubmit }) => {
+const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError }) => {
     const inputRefs = useRef([]);
 
     // Otp change handle
@@ -87,6 +87,7 @@ const OtpInputField = ({ numInputs, otp, setOTP, setError, otpError, handleSubmi
                         id={`digit-${index}`}
                         key={index}
                         type="password"
+                        data-testid={`digit-${index}`}
                         maxLength="1"
                         value={otp[index]}
                         onKeyDown={(e) => {

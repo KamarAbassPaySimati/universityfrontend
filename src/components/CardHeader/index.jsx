@@ -21,7 +21,7 @@ import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve
+    onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject
 }) => {
     const navigate = useNavigate();
 
@@ -48,7 +48,6 @@ const CardHeader = ({
     //     });
     //     onToggle(updatedButtons); // Notify the parent component of the updated button values
     // };
-
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -99,7 +98,7 @@ const CardHeader = ({
                             ? (reject
                                 ? <Shimmer height={'h-10'}/>
                                 : (
-                                    <button data-testid="reject_button" onClick={onHandleStatusChange}
+                                    <button data-testid="reject_button" onClick={onHandleReject}
                                         className={`flex  bg-primary-negative py-[8px] px-[16px] 
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
                                         <p className='text-[14px] font-[600] text-[#ffffff]'>Reject</p>
@@ -119,7 +118,7 @@ const CardHeader = ({
                                 ? (approve
                                     ? <Shimmer height={'h-10'}/>
                                     : (
-                                        <button data-testid="reject_button" onClick={onHandleStatusChange}
+                                        <button data-testid="approve_button" onClick={onHandleStatusChange}
                                             className={`flex ml-6 bg-[#13B681] py-[8px] px-[16px] 
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
                                             <p className='text-[14px] font-[600] text-[#ffffff]'>Approve</p>
