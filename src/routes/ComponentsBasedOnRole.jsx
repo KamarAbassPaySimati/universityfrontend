@@ -100,6 +100,31 @@ export const ComponentsBasedOnRole = {
             name: 'Merchant KYC Registration',
             element: <RegisterKYC role={'merchant'}/>,
             path: '/users/merchants/register-merchant/kyc-registration/:id'
+        },
+
+        // Agent Specific View from Agent Listing
+        {
+            name: 'Agent Specific View',
+            element: <KYCView role={'agent'} viewType={'specific'}/>,
+            path: '/users/agents/register-agent/specific-view/:id'
+        },
+        // Agent Specific View from Agent Listing
+        {
+            name: 'Agent Specific View',
+            element: <KYCView role={'agent'} viewType={'specific'}/>,
+            path: '/users/agents/register-agent/specific-view/:id'
+        },
+        // Merchant Specific View from Merchant Listing
+        {
+            name: 'Merchant Specific View',
+            element: <KYCView role={'merchant'} viewType={'specific'}/>,
+            path: '/users/merchants/register-merchant/specific-view/:id'
+        },
+        // KYC Update for Agent
+        {
+            name: 'Agent KYC Update',
+            element: <RegisterKYC role={'agent'} type='update'/>,
+            path: '/users/agents/register-agent/kyc-update/:id'
         }
 
     ],
@@ -147,6 +172,18 @@ export const ComponentsBasedOnRole = {
             name: 'Customer Kyc Specific View',
             element: <KYCView role={'customer'} viewType={'kyc'}/>,
             path: '/verify/kyc-registration/customer-profile/:id'
+        },
+        // Agent Specific View from Agent Listing
+        {
+            name: 'Agent Specific View',
+            element: <KYCView role={'agent'} viewType={'specific'}/>,
+            path: '/users/agents/register-agent/specific-view/:id'
+        },
+        // Merchant Specific View from Merchant Listing
+        {
+            name: 'Merchant Specific View',
+            element: <KYCView role={'merchant'} viewType={'specific'}/>,
+            path: '/users/merchants/register-merchant/specific-view/:id'
         },
         {
             name: 'Paymaart Trust Banks',

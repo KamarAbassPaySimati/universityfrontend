@@ -184,8 +184,8 @@ When('I enter the OTP as {string}', async function (OTP) {
     // Write code here that turns the phrase above into concrete actions
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-    await driver.wait(until.elementLocated(By.css('[data-testid="otp"]'))).sendKeys(OTP);
+    await driver.wait(until.elementLocated(By.css('[data-testid="digit-0"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="digit-0"]'))).sendKeys(OTP);
 });
 
 When('I click on verify OTP', async function () {

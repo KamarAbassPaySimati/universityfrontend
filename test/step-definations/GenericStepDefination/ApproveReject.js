@@ -9,6 +9,8 @@ When('I click on approve {string}', async function (type) {
     let element;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
+    case 'Merchant KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="approve_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -22,21 +24,21 @@ When('I click on approve {string}', async function (type) {
 });
 
 Then('I should see a confirmation prompt for approving {string}', async function (type) {
-    let element;
-    let modalBody;
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    const modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
     switch (type) {
     case 'Agent KYC':
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
-        await driver.wait(until.elementIsVisible(element));
-
-        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
+    case 'Customer KYC':
+        assert.equal(modalBody, 'This will allow Customer to gain access to Paymaart');
+        break;
+    case 'Merchant KYC':
+        assert.equal(modalBody, 'This will allow Merchant to gain access to Paymaart');
+        break;
     default:
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
-        await driver.wait(until.elementIsVisible(element));
-
-        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
     }
@@ -47,6 +49,8 @@ When('I click on reject {string}', async function (type) {
     let element;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
+    case 'Merchant KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="reject_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -65,6 +69,8 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
     let modalBody;
     switch (type) {
     case 'Agent KYC':
+    case 'Customer KYC':
+    case 'Merchant KYC':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
 
