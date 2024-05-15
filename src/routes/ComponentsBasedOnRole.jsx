@@ -132,7 +132,6 @@ export const ComponentsBasedOnRole = {
             element: <RegisterKYC role={'merchant'} type='update'/>,
             path: '/users/merchants/register-merchant/kyc-update/:id'
         }
-
     ],
     admin:
     [
