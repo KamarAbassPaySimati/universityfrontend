@@ -20,8 +20,8 @@ export default function FelidDivision ({
                     <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
                     ${index !== 0 ? 'pt-6' : 'pt-4'}`}>{divItem}</p>}
                     <div className='flex flex-wrap'>
-                        {Object.values(divisionObject[divItem]).map((divObj) => (
-                            <div className={'mt-4'} key={divObj}>
+                        {Object.values(divisionObject[divItem]).map((divObj, index = 0) => (
+                            <div className={'mt-4'} key={index}>
                                 {/* checking the condition for type input and options */}
                                 {
                                     divObj.type === 'dropdown'
