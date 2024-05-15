@@ -14,7 +14,8 @@ import { dataService } from '../../../services/data.services';
 import {
     AddressDetails, BankDetailsList, GetDocumentValidation, MerchantProgressBar, PersonalDetailsList, ProgressBar,
     UpdateProgressBar,
-    handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
+    handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed,
+    updateMerchantProgressBar
 } from './KYCFunctions';
 import { handleSearchParamsValue } from '../../../CommonMethods/ListFunctions';
 import addApostrophe from '../../../CommonMethods/textCorrection';
@@ -66,9 +67,9 @@ export default function RegisterKYC ({ role, type }) {
     };
     const [documentSideBarData, setDocumentSidebarData] = useState(initialDocumentSideBarData);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [progressBarStatus, setProgressBarStatus] = useState(type === 'update'
+    const [progressBarStatus, setProgressBarStatus] = useState((type === 'update' && role !== 'merchant')
         ? UpdateProgressBar
-        : role === 'merchant' ? MerchantProgressBar : ProgressBar);
+        : role === 'merchant' ? type === 'update' ? updateMerchantProgressBar : MerchantProgressBar : ProgressBar);
 
     const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
@@ -83,7 +84,7 @@ export default function RegisterKYC ({ role, type }) {
         case 'back':
             switch (searchParams.get('tab')) {
             case 'basic_details':
-                Navigate(`/users/agents/register-agent/specific-view/${id}`);
+                Navigate(`/users/${role}s/register-${role}/specific-view/${id}`);
                 return;
             case 'address_details':
                 if (type === 'update') {
@@ -128,7 +129,12 @@ export default function RegisterKYC ({ role, type }) {
                 nextTab = 'personal_details';
                 break;
             case 'personal_details':
-                nextTab = 'success';
+                if (type === 'update') {
+                    Navigate(`/users/${role}s/register-${role}/specific-view/${id}`);
+                    return;
+                } else {
+                    nextTab = 'success';
+                }
                 break;
             default:
                 break;
@@ -158,7 +164,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSaveCount(false);
                     }
                     if (type === 'update' && tab === 'success') {
-                        Navigate(`/users/agents/register-agent/specific-view/${id}`);
+                        Navigate(`/users/${role}s/register-${role}/specific-view/${id}`);
                     } else {
                         handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
                     }
@@ -872,7 +878,7 @@ export default function RegisterKYC ({ role, type }) {
                 encryptedCode={encryptedCode}
                 basicViewDetails={basicViewDetails}
                 handleTabChangeOtp={handleTabChangeOtp}
-                navigationPath={() => Navigate(`/users/agents/register-agent/specific-view/${id}`)}
+                navigationPath={() => Navigate(`/users/${role}s/register-${role}/specific-view/${id}`)}
             />
         </CardHeader>
     );
