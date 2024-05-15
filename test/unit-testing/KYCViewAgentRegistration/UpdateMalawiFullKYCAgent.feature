@@ -71,7 +71,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Full KYC)
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
 
-    Scenario: View specific agent KYC and approve kyc
+    Scenario: View specific agent
         Given I navigate to agent users listing screen
         When I search for recently created agent
         When I click on view agent
