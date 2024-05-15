@@ -4,9 +4,6 @@ const invalidEmail = (email) => {
 };
 
 export default function verificationValidation (state, setErrorState, ignoreKey) {
-    console.log(state, 'state');
-    console.log(setErrorState, 'er');
-
     let isValid = true;
     const stateValiable = { ...state };
     delete stateValiable.profileImage;
