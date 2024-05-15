@@ -29,6 +29,19 @@ body {
   display: flex;
 }
 
+.react-responsive-modal-closeButton.merchant {
+  padding-top: 0px !important;
+  position: absolute;
+  top: 0px !important;
+  right: 14px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  background-color: transparent;
+  display: flex;
+  outline: 0 !important;
+}
+
 .react-responsive-modal-modal:has(.customModal) {
   max-width: fit-content !important;
   min-width: 306px !important;

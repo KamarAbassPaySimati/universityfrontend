@@ -13,6 +13,24 @@ export const ProgressBar = {
         label: 'Personal Details'
     }
 };
+export const UpdateProgressBar = {
+    basic_details: {
+        status: 'current',
+        label: 'Basic Details'
+    },
+    address_details: {
+        status: 'current',
+        label: 'Address Details'
+    },
+    identity_details: {
+        status: 'skip',
+        label: 'Identity Details'
+    },
+    personal_details: {
+        status: 'skip',
+        label: 'Personal Details'
+    }
+};
 export const MerchantProgressBar = {
     address_details: {
         status: 'current',
