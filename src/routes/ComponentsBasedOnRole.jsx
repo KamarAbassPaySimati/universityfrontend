@@ -119,6 +119,12 @@ export const ComponentsBasedOnRole = {
             name: 'Merchant Specific View',
             element: <KYCView role={'merchant'} viewType={'specific'}/>,
             path: '/users/merchants/register-merchant/specific-view/:id'
+        },
+        // KYC Update for Agent
+        {
+            name: 'Agent KYC Update',
+            element: <RegisterKYC role={'agent'} type='update'/>,
+            path: '/users/agents/register-agent/kyc-update/:id'
         }
 
     ],

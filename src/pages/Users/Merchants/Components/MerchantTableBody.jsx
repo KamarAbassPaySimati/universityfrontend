@@ -6,7 +6,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import TillNumber from '../../../../components/Modals/TillNumber';
 
-export default function MerchantTableBody ({ user, index }) {
+export default function MerchantTableBody ({ user, index }) {1
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const handleTillNumber = () => {
@@ -15,7 +15,7 @@ export default function MerchantTableBody ({ user, index }) {
     return (
         <>
             <tr className='border-b border-neutral-outline h-[48px]'>
-                {console.log(user, 'manydhdjsdn')}
+                {console.log(Object.keys(user?.till_numbers), 'manydhdjsdn')}
                 <td
                     title={user?.paymaart_id}
                     data-testid="paymaart_id"
@@ -27,8 +27,9 @@ export default function MerchantTableBody ({ user, index }) {
                 <td className='py-2 px-[10px]'>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
                 <td
-                    className={`py-2 px-[10px] ${user?.till_numbers?.length>1 ? ' cursor-pointer underline' : 'cursor-default'}`}
-                    onClick={() => user?.till_numbers?.length > 1 && handleTillNumber()}>{`${user?.till_numbers.length !== 0 ? user?.till_numbers[0] : '-'}`}</td>
+                    className={`py-2 px-[10px] ${user?.till_numbers?.length > 1 ? ' cursor-pointer underline' : 'cursor-default'}`}
+                    onClick={() => user?.till_numbers?.length > 1 && handleTillNumber()}
+                >{`${(user?.till_numbers && Object.values(user?.till_numbers)[0] !== '') ? user?.till_numbers[0] : '-'}`}</td>
                 <td className='py-2 px-[10px]'>{`${user?.location ? user?.location : '-'}`}</td>
                 <td data-testid="status" className='py-2 px-[10px]'>
                     {user?.status

@@ -20,7 +20,7 @@ import { endpoints } from '../../../services/endpoints';
 import KYCReject from '../KYCReject';
 import TillNumber from '../../Modals/TillNumber';
 
-export default function KYCView({ role, viewType }) {
+export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
@@ -182,15 +182,15 @@ export default function KYCView({ role, viewType }) {
                                             Object.keys(
                                                 userDetails.basicDetails
                                             ).map((itemkey, index = 0) =>
-                                            (<div key={index} className='w-1/3 px-1'>
-                                                <ViewDetail
-                                                    itemkey={itemkey.replaceAll('_', ' ')}
-                                                    userDetails={
-                                                        userDetails.basicDetails[itemkey]
-                                                    }
-                                                    loading={loading}
-                                                />
-                                            </div>)
+                                                (<div key={index} className='w-1/3 px-1'>
+                                                    <ViewDetail
+                                                        itemkey={itemkey.replaceAll('_', ' ')}
+                                                        userDetails={
+                                                            userDetails.basicDetails[itemkey]
+                                                        }
+                                                        loading={loading}
+                                                    />
+                                                </div>)
                                             )
                                         )
                                     }
@@ -235,8 +235,8 @@ export default function KYCView({ role, viewType }) {
                                                                                             ? `${itemkey === 'ID Document'
                                                                                                 ? View?.id_document
                                                                                                 : View?.verification_document}${itemkey === 'ID Document' && View?.id_document === 'Passport'
-                                                                                                    ? ` Data Page.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`
-                                                                                                    : `.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`}`
+                                                                                                ? ` Data Page.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`
+                                                                                                : `.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`}`
 
                                                                                             : index === 0
                                                                                                 ? `${itemkey === 'ID Document'
@@ -244,13 +244,13 @@ export default function KYCView({ role, viewType }) {
                                                                                                     : View?.verification_document
                                                                                                 } 
                                                                                                 ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Data Page' : 'Front'}.${imageItem.slice(imageItem
-                                                                                                    .lastIndexOf('.') + 1)}`
+                                                                            .lastIndexOf('.') + 1)}`
                                                                                                 : `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 } 
                                                                                                 ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Visa Page' : 'Back'}.${imageItem.slice(imageItem
-                                                                                                    .lastIndexOf('.') + 1)}`
+                                                                            .lastIndexOf('.') + 1)}`
                                                                                 }
                                                                                 item={imageItem}
                                                                                 testId={`${itemkey}_${index}`}
@@ -304,7 +304,7 @@ export default function KYCView({ role, viewType }) {
                                                             {View?.user_kyc_status === 'completed' &&
                                                                 <div className='my-6'>
                                                                     <p className='font-normal text-[#A4A9AE] text-sm'>Till Numbers</p>
-                                                                    <p className={`mt-1 ${View?.till_numbers?.length > 1 ? 'underline cursor-pointer' : 'cursor-default'}`} onClick={() => View?.till_numbers?.length > 1 && handleTillNumber()}>{(View?.till_numbers && View?.till_numbers.length !== 0) ? View?.till_numbers[0] : '-'}</p>
+                                                                    <p className={`mt-1 ${View?.till_numbers?.length > 1 ? 'underline cursor-pointer' : 'cursor-default'}`} onClick={() => View?.till_numbers?.length > 1 && handleTillNumber()}>{(View?.till_numbers && Object.values(View?.till_numbers)[0] !== '') ? View?.till_numbers[0] : '-'}</p>
                                                                 </div>
                                                             }
                                                             <h1 className='mt-4 text-[#A4A9AE] text-[14px] leading-6
