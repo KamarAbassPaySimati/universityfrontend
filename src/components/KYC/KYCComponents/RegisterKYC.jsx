@@ -9,31 +9,46 @@ import Button from '../../Button/Button';
 import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import IdentityDetails from './IdentityDetails';
-import { useSearchParams, useParams } from 'react-router-dom';
+import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
 import { dataService } from '../../../services/data.services';
 import {
     AddressDetails, BankDetailsList, GetDocumentValidation, MerchantProgressBar, PersonalDetailsList, ProgressBar,
-    handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed
+    UpdateProgressBar,
+    handleStates, occupationEduction, occupationEmployed, occupationSelfEmployed,
+    updateMerchantProgressBar
 } from './KYCFunctions';
 import { handleSearchParamsValue } from '../../../CommonMethods/ListFunctions';
 import addApostrophe from '../../../CommonMethods/textCorrection';
 import KYCFinalPage from '../KYCFinalPage';
 import GlobalContext from '../../Context/GlobalContext';
 import TradingDetails from './TradingDetails';
+import OTPpopup from '../../OTPpopup/OTPpopup';
+import BasicDetails from './BasicDetails';
 
-export default function RegisterKYC ({ role }) {
+export default function RegisterKYC ({ role, type }) {
     const { id } = useParams();
+    const Navigate = useNavigate();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isLoadingButton, setIsLoadingButton] = useState(false);
     const [submitPayload, setSubmitPayload] = useState({});
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const [countryCode, setCountryCode] = useState('+265');
+    const [saveCount, setSaveCount] = useState(true);
     const [oldStateValue, setOldStateValue] = useState({
         citizen_type: '',
         kyc_type: '',
         trading_name: ''
     });
+    const [verified, setVerified] = useState({
+        email: true,
+        phoneNumber: true
+    });
+    const [formData, setFormData] = useState({});
+    const [isOtpPopup, setIsOtpPopup] = useState(type === 'update');
     const [buttonStatus, setButtonStatus] = useState('Not Started');
     const [bankSelected, setBankSelected] = useState(false);
+    const [encryptedCode, setEncryptedCode] = useState('');
+    const [basicViewDetails, setBasicVieDetails] = useState({});
     const [states, setStates] = useState({
         citizen_type: 'Malawi citizen',
         personal_customer: 'Full KYC',
@@ -52,7 +67,9 @@ export default function RegisterKYC ({ role }) {
     };
     const [documentSideBarData, setDocumentSidebarData] = useState(initialDocumentSideBarData);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [progressBarStatus, setProgressBarStatus] = useState(role === 'merchant' ? MerchantProgressBar : ProgressBar);
+    const [progressBarStatus, setProgressBarStatus] = useState((type === 'update' && role !== 'merchant')
+        ? UpdateProgressBar
+        : role === 'merchant' ? type === 'update' ? updateMerchantProgressBar : MerchantProgressBar : ProgressBar);
 
     const handleInputFelids = (value, id, type) => {
         setSubmitSelected(false);
@@ -66,8 +83,15 @@ export default function RegisterKYC ({ role }) {
         switch (buttonType) {
         case 'back':
             switch (searchParams.get('tab')) {
+            case 'basic_details':
+                Navigate(`/users/${role}s/register-${role}/specific-view/${id}`);
+                return;
             case 'address_details':
-                nextTab = null;
+                if (type === 'update') {
+                    nextTab = 'basic_details';
+                } else {
+                    nextTab = null;
+                }
                 break;
             case 'identity_details':
                 nextTab = 'address_details';
@@ -88,6 +112,9 @@ export default function RegisterKYC ({ role }) {
             break;
         case 'skip':
             switch (searchParams.get('tab')) {
+            case 'basic_details':
+                nextTab = 'address_details';
+                break;
             case 'address_details':
                 nextTab = 'identity_details';
                 break;
@@ -102,7 +129,12 @@ export default function RegisterKYC ({ role }) {
                 nextTab = 'personal_details';
                 break;
             case 'personal_details':
-                nextTab = 'success';
+                if (type === 'update') {
+                    Navigate(`/users/${role}s/register-${role}/specific-view/${id}`);
+                    return;
+                } else {
+                    nextTab = 'success';
+                }
                 break;
             default:
                 break;
@@ -115,17 +147,24 @@ export default function RegisterKYC ({ role }) {
         handleSearchParamsValue('tab', nextTab, searchParams, setSearchParams);
     };
 
-    const handleAPICall = async (body, tab) => {
+    const handleAPICall = async (body, tab, givenEndPoint) => {
         try {
             const endPoint = role === 'agent' ? 'agent-users' : role === 'merchant' ? 'merchant-users' : 'customer-user';
-            const res = await dataService.PostAPI(`${endPoint}/create-kyc-secure`, body);
+            const res = await dataService.PostAPI(givenEndPoint || `${endPoint}/create-kyc-secure`, body);
             if (res.error) {
                 setToastError(res.data.data.message);
             } else {
                 getKYCView();
                 setTimeout(() => {
                     setToastSuccess(res.data.message);
-                    handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
+                    if (type === 'update' && tab !== 'address_details') {
+                        setSaveCount(false);
+                    }
+                    if (type === 'update' && tab === 'success') {
+                        Navigate(`/users/${role}s/register-${role}/specific-view/${id}`);
+                    } else {
+                        handleSearchParamsValue('tab', tab, searchParams, setSearchParams);
+                    }
                     setSubmitPayload({});
                 }, 1000);
             }
@@ -405,9 +444,9 @@ export default function RegisterKYC ({ role }) {
         }
     };
 
-    const handleSubmit = (type) => {
+    const handleSubmit = (KycSelectedType) => {
         setIsLoadingButton(true);
-        if (type === 'proceed') {
+        if (KycSelectedType === 'proceed') {
             if (oldStateValue.citizen_type !== states.citizen_type || oldStateValue.kyc_type !== states.personal_customer) {
                 handleAPICall({
                     kyc_type: states.personal_customer === 'Full KYC' ? 'full' : 'simplified',
@@ -422,6 +461,20 @@ export default function RegisterKYC ({ role }) {
             }
         } else {
             switch (searchParams.get('tab')) {
+            case 'basic_details' :
+                if (!verified.email || !verified.phoneNumber) {
+                    setSubmitSelected(true);
+                    setIsLoadingButton(false);
+                } else {
+                    const payload = {
+                        email: formData.email,
+                        phone_number: formData.phoneNumber,
+                        country_code: countryCode,
+                        paymaart_id: id
+                    };
+                    handleAPICall(payload, 'address_details', 'kyc-update/update/basicDetails');
+                }
+                break;
             case 'address_details':
                 if (!handleValidation('address_details')) {
                     setIsLoadingButton(false);
@@ -445,8 +498,12 @@ export default function RegisterKYC ({ role }) {
                     if (states.citizen_type !== 'Malawi citizen') {
                         body.citizen = states.nationality;
                     }
-                    handleAPICall(body, 'identity_details'
-                    );
+                    if (type === 'update' && saveCount) {
+                        body.sent_email = true;
+                    }
+                    handleAPICall(body, 'identity_details', type === 'update'
+                        ? 'kyc-update/update/addressDetails'
+                        : undefined);
                 }
                 break;
             case 'identity_details':
@@ -464,7 +521,12 @@ export default function RegisterKYC ({ role }) {
                         paymaart_id: id,
                         id_details_status: 'completed'
                     };
-                    handleAPICall(body, role === 'merchant' ? 'trading_details' : 'personal_details');
+                    if (type === 'update' && saveCount) {
+                        body.sent_email = true;
+                    }
+                    handleAPICall(body, role === 'merchant' ? 'trading_details' : 'personal_details', type === 'update'
+                        ? 'kyc-update/update/documentsDetails'
+                        : undefined);
                 }
                 break;
             case 'trading_details':
@@ -485,7 +547,12 @@ export default function RegisterKYC ({ role }) {
                     if (oldStateValue.trading_name !== states.trading_name) {
                         body.trading_name = states.trading_name;
                     }
-                    handleAPICall(body, 'personal_details');
+                    if (type === 'update' && saveCount) {
+                        body.sent_email = true;
+                    }
+                    handleAPICall(body, 'personal_details', type === 'update'
+                        ? 'kyc-update/update/tradingDetails'
+                        : undefined);
                 }
                 break;
             case 'personal_details':
@@ -503,7 +570,12 @@ export default function RegisterKYC ({ role }) {
                         paymaart_id: id,
                         info_details_status: 'completed'
                     };
-                    handleAPICall({ ...body, ...submitPayload }, 'success');
+                    if (type === 'update' && saveCount) {
+                        body.sent_email = true;
+                    }
+                    handleAPICall(type === 'update' ? body : { ...body, ...submitPayload }, 'success', type === 'update'
+                        ? 'kyc-update/update/infoDetails'
+                        : undefined);
                 }
                 break;
             default:
@@ -519,6 +591,12 @@ export default function RegisterKYC ({ role }) {
             const object = {};
             if (res.data.data !== '') {
                 const statusObject = progressBarStatus;
+                if (type === 'update') {
+                    statusObject.basic_details = {
+                        status: 'completed',
+                        label: 'Basic Details'
+                    };
+                }
                 Object.keys(res.data.data).map((item) => {
                     setOldStateValue({
                         citizen_type: res.data.data.citizen === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen',
@@ -551,29 +629,54 @@ export default function RegisterKYC ({ role }) {
                             }
                             break;
                         case 'id_document_back':
-                            object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
-                            res.data.data[item];
+                            if (res.data.data.id_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_back'] = res.data.data[item];
+                            } else {
+                                object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
+                                res.data.data[item];
+                            }
                             break;
                         case 'id_document_front':
-                            object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
-                            res.data.data[item];
+                            if (res.data.data.id_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_front'] =
+                                res.data.data[item];
+                            } else {
+                                object[`${res.data.data.id_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
+                                res.data.data[item];
+                            }
                             break;
                         case 'verification_document_back':
-                            object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
+                            if (res.data.data.verification_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_back'] = res.data.data[item];
+                            } else {
+                                object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_back`] =
                                 res.data.data[item];
+                            }
                             break;
                         case 'verification_document_front':
-                            object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
+                            if (res.data.data.verification_document === 'Driver’s Licence') {
+                                object['driver\'s_licence_img_front'] = res.data.data[item];
+                            } else {
+                                object[`${res.data.data.verification_document.replaceAll(' ', '_').toLowerCase()}_img_front`] =
                                 res.data.data[item];
+                            }
                             break;
                         case 'selfie':
                             object.capture = res.data.data[item];
                             break;
                         case 'id_document':
-                            object['ID Document'] = res.data.data[item];
+                            if (res.data.data[item] === 'Driver’s Licence') {
+                                object['ID Document'] = 'Driver\'s Licence';
+                            } else {
+                                object['ID Document'] = res.data.data[item];
+                            }
                             break;
                         case 'verification_document':
-                            object['Verification Document'] = res.data.data[item];
+                            if (res.data.data[item] === 'Driver’s Licence') {
+                                object['Verification Document'] = 'Driver\'s Licence';
+                            } else {
+                                object['Verification Document'] = res.data.data[item];
+                            }
                             break;
                         case 'address_details_status':
                             statusObject.address_details = {
@@ -625,27 +728,55 @@ export default function RegisterKYC ({ role }) {
             console.error('Error fetching orders:', error);
         }
     };
+    const basicDetailsView = async () => {
+        const res = await dataService.GetAPI(`admin-users/view-specific-${role}?paymaart_id=${id}`);
+        setBasicVieDetails(res.data.data);
+        const otp = await dataService.PostAPI('kyc-update/send-otp', {
+            paymaart_id: id,
+            phone_number: res.data.data.phone_number,
+            country_code: res.data.data.country_code
+        });
+        setFormData({
+            email: res.data.data.email,
+            phoneNumber: res.data.data.phone_number
+        });
+        setCountryCode(res.data.data.country_code);
+        setEncryptedCode(otp.data.encryptedOTP);
+    };
     useEffect(() => {
         if (searchParams.get('tab') !== null) {
             if (searchParams.get('tab') !== 'address_details' &&
                 searchParams.get('tab') !== 'identity_details' &&
                 searchParams.get('tab') !== 'trading_details' &&
+                searchParams.get('tab') !== 'basic_details' &&
                 searchParams.get('tab') !== 'personal_details') {
                 handleSearchParamsValue('tab', null, searchParams, setSearchParams);
             }
             getKYCView();
         }
+        if (type === 'update') {
+            basicDetailsView();
+        }
     }, []);
+    const handleTabChangeOtp = () => {
+        if (searchParams.get('tab') === null) {
+            handleSearchParamsValue('tab', 'basic_details', searchParams, setSearchParams);
+        }
+        getKYCView();
+    };
     return (
         <CardHeader
-            activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
+            activePath={role === 'agent'
+                ? `
+            ${type === 'update' ? 'Update' : 'Register'} Agent`
+                : role === 'merchant' ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant` : 'Register Customer'}
             paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
             pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
             ChildrenElement
         >
 
-            {searchParams.get('tab') === null
+            {searchParams.get('tab') === null && type !== 'update'
                 ? (
                     <KYCRegistration
                         states={states}
@@ -680,10 +811,30 @@ export default function RegisterKYC ({ role }) {
                             <div className='flex flex-col'>
                                 <StatusProgressBar
                                     ProgressBar={progressBarStatus}
-                                    LineClass={role === 'merchant' ? 'line-class-merchant' : 'line-class'}
+                                    LineClass={(role === 'merchant' && type === 'update')
+                                        ? 'line-class-merchant-update'
+                                        : (role === 'merchant' || type === 'update')
+                                            ? 'line-class-merchant'
+                                            : 'line-class'}
                                     currentTab={searchParams.get('tab')}
                                 />
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>
+                                    {searchParams.get('tab') === 'basic_details' &&
+                                    <BasicDetails
+                                        handleStates={handleInputFelids}
+                                        states={basicViewDetails}
+                                        submitSelected={submitSelected}
+                                        bankSelected={bankSelected}
+                                        setFormData={setFormData}
+                                        formData={formData}
+                                        role={role}
+                                        verified={verified}
+                                        setVerified={setVerified}
+                                        countryCode={countryCode}
+                                        setCountryCode={setCountryCode}
+                                        setSubmitSelected={setSubmitSelected}
+                                    />
+                                    }
                                     {searchParams.get('tab') === 'address_details' &&
                                     <Address
                                         handleStates={handleInputFelids}
@@ -705,6 +856,7 @@ export default function RegisterKYC ({ role }) {
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
                                         role={role}
+                                        type={type}
                                     />}
                                     {
                                         searchParams.get('tab') === 'trading_details' &&
@@ -743,6 +895,14 @@ export default function RegisterKYC ({ role }) {
                                     Skip</div>
                             </div>
                         </div></>}
+            <OTPpopup
+                isOpen={isOtpPopup}
+                handleClose={() => setIsOtpPopup(false)}
+                encryptedCode={encryptedCode}
+                basicViewDetails={basicViewDetails}
+                handleTabChangeOtp={handleTabChangeOtp}
+                navigationPath={() => Navigate(`/users/${role}s/register-${role}/specific-view/${id}`)}
+            />
         </CardHeader>
     );
 }

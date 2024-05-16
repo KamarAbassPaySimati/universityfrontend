@@ -8,12 +8,17 @@ When('I click on update {string}', async function (type) {
     let element;
     switch (type) {
     case 'Admin user':
+    case 'Update Agent':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="update_button"]')));
         await driver.wait(until.elementIsVisible(element));
         this.record_status = await element.getText();
         await element.click();
         break;
     default:
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="update_button"]')));
+        await driver.wait(until.elementIsVisible(element));
+        this.record_status = await element.getText();
+        await element.click();
         break;
     }
 });
