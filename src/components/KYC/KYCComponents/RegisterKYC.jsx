@@ -423,19 +423,21 @@ export default function RegisterKYC ({ role, type }) {
                     break;
                 }
             }
-            if (!((states.bank_name === '' || states.bank_name === undefined) &&
+            if (type !== 'update') {
+                if (!((states.bank_name === '' || states.bank_name === undefined) &&
             (states.account_number === '' || states.account_number === undefined) &&
             (states.account_name === '' || states.account_name === undefined))) {
-                BankDetailsList.map((bank) => {
-                    if (states[bank] === '' || states[bank] === undefined) {
-                        if (key !== 'skip') {
-                            setBankSelected(true);
+                    BankDetailsList.map((bank) => {
+                        if (states[bank] === '' || states[bank] === undefined) {
+                            if (key !== 'skip') {
+                                setBankSelected(true);
+                            }
+                            count = count + 1;
+                        } else {
+                            body[bank] = states[bank];
                         }
-                        count = count + 1;
-                    } else {
-                        body[bank] = states[bank];
-                    }
-                });
+                    });
+                }
             }
             setSubmitPayload({ ...body });
             return count === 0;
@@ -573,7 +575,7 @@ export default function RegisterKYC ({ role, type }) {
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
-                    handleAPICall(type === 'update' ? body : { ...body, ...submitPayload }, 'success', type === 'update'
+                    handleAPICall({ ...body, ...submitPayload }, 'success', type === 'update'
                         ? 'kyc-update/update/infoDetails'
                         : undefined);
                 }

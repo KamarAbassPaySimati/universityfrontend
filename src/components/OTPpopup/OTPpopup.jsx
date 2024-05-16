@@ -25,22 +25,27 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        try {
-            const res = await dataService.PostAPI('kyc-update/verify-otp-secure', {
-                otp: otp.join(''),
-                encryptedOTP: encryptedCode
-            });
+        if (otp.join('') === '') {
+            setError('Required field');
             setIsLoading(false);
-            if (res.error) {
-                setError(res.data.data.message);
-            } else {
-                setTimer(2 * 60);
-                handleTabChangeOtp();
-                handleClose();
-            }
-        } catch (error) {
+        } else {
+            try {
+                const res = await dataService.PostAPI('kyc-update/verify-otp-secure', {
+                    otp: otp.join(''),
+                    encryptedOTP: encryptedCode
+                });
+                setIsLoading(false);
+                if (res.error) {
+                    setError(res.data.data.message);
+                } else {
+                    setTimer(2 * 60);
+                    handleTabChangeOtp();
+                    handleClose();
+                }
+            } catch (error) {
             // setError(error.message);
-            console.log('ennnnnnrr', error);
+                console.log('ennnnnnrr', error);
+            }
         }
     };
     const handleResendClick = () => {
