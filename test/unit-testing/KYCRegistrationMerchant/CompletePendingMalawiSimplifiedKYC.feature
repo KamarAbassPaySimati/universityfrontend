@@ -1,25 +1,17 @@
-Feature: Paymaart - Admin Web - Onboard Merchant(Malawi Simplified KYC)
-    As an Super/support/admin, I want the ability to perform KYC Registration for Malawi Simplified new Merchant
+Feature: Paymaart - Admin Web - Complete Pending Merchant KYC(Simplified)
+    As an Super/admin, I want the ability to Complete Pending KYC details of a merchant to keep their information accurate and up-to-date.
+
     Conditions of Satisfaction
-    Clear instructions and guidance should be provided on what documents are required and in which format
-    There should be an option to select as user is Malawi or Non-Malawi citizen
-    If user is a Malawi then user should be having the option to select as Personal or as Business merchant
-    If user is a Personal merchant there should be an option to select Full KYC or Simplified KYC
-    Merchants should be able to upload relevant documents, such as Location details ID details and Personal details, during the onboarding process, according to their KYC selection.
-    The platform should have a progress indicator to show merchants how far users are in the onboarding process.
-    A live selfie should be captured according to predefined rules during the onboarding process.
-    Merchants should be able to save their progress and return to complete the onboarding if necessary.
-    Upon successful submission of details the request goes to the admin for verification.
-    If there are any issues with the submission, clear instructions on what needs to be corrected should be provided by admin.
-    Email and SMS notifications should be sent to merchants at different stages of the onboarding process, such as confirmation of submission and approval/rejection.
-    The user should be able to see the documents to be submitted on each screen as information
-    The user should upload document in any of the mentioned formats such as .png,.jpg.jpeg.gif from phone documents or camera
-    Users should be able to skip to the next screen if required or come back to previous screen for any updates/changes.
-    The location details to be fetched from Google APIs.
-    The user should mandatorily fill in street, town, and district under location details
-    The user should be able to upload the front and back of the document(multiple uploads) 16. User should be given the option to remove and reupload the documents.
-    The system should show the user's the path chosen in KYC selection such as for eg: Malawi Citizen>Personal Merchant>Simplified KYC
-    
+
+    The user should be navigated to the screen where the user has the pending update to be completed.
+
+    There should be an option to view the information on the KYC requirements
+
+    there should be an option to skip the screen.
+
+    The user should fill all the information in selected section, partially filled information is not captured.
+    Upon filling all the KYC details ,the request goes to admin.
+
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
