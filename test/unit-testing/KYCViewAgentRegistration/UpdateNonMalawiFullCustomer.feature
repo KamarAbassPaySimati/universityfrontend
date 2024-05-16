@@ -28,8 +28,8 @@ Feature: Paymaart - Admin Web - Update Customer Details(Non-Malawi)
     @add_admin_user
     @create_new_user_and_login
     @register_new_customer
-    Scenario: Complete Agent Non Malawi Full KYC
-        Given I navigate to agent KYC registration screen
+    Scenario: Complete Customer Non Malawi Full KYC
+        Given I navigate to customer KYC registration screen
         When I select the citizenship type as "Non-Malawi"
         And I select the KYC type as "Full KYC"
         When I click on proceed button
@@ -81,7 +81,7 @@ Feature: Paymaart - Admin Web - Update Customer Details(Non-Malawi)
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
 
-    Scenario: Navigate to update agent KYC Screen, and Update
+    Scenario: Search and update customer 
         Given I navigate to customer users listing screen
         When I search for recently created customer
         When I click on update "Customer From Listing"
