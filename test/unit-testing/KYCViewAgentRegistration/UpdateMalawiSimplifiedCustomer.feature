@@ -86,6 +86,7 @@ Feature: Paymaart - Admin Web - Update Customer Details(Simplified)
         And I click on submit TOTP form
         Then I should be redirected to agent basic details screen
         And I should view first name, middle name, last name is disabled
+        When I upload the customer profile picture as "profile.png"
         When I click on save and continue button
         Then I should be redirected to KYC address details screen
         And I should view the street name, district, town are already prefilled
