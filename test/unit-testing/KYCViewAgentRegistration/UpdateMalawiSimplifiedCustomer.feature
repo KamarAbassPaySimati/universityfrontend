@@ -84,7 +84,7 @@ Feature: Paymaart - Admin Web - Update Customer Details(Simplified)
         Then I should view a modal asking for the OTP
         When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
-        Then I should be redirected to agent basic details screen
+        Then I should be redirected to customer basic details screen
         And I should view first name, middle name, last name is disabled
         When I upload the customer profile picture as "profile.png"
         When I click on save and continue button
