@@ -15,7 +15,6 @@ export default function MerchantTableBody ({ user, index }) {
     return (
         <>
             <tr className='border-b border-neutral-outline h-[48px]'>
-                {console.log(Object.keys(user?.till_numbers), 'manydhdjsdn')}
                 <td
                     title={user?.paymaart_id}
                     data-testid="paymaart_id"
