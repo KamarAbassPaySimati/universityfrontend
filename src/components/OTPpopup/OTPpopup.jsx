@@ -40,7 +40,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
             }
         } catch (error) {
             // setError(error.message);
-            console.log('ennnnnnrr', error);
+            console.log('error', error);
         }
     };
     const handleResendClick = () => {
