@@ -146,7 +146,6 @@ export default function KYCView ({ role, viewType }) {
                                     <div className="mt-2">
                                         {View.rejection_reasons.map((itemValue, index) => (
                                             <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
-                                                {console.log('nnssan', itemValue)}
                                                 <div className='flex'>
                                                     <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
                                                     <div className='ml-1'>
