@@ -769,7 +769,9 @@ export default function RegisterKYC ({ role, type }) {
             activePath={role === 'agent'
                 ? `
             ${type === 'update' ? 'Update' : 'Register'} Agent`
-                : role === 'merchant' ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant` : 'Register Customer'}
+                : role === 'merchant'
+                    ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant`
+                    : `${type === 'update' ? 'Update' : 'Register'} Customer`}
             paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
             pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
