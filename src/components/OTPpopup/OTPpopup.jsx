@@ -44,7 +44,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
                 }
             } catch (error) {
             // setError(error.message);
-                console.log('ennnnnnrr', error);
+                console.log('error', error);
             }
         }
     };
@@ -59,6 +59,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
             setTimer(2 * 60);
         }
     }, [encryptedCode]);
+
     return (
         <div className='merchant'>
             <Modal center open={isOpen} onClose={navigationPath} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
@@ -92,8 +93,8 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
                                     Didn’t receive OTP?
                                     {timer > 0
                                         ? <span> &nbsp;Resend in {formatTime(timer)}</span>
-                                        : <button onClick={handleResendClick} disabled={(resend === 0 || isLoading)} className={`
-                                    ${(isLoading || resend === 0) ? 'cursor-default' : 'cursor-pointer'} text-primary-normal`}
+                                        : <button onClick={handleResendClick} disabled={(isLoading)} className={`
+                                    ${(isLoading) ? 'cursor-default' : 'cursor-pointer'} text-primary-normal`}
                                         >
                                             &nbsp;Resend
                                         </button>}

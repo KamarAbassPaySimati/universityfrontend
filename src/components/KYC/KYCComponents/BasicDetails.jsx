@@ -8,10 +8,11 @@ import verificationValidation from '../../../pages/Users/Agent/Onboard Agent/ver
 import { endpoints } from '../../../services/endpoints';
 import { dataService } from '../../../services/data.services';
 import FelidDivision from '../../FelidDivision/FelidDivision';
+import ProfileUploadPlaceholder from '../../S3Upload/ProfileImageUpload';
 
 const BasicDetails = ({
     role, states, verified, setVerified, formData, setFormData, countryCode, setCountryCode, setSubmitSelected,
-    submitSelected
+    submitSelected, handleStates
 }) => {
     const [enteredLetter, setEnteredLetter] = useState();
     const initialErrorState = { phoneNumber: '', email: '' };
@@ -324,6 +325,19 @@ const BasicDetails = ({
     };
     return (
         <div data-testid="basic_details_screen">
+            {role === 'customer' && (
+                <div className='ml-2'>
+                    <h1 className='mt-[20px] font-500 text-[14px]'>Public Profile</h1>
+                    <ProfileUploadPlaceholder
+                        testId={'profile_image'}
+                        path={'customer_profile'}
+                        states={states}
+                        selectedUploadImg={'profile_pic'}
+                        profilePublic = {'public_profile'}
+                        handleStates = {handleStates}
+                    />
+                </div>
+            )}
             <FelidDivision
                 divisionClassName = {'w-1/3'}
                 divisionObject = {BasicDetails}

@@ -124,7 +124,7 @@ export const ComponentsBasedOnRole = {
             {
                 name: 'Customer Specific View',
                 element: <KYCView role={'customer'} viewType={'specific'} />,
-                path: '/users/customer/register-customer/specific-view/:id'
+                path: '/users/customers/register-customer/specific-view/:id'
             },
             // KYC Update for Agent
             {
@@ -138,12 +138,12 @@ export const ComponentsBasedOnRole = {
                 element: <RegisterKYC role={'merchant'} type='update' />,
                 path: '/users/merchants/register-merchant/kyc-update/:id'
             },
-        // KYC Update for Customer
-        {
-            name: 'Customer KYC Update',
-            element: <RegisterKYC role={'customer'} type='update'/>,
-            path: '/users/customers/register-customer/kyc-update/:id'
-        }
+            // KYC Update for Customer
+            {
+                name: 'Customer KYC Update',
+                element: <RegisterKYC role={'customer'} type='update'/>,
+                path: '/users/customers/register-customer/kyc-update/:id'
+            }
         ],
     admin:
         [

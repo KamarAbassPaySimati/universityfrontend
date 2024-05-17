@@ -472,7 +472,9 @@ export default function RegisterKYC ({ role, type }) {
                         email: formData.email,
                         phone_number: formData.phoneNumber,
                         country_code: countryCode,
-                        paymaart_id: id
+                        paymaart_id: id,
+                        profile_pic: basicViewDetails.profile_pic,
+                        public_profile: basicViewDetails.public_profile
                     };
                     handleAPICall(payload, 'address_details', 'kyc-update/update/basicDetails');
                 }
@@ -745,6 +747,9 @@ export default function RegisterKYC ({ role, type }) {
         setCountryCode(res.data.data.country_code);
         setEncryptedCode(otp.data.encryptedOTP);
     };
+    const handleBasicDetails = (id, value) => {
+        setBasicVieDetails((prevState) => ({ ...prevState, [id]: value }));
+    };
     useEffect(() => {
         if (searchParams.get('tab') !== null) {
             if (searchParams.get('tab') !== 'address_details' &&
@@ -825,7 +830,7 @@ export default function RegisterKYC ({ role, type }) {
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>
                                     {searchParams.get('tab') === 'basic_details' &&
                                     <BasicDetails
-                                        handleStates={handleInputFelids}
+                                        handleStates={handleBasicDetails}
                                         states={basicViewDetails}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}

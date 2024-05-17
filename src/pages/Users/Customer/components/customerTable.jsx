@@ -67,9 +67,9 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                                        onClick={() => Navigate(`/users/customer/register-customer/specific-view/${user?.paymaart_id}`
+                                        onClick={() => Navigate(`/users/customers/register-customer/specific-view/${user?.paymaart_id}`
                                         )} />
-                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' testId={`edit-${index}`}
                                         onClick={() => Navigate(`/users/customers/register-customer/kyc-update/${user?.paymaart_id}`)}
                                     />
                                     <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
