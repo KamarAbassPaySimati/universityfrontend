@@ -25,22 +25,27 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-        try {
-            const res = await dataService.PostAPI('kyc-update/verify-otp-secure', {
-                otp: otp.join(''),
-                encryptedOTP: encryptedCode
-            });
+        if (otp.join('') === '') {
+            setError('Required field');
             setIsLoading(false);
-            if (res.error) {
-                setError(res.data.data.message);
-            } else {
-                setTimer(2 * 60);
-                handleTabChangeOtp();
-                handleClose();
-            }
-        } catch (error) {
+        } else {
+            try {
+                const res = await dataService.PostAPI('kyc-update/verify-otp-secure', {
+                    otp: otp.join(''),
+                    encryptedOTP: encryptedCode
+                });
+                setIsLoading(false);
+                if (res.error) {
+                    setError(res.data.data.message);
+                } else {
+                    setTimer(2 * 60);
+                    handleTabChangeOtp();
+                    handleClose();
+                }
+            } catch (error) {
             // setError(error.message);
-            console.log('ennnnnnrr', error);
+                console.log('error', error);
+            }
         }
     };
     const handleResendClick = () => {
@@ -54,6 +59,7 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
             setTimer(2 * 60);
         }
     }, [encryptedCode]);
+
     return (
         <div className='merchant'>
             <Modal center open={isOpen} onClose={navigationPath} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
@@ -87,8 +93,8 @@ export default function OTPpopup ({ isOpen, handleClose, encryptedCode, basicVie
                                     Didn’t receive OTP?
                                     {timer > 0
                                         ? <span> &nbsp;Resend in {formatTime(timer)}</span>
-                                        : <button onClick={handleResendClick} disabled={(resend === 0 || isLoading)} className={`
-                                    ${(isLoading || resend === 0) ? 'cursor-default' : 'cursor-pointer'} text-primary-normal`}
+                                        : <button onClick={handleResendClick} disabled={(isLoading)} className={`
+                                    ${(isLoading) ? 'cursor-default' : 'cursor-pointer'} text-primary-normal`}
                                         >
                                             &nbsp;Resend
                                         </button>}
