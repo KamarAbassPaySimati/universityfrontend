@@ -40,7 +40,6 @@ function replaceTextWithSpecialChars (text) {
     const regex = /[^\w\s]/g; // Matches any character that's not alphanumeric or whitespace
     return text.replace(regex, '');
 }
-
 async function login () {
     await driver.get('http://localhost:3000/');
     await new Promise(resolve => setTimeout(resolve, 500));
