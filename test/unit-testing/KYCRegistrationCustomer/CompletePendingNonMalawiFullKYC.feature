@@ -17,7 +17,9 @@ Feature: Paymaart - Admin Web - Completed customer Pending KYC
         When I click on view customer
         Then I should view customer information
         And I should view option to activate or update a customer
-        
+        And I click on complete pending KYC
+        Then I should be redirected to KYC verification screen
+ 
     Scenario: Navigate to KYC verification
         When I select the citizenship type as "Non-Malawi"
         And I select the KYC type as "Full KYC"

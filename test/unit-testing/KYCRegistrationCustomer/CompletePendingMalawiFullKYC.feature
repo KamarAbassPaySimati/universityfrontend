@@ -17,6 +17,8 @@ Feature: Paymaart - Admin Web - Completed customer Pending KYC
         When I click on view customer
         Then I should view customer information
         And I should view option to activate or update a customer
+        And I click on complete pending KYC
+        Then I should be redirected to KYC verification screen
 
     Scenario: Navigate to KYC verification
         When I click on proceed button

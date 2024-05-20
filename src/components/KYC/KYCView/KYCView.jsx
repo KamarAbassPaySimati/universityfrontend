@@ -32,7 +32,7 @@ export default function KYCView ({ role, viewType }) {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const { approveKyc } = endpoints;
-    const idDocumentKeys = Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document');
+    const idDocumentKeys = userDetails?.identityDetails ? Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document') : [];
     const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
     const getView = () => {
         try {
