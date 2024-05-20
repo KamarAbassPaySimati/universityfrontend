@@ -32,6 +32,8 @@ export default function KYCView ({ role, viewType }) {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const { approveKyc } = endpoints;
+    const idDocumentKeys = Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document');
+    const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)));
@@ -255,6 +257,12 @@ export default function KYCView ({ role, viewType }) {
                                                                                 testId={`${itemkey}_${index}`}
                                                                                 className={'w-[245px]'}
                                                                             />
+                                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && index === lastIdDocumentIndex &&
+                                                                                <>
+                                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
+                                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
+                                                                                </>
+                                                                            }
                                                                         </div>
                                                                     )
                                                                     : (
