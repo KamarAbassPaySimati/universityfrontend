@@ -450,8 +450,9 @@ export default function RegisterKYC ({ role, type }) {
         }
     };
 
-    const handleSimplifiedTofull = () => {
+    const handleSimplifiedToFull = () => {
         setIsFullKycPopup(false);
+        setIsFullKYC(true);
         const payload = {
             email: formData.email,
             phone_number: formData.phoneNumber,
@@ -460,7 +461,7 @@ export default function RegisterKYC ({ role, type }) {
             profile_pic: basicViewDetails.profile_pic,
             public_profile: basicViewDetails.public_profile
         };
-        handleAPICall(payload, 'address_details', 'kyc-update/update/basicDetails');
+        handleAPICall(payload, 'address_details', 'kyc-update/update/convertkyc');
     };
     const handleSubmit = (KycSelectedType) => {
         setIsLoadingButton(true);
@@ -484,7 +485,7 @@ export default function RegisterKYC ({ role, type }) {
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
-                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup) {
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role === 'agent') {
                     setIsFullKycPopup(true);
                     setIsLoadingButton(false);
                 } else {
@@ -871,6 +872,7 @@ export default function RegisterKYC ({ role, type }) {
                                         states={states}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
+                                        isFullKYC={isFullKYC}
                                     />}
                                     {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                         handleStates={handleInputFelids}
@@ -887,6 +889,7 @@ export default function RegisterKYC ({ role, type }) {
                                         bankSelected={bankSelected}
                                         role={role}
                                         type={type}
+                                        isFullKYC={isFullKYC}
                                     />}
                                     {
                                         searchParams.get('tab') === 'trading_details' &&
@@ -942,7 +945,7 @@ export default function RegisterKYC ({ role, type }) {
                         title={'Confirm'}
                         message={`'Upgrade to Full KYC' requires additional documentation 
                         for verification.  Select 'Edit Simplified KYC' to modify existing details`}
-                        handleSubmit={handleSimplifiedTofull}
+                        handleSubmit={handleSimplifiedToFull}
                         isLoading={false}
                         handleClose={handleSubmit}
                         buttonText={'Upgrade to Full KYC'}
