@@ -423,19 +423,21 @@ export default function RegisterKYC ({ role, type }) {
                     break;
                 }
             }
-            if (!((states.bank_name === '' || states.bank_name === undefined) &&
+            if (type !== 'update') {
+                if (!((states.bank_name === '' || states.bank_name === undefined) &&
             (states.account_number === '' || states.account_number === undefined) &&
             (states.account_name === '' || states.account_name === undefined))) {
-                BankDetailsList.map((bank) => {
-                    if (states[bank] === '' || states[bank] === undefined) {
-                        if (key !== 'skip') {
-                            setBankSelected(true);
+                    BankDetailsList.map((bank) => {
+                        if (states[bank] === '' || states[bank] === undefined) {
+                            if (key !== 'skip') {
+                                setBankSelected(true);
+                            }
+                            count = count + 1;
+                        } else {
+                            body[bank] = states[bank];
                         }
-                        count = count + 1;
-                    } else {
-                        body[bank] = states[bank];
-                    }
-                });
+                    });
+                }
             }
             setSubmitPayload({ ...body });
             return count === 0;
@@ -470,7 +472,9 @@ export default function RegisterKYC ({ role, type }) {
                         email: formData.email,
                         phone_number: formData.phoneNumber,
                         country_code: countryCode,
-                        paymaart_id: id
+                        paymaart_id: id,
+                        profile_pic: basicViewDetails.profile_pic,
+                        public_profile: basicViewDetails.public_profile
                     };
                     handleAPICall(payload, 'address_details', 'kyc-update/update/basicDetails');
                 }
@@ -573,7 +577,7 @@ export default function RegisterKYC ({ role, type }) {
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
-                    handleAPICall(type === 'update' ? body : { ...body, ...submitPayload }, 'success', type === 'update'
+                    handleAPICall({ ...body, ...submitPayload }, 'success', type === 'update'
                         ? 'kyc-update/update/infoDetails'
                         : undefined);
                 }
@@ -743,6 +747,9 @@ export default function RegisterKYC ({ role, type }) {
         setCountryCode(res.data.data.country_code);
         setEncryptedCode(otp.data.encryptedOTP);
     };
+    const handleBasicDetails = (id, value) => {
+        setBasicVieDetails((prevState) => ({ ...prevState, [id]: value }));
+    };
     useEffect(() => {
         if (searchParams.get('tab') !== null) {
             if (searchParams.get('tab') !== 'address_details' &&
@@ -769,7 +776,9 @@ export default function RegisterKYC ({ role, type }) {
             activePath={role === 'agent'
                 ? `
             ${type === 'update' ? 'Update' : 'Register'} Agent`
-                : role === 'merchant' ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant` : 'Register Customer'}
+                : role === 'merchant'
+                    ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant`
+                    : `${type === 'update' ? 'Update' : 'Register'} Customer`}
             paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
             pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
@@ -821,7 +830,7 @@ export default function RegisterKYC ({ role, type }) {
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>
                                     {searchParams.get('tab') === 'basic_details' &&
                                     <BasicDetails
-                                        handleStates={handleInputFelids}
+                                        handleStates={handleBasicDetails}
                                         states={basicViewDetails}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}

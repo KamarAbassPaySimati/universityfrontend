@@ -110,7 +110,6 @@ const KycVerificationTable = (
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-start'}>
                                     {
                                         <>
-                                            {console.log(geturl(), 'url')}
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
                                                 onClick={() => Navigate(`${geturl()}${user?.paymaart_id}`
                                                 )}
