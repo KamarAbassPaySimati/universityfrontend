@@ -91,7 +91,7 @@ When('I select the nature of permit as {string}', async function (string) {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="type_of_visa/permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]'))).click();
 });
 
 Then('I should see the town and district field getting pre-filled with google API data', async function () {

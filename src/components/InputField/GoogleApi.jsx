@@ -72,7 +72,9 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             handleOnChange('', 'street_name');
             handleOnChange('', 'town_village_ta');
             break;
-
+        case 'intl_district':
+            handleOnChange(place.address_components[0].long_name, 'intl_district');
+            break;
         case 'occupation_town':
             handleOnChange(place.address_components[0].long_name, 'occupation_town');
             break;

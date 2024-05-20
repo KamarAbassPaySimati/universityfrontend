@@ -35,9 +35,9 @@ export default function Documents ({ type, handleStates, states, submitSelected 
             <div className='flex'>
                 <div className="w-[48%] relative mt-2">
                     <InputFieldWithDropDown
-                        labelName={'Nature of permit'}
+                        labelName={'Type of Visa/Permit'}
                         value={states.nature_of_permit === undefined ? '' : states.nature_of_permit}
-                        placeholder={'Select Nature of permit'}
+                        placeholder={'Select Type of Visa/Permit'}
                         error={submitSelected && (states.nature_of_permit === undefined || states.nature_of_permit === '')
                             ? 'Required field'
                             : undefined}
@@ -57,8 +57,8 @@ export default function Documents ({ type, handleStates, states, submitSelected 
                         error={submitSelected && (states.ref_no === undefined || states.ref_no === '')
                             ? 'Required field'
                             : undefined}
-                        label={'Reference number'}
-                        placeholder={'Enter Reference number'}
+                        label={'Visa/Permit reference number'}
+                        placeholder={'Enter Visa/Permit reference number'}
                         maxLength="100"
                         onChange={handleStates}
                         inputType={'input'}
