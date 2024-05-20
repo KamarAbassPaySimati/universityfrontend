@@ -249,7 +249,7 @@ stages:
       displayName: "Integration Testing"
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       pool:
-        vmImage: "ubuntu-latest"
+        vmImage: "macos-latest"
       steps:
         - task: Cache@2
           inputs:
