@@ -27,7 +27,7 @@ export const getPaths = (viewType, role, status) => {
                 paths: ['Users', 'Customers'],
                 pathurls: ['users/customers'],
                 updateButtonPath: status === 'not_started'
-                    ? '/users/customers/register-customer/specific-view/update-customer'
+                    ? '/users/customers/register-customer/kyc-registration/'
                     : '/users/customers/register-customer/kyc-update/'
 
             };

@@ -8,14 +8,20 @@ export default function ProfileName ({
     loading,
     lastLoggedIn,
     CreatedDate,
-    viewType
+    viewType,
+    profilePicture
 }) {
     return (
         <div className={`flex gap-[27px] justify-center items-center ${loading ? 'animate-pulse z-0 ' : ''}`}>
-            <div className={`${loading ? 'bg-slate-200 text-slate-200 ' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] px-2 w-fit flex justify-center items-center
+            {profilePicture
+                ? (<div>
+                    <img src={profilePicture} alt="profilePicture" className='h-[66px] rounded-[8px] w-fit' />
+                </div>)
+                : (<div className={`${loading ? 'bg-slate-200 text-slate-200 ' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] px-2 w-fit flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px] uppercase`}>
-                {userButtonName}
-            </div>
+                    {userButtonName}
+                </div>)
+            }
             <div className={`${loading ? 'text-slate-200' : 'text-neutral-primary '}`}>
                 <div className={`font-[700] text-[30px] leading-[40px] capitalize max-w-[calc(100vw-690px)]
                                  break-words ${loading ? 'bg-slate-200 mb-2' : ''}`} data-testid="name">
