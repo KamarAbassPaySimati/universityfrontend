@@ -8,6 +8,7 @@ import Button2 from '../../Button2/Button2';
 import Button from '../../Button/Button';
 import PersonalDetails from './PersonalDetails';
 import Address from './Address';
+import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
 import { dataService } from '../../../services/data.services';
@@ -24,6 +25,7 @@ import GlobalContext from '../../Context/GlobalContext';
 import TradingDetails from './TradingDetails';
 import OTPpopup from '../../OTPpopup/OTPpopup';
 import BasicDetails from './BasicDetails';
+import Modal from 'react-responsive-modal';
 
 export default function RegisterKYC ({ role, type }) {
     const { id } = useParams();
@@ -34,6 +36,7 @@ export default function RegisterKYC ({ role, type }) {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [countryCode, setCountryCode] = useState('+265');
     const [saveCount, setSaveCount] = useState(true);
+    const [isFullKYC, setIsFullKYC] = useState(false);
     const [oldStateValue, setOldStateValue] = useState({
         citizen_type: '',
         kyc_type: '',
@@ -43,6 +46,7 @@ export default function RegisterKYC ({ role, type }) {
         email: true,
         phoneNumber: true
     });
+    const [isFullKycPopup, setIsFullKycPopup] = useState(false);
     const [formData, setFormData] = useState({});
     const [isOtpPopup, setIsOtpPopup] = useState(type === 'update');
     const [buttonStatus, setButtonStatus] = useState('Not Started');
@@ -446,6 +450,18 @@ export default function RegisterKYC ({ role, type }) {
         }
     };
 
+    const handleSimplifiedTofull = () => {
+        setIsFullKycPopup(false);
+        const payload = {
+            email: formData.email,
+            phone_number: formData.phoneNumber,
+            country_code: countryCode,
+            paymaart_id: id,
+            profile_pic: basicViewDetails.profile_pic,
+            public_profile: basicViewDetails.public_profile
+        };
+        handleAPICall(payload, 'address_details', 'kyc-update/update/basicDetails');
+    };
     const handleSubmit = (KycSelectedType) => {
         setIsLoadingButton(true);
         if (KycSelectedType === 'proceed') {
@@ -464,10 +480,15 @@ export default function RegisterKYC ({ role, type }) {
         } else {
             switch (searchParams.get('tab')) {
             case 'basic_details' :
+
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup) {
+                    setIsFullKycPopup(true);
+                    setIsLoadingButton(false);
                 } else {
+                    setIsFullKycPopup(false);
                     const payload = {
                         email: formData.email,
                         phone_number: formData.phoneNumber,
@@ -912,6 +933,25 @@ export default function RegisterKYC ({ role, type }) {
                 handleTabChangeOtp={handleTabChangeOtp}
                 navigationPath={() => Navigate(`/users/${role}s/register-${role}/specific-view/${id}`)}
             />
+            <Modal
+                center
+                open={isFullKycPopup}
+                onClose={() => { setIsFullKycPopup(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Confirm'}
+                        message={`'Upgrade to Full KYC' requires additional documentation 
+                        for verification.  Select 'Edit Simplified KYC' to modify existing details`}
+                        handleSubmit={handleSimplifiedTofull}
+                        isLoading={false}
+                        handleClose={handleSubmit}
+                        buttonText={'Upgrade to Full KYC'}
+                        buttonColor={'bg-[#3B2A6F]'}
+                        buttonWidth='w-[155px]'
+                        CancelButtonText={'Edit Simplified KYC'}
+                    />
+                </div>
+            </Modal>
         </CardHeader>
     );
 }
