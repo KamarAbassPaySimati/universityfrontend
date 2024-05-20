@@ -19,28 +19,6 @@ Feature: Paymaart - Admin Web- Update Merchant Details(Simplified to Full)
     There should be an information about the KYC requirements on all the KYC screen
     Upon successfully updating the details, the request goes to admin as re-KYC request, and KYC status to changed as In progress the det
     
-    Feature: Paymaart - Admin Web- Update Merchant Details(Simplified to Full)
-    As an Super/admin, I want the ability to update and modifyails of an merchant to keep their information accurate and up-to-date.
-
-    Conditions of Satisfaction
-
-    There should be an option to receive OTP when the admin tries to edit the merchant KYC.
-
-    The 6-digit OTP to be sent to the registered SMS/email based on merchant membership.
-
-    There should be an option to enter the OTP received
-
-    There should be an option to resent the OTP(Max 3 attempts)
-    Upon entering the valid OTP, the user will be navigated to edit KYC screen
-    If the OTP invalid the error message need to be displayed
-    If the merchant is has done simplified KYC ,then there should be an option to move from simplified to FULL KYC or continue with existing KYC
-    Upon selecting existing KYC, There should be an option to view the sections of KYC, and edit the KYC based on section selected.
-    The admin should be allowed to view the merchants' existing KYC details.
-    Upon selecting FULL KYC, There should an option to update ID details and Income status.
-    There should be an information about the KYC requirements on all the KYC screen
-    Upon successfully updating the details, the request goes to admin as re-KYC request, and KYC status to changed as In progress the det
-    
-    
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
