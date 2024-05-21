@@ -197,6 +197,11 @@ Feature: Paymaart - Admin Web- Update Merchant Details(Simplified to Full)
         Then I should view the preview of the uploaded document
         Given I am in KYC identity document details screen
         When I click on save and continue button
+        Then I should be redirected to KYC trading details screen
+        Given I am in KYC trading document details screen
+        When I enter the OTP as "355948" for update KYC
+        And I click on submit TOTP form
+        When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
         When I enter the OTP as "355948" for update KYC

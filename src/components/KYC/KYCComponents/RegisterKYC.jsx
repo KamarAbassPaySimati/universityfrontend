@@ -906,6 +906,7 @@ export default function RegisterKYC ({ role, type }) {
                                             states={states}
                                             submitSelected={submitSelected}
                                             bankSelected={bankSelected}
+                                            isFullKYC={isFullKYC}
                                         />
                                     }
                                 </div>
