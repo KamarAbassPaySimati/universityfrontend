@@ -19,7 +19,7 @@ When('I click on view customer', async function () {
 });
 
 Then('I should view customer information', async function () {
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"]')));
     await driver.wait(until.elementIsVisible(element));

@@ -28,7 +28,7 @@ export default function ProfileUploadPlaceholder ({ path, selectedUploadImg, sta
             setLoadingImg(false);
             e.target.value = '';
         } catch (error) {
-            console.log('errrr', error);
+            console.log('error', error);
             e.target.value = '';
         }
     };
