@@ -484,7 +484,7 @@ export default function RegisterKYC ({ role, type }) {
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
-                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role !== 'merchant' &&
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup &&
                 basicViewDetails.user_kyc_status === 'completed') {
                     setIsFullKycPopup(true);
                     setIsLoadingButton(false);
@@ -645,6 +645,8 @@ export default function RegisterKYC ({ role, type }) {
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
                             if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawian') {
                                 object.nationality = res.data.data[item];
+                            } else {
+                                object.nationality = '';
                             }
                             break;
                         case 'kyc_type':
