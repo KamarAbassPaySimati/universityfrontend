@@ -10,7 +10,7 @@ import { dataService } from '../../../services/data.services';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import { InputFelidsMonthSimplified } from './KYCFunctions';
 
-export default function PersonalDetails ({ handleStates, states, submitSelected, bankSelected, role, type }) {
+export default function PersonalDetails ({ isFullKYC, handleStates, states, submitSelected, bankSelected, role, type }) {
     const OccupationList = [
         'Employed', 'Self Employed', 'In Full-time Education', 'Seeking Employment', 'Retired/Pensioner', 'Others'];
     const Purpose = [
@@ -147,6 +147,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                             label={item}
                             id={item}
                             key={item}
+                            disabled={isFullKYC}
                             checkedState={states.gender === item}
                             name='gender'
                             handleRadioButton={() => handleStates(item, 'gender')}
@@ -157,6 +158,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
             <div className='mb-4 ml-2'><ErrorMessage error={'Required field'} /></div>}
             <div className='px-2.5 w-[339px]'>
                 <DatePickerAntd
+                    disabled={isFullKYC}
                     label={'Date of Birth'}
                     handleStates={handleStates}
                     value={states.dob === undefined ? '' : states.dob}
@@ -173,6 +175,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                             placeholder={'Select Occupation/Source of Funds'}
                             // error={formErrors.role}
                             options={OccupationList}
+                            disable={isFullKYC}
                             id="occupation"
                             testId="occupation_dropdown"
                             // information
@@ -273,6 +276,7 @@ export default function PersonalDetails ({ handleStates, states, submitSelected,
                         key={purposeItem}
                         id={purposeItem}
                         testId={`purpose_${index}`}
+                        disabled={isFullKYC}
                         checkboxText={purposeItem}
                         handleOnChange={handleStates}
                         Checked={states?.purpose !== undefined ? states?.purpose.includes(purposeItem) : false}

@@ -572,6 +572,8 @@ When('I select the applicable purpose and nature of business', async function ()
 
 When('I select valid monthly income and monthly withdrawal', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
     await driver.wait(until.elementIsVisible(monthly_income));
     await monthly_income.click();
