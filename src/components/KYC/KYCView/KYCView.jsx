@@ -16,7 +16,6 @@ import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
 import { dataService } from '../../../services/data.services';
 import GlobalContext from '../../Context/GlobalContext';
-import { endpoints } from '../../../services/endpoints';
 import KYCReject from '../KYCReject';
 import TillNumber from '../../Modals/TillNumber';
 import { CDN } from '../../../config';
@@ -32,7 +31,6 @@ export default function KYCView ({ role, viewType }) {
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
-    const { approveKyc } = endpoints;
     const idDocumentKeys = userDetails?.identityDetails ? Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document') : [];
     const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
 
@@ -69,13 +67,13 @@ export default function KYCView ({ role, viewType }) {
             const response = await dataService.PatchAPI(('admin-users/activate-deactivate-user'),
                 {
                     paymaart_id: View?.paymaart_id,
-                    status: 'false'
+                    status: View.status === 'active' ? 'false' : 'true'
                 });
             if (!response.error) {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
                 getView();
-                setToastSuccess(`Agent ${View.status === 'active' ? 'deactivated' : 'activated'} successfully`);
+                setToastSuccess(`${role.charAt(0).toUpperCase() + role.slice(1)} ${View.status === 'active' ? 'deactivated' : 'activated'} successfully`);
             } else {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
@@ -168,7 +166,6 @@ export default function KYCView ({ role, viewType }) {
                                     </div>
                                 )}
                             </div>
-
                         }
                         <KYCSections
                             heading='Basic Details'
@@ -510,6 +507,7 @@ export default function KYCView ({ role, viewType }) {
                     </div>
                 </>}
             </CardHeader>
+            {console.log(View?.status, 'hfhfhhfhfh')}
             <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
