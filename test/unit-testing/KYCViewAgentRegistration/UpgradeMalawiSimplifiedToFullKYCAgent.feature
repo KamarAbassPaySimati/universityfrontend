@@ -62,14 +62,35 @@ Feature: Paymaart - Admin Web- Update Agent from Simplified to Full KYC
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
     
-    Scenario: Navigate to update agent KYC Screen, and Update the simplified KYC when it is not approved by admin
-        Given I click on update "Update Agent"
+
+    @perform_logout
+    @add_admin_user
+    @create_new_user_and_login
+    Scenario: Navigate to update agent KYC Screen, and Edit simplified KYC when it is approved by the admin
+        Given I navigate to agent KYC listing screen
+        When I search for recently created agent
+        When I click on view agent KYC
+        Then I should view agent details
+        Then I should view basic details of agent KYC
+        And I should view the identification details of agent KYC
+        And I should view the personal details of agent KYC
+        * I click on approve "Agent KYC"
+        Then I should see a confirmation prompt for approving "Agent KYC"
+        When I click on confirm button
+        Then I should read a message stating that "KYC approved successfully"
+        And I should see the KYC status changed to "Completed"
+        Given I navigate to agent users listing screen
+        When I search for recently created agent
+        When I click on view agent
+        Then I should view agent information
+        When I click on update "Update Agent"
         Then I should view a modal asking for the OTP
         When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
         Then I should be redirected to agent basic details screen
         And I should view first name, middle name, last name is disabled
         When I click on save and continue button
+        Then I click on edit simplified KYC
         Then I should be redirected to KYC address details screen
         And I should view the street name, district, town are already prefilled
         When I click on save and continue button
@@ -112,6 +133,10 @@ Feature: Paymaart - Admin Web- Update Agent from Simplified to Full KYC
         When I click on confirm button
         Then I should read a message stating that "KYC approved successfully"
         And I should see the KYC status changed to "Completed"
+        Given I navigate to agent users listing screen
+        When I search for recently created agent
+        When I click on view agent
+        Then I should view agent information
         When I click on update "Update Agent"
         Then I should view a modal asking for the OTP
         When I enter the OTP as "355948" for update KYC

@@ -481,11 +481,11 @@ export default function RegisterKYC ({ role, type }) {
         } else {
             switch (searchParams.get('tab')) {
             case 'basic_details' :
-
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
-                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role === 'agent') {
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role === 'agent' &&
+                 basicViewDetails.user_kyc_status === 'completed') {
                     setIsFullKycPopup(true);
                     setIsLoadingButton(false);
                 } else {
