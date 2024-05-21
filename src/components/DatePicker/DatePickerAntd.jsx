@@ -6,7 +6,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
 dayjs.extend(customParseFormat);
 
-const CustomDatePicker = ({ label, handleStates, value, error }) => {
+const CustomDatePicker = ({ label, handleStates, value, error, disabled }) => {
     const getDisabledDate = (current) => {
         return current && current > Date.now();
     };
@@ -14,7 +14,10 @@ const CustomDatePicker = ({ label, handleStates, value, error }) => {
         <div className=''>
             <p className='text-neutral-primary font-medium text-[14px] leading-4 mb-2'>{label}</p>
             <DatePicker
-                className={`${error ? 'custom-datepicker-error' : 'custom-datepicker'} w-full`}
+                disabled={disabled}
+                className={`${disabled
+                    ? 'custom-datepicker-disabled'
+                    : error ? 'custom-datepicker-error' : 'custom-datepicker'} w-full`}
                 autoComplete="off"
                 data-testid="date_of_birth"
                 placeholder="DD-MMM-YYYY"

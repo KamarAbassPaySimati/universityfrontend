@@ -47,15 +47,41 @@ export default function FelidDivision ({
                                             </div>)
                                         : divObj.type === 'googleAPI'
                                             ? (
-                                                <GoogleApi
-                                                    id={divObj?.key}
-                                                    submitSelected={submitSelected}
-                                                    value={states[divObj?.key]}
-                                                    placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
-                                                    testId={divObj?.key}
-                                                    handleOnChange={handleOnChange}
-                                                    states={states}
-                                                    labelName={`${divObj?.label}`} />
+                                                divObj?.disable
+                                                    ? (
+                                                        <InputField
+                                                            className={!(submitSelected && (states[divObj?.key] === undefined ||
+                                                        states[divObj?.key]?.trim() === ''))
+                                                                ? 'w-[339px]'
+                                                                : 'w-[339px]'}
+                                                            divClassName='mx-2.5'
+                                                            value={states[divObj?.key]}
+                                                            // onFocus={handleFocus}
+                                                            id={divObj?.key}
+                                                            testId={divObj?.key}
+                                                            error={divObj?.require &&
+                                                        (submitSelected && (states[divObj?.key] === undefined ||
+                                                        states[divObj?.key]?.trim() === ''))
+                                                                ? 'Required field'
+                                                                : undefined}
+                                                            label={`${divObj?.label}`}
+                                                            placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                            // setEnteredLetter={setEnteredLetter}
+                                                            maxLength="100"
+                                                            onChange={handleOnChange}
+                                                            inputType={divObj?.type}
+                                                            disableInput={divObj?.disable}
+                                                        />)
+                                                    : (
+                                                        <GoogleApi
+                                                            id={divObj?.key}
+                                                            submitSelected={submitSelected}
+                                                            value={states[divObj?.key]}
+                                                            placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                            testId={divObj?.key}
+                                                            handleOnChange={handleOnChange}
+                                                            states={states}
+                                                            labelName={`${divObj?.label}`} />)
                                             )
                                             : divObj.type === 'InputSearch'
                                                 ? (
