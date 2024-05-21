@@ -7,7 +7,7 @@ Feature: Paymaart - Admin Web - Update Customer Details(Simplified to Full)
 
     Upon successfully performing the updation of the user KYC, it should be submitted to the admin for verification.
 
-    This option is enable only if simplified KYC is approved  
+    This option is enable only if simplified KYC is approved
 
     @perform_logout
     @add_admin_user
@@ -62,7 +62,22 @@ Feature: Paymaart - Admin Web - Update Customer Details(Simplified to Full)
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
 
+    @perform_logout
+    @add_admin_user
+    @create_new_user_and_login
     Scenario: Search and update customer
+        Given I navigate to customer KYC listing screen
+        When I search for recently created customer
+        When I click on view customer KYC
+        Then I should view customer details
+        Then I should view basic details of customer KYC
+        And I should view the identification details of customer KYC
+        And I should view the personal details of customer KYC
+        * I click on approve "Customer KYC"
+        Then I should see a confirmation prompt for approving "Customer KYC"
+        When I click on confirm button
+        Then I should read a message stating that "KYC approved successfully"
+        And I should see the KYC status changed to "Completed"
         Given I navigate to customer users listing screen
         When I search for recently created customer
         When I click on update "Customer From Listing"
@@ -73,8 +88,9 @@ Feature: Paymaart - Admin Web - Update Customer Details(Simplified to Full)
         And I should view first name, middle name, last name is disabled
         When I upload the customer profile picture as "profile.png"
         When I click on save and continue button
+                Then I click on edit simplified KYC
         Then I should be redirected to KYC address details screen
-        And I should view the street name, district, town are already prefilled
+                And I should view the street name, district, town are already prefilled
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
         Then I should be able to view the preview of the document front and back
@@ -115,6 +131,8 @@ Feature: Paymaart - Admin Web - Update Customer Details(Simplified to Full)
         When I click on confirm button
         Then I should read a message stating that "KYC approved successfully"
         And I should see the KYC status changed to "Completed"
+        Given I navigate to customer users listing screen
+        When I search for recently created customer
         When I click on update "Customer From Listing"
         Then I should view a modal asking for the OTP
         When I enter the OTP as "355948" for update KYC

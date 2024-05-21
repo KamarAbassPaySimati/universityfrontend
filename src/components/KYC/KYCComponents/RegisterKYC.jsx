@@ -179,11 +179,11 @@ export default function RegisterKYC ({ role, type }) {
         }
     };
 
-    const handleValidation = (type, key) => {
+    const handleValidation = (KYCValidationType, key) => {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
-        switch (type) {
+        switch (KYCValidationType) {
         case 'address_details':
             AddressDetails.map((item) => {
                 if (states[item] === undefined || states[item]?.trim() === '') {
@@ -484,8 +484,8 @@ export default function RegisterKYC ({ role, type }) {
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
-                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role === 'agent' &&
-                 basicViewDetails.user_kyc_status === 'completed') {
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role !== 'merchant' &&
+                basicViewDetails.user_kyc_status === 'completed') {
                     setIsFullKycPopup(true);
                     setIsLoadingButton(false);
                 } else {
