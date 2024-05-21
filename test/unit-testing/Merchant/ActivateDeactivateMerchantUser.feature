@@ -12,9 +12,9 @@ Feature: Paymaart - Admin Web - Active/Deactive merchants account
     @register_new_merchant
     Scenario: Cancel Deactivate merchant User
         Given I navigate to merchant users listing screen
-        When I search for the recently created merchant user
-        * I click on view for particular merchant user
-        * I should view all the basic details
+        When I search for recently created merchant
+        When I click on view merchant
+        Then I should view merchant information
         * I click on deactivate "Merchant user"
         Then I should see a confirmation prompt for deactivating "Merchant user"
         When I click on cancel button
@@ -22,9 +22,9 @@ Feature: Paymaart - Admin Web - Active/Deactive merchants account
 
     Scenario: Deactivate merchant User 
         Given I navigate to merchant users listing screen
-        When I search for the recently created merchant user
-        * I click on view for particular merchant user
-        * I should view all the basic details
+        When I search for recently created merchant
+        When I click on view merchant
+        Then I should view merchant information
         * I click on deactivate "Merchant user"
         Then I should see a confirmation prompt for deactivating "Merchant user"
         When I click on confirm button
@@ -32,9 +32,9 @@ Feature: Paymaart - Admin Web - Active/Deactive merchants account
 
     Scenario: Cancel Activate merchant User
         Given I navigate to merchant users listing screen
-        When I search for the recently created merchant user
-        When I click on view for particular merchant user
-        When I should view all the basic details
+        When I search for recently created merchant
+        When I click on view merchant
+        Then I should view merchant information
         When I click on activate "Merchant user"
         Then I should see a confirmation prompt for activate "Merchant user"
         When I click on cancel button
@@ -42,9 +42,9 @@ Feature: Paymaart - Admin Web - Active/Deactive merchants account
 
     Scenario: Activate merchant User
         Given I navigate to merchant users listing screen
-        When I search for the recently created merchant user
-        When I click on view for particular merchant user
-        When I should view all the basic details
+        When I search for recently created merchant
+        When I click on view merchant
+        Then I should view merchant information
         When I click on activate "Merchant user"
         Then I should see a confirmation prompt for activate "Merchant user"
         When I click on confirm button

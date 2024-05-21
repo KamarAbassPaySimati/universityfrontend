@@ -12,9 +12,9 @@ Feature: Paymaart - Admin Web - Active/Deactive agents account
     @register_new_agent
     Scenario: Cancel Deactivate agent User
         Given I navigate to agent users listing screen
-        When I search for the recently created agent user
-        * I click on view for particular agent user
-        * I should view all the basic details
+        When I search for recently created agent
+        When I click on view agent
+        Then I should view agent information
         * I click on deactivate "Agent user"
         Then I should see a confirmation prompt for deactivating "Agent user"
         When I click on cancel button
@@ -22,19 +22,19 @@ Feature: Paymaart - Admin Web - Active/Deactive agents account
 
     Scenario: Deactivate agent User
         Given I navigate to agent users listing screen
-        When I search for the recently created agent user
-        * I click on view for particular agent user
-        * I should view all the basic details
+        When I search for recently created agent
+        When I click on view agent
+        Then I should view agent information
         * I click on deactivate "Agent user"
         Then I should see a confirmation prompt for deactivating "Agent user"
         When I click on confirm button
-        Then I should read a message stating that "Agent user deactivated successfully"
+        Then I should read a message stating that "Agent deactivated successfully"
 
     Scenario: Cancel Activate agent User
         Given I navigate to agent users listing screen
-        When I search for the recently created agent user
-        When I click on view for particular agent user
-        When I should view all the basic details
+        When I search for recently created agent
+        When I click on view agent
+        Then I should view agent information
         When I click on activate "Agent user"
         Then I should see a confirmation prompt for activate "Agent user"
         When I click on cancel button
@@ -42,10 +42,10 @@ Feature: Paymaart - Admin Web - Active/Deactive agents account
 
     Scenario: Activate agent User
         Given I navigate to agent users listing screen
-        When I search for the recently created agent user
-        When I click on view for particular agent user
-        When I should view all the basic details
+        When I search for recently created agent
+        When I click on view agent
+        Then I should view agent information
         When I click on activate "Agent user"
         Then I should see a confirmation prompt for activate "Agent user"
         When I click on confirm button
-        Then I should read a message stating that "Agent user activated successfully"
+        Then I should read a message stating that "Agent activated successfully"

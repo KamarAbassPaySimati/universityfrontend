@@ -315,6 +315,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSubmitSelected(true);
                         sideBarStatus['ID Document'] = 'pending';
                     }
+                    count = count + 1;
                 } else {
                     body.nature_of_permit = states.nature_of_permit;
                 }
@@ -323,6 +324,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSubmitSelected(true);
                         sideBarStatus['ID Document'] = 'pending';
                     }
+                    count = count + 1;
                 } else {
                     body.ref_no = states.ref_no;
                 }
@@ -547,6 +549,10 @@ export default function RegisterKYC ({ role, type }) {
                         paymaart_id: id,
                         id_details_status: 'completed'
                     };
+                    if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
+                        body.nature_of_permit = submitPayload.nature_of_permit;
+                        body.ref_no = submitPayload.ref_no;
+                    }
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
