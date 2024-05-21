@@ -63,17 +63,19 @@ export default function KYCView ({ role, viewType }) {
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
     };
-
     const handleConfirmAction = async () => {
         try {
             setIsLoading(true);
-            const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
-                { user_id: View?.paymaart_id });
+            const response = await dataService.PatchAPI(('admin-users/activate-deactivate-user'),
+                {
+                    paymaart_id: View?.paymaart_id,
+                    status: 'false'
+                });
             if (!response.error) {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
                 getView();
-                setToastSuccess('KYC approved successfully');
+                setToastSuccess(`Agent ${View.status === 'active' ? 'deactivated' : 'activated'} successfully`);
             } else {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
@@ -276,7 +278,6 @@ export default function KYCView ({ role, viewType }) {
                                                                         font-normal px-1'>-</h1>
                                                                     )
                                                             ))}
-
                                                         </div>
                                                     </div>)
                                                 )
@@ -512,13 +513,13 @@ export default function KYCView ({ role, viewType }) {
             <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
-                        title={'Confirm to Approve?'}
-                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        title={`Confirm to ${View?.status === 'active' ? 'Deactivate' : 'Activate'}?`}
+                        message={`${View?.status === 'active' ? 'This action will suspend Admin user\'s account' : 'This action will activate Admin user\'s account'}`}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
-                        buttonText={'Approve'}
-                        buttonColor={'bg-accent-positive'}
+                        // buttonText={'Approve'}
+                        buttonColor={`${View?.status === 'active' ? 'bg-primary-negative' : 'bg-accent-positive'}`}
                     />
                 </div>
             </Modal>
