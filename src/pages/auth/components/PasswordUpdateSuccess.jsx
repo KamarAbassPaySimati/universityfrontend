@@ -16,7 +16,7 @@ const PasswordUpdateSuccess = () => {
             </div>
             <button data-testid="back_to_login"
                 onClick={() => navigate('/')}
-                className='w-[191px] text-[#fff] bg-primary-normal font-[600] text-[14px] leading-[24px] py-2
+                className='w-[191px] text-[#fff] bg-primary-normal font-semibold text-[14px] leading-[24px] py-2
                                 rounded-[8px] mt-4'>
                 Back to Login
             </button>

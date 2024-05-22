@@ -220,7 +220,7 @@ const OnboardAdmin = ({ actionKey }) => {
             minHeightRequired={true}
         >
             <>
-                <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
+                <h1 className='text-header-dark font-semibold text-[18px] leading-[26px] my-2'>
                     Basic Details
                 </h1>
                 {actionKey === 'update' && loading

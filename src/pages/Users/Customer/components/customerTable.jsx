@@ -52,7 +52,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                 <td data-testid="status" className='py-2 px-[10px] truncate min-w-[50px] max-w-[100px]'>
                                     {user?.status
                                         ? (
-                                            <span className={`py-[2px] px-[10px] rounded text-[13px] font-[600] capitalize 
+                                            <span className={`py-[2px] px-[10px] rounded text-[13px] font-semibold capitalize 
                                              ${user.status === 'active'
                                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                                 : 'bg-neutral-grey text-neutral-secondary'}`}>
@@ -70,7 +70,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                         onClick={() => Navigate(`/users/customers/register-customer/specific-view/${user?.paymaart_id}`
                                         )} />
                                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' testId={`edit-${index}`}
-                                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/customers/register-customer/specific-view/update-customer/${user?.paymaart_id}`) : Navigate(`/users/customers/register-customer/kyc-update/${user?.paymaart_id}`)}
+                                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/customers/register-customer/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/customers/register-customer/kyc-update/${user?.paymaart_id}`)}
                                     />
                                     <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
                                     <Tooltip

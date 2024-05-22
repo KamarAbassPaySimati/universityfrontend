@@ -20,7 +20,7 @@ const CardHeaderWithButton = ({
                             className='flex bg-primary-normal py-[8px] px-[16px]
                             justify-center items-center h-[40px] rounded-[6px]'>
                             <img src='/images/onboardIcon.svg' className='mr-[8px]'/>
-                            <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
+                            <p className='text-[14px] font-semibold text-[#ffffff]'>{buttonText}</p>
                         </button>
                     )}
                     {statusButton === true
@@ -33,7 +33,7 @@ const CardHeaderWithButton = ({
                                     ? 'bg-[#13B681]'
                                     : 'bg-[#FF6363]'} py-[8px] px-[16px] 
                             justify-center items-center h-[40px] rounded-[6px]`}>
-                                <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
+                                <p className='text-[14px] font-semibold text-[#ffffff]'>{statusButton}</p>
                             </button>
                         ))}
                     {statusButton && (updateButton === false
@@ -42,7 +42,7 @@ const CardHeaderWithButton = ({
                                 className='ml-6 flex bg-primary-normal py-[8px] px-[16px]
                             justify-center items-center h-[40px] rounded-[6px]'>
                                 <Image src='update' className='mr-[8px]'/>
-                                <p className='text-[14px] font-[600] text-[#ffffff]'>Update</p>
+                                <p className='text-[14px] font-semibold text-[#ffffff]'>Update</p>
                             </button>
                         )
                         : (updateButton === true && (
