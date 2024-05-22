@@ -18,7 +18,7 @@ export default function MerchantTableBody ({ user, index }) {
                 <td
                     title={user?.paymaart_id}
                     data-testid="paymaart_id"
-                    className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'
+                    className='py-2 px-[10px] text-left min-w-[70px] max-w-[70px]'
                 >{user?.paymaart_id || '-'}</td>
                 <td data-testid="merchant_name"
                     title={user?.name}
