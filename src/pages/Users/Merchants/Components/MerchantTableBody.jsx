@@ -18,7 +18,7 @@ export default function MerchantTableBody ({ user, index }) {
                 <td
                     title={user?.paymaart_id}
                     data-testid="paymaart_id"
-                    className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'
+                    className='py-2 px-[10px] text-left min-w-[70px] max-w-[70px]'
                 >{user?.paymaart_id || '-'}</td>
                 <td data-testid="merchant_name"
                     title={user?.name}
@@ -51,7 +51,7 @@ export default function MerchantTableBody ({ user, index }) {
                         onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
                         )} />
                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                        onClick={() => Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
+                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
                     />
                     <Tooltip
                         id={`eye-${index}`}
@@ -63,7 +63,7 @@ export default function MerchantTableBody ({ user, index }) {
                         id={`edit-${index}`}
                         className='my-tooltip z-30'
                         place="top"
-                        content="Edit"
+                        content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                     />
                 </td>
             </tr>
