@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button/Button';
 import Image from '../../../components/Image/Image';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { siteKey } from '../../../config';
-
-const DELAY = 1500;
 
 const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
     const navigate = useNavigate();
@@ -31,39 +29,21 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
         });
     };
     const reCaptchaRef = useRef();
-    const [load, setLoad] = useState(false);
-    const [value, setValue] = useState('[empty]');
     const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
-
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setLoad(true);
-        }, DELAY);
-        return () => clearTimeout(timer);
-    }, []);
-    const handleChangeRecap = (value) => {
-        console.log('onChange prop - Captcha value:', value);
-        setValue(value);
-        if (value === null) alert('Token Expired');
-    };
 
     const asyncScriptOnLoad = () => {
         setRecaptchaLoaded(true);
     };
-    const onSubmitValue = (e) => {
-        if (window.location.href !== 'http://localhost:3000/') {
-            const token = reCaptchaRef.current.execute();
-            console.log('token', value, token);
-            if (value) {
-                handleSubmit(e);
-            } else {
-                alert('Invisible reCAPTCHA active—prove you\'re human to proceed!');
-            }
-        } else {
-            handleSubmit(e);
+    const onSubmitValue = async (e) => {
+        e.preventDefault();
+        if (window.location.host !== 'localhost:3000') {
+            await reCaptchaRef.current.executeAsync();
+        }
+        handleSubmit(e);
+        if (window.location.host !== 'localhost:3000') {
+            await reCaptchaRef.current.reset();
         }
     };
-    console.log('windowww', window.location.href !== 'http://localhost:3000/');
     return (
         <div className='bg-primary-normal'>
             <Image className='fixed bottom-[30px] right-[100px] object-cover z-10' src='login_img' />
@@ -111,19 +91,19 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 showLoginError={true}
                                 setEnteredLetter={setEnteredLetter}
                             />
-                            {(load && window.location.href !== 'http://localhost:3000/') && (
+                            {(window.location.host !== 'localhost:3000') && (
                                 <ReCAPTCHA
                                     style={{ display: 'inline-block', height: '10px !important' }}
                                     theme="dark"
                                     size="invisible"
                                     ref={reCaptchaRef}
                                     sitekey={siteKey}
-                                    onChange={handleChangeRecap}
+                                    // onChange={handleChangeRecap}
                                     asyncScriptOnLoad={asyncScriptOnLoad}
                                 />
                             )}
                             <Button
-                                disabled={!recaptchaLoaded && window.location.href !== 'http://localhost:3000/'}
+                                disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
                                 testId='login_button' isLoading={isLoading} text='Login' className='mt-4' />
                         </form>
                         {/* <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}

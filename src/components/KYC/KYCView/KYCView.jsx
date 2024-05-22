@@ -115,7 +115,7 @@ export default function KYCView ({ role, viewType }) {
                                 UserName={`${View?.first_name || '-'} 
                                 ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
                                 payMaartID={View?.paymaart_id}
-                                profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
+                                profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View?.public_profile && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
                                 loading={loading}
                                 viewType={viewType}
                                 lastLoggedIn={View?.last_logged_in === null
