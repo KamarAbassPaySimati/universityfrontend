@@ -315,6 +315,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSubmitSelected(true);
                         sideBarStatus['ID Document'] = 'pending';
                     }
+                    count = count + 1;
                 } else {
                     body.nature_of_permit = states.nature_of_permit;
                 }
@@ -323,6 +324,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSubmitSelected(true);
                         sideBarStatus['ID Document'] = 'pending';
                     }
+                    count = count + 1;
                 } else {
                     body.ref_no = states.ref_no;
                 }
@@ -484,7 +486,7 @@ export default function RegisterKYC ({ role, type }) {
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
-                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup && role !== 'merchant' &&
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup &&
                 basicViewDetails.user_kyc_status === 'completed') {
                     setIsFullKycPopup(true);
                     setIsLoadingButton(false);
@@ -547,6 +549,10 @@ export default function RegisterKYC ({ role, type }) {
                         paymaart_id: id,
                         id_details_status: 'completed'
                     };
+                    if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
+                        body.nature_of_permit = submitPayload.nature_of_permit;
+                        body.ref_no = submitPayload.ref_no;
+                    }
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
@@ -645,6 +651,8 @@ export default function RegisterKYC ({ role, type }) {
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
                             if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawian') {
                                 object.nationality = res.data.data[item];
+                            } else {
+                                object.nationality = '';
                             }
                             break;
                         case 'kyc_type':
@@ -898,6 +906,7 @@ export default function RegisterKYC ({ role, type }) {
                                             states={states}
                                             submitSelected={submitSelected}
                                             bankSelected={bankSelected}
+                                            isFullKYC={isFullKYC}
                                         />
                                     }
                                 </div>

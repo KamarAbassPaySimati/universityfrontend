@@ -132,6 +132,30 @@ Then('The admin user record must remain in the system with its previous status',
     assert.equal(this.record_status, actualStatus);
 });
 
+Then('The agent user record must remain in the system with its previous status', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    const actualStatus = await element.getText();
+    assert.equal(this.record_status, actualStatus);
+});
+
+Then('The customer user record must remain in the system with its previous status', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    const actualStatus = await element.getText();
+    assert.equal(this.record_status, actualStatus);
+});
+
+Then('The merchant user record must remain in the system with its previous status', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    const actualStatus = await element.getText();
+    assert.equal(this.record_status, actualStatus);
+});
+
 Then('I should see the deactivate {string} button is hidden', async function (type) {
     // Write code here that turns the phrase above into concrete actions
     let element;
