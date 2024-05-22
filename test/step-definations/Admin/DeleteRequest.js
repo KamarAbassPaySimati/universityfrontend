@@ -4,7 +4,7 @@ const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 
 Given('I navigate to agent delete request listing screen', async function () {
-    await driver.get('http://localhost:3000/users/admins');
+    await driver.get('http://localhost:3000/delete-request/agent');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
