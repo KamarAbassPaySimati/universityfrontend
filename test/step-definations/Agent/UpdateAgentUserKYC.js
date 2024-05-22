@@ -108,3 +108,27 @@ When('I should view the monthly income and withdrawal prefilled', async function
 
     assert.notEqual(monthlyWithdrawalValue, '-');
 });
+
+Then('I click on upgrade to full KYC', async function () {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="confirm_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+});
+
+Then('I should view the KYC status changed to {string}', async function (expected_text) {
+    // Write code here that turns the phrase above into concrete actions
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="KYC_Type"]')));
+    await driver.wait(until.elementIsVisible(element));
+    const element_text = await element.getText();
+
+    assert.equal(expected_text, element_text);
+});
+
+Then('I click on edit simplified KYC', async function () {
+    await new Promise(resolve => setTimeout(resolve, 100));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="cancel_button"]')));
+    await driver.wait(until.elementIsVisible(element));
+    await element.click();
+});
