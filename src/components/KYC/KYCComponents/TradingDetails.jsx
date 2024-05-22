@@ -4,21 +4,23 @@ import { tradingTypes } from '../../JsonLists/TradingTypes';
 import UploadPlaceholder from '../../S3Upload/UploadPlaceholder';
 import InputTypeCheckbox from '../../InputField/InputTypeCheckbox';
 
-export default function TradingDetails ({ states, handleStates, bankSelected, submitSelected }) {
+export default function TradingDetails ({ states, handleStates, isFullKYC, submitSelected }) {
     const AddressDetails = {
         nothing_to_show: {
             trading_name: {
                 label: 'Trading Name of Business (Optional)',
                 type: 'input',
                 key: 'trading_name',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             trading_types: {
                 label: 'Business Types',
                 type: 'InputSearchMuliSelect',
                 key: 'trading_type',
                 require: true,
-                options: tradingTypes
+                options: tradingTypes,
+                disable: isFullKYC ? true : undefined
             }
         },
         'Trading Address':
@@ -27,25 +29,29 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                 label: 'House Name/Number (Optional)',
                 type: 'input',
                 key: 'trading_house_name',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             street_name: {
                 label: 'Street Name',
                 type: 'googleAPI',
                 key: 'trading_street_name',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             town_village_ta: {
                 label: 'Town/Village/TA',
                 type: 'googleAPI',
                 key: 'trading_town_village_ta',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             district: {
                 label: 'District',
                 type: 'googleAPI',
                 key: 'trading_district',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             }
         }
     };
@@ -77,6 +83,7 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                         selectedUploadImg={'trading_images'}
                         states={states}
                         handleStates={handleStates}
+                        disabled={isFullKYC}
                     />
                 </div>
                 {(states.trading_images !== undefined && states.trading_images.length !== 0) && <div className='ml-2'>
@@ -84,6 +91,7 @@ export default function TradingDetails ({ states, handleStates, bankSelected, su
                         id={'public_images'}
                         testId={'public_images'}
                         checkboxText={'Make your business images public '}
+                        disabled={isFullKYC}
                         handleOnChange={() =>
                             handleStates(states.public_images === undefined ? true : !states.public_images, 'public_images')}
                         Checked={states.public_images !== undefined ? states.public_images : false}
