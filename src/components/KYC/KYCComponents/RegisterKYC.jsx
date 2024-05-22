@@ -8,6 +8,7 @@ import Button2 from '../../Button2/Button2';
 import Button from '../../Button/Button';
 import PersonalDetails from './PersonalDetails';
 import Address from './Address';
+import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
 import IdentityDetails from './IdentityDetails';
 import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
 import { dataService } from '../../../services/data.services';
@@ -24,6 +25,7 @@ import GlobalContext from '../../Context/GlobalContext';
 import TradingDetails from './TradingDetails';
 import OTPpopup from '../../OTPpopup/OTPpopup';
 import BasicDetails from './BasicDetails';
+import Modal from 'react-responsive-modal';
 
 export default function RegisterKYC ({ role, type }) {
     const { id } = useParams();
@@ -34,6 +36,7 @@ export default function RegisterKYC ({ role, type }) {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [countryCode, setCountryCode] = useState('+265');
     const [saveCount, setSaveCount] = useState(true);
+    const [isFullKYC, setIsFullKYC] = useState(false);
     const [oldStateValue, setOldStateValue] = useState({
         citizen_type: '',
         kyc_type: '',
@@ -43,6 +46,7 @@ export default function RegisterKYC ({ role, type }) {
         email: true,
         phoneNumber: true
     });
+    const [isFullKycPopup, setIsFullKycPopup] = useState(false);
     const [formData, setFormData] = useState({});
     const [isOtpPopup, setIsOtpPopup] = useState(type === 'update');
     const [buttonStatus, setButtonStatus] = useState('Not Started');
@@ -175,11 +179,11 @@ export default function RegisterKYC ({ role, type }) {
         }
     };
 
-    const handleValidation = (type, key) => {
+    const handleValidation = (KYCValidationType, key) => {
         let count = 0;
         const sideBarStatus = documentSideBarData.documentTypes;
         const body = submitPayload;
-        switch (type) {
+        switch (KYCValidationType) {
         case 'address_details':
             AddressDetails.map((item) => {
                 if (states[item] === undefined || states[item]?.trim() === '') {
@@ -311,6 +315,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSubmitSelected(true);
                         sideBarStatus['ID Document'] = 'pending';
                     }
+                    count = count + 1;
                 } else {
                     body.nature_of_permit = states.nature_of_permit;
                 }
@@ -319,6 +324,7 @@ export default function RegisterKYC ({ role, type }) {
                         setSubmitSelected(true);
                         sideBarStatus['ID Document'] = 'pending';
                     }
+                    count = count + 1;
                 } else {
                     body.ref_no = states.ref_no;
                 }
@@ -423,19 +429,21 @@ export default function RegisterKYC ({ role, type }) {
                     break;
                 }
             }
-            if (!((states.bank_name === '' || states.bank_name === undefined) &&
+            if (type !== 'update') {
+                if (!((states.bank_name === '' || states.bank_name === undefined) &&
             (states.account_number === '' || states.account_number === undefined) &&
             (states.account_name === '' || states.account_name === undefined))) {
-                BankDetailsList.map((bank) => {
-                    if (states[bank] === '' || states[bank] === undefined) {
-                        if (key !== 'skip') {
-                            setBankSelected(true);
+                    BankDetailsList.map((bank) => {
+                        if (states[bank] === '' || states[bank] === undefined) {
+                            if (key !== 'skip') {
+                                setBankSelected(true);
+                            }
+                            count = count + 1;
+                        } else {
+                            body[bank] = states[bank];
                         }
-                        count = count + 1;
-                    } else {
-                        body[bank] = states[bank];
-                    }
-                });
+                    });
+                }
             }
             setSubmitPayload({ ...body });
             return count === 0;
@@ -444,6 +452,19 @@ export default function RegisterKYC ({ role, type }) {
         }
     };
 
+    const handleSimplifiedToFull = () => {
+        setIsFullKycPopup(false);
+        setIsFullKYC(true);
+        const payload = {
+            email: formData.email,
+            phone_number: formData.phoneNumber,
+            country_code: countryCode,
+            paymaart_id: id,
+            profile_pic: basicViewDetails.profile_pic,
+            public_profile: basicViewDetails.public_profile
+        };
+        handleAPICall(payload, 'address_details', 'kyc-update/update/convertkyc');
+    };
     const handleSubmit = (KycSelectedType) => {
         setIsLoadingButton(true);
         if (KycSelectedType === 'proceed') {
@@ -465,12 +486,19 @@ export default function RegisterKYC ({ role, type }) {
                 if (!verified.email || !verified.phoneNumber) {
                     setSubmitSelected(true);
                     setIsLoadingButton(false);
+                } else if (states.personal_customer === 'Simplified KYC' && !isFullKycPopup &&
+                basicViewDetails.user_kyc_status === 'completed') {
+                    setIsFullKycPopup(true);
+                    setIsLoadingButton(false);
                 } else {
+                    setIsFullKycPopup(false);
                     const payload = {
                         email: formData.email,
                         phone_number: formData.phoneNumber,
                         country_code: countryCode,
-                        paymaart_id: id
+                        paymaart_id: id,
+                        profile_pic: basicViewDetails.profile_pic,
+                        public_profile: basicViewDetails.public_profile
                     };
                     handleAPICall(payload, 'address_details', 'kyc-update/update/basicDetails');
                 }
@@ -521,6 +549,10 @@ export default function RegisterKYC ({ role, type }) {
                         paymaart_id: id,
                         id_details_status: 'completed'
                     };
+                    if (states.citizen_type === 'Non Malawi citizen' && states['ID Document'] === 'Passport') {
+                        body.nature_of_permit = submitPayload.nature_of_permit;
+                        body.ref_no = submitPayload.ref_no;
+                    }
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
@@ -573,7 +605,7 @@ export default function RegisterKYC ({ role, type }) {
                     if (type === 'update' && saveCount) {
                         body.sent_email = true;
                     }
-                    handleAPICall(type === 'update' ? body : { ...body, ...submitPayload }, 'success', type === 'update'
+                    handleAPICall({ ...body, ...submitPayload }, 'success', type === 'update'
                         ? 'kyc-update/update/infoDetails'
                         : undefined);
                 }
@@ -619,6 +651,8 @@ export default function RegisterKYC ({ role, type }) {
                             object.citizen_type = res.data.data[item] === 'Malawian' ? 'Malawi citizen' : 'Non Malawi citizen';
                             if (res.data.data[item] !== 'Malawian' && res.data.data[item] !== 'Non Malawian') {
                                 object.nationality = res.data.data[item];
+                            } else {
+                                object.nationality = '';
                             }
                             break;
                         case 'kyc_type':
@@ -743,6 +777,9 @@ export default function RegisterKYC ({ role, type }) {
         setCountryCode(res.data.data.country_code);
         setEncryptedCode(otp.data.encryptedOTP);
     };
+    const handleBasicDetails = (id, value) => {
+        setBasicVieDetails((prevState) => ({ ...prevState, [id]: value }));
+    };
     useEffect(() => {
         if (searchParams.get('tab') !== null) {
             if (searchParams.get('tab') !== 'address_details' &&
@@ -769,7 +806,9 @@ export default function RegisterKYC ({ role, type }) {
             activePath={role === 'agent'
                 ? `
             ${type === 'update' ? 'Update' : 'Register'} Agent`
-                : role === 'merchant' ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant` : 'Register Customer'}
+                : role === 'merchant'
+                    ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant`
+                    : `${type === 'update' ? 'Update' : 'Register'} Customer`}
             paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
             pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
             header={false}
@@ -821,7 +860,7 @@ export default function RegisterKYC ({ role, type }) {
                                 <div className='overflow-auto scrollBar h-tabledivHeight'>
                                     {searchParams.get('tab') === 'basic_details' &&
                                     <BasicDetails
-                                        handleStates={handleInputFelids}
+                                        handleStates={handleBasicDetails}
                                         states={basicViewDetails}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
@@ -841,6 +880,7 @@ export default function RegisterKYC ({ role, type }) {
                                         states={states}
                                         submitSelected={submitSelected}
                                         bankSelected={bankSelected}
+                                        isFullKYC={isFullKYC}
                                     />}
                                     {searchParams.get('tab') === 'identity_details' && <IdentityDetails
                                         handleStates={handleInputFelids}
@@ -857,6 +897,7 @@ export default function RegisterKYC ({ role, type }) {
                                         bankSelected={bankSelected}
                                         role={role}
                                         type={type}
+                                        isFullKYC={isFullKYC}
                                     />}
                                     {
                                         searchParams.get('tab') === 'trading_details' &&
@@ -865,6 +906,7 @@ export default function RegisterKYC ({ role, type }) {
                                             states={states}
                                             submitSelected={submitSelected}
                                             bankSelected={bankSelected}
+                                            isFullKYC={isFullKYC}
                                         />
                                     }
                                 </div>
@@ -903,6 +945,25 @@ export default function RegisterKYC ({ role, type }) {
                 handleTabChangeOtp={handleTabChangeOtp}
                 navigationPath={() => Navigate(`/users/${role}s/register-${role}/specific-view/${id}`)}
             />
+            <Modal
+                center
+                open={isFullKycPopup}
+                onClose={() => { setIsFullKycPopup(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Confirm'}
+                        message={`'Upgrade to Full KYC' requires additional documentation 
+                        for verification.  Select 'Edit Simplified KYC' to modify existing details`}
+                        handleSubmit={handleSimplifiedToFull}
+                        isLoading={false}
+                        handleClose={handleSubmit}
+                        buttonText={'Upgrade to Full KYC'}
+                        buttonColor={'bg-[#3B2A6F]'}
+                        buttonWidth='w-[155px]'
+                        CancelButtonText={'Edit Simplified KYC'}
+                    />
+                </div>
+            </Modal>
         </CardHeader>
     );
 }

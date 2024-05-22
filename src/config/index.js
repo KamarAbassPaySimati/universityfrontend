@@ -3,6 +3,8 @@ export const baseURL = 'https://' + import.meta.env.VITE_DOMAIN_NAME + '/v1/';
 // export const branchLiveKey =process.env.REACT_APP_BRANCH_LIVE_KEY
 export const CDN = 'https://' + import.meta.env.VITE_CDN_URL + '/';
 export const GOOGLE_API = import.meta.env.VITE_GOOGLE_API;
+export const siteKey = import.meta.env.VITE_SITE_KEY;
+export const secretKey = import.meta.env.VITE_SECRET_KEY;
 export const awsConfig = {
     Auth: {
         Cognito: {

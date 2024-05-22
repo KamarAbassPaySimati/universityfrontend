@@ -12,7 +12,6 @@ export default function verificationValidation (state, setErrorState, ignoreKey)
         if (key === ignoreKey) {
             continue;
         }
-        console.log('key', key, state[key]);
         if (state[key]?.trim() === '') {
             setErrorState((prevState) => ({
                 ...prevState,

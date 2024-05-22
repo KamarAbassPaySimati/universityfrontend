@@ -118,12 +118,6 @@ const KycVerification = () => {
             const correctedValues = fullKycValues.join(',');
             url += `&fullStatus=${correctedValues}`;
         }
-
-        // else if (searchParams.get('type') === 'customers') {
-        //     console.log('');
-        // } else if (searchParams.get('type') === 'merchants') {
-        //     console.log('');
-        // }
         try {
             // to get the data from authslice
             dispatch(KycVerificationList(url));
@@ -213,7 +207,6 @@ const KycVerification = () => {
                     (List?.data?.length !== 0 && !notFound) &&
 
                     <div className='h-tableHeight scrollBar overflow-auto'>
-                        {console.log('comi')}
                         <KycVerificationTable
                             error={error}
                             loading={loading}

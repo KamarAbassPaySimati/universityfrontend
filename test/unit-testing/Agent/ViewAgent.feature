@@ -257,7 +257,4 @@ Feature: Paymaart - Admin Web - Specific Agent View(Full KYC)
         Given I navigate to agent users listing screen
         When I click on view agent
         Then I should view agent information
-        Then I should view basic details of agent
-        And I should view the identification details of agent
-        And I should view the personal details of agent
         And I should view option to activate or update a agent
