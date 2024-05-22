@@ -1,11 +1,25 @@
 const { getAgentPayload, getCustomerPayload, getMerchantPayload } = require('../../bdd_payload/index');
-const { createAgentAccount, createCustomerAccount, createMerchantAccount } = require('../../bdd_api/index');
+const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI } = require('../../bdd_api/index');
 const { Before } = require('@cucumber/cucumber');
 
 Before('@register_new_agent', async function () {
     try {
         global.agent_registration_payload = await getAgentPayload();
         global.agent_registration_response = await createAgentAccount(global.agent_registration_payload);
+    } catch (error) {
+        console.log('Registration of agent failed', error);
+    }
+}); 
+Before('@register_new_agent_and_send_delete_request_for_that_agent', async function () {
+    try {
+        global.agent_registration_payload = await getAgentPayload();
+        global.agent_registration_response = await createAgentAccount(global.agent_registration_payload);
+
+        const deleteRequestPayload = {
+            reasons: ['Deleted For BDD'],
+            user_id: global.agent_registration_response.paymaart_id
+        };
+        global.delete_request_response = await deleteRequestBDDAPI(deleteRequestPayload);
     } catch (error) {
         console.log('Registration of agent failed', error);
     }
