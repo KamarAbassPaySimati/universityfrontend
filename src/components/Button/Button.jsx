@@ -7,7 +7,7 @@ const Button = ({ text, className, onClick, isLoading, color, smallLoader, disab
             data-testid={testId}
             onClick={onClick}
             disabled={disabled || isLoading}
-            className={`w-full ${buttonColor ? `${buttonColor}` : 'bg-primary-normal'} text-[#fff]  font-[600] text-[14px] 
+            className={`w-full ${buttonColor ? `${buttonColor}` : 'bg-primary-normal'} text-[#fff]  font-semibold text-[14px] 
             leading-[24px] py-2 rounded-[6px] 
             ${disabled ? 'cursor-not-allowed disabled:opacity-50' : 'cursor-pointer'}  text-center
 

@@ -96,7 +96,7 @@ const KycVerificationTable = (
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.kyc_status
                                         ? (
-                                            <span className={`py-[4px] px-[10px] rounded text-[13px] font-[600] capitalize ${getStatusStyles(user?.kyc_status)} `} title={getStatusText(user?.kyc_status)}>
+                                            <span className={`py-[4px] px-[10px] rounded text-[13px] font-semibold capitalize ${getStatusStyles(user?.kyc_status)} `} title={getStatusText(user?.kyc_status)}>
                                                 {getStatusText(user?.kyc_status)}
                                             </span>
                                         )

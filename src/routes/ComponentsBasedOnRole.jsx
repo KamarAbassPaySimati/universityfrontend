@@ -9,6 +9,7 @@ import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
 import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
 import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
 import KYCView from '../components/KYC/KYCView/KYCView';
+import DeleteAccount from '../pages/Verification/DeleteAccount';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -57,6 +58,11 @@ export const ComponentsBasedOnRole = {
                 name: 'KYC Verification list',
                 element: <KycVerification />,
                 path: '/verify/kyc-registration'
+            },
+            {
+                name: 'Delete Account Request',
+                element: <DeleteAccount />,
+                path: '/verify/delete-account-requests'
             },
             // Agent Kyc Specific View
             {
@@ -226,6 +232,11 @@ export const ComponentsBasedOnRole = {
                 name: 'Merchant KYC Registration',
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
+            },
+            {
+                name: 'Delete Account Request',
+                element: <DeleteAccount />,
+                path: '/verify/delete-account-requests'
             }
         ],
     'support-admin':

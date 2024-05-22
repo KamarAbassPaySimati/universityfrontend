@@ -92,7 +92,7 @@ const CardHeader = ({
                     h-[40px] rounded-[6px]'>
                             <img src='/images/onboardIcon.svg'
                                 className='mr-[8px]'/>
-                            <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
+                            <p className='text-[14px] font-semibold text-[#ffffff]'>{buttonText}</p>
                         </button>}
                         {rejectOrApprove && rejectOrApprove !== undefined
                             ? (reject
@@ -101,14 +101,14 @@ const CardHeader = ({
                                     <button data-testid="reject_button" onClick={onHandleReject}
                                         className={`flex  bg-primary-negative py-[8px] px-[16px] 
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
-                                        <p className='text-[14px] font-[600] text-[#ffffff]'>Reject</p>
+                                        <p className='text-[14px] font-semibold text-[#ffffff]'>Reject</p>
                                     </button>))
                             : (statusButton === true
                                 ? <Shimmer height={'h-10'}/>
                                 : (statusButton !== undefined &&
                                 <button data-testid="activate_deactivate_button" onClick={onHandleStatusChange}
                                     className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]`}>
-                                    <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
+                                    <p className='text-[14px] font-semibold text-[#ffffff]'>{statusButton}</p>
                                 </button>)
                             )
                         }
@@ -121,7 +121,7 @@ const CardHeader = ({
                                         <button data-testid="approve_button" onClick={onHandleStatusChange}
                                             className={`flex ml-6 bg-[#13B681] py-[8px] px-[16px] 
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
-                                            <p className='text-[14px] font-[600] text-[#ffffff]'>Approve</p>
+                                            <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>
                                         </button>))
                                 : (statusButton && ((updateButton !== '' && updateButton !== true)
                                     ? (
@@ -130,7 +130,7 @@ const CardHeader = ({
                     h-[40px] rounded-[6px]'>
                                             {updateButton === 'Update' && <Image src='update'
                                                 className='mr-[8px]'/>}
-                                            <p className='text-[14px] font-[600] text-[#ffffff]'>{updateButton}</p>
+                                            <p className='text-[14px] font-semibold text-[#ffffff]'>{updateButton}</p>
                                         </button>)
                                     : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>)))
                         }
@@ -148,7 +148,7 @@ const CardHeader = ({
                             <button
                                 key={index}
                                 onClick={() => handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams)}
-                                className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
+                                className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
                             >
                                 {item.key}
                             </button>
@@ -157,7 +157,6 @@ const CardHeader = ({
 
                 </div>
                 }
-
                 {ChildrenElement !== true
                     ? (!table
                         ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 

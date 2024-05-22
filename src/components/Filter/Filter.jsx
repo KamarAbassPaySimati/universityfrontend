@@ -38,7 +38,7 @@ const Filter = ({
             {isFilterOpen && <div className='relative z-[12]'>
                 <div data-testid='filter-modal' className="absolute top-[10px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
-                        <div className='font-[600]'>
+                        <div className='font-semibold'>
                             {filterType}
                         </div>
                         <button data-testid="clear-filter" onClick={() => { setIsFilterOpen(false); handleClearFilter(); } } className='font-[400]'>
@@ -48,7 +48,7 @@ const Filter = ({
                     <div className='p-4 flex flex-col gap-4'>
                         { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
-                                <div className='font-[600] mb-2 capitalize'>
+                                <div className='font-semibold mb-2 capitalize'>
                                     {key}
                                 </div>
                                 <div className='flex gap-10'>

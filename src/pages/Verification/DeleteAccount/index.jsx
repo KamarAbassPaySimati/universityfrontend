@@ -1,80 +1,43 @@
-import React, { useContext, useState, useEffect, useCallback } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
-import Topbar from '../../../components/Topbar/Topbar';
-import { useSearchParams } from 'react-router-dom';
+import NotFound from '../../NotFound';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import Topbar from '../../../components/Topbar/Topbar';
+import DeleteAccountTable from './components/DeleteAccountTable';
+import NoDataError from '../../../components/NoDataError/NoDataError';
 import Paginator from '../../../components/Paginator/Paginator';
 import GlobalContext from '../../../components/Context/GlobalContext';
-import NoDataError from '../../../components/NoDataError/NoDataError';
-import KycVerificationTable from './Components/KycVerificationTable';
-import { KycVerificationList } from './KycVerificationSlice';
+import { DeleteAccountList } from './DeleteAccountSlice';
 
-const KycVerification = () => {
+function DeleteAccount () {
+    const { List, error, loading } = useSelector(state => state.DeleteteAccount);
     const [notFound, setNotFound] = useState(false);
-    let url = '';
+    const [searchParams, setSearchParams] = useSearchParams();
     const { setToastError } = useContext(GlobalContext);
-    const { List, error, loading } = useSelector(state => state.kycVerifications);
-    // filter options
+    let url = '';
+    const dispatch = useDispatch();
+
+    const filterOptions = {
+        filter: ['pending', 'approve', 'reject']
+    };
+
     const initialToggleButtons = [
         { key: 'Agents', status: true },
         { key: 'Customers', status: false },
         { key: 'Merchants', status: false }
     ];
     const [toggleButtons, setToggleButtons] = useState(initialToggleButtons);
-    const filterOptions = {
-        role: ['Super admin', 'Finance admin', 'Admin', 'Support admin'],
-        status: ['active', 'inactive']
-    };
+
     const handleToggle = (updatedButtons) => {
         setToggleButtons(updatedButtons);
         // Perform API call or any other action based on the updated button values
     };
-    const singleCheckOptions = {
-        citizen: ['All', 'Malawi Citizen', 'Non Malawi Citizen']
-    };
-    const fullKycOptions = {
-        fullkyc: ['Completed', 'In-progress', 'Further Information Required']
-    };
-    const simplifedKycOptions = {
-        simplifiedkyc: ['Completed', 'In-progress', 'Further Information Required']
-    };
 
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    const dispatch = useDispatch();
-
-    /* The `GetList` constant is a function created using the `useCallback` hook in React. It is an
-    asynchronous function that is responsible for fetching data using the `dispatch` function to
-    call the `AdminList` action creator with the `searchParams` as a parameter. */
     const GetList = useCallback(async () => {
         url = searchParams.get('type') === 'agents'
-            ? 'agent-users/get-agent-kyc-list?'
+            ? 'admin-users/delete-requests?'
             : searchParams.get('type') === 'customers' ? 'admin-users/customer-kyc-list?' : 'admin-users/merchant-kyc-list?';
-        if (searchParams.get('page') !== null) {
-            url += `page=${searchParams.get('page')}`;
-        }
-        if (searchParams.get('search') !== null) {
-            url += `&search=${searchParams.get('search')}`;
-        }
-        if (searchParams.get('sortOrder') !== null) {
-            url += `&sortOrder=${searchParams.get('sortOrder')}`;
-        }
-        if (searchParams.get('citizen') !== null) {
-            const citizenValues = searchParams.get('citizen').split(',').map(value => {
-                const trimmedValue = value.trim().toLowerCase().replace(/citizen$/, '');
-                switch (trimmedValue) {
-                case 'malawi ':
-                    return 'malawi';
-                case 'non malawi ':
-                    return 'nonMalawi';
-                default:
-                    return trimmedValue; // Use original value if no correction needed
-                }
-            });
-
-            const correctedValues = citizenValues.join(',');
-            url += `&citizenship=${correctedValues}`;
-        }
 
         if (searchParams.get('simplifiedkyc') !== null) {
             // Get the value of 'simplifiedkyc' from the searchParams and split it by ','
@@ -94,7 +57,7 @@ const KycVerification = () => {
                     return trimmedValue;
                 }
             });
-                // Join the corrected values back into a string separated by ','
+            // Join the corrected values back into a string separated by ','
             const correctedValues = simplifiedValues.join(',');
             // Append the correctedValues directly to the URL
             url += `&simplifiedStatus=${correctedValues}`;
@@ -120,21 +83,13 @@ const KycVerification = () => {
         }
         try {
             // to get the data from authslice
-            dispatch(KycVerificationList(url));
+            dispatch(DeleteAccountList(`${url}&${searchParams.toString()}`));
         } catch (error) {
             setToastError('Something went wrong!');
         }
     }, [searchParams]);
-    // const GetList = useCallback(async () => {
-    //     try {
-    //         dispatch(AdminList(searchParams));
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400 || error.status === 404) {
                 setNotFound(true);
@@ -147,26 +102,25 @@ const KycVerification = () => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
             setNotFound(false);
-            params.page = 1;
+            params.page_number = 1;
         }
     }, [List]);
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
     useEffect(() => {
-        if (searchParams.get('page') === null) {
-            setSearchParams({ page: 1, type: 'agents', citizen: 'all' });
+        if (searchParams.get('page_number') === null) {
+            setSearchParams({ page_number: 1, type: 'agents' });
         } else {
             GetList();
         }
     }, [GetList]);
-
     return (
         <CardHeader
-            activePath='KYC Registration'
+            activePath='Delete Account Requests'
             paths={['Verify']}
-            pathurls={['verify/kyc-registration']}
-            header='KYC Registration'
+            pathurls={['verify/Delete Account']}
+            header='Delete Account Requests'
             minHeightRequired={true}
             headerWithoutButton={true}
             toggleButtons={toggleButtons}
@@ -175,12 +129,12 @@ const KycVerification = () => {
             searchParams={searchParams}// pass this because its used
             setSearchParams={setSearchParams}
         >
-            <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
+            <div className={`relative ${NotFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {
                     (!notFound && List?.data?.length === 0 &&
-                        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
-                    searchParams.get('search') === null && searchParams.get('search') === null &&
-                    searchParams.get('simplifiedkyc') === null && searchParams.get('fullkyc') === null)
+                        searchParams.get('page_number') === '1' && searchParams.get('citizen') === 'all' &&
+                        searchParams.get('search') === null && searchParams.get('search') === null &&
+                        searchParams.get('simplifiedkyc') === null && searchParams.get('fullkyc') === null)
                         ? (
                             <></>
                         )
@@ -189,24 +143,18 @@ const KycVerification = () => {
                                 setSearchParams={setSearchParams}// pass this as its getting updated
                                 searchParams={searchParams}// pass this because its used
                                 filterOptions={filterOptions}
-                                filter1={singleCheckOptions}
-                                filter2={fullKycOptions}
-                                filter3={simplifedKycOptions}
-                                filterType= 'Filter KYC Status'
+                                filterType= 'Filter'
                                 placeHolder= 'Paymaart ID or name '
                                 isLoading={loading}
-                                filterActive={(searchParams.get('citizen') !== null) ||
-                                searchParams.get('simplifiedkyc') !== null ||
-                            searchParams.get('fullkyc') !== null}
-                                singleSelectFilter={true}
+                                filterActive={(searchParams.get('status') !== null)}
                             />
                         </div>)
-
                 }
                 {
                     (List?.data?.length !== 0 && !notFound) &&
+
                     <div className='h-tableHeight scrollBar overflow-auto'>
-                        <KycVerificationTable
+                        <DeleteAccountTable
                             error={error}
                             loading={loading}
                             List={List}
@@ -214,18 +162,19 @@ const KycVerification = () => {
                             notFound={notFound}
                             searchParams={searchParams}
                         />
-                    </div> }
+                    </div>
+                }
                 {notFound &&
-                <NoDataError
-                    className='h-noDataError' heading='No Data Found'
-                    text = "404 could not find what you are looking for."/>}
-
+                    <NoDataError
+                        className='h-noDataError' heading='No Data Found'
+                        text="404 could not find what you are looking for." />
+                }
                 {
                     (!notFound && List?.data?.length === 0 &&
-        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
-        searchParams.get('search') === null &&
-        searchParams.get('simplifiedkyc') === null &&
-        searchParams.get('fullkyc') === null)
+                        searchParams.get('page_number') === '1' && searchParams.get('citizen') === 'all' &&
+                        searchParams.get('search') === null &&
+                        searchParams.get('simplifiedkyc') === null &&
+                        searchParams.get('fullkyc') === null)
                         ? (
 
                             <NoDataError className='h-noDataError'
@@ -233,23 +182,24 @@ const KycVerification = () => {
                                 text='No profiles currently require verification. Please check back later.' />
                         )
                         : (List?.data?.length === 0 &&
-            (
-                <NoDataError className='h-tableHeight'
-                    heading='No data found'
-                    text='Try adjusting your search or filter to find what you’re looking for' />)
+                            (
+                                <NoDataError className='h-tableHeight'
+                                    heading='No data found'
+                                    text='Try adjusting your search or filter to find what you’re looking for' />)
                         )
                 }
-
-                {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
+                {!loading && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
-                    totalPages={Math.ceil(List?.totalRecords / 10)}
+                    totalPages={Math.ceil(List?.total_records / 10)}
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}
-                    totalRecords={List?.totalRecords}
-                />}
+                    totalRecords={List?.total_records}
+                />
+                }
+
             </div>
         </CardHeader>
     );
-};
+}
 
-export default KycVerification;
+export default DeleteAccount;
