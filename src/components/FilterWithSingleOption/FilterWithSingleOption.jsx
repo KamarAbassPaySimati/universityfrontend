@@ -33,7 +33,7 @@ const FilterWithSingleOption = ({
                 src={`${filterActive ? 'active_' : ''}filter_icon`}
                 testId='filter-tab'
                 className={'filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer'}
-                onClick={() => {console.log('clickkk'); setIsFilterOpen(prevState => !prevState)}}
+                onClick={() => { setIsFilterOpen(prevState => !prevState); }}
             />
             <Tooltip
                 className='my-tooltip'

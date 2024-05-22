@@ -14,12 +14,13 @@ function DeleteAccount () {
     const { List, error, loading } = useSelector(state => state.DeleteteAccount);
     const [notFound, setNotFound] = useState(false);
     const [searchParams, setSearchParams] = useSearchParams();
+    const currentPage = searchParams.get('page') || 1;
     const { setToastError } = useContext(GlobalContext);
     let url = '';
     const dispatch = useDispatch();
 
     const filterOptions = {
-        filter: ['pending', 'approve', 'reject']
+        filter: ['pending', 'approved', 'rejected']
     };
 
     const initialToggleButtons = [
@@ -143,8 +144,8 @@ function DeleteAccount () {
                                 setSearchParams={setSearchParams}// pass this as its getting updated
                                 searchParams={searchParams}// pass this because its used
                                 filterOptions={filterOptions}
-                                filterType= 'Filter'
-                                placeHolder= 'Paymaart ID or name '
+                                filterType='Filter'
+                                placeHolder='Paymaart ID or name '
                                 isLoading={loading}
                                 filterActive={(searchParams.get('status') !== null)}
                             />
@@ -189,7 +190,7 @@ function DeleteAccount () {
                         )
                 }
                 {!loading && !notFound && List?.data?.length !== 0 && <Paginator
-                    currentPage={searchParams.get('page')}
+                    currentPage={currentPage}
                     totalPages={Math.ceil(List?.total_records / 10)}
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}

@@ -232,11 +232,6 @@ export const ComponentsBasedOnRole = {
                 name: 'Merchant KYC Registration',
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
-            },
-            {
-                name: 'Delete Account Request',
-                element: <DeleteAccount />,
-                path: '/verify/delete-account-requests'
             }
         ],
     'support-admin':

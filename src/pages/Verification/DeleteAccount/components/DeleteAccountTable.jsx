@@ -59,7 +59,7 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
                             <th className='py-2 px-[10px] text-left font-[400]'>Name</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Email</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Phone Number</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Satus</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Status</th>
 
                             <th className='py-2 px-[10px]'></th>
                         </tr>

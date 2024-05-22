@@ -9,7 +9,8 @@ Before('@register_new_agent', async function () {
     } catch (error) {
         console.log('Registration of agent failed', error);
     }
-}); 
+});
+
 Before('@register_new_agent_and_send_delete_request_for_that_agent', async function () {
     try {
         global.agent_registration_payload = await getAgentPayload();
@@ -19,9 +20,11 @@ Before('@register_new_agent_and_send_delete_request_for_that_agent', async funct
             reasons: ['Deleted For BDD'],
             user_id: global.agent_registration_response.paymaart_id
         };
+        console.log('deleteRequestPayload', deleteRequestPayload);
         global.delete_request_response = await deleteRequestBDDAPI(deleteRequestPayload);
+        console.log('delete request response', global.delete_request_response);
     } catch (error) {
-        console.log('Registration of agent failed', error);
+        console.log('Delete Request API Failed', error);
     }
 });
 
