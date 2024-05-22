@@ -81,6 +81,7 @@ const Topbar = ({
         }
         delete params.role;
         delete params.status;
+        delete params.filter;
         setSearchParams({ ...params });
     };
     const handleClearFilterForSingleCheck = () => {

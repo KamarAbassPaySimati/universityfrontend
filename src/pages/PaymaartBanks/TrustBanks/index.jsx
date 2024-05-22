@@ -111,7 +111,7 @@ const TrustBanks = () => {
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
                             className='mr-[8px]'/>
-                        <p className='text-[14px] font-[600] text-[#ffffff]'>Add Trust Bank</p>
+                        <p className='text-[14px] font-semibold text-[#ffffff]'>Add Trust Bank</p>
                     </button>
                 </div>}
                 {<div className='flex mt-[20px]'>

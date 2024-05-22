@@ -34,11 +34,7 @@ export default function KYCView ({ role, viewType }) {
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
-    const idDocumentKeys = userDetails?.identityDetails ? Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document') : [];
-    const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
 
-    // const idDocumentKeys = Object.keys(userDetails?.identityDetails)?.filter(key => key === 'ID Document');
-    // const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)));
@@ -158,7 +154,7 @@ export default function KYCView ({ role, viewType }) {
                                         className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
                                     <span data-testid="kyc_status"
-                                        className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
+                                        className={`py-[2px] px-[10px] text-[13px] font-semibold capitalize rounded w-fit
                                  ${getStatusColor(View?.user_kyc_status)?.color}`}>
                                         {getStatusColor(View?.user_kyc_status)?.text}
                                     </span>
@@ -169,7 +165,7 @@ export default function KYCView ({ role, viewType }) {
                         {!loading && View?.user_kyc_status === 'info_required' &&
                             <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
                                 <div className="flex flex-row justify-between">
-                                    <h1 className="text-[18px] font-600 text-neutral-primary">Reason for pending KYC</h1>
+                                    <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
                                     <button className="text-[14px] font-400 text-primary-normal" onClick={toggleExpand}>
                                         {isExpanded ? 'Collapse' : 'Expand'}
                                     </button>
@@ -179,9 +175,9 @@ export default function KYCView ({ role, viewType }) {
                                         {View.rejection_reasons.map((itemValue, index) => (
                                             <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
                                                 <div className='flex'>
-                                                    <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
+                                                    <span className="text-[#4F5962] font-semibold text-[14px] mt-[2.2px]">{index + 1}. </span>
                                                     <div className='ml-1'>
-                                                        <span className="text-[#4F5962] font-[600] text-[14px]">{`${itemValue.heading}: `}</span>
+                                                        <span className="text-[#4F5962] font-semibold text-[14px]">{`${itemValue.heading}: `}</span>
                                                         <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>{itemValue.label}</span>
 
                                                     </div>
@@ -286,12 +282,6 @@ export default function KYCView ({ role, viewType }) {
                                                                                 testId={`${itemkey}_${index}`}
                                                                                 className={'w-[245px]'}
                                                                             />
-                                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && (lastIdDocumentIndex) &&
-                                                                                <>
-                                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
-                                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
-                                                                                </>
-                                                                            }
                                                                         </div>
                                                                     )
                                                                     : (
@@ -300,6 +290,12 @@ export default function KYCView ({ role, viewType }) {
                                                                         font-normal px-1'>-</h1>
                                                                     )
                                                             ))}
+                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && (
+                                                                <>
+                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
+                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>)
                                                 )

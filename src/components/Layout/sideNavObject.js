@@ -9,7 +9,7 @@ export const sideNavObject = {
         },
         Verify: {
             path: 'verify',
-            dropdown: ['KYC Registration', 'Delete Account']
+            dropdown: ['KYC Registration', 'Delete Account Requests']
         },
         'Paymaart Banks': {
             path: 'paymaart-banks'

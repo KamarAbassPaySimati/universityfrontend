@@ -17,7 +17,7 @@ const TokenInvalid = () => {
                     </div>
                     <div className="flex justify-center"> {/* Centering the button */}
                         <button data-testid="back_to_login" onClick={() => navigate('/')}
-                            className='w-[140px] h-[40px] text-[#fff] bg-primary-normal font-[600] text-[14px] py-2
+                            className='w-[140px] h-[40px] text-[#fff] bg-primary-normal font-semibold text-[14px] py-2
                         rounded-[8px] mt-10 mb-[129px]'>
                             Back to Login
                         </button>

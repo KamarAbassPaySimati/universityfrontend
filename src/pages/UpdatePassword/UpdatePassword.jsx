@@ -5,7 +5,7 @@ import UpdateToNewPassword from './Components/UpdateToNewPassword';
 const UpdatePassword = () => {
     return (
         <CardHeader activePath='Update Password' paths={['Profile']} pathurls={['profile']} testId='update_password_card'>
-            <p className='font-[600] text-[24px] text-neutral-primary'>Update Password</p>
+            <p className='font-semibold text-[24px] text-neutral-primary'>Update Password</p>
             <div className='flex justify-center items-center  mt-[44px] mb-22'>
                 <UpdateToNewPassword />
             </div>
