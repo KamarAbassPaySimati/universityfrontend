@@ -16,9 +16,9 @@ import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
 import { dataService } from '../../../services/data.services';
 import GlobalContext from '../../Context/GlobalContext';
-import { endpoints } from '../../../services/endpoints';
 import KYCReject from '../KYCReject';
 import TillNumber from '../../Modals/TillNumber';
+import { CDN } from '../../../config';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
@@ -31,7 +31,11 @@ export default function KYCView ({ role, viewType }) {
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
-    const { approveKyc } = endpoints;
+    const idDocumentKeys = userDetails?.identityDetails ? Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document') : [];
+    const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
+
+    // const idDocumentKeys = Object.keys(userDetails?.identityDetails)?.filter(key => key === 'ID Document');
+    // const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)));
@@ -57,17 +61,19 @@ export default function KYCView ({ role, viewType }) {
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
     };
-
     const handleConfirmAction = async () => {
         try {
             setIsLoading(true);
-            const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
-                { user_id: View?.paymaart_id });
+            const response = await dataService.PatchAPI(('admin-users/activate-deactivate-user'),
+                {
+                    paymaart_id: View?.paymaart_id,
+                    status: View.status === 'active' ? 'false' : 'true'
+                });
             if (!response.error) {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
                 getView();
-                setToastSuccess('KYC approved successfully');
+                setToastSuccess(`${role.charAt(0).toUpperCase() + role.slice(1)} ${View.status === 'active' ? 'deactivated' : 'activated'} successfully`);
             } else {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
@@ -109,6 +115,7 @@ export default function KYCView ({ role, viewType }) {
                                 UserName={`${View?.first_name || '-'} 
                                 ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
                                 payMaartID={View?.paymaart_id}
+                                profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
                                 loading={loading}
                                 viewType={viewType}
                                 lastLoggedIn={View?.last_logged_in === null
@@ -146,7 +153,6 @@ export default function KYCView ({ role, viewType }) {
                                     <div className="mt-2">
                                         {View.rejection_reasons.map((itemValue, index) => (
                                             <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
-                                                {console.log('nnssan', itemValue)}
                                                 <div className='flex'>
                                                     <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
                                                     <div className='ml-1'>
@@ -160,7 +166,6 @@ export default function KYCView ({ role, viewType }) {
                                     </div>
                                 )}
                             </div>
-
                         }
                         <KYCSections
                             heading='Basic Details'
@@ -256,6 +261,12 @@ export default function KYCView ({ role, viewType }) {
                                                                                 testId={`${itemkey}_${index}`}
                                                                                 className={'w-[245px]'}
                                                                             />
+                                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && (lastIdDocumentIndex) &&
+                                                                                <>
+                                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
+                                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
+                                                                                </>
+                                                                            }
                                                                         </div>
                                                                     )
                                                                     : (
@@ -264,7 +275,6 @@ export default function KYCView ({ role, viewType }) {
                                                                         font-normal px-1'>-</h1>
                                                                     )
                                                             ))}
-
                                                         </div>
                                                     </div>)
                                                 )
@@ -304,7 +314,7 @@ export default function KYCView ({ role, viewType }) {
                                                             {View?.user_kyc_status === 'completed' &&
                                                                 <div className='my-6'>
                                                                     <p className='font-normal text-[#A4A9AE] text-sm'>Till Numbers</p>
-                                                                    <p className={`mt-1 ${View?.till_numbers?.length > 1 ? 'underline cursor-pointer' : 'cursor-default'}`} onClick={() => View?.till_numbers?.length > 1 && handleTillNumber()}>{(View?.till_numbers && View?.till_numbers.length !== 0) ? View?.till_numbers[0] : '-'}</p>
+                                                                    <p className={`mt-1 ${View?.till_numbers?.length > 1 ? 'underline cursor-pointer' : 'cursor-default'}`} onClick={() => View?.till_numbers?.length > 1 && handleTillNumber()}>{(View?.till_numbers && Object.values(View?.till_numbers)[0] !== '') ? View?.till_numbers[0] : '-'}</p>
                                                                 </div>
                                                             }
                                                             <h1 className='mt-4 text-[#A4A9AE] text-[14px] leading-6
@@ -350,7 +360,6 @@ export default function KYCView ({ role, viewType }) {
                                     }
                                 />
                             )}
-
                             <KYCSections
                                 heading='Personal Details'
                                 testId='personal_details'
@@ -498,16 +507,17 @@ export default function KYCView ({ role, viewType }) {
                     </div>
                 </>}
             </CardHeader>
+            {console.log(View?.status, 'hfhfhhfhfh')}
             <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
-                        title={'Confirm to Approve?'}
-                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        title={`Confirm to ${View?.status === 'active' ? 'Deactivate' : 'Activate'}?`}
+                        message={`${View?.status === 'active' ? 'This action will suspend Admin user\'s account' : 'This action will activate Admin user\'s account'}`}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
-                        buttonText={'Approve'}
-                        buttonColor={'bg-accent-positive'}
+                        // buttonText={'Approve'}
+                        buttonColor={`${View?.status === 'active' ? 'bg-primary-negative' : 'bg-accent-positive'}`}
                     />
                 </div>
             </Modal>

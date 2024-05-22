@@ -1,4 +1,4 @@
-Feature: Paymaart - Admin Web -Approve/Reject Customer KYC
+Feature: Paymaart - Admin Web -Approve/Reject Merchant KYC
     As a super/admin, I want the ability to approve or reject the KYC of agent
     Conditions of Satisfaction
     There should be an option to approve or reject the KYC verification request

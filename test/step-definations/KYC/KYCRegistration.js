@@ -91,7 +91,7 @@ When('I select the nature of permit as {string}', async function (string) {
 
     await new Promise(resolve => setTimeout(resolve, 100));
 
-    await driver.wait(until.elementLocated(By.css('[data-testid="nature_of_permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="type_of_visa/permit_dropdown_list"] [data-testid="single/multiple_entry_visa"]'))).click();
 });
 
 Then('I should see the town and district field getting pre-filled with google API data', async function () {
@@ -572,6 +572,8 @@ When('I select the applicable purpose and nature of business', async function ()
 
 When('I select valid monthly income and monthly withdrawal', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
     const monthly_income = await driver.wait(until.elementLocated(By.css('[data-testid="monthly_income"]')));
     await driver.wait(until.elementIsVisible(monthly_income));
     await monthly_income.click();
@@ -801,4 +803,19 @@ When('I should view the monthly income and withdrawal prefilled with value {stri
     await driver.wait(until.elementIsVisible(monthlyWithdrawal));
     const monthlyWithdrawalValue = await monthlyIncome.getAttribute('value');
     assert.equal(monthlyWithdrawalValue, expectedValue);
+});
+
+When('I enter the OTP as {string} for update KYC', async function (OTP) {
+    // clear already existing TOTP
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    for (let i = 5; i >= 0; i--) {
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(Key.BACK_SPACE);
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    for (let i = 0; i < OTP.length; i++) {
+        await driver.wait(until.elementLocated(By.css(`#digit-${i}`))).sendKeys(OTP[i]);
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
 });

@@ -14,6 +14,11 @@ When('I click on update {string}', async function (type) {
         this.record_status = await element.getText();
         await element.click();
         break;
+    case 'Customer From Listing':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="edit-0"]')));
+        await driver.wait(until.elementIsVisible(element));
+        await element.click();
+        break;
     default:
         element = await driver.wait(until.elementLocated(By.css('[data-testid="update_button"]')));
         await driver.wait(until.elementIsVisible(element));

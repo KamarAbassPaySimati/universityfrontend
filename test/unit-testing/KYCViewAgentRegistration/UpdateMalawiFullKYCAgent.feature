@@ -71,7 +71,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Full KYC)
         Then I should read a message stating KYC submission successful
         And I should view the status of the KYC as "In review"
 
-    Scenario: View specific agent KYC and approve kyc
+    Scenario: View specific agent
         Given I navigate to agent users listing screen
         When I search for recently created agent
         When I click on view agent
@@ -84,10 +84,10 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Full KYC)
     Scenario: Navigate to update agent KYC Screen, and Update
         Given I click on update "Update Agent"
         Then I should view a modal asking for the OTP
-        When I enter the OTP as "35598"
+        When I enter the OTP as "35598" for update KYC
         And I click on submit TOTP form
         Then I should read a message stating that "Invalid OTP"
-        When I enter the OTP as "355948"
+        When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
         Then I should be redirected to agent basic details screen
         And I should view first name, middle name, last name is disabled
@@ -107,7 +107,7 @@ Feature: Paymaart - Admin Web - Update Existing Agent details(Full KYC)
         When I click on save and continue button
         Then I should be redirected to KYC personal details screen
         Given I am in KYC personal details screen
-        When I enter the OTP as "355948"
+        When I enter the OTP as "355948" for update KYC
         And I click on submit TOTP form
         When I select gender as "male"
         When I select the date of birth as "04-Aug-1999"

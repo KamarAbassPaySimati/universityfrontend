@@ -43,7 +43,6 @@ const AddTrustBank = () => {
         }
     };
     const handleChange = (e, id) => {
-        console.log('enteredLetter', enteredLetter);
         if (enteredLetter && enteredLetter !== 'Backspace' && (enteredLetter === ' ' || !/^[0-9]+$/.test(enteredLetter))) {
             return;
         }

@@ -333,6 +333,16 @@ input[type='number'] {
   left: 30px;
   right: 0;
 }
+.line-class-merchant-update::after{
+  position: absolute;
+  content: "";
+  width: 500px;
+  height: 0;
+  border-top: 2px solid #A4A9AE;
+  top: 13px;
+  left: 30px;
+  right: 0;
+}
 
 .lower-alpha {list-style-type: lower-alpha;}
 .list-circle {list-style-type: circle;}
@@ -340,6 +350,30 @@ input[type='number'] {
 
 .capture-img img, video {
     border-radius: 7px !important;
+}
+/* CustomDatePicker.css disabled */
+.custom-datepicker-disabled {
+  border: none;
+  border-bottom: 1px solid #DDDDDD;
+  background-color: transparent;
+  width: 100%;
+  padding: 10px;
+  border-top-right-radius: 8px !important;
+  border-top-left-radius: 8px !important;
+  background-color: #D1D4D7 !important;
+  border-radius: 0; /* Remove border-radius */
+}
+
+.custom-datepicker-disabled input {
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.custom-datepicker-disabled input:focus,
+.custom-datepicker-disabled input:hover {
+  border-bottom: none !important; /* Remove bottom border on input focus and hover */
+  box-shadow: none !important; /* Remove box-shadow */
 }
 
 

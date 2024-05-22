@@ -2,44 +2,50 @@ import React from 'react';
 import FelidDivision from '../../FelidDivision/FelidDivision';
 import { nationality } from '../../JsonLists/Nationality';
 
-export default function Address ({ bankSelected, handleStates, states, submitSelected }) {
+export default function Address ({ bankSelected, handleStates, states, submitSelected, isFullKYC }) {
     const AddressDetails = {
         nothing_to_show: {
             po_box_no: {
                 label: 'P.O Box NO (Optional)',
                 type: 'input',
                 key: 'po_box_no',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             house_number: {
                 label: 'House Name/Number (Optional)',
                 type: 'input',
                 key: 'house_number',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             street_name: {
                 label: 'Street Name',
                 type: 'googleAPI',
                 key: 'street_name',
-                require: true
+                require: true,
+                disable: isFullKYC ? true : undefined
             },
             landmark: {
                 label: 'Landmark (Optional)',
                 type: 'input',
                 key: 'landmark',
-                require: false
+                require: false,
+                disable: isFullKYC ? true : undefined
             },
             town_village_ta: {
                 label: 'Town/Village/TA',
                 type: 'googleAPI',
                 key: 'town_village_ta',
-                require: true
+                require: true,
+                disable: isFullKYC ? true : undefined
             },
             district: {
                 label: 'District',
                 type: 'googleAPI',
                 key: 'district',
-                require: true
+                require: true,
+                disable: isFullKYC ? true : undefined
             }
         }
     };

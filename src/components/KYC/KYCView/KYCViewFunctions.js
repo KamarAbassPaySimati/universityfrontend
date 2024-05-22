@@ -16,7 +16,9 @@ export const getPaths = (viewType, role, status) => {
                 activePath: 'Merchant Profile',
                 paths: ['Users', 'Merchants'],
                 pathurls: ['users/merchants'],
-                updateButtonPath: '/users/merchants/register-merchant/specific-view/update-merchant'
+                updateButtonPath: status === 'not_started'
+                    ? '/users/merchants/register-merchant/kyc-registration/'
+                    : '/users/merchants/register-merchant/kyc-update/'
 
             };
         case 'customer':
@@ -24,7 +26,9 @@ export const getPaths = (viewType, role, status) => {
                 activePath: 'Customer Profile',
                 paths: ['Users', 'Customers'],
                 pathurls: ['users/customers'],
-                updateButtonPath: '/users/customers/register-customer/specific-view/update-customer'
+                updateButtonPath: status === 'not_started'
+                    ? '/users/customers/register-customer/kyc-registration/'
+                    : '/users/customers/register-customer/kyc-update/'
 
             };
         default:

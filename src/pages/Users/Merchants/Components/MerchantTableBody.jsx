@@ -6,7 +6,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import TillNumber from '../../../../components/Modals/TillNumber';
 
-export default function MerchantTableBody ({ user, index }) {1
+export default function MerchantTableBody ({ user, index }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const handleTillNumber = () => {
@@ -15,7 +15,6 @@ export default function MerchantTableBody ({ user, index }) {1
     return (
         <>
             <tr className='border-b border-neutral-outline h-[48px]'>
-                {console.log(Object.keys(user?.till_numbers), 'manydhdjsdn')}
                 <td
                     title={user?.paymaart_id}
                     data-testid="paymaart_id"
@@ -24,13 +23,13 @@ export default function MerchantTableBody ({ user, index }) {1
                 <td data-testid="merchant_name"
                     title={user?.name}
                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
-                <td className='py-2 px-[10px]'>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
+                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.trading_name}>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
                 <td
                     className={`py-2 px-[10px] ${user?.till_numbers?.length > 1 ? ' cursor-pointer underline' : 'cursor-default'}`}
                     onClick={() => user?.till_numbers?.length > 1 && handleTillNumber()}
                 >{`${(user?.till_numbers && Object.values(user?.till_numbers)[0] !== '') ? user?.till_numbers[0] : '-'}`}</td>
-                <td className='py-2 px-[10px]'>{`${user?.location ? user?.location : '-'}`}</td>
+                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.trading_street_name}>{`${user?.trading_street_name ? user?.trading_street_name : '-'}`}</td>
                 <td data-testid="status" className='py-2 px-[10px]'>
                     {user?.status
                         ? (
@@ -51,7 +50,9 @@ export default function MerchantTableBody ({ user, index }) {1
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                         onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
                         )} />
-                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' />
+                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
+                    />
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'
@@ -62,7 +63,7 @@ export default function MerchantTableBody ({ user, index }) {1
                         id={`edit-${index}`}
                         className='my-tooltip z-30'
                         place="top"
-                        content="Edit"
+                        content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                     />
                 </td>
             </tr>

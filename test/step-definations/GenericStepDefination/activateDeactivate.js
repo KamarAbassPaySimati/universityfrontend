@@ -9,12 +9,19 @@ Given('I click on deactivate {string}', async function (type) {
     let element;
     switch (type) {
     case 'Admin user':
+    case 'Customer user':
+    case 'Merchant user':
+    case 'Agent user':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
         await driver.wait(until.elementIsVisible(element));
         this.record_status = await element.getText();
         await element.click();
         break;
     default:
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
+        await driver.wait(until.elementIsVisible(element));
+        this.record_status = await element.getText();
+        await element.click();
         break;
     }
 });
@@ -31,6 +38,27 @@ Then('I should see a confirmation prompt for deactivating {string}', async funct
         modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, "This action will suspend Admin user's account");
         break;
+    case 'Customer user':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, "This action will suspend Customer's account");
+        break;
+    case 'Merchant user':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, "This action will suspend Merchant's account");
+        break;
+    case 'Agent user':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, "This action will suspend Agent's account");
+        break;
     default:
         break;
     }
@@ -41,12 +69,19 @@ When('I click on activate {string}', async function (type) {
     let element;
     switch (type) {
     case 'Admin user':
+    case 'Customer user':
+    case 'Merchant user':
+    case 'Agent user':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
         await driver.wait(until.elementIsVisible(element));
         this.record_status = await element.getText();
         await element.click();
         break;
     default:
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]')));
+        await driver.wait(until.elementIsVisible(element));
+        this.record_status = await element.getText();
+        await element.click();
         break;
     }
 });
@@ -62,6 +97,27 @@ Then('I should see a confirmation prompt for activate {string}', async function 
 
         modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, "This action will activate Admin user's account");
+        break;
+    case 'Customer user':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, "This action will activate Customer's account");
+        break;
+    case 'Merchant user':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, "This action will activate Merchant's account");
+        break;
+    case 'Agent user':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, "This action will activate Agent's account");
         break;
     default:
         break;

@@ -10,7 +10,7 @@ export default function KYCTopWithType ({ Name, type, loading }) {
                                  break-words ${loading ? 'bg-slate-200 mb-2' : ''}`} >
                 {Name}
             </div>
-            <div className='bg-background-light px-2.5 py-0.5 rounded text-primary-normal'>
+            <div data-testid="KYC_Type" className='bg-background-light px-2.5 py-0.5 rounded text-primary-normal'>
                 {type}
             </div>
         </div>
