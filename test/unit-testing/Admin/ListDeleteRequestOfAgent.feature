@@ -22,11 +22,11 @@ Feature: Paymaart - Admin Web - View Delete Account List(Agent)
     @add_admin_user
     @create_new_user_and_login
     @register_new_agent_and_send_delete_request_for_that_agent
-    Scenario: List all the KYC
+    Scenario: List all the delete request
         Given I navigate to agent delete request listing screen
         Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Status"]'
 
-    Scenario: Filter KYC listing KYC status
+    Scenario: Filter delete request by status
         Given I navigate to agent delete request listing screen
         When I click on filter tab
         Then I should see filter popup modal
@@ -46,7 +46,7 @@ Feature: Paymaart - Admin Web - View Delete Account List(Agent)
     @add_finance_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as finance admin and navigate to KYC listing screen
+    Scenario: Login as finance admin and navigate to delete request listing screen
         Given I navigate to agent delete request listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
@@ -56,7 +56,7 @@ Feature: Paymaart - Admin Web - View Delete Account List(Agent)
     @add_support_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as support admin and navigate to KYC listing screen
+    Scenario: Login as support admin and navigate to delete request listing screen
         Given I navigate to agent delete request listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
@@ -66,7 +66,7 @@ Feature: Paymaart - Admin Web - View Delete Account List(Agent)
     @add_normal_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    Scenario: Login as normal admin and view admin listing
+    Scenario: Login as normal admin and navigate to delete request listing screen
         Given I navigate to agent delete request listing screen
         Then I should read a message stating that "Page Not Found"
         And I should read a message stating that "We can’t find the page you’re looking for"
