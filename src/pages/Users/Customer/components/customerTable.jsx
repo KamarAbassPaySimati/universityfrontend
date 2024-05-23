@@ -72,7 +72,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' testId={`edit-${index}`}
                                         onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/customers/register-customer/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/customers/register-customer/kyc-update/${user?.paymaart_id}`)}
                                     />
-                                    <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' />
+                                    {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}
                                         className='my-tooltip z-30'
@@ -85,12 +85,12 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                         place="top"
                                         content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                                     />
-                                    <Tooltip
+                                    {/* <Tooltip
                                         id={`payin-${index}`}
                                         className='my-tooltip z-30'
                                         place="top"
                                         content="Payin"
-                                    />
+                                    /> */}
                                 </td>
                             </tr>))}
                     </tbody>
