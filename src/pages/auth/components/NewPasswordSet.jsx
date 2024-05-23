@@ -1,11 +1,16 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import passwordCheck from '../../../CommonMethods/passwordCheck';
 import GlobalContext from '../../../components/Context/GlobalContext';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { siteKey } from '../../../config';
+
 const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
+    const reCaptchaRef = useRef();
+    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [newPasswordError, setNewPasswordError] = useState('');
@@ -17,6 +22,9 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
 
     const handleClick = async (e) => {
         e.preventDefault();
+        if (window.location.host !== 'localhost:3000') {
+            await reCaptchaRef.current.executeAsync();
+        }
         if (password.trim() === '' && confirmPassword.trim() === '') {
             setNewPasswordError('This field is mandatory');
             setConfirmPasswordError('This field is mandatory');
@@ -57,6 +65,9 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                 setIsSuccess(false);
             }
         }
+        if (window.location.host !== 'localhost:3000') {
+            await reCaptchaRef.current.reset();
+        }
     };
 
     const changeHandler = (e, id) => {
@@ -75,6 +86,9 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
         } else {
             setConfirmPasswordError('');
         }
+    };
+    const asyncScriptOnLoad = () => {
+        setRecaptchaLoaded(true);
     };
     return (
         <div className='z-20 mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
@@ -116,11 +130,23 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
                         givenType='password'
                         setEnteredLetter={setEnteredLetter}
                     />
+                    {(window.location.host !== 'localhost:3000') && (
+                        <ReCAPTCHA
+                            style={{ display: 'inline-block', height: '10px !important' }}
+                            theme="dark"
+                            size="invisible"
+                            ref={reCaptchaRef}
+                            sitekey={siteKey}
+                            // onChange={handleChangeRecap}
+                            asyncScriptOnLoad={asyncScriptOnLoad}
+                        />
+                    )}
                     <div className='mt-6'>
                         <Button
                             text="Reset"
                             testId= 'submit_button'
                             onClick={handleClick}
+                            disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
                             isLoading={isLoading}
                         />
                     </div>

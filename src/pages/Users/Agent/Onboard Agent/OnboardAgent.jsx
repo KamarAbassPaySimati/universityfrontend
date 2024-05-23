@@ -442,7 +442,7 @@ const OnboardAgent = ({ role }) => {
             {registrationSuccessful
                 ? <RegistrationSuccessful email={addBackslashBeforeApostrophe(formData.email)} accessRole={role} paymartId={paymartId}/>
                 : <>
-                    <h1 className='text-header-dark font-[600] text-[18px] leading-[26px] my-2'>
+                    <h1 className='text-header-dark font-semibold text-[18px] leading-[26px] my-2'>
                         Basic Details
                     </h1>
 
@@ -602,7 +602,7 @@ const OnboardAgent = ({ role }) => {
                     <div className='flex flex-col gap-6 w-[339px]'>
                         <div className='flex flex-col gap-2'>
                             <div className='flex justify-between mt-2 mb-[2px]'>
-                                <p className='text-header-dark font-[600] text-[18px] leading-[26px]'>Security Questions</p>
+                                <p className='text-header-dark font-semibold text-[18px] leading-[26px]'>Security Questions</p>
                                 <Image src='info_icon' className='cursor-pointer info-icon' />
                             </div>
                             {securityQuestionError && <ErrorMessage error='Answer at least 3 questions' />}

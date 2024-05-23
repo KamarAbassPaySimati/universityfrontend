@@ -18,7 +18,7 @@ export default function MerchantTableBody ({ user, index }) {
                 <td
                     title={user?.paymaart_id}
                     data-testid="paymaart_id"
-                    className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'
+                    className='py-2 px-[10px] text-left min-w-[70px] max-w-[70px]'
                 >{user?.paymaart_id || '-'}</td>
                 <td data-testid="merchant_name"
                     title={user?.name}
@@ -33,7 +33,7 @@ export default function MerchantTableBody ({ user, index }) {
                 <td data-testid="status" className='py-2 px-[10px]'>
                     {user?.status
                         ? (
-                            <span className={`py-[2px] px-[10px] rounded text-[13px] font-[600] capitalize
+                            <span className={`py-[2px] px-[10px] rounded text-[13px] font-semibold capitalize
                                              ${user.status === 'active'
                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                 : 'bg-neutral-grey text-neutral-secondary'}`}>

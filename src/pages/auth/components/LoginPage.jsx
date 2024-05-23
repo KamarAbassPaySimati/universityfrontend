@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import InputField from '../../../components/InputField/InputField';
 import { useNavigate } from 'react-router-dom';
 import Button from '../../../components/Button/Button';
 import Image from '../../../components/Image/Image';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { siteKey } from '../../../config';
 
 const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, loginError, setloginError, isLoading }) => {
     const navigate = useNavigate();
@@ -26,7 +28,22 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
             return { ...prevState, [id]: e.target.value };
         });
     };
+    const reCaptchaRef = useRef();
+    const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
 
+    const asyncScriptOnLoad = () => {
+        setRecaptchaLoaded(true);
+    };
+    const onSubmitValue = async (e) => {
+        e.preventDefault();
+        if (window.location.host !== 'localhost:3000') {
+            await reCaptchaRef.current.executeAsync();
+        }
+        handleSubmit(e);
+        if (window.location.host !== 'localhost:3000') {
+            await reCaptchaRef.current.reset();
+        }
+    };
     return (
         <div className='bg-primary-normal'>
             <Image className='fixed bottom-[30px] right-[100px] object-cover z-10' src='login_img' />
@@ -44,7 +61,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 Welcome back!
                             </div>
                         </div>
-                        <form onSubmit={handleSubmit} className='flex flex-col gap-[16px]'>
+                        <form className='flex flex-col gap-[16px]' onSubmit={onSubmitValue}>
                             <InputField
                                 autoComplete='off'
                                 testId='email_address'
@@ -74,7 +91,20 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 showLoginError={true}
                                 setEnteredLetter={setEnteredLetter}
                             />
-                            <Button testId='login_button' isLoading={isLoading} text='Login' className='mt-8' />
+                            {(window.location.host !== 'localhost:3000') && (
+                                <ReCAPTCHA
+                                    style={{ display: 'inline-block', height: '10px !important' }}
+                                    theme="dark"
+                                    size="invisible"
+                                    ref={reCaptchaRef}
+                                    sitekey={siteKey}
+                                    // onChange={handleChangeRecap}
+                                    asyncScriptOnLoad={asyncScriptOnLoad}
+                                />
+                            )}
+                            <Button
+                                disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
+                                testId='login_button' isLoading={isLoading} text='Login' className='mt-4' />
                         </form>
                         {/* <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
                             className='mt-6 cursor-pointer text-primary-normal font-[400] text-[14px] leading-[24px]

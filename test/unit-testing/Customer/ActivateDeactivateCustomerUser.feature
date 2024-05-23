@@ -10,9 +10,9 @@ Feature: Paymaart - Admin Web - Active/Deactive customer user
     @register_new_customer
     Scenario: Cancel Deactivate customer User
         Given I navigate to customer users listing screen
-        When I search for the recently created customer user
-        * I click on view for particular customer user
-        * I should view all the basic details
+        When I search for recently created customer
+        When I click on view customer
+        Then I should view customer information
         * I click on deactivate "Customer user"
         Then I should see a confirmation prompt for deactivating "Customer user"
         When I click on cancel button
@@ -20,19 +20,19 @@ Feature: Paymaart - Admin Web - Active/Deactive customer user
 
     Scenario: Deactivate customer User
         Given I navigate to customer users listing screen
-        When I search for the recently created customer user
-        * I click on view for particular customer user
-        * I should view all the basic details
+        When I search for recently created customer
+        When I click on view customer
+        Then I should view customer information
         * I click on deactivate "Customer user"
         Then I should see a confirmation prompt for deactivating "Customer user"
         When I click on confirm button
-        Then I should read a message stating that "Customer user deactivated successfully"
+        Then I should read a message stating that "Customer deactivated successfully"
 
     Scenario: Cancel Activate customer User
-        Given I navigate to customer users listing screen
-        When I search for the recently created customer user
-        When I click on view for particular customer user
-        When I should view all the basic details
+         Given I navigate to customer users listing screen
+        When I search for recently created customer
+        When I click on view customer
+        Then I should view customer information
         When I click on activate "Customer user"
         Then I should see a confirmation prompt for activate "Customer user"
         When I click on cancel button
@@ -40,10 +40,10 @@ Feature: Paymaart - Admin Web - Active/Deactive customer user
 
     Scenario: Activate customer User
         Given I navigate to customer users listing screen
-        When I search for the recently created customer user
-        When I click on view for particular customer user
-        When I should view all the basic details
+        When I search for recently created customer
+        When I click on view customer
+        Then I should view customer information
         When I click on activate "Customer user"
         Then I should see a confirmation prompt for activate "Customer user"
         When I click on confirm button
-        Then I should read a message stating that "Customer user activated successfully"
+        Then I should read a message stating that "Customer activated successfully"

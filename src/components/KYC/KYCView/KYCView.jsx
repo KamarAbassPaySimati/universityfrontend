@@ -19,11 +19,14 @@ import GlobalContext from '../../Context/GlobalContext';
 import KYCReject from '../KYCReject';
 import TillNumber from '../../Modals/TillNumber';
 import { CDN } from '../../../config';
+import { endpoints } from '../../../services/endpoints';
 
 export default function KYCView ({ role, viewType }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
+    const [isActivateModalOpen, setIsActivateModalOpen] = useState();
+    const { approveKyc } = endpoints;
     const [isRejectModalOpen, setIsRejectModalOpen] = useState();
     const [isExpanded, setIsExpanded] = useState();
     const { id } = useParams();
@@ -31,11 +34,7 @@ export default function KYCView ({ role, viewType }) {
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
-    const idDocumentKeys = userDetails?.identityDetails ? Object.keys(userDetails.identityDetails).filter(key => key === 'ID Document') : [];
-    const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
 
-    // const idDocumentKeys = Object.keys(userDetails?.identityDetails)?.filter(key => key === 'ID Document');
-    // const lastIdDocumentIndex = idDocumentKeys.length > 0 ? userDetails.identityDetails[idDocumentKeys[idDocumentKeys.length - 1]].length - 1 : -1;
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)));
@@ -61,7 +60,29 @@ export default function KYCView ({ role, viewType }) {
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
     };
+
     const handleConfirmAction = async () => {
+        try {
+            setIsLoading(true);
+            const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
+                { user_id: View?.paymaart_id });
+            if (!response.error) {
+                setIsLoading(false);
+                setIsApprovalModalOpen(false);
+                getView();
+                setToastSuccess('KYC approved successfully');
+            } else {
+                setIsLoading(false);
+                setIsApprovalModalOpen(false);
+                setToastError('Something went wrong!');
+            }
+        } catch (error) {
+            setIsLoading(false);
+            setIsApprovalModalOpen(false);
+            setToastError('Something went wrong!');
+        }
+    };
+    const handleConfirmActivation = async () => {
         try {
             setIsLoading(true);
             const response = await dataService.PatchAPI(('admin-users/activate-deactivate-user'),
@@ -71,17 +92,17 @@ export default function KYCView ({ role, viewType }) {
                 });
             if (!response.error) {
                 setIsLoading(false);
-                setIsApprovalModalOpen(false);
+                setIsActivateModalOpen(false);
                 getView();
                 setToastSuccess(`${role.charAt(0).toUpperCase() + role.slice(1)} ${View.status === 'active' ? 'deactivated' : 'activated'} successfully`);
             } else {
                 setIsLoading(false);
-                setIsApprovalModalOpen(false);
+                setIsActivateModalOpen(false);
                 setToastError('Something went wrong!');
             }
         } catch (error) {
             setIsLoading(false);
-            setIsApprovalModalOpen(false);
+            setIsActivateModalOpen(false);
             setToastError('Something went wrong!');
         }
     };
@@ -99,7 +120,7 @@ export default function KYCView ({ role, viewType }) {
                 updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
-                onHandleStatusChange={handleApproveClick}
+                onHandleStatusChange={viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
                 ChildrenElement
             // onHandleStatusChange={handleStatusClick}
@@ -115,7 +136,7 @@ export default function KYCView ({ role, viewType }) {
                                 UserName={`${View?.first_name || '-'} 
                                 ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
                                 payMaartID={View?.paymaart_id}
-                                profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
+                                profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View?.public_profile && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
                                 loading={loading}
                                 viewType={viewType}
                                 lastLoggedIn={View?.last_logged_in === null
@@ -133,7 +154,7 @@ export default function KYCView ({ role, viewType }) {
                                         className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
                                     <span data-testid="kyc_status"
-                                        className={`py-[2px] px-[10px] text-[13px] font-[600] capitalize rounded w-fit
+                                        className={`py-[2px] px-[10px] text-[13px] font-semibold capitalize rounded w-fit
                                  ${getStatusColor(View?.user_kyc_status)?.color}`}>
                                         {getStatusColor(View?.user_kyc_status)?.text}
                                     </span>
@@ -144,7 +165,7 @@ export default function KYCView ({ role, viewType }) {
                         {!loading && View?.user_kyc_status === 'info_required' &&
                             <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
                                 <div className="flex flex-row justify-between">
-                                    <h1 className="text-[18px] font-600 text-neutral-primary">Reason for pending KYC</h1>
+                                    <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
                                     <button className="text-[14px] font-400 text-primary-normal" onClick={toggleExpand}>
                                         {isExpanded ? 'Collapse' : 'Expand'}
                                     </button>
@@ -154,9 +175,9 @@ export default function KYCView ({ role, viewType }) {
                                         {View.rejection_reasons.map((itemValue, index) => (
                                             <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
                                                 <div className='flex'>
-                                                    <span className="text-[#4F5962] font-[600] text-[14px] mt-[2.2px]">{index + 1}. </span>
+                                                    <span className="text-[#4F5962] font-semibold text-[14px] mt-[2.2px]">{index + 1}. </span>
                                                     <div className='ml-1'>
-                                                        <span className="text-[#4F5962] font-[600] text-[14px]">{`${itemValue.heading}: `}</span>
+                                                        <span className="text-[#4F5962] font-semibold text-[14px]">{`${itemValue.heading}: `}</span>
                                                         <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>{itemValue.label}</span>
 
                                                     </div>
@@ -261,12 +282,6 @@ export default function KYCView ({ role, viewType }) {
                                                                                 testId={`${itemkey}_${index}`}
                                                                                 className={'w-[245px]'}
                                                                             />
-                                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && (lastIdDocumentIndex) &&
-                                                                                <>
-                                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
-                                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
-                                                                                </>
-                                                                            }
                                                                         </div>
                                                                     )
                                                                     : (
@@ -275,6 +290,12 @@ export default function KYCView ({ role, viewType }) {
                                                                         font-normal px-1'>-</h1>
                                                                     )
                                                             ))}
+                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && (
+                                                                <>
+                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
+                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
+                                                                </>
+                                                            )}
                                                         </div>
                                                     </div>)
                                                 )
@@ -508,16 +529,29 @@ export default function KYCView ({ role, viewType }) {
                 </>}
             </CardHeader>
             {console.log(View?.status, 'hfhfhhfhfh')}
-            <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={isActivateModalOpen} onClose={() => setIsActivateModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={`Confirm to ${View?.status === 'active' ? 'Deactivate' : 'Activate'}?`}
-                        message={`${View?.status === 'active' ? 'This action will suspend Admin user\'s account' : 'This action will activate Admin user\'s account'}`}
+                        message={`${View?.status === 'active' ? `This action will suspend ${role.charAt(0).toUpperCase() + role.slice(1)}'s account` : `This action will activate ${role.charAt(0).toUpperCase() + role.slice(1)}'s account`}`}
+                        handleSubmit={handleConfirmActivation}
+                        isLoading={isLoading}
+                        handleClose={() => setIsActivateModalOpen(false)}
+                        // buttonText={'Approve'}
+                        buttonColor={`${View?.status === 'active' ? 'bg-primary-negative' : 'bg-accent-positive'}`}
+                    />
+                </div>
+            </Modal>
+            <Modal center open={isApproveModalOpen} onClose={handleClose} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Confirm to Approve?'}
+                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
-                        // buttonText={'Approve'}
-                        buttonColor={`${View?.status === 'active' ? 'bg-primary-negative' : 'bg-accent-positive'}`}
+                        buttonText={'Approve'}
+                        buttonColor={'bg-accent-positive'}
                     />
                 </div>
             </Modal>
