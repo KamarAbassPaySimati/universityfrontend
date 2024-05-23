@@ -48,6 +48,11 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
             return '/verify/kyc-registration/';
         }
     };
+    const formatPhoneNumber = (countryCode, phoneNumber) => {
+        const cleanPhoneNumber = phoneNumber.replace(/\s+/g, '');
+        const formattedPhoneNumber = `${cleanPhoneNumber.slice(0, 2)} ${cleanPhoneNumber.slice(2, 5)} ${cleanPhoneNumber.slice(5, 9)}`;
+        return `${countryCode} ${formattedPhoneNumber}`;
+    };
 
     return (
         <>
@@ -71,14 +76,16 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title={user?.paymaart_id}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
-                                <td data-testid="name" title={user?.name}
+                                <td data-testid="agent_name" title={user?.name}
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.name || '-'}
                                 </td>
-                                <td data-testid="name" title={user?.email}
+                                <td data-testid="email" title={user?.email}
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.email || '-'}
                                 </td>
-                                <td data-testid="name" title={user?.phone_number}
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.country_code && user?.phone_number ? `${user.country_code}${user.phone_number}` : '-'}
+                                <td data-testid="phone_number" title={user?.phone_number}
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>  {user?.country_code && user?.phone_number
+                                        ? formatPhoneNumber(user.country_code, user.phone_number)
+                                        : '-'}
                                 </td>
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status
@@ -98,7 +105,7 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
                                     {
                                         <>
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
-                                                onClick={() => Navigate(`${geturl()}${user?.paymaart_id}`
+                                                onClick={() => Navigate(`/verify/delete-account-requests/agent-profile/${user?.paymaart_id}`
                                                 )}
                                             />
                                         </>
