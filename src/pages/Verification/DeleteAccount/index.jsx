@@ -144,7 +144,7 @@ function DeleteAccount () {
                                 setSearchParams={setSearchParams}// pass this as its getting updated
                                 searchParams={searchParams}// pass this because its used
                                 filterOptions={filterOptions}
-                                filterType='Filter'
+                                filterType={'Filter Agent List'}
                                 placeHolder='Paymaart ID or name '
                                 isLoading={loading}
                                 filterActive={(searchParams.get('status') !== null)}

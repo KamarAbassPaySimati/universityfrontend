@@ -120,7 +120,7 @@ export default function KYCView ({ role, viewType }) {
                 updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
-                onHandleStatusChange={viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin) ? handleApproveClick : () => setIsActivateModalOpen(true)}
+                onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
                 ChildrenElement
             // onHandleStatusChange={handleStatusClick}
@@ -165,7 +165,11 @@ export default function KYCView ({ role, viewType }) {
                         {!loading && (View?.user_kyc_status === 'info_required' || viewType === 'DeleteAccount') &&
                             <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
                                 <div className="flex flex-row justify-between">
-                                    <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
+                                    {viewType === 'kyc'
+                                        ? <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
+                                        : <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for account deletion</h1>
+
+                                    }
                                     <button className="text-[14px] font-400 text-primary-normal" onClick={toggleExpand}>
                                         {isExpanded ? 'Collapse' : 'Expand'}
                                     </button>
@@ -210,8 +214,7 @@ export default function KYCView ({ role, viewType }) {
                                             </div>
                                         )))
                                         : (
-                                            Object.keys(
-                                                userDetails.basicDetails
+                                            Object.keys(userDetails.basicDetails
                                             ).map((itemkey, index = 0) =>
                                                 (<div key={index} className='w-1/3 px-1'>
                                                     <ViewDetail
@@ -550,7 +553,9 @@ export default function KYCView ({ role, viewType }) {
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm to Approve?'}
-                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        message={viewType === 'DeleteAccount' ? 'Reason for approval' : `This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        messageStyle={viewType === 'DeleteAccount' ? 'text-[14px] font-medium text-[#4F5962] mt-2' : undefined}
+                        Reason={viewType === 'DeleteAccount' && (<><label htmlFor=""></label><input className='w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded' style={{ borderBottom: '1px solid #DDDDDD' }} placeholder='Enter Reason'></input></>)}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
@@ -559,10 +564,19 @@ export default function KYCView ({ role, viewType }) {
                     />
                 </div>
             </Modal>
-            {isRejectModalOpen && <KYCReject
+            {(isRejectModalOpen && viewType === 'kyc') && <KYCReject
                 View={View}
                 userDetails={userDetails.basicDetails}
                 setIsRejectModalOpen={setIsRejectModalOpen}
+                id={id}
+                getView={getView}
+            />}
+            {(isRejectModalOpen && viewType === 'DeleteAccount') && <KYCReject
+                View={View}
+                userDetails={userDetails.basicDetails}
+                setIsRejectModalOpen={setIsRejectModalOpen}
+                message={'Reason for rejection'}
+                Reason={viewType === 'DeleteAccount' && (<><label htmlFor=""></label><input className='w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded' style={{ borderBottom: '1px solid #DDDDDD' }} placeholder='Enter Reason'></input></>)}
                 id={id}
                 getView={getView}
             />}
