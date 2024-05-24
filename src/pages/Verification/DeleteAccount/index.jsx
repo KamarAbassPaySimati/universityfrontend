@@ -4,7 +4,7 @@ import NotFound from '../../NotFound';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import Topbar from '../../../components/Topbar/Topbar';
-import DeleteAccountTable from './components/DeleteAccountTable';
+import DeleteAccountTable from '../DeleteAccount/components/DeleteAccountTable';
 import NoDataError from '../../../components/NoDataError/NoDataError';
 import Paginator from '../../../components/Paginator/Paginator';
 import GlobalContext from '../../../components/Context/GlobalContext';
