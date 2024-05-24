@@ -37,7 +37,7 @@ export default function KYCView ({ role, viewType }) {
 
     const getView = () => {
         try {
-            dispatch(KYCProfileView(getApiurl(id, viewType, role)));
+            dispatch(KYCProfileView(getApiurl(id, viewType, role)), viewType);
         } catch (error) {
             console.error(error);
         }
@@ -48,7 +48,7 @@ export default function KYCView ({ role, viewType }) {
     const handleApproveClick = () => {
         setIsApprovalModalOpen(true);
     };
-    const handleRejectClick = () => {
+    const handleRejectClick = () => { // jjjfjfjfj
         setIsRejectModalOpen(true);
     };
     const handleClose = () => {
@@ -114,7 +114,7 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
-                rejectOrApprove={viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin) ? true : undefined}
+                rejectOrApprove={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}
@@ -150,19 +150,19 @@ export default function KYCView ({ role, viewType }) {
                             />
                             {!loading &&
                                 <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
-                                    {View?.user_kyc_status !== 'not_started' && <p data-testid="kyc_type"
+                                    {viewType !== 'DeleteAccount' && (View?.user_kyc_status !== 'not_started' && <p data-testid="kyc_type"
                                         className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
-                                        {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>}
+                                        {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>)}
                                     <span data-testid="kyc_status"
                                         className={`py-[2px] px-[10px] text-[13px] font-semibold capitalize rounded w-fit
-                                 ${getStatusColor(View?.user_kyc_status)?.color}`}>
-                                        {getStatusColor(View?.user_kyc_status)?.text}
+                                 ${getStatusColor((View?.user_kyc_status) || View?.status)?.color}`}>
+                                        {getStatusColor((View?.user_kyc_status) || View?.status)?.text}
                                     </span>
                                 </div>}
                         </div>
                     </div>
                     <div className='max-h-[calc(100vh-350px)] scrollBar overflow-auto'>
-                        {!loading && View?.user_kyc_status === 'info_required' &&
+                        {!loading && (View?.user_kyc_status === 'info_required' || viewType === 'DeleteAccount') &&
                             <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
                                 <div className="flex flex-row justify-between">
                                     <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
@@ -172,15 +172,20 @@ export default function KYCView ({ role, viewType }) {
                                 </div>
                                 {isExpanded && (
                                     <div className="mt-2">
-                                        {View.rejection_reasons.map((itemValue, index) => (
+                                        {(viewType === 'DeleteAccount' ? View.reasons : View.rejection_reasons).map((itemValue, index) => (
                                             <div key={index} className={`${index === 0 ? 'border-t border-solid border-[#E5E9EB]' : ''} pt-[17px] overflow-hidden`}>
                                                 <div className='flex'>
                                                     <span className="text-[#4F5962] font-semibold text-[14px] mt-[2.2px]">{index + 1}. </span>
-                                                    <div className='ml-1'>
-                                                        <span className="text-[#4F5962] font-semibold text-[14px]">{`${itemValue.heading}: `}</span>
-                                                        <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>{itemValue.label}</span>
+                                                    {viewType === 'DeleteAccount'
+                                                        ? <div className='ml-1'>
+                                                            <span className="text-[#4F5962] font-semibold text-[14px]">{`${itemValue}`}</span>
 
-                                                    </div>
+                                                        </div>
+                                                        : <div className='ml-1'>
+                                                            <span className="text-[#4F5962] font-semibold text-[14px]">{`${itemValue.heading}: `}</span>
+                                                            <span className="text-[#A4A9AE] font-[400] text-[14px]" style={{ overflowWrap: 'break-word' }}>{itemValue.label}</span>
+
+                                                        </div>}
                                                 </div>
                                             </div>
                                         ))}
@@ -223,7 +228,7 @@ export default function KYCView ({ role, viewType }) {
                                 </div>
                             }
                         />
-                        {(View?.user_kyc_status !== 'not_started') && <>
+                        {viewType !== 'DeleteAccount' && (View?.user_kyc_status !== 'not_started') && <>
                             <KYCSections
                                 heading='Identity Details'
                                 testId='identity_details'
@@ -268,13 +273,13 @@ export default function KYCView ({ role, viewType }) {
                                                                                                 ? `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
-                                                                                                } 
+                                                                                                }
                                                                                                 ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Data Page' : 'Front'}.${imageItem.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                                 : `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
-                                                                                                } 
+                                                                                                }
                                                                                                 ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Visa Page' : 'Back'}.${imageItem.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                 }
@@ -528,7 +533,6 @@ export default function KYCView ({ role, viewType }) {
                     </div>
                 </>}
             </CardHeader>
-            {console.log(View?.status, 'hfhfhhfhfh')}
             <Modal center open={isActivateModalOpen} onClose={() => setIsActivateModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
