@@ -29,6 +29,7 @@ Feature: Paymaart- Admin Web -Approve/Reject Delete Account(Agent)
     @register_new_agent_and_send_delete_request_for_that_agent
     Scenario: View specific agent and approve delete request
         Given I navigate to agent delete request listing screen
+        When I search for recently created agent
         When I click on view delete request
         Then I should view agent information
         When I click on approve "Agent Delete Request"
@@ -41,6 +42,7 @@ Feature: Paymaart- Admin Web -Approve/Reject Delete Account(Agent)
     @register_new_agent_and_send_delete_request_for_that_agent
     Scenario: View specific agent and reject delete request
         Given I navigate to agent delete request listing screen
+        When I search for recently created agent
         When I click on view delete request
         Then I should view agent information
         When I click on reject "Agent Delete Request"

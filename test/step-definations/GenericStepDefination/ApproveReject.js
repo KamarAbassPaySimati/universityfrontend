@@ -102,6 +102,7 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
 });
 
 When('I enter the reason for rejecting as {string}', async function (reason) {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="reason"]')));
     await driver.wait(until.elementIsVisible(element));
 

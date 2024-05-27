@@ -227,7 +227,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                 {/* <p>{title}</p> */}
                 <h1 className='text-[#4F5962] font-normal text-[20px] leading-7'>Confirm to Reject?</h1>
                 <p data-testid="modal-body" className='font-medium text-[#4F5962] my-2 text-sm'>{message}</p>
-                <div data-testid="reason" onChange={() => handleReason(event)} className={`${error ? 'border-bottom-red mb-1' : ' border-b border-bottom-default'}`}>
+                <div onChange={() => handleReason(event)} className={`${error ? 'border-bottom-red mb-1' : ' border-b border-bottom-default'}`}>
                     {Reason}
                 </div>
                 {error && <ErrorMessage error={'Required field'} />}
