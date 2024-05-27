@@ -63,13 +63,14 @@ Then("I should see the Transaction Limit field for {string} prefilled",async fun
 
             break;
         case 'Customer':
-            elememt  = await driver.wait(until.elementLocated(By.css('[data-testid="CustomerTransactionLimit"]')))
+            element  = await driver.wait(until.elementLocated(By.css('[data-testid="CustomerTransactionLimit"]')))
             elementValue = await element.getText()
-
             break;
         default:
             break;
     }
+    await assert.notEqual(elementValue, '')
+    await assert.notEqual(elementValue, '-')
 })
 
 When("I click the update set limit button",async function(){
