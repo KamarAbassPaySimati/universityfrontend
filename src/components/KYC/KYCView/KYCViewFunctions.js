@@ -66,7 +66,7 @@ export const getPaths = (viewType, role, status) => {
             return {
                 activePath: 'Agent Profile',
                 paths: ['Verify', 'Delete Account'],
-                pathurls: ['/verify/delete-account-requests']
+                pathurls: ['verify/delete-account-requests']
             };
         }
         break;
@@ -101,6 +101,16 @@ export const getStatusColor = (status) => {
         return {
             color: 'bg-[#D9E8FE] text-[#0066F6]',
             text: 'Pending'
+        };
+    case 'rejected':
+        return {
+            color: 'bg-[#FFE8E8] text-[#FF6363]',
+            text: 'Rejected'
+        };
+    case 'approved':
+        return {
+            color: 'bg-[#ECFDF5] text-[#13B681]',
+            text: 'Approved'
         };
 
     default:

@@ -35,11 +35,9 @@ Feature: Paymaart- Admin Web -Approve/Reject Delete Account(Agent)
         Then I should see a confirmation prompt for approving "Agent Delete Request"
         When I enter the reason for approving as "BDD Test"
         When I click on confirm button
-        Then I should read a message stating that "Account deletion request approved successfully "
+        Then I should read a message stating that "Account deletion request approved successfully"
         And I should see the delete request status changed to "Approved"
 
-    @add_admin_user
-    @create_new_user_and_login
     @register_new_agent_and_send_delete_request_for_that_agent
     Scenario: View specific agent and reject delete request
         Given I navigate to agent delete request listing screen
@@ -49,5 +47,5 @@ Feature: Paymaart- Admin Web -Approve/Reject Delete Account(Agent)
         Then I should see a confirmation prompt for reject "Agent Delete Request"
         When I enter the reason for rejecting as "BDD Test"
         When I click on confirm button
-        Then I should read a message stating that "Account deletion request rejected successfully "
+        Then I should read a message stating that "Account deletion request rejected successfully"
         And I should see the delete request status changed to "Rejected"

@@ -85,6 +85,10 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
         assert.equal(modalBody, 'Select the reason for rejection');
         break;
     case 'Agent Delete Request':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'Reason for rejection');
         break;
     default:
@@ -115,6 +119,6 @@ When('I enter the reason for approving as {string}', async function (reason) {
 
 Then('I should see the delete request status changed to {string}', async function (status) {
     await new Promise(resolve => setTimeout(resolve, 4000));
-    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
+    const actual_status = await driver.wait(until.elementLocated(By.css('[data-testid="kyc_status"]'))).getText();
     assert.equal(actual_status, status);
 });

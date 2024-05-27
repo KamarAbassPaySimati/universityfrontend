@@ -8,13 +8,13 @@ import GlobalContext from '../Context/GlobalContext';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import addApostrophe from '../../CommonMethods/textCorrection';
 
-export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id, getView, Reason, message }) {
+export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id, getView, Reason, message, inputValue, setInputValue }) {
     const [selectedCheckBox, setSelectedCheckBox] = useState({});
     const [RejectReasons, setRejectReasons] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [errorMessage, setErrorMessage] = useState(false);
-    const [inputValue, setInputValue] = useState('');
+    const [error, setError] = useState(false);
 
     const MalawiInfo = {
         'National ID': 'Valid National ID Card issued by National Registration Bureau',
@@ -160,57 +160,64 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
 
     const handleReason = async (event) => {
         const newValue = event.target.value;
+        setError(false);
         setInputValue(newValue);
-        console.log(newValue, 'newvalue');
     };
-
     const handleReject = async () => {
         const payload = [];
-        if (Object.keys(selectedCheckBox).length === 0) {
+        setError(false);
+        if (inputValue === '' && Reason !== undefined) {
+            setError(true);
+            return;
+        }
+        // Check if Reason and selectedCheckBox are valid
+        if (!Reason && Object.keys(selectedCheckBox).length === 0) {
             setErrorMessage(true);
-        } else {
+            return;
+        }
+        // Prepare the payload if Reason is not provided
+        if (!Reason) {
             Object.keys(selectedCheckBox).forEach((item) => {
-                if (selectedCheckBox[item].placeholder) {
-                    const allItem = [];
-                    selectedCheckBox[item].placeholder.forEach((allMappedItem) => {
-                        allItem.push(addApostrophe(allMappedItem));
-                    });
+                const checkboxItem = selectedCheckBox[item];
+                if (checkboxItem.placeholder) {
+                    const allItem = checkboxItem.placeholder.map(addApostrophe);
                     payload.push({ reason_id: Number(item), placeholder: allItem });
                 } else {
                     payload.push({ reason_id: Number(item) });
                 }
             });
-            try {
-                setIsLoading(true);
-                let response;
-                if (Reason) {
-                    response = await dataService.PostAPI('admin-users/delete-confirmation', {
-                        user_id: id
-                    });
-                } else {
-                    response = await dataService.PostAPI('admin-users/reject-kyc', {
-                        user_id: id,
-                        rejection_reason: payload
-                    });
-                }
+        }
 
-                if (!response.error) {
-                    setIsLoading(false);
-                    getView();
-                    setIsRejectModalOpen(false);
-                    setToastSuccess('KYC rejected successfully');
-                } else {
-                    setIsLoading(false);
-                    setIsRejectModalOpen(false);
-                    setToastError('Something went wrong!');
-                }
-            } catch (error) {
-                setIsLoading(false);
-                setIsRejectModalOpen(false);
+        try {
+            setIsLoading(true);
+            const body = { reason: inputValue };
+            let response;
+            if (Reason) {
+                // eslint-disable-next-line camelcase
+                const { paymaart_id, first_name, middle_name, last_name } = View;
+                response = await dataService.PatchAPI(`admin-users/delete-confirmation?user_id=${paymaart_id}&status=rejected&name=${first_name}${middle_name}${last_name}`, body);
+            } else {
+                response = await dataService.PostAPI('admin-users/reject-kyc', {
+                    user_id: id,
+                    rejection_reason: payload
+                });
+            }
+
+            if (!response.error) {
+                setToastSuccess(Reason ? 'Account deletion request rejected successfully' : 'KYC rejected successfully');
+            } else {
                 setToastError('Something went wrong!');
             }
+        } catch (error) {
+            setToastError('Something went wrong!');
+        } finally {
+            setIsLoading(false);
+            setIsRejectModalOpen(false);
+            getView();
         }
     };
+
+    ;
     return (
         <Modal center open={true}
             data-testid="modal"
@@ -219,11 +226,12 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
             <div className={`p-6 ${Reason ? 'min-w-[530px]' : 'min-w-[900px]'}`} >
                 {/* <p>{title}</p> */}
                 <h1 className='text-[#4F5962] font-normal text-[20px] leading-7'>Confirm to Reject?</h1>
-                <p className='font-medium text-[#4F5962] my-2 text-sm'>{message}</p>
-                <div onChange={() => handleReason(event)}>
+                <p data-testid="modal-body" className='font-medium text-[#4F5962] my-2 text-sm'>{message}</p>
+                <div data-testid="reason" onChange={() => handleReason(event)} className={`${error ? 'border-bottom-red mb-1' : ' border-b border-bottom-default'}`}>
                     {Reason}
                 </div>
-                {Reason === undefined && <><div className='border-t mt-2 w-[483px]'></div>
+                {error && <ErrorMessage error={'Required field'} />}
+                {Reason === undefined && <><div className={` mt-2 w-[483px] ${error ? 'border-b border-red-600' : ''}`}></div>
                     <div className='flex justify-between mt-2'>
                         <p className='font-normal text-[#A4A9AE] text-[14px] leading-6' data-testid="modal-body">Select the reason for rejection </p>
                         <div className='flex justify-between text-[#4F5962] font-normal text-[14px] leading-6 gap-6'>
