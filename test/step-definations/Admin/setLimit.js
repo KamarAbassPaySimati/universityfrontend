@@ -26,7 +26,6 @@ Then("I should see the Maximum Account Balance field for {string} prefilled",asy
             elementValue = await element.getText()
             break;
     }
-
     await assert.notEqual(elementValue, '')
     await assert.notEqual(elementValue, '-')
 })  
@@ -55,12 +54,10 @@ Then("I should see the Transaction Limit field for {string} prefilled",async fun
         case 'Agent':
             element = await driver.wait(until.elementLocated(By.css('[data-testid="agentTransactionLimit"]')))
             elementValue = await element.getText()
-
             break;
         case 'Merchant':
             element = await driver.wait(until.elementLocated(By.css('[data-testid="MerchantTransactionLimit"]')))
             elementValue = await element.getText()
-
             break;
         case 'Customer':
             element  = await driver.wait(until.elementLocated(By.css('[data-testid="CustomerTransactionLimit"]')))
@@ -94,11 +91,11 @@ When("I update the Maximum Account Balance field for {string} to {string}",async
             break;
         case 'Merchant':
             await driver.wait(until.elementLocated(By.css('[data-testid="merchantMaxLimit"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-            await driver.wait(until.elementLocated(By.css('[data-testid="merchantMaxLimit"]'))).sendKeys('${limit}');
+            await driver.wait(until.elementLocated(By.css('[data-testid="merchantMaxLimit"]'))).sendKeys(limit);
             break;
         case 'Customer':
             await driver.wait(until.elementLocated(By.css('[data-testid="agentMaxLimit"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-            await driver.wait(until.elementLocated(By.css('[data-testid="agentMaxLimit"]'))).sendKeys('${limit}');
+            await driver.wait(until.elementLocated(By.css('[data-testid="agentMaxLimit"]'))).sendKeys(limit);
             break;
         default:
             break;
@@ -109,15 +106,15 @@ Then("I update the Transaction Limit field for {string} to {string}",async funct
     switch(userType){
         case 'Agent':
             await driver.wait(until.elementLocated(By.css('[data-testid="agentTransactionLimit"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-            await driver.wait(until.elementLocated(By.css('[data-testid="agentTransactionLimit"]'))).sendKeys('${limit}');
+            await driver.wait(until.elementLocated(By.css('[data-testid="agentTransactionLimit"]'))).sendKeys(limit);
             break;
         case 'Merchant':
             await driver.wait(until.elementLocated(By.css('[data-testid="MerchantTransactionLimit"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-            await driver.wait(until.elementLocated(By.css('[data-testid="MerchantTransactionLimit"]'))).sendKeys('${limit}');
+            await driver.wait(until.elementLocated(By.css('[data-testid="MerchantTransactionLimit"]'))).sendKeys(limit);
             break;
         case 'Customer':
             await driver.wait(until.elementLocated(By.css('[data-testid="CustomerTransactionLimit"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-            await driver.wait(until.elementLocated(By.css('[data-testid="CustomerTransactionLimit"]'))).sendKeys('${limit}');
+            await driver.wait(until.elementLocated(By.css('[data-testid="CustomerTransactionLimit"]'))).sendKeys(limit);
             break;
         default:
             break;
