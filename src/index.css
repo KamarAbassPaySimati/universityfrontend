@@ -63,6 +63,22 @@ body {
 }
 
 /* Tooltip styling rules */
+.notification-tooltip {
+  background-color: #FFFFFF !important;
+  color: #333333 !important;
+  font-weight: 400 !important;
+  font-size: 12px !important;
+  padding: 16px !important;
+  border-radius: 4px !important;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.12) !important;
+  cursor: pointer;
+  position: absolute;
+  right: 30px;
+  top: 55px;
+  width: 545px;
+}
+
+/* Tooltip styling rules */
 .info-tooltip {
   width: 419px !important;
   background-color: #3B2A6F !important;

@@ -11,12 +11,13 @@
  * the pathurls should be an array that correspond to urls for each path in paths
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
 import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
+import NotificationPopup from '../Notification/NotificationPopup';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
@@ -48,6 +49,7 @@ const CardHeader = ({
     //     });
     //     onToggle(updatedButtons); // Notify the parent component of the updated button values
     // };
+    const [isNotification, setIsNotification] = useState(false);
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -68,8 +70,18 @@ const CardHeader = ({
                         </span>
                     }
                 </div>
-                <div className='flex justify-center items-center'>
-                    <Image onClick={() => navigate('/profile')} className='profile cursor-pointer' src='profile' />
+                <div className='flex justify-center items-center relative'>
+                    <Image onClick={() => setIsNotification(!isNotification)} className='notifications info-icon cursor-pointer' src='hover-notification-dot' />
+                    <Tooltip
+                        className='my-tooltip'
+                        anchorSelect=".notifications"
+                        place='bottom'
+                        clickable
+                    >
+                        <Link to="/profile">Notifications</Link>
+                    </Tooltip>
+                    {isNotification && <NotificationPopup setIsNotification={setIsNotification}/>}
+                    <Image onClick={() => navigate('/profile')} className='profile cursor-pointer ml-9' src='profile' />
                     <Tooltip
                         className='my-tooltip'
                         anchorSelect=".profile"
@@ -78,6 +90,7 @@ const CardHeader = ({
                     >
                         <Link to="/profile">Profile</Link>
                     </Tooltip>
+
                 </div>
             </div>
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
