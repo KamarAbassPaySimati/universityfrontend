@@ -22,11 +22,11 @@ import { CDN } from '../../../config';
 import { endpoints } from '../../../services/endpoints';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 
-export default function KYCView ({ role, viewType }) {
+export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
-    const [isActivateModalOpen, setIsActivateModalOpen] = useState();
+    const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const { approveKyc } = endpoints;
     const [isRejectModalOpen, setIsRejectModalOpen] = useState();
     const [isExpanded, setIsExpanded] = useState();
@@ -105,12 +105,12 @@ export default function KYCView ({ role, viewType }) {
                     `admin-users/delete-confirmation?user_id=${paymaart_id}&status=approved&name=${first_name}${middle_name}${last_name}`, body);
                 if (!response.error) {
                     setIsLoading(false);
-                    setIsActivateModalOpen(false);
+                    setIsApprovalModalOpen(false);
                     getView();
                     setToastSuccess('Account deletion request approved successfully ');
                 } else {
                     setIsLoading(false);
-                    setIsActivateModalOpen(false);
+                    setIsApprovalModalOpen(false);
                     setToastError('Something went wrong!');
                 }
             } catch (error) {
@@ -154,7 +154,7 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
-                rejectOrApprove={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
+                rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}

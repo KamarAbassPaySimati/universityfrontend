@@ -216,8 +216,6 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
             getView();
         }
     };
-
-    ;
     return (
         <Modal center open={true}
             data-testid="modal"
