@@ -125,8 +125,53 @@ stages:
           artifact: bundle
 - stage: Test
   jobs:
-    - job: UnitTesting
-      displayName: "Unit Testing"
+    # - job: UnitTesting
+    #   displayName: "Unit Testing"
+    #   condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+    #   pool:
+    #     vmImage: "macos-latest"
+    #   steps:
+    #     - task: Cache@2
+    #       inputs:
+    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
+    #         restoreKeys: |
+    #           npm | "$(Agent.OS)"
+    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
+    #         cacheHitVar: CACHE_RESTORED
+    #       displayName: Cache npm
+    #     - script: |
+    #         npm install --force
+    #       condition: ne(variables.CACHE_RESTORED, 'true')
+    #     - task: DownloadPipelineArtifact@2
+    #       name: environment
+    #       inputs:
+    #         artifact: Environment
+    #         targetPath: '$(System.DefaultWorkingDirectory)'
+    #     - task: DownloadPipelineArtifact@2
+    #       name: bundle
+    #       inputs:
+    #         artifact: bundle
+    #         targetPath: '$(System.DefaultWorkingDirectory)'
+    #     - script: |
+    #         npm install pm2@5.3.0 -g
+    #         source .env
+    #         echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
+    #         echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
+    #         npm install express --force
+    #         pm2 start scripts/server.js
+    #         node --version
+    #         sleep 5
+    #         mkdir reports
+    #         mkdir reports-xml
+    #         npm install nyc --save-dev --force
+    #         node scripts/bdd_unit_testing_azure.js
+    #       displayName: Unit Testing
+    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+    #       artifact: '$(system.JobId)-failedScenarios'
+    #       condition: always()
+
+    - job: UnitTesting1
+      displayName: "Unit Testing-1"
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
         vmImage: "macos-latest"
@@ -164,11 +209,72 @@ stages:
             mkdir reports
             mkdir reports-xml
             npm install nyc --save-dev --force
-            node scripts/bdd_unit_testing_azure.js
+            node scripts/bdd_unit_testing_azure1.js
           displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
           condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-coverageData'
+          condition: always()
+
+
+    - job: UnitTesting2
+      displayName: "Unit Testing-2"
+      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      pool:
+        vmImage: "macos-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            npm install pm2@5.3.0 -g
+            source .env
+            echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
+            echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
+            npm install express --force
+            pm2 start scripts/server.js
+            node --version
+            sleep 5
+            mkdir reports
+            mkdir reports-xml
+            npm install nyc --save-dev --force
+            node scripts/bdd_unit_testing_azure2.js
+          displayName: Unit Testing
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-failedScenarios'
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-coverageData'
+          condition: always()
+
+
+    - job: BDDReports
+      displayName: 'BDD Living documentation'
+      # condition: and(succeeded('UnitTesting1'), succeeded('UnitTesting2'), contains(variables['build.SourceBranch'], or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')) ))
+      condition: and(succeeded('UnitTesting1'), succeeded('UnitTesting2'), or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')))
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
         - script: |
             echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
             echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
