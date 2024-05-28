@@ -45,7 +45,7 @@ const SideBar = ({ role }) => {
     //     checkLoggedInUserForGlobalSignout();
     // }, []);
 
-    async function handleSignOut() {
+    async function handleSignOut () {
         try {
             setIsLoading(true);
             await signOut();
