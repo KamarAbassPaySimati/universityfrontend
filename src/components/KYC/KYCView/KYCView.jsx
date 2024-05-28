@@ -99,10 +99,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
             try {
                 const body = { reason: inputValue };
                 setIsLoading(true);
-                // eslint-disable-next-line camelcase
-                const { paymaart_id, first_name, middle_name, last_name } = View;
                 const response = await dataService.PatchAPI(
-                    `admin-users/delete-confirmation?user_id=${paymaart_id}&status=approved&name=${first_name}${middle_name}${last_name}`, body);
+                    `admin-users/delete-confirmation?user_id=${View.paymaart_id}&status=approved&name=${View.first_name}${View.middle_name}${View.last_name}`, body);
                 if (!response.error) {
                     setIsLoading(false);
                     setIsApprovalModalOpen(false);

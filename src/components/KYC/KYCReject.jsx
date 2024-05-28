@@ -193,9 +193,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
             const body = { reason: inputValue };
             let response;
             if (Reason) {
-                // eslint-disable-next-line camelcase
-                const { paymaart_id, first_name, middle_name, last_name } = View;
-                response = await dataService.PatchAPI(`admin-users/delete-confirmation?user_id=${paymaart_id}&status=rejected&name=${first_name}${middle_name}${last_name}`, body);
+                response = await dataService.PatchAPI(`admin-users/delete-confirmation?user_id=${View.paymaart_id}&status=rejected&name=${View.first_name}${View.middle_name}${View.last_name}`, body);
             } else {
                 response = await dataService.PostAPI('admin-users/reject-kyc', {
                     user_id: id,
