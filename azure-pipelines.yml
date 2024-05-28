@@ -273,8 +273,8 @@ stages:
       dependsOn:
           - UnitTesting1
           - UnitTesting2
-      # condition: and(succeeded('UnitTesting1'), succeeded('UnitTesting2'), contains(variables['build.SourceBranch'], or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')) ))
-      condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')))
+      condition: or(contains(variables['Build.SourceBranch'], 'feature'), contains(variables['Build.SourceBranch'], 'bugfix'), contains(variables['Build.SourceBranch'], 'hotfix'))
+
       pool:
         vmImage: "ubuntu-latest"
       steps:
