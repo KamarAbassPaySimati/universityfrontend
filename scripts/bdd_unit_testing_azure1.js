@@ -6,7 +6,7 @@ const { exec } = require('child_process');
 const readdir = util.promisify(fs.readdir);
 const stat = util.promisify(fs.stat);
 
-const featureDirectory = 'test/unit-testing/unit-testing-flow2';
+const featureDirectory = 'test/unit-testing/unit-testing-flow1';
 const DELAY_BETWEEN_TESTS = 1000; // 5 seconds
 const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 1000; // 40 seconds
 const MAX_PARALLEL_EXECUTIONS = 12;
