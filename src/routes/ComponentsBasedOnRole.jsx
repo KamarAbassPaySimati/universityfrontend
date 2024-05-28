@@ -10,6 +10,7 @@ import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrus
 import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
 import KYCView from '../components/KYC/KYCView/KYCView';
 import DeleteAccount from '../pages/Verification/DeleteAccount';
+import SetLimit from '../pages/Financials/SetLimit/index';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -155,6 +156,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Customer KYC Update',
                 element: <RegisterKYC role={'customer'} type='update'/>,
                 path: '/users/customers/register-customer/kyc-update/:id'
+            },
+            // View and update set limit finance
+            {
+                name: 'Set limit View',
+                element: <SetLimit />,
+                path: '/financials/set-limit'
             }
         ],
     admin:
