@@ -1,21 +1,39 @@
-/* eslint-disable max-len */
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { formatTimeAgo } from '../../CommonMethods/formatTimeAgo';
 
-export default function NotificationPopup ({ setIsNotification }) {
+export default function NotificationPopup ({
+    loading,
+    page, setPage,
+    setIsNotification, notificationData, fetchNotificationData, hasMore
+}) {
     const NotificationRef = useRef();
+
     useOnClickOutside(NotificationRef, () => {
         setIsNotification(false);
     });
-    const getNotificationList = () => {
 
-    };
-    useEffect(() => {
-        getNotificationList();
-    }, []);
+    const handleScroll = debounce(() => {
+        // Check if there is no loading and there is more data to fetch
+        if (!loading && hasMore) {
+            fetchNotificationData(page);
+        }
+    }, 200); // Adjust debounce delay as needed
+
+    function debounce (func, delay) {
+        let timer;
+        return function () {
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+                func.apply(this, arguments);
+            }, delay);
+        };
+    }
+
     return (
         <div
-            className='notification-tooltip absolute'
+            className='notification-tooltip absolute z-[11]'
             anchorSelect=".info-icon"
             place='right-start'
             effect="solid"
@@ -23,91 +41,38 @@ export default function NotificationPopup ({ setIsNotification }) {
             ref={NotificationRef}
         >
             <p className='text-[#4F5962] font-bold text-[16px] pb-[6px] border-b borer-[#E5E9EB]'>Notifications</p>
-            <div className='h-[480px] overflow-auto scrollBar'>
-                <div className='py-4 px-[10px] flex justify-between items-start'>
-                    <div className='flex items-center w-[90%]'>
-                        <div className='w-[15%]'>
-                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
+            <div className='h-[480px] overflow-auto scrollBar' onScroll={handleScroll}>
+                <InfiniteScroll
+                    dataLength={notificationData.length}
+                    next={() => setPage(page + 1)}
+                    hasMore={hasMore}
+                    loader={<p>Loading...</p>}
+                    scrollableTarget="scrollBar"
+                    scrollThreshold={0.9}
+                >
+                    {notificationData.map((notificationItem, notificationIndex) => (
+                        <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}>
+                            <div className='flex items-center w-[90%]'>
+                                <div className='w-[15%]'>
+                                    <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
+                                </div>
+                                <div className='ml-2.5 w-[85%]'>
+                                    <p className='font-normal text-sm text-[#4F5962]'>
+                                        {notificationItem?.type === 'kyc'
+                                            ? `Pending KYC Registration for ${notificationItem.user_id}`
+                                            : `Pending Delete Account Request for ${notificationItem.user_id}`}</p>
+                                    <p className='font-normal text-sm text-[#4F5962]'>{notificationItem.type === 'kyc'
+                                        ? 'There are pending KYC Registrations requiring your attention.'
+                                        : 'There are pending Delete Account Request requiring your attention.'}</p>
+                                </div>
+                            </div>
+                            <div className='w-[12%] '>
+                                <p className='text-xs text-[#A4A9AE] font-normal text-end'>
+                                    {formatTimeAgo(notificationItem.created_at)}</p>
+                            </div>
                         </div>
-                        <div className='ml-2.5 w-[85%]'>
-                            <p className='font-normal text-sm text-[#4F5962]'>Pending KYC Registration</p>
-                            <p className='font-normal text-sm text-[#4F5962]'>There are pending KYC Registrations requiring your attention.</p>
-                        </div>
-                    </div>
-                    <div className='w-[12%]'>
-                        <p className='text-xs text-[#A4A9AE] font-normal'>20m ago</p>
-                    </div>
-                </div>
-                <div className='py-4 px-[10px] flex justify-between items-start'>
-                    <div className='flex items-center w-[90%]'>
-                        <div className='w-[15%]'>
-                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
-                        </div>
-                        <div className='ml-2.5 w-[85%]'>
-                            <p className='font-normal text-sm text-[#4F5962]'>Pending KYC Registration</p>
-                            <p className='font-normal text-sm text-[#4F5962]'>There are pending KYC Registrations requiring your attention.</p>
-                        </div>
-                    </div>
-                    <div className='w-[12%]'>
-                        <p className='text-xs text-[#A4A9AE] font-normal'>20m ago</p>
-                    </div>
-                </div>
-                <div className='py-4 px-[10px] flex justify-between items-start'>
-                    <div className='flex items-center w-[90%]'>
-                        <div className='w-[15%]'>
-                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
-                        </div>
-                        <div className='ml-2.5 w-[85%]'>
-                            <p className='font-normal text-sm text-[#4F5962]'>Pending KYC Registration</p>
-                            <p className='font-normal text-sm text-[#4F5962]'>There are pending KYC Registrations requiring your attention.</p>
-                        </div>
-                    </div>
-                    <div className='w-[12%]'>
-                        <p className='text-xs text-[#A4A9AE] font-normal'>20m ago</p>
-                    </div>
-                </div>
-                <div className='py-4 px-[10px] flex justify-between items-start'>
-                    <div className='flex items-center w-[90%]'>
-                        <div className='w-[15%]'>
-                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
-                        </div>
-                        <div className='ml-2.5 w-[85%]'>
-                            <p className='font-normal text-sm text-[#4F5962]'>Pending KYC Registration</p>
-                            <p className='font-normal text-sm text-[#4F5962]'>There are pending KYC Registrations requiring your attention.</p>
-                        </div>
-                    </div>
-                    <div className='w-[12%]'>
-                        <p className='text-xs text-[#A4A9AE] font-normal'>20m ago</p>
-                    </div>
-                </div>
-                 <div className='py-4 px-[10px] flex justify-between items-start'>
-                    <div className='flex items-center w-[90%]'>
-                        <div className='w-[15%]'>
-                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
-                        </div>
-                        <div className='ml-2.5 w-[85%]'>
-                            <p className='font-normal text-sm text-[#4F5962]'>Pending KYC Registration</p>
-                            <p className='font-normal text-sm text-[#4F5962]'>There are pending KYC Registrations requiring your attention.</p>
-                        </div>
-                    </div>
-                    <div className='w-[12%]'>
-                        <p className='text-xs text-[#A4A9AE] font-normal'>20m ago</p>
-                    </div>
-                </div>
-                <div className='py-4 px-[10px] flex justify-between items-start'>
-                    <div className='flex items-center w-[90%]'>
-                        <div className='w-[15%]'>
-                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
-                        </div>
-                        <div className='ml-2.5 w-[85%]'>
-                            <p className='font-normal text-sm text-[#4F5962]'>Pending KYC Registration</p>
-                            <p className='font-normal text-sm text-[#4F5962]'>There are pending KYC Registrations requiring your attention.</p>
-                        </div>
-                    </div>
-                    <div className='w-[12%]'>
-                        <p className='text-xs text-[#A4A9AE] font-normal'>20m ago</p>
-                    </div>
-                </div>
+                    ))}
+                </InfiniteScroll>
             </div>
         </div>
     );
