@@ -45,7 +45,7 @@ const SideBar = ({ role }) => {
     //     checkLoggedInUserForGlobalSignout();
     // }, []);
 
-    async function handleSignOut() {
+    async function handleSignOut () {
         try {
             setIsLoading(true);
             await signOut();
@@ -108,7 +108,6 @@ const SideBar = ({ role }) => {
                                     </div>
                                     {sideNavObject[role][nav]?.dropdown && <Image className={`duration-300 ${dropdown[nav.toLowerCase()] ? 'rotate-180' : ''}`} src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down'} />}
                                 </div>
-                                {console.log(sideNavObject[role][nav]?.dropdown, 'hfhfhhfhffh')}
                                 {dropdown[nav.toLowerCase()] &&
                                     <>
                                         {sideNavObject[role][nav]?.dropdown?.map((option) => (
