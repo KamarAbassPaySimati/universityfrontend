@@ -71,7 +71,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     };
     const handleConfirmAction = async () => {
         setError(false);
-        if (inputValue === '') {
+        if (inputValue.trim() === '' && viewType === 'DeleteAccount') {
             setError(true);
             return;
         }
