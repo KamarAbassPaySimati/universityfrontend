@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { formatTimeAgo } from '../../CommonMethods/formatTimeAgo';
+import { useNavigate } from 'react-router';
 
 export default function NotificationPopup ({
     loading,
@@ -9,7 +10,7 @@ export default function NotificationPopup ({
     setIsNotification, notificationData, fetchNotificationData, hasMore
 }) {
     const NotificationRef = useRef();
-
+    const navigate = useNavigate();
     useOnClickOutside(NotificationRef, () => {
         setIsNotification(false);
     });
@@ -30,6 +31,40 @@ export default function NotificationPopup ({
             }, delay);
         };
     }
+    const handleOnClick = (paymaartId, type) => {
+        const subString = paymaartId.substring(0, 3);
+        switch (type) {
+        case 'kyc':
+            switch (subString) {
+            case 'AGT':
+                navigate(`/users/agents/register-agent/specific-view/${paymaartId}`);
+                break;
+            case 'CMR':
+                navigate(`/users/customers/register-customer/specific-view/${paymaartId}`);
+                break;
+            case 'MCT':
+                navigate(`/users/merchants/register-merchant/specific-view/${paymaartId}`);
+                break;
+            default:
+                break;
+            }
+            break;
+        case 'delete':
+            switch (subString) {
+            case 'AGT':
+                navigate(`verify/delete-account-requests/agent-profile/${paymaartId}`);
+                break;
+            case 'CMR':
+                navigate(`verify/delete-account-requests/customer-profile/${paymaartId}`);
+                break;
+            case 'MCT':
+                navigate(`verify/delete-account-requests/merchant-profile/${paymaartId}`);
+                break;
+            default:
+                break;
+            }
+        }
+    };
 
     return (
         <div
@@ -51,7 +86,9 @@ export default function NotificationPopup ({
                     scrollThreshold={0.9}
                 >
                     {notificationData.map((notificationItem, notificationIndex) => (
-                        <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}>
+                        <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}
+                            onClick={() => handleOnClick(notificationItem.user_id, notificationItem.type)}
+                        >
                             <div className='flex items-center w-[90%]'>
                                 <div className='w-[15%]'>
                                     <img src="/images/notification-icon.svg" alt="notification" className='w-full' />

@@ -25,6 +25,7 @@ const CardHeader = ({
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject
 }) => {
+    const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
@@ -98,9 +99,14 @@ const CardHeader = ({
                     }
                 </div>
                 <div className='flex justify-center items-center relative'>
-                    <Image
+                    <img
                         onClick={() => setIsNotification(!isNotification)}
-                        className='notifications info-icon cursor-pointer' src='hover-notification-dot'
+                        onMouseEnter={() => setONHover(true)}
+                        onMouseLeave={() => setONHover(false)}
+                        className={`notifications info-icon cursor-pointer ${onHover ? '' : 'px-1'}`}
+                        src={`/images/${notificationData.length === 0
+                            ? onHover ? 'hover-notification-dot' : 'notification'
+                            : onHover ? 'hover-notification-dot' : 'notification-dot'}.svg`}
                     />
                     <Tooltip
                         className='my-tooltip'
