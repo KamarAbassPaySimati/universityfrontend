@@ -20,12 +20,13 @@ import KYCReject from '../KYCReject';
 import TillNumber from '../../Modals/TillNumber';
 import { CDN } from '../../../config';
 import { endpoints } from '../../../services/endpoints';
+import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 
-export default function KYCView ({ role, viewType }) {
+export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
-    const [isActivateModalOpen, setIsActivateModalOpen] = useState();
+    const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const { approveKyc } = endpoints;
     const [isRejectModalOpen, setIsRejectModalOpen] = useState();
     const [isExpanded, setIsExpanded] = useState();
@@ -34,6 +35,8 @@ export default function KYCView ({ role, viewType }) {
     const { View, loading, userDetails } = useSelector(state => state.KYCProfileSpecificView); // to get the api respons
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
+    const [inputValue, setInputValue] = useState('');
+    const [error, setError] = useState(false);
 
     const getView = () => {
         try {
@@ -48,10 +51,11 @@ export default function KYCView ({ role, viewType }) {
     const handleApproveClick = () => {
         setIsApprovalModalOpen(true);
     };
-    const handleRejectClick = () => { // jjjfjfjfj
+    const handleRejectClick = () => {
         setIsRejectModalOpen(true);
     };
     const handleClose = () => {
+        setError(false);
         setIsApprovalModalOpen(false);
     };
     const toggleExpand = () => {
@@ -60,26 +64,58 @@ export default function KYCView ({ role, viewType }) {
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
     };
-
+    const handleReason = (event) => {
+        const newValue = event.target.value;
+        setError(false);
+        setInputValue(newValue);
+    };
     const handleConfirmAction = async () => {
-        try {
-            setIsLoading(true);
-            const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
-                { user_id: View?.paymaart_id });
-            if (!response.error) {
-                setIsLoading(false);
-                setIsApprovalModalOpen(false);
-                getView();
-                setToastSuccess('KYC approved successfully');
-            } else {
+        setError(false);
+        if (inputValue.trim() === '' && viewType === 'DeleteAccount') {
+            setError(true);
+            return;
+        }
+        if (viewType !== 'DeleteAccount') {
+            try {
+                setIsLoading(true);
+                const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
+                    { user_id: View?.paymaart_id });
+                if (!response.error) {
+                    setIsLoading(false);
+                    setIsApprovalModalOpen(false);
+                    getView();
+                    setToastSuccess('KYC approved successfully');
+                } else {
+                    setIsLoading(false);
+                    setIsApprovalModalOpen(false);
+                    setToastError('Something went wrong!');
+                }
+            } catch (error) {
                 setIsLoading(false);
                 setIsApprovalModalOpen(false);
                 setToastError('Something went wrong!');
             }
-        } catch (error) {
-            setIsLoading(false);
-            setIsApprovalModalOpen(false);
-            setToastError('Something went wrong!');
+        } else {
+            try {
+                const body = { reason: inputValue };
+                setIsLoading(true);
+                const response = await dataService.PatchAPI(
+                    `admin-users/delete-confirmation?user_id=${View.paymaart_id}&status=approved&name=${View.first_name}${View.middle_name}${View.last_name}`, body);
+                if (!response.error) {
+                    setIsLoading(false);
+                    setIsApprovalModalOpen(false);
+                    getView();
+                    setToastSuccess('Account deletion request approved successfully ');
+                } else {
+                    setIsLoading(false);
+                    setIsApprovalModalOpen(false);
+                    setToastError('Something went wrong!');
+                }
+            } catch (error) {
+                setIsLoading(false);
+                setIsActivateModalOpen(false);
+                setToastError('Something went wrong!');
+            }
         }
     };
     const handleConfirmActivation = async () => {
@@ -90,6 +126,7 @@ export default function KYCView ({ role, viewType }) {
                     paymaart_id: View?.paymaart_id,
                     status: View.status === 'active' ? 'false' : 'true'
                 });
+            setIsActivateModalOpen(false);
             if (!response.error) {
                 setIsLoading(false);
                 setIsActivateModalOpen(false);
@@ -106,6 +143,7 @@ export default function KYCView ({ role, viewType }) {
             setToastError('Something went wrong!');
         }
     };
+
     return (
         <>
             <CardHeader
@@ -114,13 +152,13 @@ export default function KYCView ({ role, viewType }) {
                 pathurls={getPaths(viewType, role).pathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
-                rejectOrApprove={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
+                rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
                 updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
-                onHandleStatusChange={viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin) ? handleApproveClick : () => setIsActivateModalOpen(true)}
+                onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
                 ChildrenElement
             // onHandleStatusChange={handleStatusClick}
@@ -155,8 +193,8 @@ export default function KYCView ({ role, viewType }) {
                                         {View?.citizen === 'Malawian' ? ' Malawi citizen' : ' Non-Malawi citizen'}</p>)}
                                     <span data-testid="kyc_status"
                                         className={`py-[2px] px-[10px] text-[13px] font-semibold capitalize rounded w-fit
-                                 ${getStatusColor((View?.user_kyc_status) || View?.status)?.color}`}>
-                                        {getStatusColor((View?.user_kyc_status) || View?.status)?.text}
+                                 ${getStatusColor(viewType !== 'DeleteAccount' ? (View?.user_kyc_status) : View?.status)?.color}`}>
+                                        {getStatusColor(viewType !== 'DeleteAccount' ? (View?.user_kyc_status) : View?.status)?.text}
                                     </span>
                                 </div>}
                         </div>
@@ -165,7 +203,11 @@ export default function KYCView ({ role, viewType }) {
                         {!loading && (View?.user_kyc_status === 'info_required' || viewType === 'DeleteAccount') &&
                             <div className="mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px] overflow-hidden">
                                 <div className="flex flex-row justify-between">
-                                    <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
+                                    {viewType === 'kyc'
+                                        ? <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for pending KYC</h1>
+                                        : <h1 className="text-[18px] font-semibold text-neutral-primary">Reason for account deletion</h1>
+
+                                    }
                                     <button className="text-[14px] font-400 text-primary-normal" onClick={toggleExpand}>
                                         {isExpanded ? 'Collapse' : 'Expand'}
                                     </button>
@@ -210,8 +252,7 @@ export default function KYCView ({ role, viewType }) {
                                             </div>
                                         )))
                                         : (
-                                            Object.keys(
-                                                userDetails.basicDetails
+                                            Object.keys(userDetails.basicDetails
                                             ).map((itemkey, index = 0) =>
                                                 (<div key={index} className='w-1/3 px-1'>
                                                     <ViewDetail
@@ -550,23 +591,50 @@ export default function KYCView ({ role, viewType }) {
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm to Approve?'}
-                        message={`This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        message={viewType === 'DeleteAccount' ? 'Reason for approval' : `This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        messageStyle={viewType === 'DeleteAccount' ? 'text-[14px] font-medium text-[#4F5962] mt-2' : undefined}
+                        Reason={viewType === 'DeleteAccount' && (<>
+                            <label htmlFor=""></label>
+                            {/* <input className='w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded' style={{ borderBottom: '1px solid #DDDDDD' }} placeholder='Enter Reason'> */}
+                            <input data-testid="reason" className={`w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded ${error ? 'border-bottom-red mb-1' : 'border-bottom-default'}`} placeholder="Enter Reason">
+                            </input>
+                            {error && <ErrorMessage error={'Required field'} />
+                            }
+                        </>)}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
                         buttonText={'Approve'}
                         buttonColor={'bg-accent-positive'}
+                        handleReason={handleReason}
+                        error={error}
                     />
                 </div>
             </Modal>
-            {isRejectModalOpen && <KYCReject
+            {(isRejectModalOpen && viewType === 'kyc') && <KYCReject
                 View={View}
                 userDetails={userDetails.basicDetails}
                 setIsRejectModalOpen={setIsRejectModalOpen}
                 id={id}
                 getView={getView}
             />}
+            {(isRejectModalOpen && viewType === 'DeleteAccount') && <KYCReject
+                View={View}
+                userDetails={userDetails.basicDetails}
+                setIsRejectModalOpen={setIsRejectModalOpen}
+                message={'Reason for rejection'}
+                Reason={viewType === 'DeleteAccount' && (
+                    <>
+                        <label htmlFor=""></label>
+                        <input data-testid="reason" className={'w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded'} placeholder="Enter Reason">
+                        </input>
+                    </>)}
+                id={id}
+                getView={getView}
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+            />}
             <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={View} />
         </>
     );
-}
+};
