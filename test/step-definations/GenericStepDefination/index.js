@@ -144,7 +144,7 @@ Then('I should see list of table records', async function () {
 
 When('I click on clear filter', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="clear-filter"]')));
     await driver.wait(until.elementIsVisible(element));
     await driver.wait(until.elementIsEnabled(element));
@@ -153,7 +153,7 @@ When('I click on clear filter', async function () {
 
 Then('I should see all the filters getting cleared', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const checkboxes = await driver.wait(until.elementsLocated(By.css('[data-testid="filter-modal"] input[type="checkbox"]')));
     let allUnchecked = true;
 
@@ -180,7 +180,7 @@ Then('I should see filter popup modal closed', async function () {
 
 When('I click on cancel button', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="cancel_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
@@ -188,7 +188,7 @@ When('I click on cancel button', async function () {
 
 When('I click on confirm button', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="confirm_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();

@@ -23,10 +23,9 @@ const CardHeader = ({
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction
 }) => {
-    console.log(navigationPath, 'mmmmmm');
     const navigate = useNavigate();
 
-    function cumulativeSum(arr) {
+    function cumulativeSum (arr) {
         const result = [];
         let sum = '';
         for (let i = 0; i < arr.length; i++) {
@@ -120,7 +119,6 @@ const CardHeader = ({
                                         </button>)
                                 )
                             }
-
                             {
                                 rejectOrApprove && rejectOrApprove !== undefined
                                     ? (approve

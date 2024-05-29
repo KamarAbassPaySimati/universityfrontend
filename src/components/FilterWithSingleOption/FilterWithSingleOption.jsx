@@ -26,7 +26,6 @@ const FilterWithSingleOption = ({
     useOnClickOutside(filterDiv, () => {
         setIsFilterOpen(false);
     });
-    console.log('filterOptionOne', filterOptionOne);
     return (
         <div ref={filterDiv} className="z-1">
             <Image
