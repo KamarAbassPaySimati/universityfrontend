@@ -103,6 +103,7 @@ const CardHeader = ({
                         onClick={() => setIsNotification(!isNotification)}
                         onMouseEnter={() => setONHover(true)}
                         onMouseLeave={() => setONHover(false)}
+                        data-testid="notification_bell"
                         className={`notifications info-icon cursor-pointer ${onHover ? '' : 'px-1'}`}
                         src={`/images/${notificationData.length === 0
                             ? onHover ? 'hover-notification-dot' : 'notification'

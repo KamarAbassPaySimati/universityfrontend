@@ -37,13 +37,13 @@ export default function NotificationPopup ({
         case 'kyc':
             switch (subString) {
             case 'AGT':
-                navigate(`/users/agents/register-agent/specific-view/${paymaartId}`);
+                navigate(`/verify/kyc-registration/agent-profile/${paymaartId}`);
                 break;
             case 'CMR':
-                navigate(`/users/customers/register-customer/specific-view/${paymaartId}`);
+                navigate(`/verify/kyc-registration/customer-profile/${paymaartId}`);
                 break;
             case 'MCT':
-                navigate(`/users/merchants/register-merchant/specific-view/${paymaartId}`);
+                navigate(`/verify/kyc-registration/merchant-profile/${paymaartId}`);
                 break;
             default:
                 break;
@@ -52,13 +52,13 @@ export default function NotificationPopup ({
         case 'delete':
             switch (subString) {
             case 'AGT':
-                navigate(`verify/delete-account-requests/agent-profile/${paymaartId}`);
+                navigate(`/verify/delete-account-requests/agent-profile/${paymaartId}`);
                 break;
             case 'CMR':
-                navigate(`verify/delete-account-requests/customer-profile/${paymaartId}`);
+                navigate(`/verify/delete-account-requests/customer-profile/${paymaartId}`);
                 break;
             case 'MCT':
-                navigate(`verify/delete-account-requests/merchant-profile/${paymaartId}`);
+                navigate(`/verify/delete-account-requests/merchant-profile/${paymaartId}`);
                 break;
             default:
                 break;
@@ -74,6 +74,7 @@ export default function NotificationPopup ({
             effect="solid"
             arrowColor="transparent"
             ref={NotificationRef}
+            data-testid="notification_list"
         >
             <p className='text-[#4F5962] font-bold text-[16px] pb-[6px] border-b borer-[#E5E9EB]'>Notifications</p>
             <div className='h-[480px] overflow-auto scrollBar' onScroll={handleScroll}>
@@ -88,6 +89,9 @@ export default function NotificationPopup ({
                     {notificationData.map((notificationItem, notificationIndex) => (
                         <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}
                             onClick={() => handleOnClick(notificationItem.user_id, notificationItem.type)}
+                            data-testid={notificationItem.type === 'kyc'
+                                ? 'view_kyc_notification'
+                                : 'view_delete_request_notification'}
                         >
                             <div className='flex items-center w-[90%]'>
                                 <div className='w-[15%]'>

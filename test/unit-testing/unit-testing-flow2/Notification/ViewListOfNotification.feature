@@ -19,7 +19,7 @@ Feature: Paymaart - Admin Web - Notification Page
     @create_new_user_and_login
     @register_new_agent_and_send_delete_request_for_that_agent
     Scenario: View list of notification and redirection
-        Given I navigate to customer KYC registration screen
+        Given I navigate to admin users listing screen
         When I click on notification bell
         Then I should view list of notifications
         When I click on view agent delete request notification
