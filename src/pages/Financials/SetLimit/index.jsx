@@ -5,12 +5,14 @@ import { dataService } from '../../../services/data.services';
 import SetLimitViewShimmer from '../../../components/Shimmers/SetLimitViewShimmer';
 import { useLocation, useNavigate } from 'react-router';
 import GlobalContext from '../../../components/Context/GlobalContext';
+import Button from '../../../components/Button/Button';
 
-function SetLimit () {
+function SetLimit() {
     const [viewLimitData, setViewLimitData] = useState();
     const [activeTab, setActiveTab] = useState('fullKYC');
     const [loadingdata, setLodingData] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [formData, setFormData] = useState({});
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const location = useLocation();
@@ -62,7 +64,7 @@ function SetLimit () {
         });
     };
     // Add this function to handle key press events
-    function handleKeyPress(event) {
+    function handleKeyPress (event) {
         const charCode = event.which || event.keyCode;
         // Allow only numbers (0-9) and specific control keys (like arrows, backspace, delete)
         if (!(charCode >= 48 && charCode <= 57) && // numbers
@@ -73,6 +75,7 @@ function SetLimit () {
     }
     const handleSubmit = async () => {
         // Check for empty fields and set errors
+        setIsLoading(true);
         const newErrors = {};
         for (const key in formData) {
             if (!formData[key]) {
@@ -101,20 +104,26 @@ function SetLimit () {
 
         try {
             const response = await dataService.PatchAPI('admin-users/update-limit', requestBody);
+            setIsLoading(true);
             if (!response.error) {
                 setToastError('');
                 setToastSuccess('Transaction Limit updated successfully');
+                setIsLoading(false);
                 setIsEditing(false);
                 navigate({ search: '' }, { replace: true });
+                setLodingData(true);
                 // Fetch updated data
                 const updatedData = await dataService.GetAPI('admin-users/view-limit');
                 setViewLimitData(updatedData?.data?.data);
+                setLodingData(false);
             } else {
                 // Display error message if not successful
+                setIsLoading(false);
                 setToastError(response.message || 'Something went wrong!');
             }
         } catch (error) {
             // Handle network or other errors
+            setIsLoading(false);
             console.error('Error updating limits:', error);
             setToastError('Something went wrong!');
         }
@@ -122,6 +131,15 @@ function SetLimit () {
 
     const handleBack = () => {
         navigate('/financials/set-limit');
+    };
+
+    const formatNumberWithCommas = (value) => {
+        if (typeof value === 'number') {
+            return value.toLocaleString();
+        } else if (typeof value === 'string' && !isNaN(Number(value))) {
+            return Number(value).toLocaleString();
+        }
+        return value;
     };
 
     useEffect(() => {
@@ -141,7 +159,7 @@ function SetLimit () {
                 <CardHeader
                     activePath='Set-limit'
                     paths={['Financials']}
-                    pathurls={['financials/set-limit']}
+                    pathurls={['financials/set Limit']}
                     header='Set Limit'
                     minHeightRequired={true}
                     buttonText={isEditing ? '' : 'Update'}
@@ -175,7 +193,7 @@ function SetLimit () {
                                     )
                                     : (
                                         <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="agentMaxLimit"
-                                        >{viewLimitData[0]?.agent || 0} MWK</p>
+                                        >{formatNumberWithCommas(viewLimitData[0]?.agent || 0)} MWK</p>
                                     )}
 
                             </div>
@@ -199,7 +217,8 @@ function SetLimit () {
                                     )
                                     : (
                                         <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="merchantMaxLimit"
-                                        >{viewLimitData[0]?.merchant || 0} MWK</p>
+                                        > {formatNumberWithCommas(viewLimitData[0]?.merchant || 0)} MWK
+                                        </p>
                                     )}
                             </div>
                             <div className='w-1/3'>
@@ -222,7 +241,7 @@ function SetLimit () {
                                     )
                                     : (
                                         <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="customerMaxLimit"
-                                        >{viewLimitData[0]?.customer || 0} MWK</p>
+                                        >{formatNumberWithCommas(viewLimitData[0]?.customer || 0)} MWK</p>
                                     )}
                             </div>
                         </div>
@@ -246,9 +265,9 @@ function SetLimit () {
                                     </div>
                                 </div>
                                 {activeTab === 'fullKYC' &&
-                                <p className='font-normal text-sm text-[#0066F6]' data-testid="staticMessage">*Full KYC is daily maximum transaction limit</p>}
+                                    <p className='font-normal text-sm text-[#0066F6]' data-testid="staticMessage">*Full KYC is daily maximum transaction limit</p>}
                                 {activeTab === 'simplifiedKYC' &&
-                                <p className='font-normal text-sm text-[#0066F6]' data-testid="staticMessage">*Simplified KYC is monthly maximum withdrawal limit</p>}
+                                    <p className='font-normal text-sm text-[#0066F6]' data-testid="staticMessage">*Simplified KYC is monthly maximum withdrawal limit</p>}
                             </div>
 
                             {activeTab === 'fullKYC' && (
@@ -264,7 +283,7 @@ function SetLimit () {
                                                             type="text"
                                                             name="full_agent"
                                                             data-testid="agentTransactionLimit"
-                                                            defaultValue={viewLimitData[0]?.agent || 0}
+                                                            defaultValue={viewLimitData[1]?.agent || 0}
                                                             className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.full_agent ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                             onChange={handleInputChange}
                                                             onKeyPress={handleKeyPress}
@@ -275,7 +294,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
-                                                    >{viewLimitData[1]?.agent} MWK</p>
+                                                    >{formatNumberWithCommas(viewLimitData[1]?.agent)} MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -298,7 +317,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
-                                                    >{viewLimitData[1]?.merchant} MWK</p>
+                                                    >{formatNumberWithCommas(viewLimitData[1]?.merchant)} MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3'>
@@ -321,7 +340,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
-                                                    >{viewLimitData[1]?.customer} MWK</p>
+                                                    >{formatNumberWithCommas(viewLimitData[1]?.customer)} MWK</p>
                                                 )}
                                         </div>
                                     </div>
@@ -351,7 +370,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
-                                                    >{viewLimitData[2]?.agent} MWK</p>
+                                                    >{formatNumberWithCommas(viewLimitData[2]?.agent)} MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -374,7 +393,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
-                                                    >{viewLimitData[2]?.merchant} MWK</p>
+                                                    >{formatNumberWithCommas(viewLimitData[2]?.merchant)} MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3'>
@@ -397,7 +416,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
-                                                    >{viewLimitData[2]?.customer} MWK</p>
+                                                    >{formatNumberWithCommas(viewLimitData[2]?.customer)} MWK</p>
                                                 )}
                                         </div>
                                     </div>
@@ -415,16 +434,27 @@ function SetLimit () {
                                 >
                                     Back
                                 </button>
-                            </div><div className='px-6'>
-                                <button
+                            </div>
+                            <div className='px-6'>
+                                {/* <Button2
                                     className='mt-5 bg-[#3B2A6F] h-[40px] text-white px-4 py-2 rounded-[6px] font-semibold text-sm w-[200px]'
                                     onClick={handleSubmit}
                                     disabled={loadingdata}
                                     data-testid="updateSubmitButtion"
                                 >
                                     Update
-                                </button>
-                            </div></div>
+                                </Button2> */}
+                                <Button
+                                    text='Update'
+                                    testId='updateSubmitButtion'
+                                    className='mt-5 bg-[#3B2A6F] h-[40px] text-white px-4 py-2 rounded-[6px] font-semibold text-sm w-[200px] min-w-[200px]'
+                                    onClick={handleSubmit}
+                                    isLoading={isLoading}
+                                    disabled={loadingdata}
+
+                                />
+                            </div>
+                        </div>
                     )}
                 </CardHeader>
 
