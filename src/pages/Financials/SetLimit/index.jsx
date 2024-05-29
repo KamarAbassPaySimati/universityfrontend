@@ -62,7 +62,7 @@ function SetLimit () {
         });
     };
     // Add this function to handle key press events
-    function handleKeyPress(event) {
+    function handleKeyPress (event) {
         const charCode = event.which || event.keyCode;
         // Allow only numbers (0-9) and specific control keys (like arrows, backspace, delete)
         if (!(charCode >= 48 && charCode <= 57) && // numbers
@@ -139,7 +139,7 @@ function SetLimit () {
             ? (<SetLimitViewShimmer />)
             : (<div>
                 <CardHeader
-                    activePath='Set-limit'
+                    activePath='Set Limit'
                     paths={['Financials']}
                     pathurls={['financials/set-limit']}
                     header='Set Limit'
