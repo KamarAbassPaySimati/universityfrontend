@@ -300,28 +300,31 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                                                 name={
                                                                                     itemkey === 'Biometrics | Live Selfie'
                                                                                         ? `Biometrics.${imageItem
-                                                                                            .slice(imageItem
+                                                                                            ?.slice(imageItem
                                                                                                 .lastIndexOf('.') + 1)}`
                                                                                         : userDetails
                                                                                             .identityDetails[itemkey].length === 1
                                                                                             ? `${itemkey === 'ID Document'
                                                                                                 ? View?.id_document
                                                                                                 : View?.verification_document}${itemkey === 'ID Document' && View?.id_document === 'Passport'
-                                                                                                ? ` Data Page.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`
-                                                                                                : `.${imageItem.slice(imageItem.lastIndexOf('.') + 1)}`}`
+                                                                                                ? ` Data Page.${imageItem?.slice(imageItem.lastIndexOf('.') + 1)}`
+                                                                                                : `.${imageItem?.slice(imageItem.lastIndexOf('.') + 1)}`}`
 
                                                                                             : index === 0
                                                                                                 ? `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 }
-                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Data Page' : 'Front'}.${imageItem.slice(imageItem
+                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Data Page' : 'Front'}.${imageItem?.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                                 : `${itemkey === 'ID Document'
                                                                                                     ? View?.id_document
                                                                                                     : View?.verification_document
                                                                                                 }
-                                                                                                ${itemkey === 'ID Document' && View?.citizen !== 'Malawian' && View?.id_document === 'Passport' ? 'Visa Page' : 'Back'}.${imageItem.slice(imageItem
+                                                                                                ${itemkey === 'ID Document' &&
+                                                                                                View?.citizen !== 'Malawian' && View?.id_document === 'Passport'
+                                                                            ? 'Visa Page'
+                                                                            : 'Back'}.${imageItem?.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
                                                                                 }
                                                                                 item={imageItem}

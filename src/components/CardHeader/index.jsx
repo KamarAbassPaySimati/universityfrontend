@@ -11,18 +11,21 @@
  * the pathurls should be an array that correspond to urls for each path in paths
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
 import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
+import NotificationPopup from '../Notification/NotificationPopup';
+import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject
 }) => {
+    const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
@@ -48,6 +51,33 @@ const CardHeader = ({
     //     });
     //     onToggle(updatedButtons); // Notify the parent component of the updated button values
     // };
+    const [isNotification, setIsNotification] = useState(false);
+    const [notificationData, setNotificationData] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false); // New loading state
+    const [page, setPage] = useState(1);
+
+    const fetchNotificationData = async (pageNumber) => {
+        try {
+            setLoading(true); // Set loading state to true before API call
+            const res = await dataService.GetAPI(`admin-users/notifications?page=${pageNumber}`);
+            const newData = res.data.data;
+            if (res.data.nextPage === null) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
+            setNotificationData(prevData => [...prevData, ...newData]);
+            setPage(pageNumber + 1);
+        } catch (error) {
+            console.error('Error occurred:', error);
+        } finally {
+            setLoading(false); // Reset loading state after API call is completed
+        }
+    };
+    useEffect(() => {
+        fetchNotificationData(1);
+    }, []);
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -68,8 +98,36 @@ const CardHeader = ({
                         </span>
                     }
                 </div>
-                <div className='flex justify-center items-center'>
-                    <Image onClick={() => navigate('/profile')} className='profile cursor-pointer' src='profile' />
+                <div className='flex justify-center items-center relative'>
+                    <img
+                        onClick={() => setIsNotification(!isNotification)}
+                        onMouseEnter={() => setONHover(true)}
+                        onMouseLeave={() => setONHover(false)}
+                        data-testid="notification_bell"
+                        className={`notifications info-icon cursor-pointer ${onHover ? '' : 'px-1'}`}
+                        src={`/images/${notificationData.length === 0
+                            ? onHover ? 'hover-notification-dot' : 'notification'
+                            : onHover ? 'hover-notification-dot' : 'notification-dot'}.svg`}
+                    />
+                    <Tooltip
+                        className='my-tooltip'
+                        anchorSelect=".notifications"
+                        place='bottom'
+                        clickable
+                    >
+                        <Link to="/profile">Notifications</Link>
+                    </Tooltip>
+                    {isNotification &&
+                    <NotificationPopup
+                        page={page}
+                        setPage={setPage}
+                        setIsNotification={setIsNotification}
+                        loading={loading}
+                        notificationData={notificationData}
+                        fetchNotificationData={fetchNotificationData}
+                        hasMore={hasMore}
+                    />}
+                    <Image onClick={() => navigate('/profile')} className='profile cursor-pointer ml-9' src='profile' />
                     <Tooltip
                         className='my-tooltip'
                         anchorSelect=".profile"
@@ -78,6 +136,7 @@ const CardHeader = ({
                     >
                         <Link to="/profile">Profile</Link>
                     </Tooltip>
+
                 </div>
             </div>
             <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
@@ -161,7 +220,7 @@ const CardHeader = ({
                     ? (!table
                         ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
-                ${header ? 'max-h-[calc(100vh-240px)]' : ''} 
+                ${header ? 'max-h-[calc(100vh-240px)] relative z-[9]' : ''} 
                 ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
                             {children}
                         </div>
