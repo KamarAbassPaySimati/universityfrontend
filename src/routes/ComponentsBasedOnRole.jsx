@@ -11,6 +11,7 @@ import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
 import KYCView from '../components/KYC/KYCView/KYCView';
 import DeleteAccount from '../pages/Verification/DeleteAccount';
 import SetLimit from '../pages/Financials/SetLimit/index';
+import Commissions from '../pages/Financials/Commissions/Commissions';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -162,6 +163,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Set limit View',
                 element: <SetLimit />,
                 path: '/financials/set-limit'
+            },
+            // View and update Commissions
+            {
+                name: 'Commissions',
+                element: <Commissions />,
+                path: '/financials/Commissions'
             }
         ],
     admin:
