@@ -13,6 +13,8 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
     1.Full KYC(agent,merchant,customer)
     2.Simplified KYC(agent,merchant,customer)
 
+    @add_admin_user
+    @create_new_user_and_login
   Scenario: Viewing prefilled maximum account balances
     Given I navigate to set limit screen
     Then I should see the Maximum Account Balance field for "Agent" prefilled
@@ -22,7 +24,7 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
   Scenario: Viewing prefilled transaction limits in Full KYC
     Given I navigate to set limit screen
     When I select the Full KYC tab
-    Then I should see a static text stating "Full KYC is daily maximum transaction limit"
+    Then I should see a static text stating "*Full KYC is daily maximum transaction limit"
     And I should see the Transaction Limit field for "Agent" prefilled
     And I should see the Transaction Limit field for "Merchant" prefilled
     And I should see the Transaction Limit field for "Customer" prefilled
@@ -30,7 +32,7 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
   Scenario: Viewing prefilled transaction limits in Simplified KYC
     Given I navigate to set limit screen
     When I select the Simplified KYC tab
-    Then I should see a static text stating "Simplified KYC is monthly maximum withdrawal limit"
+    Then I should see a static text stating "*Simplified KYC is monthly maximum withdrawal limit"
     And I should see the Transaction Limit field for "Agent" prefilled
     And I should see the Transaction Limit field for "Merchant" prefilled
     And I should see the Transaction Limit field for "Customer" prefilled 
@@ -42,12 +44,12 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
     And I update the Maximum Account Balance field for "Merchant" to ""
     And I update the Maximum Account Balance field for "Customer" to ""
     And I submit the update transaction limit form
-    Then I should read a message stating that "Enter a valid limit" 
+    Then I should read a message stating that "Required field" 
     When I update the Maximum Account Balance field for "Agent" to "-"
     And I update the Maximum Account Balance field for "Merchant" to "-"
     And I update the Maximum Account Balance field for "Customer" to "-"
     And I submit the update transaction limit form
-    Then I should read a message stating that "Enter a valid limit" 
+    Then I should read a message stating that "Required field" 
 
   Scenario: Updating maximum account balances
     Given I navigate to set limit screen
@@ -62,23 +64,23 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
     Given I navigate to set limit screen
     And I click the update set limit button
     When I select the Full KYC tab
-    Then I should see a static text stating "Full KYC is daily maximum transaction limit"
+    Then I should see a static text stating "*Full KYC is daily maximum transaction limit"
     And I update the Transaction Limit field for "Agent" to ""
     And I update the Transaction Limit field for "Merchant" to ""
     And I update the Transaction Limit field for "Customer" to ""
     And I submit the update transaction limit form
-    Then I should read a message stating that "Invalid Transaction Limit"
+    Then I should read a message stating that "Required field"
     And I update the Transaction Limit field for "Agent" to "-"
     And I update the Transaction Limit field for "Merchant" to "-"
     And I update the Transaction Limit field for "Customer" to "-"
     And I submit the update transaction limit form
-    Then I should read a message stating that "Invalid Transaction Limit"
+    Then I should read a message stating that "Required field"
 
   Scenario: Updating transaction limits in Full KYC
     Given I navigate to set limit screen
     And I click the update set limit button
     When I select the Full KYC tab
-    Then I should see a static text stating "Full KYC is daily maximum transaction limit"
+    Then I should see a static text stating "*Full KYC is daily maximum transaction limit"
     And I update the Transaction Limit field for "Agent" to "12,000,000.00"
     And I update the Transaction Limit field for "Merchant" to "11,000,000.00"
     And I update the Transaction Limit field for "Customer" to "34,000.00"
@@ -89,23 +91,23 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
     Given I navigate to set limit screen
     And I click the update set limit button
     When I select the Simplified KYC tab
-    Then I should see a static text stating "Simplified KYC is monthly maximum withdrawal limit"
+    Then I should see a static text stating "*Simplified KYC is monthly maximum withdrawal limit"
     And I update the Transaction Limit field for "Agent" to ""
     And I update the Transaction Limit field for "Merchant" to ""
     And I update the Transaction Limit field for "Customer" to ""
     And I submit the update transaction limit form
-    Then I should read a message stating that "Invalid Transaction Limit"
+    Then I should read a message stating that "Required field"
     And I update the Transaction Limit field for "Agent" to "-"
     And I update the Transaction Limit field for "Merchant" to "-"
     And I update the Transaction Limit field for "Customer" to "-"
     And I submit the update transaction limit form
-    Then I should read a message stating that "Invalid Transaction Limit"
+    Then I should read a message stating that "Required field"
 
   Scenario: Updating transaction limits in Simplified KYC
     Given I navigate to set limit screen
     And I click the update set limit button
     When I select the Simplified KYC tab
-    Then I should see a static text stating "Simplified KYC is monthly maximum withdrawal limit"
+    Then I should see a static text stating "*Simplified KYC is monthly maximum withdrawal limit"
     When I update the Transaction Limit field for "Agent" to "100,000,000.00"
     And I update the Transaction Limit field for "Merchant" to "100,000,000.00"
     And I update the Transaction Limit field for "Customer" to "100,100,000.00"

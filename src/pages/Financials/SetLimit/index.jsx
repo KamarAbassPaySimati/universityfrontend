@@ -17,14 +17,15 @@ function SetLimit () {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({
         max_agent: false,
-        max_customer: false,
         max_merchant: false,
+        max_customer: false,
         full_agent: false,
-        full_customer: false,
         full_merchant: false,
+        full_customer: false,
         simplified_agent: false,
-        simplified_customer: false,
-        simplified_merchant: false
+        simplified_merchant: false,
+        simplified_customer: false
+
     });
 
     useEffect(() => {
@@ -61,7 +62,7 @@ function SetLimit () {
         });
     };
     // Add this function to handle key press events
-    function handleKeyPress (event) {
+    function handleKeyPress(event) {
         const charCode = event.which || event.keyCode;
         // Allow only numbers (0-9) and specific control keys (like arrows, backspace, delete)
         if (!(charCode >= 48 && charCode <= 57) && // numbers
@@ -140,7 +141,7 @@ function SetLimit () {
                 <CardHeader
                     activePath='Set-limit'
                     paths={['Financials']}
-                    pathurls={['finanacials/set-limit']}
+                    pathurls={['financials/set-limit']}
                     header='Set Limit'
                     minHeightRequired={true}
                     buttonText={isEditing ? '' : 'Update'}
@@ -162,6 +163,7 @@ function SetLimit () {
                                             <input
                                                 type="text"
                                                 name="max_agent"
+                                                data-testid="agentMaxLimit"
                                                 defaultValue={viewLimitData[0]?.agent || ''}
                                                 className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8]  ${errors.max_agent ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                 onChange={handleInputChange}
@@ -172,7 +174,8 @@ function SetLimit () {
                                         </div>
                                     )
                                     : (
-                                        <p className='mt-2 font-normal text-sm text-[#4F5962]'>{viewLimitData[0]?.agent || 0} MWK</p>
+                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="agentMaxLimit"
+                                        >{viewLimitData[0]?.agent || 0} MWK</p>
                                     )}
 
                             </div>
@@ -183,28 +186,8 @@ function SetLimit () {
                                         <div>
                                             <input
                                                 type="text"
-                                                name="max_customer"
-                                                defaultValue={viewLimitData[0]?.customer || 0}
-                                                className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.max_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
-                                                onChange={handleInputChange}
-                                                onKeyPress={handleKeyPress}
-
-                                            />
-                                            {errors.max_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
-                                        </div>
-                                    )
-                                    : (
-                                        <p className='mt-2 font-normal text-sm text-[#4F5962]'>{viewLimitData[0]?.merchant || 0} MWK</p>
-                                    )}
-                            </div>
-                            <div className='w-1/3'>
-                                <p className='font-normal text-sm text-[#A4A9AE]'>Customer</p>
-                                {isEditing
-                                    ? (
-                                        <div>
-                                            <input
-                                                type="text"
                                                 name="max_merchant"
+                                                data-testid="merchantMaxLimit"
                                                 defaultValue={viewLimitData[0]?.merchant || 0}
                                                 className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.max_merchant ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                 onChange={handleInputChange}
@@ -215,7 +198,31 @@ function SetLimit () {
                                         </div>
                                     )
                                     : (
-                                        <p className='mt-2 font-normal text-sm text-[#4F5962]'>{viewLimitData[0]?.customer || 0} MWK</p>
+                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="merchantMaxLimit"
+                                        >{viewLimitData[0]?.merchant || 0} MWK</p>
+                                    )}
+                            </div>
+                            <div className='w-1/3'>
+                                <p className='font-normal text-sm text-[#A4A9AE]'>Customer</p>
+                                {isEditing
+                                    ? (
+                                        <div>
+                                            <input
+                                                type="text"
+                                                name="max_customer"
+                                                data-testid="customerMaxLimit"
+                                                defaultValue={viewLimitData[0]?.customer || 0}
+                                                className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.max_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
+                                                onChange={handleInputChange}
+                                                onKeyPress={handleKeyPress}
+
+                                            />
+                                            {errors.max_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
+                                        </div>
+                                    )
+                                    : (
+                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="customerMaxLimit"
+                                        >{viewLimitData[0]?.customer || 0} MWK</p>
                                     )}
                             </div>
                         </div>
@@ -226,17 +233,22 @@ function SetLimit () {
                                     <div
                                         className={`cursor-pointer text-sm text-[#4F5962] ${activeTab === 'fullKYC' ? 'font-semibold border-b border-[#4F5962] pb-2 ' : 'font-normal'}`}
                                         onClick={() => handleTabClick('fullKYC')}
+                                        data-testid="fullKycTab"
                                     >
                                         Full KYC
                                     </div>
                                     <div
                                         className={`cursor-pointer text-sm text-[#4F5962] ${activeTab === 'simplifiedKYC' ? 'font-semibold border-b border-[#4F5962] pb-2' : 'font-normal'}`}
                                         onClick={() => handleTabClick('simplifiedKYC')}
+                                        data-testid="simplified KycTab"
                                     >
                                         Simplified KYC
                                     </div>
                                 </div>
-                                <p className='font-normal text-sm text-[#0066F6]'>*Full KYC is daily maximum transaction limit</p>
+                                {activeTab === 'fullKYC' &&
+                                <p className='font-normal text-sm text-[#0066F6]' data-testid="staticMessage">*Full KYC is daily maximum transaction limit</p>}
+                                {activeTab === 'simplifiedKYC' &&
+                                <p className='font-normal text-sm text-[#0066F6]' data-testid="staticMessage">*Simplified KYC is monthly maximum withdrawal limit</p>}
                             </div>
 
                             {activeTab === 'fullKYC' && (
@@ -251,6 +263,7 @@ function SetLimit () {
                                                         <input
                                                             type="text"
                                                             name="full_agent"
+                                                            data-testid="agentTransactionLimit"
                                                             defaultValue={viewLimitData[0]?.agent || 0}
                                                             className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.full_agent ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                             onChange={handleInputChange}
@@ -261,7 +274,8 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]'>{viewLimitData[1]?.agent} MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
+                                                    >{viewLimitData[1]?.agent} MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -271,28 +285,8 @@ function SetLimit () {
                                                     <div>
                                                         <input
                                                             type="text"
-                                                            name="full_customer"
-                                                            defaultValue={viewLimitData[1]?.customer || 0}
-                                                            className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.full_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
-                                                            onChange={handleInputChange}
-                                                            onKeyPress={handleKeyPress}
-
-                                                        />
-                                                        {errors.full_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
-                                                    </div>
-                                                )
-                                                : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]'>{viewLimitData[1]?.merchant} MWK</p>
-                                                )}
-                                        </div>
-                                        <div className='w-1/3'>
-                                            <p className='font-normal text-sm text-[#A4A9AE]'>Customer</p>
-                                            {isEditing
-                                                ? (
-                                                    <div>
-                                                        <input
-                                                            type="text"
                                                             name="full_merchant"
+                                                            data-testid="MerchantTransactionLimit"
                                                             defaultValue={viewLimitData[1]?.merchant || 0}
                                                             className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.full_merchant ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                             onChange={handleInputChange}
@@ -303,7 +297,31 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]'>{viewLimitData[1]?.customer} MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
+                                                    >{viewLimitData[1]?.merchant} MWK</p>
+                                                )}
+                                        </div>
+                                        <div className='w-1/3'>
+                                            <p className='font-normal text-sm text-[#A4A9AE]'>Customer</p>
+                                            {isEditing
+                                                ? (
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            name="full_customer"
+                                                            data-testid="CustomerTransactionLimit"
+                                                            defaultValue={viewLimitData[1]?.customer || 0}
+                                                            className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.full_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
+                                                            onChange={handleInputChange}
+                                                            onKeyPress={handleKeyPress}
+
+                                                        />
+                                                        {errors.full_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
+                                                    </div>
+                                                )
+                                                : (
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
+                                                    >{viewLimitData[1]?.customer} MWK</p>
                                                 )}
                                         </div>
                                     </div>
@@ -321,6 +339,7 @@ function SetLimit () {
                                                         <input
                                                             type="text"
                                                             name="simplified_agent"
+                                                            data-testid="agentTransactionLimit"
                                                             defaultValue={viewLimitData[2]?.agent || 0}
                                                             className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.simplified_agent ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                             onChange={handleInputChange}
@@ -331,7 +350,8 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]'>{viewLimitData[2]?.agent} MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
+                                                    >{viewLimitData[2]?.agent} MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -341,28 +361,8 @@ function SetLimit () {
                                                     <div>
                                                         <input
                                                             type="text"
-                                                            name="simplified_customer"
-                                                            defaultValue={viewLimitData[2]?.customer || 0}
-                                                            className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.simplified_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
-                                                            onChange={handleInputChange}
-                                                            onKeyPress={handleKeyPress}
-
-                                                        />
-                                                        {errors.simplified_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
-                                                    </div>
-                                                )
-                                                : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]'>{viewLimitData[2]?.merchant} MWK</p>
-                                                )}
-                                        </div>
-                                        <div className='w-1/3'>
-                                            <p className='font-normal text-sm text-[#A4A9AE]'>Customer</p>
-                                            {isEditing
-                                                ? (
-                                                    <div>
-                                                        <input
-                                                            type="text"
                                                             name="simplified_merchant"
+                                                            data-testid="MerchantTransactionLimit"
                                                             defaultValue={viewLimitData[2]?.merchant || 0}
                                                             className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.simplified_merchant ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                             onChange={handleInputChange}
@@ -373,7 +373,31 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]'>{viewLimitData[2]?.customer} MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
+                                                    >{viewLimitData[2]?.merchant} MWK</p>
+                                                )}
+                                        </div>
+                                        <div className='w-1/3'>
+                                            <p className='font-normal text-sm text-[#A4A9AE]'>Customer</p>
+                                            {isEditing
+                                                ? (
+                                                    <div>
+                                                        <input
+                                                            type="text"
+                                                            name="simplified_customer"
+                                                            data-testid="CustomerTransactionLimit"
+                                                            defaultValue={viewLimitData[2]?.customer || 0}
+                                                            className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.simplified_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
+                                                            onChange={handleInputChange}
+                                                            onKeyPress={handleKeyPress}
+
+                                                        />
+                                                        {errors.simplified_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
+                                                    </div>
+                                                )
+                                                : (
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
+                                                    >{viewLimitData[2]?.customer} MWK</p>
                                                 )}
                                         </div>
                                     </div>
@@ -396,6 +420,7 @@ function SetLimit () {
                                     className='mt-5 bg-[#3B2A6F] h-[40px] text-white px-4 py-2 rounded-[6px] font-semibold text-sm w-[200px]'
                                     onClick={handleSubmit}
                                     disabled={loadingdata}
+                                    data-testid="updateSubmitButtion"
                                 >
                                     Update
                                 </button>
