@@ -574,3 +574,10 @@ iframe {
   max-width: max-content;
 }
 
+.border-bottom-default {
+  border-bottom: 1px solid #DDDDDD;
+}
+
+.border-bottom-red {
+  border-bottom: 1px solid red;
+}

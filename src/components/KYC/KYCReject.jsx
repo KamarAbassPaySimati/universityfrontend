@@ -8,12 +8,14 @@ import GlobalContext from '../Context/GlobalContext';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import addApostrophe from '../../CommonMethods/textCorrection';
 
-export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id, getView }) {
+export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id, getView, Reason, message, inputValue, setInputValue }) {
     const [selectedCheckBox, setSelectedCheckBox] = useState({});
     const [RejectReasons, setRejectReasons] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [errorMessage, setErrorMessage] = useState(false);
+    const [error, setError] = useState(false);
+
     const MalawiInfo = {
         'National ID': 'Valid National ID Card issued by National Registration Bureau',
         Passport: 'Valid Passport issued by Department of Immigration or other appropriate authority',
@@ -71,7 +73,7 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                 setSelectedCheckBox(updatedSelectedCheckBox);
             } else if (type === 'sub') {
                 const updatedPlaceholder =
-                (selectedCheckBox[selectedIndex]?.placeholder || []).filter(placeholderId => placeholderId !== checkboxText);
+                    (selectedCheckBox[selectedIndex]?.placeholder || []).filter(placeholderId => placeholderId !== checkboxText);
                 const updatedValue = {
                     ...selectedCheckBox[selectedIndex],
                     placeholder: updatedPlaceholder
@@ -156,43 +158,60 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
         setSelectedCheckBox(obj);
     };
 
+    const handleReason = async (event) => {
+        const newValue = event.target.value;
+        setError(false);
+        setInputValue(newValue);
+    };
     const handleReject = async () => {
         const payload = [];
-        if (Object.keys(selectedCheckBox).length === 0) {
+        setError(false);
+        if (inputValue === '' && Reason !== undefined) {
+            setError(true);
+            return;
+        }
+        // Check if Reason and selectedCheckBox are valid
+        if (!Reason && Object.keys(selectedCheckBox).length === 0) {
             setErrorMessage(true);
-        } else {
+            return;
+        }
+        // Prepare the payload if Reason is not provided
+        if (!Reason) {
             Object.keys(selectedCheckBox).forEach((item) => {
-                if (selectedCheckBox[item].placeholder) {
-                    const allItem = [];
-                    selectedCheckBox[item].placeholder.forEach((allMappedItem) => {
-                        allItem.push(addApostrophe(allMappedItem));
-                    });
+                const checkboxItem = selectedCheckBox[item];
+                if (checkboxItem.placeholder) {
+                    const allItem = checkboxItem.placeholder.map(addApostrophe);
                     payload.push({ reason_id: Number(item), placeholder: allItem });
                 } else {
                     payload.push({ reason_id: Number(item) });
                 }
             });
-            try {
-                setIsLoading(true);
-                const response = await dataService.PostAPI('admin-users/reject-kyc', {
+        }
+
+        try {
+            setIsLoading(true);
+            const body = { reason: inputValue };
+            let response;
+            if (Reason) {
+                response = await dataService.PatchAPI(`admin-users/delete-confirmation?user_id=${View.paymaart_id}&status=rejected&name=${View.first_name}${View.middle_name}${View.last_name}`, body);
+            } else {
+                response = await dataService.PostAPI('admin-users/reject-kyc', {
                     user_id: id,
                     rejection_reason: payload
                 });
-                if (!response.error) {
-                    setIsLoading(false);
-                    getView();
-                    setIsRejectModalOpen(false);
-                    setToastSuccess('KYC rejected successfully');
-                } else {
-                    setIsLoading(false);
-                    setIsRejectModalOpen(false);
-                    setToastError('Something went wrong!');
-                }
-            } catch (error) {
-                setIsLoading(false);
-                setIsRejectModalOpen(false);
+            }
+
+            if (!response.error) {
+                setToastSuccess(Reason ? 'Account deletion request rejected successfully' : 'KYC rejected successfully');
+            } else {
                 setToastError('Something went wrong!');
             }
+        } catch (error) {
+            setToastError('Something went wrong!');
+        } finally {
+            setIsLoading(false);
+            setIsRejectModalOpen(false);
+            getView();
         }
     };
     return (
@@ -200,57 +219,66 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
             data-testid="modal"
             styles={{ modal: { borderRadius: 10 } }}
             onClose={() => { setIsRejectModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-            <div className='p-6 min-w-[900px]' >
+            <div className={`p-6 ${Reason ? 'min-w-[530px]' : 'min-w-[900px]'}`} >
+                {/* <p>{title}</p> */}
                 <h1 className='text-[#4F5962] font-normal text-[20px] leading-7'>Confirm to Reject?</h1>
-                <div className='border-t mt-2 w-[483px]'></div>
-                <div className='flex justify-between mt-2'>
-                    <p className='font-normal text-[#A4A9AE] text-[14px] leading-6' data-testid="modal-body">Select the reason for rejection </p>
-                    <div className='flex justify-between text-[#4F5962] font-normal text-[14px] leading-6 gap-6'>
-                        <button className='' onClick={handleSelectAll}>Select all</button>
-                        <button className='' onClick={() => setSelectedCheckBox({})}>Clear</button>
+                {Reason &&
+                <p data-testid="modal-body" className='font-medium text-[#4F5962] my-2 text-sm'>{message}</p>}
+                <div onChange={() => handleReason(event)} className={`${error ? 'border-bottom-red mb-1' : ' border-b border-bottom-default'}`}>
+                    {Reason}
+                </div>
+                {error && <ErrorMessage error={'Required field'} />}
+                {Reason === undefined && <><div className={` mt-2 w-[483px] ${error ? 'border-b border-red-600' : ''}`}></div>
+                    <div className='flex justify-between mt-2'>
+                        <p className='font-normal text-[#A4A9AE] text-[14px] leading-6' data-testid="modal-body">Select the reason for rejection </p>
+                        <div className='flex justify-between text-[#4F5962] font-normal text-[14px] leading-6 gap-6'>
+                            <button className='' onClick={handleSelectAll}>Select all</button>
+                            <button className='' onClick={() => setSelectedCheckBox({})}>Clear</button>
+                        </div>
                     </div>
-                </div>
-                {errorMessage && <ErrorMessage error={'Please select at least one option to proceed.'} />}
-                <div className='overflow-auto mx-auto max-h-[calc(100vh-350px)] scrollBar'>
-                    {RejectReasons.map((item, index = 0) => (
-                        <>
-                            <CheckboxWithReason
-                                key={item}
-                                item={item}
-                                testId={item.label}
-                                handleOnChange={handleCheckBox}
-                                index={index}
-                                id={`reject_${index}`}
-                                type={'main'}
-                                Checked={selectedCheckBox[index + 1]}
-                            />
-                            {item.selectedObj &&
-                            <div className='ml-6 px-2 pt-2 flex flex-wrap'>
-                                {item.selectedObj.map((reasonItem, reasonIndex = 0) => (
-                                    <div key={reasonItem} className='w-1/3'>
-                                        <CheckboxWithReason
-                                            item={{
-                                                label: reasonItem,
-                                                reason: View?.citizen === 'Malawian' ? MalawiInfo[reasonItem] : NonMalawiInfo[reasonItem]
-                                            }}
-                                            index={reasonIndex}
-                                            selectedIndex={index + 1}
-                                            Checked={selectedCheckBox[index + 1]?.placeholder &&
-                                            selectedCheckBox[index + 1]?.placeholder.includes(reasonItem)}
-                                            testId={reasonItem}
-                                            id={`reject_sub_${reasonIndex}${index}`}
-                                            handleOnChange={handleCheckBox}
-                                            type={'sub'}
-                                        />
+                    {errorMessage && <ErrorMessage error={'Please select at least one option to proceed.'} />}
+                    <div className='overflow-auto mx-auto max-h-[calc(100vh-350px)] scrollBar'>
+                        {RejectReasons.map((item, index = 0) => (
+                            <>
+                                <CheckboxWithReason
+                                    key={item}
+                                    item={item}
+                                    testId={item.label}
+                                    handleOnChange={handleCheckBox}
+                                    index={index}
+                                    id={`reject_${index}`}
+                                    type={'main'}
+                                    Checked={selectedCheckBox[index + 1]}
+                                />
+                                {item.selectedObj &&
+                                    <div className='ml-6 px-2 pt-2 flex flex-wrap'>
+                                        {item.selectedObj.map((reasonItem, reasonIndex = 0) => (
+                                            <div key={reasonItem} className='w-1/3'>
+                                                <CheckboxWithReason
+                                                    item={{
+                                                        label: reasonItem,
+                                                        reason: View?.citizen === 'Malawian' ? MalawiInfo[reasonItem] : NonMalawiInfo[reasonItem]
+                                                    }}
+                                                    index={reasonIndex}
+                                                    selectedIndex={index + 1}
+                                                    Checked={selectedCheckBox[index + 1]?.placeholder &&
+                                                        selectedCheckBox[index + 1]?.placeholder.includes(reasonItem)}
+                                                    testId={reasonItem}
+                                                    id={`reject_sub_${reasonIndex}${index}`}
+                                                    handleOnChange={handleCheckBox}
+                                                    type={'sub'}
+                                                />
+                                            </div>
+                                        ))}
+
                                     </div>
-                                ))}
+                                }
 
-                            </div>
-                            }
-
-                        </>
-                    ))}
-                </div>
+                            </>
+                        ))}
+                    </div>
+                </>
+                }
                 <div className="flex justify-end items-center w-[240px] mt-4 gap-6 mr-[24px] ml-auto">
                     <button className='min-w-[117px] text-[#3B2A6F] font-normal text-[14px] leading-6 border-[#3B2A6F] border rounded-[6px] py-2'
                         data-testid="cancel_button" onClick={() => setIsRejectModalOpen(false)}> Cancel </button>
@@ -258,9 +286,9 @@ export default function KYCReject ({ View, userDetails, setIsRejectModalOpen, id
                         className='min-w-[117px]'
                         onClick={handleReject}
                         isLoading={isLoading}
-                        text= {'Reject'}
+                        text={'Reject'}
                         testId="confirm_button"
-                        buttonColor= {'bg-primary-negative'}
+                        buttonColor={'bg-primary-negative'}
                     />
                 </div>
             </div>
