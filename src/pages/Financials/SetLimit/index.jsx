@@ -157,7 +157,7 @@ function SetLimit() {
             ? (<SetLimitViewShimmer />)
             : (<div>
                 <CardHeader
-                    activePath='Set-limit'
+                    activePath='Set Limit'
                     paths={['Financials']}
                     pathurls={['financials/set Limit']}
                     header='Set Limit'
