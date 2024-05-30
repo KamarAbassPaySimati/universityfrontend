@@ -80,16 +80,24 @@ When('I select the transaction type as {string}', async function (transactionTyp
     }
 });
 
-When('I enter valid agent paymaart ID', function () {
-    return 'passed';
+When('I enter valid agent paymaart ID', async function () {
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await element.sendKeys(global.agentList.data[0].paymaart_id);
 });
 
-When('I enter valid customer paymaart ID', function () {
-    return 'passed';
+When('I enter valid customer paymaart ID', async function () {
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await element.sendKeys(global.customerList.data[0].paymaart_id);
 });
 
 When('I enter the transaction amount as {string} for trust bank transaction', async function (amount) {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="account_number"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="amount"]')));
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);

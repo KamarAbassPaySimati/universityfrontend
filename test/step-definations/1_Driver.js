@@ -27,7 +27,13 @@ const { v4: uuidv4 } = require('uuid');
 global.driver = chrome.Driver.createSession(options, service);
 
 const { faker } = require('@faker-js/faker');
-const { getMFASecret, addAdminUser, deleteAdminAccount } = require('../bdd_api/index');
+const {
+    getMFASecret,
+    addAdminUser,
+    deleteAdminAccount,
+    getKYCCompletedAgentList,
+    getKYCCompletedCustomerList
+} = require('../bdd_api/index');
 const {
     extractQRCodeData,
     generateTOTP,
@@ -458,6 +464,21 @@ Before('@add_normal_admin_user', async function () {
 Before('@create_new_user_and_login', async function () {
     try {
         await create_new_user_and_login();
+    } catch (error) {
+        console.log('API Error', error);
+    }
+});
+Before('@get_agent_completed_kyc_list', async function () {
+    try {
+        global.agentList = await getKYCCompletedAgentList();
+        console.log('global.agentList', global.agentList);
+    } catch (error) {
+        console.log('API Error', error);
+    }
+});
+Before('@get_customer_completed_kyc_list', async function () {
+    try {
+        global.customerList = await getKYCCompletedCustomerList();
     } catch (error) {
         console.log('API Error', error);
     }

@@ -20,6 +20,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     @perform_logout
     @add_admin_user
     @create_new_user_and_login
+    @get_agent_completed_kyc_list
     Scenario: Add transaction for trust bank with valid details for Pay-in by Agent to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Agent to PTBA1 | RM credit"
         When I enter valid agent paymaart ID
@@ -64,6 +65,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
             | "CMR82928455" | "1200" | "TRASACTION9910284"    | ""                  | "Required field"                                 |
             | "CMR82239898" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Customer with this Paymaart ID does not exists" |
 
+    @get_customer_completed_kyc_list
     Scenario: Add transaction for trust bank with valid details for Pay-in by Standard Customer to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Standard Customer to PTBA1 | RM credit"
         When I enter valid customer paymaart ID
@@ -91,7 +93,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
             | "CMR82928455" | "1200" | "TRASACTION9910284"    | ""                  | "Required field"                                 |
             | "CMR82239898" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Customer with this Paymaart ID does not exists" |
 
-
+    @get_customer_completed_kyc_list
     Scenario: Add transaction for trust bank with valid details for Pay-in by G2P Customer to PTBA1 | RMcredit
         When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
         When I enter valid customer paymaart ID
@@ -120,6 +122,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
             | "AGT887631" | "1200" | "TRASACTION9910284"    | ""                  | "Required field"                              |
             | "AGT381283" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Agent with this Paymaart ID does not exists" |
 
+    @get_agent_completed_kyc_list
     Scenario: Add transaction for trust bank with valid details for Pay-in by Paymaart OBO Agent to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Paymaart OBO Agent to PTBA1 | RM credit"
         When I enter valid agent paymaart ID
@@ -147,6 +150,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
             | "CMR82928455" | "1200" | "TRASACTION9910284"    | ""                  | "Required field"                                 |
             | "CMR82239898" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Customer with this Paymaart ID does not exists" |
 
+    @get_customer_completed_kyc_list
     Scenario: Add transaction for trust bank with valid details for Pay-in by Paymaart OBO Standard Customer to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Paymaart OBO Standard Customer to PTBA1 | RM credit"
         When I enter valid customer paymaart ID
@@ -174,6 +178,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
             | "CMR82928455" | "1200" | "TRASACTION9910284"    | ""                  | "Required field"                                 |
             | "CMR82239898" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Customer with this Paymaart ID does not exists" |
 
+    @get_customer_completed_kyc_list
     Scenario: Add transaction for trust bank with valid details for Pay-in by Paymaart OBO G2P Customer to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Paymaart OBO G2P Customer to PTBA1 | RM credit"
         When I enter valid customer paymaart ID
