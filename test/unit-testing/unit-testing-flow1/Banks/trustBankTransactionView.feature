@@ -35,7 +35,7 @@ Feature: Paymaart - Admin Web- Trust Bank Transaction View
     And I select start date as "08-Jan-2023"
     And I select end date as "07-Jan-2023"
     Then I click on the apply filter button
-    Then I should read a message stating that "end date should be greater than start date"  
+    Then I should read a message stating that "Start date cannot be greater than end date"  
     And I select start date as "08-Jan-2023"
     And I select end date as "07-Feb-2023"
     Then I click on the apply filter button
