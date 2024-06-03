@@ -79,8 +79,8 @@ function SetLimit () {
         }
     }
     const handleSubmit = async () => {
-        // Check for empty fields and set errors
         setIsLoading(true);
+        // Check for empty fields and set errors
         const newErrors = {};
         for (const key in formData) {
             if (!formData[key]) {
@@ -91,6 +91,7 @@ function SetLimit () {
 
         // If any field is empty, stop the submission
         if (Object.values(newErrors).some(error => error)) {
+            setIsLoading(false);
             return;
         }
 
@@ -109,7 +110,7 @@ function SetLimit () {
 
         try {
             const response = await dataService.PatchAPI('admin-users/update-limit', requestBody);
-            setIsLoading(true);
+            setIsLoading(false);
             if (!response.error) {
                 setToastError('');
                 setToastSuccess('Transaction Limit updated successfully');
@@ -153,12 +154,12 @@ function SetLimit () {
                 responceValue.max_merchant = element.merchant;
                 responceValue.max_customer = element.customer;
                 break;
-            case 'transaction_simplified':
+            case 'transaction_full':
                 responceValue.full_agent = element.agent;
                 responceValue.full_merchant = element.merchant;
                 responceValue.full_customer = element.customer;
                 break;
-            case 'transaction_full':
+            case 'transaction_simplified':
                 responceValue.simplified_agent = element.agent;
                 responceValue.simplified_merchant = element.merchant;
                 responceValue.simplified_customer = element.customer;
@@ -173,10 +174,7 @@ function SetLimit () {
     };
 
     useEffect(() => {
-        setLodingData(true);
-        setLodingData(true);
         fetchViewLimitData();
-        setLodingData(false);
     }, []);
 
     return (
