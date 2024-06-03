@@ -52,7 +52,6 @@ function SetLimit () {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('value?.length', value?.length);
         if (value?.length <= 18) {
             const regex = /^(\d{1,15}(\.\d{0,2})?)?$/;
             if (regex.test(value)) {
@@ -145,7 +144,6 @@ function SetLimit () {
 
     const fetchViewLimitData = async () => {
         const response = await dataService.GetAPI('admin-users/view-limit');
-        console.log('response?.data?.data', response?.data?.data);
         const responceValue = {};
         response?.data?.data.forEach(element => {
             switch (element.type) {
