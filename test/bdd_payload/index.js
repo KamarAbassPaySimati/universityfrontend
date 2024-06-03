@@ -20,7 +20,7 @@ async function getAgentPayload () {
     const first_name = replaceTextWithSpecialChars(faker.person.firstName());
     const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
     const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-    let phone_number = `${faker.phone.number('## ### ####')}`;
+    let phone_number = `10 ${faker.phone.number('### ####')}`;
     if (phone_number.startsWith('0')) {
     // Replace the first character with '9'
         phone_number = '9' + phone_number.substring(1);
@@ -113,7 +113,7 @@ async function getCustomerPayload () {
     const first_name = replaceTextWithSpecialChars(faker.person.firstName());
     const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
     const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-    let phone_number = `${faker.phone.number('## ### ####')}`;
+    let phone_number = `10 ${faker.phone.number('### ####')}`;
     if (phone_number.startsWith('0')) {
     // Replace the first character with '9'
         phone_number = '9' + phone_number.substring(1);
@@ -208,7 +208,7 @@ async function getMerchantPayload () {
     const first_name = replaceTextWithSpecialChars(faker.person.firstName());
     const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
     const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-    let phone_number = `${faker.phone.number('## ### ####')}`;
+    let phone_number = `10 ${faker.phone.number('### ####')}`;
     if (phone_number.startsWith('0')) {
     // Replace the first character with '9'
         phone_number = '9' + phone_number.substring(1);
