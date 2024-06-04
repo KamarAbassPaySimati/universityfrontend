@@ -1,11 +1,12 @@
 // src/encryption.js
 
+import { encryptionSecretKey } from '../config';
+
 const encodePassword2 = async (string) => {
-    const secretKey = 'UuvSdhgJ5i7HCyLzApOC53qgAUcmdyo1'; // Replace with your actual secret key
     const enc = new TextEncoder();
 
     // Convert the secret key to an ArrayBuffer
-    const keyBuffer = enc.encode(secretKey);
+    const keyBuffer = enc.encode(encryptionSecretKey);
     const key = await window.crypto.subtle.importKey(
         'raw',
         keyBuffer,
@@ -22,7 +23,7 @@ const encodePassword2 = async (string) => {
 
     // Encrypt the data
     const encryptedData = await window.crypto.subtle.encrypt(
-        { name: 'AES-GCM', iv: iv },
+        { name: 'AES-GCM', iv },
         key,
         encodedString
     );
