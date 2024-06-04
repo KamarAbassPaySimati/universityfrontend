@@ -205,7 +205,7 @@ const CardHeader = ({
                 {/* checks for card has only toggles down */}
                 {header && headerWithoutButton &&
                     <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-5 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
-                    ${buttonText === '' ? 'h-[90px]' : ''}
+                    ${buttonText === '' ? 'h-[90px]' : ' h-[80px]'}
                  text-header-dark flex flex-col gap-2`}>
                         {header}
                         <div className='-mt-[2px] flex gap-6'>
