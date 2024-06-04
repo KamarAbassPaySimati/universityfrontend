@@ -7,20 +7,25 @@ const initialState = {
     success: ''
 };
 
-export const G2PList = createAsyncThunk('G2P', async (url, { rejectWithValue }) => {
+export const G2PList = createAsyncThunk('G2PCustomers', async (searchParams, { rejectWithValue }) => {
+    // Construct URL safely using query parameters instead of string interpolation
+
     try {
-        const res = await dataService.GetAPI(url);
+        const res = await dataService.GetAPI(`g2p-users?${searchParams.toString()}`);
         return res;
     } catch (error) {
+        // Log error or send notification
         console.error('Error fetching orders:', error);
-        return rejectWithValue({ message: error.message }); // Error message needs to be accessed via error.message
+        return rejectWithValue({ message: error });
     }
 });
 
 const G2PSlice = createSlice({
     name: 'G2P-list',
     initialState,
-    reducers: {},
+    reducers: {
+
+    },
     extraReducers: (builder) => {
         builder
             .addCase(G2PList.pending, (state) => {

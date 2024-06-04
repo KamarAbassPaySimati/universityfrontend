@@ -64,25 +64,10 @@ function G2pList () {
             searchParams={searchParams}// pass this because its used
             setSearchParams={setSearchParams}
         >
-            <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
-                {(!notFound && List?.data?.length === 0 &&
-                    searchParams.get('status') === null &&
-                    searchParams.get('search') === null)
-                    ? (
-                        <></>
-                    )
-                    : (!notFound &&
-                        <div className='bg-[#fff] border-b border-neutral-outline'>
-                            {/* <Topbar
-                                // setSearchParams={setSearchParams}
-                                // searchParams={searchParams}
-                                isLoading={loading}
-                            /> */}
-                        </div>)
-                }
+            <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'g2p-border-bottom'}`}>
                 {!notFound && !(List?.data?.length === 0 && !loading &&
                     !(searchParams.get('status') !== null || searchParams.get('search') !== null)) &&
-                    <div className='overflow-auto scrollBar h-tableHeight'>
+                    <div className='overflow-auto scrollBar h-g2pTableHeight'>
                         <G2PTable
                             error={error}
                             loading={loading}
@@ -97,13 +82,13 @@ function G2pList () {
                         className='h-noDataError' heading='No data found' text="404 could not find what you are looking for." />}
                 {List?.data?.length === 0 && !loading &&
                     !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
-                    (<NoDataError className='h-noDataError' heading='No data found' text='Click “Register Agent ” to add agent' />)}
+                    (<NoDataError className='h-noDataError' heading='There are no G2P list to view yet' topValue='mt-8' />)}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
-                    totalPages={Math.ceil(List?.totalRecords / 10)}
+                    totalPages={Math.ceil(List?.total_records / 10)}
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}
-                    totalRecords={List?.totalRecords}
+                    totalRecords={List?.total_records}
                 />}
 
             </div>
