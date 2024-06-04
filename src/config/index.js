@@ -5,6 +5,7 @@ export const CDN = 'https://' + import.meta.env.VITE_CDN_URL + '/';
 export const GOOGLE_API = import.meta.env.VITE_GOOGLE_API;
 export const siteKey = import.meta.env.VITE_SITE_KEY;
 export const secretKey = import.meta.env.VITE_SECRET_KEY;
+export const encryptionSecretKey = import.meta.VITE_ENCRYPTION_SECRET_KEY;
 export const awsConfig = {
     Auth: {
         Cognito: {
