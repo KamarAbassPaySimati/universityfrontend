@@ -1,6 +1,4 @@
-const assert = require('assert');
-const { Given, When, Then } = require('@cucumber/cucumber');
-const { Key, until, By } = require('selenium-webdriver');
+const { Given } = require('@cucumber/cucumber');
 const { driver } = require('../1_Driver.js');
 
 Given('I navigate to G2P customer listing page', async function () {
