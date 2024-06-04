@@ -270,7 +270,7 @@ Before('@add_admin_user', async function () {
         const first_name = replaceTextWithSpecialChars(faker.person.firstName());
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-        let phone_number = `${faker.phone.number('## ### ####')}`;
+        let phone_number = `10 ${faker.phone.number('### ####')}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -317,7 +317,7 @@ Before('@add_finance_admin_user', async function () {
         const first_name = replaceTextWithSpecialChars(faker.person.firstName());
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-        let phone_number = `${faker.phone.number('## ### ####')}`;
+        let phone_number = `10 ${faker.phone.number('### ####')}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -365,7 +365,7 @@ Before('@add_support_admin_user', async function () {
         const first_name = replaceTextWithSpecialChars(faker.person.firstName());
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-        let phone_number = `${faker.phone.number('## ### ####')}`;
+        let phone_number = `10 ${faker.phone.number('### ####')}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
@@ -413,7 +413,7 @@ Before('@add_normal_admin_user', async function () {
         const first_name = replaceTextWithSpecialChars(faker.person.firstName());
         const middle_name = replaceTextWithSpecialChars(faker.person.middleName());
         const last_name = replaceTextWithSpecialChars(faker.person.lastName());
-        let phone_number = `${faker.phone.number('## ### ####')}`;
+        let phone_number = `10 ${faker.phone.number('### ####')}`;
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
