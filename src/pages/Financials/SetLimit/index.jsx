@@ -52,7 +52,6 @@ function SetLimit () {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        console.log('value?.length', value?.length);
         if (value?.length <= 18) {
             const regex = /^(\d{1,15}(\.\d{0,2})?)?$/;
             if (regex.test(value)) {
@@ -79,8 +78,8 @@ function SetLimit () {
         }
     }
     const handleSubmit = async () => {
-        // Check for empty fields and set errors
         setIsLoading(true);
+        // Check for empty fields and set errors
         const newErrors = {};
         for (const key in formData) {
             if (!formData[key]) {
@@ -91,6 +90,7 @@ function SetLimit () {
 
         // If any field is empty, stop the submission
         if (Object.values(newErrors).some(error => error)) {
+            setIsLoading(false);
             return;
         }
 
@@ -109,7 +109,7 @@ function SetLimit () {
 
         try {
             const response = await dataService.PatchAPI('admin-users/update-limit', requestBody);
-            setIsLoading(true);
+            setIsLoading(false);
             if (!response.error) {
                 setToastError('');
                 setToastSuccess('Transaction Limit updated successfully');
@@ -144,7 +144,6 @@ function SetLimit () {
 
     const fetchViewLimitData = async () => {
         const response = await dataService.GetAPI('admin-users/view-limit');
-        console.log('response?.data?.data', response?.data?.data);
         const responceValue = {};
         response?.data?.data.forEach(element => {
             switch (element.type) {
@@ -153,12 +152,12 @@ function SetLimit () {
                 responceValue.max_merchant = element.merchant;
                 responceValue.max_customer = element.customer;
                 break;
-            case 'transaction_simplified':
+            case 'transaction_full':
                 responceValue.full_agent = element.agent;
                 responceValue.full_merchant = element.merchant;
                 responceValue.full_customer = element.customer;
                 break;
-            case 'transaction_full':
+            case 'transaction_simplified':
                 responceValue.simplified_agent = element.agent;
                 responceValue.simplified_merchant = element.merchant;
                 responceValue.simplified_customer = element.customer;
@@ -173,10 +172,7 @@ function SetLimit () {
     };
 
     useEffect(() => {
-        setLodingData(true);
-        setLodingData(true);
         fetchViewLimitData();
-        setLodingData(false);
     }, []);
 
     return (
@@ -220,7 +216,7 @@ function SetLimit () {
                                     )
                                     : (
                                         <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="agentMaxLimit"
-                                        >{formatNumberWithCommas(formData.max_agent || 0)} MWK</p>
+                                        >{formatNumberWithCommas(formData.max_agent || 0)}.00 MWK</p>
                                     )}
 
                             </div>
@@ -244,7 +240,7 @@ function SetLimit () {
                                     )
                                     : (
                                         <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="merchantMaxLimit"
-                                        > {formatNumberWithCommas(formData.max_merchant || 0)} MWK
+                                        > {formatNumberWithCommas(formData.max_merchant || 0)}.00 MWK
                                         </p>
                                     )}
                             </div>
@@ -268,7 +264,7 @@ function SetLimit () {
                                     )
                                     : (
                                         <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="customerMaxLimit"
-                                        >{formatNumberWithCommas(formData.max_customer || 0)} MWK</p>
+                                        >{formatNumberWithCommas(formData.max_customer || 0)}.00 MWK</p>
                                     )}
                             </div>
                         </div>
@@ -321,7 +317,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.full_agent || '')} MWK</p>
+                                                    >{formatNumberWithCommas(formData.full_agent || '')}.00 MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -344,7 +340,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.full_merchant || 0)} MWK</p>
+                                                    >{formatNumberWithCommas(formData.full_merchant || 0)}.00 MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3'>
@@ -367,7 +363,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.full_customer || 0)} MWK</p>
+                                                    >{formatNumberWithCommas(formData.full_customer || 0)}.00 MWK</p>
                                                 )}
                                         </div>
                                     </div>
@@ -397,7 +393,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.simplified_agent || 0)} MWK</p>
+                                                    >{formatNumberWithCommas(formData.simplified_agent || 0)}.00 MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -420,7 +416,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.simplified_merchant || 0)} MWK</p>
+                                                    >{formatNumberWithCommas(formData.simplified_merchant || 0)}.00 MWK</p>
                                                 )}
                                         </div>
                                         <div className='w-1/3'>
@@ -443,7 +439,7 @@ function SetLimit () {
                                                 )
                                                 : (
                                                     <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.simplified_customer || 0)} MWK</p>
+                                                    >{formatNumberWithCommas(formData.simplified_customer || 0)}.00 MWK</p>
                                                 )}
                                         </div>
                                     </div>

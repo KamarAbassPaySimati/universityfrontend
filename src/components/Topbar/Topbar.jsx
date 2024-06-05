@@ -21,14 +21,6 @@ const Topbar = ({
     const [timer, setTimer] = useState(null);
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
 
-    const initialState = {};
-    Object.entries(filterOptions).forEach(([key, values]) => {
-        initialState[key.toLowerCase()] = {};
-        values.forEach((value) => {
-            initialState[key.toLowerCase()][value.toLowerCase()] = false;
-        });
-    });
-
     const handleSearch = (e) => {
         const newValue = e.target.value;
         setSearch(newValue);

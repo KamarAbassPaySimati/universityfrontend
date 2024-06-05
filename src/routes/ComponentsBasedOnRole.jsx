@@ -71,7 +71,7 @@ export const ComponentsBasedOnRole = {
             // Agent Delete Account Request View
             {
                 name: 'Agent Delect Account Request View',
-                element: <KYCView role={'agent'} viewType={'DeleteAccount'}/>,
+                element: <KYCView role={'agent'} viewType={'DeleteAccount'} />,
                 path: '/verify/delete-account-requests/agent-profile/:id'
             },
             // Agent Kyc Specific View
@@ -157,7 +157,7 @@ export const ComponentsBasedOnRole = {
             // KYC Update for Customer
             {
                 name: 'Customer KYC Update',
-                element: <RegisterKYC role={'customer'} type='update'/>,
+                element: <RegisterKYC role={'customer'} type='update' />,
                 path: '/users/customers/register-customer/kyc-update/:id'
             },
             // View and update set limit finance
@@ -312,6 +312,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Trust Banks',
                 element: <AddTrustBank />,
                 path: '/paymaart-banks/trust-banks/add-trust-bank'
+            },
+            // G2p List
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                pasth: '/financials/g2p'
             }
         ]
 };
