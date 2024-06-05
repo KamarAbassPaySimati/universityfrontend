@@ -12,6 +12,8 @@ import KYCView from '../components/KYC/KYCView/KYCView';
 import DeleteAccount from '../pages/Verification/DeleteAccount';
 import SetLimit from '../pages/Financials/SetLimit/index';
 import Commissions from '../pages/Financials/Commissions/Commissions';
+import G2pList from '../pages/Financials/G2P/index';
+import G2PCustomerView from '../pages/Financials/G2P/Components/G2PCustomerView';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -169,6 +171,18 @@ export const ComponentsBasedOnRole = {
                 name: 'Commissions',
                 element: <Commissions />,
                 path: '/financials/Commissions'
+            },
+            // G2p customer List
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                path: '/financials/g2p'
+            },
+            // View G2P customer
+            {
+                name: 'G2P Customer View',
+                element: <G2PCustomerView/>,
+                path: '/financials/g2p/:name'
             }
         ],
     admin:
