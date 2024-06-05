@@ -21,17 +21,19 @@ export default function BankTransactionView ({ type }) {
                 ChildrenElement
             >
                 <BankViewTopHeader Name={'Trust Bank'}/>
-                <BankDetails bankDetails={
-                    {
-                        'Ref No.': 'PTBA1',
-                        Name: 'National Bank',
-                        'Account Number': '1006171539',
-                        Purpose: 'Paymaart Trust Account 1',
-                        'Last Update Date / Time': '21 Mar 2024, 22:00 hours',
-                        Balance: '2,500,000.00 MWK'
-                    }
-                }/>
-                <TransactionList />
+                <div className='h-noDataError overflow-auto scrollBar'>
+                    <BankDetails bankDetails={
+                        {
+                            'Ref No.': 'PTBA1',
+                            Name: 'National Bank',
+                            'Account Number': '1006171539',
+                            Purpose: 'Paymaart Trust Account 1',
+                            'Last Update Date / Time': '21 Mar 2024, 22:00 hours',
+                            Balance: '2,500,000.00 MWK'
+                        }
+                    }/>
+                    <TransactionList />
+                </div>
             </CardHeader>
         </div>
     );
