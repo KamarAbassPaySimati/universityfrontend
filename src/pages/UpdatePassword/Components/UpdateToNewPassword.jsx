@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { endpoints } from '../../../services/endpoints';
 import passwordCheck from '../../../CommonMethods/passwordCheck';
+import encodePassword2 from '../../../CommonMethods/PasswordEncription';
 
 const UpdateToNewPassword = () => {
     const [oldPassword, setOldPassword] = useState('');
@@ -50,8 +51,10 @@ const UpdateToNewPassword = () => {
         } else {
             try {
                 setIsLoading(true);
+                const encryptedOldPassword = await encodePassword2(oldPassword);
+                const encryptedNewPassword = await encodePassword2(newPassword);
                 const response = await dataService.PostAPI(`admin-users/${updatePassword}`,
-                    { old_password: oldPassword, new_password: newPassword });
+                    { old_password: encryptedOldPassword, new_password: encryptedNewPassword });
                 if (!response.error) {
                     setIsLoading(false);
                     handleSignOut();

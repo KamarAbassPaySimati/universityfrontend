@@ -11,7 +11,7 @@
 #     echo "Added $param_name to .env file with value: $param_value"
 # done
 
-specific_params=("ADMIN_COGNITO_USERPOOL_ID " "ADMIN_COGNITO_CLIENT_ID" "ADMIN_COGNITO_IDENTITY_POOL_ID", "DOMAIN_NAME ", "GOOGLE_API", "BUCKET_NAME", "CDN_URL")
+specific_params=("ADMIN_COGNITO_USERPOOL_ID " "ADMIN_COGNITO_CLIENT_ID" "ADMIN_COGNITO_IDENTITY_POOL_ID", "DOMAIN_NAME ", "GOOGLE_API", "BUCKET_NAME", "CDN_URL", "PASSWORD_SECRET_KEY")
 
 # Loop through each parameter
 for param_name in "${specific_params[@]}"; do
