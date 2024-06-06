@@ -10,6 +10,7 @@ import merchantSlice from '../pages/Users/Merchants/merchantSlice';
 import customerSlice from '../pages/Users/Customer/customerSlice';
 import KYCProfileViewSlice from '../components/KYC/KYCView/KYCProfileViewSlice';
 import DeleteAccountSlice from '../pages/Verification/DeleteAccount/DeleteAccountSlice';
+import BankTransactionViewSlice from '../pages/PaymaartBanks/BankTransactionView/BankTransactionViewSlice';
 
 export const store = configureStore({
     reducer: {
@@ -23,6 +24,7 @@ export const store = configureStore({
         bankAccounts: BankSlice,
         merchantUsers: merchantSlice,
         customerUsers: customerSlice,
-        DeleteteAccount: DeleteAccountSlice
+        DeleteteAccount: DeleteAccountSlice,
+        BankTransactionViewData: BankTransactionViewSlice
     }
 });
