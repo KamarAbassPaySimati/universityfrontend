@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import { dataService } from '../../../services/data.services';
-import isTimestampFiveMinutesAgo from '../../../CommonMethods/lastLoggedInTimeStamp';
 
 const initialState = {
     loading: true,
@@ -9,17 +8,20 @@ const initialState = {
     success: ''
 };
 
-export const G2PCustomerView = createAsyncThunk('G2PCustomers', async (PaymaartId, { rejectWithValue }) => {
-    // Construct URL safely using query parameters instead of string interpolation
-
-    try {
-        const res = await dataService.GetAPI(`admin-users/view-admin/${PaymaartId}`);
-        return res;
-    } catch (error) {
-        // Log error or send notification
-        return rejectWithValue({ message: error });
+export const G2PCustomerView = createAsyncThunk(
+    'G2PCustomers',
+    async ({ PaymaartId, searchParams }, { rejectWithValue }) => {
+        try {
+            console.log('nayana', PaymaartId);
+            const res = await dataService.GetAPI(`g2p-users/view-user?user_id=${PaymaartId}&${searchParams.toString()}`);
+            console.log(res?.data, 'hjdfjdhfh');
+            return res;
+        } catch (error) {
+            // Log error or send notification
+            return rejectWithValue({ message: error.message });
+        }
     }
-});
+);
 
 const G2pCustomerViewSlice = createSlice({
     name: 'G2PCustomer-view',
@@ -34,18 +36,17 @@ const G2pCustomerViewSlice = createSlice({
                 state.error = null;
             })
             .addCase(G2PCustomerView.fulfilled, (state, action) => {
+                console.log(action, 'dhjdhsdhs');
                 state.loading = false;
-                if (!action.payload.error && action.payload.data.success_status) {
-                    state.View = action?.payload?.data?.data[0];
+                if (!action.payload.error) {
+                    const viewData = action.payload.data;
+                    console.log(viewData, 'viewData');
+                    state.View = viewData;
                     state.userDetails = {
-                        Email: state?.View?.email,
-                        Role: state?.View?.user_type,
+                        Email: state?.View?.sheet_name,
                         Created_Date: formatTimestamp(state?.View?.created_at),
-                        Last_Logged_In: state?.View?.last_logged_in
-                            ? isTimestampFiveMinutesAgo(state?.View?.last_logged_in)
-                                ? formatTimestamp(state?.View?.last_logged_in)
-                                : 'Online'
-                            : ''
+                        Role: state?.View?.upload_by,
+                        Amount: state?.View?.transferred_amount
                     };
                     state.keys = Object.keys(state.userDetails);
                 } else {

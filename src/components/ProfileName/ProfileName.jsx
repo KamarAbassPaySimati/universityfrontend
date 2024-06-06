@@ -9,7 +9,8 @@ export default function ProfileName ({
     lastLoggedIn,
     CreatedDate,
     viewType,
-    profilePicture
+    profilePicture,
+    Amount
 }) {
     return (
         <div className={`flex gap-[27px] justify-center items-center ${loading ? 'animate-pulse z-0 ' : ''}`}>
@@ -29,6 +30,9 @@ export default function ProfileName ({
                 </div>
                 <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Paymaart ID: <span data-testid="paymaart_id" className='font-semibold'>{payMaartID}</span>
+                </div>
+                <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
+                    Amount: <span data-testid="amount" className='font-semibold'>{Amount}</span>
                 </div>
                 {viewType === 'specific' && lastLoggedIn && <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Created Date: <span data-testid="paymaart_id" className='font-semibold mr-4'>{CreatedDate}</span>
