@@ -19,12 +19,12 @@ const CustomDatePicker = ({ testID, label, handleStates, value, error, disabled,
                     ? 'custom-datepicker-disabled'
                     : error ? 'custom-datepicker-error' : 'custom-datepicker'} w-full`}
                 autoComplete="off"
-                data-testid="date_of_birth"
+                data-testid={testID}
                 placeholder="DD-MMM-YYYY"
                 format={'DD-MMM-YYYY'}
                 value={value && dayjs(value)}
                 suffixIcon={<Image src='calendar'/>}
-                disabledDate={getDisabledDate}
+                disabledDate={type === 'dob' ? getDisabledDate : undefined}
                 onChange={(date, dateString) => handleStates(date, type)}
             />
             {error && <div className='mt-2'><ErrorMessage error={error} /></div>}

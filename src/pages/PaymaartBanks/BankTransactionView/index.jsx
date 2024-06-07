@@ -13,7 +13,6 @@ export default function BankTransactionView ({ type }) {
     const { id } = useParams();
     const [searchParams, setSearchParams] = useSearchParams({ bank_code: id, page_number: 1 });
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
-    console.log('loading, Data', loading, Data);
     const handleViewData = async () => {
         try {
             // Fetch data using the provided URL
@@ -28,7 +27,7 @@ export default function BankTransactionView ({ type }) {
     };
     useEffect(() => {
         handleViewData();
-    }, []);
+    }, [searchParams]);
     return (
         <div>
             <CardHeader
