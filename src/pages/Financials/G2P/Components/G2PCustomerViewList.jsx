@@ -8,14 +8,15 @@ import { G2PCustomerView } from '../G2PCustomerViewSlice';
 import { useSearchParams } from 'react-router-dom';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import G2PCustomerTable from './G2PSCustomerTable';
+import NoDataError from '../../../../components/NoDataError/NoDataError';
+import Paginator from '../../../../components/Paginator/Paginator';
 
 export default function G2PCustomerViewList() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
     const [notFound, setNotFound] = useState(false);
-    const [error, setError] = useState(false);
-    const { View, loading } = useSelector(state => state.G2PCustomerView); // to get the api respons
+    const { View, loading, error } = useSelector(state => state.G2PCustomerView); // to get the api respons
 
     const getG2PCustomerView = async () => {
         try {
@@ -24,11 +25,11 @@ export default function G2PCustomerViewList() {
 
         }
     };
-    useEffect(() => {
-        if (View?.data?.length !== 0) {
-            setNotFound(false);
-        }
-    }, [View]);
+    // useEffect(() => {
+    //     if (View?.length !== 0) {
+    //         setNotFound(false);
+    //     }
+    // }, [View]);
 
     useEffect(() => {
         getG2PCustomerView();
@@ -55,7 +56,7 @@ export default function G2PCustomerViewList() {
                             userButtonName={`${View?.first_name[0] || ''}${View?.middle_name[0] || ''}${View?.last_name[0] || ''}`}
                             UserName={`${View?.first_name} ${View?.middle_name} ${View?.last_name}`}
                             payMaartID={View?.paymaart_id}
-                            Amount={(View?.amount) ? `${View.amount}` : `${View?.remaining_amount}`}
+                            Amount={(View?.amount) ? `${View?.amount}` : `${View?.remaining_amount} MWK`}
                             CreatedDate={formatTimestamp(View?.created_at)}
                             loading={loading}
                         />
@@ -70,17 +71,31 @@ export default function G2PCustomerViewList() {
                         </div>
                     </div>
                 </div>
-                <div data-testid="view_admin" className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
-        flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
-        `}>
-                    {/* <G2PCustomerTable
-                        View={View}
-                        error ={error}
-                        loading={loading}
+                <div className={`relative ${notFound || View?.length === 0 ? '' : 'mx-10 mb-8 mt-8 border border-[#DDDDDD] rounded-[6px]'}`}>
+                    {!notFound && !(View?.length === 0 && !loading &&
+                        !(searchParams.get('status') !== null || searchParams.get('search') !== null)) &&
+                        <div className='overflow-auto scrollBar h-g2pTableHeight'>
+                            <G2PCustomerTable
+                                View={View}
+                                loading={loading}
+                                error={error}
+                                searchParams={searchParams}
+                                setSearchparams={setSearchParams}
+                            />
+                        </div>}
+                    {notFound &&
+                        <NoDataError
+                            className='h-noDataError' heading='No data found' text="404 could not find what you are looking for." />}
+                    {View?.length === 0 && !loading &&
+                        !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
+                        (<NoDataError className='h-noDataError' heading='There are no G2P list to view yet' topValue='mt-8' />)}
+                    {!loading && !error && !notFound && View?.length !== 0 && <Paginator
+                        currentPage={searchParams.get('page')}
+                        totalPages={Math.ceil(View?.total_records / 10)}
                         setSearchParams={setSearchParams}
-                        notFound={notFound}
                         searchParams={searchParams}
-                    /> */}
+                        totalRecords={View?.total_records}
+                    />}
                 </div>
             </>}
         </CardHeader>

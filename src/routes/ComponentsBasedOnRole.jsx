@@ -182,7 +182,7 @@ export const ComponentsBasedOnRole = {
             {
                 name: 'G2P Customer View',
                 element: <G2PCustomerViewList />,
-                path: '/financials/g2p/view/:id'
+                path: '/financials/g2p/profile/:id'
             }
         ],
     admin:
