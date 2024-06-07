@@ -8,20 +8,17 @@ const initialState = {
     success: ''
 };
 
-export const G2PCustomerView = createAsyncThunk(
-    'G2PCustomers',
-    async ({ PaymaartId, searchParams }, { rejectWithValue }) => {
-        try {
-            console.log('nayana', PaymaartId);
-            const res = await dataService.GetAPI(`g2p-users/view-user?user_id=${PaymaartId}&${searchParams.toString()}`);
-            console.log(res?.data, 'hjdfjdhfh');
-            return res;
-        } catch (error) {
-            // Log error or send notification
-            return rejectWithValue({ message: error.message });
-        }
+export const G2PCustomerView = createAsyncThunk('G2PCustomerView', async (endPoint, { rejectWithValue }) => {
+    // Construct URL safely using query parameters instead of string interpolation
+    try {
+        const res = await dataService.GetAPI(`g2p-users/${endPoint}`);
+        return res;
+    } catch (error) {
+        // Log error or send notification
+        console.error('Error fetching orders:', error);
+        return rejectWithValue({ message: error });
     }
-);
+});
 
 const G2pCustomerViewSlice = createSlice({
     name: 'G2PCustomer-view',
@@ -41,7 +38,7 @@ const G2pCustomerViewSlice = createSlice({
                 if (!action.payload.error) {
                     const viewData = action.payload.data;
                     console.log(viewData, 'viewData');
-                    state.View = viewData;
+                    state.View = viewData.data;
                     state.userDetails = {
                         Email: state?.View?.sheet_name,
                         Created_Date: formatTimestamp(state?.View?.created_at),

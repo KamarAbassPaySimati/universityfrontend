@@ -13,7 +13,7 @@ import DeleteAccount from '../pages/Verification/DeleteAccount';
 import SetLimit from '../pages/Financials/SetLimit/index';
 import Commissions from '../pages/Financials/Commissions/Commissions';
 import G2pList from '../pages/Financials/G2P/index';
-import G2PCustomerViewList from '../pages/Financials/G2P/Components/G2PCustomerView';
+import G2PCustomerViewList from '../pages/Financials/G2P/Components/G2PCustomerViewList';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -181,8 +181,8 @@ export const ComponentsBasedOnRole = {
             // View G2P customer
             {
                 name: 'G2P Customer View',
-                element: <G2PCustomerViewList/>,
-                path: '/financials/g2p/:id'
+                element: <G2PCustomerViewList />,
+                path: '/financials/g2p/view/:id'
             }
         ],
     admin:
