@@ -51,7 +51,7 @@ export default {
             height: {
                 tableHeight: 'calc(100vh - 370px)',
                 g2pTableHeight: 'calc(100vh - 320px)',
-                g2pCustomerTableHeight: 'calc(100vh - 361px)',
+                g2pCustomerTableHeight: 'calc(100vh - 345px)',
                 tabledivHeight: 'calc(100vh - 458px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
                 heightSideBar: 'calc(100vh - 500px)',

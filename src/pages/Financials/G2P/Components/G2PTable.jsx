@@ -9,6 +9,7 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 
 function G2PTable ({ loading, error, List, notFound, searchParams, setSearchParams }) {
     const Navigate = useNavigate();
+    console.log(first)
 
     return (
         <>
@@ -38,7 +39,7 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                                     className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px]'>{`${user?.amount.toLocaleString()}.00 MWK`}</td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 min-w-[75px] max-w-[100px] flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                                        onClick={() => Navigate(`/financials/g2p/view/${user?.transaction_id}`)} />
+                                        onClick={() => Navigate(`/financials/g2p/view-profile/${user?.transaction_id}`)} />
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}

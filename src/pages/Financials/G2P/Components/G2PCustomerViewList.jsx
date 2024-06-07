@@ -4,38 +4,41 @@ import CardHeader from '../../../../components/CardHeader';
 import ProfileName from '../../../../components/ProfileName/ProfileName';
 import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
-import { G2PCustomerView } from '../G2PCustomerViewSlice';
+import { G2PCustomerViewData } from '../G2PCustomerViewSlice';
 import { useSearchParams } from 'react-router-dom';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import G2PCustomerTable from './G2PSCustomerTable';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Paginator from '../../../../components/Paginator/Paginator';
 
-export default function G2PCustomerViewList() {
+export default function G2PCustomerViewList () {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
     const [notFound, setNotFound] = useState(false);
     const { View, loading, error } = useSelector(state => state.G2PCustomerView); // to get the api respons
 
+    console.log(View, 'View');
+
     const getG2PCustomerView = async () => {
         try {
-            await dispatch(G2PCustomerView(`${id}&${searchParams.toString()}`));
+            await dispatch(G2PCustomerViewData(`${id}?${searchParams.toString()}`));
         } catch (error) {
 
         }
     };
-    // useEffect(() => {
-    //     if (View?.length !== 0) {
-    //         setNotFound(false);
-    //     }
-    // }, [View]);
 
     useEffect(() => {
         getG2PCustomerView();
     }, []);
 
-    console.log(View, 'VIEW');
+    useEffect(() => {
+        if (View?.length !== 0) {
+            setNotFound(false);
+        }
+    }, [View]);
+
+    // console.log(View, 'VIEW');
 
     return (
         <CardHeader
@@ -71,10 +74,10 @@ export default function G2PCustomerViewList() {
                         </div>
                     </div>
                 </div>
-                <div className={`relative ${notFound || View?.length === 0 ? '' : 'mx-10 mb-8 mt-8 border border-[#DDDDDD] rounded-[6px]'}`}>
+                <div className={`relative ${notFound || View?.length === 0 ? '' : 'mx-10 mb-8 mt-8 border border-[#DDDDDD] bg-white rounded-[6px]'}`}>
                     {!notFound && !(View?.length === 0 && !loading &&
                         !(searchParams.get('status') !== null || searchParams.get('search') !== null)) &&
-                        <div className='overflow-auto scrollBar h-g2pTableHeight'>
+                        <div className='overflow-auto scrollBar h-g2pCustomerTableHeight rounded-[6px]'>
                             <G2PCustomerTable
                                 View={View}
                                 loading={loading}
@@ -89,7 +92,7 @@ export default function G2PCustomerViewList() {
                     {View?.length === 0 && !loading &&
                         !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                         (<NoDataError className='h-noDataError' heading='There are no G2P list to view yet' topValue='mt-8' />)}
-                    {!loading && !error && !notFound && View?.length !== 0 && <Paginator
+                    {(!loading || !error || !notFound || View?.length > 0) && <Paginator
                         currentPage={searchParams.get('page')}
                         totalPages={Math.ceil(View?.total_records / 10)}
                         setSearchParams={setSearchParams}

@@ -8,7 +8,7 @@ const initialState = {
     success: ''
 };
 
-export const G2PCustomerView = createAsyncThunk('G2PCustomerView', async (endPoint, { rejectWithValue }) => {
+export const G2PCustomerViewData = createAsyncThunk('G2PCustomerView', async (endPoint, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
         const res = await dataService.GetAPI(`g2p-users/${endPoint}`);
@@ -28,11 +28,11 @@ const G2pCustomerViewSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(G2PCustomerView.pending, (state) => {
+            .addCase(G2PCustomerViewData.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(G2PCustomerView.fulfilled, (state, action) => {
+            .addCase(G2PCustomerViewData.fulfilled, (state, action) => {
                 console.log(action, 'dhjdhsdhs');
                 state.loading = false;
                 if (!action.payload.error) {
@@ -50,7 +50,7 @@ const G2pCustomerViewSlice = createSlice({
                     state.error = action?.payload?.data?.message;
                 }
             })
-            .addCase(G2PCustomerView.rejected, (state, action) => {
+            .addCase(G2PCustomerViewData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action?.payload?.message?.message;
             });
