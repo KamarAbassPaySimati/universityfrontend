@@ -9,7 +9,6 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 
 function G2PTable ({ loading, error, List, notFound, searchParams, setSearchParams }) {
     const Navigate = useNavigate();
-    console.log(first)
 
     return (
         <>

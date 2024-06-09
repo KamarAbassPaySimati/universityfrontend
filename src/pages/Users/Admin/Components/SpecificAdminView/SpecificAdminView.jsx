@@ -35,7 +35,6 @@ export default function SpecificAdminView () {
     useEffect(() => {
         getAdminView();
     }, []);
-    console.log(View, 'adminView');
 
     // on tap of activate/deactivate button
     const handleStatusClick = () => {

@@ -12,7 +12,7 @@ function G2PCustomerTable ({ loading, error, View, notFound, searchParams, setSe
     return (
         <>
             <table className={`w-full min-w-max ${(!notFound || error) ? 'h-[calc(100vh - 710px)]' : ''}`}>
-                {View?.length > 0 &&
+                {View && View.sheets.length > 0 &&
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
                             <th className='py-2 px-[10px] text-left font-[400]'>Sheet Name</th>
@@ -73,7 +73,7 @@ function G2PCustomerTable ({ loading, error, View, notFound, searchParams, setSe
                 (<NoDataError topValue='mt-6' heading='There are no G2P profile to view yet' />)
             }
             {
-                View?.length === 0 && !loading &&
+                View && Object.keys(View).length === 0 && !loading &&
                 (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                 (<NoDataError className='h-tableHeight' topValue='mt-6' heading='There are no G2P profile to view yet' />)
             }

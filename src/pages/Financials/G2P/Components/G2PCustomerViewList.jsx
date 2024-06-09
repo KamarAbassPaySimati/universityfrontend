@@ -30,7 +30,7 @@ export default function G2PCustomerViewList () {
 
     useEffect(() => {
         getG2PCustomerView();
-    }, []);
+    }, [searchParams]);
 
     useEffect(() => {
         if (View?.length !== 0) {
@@ -38,7 +38,7 @@ export default function G2PCustomerViewList () {
         }
     }, [View]);
 
-    // console.log(View, 'VIEW');
+    console.log(Object.fromEntries(searchParams), 'VIEW');
 
     return (
         <CardHeader
@@ -75,7 +75,7 @@ export default function G2PCustomerViewList () {
                     </div>
                 </div>
                 <div className={`relative ${notFound || View?.length === 0 ? '' : 'mx-10 mb-8 mt-8 border border-[#DDDDDD] bg-white rounded-[6px]'}`}>
-                    {!notFound && !(View?.length === 0 && !loading &&
+                    {!notFound && !(View && View?.sheets?.length === 0 && !loading &&
                         !(searchParams.get('status') !== null || searchParams.get('search') !== null)) &&
                         <div className='overflow-auto scrollBar h-g2pCustomerTableHeight rounded-[6px]'>
                             <G2PCustomerTable
@@ -88,11 +88,11 @@ export default function G2PCustomerViewList () {
                         </div>}
                     {notFound &&
                         <NoDataError
-                            className='h-noDataError' heading='No data found' text="404 could not find what you are looking for." />}
-                    {View?.length === 0 && !loading &&
+                            className='h-g2pNotFound' heading='No data found' text="404 could not find what you are looking for." />}
+                    {View && View?.sheets?.length === 0 && !loading &&
                         !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
-                        (<NoDataError className='h-noDataError' heading='There are no G2P list to view yet' topValue='mt-8' />)}
-                    {(!loading || !error || !notFound || View?.length > 0) && <Paginator
+                        (<NoDataError className='h-g2pNotFound' heading='There are no G2P list to view yet' topValue='mt-8' />)}
+                    {(!loading && !error && !notFound && View && View?.sheets?.length > 0) && <Paginator
                         currentPage={searchParams.get('page')}
                         totalPages={Math.ceil(View?.total_records / 10)}
                         setSearchParams={setSearchParams}
