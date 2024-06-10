@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
 const assert = require('assert');
-const { Given, When, Then } = require('@cucumber/cucumber');
-const { Key, until, By } = require('selenium-webdriver');
+const { When, Then } = require('@cucumber/cucumber');
+const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 
 When('I click on the view button for customer details', async function () {
