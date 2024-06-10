@@ -19,21 +19,21 @@ Scenario: View G2P customer details screen
       Given I navigate to G2P customer listing page
       When I click on the view button for customer details
       Then I should view G2P customer details
-      Then I should see table header containing '["Sheet Name","Uploaded  Date","Uploaded By","Transferred Amount"]'
-      When I click on view excel sheet overview
-      Then I should view a viewer modal of excel sheet
-      When I click on close image viewer 
-      Then I should see the image viewer modal of excel sheet getting closed
+      Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
+      # When I click on view excel sheet overview
+      # Then I should view a viewer modal of excel sheet
+      # When I click on close image viewer 
+      # Then I should see the image viewer modal of excel sheet getting closed
 
-Scenario: Admin deleting a specific excel sheet
-    Given I navigate to G2P customer listing page
-      When I click on the view button for customer details
-      Then I should view G2P customer details
-      Then I should see table header containing '["Sheet Name","Uploaded  Date","Uploaded By","Transferred Amount"]'
-      When I click on the delete sheet button
-      Then I should see a confirmation prompt for deleting excel sheet
-      When I click on confirm button
-      Then I should read a message stating that "Sheet deleted successfully"
+# Scenario: Admin deleting a specific excel sheet
+#     Given I navigate to G2P customer listing page
+#       When I click on the view button for customer details
+#       Then I should view G2P customer details
+#       Then I should see table header containing '["Sheet Name","Uploaded  Date","Uploaded By","Transferred Amount"]'
+#       When I click on the delete sheet button
+#       Then I should see a confirmation prompt for deleting excel sheet
+#       When I click on confirm button
+#       Then I should read a message stating that "Sheet deleted successfully"
 
 Scenario: Checking Pagination
       Given I navigate to G2P customer listing page

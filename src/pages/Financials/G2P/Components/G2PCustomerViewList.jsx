@@ -53,7 +53,7 @@ export default function G2PCustomerViewList () {
                 <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 mt-8 px-[30px] pt-[24px] pb-[28px] 
         flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
         `}>
-                    <div className='flex justify-between items-center'>
+                    <div className='flex justify-between items-center' data-testid="customer_g2p_view">
                         <ProfileName
                             g2pCustomer={true}
                             userButtonName={`${View?.first_name[0] || ''}${View?.middle_name[0] || ''}${View?.last_name[0] || ''}`}
