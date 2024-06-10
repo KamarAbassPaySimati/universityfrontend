@@ -106,12 +106,9 @@ export default function Commissions () {
                 paths={['Financials']}
                 pathurls={['finanacials/commissions']}
                 minHeightRequired={true}
-                // buttonText={isEditing ? '' : 'Update'}
-                // onClickButtonFunction={handleUpdateClick}
                 UpdateIcon={true}
                 navigationPath=''
                 table={true}
-                // headerWithoutButton={isEditing}
                 ChildrenElement
             >
                 <div >
@@ -128,7 +125,7 @@ export default function Commissions () {
                 flex flex-col justify-between bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
                         <h1 className='ml-2 font-semibold text-[#252C32] text-lg'>
-                            Settle agent commission(net)</h1>
+                            Settle agent commission (net)</h1>
                         <div className='flex justify-start'>
                             <InputField
                                 className='w-[100px] text-center'

@@ -5,15 +5,15 @@ import ReactPaginate from 'react-paginate';
 import Image from '../Image/Image';
 import PageInfo from '../PageInfo/PageInfo';
 
-export default function Paginator ({ setSearchParams, searchParams, currentPage, totalPages, totalRecords }) {
+export default function Paginator ({ type, setSearchParams, searchParams, currentPage, totalPages, totalRecords }) {
     const handlePage = (page) => {
         const params = Object.fromEntries(searchParams);
-        setSearchParams({ ...params, page: page + 1 });
+        setSearchParams({ ...params, [type || 'page']: page + 1 });
     };
     return (
         <div className="flex items-center w-full mt-1 py-5 relative">
             {totalPages > 1 &&
-            <div className="flex items-center justify-end sticky bottom-0 z-[9] w-[60%]">
+            <div className="flex items-center justify-end sticky bottom-0 z-[9] w-[55%]">
                 <div className=" flex items-center rounded-lg p-1" data-testid="paginator">
                     <ReactPaginate
                         previousLabel={
