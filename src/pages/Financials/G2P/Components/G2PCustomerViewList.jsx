@@ -11,12 +11,19 @@ import G2PCustomerTable from './G2PSCustomerTable';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Paginator from '../../../../components/Paginator/Paginator';
 import { dataService } from '../../../../services/data.services';
+import * as XLSX from 'xlsx';
+// import { CDN } from '../../config';
 
-export default function G2PCustomerViewList() {
+export default function G2PCustomerViewList () {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const fileInputRef = React.createRef();
     const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
     const [notFound, setNotFound] = useState(false);
+    const [file, setFile] = useState(null);
+    const [modalView, setModalView] = useState();
+    const [isValid, setIsValid] = useState(false);
+    const [validationMessage, setValidationMessage] = useState('');
     const { View, loading, error } = useSelector(state => state.G2PCustomerView); // to get the api respons
 
     const getG2PCustomerView = async () => {
@@ -27,18 +34,55 @@ export default function G2PCustomerViewList() {
         }
     };
 
-    const handleSampleFile = () => {
-        const link = document.createElement('a');
-        link.href = '/public/sample_G2P_Cutomers.xlsx';
-        link.download = 'sample_G2P_Cutomers.xlsx';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+    const handleUploadSheet = async () => {
+        fileInputRef.current.click();
+        // const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`);
+        // return response;
     };
 
-    const handleUploadSheet = async () => {
-        const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`);
-        return response;
+    const handleFileChange = async (e) => {
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            const reader = new FileReader();
+            reader.onload = async (event) => {
+                const data = new Uint8Array(event?.target?.result);
+                const workbook = XLSX?.read(data, { type: 'array' });
+                const sheetName = workbook?.SheetNames[0];
+                const worksheet = workbook?.Sheets[sheetName];
+                const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+
+                const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
+                const isValid = requiredHeaders.every(header => headers.includes(header));
+
+                if (isValid) {
+                    const payload = {
+                        sheet_name: 'sheet2',
+                        uploaded_by: 'Praneeth Shetty SHETTY',
+                        paymaart_id: 'PMT001D',
+                        transferred_amount: 20000,
+                        file_key: 'file://objecit.jpg'
+                    };
+                    const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
+                    if (response.error === false) {
+                        setIsValid(true);
+                        setValidationMessage(response.data.message);
+                        getG2PCustomerView();
+                        e.target.value = '';
+                        setFile(null);
+                    }
+                } else {
+                    setIsValid(false);
+                    setValidationMessage('Invalid Fields. Please check your file.');
+                    e.target.value = '';
+                    setFile(null);
+                }
+                setTimeout(() => {
+                    setValidationMessage('');
+                }, 3000); // Clear message after 3 seconds
+            };
+            reader.readAsArrayBuffer(selectedFile);
+            setFile(selectedFile);
+        }
     };
 
     useEffect(() => {
@@ -74,16 +118,38 @@ export default function G2PCustomerViewList() {
                             CreatedDate={formatTimestamp(View?.created_at)}
                             loading={loading}
                         />
-                        <div className="flex items-center">
-                            <a download href='/public/sample_G2P_Customers.xlsx'>
-                                <button type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
-                                    Sample File
-                                </button>
-                            </a>
-                            <button type='button' onClick={() => handleUploadSheet()} className='font-semibold text-base text-white px-4 py-2 bg-[#3B2A6F] rounded-[6px] flex items-center ml-4'>
-                                <span className='mr-2'><img src="/images/upload-white.svg" alt="upload" /></span>
-                                Upload Sheet
-                            </button>
+                        <div>
+                            <div className="flex items-start">
+                                <a download href='/public/sample_G2P_Customers.xlsx'>
+                                    <button type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
+                                        Sample File
+                                    </button>
+                                </a>
+                                <div className="file-upload-button">
+                                    <button
+                                        type='button'
+                                        onClick={handleUploadSheet}
+                                        className='font-semibold text-base text-white px-4 py-2 bg-[#3B2A6F] rounded-[6px] flex items-center ml-4'
+                                    >
+                                        <span className='mr-2'>
+                                            <img src="/images/upload-white.svg" alt="upload" />
+                                        </span>
+                                        Upload Sheet
+                                    </button>
+                                    <input
+                                        type="file"
+                                        accept=".xlsx, .xls"
+                                        onChange={handleFileChange}
+                                        ref={fileInputRef}
+                                        style={{ display: 'none' }}
+                                    />
+                                </div>
+                            </div>
+                            {validationMessage && (
+                                <p className={`mt-[10px] ${isValid ? 'text-green-500' : 'text-red-500'}`}>
+                                    {validationMessage}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </div>

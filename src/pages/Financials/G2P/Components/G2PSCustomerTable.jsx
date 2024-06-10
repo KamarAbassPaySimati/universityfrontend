@@ -33,9 +33,9 @@ function G2PCustomerTable ({ loading, error, View, notFound, searchParams, setSe
                                 <td className='py-2 px-[10px]'>{formatTimestamp(item?.created_at)}</td>
                                 <td data-testid="amount" title={item?.uploaded_by}
                                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${item?.uploaded_by}`}</td>
-                                <td data-testid="amount" title={item?.transfered_amount}
+                                <td data-testid="amount" title={item?.transferred_amount}
                                     className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px]'>
-                                    {item?.transfered_amount ? `${item.transfered_amount} .00 MWK` : '-'}
+                                    {item?.transferred_amount ? `${item.transferred_amount} .00 MWK` : '-'}
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
