@@ -132,7 +132,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                 </div>
                             </div>
                             <div className='ml-6 mb-2'><ErrorMessage error={errorMessage} /></div>
-                            <button data-testid="add_new_bank"
+                            <button data-testid="apply_filter"
                                 className='mb-6 w-[164px] flex bg-primary-normal py-[8px]
                                 px-[16px] justify-center items-center ml-6
                     h-[40px] rounded-[6px]' onClick={() => handleApplyFilter()}>
@@ -163,9 +163,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                                         <th className='py-2 px-[10px] text-left font-[400] '>Service codes</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>
-                                            <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_admin_name">
-                                                <span>Date/Time</span>
-                                            </div>
+                                            Date/Time
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
@@ -185,7 +183,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.transaction_code || '-'}</td>
-                                            <td data-testid="name"
+                                            <td data-testid="dateRow"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.created_at || '-'}</td>
                                             <td data-testid="name"
