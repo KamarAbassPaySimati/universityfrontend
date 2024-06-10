@@ -14,6 +14,7 @@ import SetLimit from '../pages/Financials/SetLimit/index';
 import Commissions from '../pages/Financials/Commissions/Commissions';
 import G2pList from '../pages/Financials/G2P/index';
 import G2PCustomerViewList from '../pages/Financials/G2P/Components/G2PCustomerViewList';
+import BankTransactionView from '../pages/PaymaartBanks/BankTransactionView';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -101,6 +102,11 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Trust Banks',
                 element: <AddTrustBank />,
                 path: '/paymaart-banks/trust-banks/add-trust-bank'
+            },
+            {
+                name: 'Paymaart View Trust Banks',
+                element: <BankTransactionView type={'trust-bank'}/>,
+                path: '/paymaart-banks/trust-banks/view-trust-bank/:id'
             },
             {
                 name: 'Agent KYC Registration',
@@ -253,6 +259,11 @@ export const ComponentsBasedOnRole = {
                 path: '/paymaart-banks/trust-banks/add-trust-bank'
             },
             {
+                name: 'Paymaart View Trust Banks',
+                element: <BankTransactionView type={'trust-bank'}/>,
+                path: '/paymaart-banks/trust-banks/view-trust-bank/:id'
+            },
+            {
                 name: 'Agent KYC Registration',
                 element: <RegisterKYC role={'agent'} />,
                 path: '/users/agents/register-agent/kyc-registration/:id'
@@ -318,6 +329,11 @@ export const ComponentsBasedOnRole = {
                 name: 'G2P Customers',
                 element: <G2pList />,
                 pasth: '/financials/g2p'
+            },
+            {
+                name: 'Paymaart View Trust Banks',
+                element: <BankTransactionView type={'trust-bank'}/>,
+                path: '/paymaart-banks/trust-banks/view-trust-bank/:id'
             }
         ]
 };

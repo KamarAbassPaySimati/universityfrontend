@@ -12,6 +12,7 @@ import KYCProfileViewSlice from '../components/KYC/KYCView/KYCProfileViewSlice';
 import DeleteAccountSlice from '../pages/Verification/DeleteAccount/DeleteAccountSlice';
 import G2PSlice from '../pages/Financials/G2P/G2PSlice';
 import G2PCustomerViewSlice from '../pages/Financials/G2P/G2PCustomerViewSlice';
+import BankTransactionViewSlice from '../pages/PaymaartBanks/BankTransactionView/BankTransactionViewSlice';
 
 export const store = configureStore({
     reducer: {
@@ -28,6 +29,7 @@ export const store = configureStore({
         DeleteteAccount: DeleteAccountSlice,
         G2PList: G2PSlice,
         G2PCustomerView: G2PCustomerViewSlice
-
+,
+        BankTransactionViewData: BankTransactionViewSlice
     }
 });
