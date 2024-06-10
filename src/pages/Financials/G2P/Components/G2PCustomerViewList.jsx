@@ -10,15 +10,14 @@ import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import G2PCustomerTable from './G2PSCustomerTable';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Paginator from '../../../../components/Paginator/Paginator';
+import { dataService } from '../../../../services/data.services';
 
-export default function G2PCustomerViewList () {
+export default function G2PCustomerViewList() {
     const { id } = useParams();
     const dispatch = useDispatch();
     const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
     const [notFound, setNotFound] = useState(false);
     const { View, loading, error } = useSelector(state => state.G2PCustomerView); // to get the api respons
-
-    console.log(View, 'View');
 
     const getG2PCustomerView = async () => {
         try {
@@ -26,6 +25,20 @@ export default function G2PCustomerViewList () {
         } catch (error) {
 
         }
+    };
+
+    const handleSampleFile = () => {
+        const link = document.createElement('a');
+        link.href = '/public/sample_G2P_Cutomers.xlsx';
+        link.download = 'sample_G2P_Cutomers.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const handleUploadSheet = async () => {
+        const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`);
+        return response;
     };
 
     useEffect(() => {
@@ -37,8 +50,6 @@ export default function G2PCustomerViewList () {
             setNotFound(false);
         }
     }, [View]);
-
-    console.log(Object.fromEntries(searchParams), 'VIEW');
 
     return (
         <CardHeader
@@ -64,10 +75,12 @@ export default function G2PCustomerViewList () {
                             loading={loading}
                         />
                         <div className="flex items-center">
-                            <button type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
-                                Sample File
-                            </button>
-                            <button type='button' className='font-semibold text-base text-white px-4 py-2 bg-[#3B2A6F] rounded-[6px] flex items-center ml-4'>
+                            <a download href='/public/sample_G2P_Customers.xlsx'>
+                                <button type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
+                                    Sample File
+                                </button>
+                            </a>
+                            <button type='button' onClick={() => handleUploadSheet()} className='font-semibold text-base text-white px-4 py-2 bg-[#3B2A6F] rounded-[6px] flex items-center ml-4'>
                                 <span className='mr-2'><img src="/images/upload-white.svg" alt="upload" /></span>
                                 Upload Sheet
                             </button>
