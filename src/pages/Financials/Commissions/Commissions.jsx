@@ -106,12 +106,9 @@ export default function Commissions () {
                 paths={['Financials']}
                 pathurls={['finanacials/commissions']}
                 minHeightRequired={true}
-                // buttonText={isEditing ? '' : 'Update'}
-                // onClickButtonFunction={handleUpdateClick}
                 UpdateIcon={true}
                 navigationPath=''
                 table={true}
-                // headerWithoutButton={isEditing}
                 ChildrenElement
             >
                 <div >

@@ -12,6 +12,7 @@ import KYCView from '../components/KYC/KYCView/KYCView';
 import DeleteAccount from '../pages/Verification/DeleteAccount';
 import SetLimit from '../pages/Financials/SetLimit/index';
 import Commissions from '../pages/Financials/Commissions/Commissions';
+import G2pList from '../pages/Financials/G2P/index';
 import BankTransactionView from '../pages/PaymaartBanks/BankTransactionView';
 
 export const ComponentsBasedOnRole = {
@@ -70,7 +71,7 @@ export const ComponentsBasedOnRole = {
             // Agent Delete Account Request View
             {
                 name: 'Agent Delect Account Request View',
-                element: <KYCView role={'agent'} viewType={'DeleteAccount'}/>,
+                element: <KYCView role={'agent'} viewType={'DeleteAccount'} />,
                 path: '/verify/delete-account-requests/agent-profile/:id'
             },
             // Agent Kyc Specific View
@@ -161,7 +162,7 @@ export const ComponentsBasedOnRole = {
             // KYC Update for Customer
             {
                 name: 'Customer KYC Update',
-                element: <RegisterKYC role={'customer'} type='update'/>,
+                element: <RegisterKYC role={'customer'} type='update' />,
                 path: '/users/customers/register-customer/kyc-update/:id'
             },
             // View and update set limit finance
@@ -175,6 +176,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Commissions',
                 element: <Commissions />,
                 path: '/financials/Commissions'
+            },
+            // G2p List
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                path: '/financials/g2p'
             }
         ],
     admin:
@@ -309,6 +316,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Trust Banks',
                 element: <AddTrustBank />,
                 path: '/paymaart-banks/trust-banks/add-trust-bank'
+            },
+            // G2p List
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                pasth: '/financials/g2p'
             },
             {
                 name: 'Paymaart View Trust Banks',

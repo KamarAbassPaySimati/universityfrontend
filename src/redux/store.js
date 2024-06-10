@@ -10,6 +10,7 @@ import merchantSlice from '../pages/Users/Merchants/merchantSlice';
 import customerSlice from '../pages/Users/Customer/customerSlice';
 import KYCProfileViewSlice from '../components/KYC/KYCView/KYCProfileViewSlice';
 import DeleteAccountSlice from '../pages/Verification/DeleteAccount/DeleteAccountSlice';
+import G2PSlice from '../pages/Financials/G2P/G2PSlice';
 import BankTransactionViewSlice from '../pages/PaymaartBanks/BankTransactionView/BankTransactionViewSlice';
 
 export const store = configureStore({
@@ -25,6 +26,7 @@ export const store = configureStore({
         merchantUsers: merchantSlice,
         customerUsers: customerSlice,
         DeleteteAccount: DeleteAccountSlice,
+        G2PList: G2PSlice,
         BankTransactionViewData: BankTransactionViewSlice
     }
 });

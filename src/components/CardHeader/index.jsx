@@ -139,10 +139,10 @@ const CardHeader = ({
 
                 </div>
             </div>
-            <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
+            <div className={'h-[calc(100vh-56px)] bg-background border-t border-neutral-outline '}>
                 {/* checks for card has buttons */}
                 {header && (headerWithoutButton === false || headerWithoutButton === undefined) &&
-                    <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                    <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'}  mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-row justify-between `}>
                         {header}
                         <div className='flex'>
@@ -205,6 +205,7 @@ const CardHeader = ({
                 {/* checks for card has only toggles down */}
                 {header && headerWithoutButton &&
                     <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-5 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                    ${buttonText === '' ? 'h-[90px]' : ' h-[80px]'}
                  text-header-dark flex flex-col gap-2`}>
                         {header}
                         <div className='-mt-[2px] flex gap-6'>

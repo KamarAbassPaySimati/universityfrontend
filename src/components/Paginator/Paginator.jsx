@@ -13,7 +13,7 @@ export default function Paginator ({ type, setSearchParams, searchParams, curren
     return (
         <div className="flex items-center w-full mt-1 py-5 relative">
             {totalPages > 1 &&
-            <div className="flex items-center justify-end sticky bottom-0 z-[9] w-[60%]">
+            <div className="flex items-center justify-end sticky bottom-0 z-[9] w-[55%]">
                 <div className=" flex items-center rounded-lg p-1" data-testid="paginator">
                     <ReactPaginate
                         previousLabel={

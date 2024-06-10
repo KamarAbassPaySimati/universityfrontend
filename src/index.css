@@ -269,6 +269,17 @@ input[type='number'] {
   width: calc(100% - 4px);
   height: 1px;
   background-color: #E5E9EB;
+  border-bottom: none;
+}
+.g2p-border-bottom::before{
+  content: '';
+  position: absolute;
+  top: 41px;
+  left: 0;
+  width: calc(100% - 4px);
+  height: 1px;
+  background-color: #E5E9EB;
+  border-bottom: none;
 }
 .neutral-secondary-img {
   filter: opacity(0.4);
