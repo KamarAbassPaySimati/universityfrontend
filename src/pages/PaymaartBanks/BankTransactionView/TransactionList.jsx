@@ -225,7 +225,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                 }
             </div>
             {!loading && Data?.transactions?.length !== 0 && <Paginator
-                currentPage={searchParams.get('page')}
+                currentPage={searchParams.get('page_number')}
                 totalPages={Math.ceil(Data?.total_count / 10)}
                 setSearchParams={setSearchParams}
                 searchParams={searchParams}
