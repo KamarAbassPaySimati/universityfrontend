@@ -82,7 +82,7 @@ export default function UploadPlaceholder ({
                                 />
                             </div>
                         </div>
-                        : <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+                        : <div className="max-w-md rounded-lg overflow-hidden md:max-w-xl">
                             <div>
                                 <div className="md:flex">
                                     <div className="w-full py-3">

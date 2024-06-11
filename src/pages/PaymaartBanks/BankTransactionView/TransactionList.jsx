@@ -8,13 +8,15 @@ import { useSelector } from 'react-redux';
 import Shimmer from '../../../components/Shimmers/Shimmer';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import Paginator from '../../../components/Paginator/Paginator';
+import { useNavigate, useParams } from 'react-router';
 
 export default function TransactionList ({ searchParams, setSearchParams }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
+    const { id } = useParams();
     const [errorMessage, setErrorMessage] = useState('');
-
+    const Navigate = useNavigate();
     const [selectedFilter, setSelectedFilter] = useState({
         start_date: new Date(searchParams.get('start_date')).getTime() / 1000,
         end_date: new Date(searchParams.get('end_date')).getTime() / 1000
@@ -141,12 +143,14 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                         </div>
                     </div>
                     }
-                    <button data-testid="add_new_bank"
+                    <button data-testid="add_trust_bank_transaction"
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
                             className='mr-[8px]'/>
-                        <p className='text-[14px] font-semibold text-[#ffffff]'>Add Trust Bank</p>
+                        <p
+                            onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`)}
+                            className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
                     </button>
                 </div>
             </div>
@@ -221,7 +225,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                 }
             </div>
             {!loading && Data?.transactions?.length !== 0 && <Paginator
-                currentPage={searchParams.get('page')}
+                currentPage={searchParams.get('page_number')}
                 totalPages={Math.ceil(Data?.total_count / 10)}
                 setSearchParams={setSearchParams}
                 searchParams={searchParams}

@@ -76,7 +76,7 @@ const CardHeader = ({
         }
     };
     useEffect(() => {
-        fetchNotificationData(1);
+        // fetchNotificationData(1);
     }, []);
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
