@@ -13,7 +13,6 @@ function G2PCustomerTable({ loading, error, View, notFound, searchParams, setSea
     const Navigate = useNavigate();
     const [selectedFileKey, setSelectedFileKey] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(null);
-    console.log(file, 'ffff');
     return (
         <>
             <table className={`w-full min-w-max ${(!notFound || error) ? 'h-[calc(100vh - 710px)]' : ''}`}>

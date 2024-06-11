@@ -1,4 +1,4 @@
-Feature:Paymaart - Admin Web - Upload G2P Sheet
+Feature: Paymaart - Admin Web - Upload G2P Sheet
     As a Super/finance,I want the capability to distribute payments to multiple users in one bulk transfer,So that I can efficiently manage G2P (Government-to-Person) services and disburse funds to a group of recipients.
     Conditions of satisfaction
     There should be an option to upload a excel sheet that includes Paymaart ID(if any), Name, Phone number, and Amount
@@ -9,37 +9,25 @@ Feature:Paymaart - Admin Web - Upload G2P Sheet
     The number of lines is restricted to 100.
     There should be an option to delete the existing excel saved sheet.
 
-    @add_admin_user
-    @create_new_user_and_login
-    Scenario: Admin viewing G2P customer profile
-      Given I navigate to G2P customer listing page
-      Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
-      When I click on the view button for customer details
-      Then I should view G2P customer details
-      Then I should see table header containing '["Sheet Name","Uploaded  Date","Uploaded By","Transferred Amount"]'
+  @add_admin_user @create_new_user_and_login
+  Scenario: Admin viewing G2P customer profile
+    Given I navigate to G2P customer listing page
+    Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
+    When I click on the view button for customer details
+    Then I should view G2P customer details
+    Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
 
-    Scenario: Uploading the wrong sheet
-      When I upload the excel sheet as <excel_sheet>
-      And I should read a message stating <message>
-
-      Examples:
-            | excel_sheet           |      message                                       |
-            | "InvalidHeader.xlsx"  |       "Upload failed due to incorrect format"      |
-            | "limitExceed.xlsx"    |        "Maximum 200 beneficiaries per upload"      |
-            |   "InvalidName.xlsx"       |     "Upload failed due to incorrect format"        |
+  Scenario: Uploading the wrong sheet
+    When I upload the excel sheet as <excel_sheet>
+    Then I should read a message stating that <message>
 
 
-    Scenario: Admin trying to upload valid excel sheet
-      When I upload the valid excel sheet as "ValidSheet.xlsx"
-      And I should read a message stating "Sheet uploaded successfully"
+    Examples:
+      | excel_sheet          | message                                 |
+      | "InvalidHeader.xlsx" | "Upload failed due to incorrect format" |
+      | "limitExceed.xlsx"   | "Maximum 200 beneficiaries per upload"  |
+            # |   "InvalidName.xlsx"       |     "Upload failed due to incorrect format"        |
 
-    
-
-    
-
-    
-
-
-      
-
-
+  Scenario: Admin trying to upload valid excel sheet
+    When I upload the valid excel sheet as "ValidSheet.xlsx"
+    And I should read a message stating "Sheet uploaded successfully"

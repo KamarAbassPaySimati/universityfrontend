@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import ProfileName from '../../../../components/ProfileName/ProfileName';
 import { useParams } from 'react-router';
@@ -13,9 +13,12 @@ import Paginator from '../../../../components/Paginator/Paginator';
 import { dataService } from '../../../../services/data.services';
 import * as XLSX from 'xlsx';
 import { handleUpload } from '../../../../components/S3Upload/S3Functions';
+import GlobalContext from '../../../../components/Context/GlobalContext';
+import { BeatLoader } from 'react-spinners';
 
-export default function G2PCustomerViewList () {
+export default function G2PCustomerViewList() {
     const { id } = useParams();
+    const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const dispatch = useDispatch();
     const fileInputRef = React.createRef();
     const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
@@ -26,7 +29,9 @@ export default function G2PCustomerViewList () {
     const [validationMessage, setValidationMessage] = useState('');
     const { View, loading, error } = useSelector(state => state.G2PCustomerView); // to get the api respons
     const [selectedSheets, setSelectedSheets] = useState({});
+    const [threedotLoader, setThreedotLoader] = useState(false);
     const { user } = useSelector((state) => state.auth);
+
     const getG2PCustomerView = async () => {
         try {
             await dispatch(G2PCustomerViewData(`${id}?${searchParams.toString()}`));
@@ -38,7 +43,59 @@ export default function G2PCustomerViewList () {
         fileInputRef.current.click();
     };
 
+    // const handleFileChange = async (e) => {
+    //     setThreedotLoader(true);
+    //     const selectedFile = e.target.files[0];
+    //     if (selectedFile) {
+    //         const reader = new FileReader();
+    //         reader.onload = async (event) => {
+    //             const data = new Uint8Array(event?.target?.result);
+    //             const workbook = XLSX?.read(data, { type: 'array' });
+    //             const sheetName = workbook?.SheetNames[0];
+    //             const worksheet = workbook?.Sheets[sheetName];
+    //             const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+
+    //             const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
+    //             const isValid = requiredHeaders.every(header => headers.includes(header));
+
+    //             if (isValid) {
+    //                 const path = 'g2p_customers';
+    //                 const file = await handleUpload(e.target.files[0], path);
+    //                 if (file.key !== '') {
+    //                     const payload = {
+    //                         sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
+    //                         uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
+    //                         paymaart_id: user?.paymaart_id,
+    //                         file_key: file.key
+    //                     };
+    //                     const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
+    //                     if (response.error === false) {
+    //                         setIsValid(true);
+    //                         setThreedotLoader(false);
+    //                         setToastSuccess(response.data.message);
+    //                         getG2PCustomerView();
+    //                         e.target.value = '';
+    //                         setFile(null);
+    //                     }
+    //                 }
+    //             } else {
+    //                 setIsValid(false);
+    //                 setThreedotLoader(false);
+    //                 setToastError('Upload failed due to incorrect format');
+    //                 e.target.value = '';
+    //                 setFile(null);
+    //             }
+    //             // setTimeout(() => {
+    //             //     setToastSuccess('');
+    //             // }, 3000); // Clear message after 3 seconds
+    //         };
+    //         reader.readAsArrayBuffer(selectedFile);
+    //         setFile(selectedFile);
+    //     }
+    // };
+
     const handleFileChange = async (e) => {
+        setThreedotLoader(true);
         const selectedFile = e.target.files[0];
         if (selectedFile) {
             const reader = new FileReader();
@@ -47,47 +104,56 @@ export default function G2PCustomerViewList () {
                 const workbook = XLSX?.read(data, { type: 'array' });
                 const sheetName = workbook?.SheetNames[0];
                 const worksheet = workbook?.Sheets[sheetName];
-                const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+                const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                const headers = rows[0];
 
                 const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
                 const isValid = requiredHeaders.every(header => headers.includes(header));
 
-                if (isValid) {
-                    const path = 'g2p_customers';
-                    const file = await handleUpload(e.target.files[0], path);
-                    if (file.key !== '') {
-                        const payload = {
-                            sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
-                            uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
-                            paymaart_id: user?.paymaart_id,
-                            file_key: file.key
-                        };
-                        const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
-                        if (response.error === false) {
-                            setIsValid(true);
-                            setValidationMessage(response.data.message);
-                            getG2PCustomerView();
-                            e.target.value = '';
-                            setFile(null);
-                        }
-                    }
-                } else {
+                if (!isValid) {
                     setIsValid(false);
-                    setValidationMessage('Invalid Fields. Please check your file.');
+                    setThreedotLoader(false);
+                    setToastError('Upload failed due to incorrect format');
                     e.target.value = '';
                     setFile(null);
+                    return;
                 }
-                setTimeout(() => {
-                    setValidationMessage('');
-                }, 3000); // Clear message after 3 seconds
+
+                // Check the number of rows
+                const rowCount = rows.length - 1; // Exclude header row
+                if (rowCount > 200) {
+                    setIsValid(false);
+                    setThreedotLoader(false);
+                    setToastError('Maximum 200 beneficiaries per upload');
+                    e.target.value = '';
+                    setFile(null);
+                    return;
+                }
+
+                const path = 'g2p_customers';
+                const file = await handleUpload(e.target.files[0], path);
+                if (file.key !== '') {
+                    const payload = {
+                        sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
+                        uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
+                        paymaart_id: user?.paymaart_id,
+                        file_key: file.key
+                    };
+                    const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
+                    if (response.error === false) {
+                        setIsValid(true);
+                        setThreedotLoader(false);
+                        setToastSuccess(response.data.message);
+                        getG2PCustomerView();
+                        e.target.value = '';
+                        setFile(null);
+                    }
+                }
             };
             reader.readAsArrayBuffer(selectedFile);
             setFile(selectedFile);
         }
     };
-    // const handleClose = () => {
-
-    // };
 
     useEffect(() => {
         getG2PCustomerView();
@@ -126,7 +192,7 @@ export default function G2PCustomerViewList () {
                             <div>
                                 <div className="flex items-start">
                                     <a download href='/public/sample_G2P_Customers.xlsx'>
-                                        <button type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
+                                        <button onClick={() => setToastSuccess('Sample file downloaded successfully')} type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
                                             Sample File
                                         </button>
                                     </a>
@@ -136,14 +202,20 @@ export default function G2PCustomerViewList () {
                                             onClick={handleUploadSheet}
                                             className='font-semibold text-base text-white px-4 py-2 bg-[#3B2A6F] rounded-[6px] flex items-center ml-4'
                                         >
-                                            <span className='mr-2'>
-                                                <img src="/images/upload-white.svg" alt="upload" />
-                                            </span>
-                                            Upload Sheet
+                                            {threedotLoader
+                                                ? <span>{<BeatLoader color={'#ffff'} size={'10px'} />}</span>
+                                                : <>
+                                                    <span className='mr-2'>
+                                                        <img src="/images/upload-white.svg" alt="upload" />
+                                                    </span>
+                                                    Upload Sheet
+                                                </>
+                                            }
                                         </button>
                                         <input
                                             type="file"
                                             accept=".xlsx, .xls"
+                                            data-testid="excel_sheet"
                                             onChange={handleFileChange}
                                             ref={fileInputRef}
                                             style={{ display: 'none' }}
