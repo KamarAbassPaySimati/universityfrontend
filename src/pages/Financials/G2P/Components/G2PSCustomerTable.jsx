@@ -7,11 +7,13 @@ import Image from '../../../../components/Image/Image';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import IframeModal from '../../../../components/Iframe/IframeModal';
+import { CDN } from '../../../../config';
 
 function G2PCustomerTable({ loading, error, View, notFound, searchParams, setSearchparams, setSelectedSheets, modalView, setModalView, file }) {
     const Navigate = useNavigate();
     const [selectedFileKey, setSelectedFileKey] = useState('');
     const [selectedIndex, setSelectedIndex] = useState(null);
+    console.log(file, 'ffff');
     return (
         <>
             <table className={`w-full min-w-max ${(!notFound || error) ? 'h-[calc(100vh - 710px)]' : ''}`}>
@@ -43,8 +45,9 @@ function G2PCustomerTable({ loading, error, View, notFound, searchParams, setSea
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                                         onClick={() => {
-                                            setSelectedIndex(index);
-                                            setSelectedFileKey(item.file_key); // Assuming `item.file_key` is the key you want to use
+                                            const fileLink = item.file_key;
+                                            const viewLink = `https://docs.google.com/viewer?url=${CDN}public/${encodeURIComponent(fileLink)}`;
+                                            window.open(viewLink, '_blank');// Assuming `item.file_key` is the key you want to use
                                         }} />
 
                                     <Image className='cursor-pointer' toolTipId={`delete-${index}`} src='delete' testId={`view-${index}`}
@@ -81,6 +84,7 @@ function G2PCustomerTable({ loading, error, View, notFound, searchParams, setSea
                     link={selectedFileKey} // Use the selected file key from state
                     labelValue={selectedFileKey.split('/')[selectedFileKey.split('/').length - 1]} // Extract label value from the key
                 />
+
             </table >
             {(!notFound && error) &&
                 (<NoDataError topValue='mt-6' heading='There are no G2P profile to view yet' />)

@@ -54,11 +54,6 @@ export default function G2PCustomerViewList () {
 
                 if (isValid) {
                     const path = 'g2p_customers';
-                    // const options = {
-                    //     contentDisposition: 'inline',
-                    //     contentType: 'application/vnd.ms-excel',
-                    //     ACL: 'public-read'
-                    // };
                     const file = await handleUpload(e.target.files[0], path);
                     if (file.key !== '') {
                         const payload = {
