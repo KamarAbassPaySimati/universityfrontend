@@ -7,7 +7,6 @@ import passwordCheck from '../../../CommonMethods/passwordCheck';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { siteKey } from '../../../config';
-import encodePassword2 from '../../../CommonMethods/PasswordEncription';
 
 const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
     const reCaptchaRef = useRef();
@@ -45,9 +44,8 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken }) => {
             // call api
             try {
                 setIsLoading(true);
-                const encryptedPassword = await encodePassword2(password);
                 const response = await dataService.PostAPIWithoutHeader('admin-users/reset-password',
-                    { token, new_password: encryptedPassword });
+                    { token, new_password: password });
                 if (!response.error) {
                     setIsSuccess(true);
                 } else if (response?.data?.status === 401) {
