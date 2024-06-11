@@ -99,7 +99,6 @@ export default function AddTransaction () {
         if (dataError) {
             setSubmitSelected(true);
             setLoading(false);
-            console.log('tryyyyy');
         } else {
             try {
                 const payload = {
@@ -115,7 +114,7 @@ export default function AddTransaction () {
                 if (res.error) {
                     setToastError(res.data.data.message);
                 } else {
-                    setToastSuccess(res.data.message);
+                    setToastSuccess('Transaction details added successfully ');
                     Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}`);
                 }
                 setLoading(false);

@@ -15,7 +15,7 @@ When('I click on view particular trust bank', async function () {
 
 Then('I should be redirected to view transaction listing screen of that trust bank', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
-    await driver.wait(until.urlContains('http://localhost:3000/view/trust-bank/'));
+    await driver.wait(until.urlContains('http://localhost:3000/paymaart-banks/trust-banks/view-trust-bank/'));
 });
 
 When('I click on add trust bank transaction', async function () {
@@ -26,53 +26,53 @@ When('I click on add trust bank transaction', async function () {
 
 Then('I should be redirected to add transaction for trust bank page', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
-    await driver.wait(until.urlContains('http://localhost:3000/view/trust-bank/add-transaction'));
+    await driver.wait(until.urlContains('/paymaart-banks/trust-banks/view-trust-bank/'));
 });
 
 When('I select the transaction type as {string}', async function (transactionType) {
     let dropdownElement;
     if (transactionType !== '') {
-        await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type"]'))).click();
+        await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 2000));
         switch (transactionType) {
         case 'Pay-in by Agent to PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_0"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Pay-in by Standard Customer to PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_1"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_1"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Pay-in by G2P Customer to PTBA1 | RMcredit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_2"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Pay-in by Paymaart OBO Agent to PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_3"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_3"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Pay-in by Paymaart OBO Standard Customer to PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_4"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_4"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Pay-in by Paymaart OBO G2P Customer to PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_5"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Inflow For E-money Float/other E-Funding to PTBA1 | RMey credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_6"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_6"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Inflow for Marketing Campaign Fund to PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_7"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_7"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Receipt of Customer Balances Interest from PTBA1 | RM credit':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_8"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_8"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_0"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         }
@@ -81,7 +81,7 @@ When('I select the transaction type as {string}', async function (transactionTyp
 });
 
 When('I enter valid agent paymaart ID', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="entry_for"]')));
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
@@ -89,7 +89,7 @@ When('I enter valid agent paymaart ID', async function () {
 });
 
 When('I enter valid customer paymaart ID', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="entry_for"]')));
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
@@ -112,7 +112,7 @@ When('I should see the entry by field should be disabled for add trust bank tran
 });
 
 When('I enter the valid transaction POP Ref.No', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="RefNo"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_pop_ref_number"]')));
     await driver.wait(until.elementIsVisible(element));
 
     const transactionPOPRefNo = `TRA${faker.finance.pin({ length: 12 })}`;
@@ -123,7 +123,7 @@ When('I upload the transaction POP document as {string}', async function (docume
     let element;
     await new Promise(resolve => setTimeout(resolve, 2000));
     if (document !== '') {
-        element = await driver.wait(until.elementLocated(By.css('[data-testid="profile_image"]')));
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="pop_file_key"]')));
         const filePath = path.join(__dirname, `../../support/${document}`);
         await element.sendKeys(filePath);
     }
@@ -131,14 +131,14 @@ When('I upload the transaction POP document as {string}', async function (docume
 
 When('I submit the add trust bank transaction form', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="add_transaction"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
     await new Promise(resolve => setTimeout(resolve, 100));
 });
 
 When('I enter the paymaart ID as {string} for trust bank transaction', async function (paymaart_id) {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="entry_for"]')));
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
@@ -148,7 +148,7 @@ When('I enter the paymaart ID as {string} for trust bank transaction', async fun
 });
 
 When('I enter the transaction POP Ref.No as {string}', async function (refNo) {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="RefNo"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_pop_ref_number"]')));
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);

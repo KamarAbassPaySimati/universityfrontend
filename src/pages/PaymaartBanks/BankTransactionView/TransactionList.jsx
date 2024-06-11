@@ -143,7 +143,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                         </div>
                     </div>
                     }
-                    <button data-testid="add_new_bank"
+                    <button data-testid="add_trust_bank_transaction"
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
