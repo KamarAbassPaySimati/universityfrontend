@@ -28,11 +28,11 @@ export default function ProfileName ({
                     {UserName}
                 </div>
                 <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
-                    Paymaart ID: <span data-testid="paymaart_id" className='font-[600]'>{payMaartID}</span>
+                    Paymaart ID: <span data-testid="paymaart_id" className='font-semibold'>{payMaartID}</span>
                 </div>
                 {viewType === 'specific' && lastLoggedIn && <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
-                    Created Date: <span data-testid="paymaart_id" className='font-[600] mr-4'>{CreatedDate}</span>
-                    Last Logged in: <span data-testid="paymaart_id" className={`font-[600] ${lastLoggedIn !== 'Online' ? '' : 'text-accent-positive'}`}>{lastLoggedIn}</span>
+                    Created Date: <span data-testid="paymaart_id" className='font-semibold mr-4'>{CreatedDate}</span>
+                    Last Logged in: <span data-testid="paymaart_id" className={`font-semibold ${lastLoggedIn !== 'Online' ? '' : 'text-accent-positive'}`}>{lastLoggedIn}</span>
                 </div>}
             </div>
         </div>

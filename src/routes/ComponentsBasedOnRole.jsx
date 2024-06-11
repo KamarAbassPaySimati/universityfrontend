@@ -9,6 +9,10 @@ import TrustBanks from '../pages/PaymaartBanks/TrustBanks';
 import AddTrustBank from '../pages/PaymaartBanks/TrustBanks/AddTrustBank/AddTrustBank';
 import RegisterKYC from '../components/KYC/KYCComponents/RegisterKYC';
 import KYCView from '../components/KYC/KYCView/KYCView';
+import DeleteAccount from '../pages/Verification/DeleteAccount';
+import SetLimit from '../pages/Financials/SetLimit/index';
+import Commissions from '../pages/Financials/Commissions/Commissions';
+import G2pList from '../pages/Financials/G2P/index';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -57,6 +61,17 @@ export const ComponentsBasedOnRole = {
                 name: 'KYC Verification list',
                 element: <KycVerification />,
                 path: '/verify/kyc-registration'
+            },
+            {
+                name: 'Delete Account Request',
+                element: <DeleteAccount />,
+                path: '/verify/delete-account-requests'
+            },
+            // Agent Delete Account Request View
+            {
+                name: 'Agent Delect Account Request View',
+                element: <KYCView role={'agent'} viewType={'DeleteAccount'} />,
+                path: '/verify/delete-account-requests/agent-profile/:id'
             },
             // Agent Kyc Specific View
             {
@@ -141,8 +156,26 @@ export const ComponentsBasedOnRole = {
             // KYC Update for Customer
             {
                 name: 'Customer KYC Update',
-                element: <RegisterKYC role={'customer'} type='update'/>,
+                element: <RegisterKYC role={'customer'} type='update' />,
                 path: '/users/customers/register-customer/kyc-update/:id'
+            },
+            // View and update set limit finance
+            {
+                name: 'Set limit View',
+                element: <SetLimit />,
+                path: '/financials/set-limit'
+            },
+            // View and update Commissions
+            {
+                name: 'Commissions',
+                element: <Commissions />,
+                path: '/financials/Commissions'
+            },
+            // G2p List
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                path: '/financials/g2p'
             }
         ],
     admin:
@@ -272,6 +305,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Trust Banks',
                 element: <AddTrustBank />,
                 path: '/paymaart-banks/trust-banks/add-trust-bank'
+            },
+            // G2p List
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                pasth: '/financials/g2p'
             }
         ]
 };

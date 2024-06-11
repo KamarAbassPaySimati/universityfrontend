@@ -15,7 +15,7 @@ Before('@create_new_admin_account', async function () {
         const last_name = faker.person.lastName();
         const full_name = `${first_name} ${middle_name} ${last_name.toUpperCase()}`;
         const email = `bharath.shet+${random_alpha}@7edge.com`;
-        let phone_number = `${faker.phone.number('## ### ####')}`;
+        let phone_number = `10 ${faker.phone.number('### ####')}`;
         const countryCode = '+265';
         if (phone_number.startsWith('0')) {
             // Replace the first character with '9'
@@ -169,7 +169,7 @@ When('I enter valid email address for admin onboarding', async function () {
 
 When('I enter valid phone number for admin onboarding', async function () {
     // Write code here that turns the phrase above into concrete actions
-    let phone_number = faker.phone.number('#########');
+    let phone_number = `10${faker.phone.number('#######')}`;
 
     // Check if the phone number starts with '0'
     if (phone_number.startsWith('0')) {

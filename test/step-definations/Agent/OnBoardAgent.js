@@ -171,7 +171,7 @@ When('I click on verify phone number', async function () {
 
 When('I enter a valid phone number for agent registration', async function () {
     // Write code here that turns the phrase above into concrete actions
-    let phone_number = `${faker.phone.number('#########')}`;
+    let phone_number = `10${faker.phone.number('########')}`;
     if (phone_number.startsWith('0')) {
         // Replace the first character with '9'
         phone_number = '9' + phone_number.substring(1);

@@ -123,7 +123,7 @@ const KYCProfileViewSlice = createSlice({
                         Email: state?.View?.email
                     };
                     state.userDetails = {
-                        basicDetails: state.View.user_kyc_status === 'not_started'
+                        basicDetails: (state.View.user_kyc_status === 'not_started' || state.View.reasons !== undefined)
                             ? state.not_started
                             : state.View.citizen !== 'Malawian' ? state.nonMalawiAddress : state.address,
                         identityDetails: {
