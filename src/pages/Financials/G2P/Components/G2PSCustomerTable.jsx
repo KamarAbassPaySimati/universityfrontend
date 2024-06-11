@@ -1,14 +1,17 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Tooltip } from 'react-tooltip';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import Image from '../../../../components/Image/Image';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
+import IframeModal from '../../../../components/Iframe/IframeModal';
 
-function G2PCustomerTable ({ loading, error, View, notFound, searchParams, setSearchparams }) {
+function G2PCustomerTable({ loading, error, View, notFound, searchParams, setSearchparams, setSelectedSheets, modalView, setModalView, file }) {
     const Navigate = useNavigate();
+    const [selectedFileKey, setSelectedFileKey] = useState('');
+    const [selectedIndex, setSelectedIndex] = useState(null);
     return (
         <>
             <table className={`w-full min-w-max ${(!notFound || error) ? 'h-[calc(100vh - 710px)]' : ''}`}>
@@ -39,7 +42,11 @@ function G2PCustomerTable ({ loading, error, View, notFound, searchParams, setSe
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                                        onClick={() => Navigate(`/financials/g2p/${item?.transa}`)} />
+                                        onClick={() => {
+                                            setSelectedIndex(index);
+                                            setSelectedFileKey(item.file_key); // Assuming `item.file_key` is the key you want to use
+                                        }} />
+
                                     <Image className='cursor-pointer' toolTipId={`delete-${index}`} src='delete' testId={`view-${index}`}
                                         onClick={() => Navigate(`/financials/g2p/${item?.paymaart_id}`)} />
                                     <Image className='cursor-pointer' toolTipId={`transaction-${index}`} src='transaction' testId={`view-${index}`}
@@ -68,6 +75,12 @@ function G2PCustomerTable ({ loading, error, View, notFound, searchParams, setSe
                         ))}
                     </tbody>
                 }
+                <IframeModal
+                    isOpen={selectedIndex !== null} // Check if selectedIndex is set
+                    handleClose={() => setSelectedIndex(null)}
+                    link={selectedFileKey} // Use the selected file key from state
+                    labelValue={selectedFileKey.split('/')[selectedFileKey.split('/').length - 1]} // Extract label value from the key
+                />
             </table >
             {(!notFound && error) &&
                 (<NoDataError topValue='mt-6' heading='There are no G2P profile to view yet' />)
