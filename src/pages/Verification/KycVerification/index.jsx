@@ -205,7 +205,6 @@ const KycVerification = () => {
                 }
                 {
                     (List?.data?.length !== 0 && !notFound) &&
-
                     <div className='h-tableHeight scrollBar overflow-auto'>
                         <KycVerificationTable
                             error={error}

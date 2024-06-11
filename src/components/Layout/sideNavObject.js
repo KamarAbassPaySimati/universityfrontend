@@ -7,9 +7,13 @@ export const sideNavObject = {
             path: 'users',
             dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
         },
+        Financials: {
+            path: 'financials',
+            dropdown: ['Commissions', 'G2P', 'Set Limit', 'Transaction History']
+        },
         Verify: {
             path: 'verify',
-            dropdown: ['KYC Registration', 'Delete Account']
+            dropdown: ['KYC Registration', 'Delete Account Requests']
         },
         'Paymaart Banks': {
             path: 'paymaart-banks'

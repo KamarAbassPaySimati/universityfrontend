@@ -102,21 +102,21 @@ const SideBar = ({ role }) => {
                                     <div className='flex gap-2 items-center'>
                                         <Image src={`${hoveringOn === nav.toLowerCase() || location.pathname.includes(Slugify(nav.toLowerCase())) ? `active-${nav.toLowerCase()}` : nav.toLowerCase()}`} />
                                         <div className={`font-[400] text-[14px] leading-[24px]
-                        ${hoveringOn === nav.toLowerCase() || location.pathname.includes(Slugify(nav.toLowerCase())) ? 'text-primary-normal' : location.pathname.includes(nav.toLowerCase()) ? 'font-[600]' : 'text-neutral-secondary '}`}>
+                        ${hoveringOn === nav.toLowerCase() || location.pathname.includes(Slugify(nav.toLowerCase())) ? 'text-primary-normal' : location.pathname.includes(nav.toLowerCase()) ? 'font-semibold' : 'text-neutral-secondary '}`}>
                                             {nav}
                                         </div>
                                     </div>
-                                    {sideNavObject[role][nav]?.dropdown && <Image className={`duration-300 ${dropdown[nav.toLowerCase()] ? 'rotate-180' : ''}`} src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down' } />}
+                                    {sideNavObject[role][nav]?.dropdown && <Image className={`duration-300 ${dropdown[nav.toLowerCase()] ? 'rotate-180' : ''}`} src={hoveringOn === nav.toLowerCase() || location.pathname.includes(nav.toLowerCase()) ? 'active-chevron-down' : 'chevron-down'} />}
                                 </div>
                                 {dropdown[nav.toLowerCase()] &&
-                                <>
-                                    {sideNavObject[role][nav]?.dropdown?.map((option) => (
-                                        <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
+                                    <>
+                                        {sideNavObject[role][nav]?.dropdown?.map((option) => (
+                                            <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
                                         ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown)} >
-                                            {option}
-                                        </div>
-                                    ))}
-                                </>}
+                                                {option}
+                                            </div>
+                                        ))}
+                                    </>}
                             </div>
                         ))}
 

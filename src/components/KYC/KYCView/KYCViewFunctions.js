@@ -60,7 +60,16 @@ export const getPaths = (viewType, role, status) => {
             };
         }
         break;
-
+    case 'DeleteAccount':
+        switch (role) {
+        case 'agent':
+            return {
+                activePath: 'Agent Profile',
+                paths: ['Verify', 'Delete Account'],
+                pathurls: ['verify/delete-account-requests']
+            };
+        }
+        break;
     default:
         break;
     }
@@ -87,6 +96,21 @@ export const getStatusColor = (status) => {
         return {
             color: 'bg-[#FFE8E8] text-[#FF6363]',
             text: 'Further Information Required'
+        };
+    case 'pending':
+        return {
+            color: 'bg-[#D9E8FE] text-[#0066F6]',
+            text: 'Pending'
+        };
+    case 'rejected':
+        return {
+            color: 'bg-[#FFE8E8] text-[#FF6363]',
+            text: 'Rejected'
+        };
+    case 'approved':
+        return {
+            color: 'bg-[#ECFDF5] text-[#13B681]',
+            text: 'Approved'
         };
 
     default:
@@ -120,7 +144,12 @@ export const getApiurl = (id, viewType, role) => {
             break;
         }
         break;
-
+    case 'DeleteAccount':
+        switch (role) {
+        case 'agent':
+            return `specific-requests?user_id=${id}`;
+        }
+        break;
     default:
         break;
     }

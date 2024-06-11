@@ -11,18 +11,21 @@
  * the pathurls should be an array that correspond to urls for each path in paths
  */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { Link, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
 import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
+import NotificationPopup from '../Notification/NotificationPopup';
+import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject
+    onToggle, searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction
 }) => {
+    const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
     function cumulativeSum (arr) {
@@ -48,6 +51,33 @@ const CardHeader = ({
     //     });
     //     onToggle(updatedButtons); // Notify the parent component of the updated button values
     // };
+    const [isNotification, setIsNotification] = useState(false);
+    const [notificationData, setNotificationData] = useState([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false); // New loading state
+    const [page, setPage] = useState(1);
+
+    const fetchNotificationData = async (pageNumber) => {
+        try {
+            setLoading(true); // Set loading state to true before API call
+            const res = await dataService.GetAPI(`admin-users/notifications?page=${pageNumber}`);
+            const newData = res.data.data;
+            if (res.data.nextPage === null) {
+                setHasMore(false);
+            } else {
+                setHasMore(true);
+            }
+            setNotificationData(prevData => [...prevData, ...newData]);
+            setPage(pageNumber + 1);
+        } catch (error) {
+            console.error('Error occurred:', error);
+        } finally {
+            setLoading(false); // Reset loading state after API call is completed
+        }
+    };
+    useEffect(() => {
+        fetchNotificationData(1);
+    }, []);
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -68,8 +98,36 @@ const CardHeader = ({
                         </span>
                     }
                 </div>
-                <div className='flex justify-center items-center'>
-                    <Image onClick={() => navigate('/profile')} className='profile cursor-pointer' src='profile' />
+                <div className='flex justify-center items-center relative'>
+                    <img
+                        onClick={() => setIsNotification(!isNotification)}
+                        onMouseEnter={() => setONHover(true)}
+                        onMouseLeave={() => setONHover(false)}
+                        data-testid="notification_bell"
+                        className={`notifications info-icon cursor-pointer ${onHover ? '' : 'px-1'}`}
+                        src={`/images/${notificationData.length === 0
+                            ? onHover ? 'hover-notification-dot' : 'notification'
+                            : onHover ? 'hover-notification-dot' : 'notification-dot'}.svg`}
+                    />
+                    <Tooltip
+                        className='my-tooltip'
+                        anchorSelect=".notifications"
+                        place='bottom'
+                        clickable
+                    >
+                        <Link to="/profile">Notifications</Link>
+                    </Tooltip>
+                    {isNotification &&
+                    <NotificationPopup
+                        page={page}
+                        setPage={setPage}
+                        setIsNotification={setIsNotification}
+                        loading={loading}
+                        notificationData={notificationData}
+                        fetchNotificationData={fetchNotificationData}
+                        hasMore={hasMore}
+                    />}
+                    <Image onClick={() => navigate('/profile')} className='profile cursor-pointer ml-9' src='profile' />
                     <Tooltip
                         className='my-tooltip'
                         anchorSelect=".profile"
@@ -78,91 +136,98 @@ const CardHeader = ({
                     >
                         <Link to="/profile">Profile</Link>
                     </Tooltip>
+
                 </div>
             </div>
-            <div className='h-[calc(100vh-56px)] bg-background border-t border-neutral-outline'>
+            <div className={'h-[calc(100vh-56px)] bg-background border-t border-neutral-outline '}>
                 {/* checks for card has buttons */}
                 {header && (headerWithoutButton === false || headerWithoutButton === undefined) &&
-                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                    <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'}  mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-row justify-between `}>
-                    {header}
-                    <div className='flex'>
-                        {buttonText && <button data-testid={buttonText} onClick={() => { navigate(navigationPath); }}
-                            className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
-                    h-[40px] rounded-[6px]'>
-                            <img src='/images/onboardIcon.svg'
-                                className='mr-[8px]'/>
-                            <p className='text-[14px] font-[600] text-[#ffffff]'>{buttonText}</p>
-                        </button>}
-                        {rejectOrApprove && rejectOrApprove !== undefined
-                            ? (reject
-                                ? <Shimmer height={'h-10'}/>
-                                : (
-                                    <button data-testid="reject_button" onClick={onHandleReject}
-                                        className={`flex  bg-primary-negative py-[8px] px-[16px] 
-                                        justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
-                                        <p className='text-[14px] font-[600] text-[#ffffff]'>Reject</p>
-                                    </button>))
-                            : (statusButton === true
-                                ? <Shimmer height={'h-10'}/>
-                                : (statusButton !== undefined &&
-                                <button data-testid="activate_deactivate_button" onClick={onHandleStatusChange}
-                                    className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]`}>
-                                    <p className='text-[14px] font-[600] text-[#ffffff]'>{statusButton}</p>
-                                </button>)
-                            )
-                        }
-
-                        {
-                            rejectOrApprove && rejectOrApprove !== undefined
-                                ? (approve
-                                    ? <Shimmer height={'h-10'}/>
+                        {header}
+                        <div className='flex'>
+                            {buttonText && (
+                                <button
+                                    data-testid={buttonText}
+                                    onClick={() => navigationPath === '' ? onClickButtonFunction() : navigate(navigationPath)}
+                                    className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]'
+                                >
+                                    <img
+                                        src={UpdateIcon ? '/images/update.svg' : '/images/onboardIcon.svg'}
+                                        alt="Icon"
+                                        className='mr-[8px]'
+                                    />
+                                    <p className='text-[14px] font-semibold text-[#ffffff]'>{buttonText}</p>
+                                </button>
+                            )}
+                            {rejectOrApprove && rejectOrApprove !== undefined
+                                ? (reject
+                                    ? <Shimmer height={'h-10'} />
                                     : (
-                                        <button data-testid="approve_button" onClick={onHandleStatusChange}
-                                            className={`flex ml-6 bg-[#13B681] py-[8px] px-[16px] 
+                                        <button data-testid="reject_button" onClick={onHandleReject}
+                                            className={`flex  bg-primary-negative py-[8px] px-[16px] 
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
-                                            <p className='text-[14px] font-[600] text-[#ffffff]'>Approve</p>
+                                            <p className='text-[14px] font-semibold text-[#ffffff]'>Reject</p>
                                         </button>))
-                                : (statusButton && ((updateButton !== '' && updateButton !== true)
-                                    ? (
-                                        <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
-                                            className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
-                    h-[40px] rounded-[6px]'>
-                                            {updateButton === 'Update' && <Image src='update'
-                                                className='mr-[8px]'/>}
-                                            <p className='text-[14px] font-[600] text-[#ffffff]'>{updateButton}</p>
+                                : (statusButton === true
+                                    ? <Shimmer height={'h-10'} />
+                                    : (statusButton !== undefined &&
+                                        <button data-testid="activate_deactivate_button" onClick={onHandleStatusChange}
+                                            className={`flex ${statusButton === 'Activate' ? 'bg-[#13B681]' : 'bg-[#FF6363]'} py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]`}>
+                                            <p className='text-[14px] font-semibold text-[#ffffff]'>{statusButton}</p>
                                         </button>)
-                                    : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'}/></div>)))
-                        }
+                                )
+                            }
+                            {
+                                rejectOrApprove && rejectOrApprove !== undefined
+                                    ? (approve
+                                        ? <Shimmer height={'h-10'} />
+                                        : (
+                                            <button data-testid="approve_button" onClick={onHandleStatusChange}
+                                                className={`flex ml-6 bg-[#13B681] py-[8px] px-[16px] 
+                                        justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
+                                                <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>
+                                            </button>))
+                                    : (statusButton && ((updateButton !== '' && updateButton !== true)
+                                        ? (
+                                            <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
+                                                className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
+                    h-[40px] rounded-[6px]'>
+                                                {updateButton === 'Update' && <Image src='update'
+                                                    className='mr-[8px]' />}
+                                                <p className='text-[14px] font-semibold text-[#ffffff]'>{updateButton}</p>
+                                            </button>)
+                                        : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'} /></div>)))
+                            }
+                        </div>
                     </div>
-                </div>
                 }
                 {/* checks for card has only toggles down */}
                 {header && headerWithoutButton &&
-                <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-5 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                    <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-5 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                    ${buttonText === '' ? 'h-[90px]' : ''}
                  text-header-dark flex flex-col gap-2`}>
-                    {header}
-                    <div className='-mt-[2px] flex gap-6'>
-                        {/* toggle buttons  */}
-                        {toggleButtons && toggleButtons.map((item, index) => (
-                            <button
-                                key={index}
-                                onClick={() => handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams)}
-                                className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-[600]' : 'font-[400]'}`}
-                            >
-                                {item.key}
-                            </button>
-                        ))}
+                        {header}
+                        <div className='-mt-[2px] flex gap-6'>
+                            {/* toggle buttons  */}
+                            {toggleButtons && toggleButtons.map((item, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams)}
+                                    className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
+                                >
+                                    {item.key}
+                                </button>
+                            ))}
+                        </div>
+
                     </div>
-
-                </div>
                 }
-
                 {ChildrenElement !== true
                     ? (!table
                         ? <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
-                ${header ? 'max-h-[calc(100vh-240px)]' : ''} 
+                ${header ? 'max-h-[calc(100vh-240px)] relative z-[9]' : ''} 
                 ${minHeightRequired ? 'min-h-[calc(100vh-240px)]' : ''}`} data-testid={testId}>
                             {children}
                         </div>
@@ -172,9 +237,9 @@ const CardHeader = ({
                         </div>)
                     : <div>
                         {children}
-                    </div> }
+                    </div>}
             </div>
-        </div>
+        </div >
     );
 };
 
