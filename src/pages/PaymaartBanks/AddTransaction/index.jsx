@@ -21,6 +21,8 @@ export default function AddTransaction () {
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
             return 'Agent Paymaart ID';
+        case `Pay-in by Standard Customer to ${id} | RM credit`:
+            return 'Customer Paymaart ID';
         default:
             return '<Beneficiary> Paymaart ID';
         }
@@ -33,7 +35,8 @@ export default function AddTransaction () {
                 key: 'transaction_code',
                 require: true,
                 options: [
-                    `Pay-in by Agent to ${id} | RM credit`
+                    `Pay-in by Agent to ${id} | RM credit`,
+                    `Pay-in by Standard Customer to ${id} | RM credit`
                 ]
             },
             '<Beneficiary> Paymaart ID': {
