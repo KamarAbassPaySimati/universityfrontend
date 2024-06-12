@@ -71,33 +71,32 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
         When I submit the add trust bank transaction form
         Then I should read a message stating that "Transaction details added successfully"
 
-    # Scenario Outline: Add transaction for trust bank with invalid details for Pay-in by G2P Customer to PTBA1 | RMcredit
-    #     When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
-    #     When I enter the paymaart ID as <paymaart_id> for trust bank transaction
-    #     When I enter the transaction amount as <amount> for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
-    #     When I upload the transaction POP document as <POP_document>
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that <message>
-    #     Examples:
-    #         | paymaart_id   | amount | transaction_pop_ref_no | POP_document        | message                                          |
-    #         | ""            | "1200" | "TRASACTION9910284"    | "document_back.png" | "Required field"                                 |
-    #         | "CMR82928453" | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field"                                 |
-    #         | "CMR82928454" | "1200" | ""                     | "document_back.png" | "Required field"                                 |
-    #         | "CMR82928455" | "1200" | "TRASACTION9910284"    | ""                  | "Required field"                                 |
-    #         | "CMR82239898" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Customer with this Paymaart ID does not exists" |
+    Scenario Outline: Add transaction for trust bank with invalid details for Pay-in by G2P Customer to PTBA1 | RMcredit
+        When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
+        When I enter the paymaart ID as <paymaart_id> for trust bank transaction
+        When I enter the transaction amount as <amount> for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
+        When I upload the transaction POP document as <POP_document>
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that <message>
+        Examples:
+            | paymaart_id   | amount | transaction_pop_ref_no | POP_document        | message                                          |
+            | ""            | "1200" | "TRASACTION9910284"    | "document_back.png" | "Required field"                                 |
+            | "CMR82928453" | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field"                                 |
+            | "CMR82928454" | "1200" | ""                     | "document_back.png" | "Required field"                                 |
+            # | "CMR82239898" | "1200" | "TRASACTION9910284"    | "document_back.png" | "Customer with this Paymaart ID does not exists" |
 
-    # @get_customer_completed_kyc_list
-    # Scenario: Add transaction for trust bank with valid details for Pay-in by G2P Customer to PTBA1 | RMcredit
-    #     When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
-    #     When I enter valid customer paymaart ID
-    #     When I enter the transaction amount as "100" for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the valid transaction POP Ref.No
-    #     When I upload the transaction POP document as "document_back.png"
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that "Transaction details added successfully"
+    @get_customer_completed_kyc_list
+    Scenario: Add transaction for trust bank with valid details for Pay-in by G2P Customer to PTBA1 | RMcredit
+        When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
+        When I enter valid customer paymaart ID
+        When I enter the transaction amount as "100" for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the valid transaction POP Ref.No
+        When I upload the transaction POP document as "document_back.png"
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that "Transaction details added successfully"
 
 
     # Scenario Outline: Add transaction for trust bank with invalid details for Pay-in by Paymaart OBO Agent to PTBA1 | RM credit
