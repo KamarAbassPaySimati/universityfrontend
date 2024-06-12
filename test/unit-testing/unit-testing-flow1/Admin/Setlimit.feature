@@ -81,9 +81,9 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
     And I click the update set limit button
     When I select the Full KYC tab
     Then I should see a static text stating "*Full KYC is daily maximum transaction limit"
-    And I update the Transaction Limit field for "Agent" to "12,000,000.00"
-    And I update the Transaction Limit field for "Merchant" to "11,000,000.00"
-    And I update the Transaction Limit field for "Customer" to "34,000.00"
+    And I update the Transaction Limit field for "Agent" to "300,000.00"
+    And I update the Transaction Limit field for "Merchant" to "300,000.00"
+    And I update the Transaction Limit field for "Customer" to "300,000.00"
     And I submit the update transaction limit form
     Then I should read a message stating that "Transaction Limit updated successfully"
 
@@ -108,8 +108,8 @@ Feature: Paymaart - Admin Web - Set Limit(Transaction and Balance)
     And I click the update set limit button
     When I select the Simplified KYC tab
     Then I should see a static text stating "*Simplified KYC is monthly maximum withdrawal limit"
-    When I update the Transaction Limit field for "Agent" to "100,000,000.00"
-    And I update the Transaction Limit field for "Merchant" to "100,000,000.00"
-    And I update the Transaction Limit field for "Customer" to "100,100,000.00"
+    When I update the Transaction Limit field for "Agent" to "300,000.00"
+    And I update the Transaction Limit field for "Merchant" to "300,000.00"
+    And I update the Transaction Limit field for "Customer" to "300,000.00"
     And I submit the update transaction limit form
     Then I should read a message stating that "Transaction Limit updated successfully"
