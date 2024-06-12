@@ -9,11 +9,13 @@ import Shimmer from '../../../components/Shimmers/Shimmer';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import Paginator from '../../../components/Paginator/Paginator';
 import { useNavigate, useParams } from 'react-router';
+import IframeModal from '../../../components/Iframe/IframeModal';
 
 export default function TransactionList ({ searchParams, setSearchParams }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
+    const [selectedIndex, setSelectedIndex] = useState(null);
     const { id } = useParams();
     const [errorMessage, setErrorMessage] = useState('');
     const Navigate = useNavigate();
@@ -143,7 +145,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                         </div>
                     </div>
                     }
-                    <button data-testid="add_trust_bank_transaction"
+                    {id !== 'PTBAT' && <button data-testid="add_trust_bank_transaction"
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
@@ -151,7 +153,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                         <p
                             onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`)}
                             className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
-                    </button>
+                    </button>}
                 </div>
             </div>
             <div className='scrollBar overflow-auto '>
@@ -209,8 +211,8 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
                                                 <Image
                                                     toolTipId={`eye-${index}`}
+                                                    onClick={() => setSelectedIndex(item.pop_file_key)}
                                                     testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
-
                                             </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
@@ -231,6 +233,10 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                 searchParams={searchParams}
                 type={'page_number'}
                 totalRecords={Data?.total_count}
+            />}
+            {selectedIndex !== null && <IframeModal
+                isOpen={selectedIndex !== null} handleClose={() => setSelectedIndex(null)} link={selectedIndex}
+                labelValue={selectedIndex?.split('/')[selectedIndex?.split('/').length - 1]}
             />}
         </div>
     );
