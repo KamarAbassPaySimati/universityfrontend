@@ -30,7 +30,7 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="customer_name" title={user?.full_name}
-                                    className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.full_name}`}</td>
+                                    className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.full_name ? user.full_name : '-'}</td>
                                 <td data-testid="paymaart_id" title={user?.paymaart_id}
                                     className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
                                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>

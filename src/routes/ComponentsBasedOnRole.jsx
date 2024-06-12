@@ -336,10 +336,17 @@ export const ComponentsBasedOnRole = {
                 path: '/paymaart-banks/trust-banks/add-trust-bank'
             },
             // G2p List
+            // G2p customer List
             {
                 name: 'G2P Customers',
                 element: <G2pList />,
-                pasth: '/financials/g2p'
+                path: '/financials/g2p'
+            },
+            // View G2P customer
+            {
+                name: 'G2P Customer View',
+                element: <G2PCustomerViewList />,
+                path: '/financials/g2p/view-profile/:id'
             },
             {
                 name: 'Paymaart View Trust Banks',
