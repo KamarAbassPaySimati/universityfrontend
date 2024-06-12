@@ -12,7 +12,6 @@ export const handleUpload = async (file, path) => {
                 accessLevel: 'guest'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
             }
         }).result;
-        console.log('Succeeded: ', result);
         return result;
     } catch (error) {
         console.log('Error : ', error);

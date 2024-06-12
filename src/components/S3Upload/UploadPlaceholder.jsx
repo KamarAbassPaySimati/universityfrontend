@@ -121,7 +121,6 @@ export default function UploadPlaceholder ({
                                                         accept="image/jpeg, image/png, application/pdf"
                                                         type="file" className="h-full w-full opacity-0" name=""/>
                                                 </>}
-
                                         </div>
                                     </div>
 
@@ -131,7 +130,6 @@ export default function UploadPlaceholder ({
                             </div>
                         </div>
                     }
-
                     {multiselectImage === undefined && <IframeModal
                         isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]}
                         labelValue={labelValue}/>}

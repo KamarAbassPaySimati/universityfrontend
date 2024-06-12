@@ -6,7 +6,7 @@ import UploadPlaceholder from '../../../components/S3Upload/UploadPlaceholder';
 import { useSelector } from 'react-redux';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
-import { TransactionCode } from './TransactionCode';
+import { TransactionCode } from '../TransactionCode';
 import GlobalContext from '../../../components/Context/GlobalContext';
 
 export default function AddTransaction () {
@@ -21,10 +21,15 @@ export default function AddTransaction () {
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
             return 'Agent Paymaart ID';
+        case `Pay-in by Standard Customer to ${id} | RM credit`:
+            return 'Customer Paymaart ID';
+        case `Pay-in by G2P Customer to ${id} | RM credit`:
+            return 'G2P Customer Paymaart ID';
         default:
             return '<Beneficiary> Paymaart ID';
         }
     };
+
     const InterNationalAddress = {
         nothing_to_show: {
             Type: {
@@ -33,7 +38,9 @@ export default function AddTransaction () {
                 key: 'transaction_code',
                 require: true,
                 options: [
-                    `Pay-in by Agent to ${id} | RM credit`
+                    `Pay-in by Agent to ${id} | RM credit`,
+                    `Pay-in by Standard Customer to ${id} | RM credit`,
+                    `Pay-in by G2P Customer to ${id} | RM credit`
                 ]
             },
             '<Beneficiary> Paymaart ID': {
@@ -82,6 +89,17 @@ export default function AddTransaction () {
             setFiledData((prevState) => ({ ...prevState, [id]: value }));
         }
     };
+    const getEndPoint = () => {
+        switch (filedData.transaction_code) {
+        case `Pay-in by Agent to ${id} | RM credit`:
+        case `Pay-in by Standard Customer to ${id} | RM credit`:
+            return 'direct-payin';
+        case `Pay-in by G2P Customer to ${id} | RM credit`:
+            return 'g2p-payin';
+        default:
+            return '<Beneficiary> Paymaart ID';
+        }
+    };
     const handleAddTransaction = async () => {
         setLoading(true);
         setSubmitSelected(false);
@@ -110,7 +128,7 @@ export default function AddTransaction () {
                     pop_file_key: filedData.pop_file_key,
                     bank_id: id
                 };
-                const res = await dataService.PostAPI('bank-transactions/direct-payin', payload);
+                const res = await dataService.PostAPI(`bank-transactions/${getEndPoint()}`, payload);
                 if (res.error) {
                     setToastError(res.data.data.message);
                 } else {
