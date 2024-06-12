@@ -102,7 +102,6 @@ export function TransactionCode (value) {
 }
 
 export function TransactionDescription (value) {
-    console.log('filedData.transaction_code', value);
     switch (value) {
     // PTBA1 mappings
     case 'AGTCRPTBA1':
