@@ -1,5 +1,5 @@
 /* eslint-disable camelcase */
-const { When, Then } = require('@cucumber/cucumber');
+const { When } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
 const assert = require('assert');
 const { driver } = require('../1_Driver.js');
