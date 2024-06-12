@@ -10,6 +10,7 @@ import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import Paginator from '../../../components/Paginator/Paginator';
 import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
+import { TransactionDescription } from '../TransactionCode';
 
 export default function TransactionList ({ searchParams, setSearchParams }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -193,8 +194,10 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.created_at || '-'}</td>
                                             <td data-testid="name"
-                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.transaction_type || '-'}</td>
+                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'
+                                                title={TransactionDescription(item?.transaction_code)}
+                                            >
+                                                {TransactionDescription(item?.transaction_code) || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>

@@ -6,7 +6,7 @@ import UploadPlaceholder from '../../../components/S3Upload/UploadPlaceholder';
 import { useSelector } from 'react-redux';
 import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
-import { TransactionCode } from './TransactionCode';
+import { TransactionCode } from '../TransactionCode';
 import GlobalContext from '../../../components/Context/GlobalContext';
 
 export default function AddTransaction () {

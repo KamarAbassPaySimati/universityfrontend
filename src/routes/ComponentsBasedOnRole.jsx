@@ -115,6 +115,16 @@ export const ComponentsBasedOnRole = {
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id/add-transaction'
             },
             {
+                name: 'Paymaart View Capital Bank',
+                element: <BankTransactionView type={'main-capital'}/>,
+                path: '/paymaart-banks/main-capital/view-main-capital/:id'
+            },
+            {
+                name: 'Paymaart Add Capital Transaction',
+                element: <AddTransaction type={'main-capital'}/>,
+                path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
+            },
+            {
                 name: 'Agent KYC Registration',
                 element: <RegisterKYC role={'agent'} />,
                 path: '/users/agents/register-agent/kyc-registration/:id'
@@ -275,6 +285,16 @@ export const ComponentsBasedOnRole = {
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id/add-transaction'
             },
             {
+                name: 'Paymaart View Capital Bank',
+                element: <BankTransactionView type={'main-capital'}/>,
+                path: '/paymaart-banks/main-capital/view-main-capital/:id'
+            },
+            {
+                name: 'Paymaart Add Capital Transaction',
+                element: <AddTransaction type={'main-capital'}/>,
+                path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
+            },
+            {
                 name: 'Agent KYC Registration',
                 element: <RegisterKYC role={'agent'} />,
                 path: '/users/agents/register-agent/kyc-registration/:id'
@@ -357,6 +377,16 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Trust Bank Transaction',
                 element: <AddTransaction type={'trust-bank'}/>,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id/add-transaction'
+            },
+            {
+                name: 'Paymaart View Capital Bank',
+                element: <BankTransactionView type={'main-capital'}/>,
+                path: '/paymaart-banks/main-capital/view-main-capital/:id'
+            },
+            {
+                name: 'Paymaart Add Capital Transaction',
+                element: <AddTransaction type={'main-capital'}/>,
+                path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
             }
         ]
 };
