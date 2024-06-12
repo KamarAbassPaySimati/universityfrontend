@@ -8,13 +8,17 @@ import { useSelector } from 'react-redux';
 import Shimmer from '../../../components/Shimmers/Shimmer';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import Paginator from '../../../components/Paginator/Paginator';
+import { useNavigate, useParams } from 'react-router';
+import IframeModal from '../../../components/Iframe/IframeModal';
 
 export default function TransactionList ({ searchParams, setSearchParams }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
+    const [selectedIndex, setSelectedIndex] = useState(null);
+    const { id } = useParams();
     const [errorMessage, setErrorMessage] = useState('');
-
+    const Navigate = useNavigate();
     const [selectedFilter, setSelectedFilter] = useState({
         start_date: new Date(searchParams.get('start_date')).getTime() / 1000,
         end_date: new Date(searchParams.get('end_date')).getTime() / 1000
@@ -141,13 +145,15 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                         </div>
                     </div>
                     }
-                    <button data-testid="add_new_bank"
+                    {id !== 'PTBAT' && <button data-testid="add_trust_bank_transaction"
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
                             className='mr-[8px]'/>
-                        <p className='text-[14px] font-semibold text-[#ffffff]'>Add Trust Bank</p>
-                    </button>
+                        <p
+                            onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`)}
+                            className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
+                    </button>}
                 </div>
             </div>
             <div className='scrollBar overflow-auto '>
@@ -205,8 +211,8 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
                                                 <Image
                                                     toolTipId={`eye-${index}`}
+                                                    onClick={() => setSelectedIndex(item.pop_file_key)}
                                                     testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
-
                                             </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
@@ -221,12 +227,16 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                 }
             </div>
             {!loading && Data?.transactions?.length !== 0 && <Paginator
-                currentPage={searchParams.get('page')}
+                currentPage={searchParams.get('page_number')}
                 totalPages={Math.ceil(Data?.total_count / 10)}
                 setSearchParams={setSearchParams}
                 searchParams={searchParams}
                 type={'page_number'}
                 totalRecords={Data?.total_count}
+            />}
+            {selectedIndex !== null && <IframeModal
+                isOpen={selectedIndex !== null} handleClose={() => setSelectedIndex(null)} link={selectedIndex}
+                labelValue={selectedIndex?.split('/')[selectedIndex?.split('/').length - 1]}
             />}
         </div>
     );
