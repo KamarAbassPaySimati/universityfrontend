@@ -18,6 +18,7 @@ export default function IframeModal ({ isOpen, handleClose, link, labelValue }) 
     //         document.removeEventListener('contextmenu', handleContextMenu);
     //     };
     // }, [isOpen]);
+    console.log('link', `${CDN}${link}`);
     const imageTypes = ['png', 'jpeg', 'jpg'];
     return (
         <>
