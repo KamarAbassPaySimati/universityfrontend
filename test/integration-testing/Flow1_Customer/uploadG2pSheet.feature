@@ -9,7 +9,6 @@ Feature: Paymaart - Admin Web - Upload G2P Sheet
     The number of lines is restricted to 100.
     There should be an option to delete the existing excel saved sheet.
 
-  @add_admin_user @create_new_user_and_login
   Scenario: Admin viewing G2P customer profile
     Given I navigate to G2P customer listing page
     Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
