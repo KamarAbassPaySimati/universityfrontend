@@ -9,17 +9,19 @@ Feature: Paymaart - Admin Web - Transfer amount to G2P Customer
     The number of lines is restricted to 100.
     There should be an option to delete the existing excel saved sheet.
 
-    @add_admin_user
+@add_admin_user
 @create_new_user_and_login
 Scenario: View list all G2P customers
       Given I navigate to G2P customer listing page
       Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
       
-Scenario: View G2P customer details screen
+Scenario: Transferring amount to G2P customer
       Given I navigate to G2P customer listing page
       When I click on the view button for customer details
       Then I should view G2P customer details
       Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
+      When I upload the valid excel sheet as "ValidSheet.xlsx"
+      And I should read a message stating "Sheet uploaded successfully"
       When I click on transfer amount button
       Then I should see a confirmation prompt to execute payment
       When I click on confirm button for transfer
