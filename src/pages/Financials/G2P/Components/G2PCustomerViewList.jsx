@@ -53,41 +53,62 @@ export default function G2PCustomerViewList() {
     //             const workbook = XLSX?.read(data, { type: 'array' });
     //             const sheetName = workbook?.SheetNames[0];
     //             const worksheet = workbook?.Sheets[sheetName];
-    //             const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
+    //             const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+    //             const headers = rows[0];
 
     //             const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
     //             const isValid = requiredHeaders.every(header => headers.includes(header));
 
-    //             if (isValid) {
-    //                 const path = 'g2p_customers';
-    //                 const file = await handleUpload(e.target.files[0], path);
-    //                 if (file.key !== '') {
-    //                     const payload = {
-    //                         sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
-    //                         uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
-    //                         paymaart_id: user?.paymaart_id,
-    //                         file_key: file.key
-    //                     };
-    //                     const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
-    //                     if (response.error === false) {
-    //                         setIsValid(true);
-    //                         setThreedotLoader(false);
-    //                         setToastSuccess(response.data.message);
-    //                         getG2PCustomerView();
-    //                         e.target.value = '';
-    //                         setFile(null);
-    //                     }
-    //                 }
-    //             } else {
+    //             if (!isValid) {
     //                 setIsValid(false);
     //                 setThreedotLoader(false);
     //                 setToastError('Upload failed due to incorrect format');
     //                 e.target.value = '';
     //                 setFile(null);
+    //                 return;
     //             }
-    //             // setTimeout(() => {
-    //             //     setToastSuccess('');
-    //             // }, 3000); // Clear message after 3 seconds
+
+    //             // Check if all rows except header are empty
+    //             const hasData = rows.slice(1).some(row => row.some(cell => cell !== undefined && cell !== null && cell !== ''));
+    //             if (!hasData) {
+    //                 setIsValid(false);
+    //                 setThreedotLoader(false);
+    //                 setToastError('Please fill the data');
+    //                 e.target.value = '';
+    //                 setFile(null);
+    //                 return;
+    //             }
+
+    //             // Check the number of rows
+    //             const rowCount = rows.length - 1; // Exclude header row
+    //             if (rowCount > 200) {
+    //                 setIsValid(false);
+    //                 setThreedotLoader(false);
+    //                 setToastError('Maximum 200 beneficiaries per upload');
+    //                 e.target.value = '';
+    //                 setFile(null);
+    //                 return;
+    //             }
+
+    //             const path = 'g2p_customers';
+    //             const file = await handleUpload(e.target.files[0], path);
+    //             if (file.key !== '') {
+    //                 const payload = {
+    //                     sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
+    //                     uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
+    //                     paymaart_id: user?.paymaart_id,
+    //                     file_key: file.key
+    //                 };
+    //                 const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
+    //                 if (response.error === false) {
+    //                     setIsValid(true);
+    //                     setThreedotLoader(false);
+    //                     setToastSuccess(response.data.message);
+    //                     getG2PCustomerView();
+    //                     e.target.value = '';
+    //                     setFile(null);
+    //                 }
+    //             }
     //         };
     //         reader.readAsArrayBuffer(selectedFile);
     //         setFile(selectedFile);
@@ -114,6 +135,17 @@ export default function G2PCustomerViewList() {
                     setIsValid(false);
                     setThreedotLoader(false);
                     setToastError('Upload failed due to incorrect format');
+                    e.target.value = '';
+                    setFile(null);
+                    return;
+                }
+
+                // Check if all rows except header are empty
+                const hasData = rows.slice(1).some(row => row.some(cell => cell !== undefined && cell !== null && cell.toString().trim() !== ''));
+                if (!hasData) {
+                    setIsValid(false);
+                    setThreedotLoader(false);
+                    setToastError('Uploaded file is empty. Please fill in some data and try again');
                     e.target.value = '';
                     setFile(null);
                     return;
@@ -191,7 +223,7 @@ export default function G2PCustomerViewList() {
                             />
                             <div>
                                 <div className="flex items-start">
-                                    <a download href='/public/sample_G2P_Customers.xlsx'>
+                                    <a download href='/public/Sample-file.xlsx'>
                                         <button onClick={() => setToastSuccess('Sample file downloaded successfully')} type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
                                             Sample File
                                         </button>
