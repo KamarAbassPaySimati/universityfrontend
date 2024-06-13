@@ -150,6 +150,7 @@ export default function FelidDivision ({
                                                                 : 'w-[339px]'}
                                                             divClassName='mx-2.5'
                                                             value={states[divObj?.key]}
+                                                            staticText={divObj?.staticText}
                                                             // onFocus={handleFocus}
                                                             id={divObj?.key}
                                                             testId={divObj?.key}
