@@ -16,7 +16,7 @@ import { handleUpload } from '../../../../components/S3Upload/S3Functions';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { BeatLoader } from 'react-spinners';
 
-export default function G2PCustomerViewList() {
+export default function G2PCustomerViewList () {
     const { id } = useParams();
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const dispatch = useDispatch();
@@ -26,94 +26,24 @@ export default function G2PCustomerViewList() {
     const [file, setFile] = useState(null);
     const [modalView, setModalView] = useState(false);
     const [isValid, setIsValid] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [validationMessage, setValidationMessage] = useState('');
     const { View, loading, error } = useSelector(state => state.G2PCustomerView); // to get the api respons
-    const [selectedSheets, setSelectedSheets] = useState({});
+    // const [selectedSheets, setSelectedSheets] = useState();
     const [threedotLoader, setThreedotLoader] = useState(false);
     const { user } = useSelector((state) => state.auth);
 
     const getG2PCustomerView = async () => {
         try {
             await dispatch(G2PCustomerViewData(`${id}?${searchParams.toString()}`));
+            console.log(G2PCustomerViewData, 'G2PCustomerViewData');
         } catch (error) {
         }
     };
-
+    console.log(View?.sheets);
     const handleUploadSheet = async () => {
         fileInputRef.current.click();
     };
-
-    // const handleFileChange = async (e) => {
-    //     setThreedotLoader(true);
-    //     const selectedFile = e.target.files[0];
-    //     if (selectedFile) {
-    //         const reader = new FileReader();
-    //         reader.onload = async (event) => {
-    //             const data = new Uint8Array(event?.target?.result);
-    //             const workbook = XLSX?.read(data, { type: 'array' });
-    //             const sheetName = workbook?.SheetNames[0];
-    //             const worksheet = workbook?.Sheets[sheetName];
-    //             const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-    //             const headers = rows[0];
-
-    //             const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
-    //             const isValid = requiredHeaders.every(header => headers.includes(header));
-
-    //             if (!isValid) {
-    //                 setIsValid(false);
-    //                 setThreedotLoader(false);
-    //                 setToastError('Upload failed due to incorrect format');
-    //                 e.target.value = '';
-    //                 setFile(null);
-    //                 return;
-    //             }
-
-    //             // Check if all rows except header are empty
-    //             const hasData = rows.slice(1).some(row => row.some(cell => cell !== undefined && cell !== null && cell !== ''));
-    //             if (!hasData) {
-    //                 setIsValid(false);
-    //                 setThreedotLoader(false);
-    //                 setToastError('Please fill the data');
-    //                 e.target.value = '';
-    //                 setFile(null);
-    //                 return;
-    //             }
-
-    //             // Check the number of rows
-    //             const rowCount = rows.length - 1; // Exclude header row
-    //             if (rowCount > 200) {
-    //                 setIsValid(false);
-    //                 setThreedotLoader(false);
-    //                 setToastError('Maximum 200 beneficiaries per upload');
-    //                 e.target.value = '';
-    //                 setFile(null);
-    //                 return;
-    //             }
-
-    //             const path = 'g2p_customers';
-    //             const file = await handleUpload(e.target.files[0], path);
-    //             if (file.key !== '') {
-    //                 const payload = {
-    //                     sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
-    //                     uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
-    //                     paymaart_id: user?.paymaart_id,
-    //                     file_key: file.key
-    //                 };
-    //                 const response = await dataService.PostAPI(`g2p-users/${View?.transaction_id}`, payload);
-    //                 if (response.error === false) {
-    //                     setIsValid(true);
-    //                     setThreedotLoader(false);
-    //                     setToastSuccess(response.data.message);
-    //                     getG2PCustomerView();
-    //                     e.target.value = '';
-    //                     setFile(null);
-    //                 }
-    //             }
-    //         };
-    //         reader.readAsArrayBuffer(selectedFile);
-    //         setFile(selectedFile);
-    //     }
-    // };
 
     const handleFileChange = async (e) => {
         setThreedotLoader(true);
@@ -130,7 +60,6 @@ export default function G2PCustomerViewList() {
 
                 const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
                 const isValid = requiredHeaders.every(header => headers.includes(header));
-
                 if (!isValid) {
                     setIsValid(false);
                     setThreedotLoader(false);
@@ -274,7 +203,6 @@ export default function G2PCustomerViewList() {
                                     setSearchparams={setSearchParams}
                                     modalView={modalView}
                                     setModalView={setModalView}
-                                    setSelectedSheets={setSelectedSheets}
                                     file={file}
                                 />
                             </div>}
