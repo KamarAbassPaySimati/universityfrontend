@@ -30,6 +30,18 @@ export default function AddTransaction () {
         }
     };
 
+    const getStaticText = () => {
+        switch (filedData.transaction_code) {
+        case `Pay-in by Agent to ${id} | RM credit`:
+            return 'AGT';
+        case `Pay-in by Standard Customer to ${id} | RM credit`:
+        case `Pay-in by G2P Customer to ${id} | RM credit`:
+            return 'CMR';
+        default:
+            return undefined;
+        }
+    };
+
     const InterNationalAddress = {
         nothing_to_show: {
             Type: {
@@ -48,7 +60,8 @@ export default function AddTransaction () {
                 placeHolder: 'Enter paymaart ID',
                 type: 'input',
                 key: 'entry_for',
-                require: true
+                require: true,
+                staticText: getStaticText()
             },
             Amount: {
                 label: 'Amount',
@@ -74,13 +87,17 @@ export default function AddTransaction () {
         if (type === 'input') {
             if (id === 'amount') {
                 if (value.target.value?.length <= 18) {
-                    const regex = /^(\d{1,15}(\.\d{0,2})?)?$/;
+                    const regex = /^(\d{1,8}(\.\d{0,2})?)?$/;
                     if (regex.test(value.target.value)) {
                         console.log('type', type, id, regex.test(value.target.value));
                         setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
                     } else {
                         setFiledData((prevState) => ({ ...prevState, [id]: filedData.amount }));
                     }
+                }
+            } else if (id === 'entry_for') {
+                if (value.target.value.length <= 10) {
+                    setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
                 }
             } else {
                 setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
