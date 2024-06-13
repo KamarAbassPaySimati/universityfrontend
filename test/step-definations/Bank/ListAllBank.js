@@ -20,7 +20,7 @@ Given('I navigate to capital bank listing', async function () {
 });
 Given('I navigate to Transaction fee and commision bank listing', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await driver.get('http://localhost:3000/paymaart-banks?type=Transaction-fee-and-commision-bank');
+    await driver.get('http://localhost:3000/paymaart-banks?type=transaction-fees-and-commissions');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
