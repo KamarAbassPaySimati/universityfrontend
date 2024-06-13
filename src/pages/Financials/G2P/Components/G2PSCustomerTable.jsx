@@ -88,10 +88,10 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
                                         className='cursor-pointer'
                                         toolTipId={`delete-${index}`}
                                         src='delete'
-                                        testId={`view-${index}`}
+                                        testId={`delete-${index}`}
                                         onClick={() => handleApproveClick(item._id)}
                                     />
-                                    <Image className='cursor-pointer' toolTipId={`transaction-${index}`} src='transaction' testId={`view-${index}`}
+                                    <Image className='cursor-pointer' toolTipId={`transaction-${index}`} src='transaction' testId={`transaction-${index}`}
                                         onClick={() => Navigate(`/financials/g2p/${item?.paymaart_id}`)} />
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
