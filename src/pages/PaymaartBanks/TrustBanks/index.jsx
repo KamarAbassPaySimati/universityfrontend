@@ -53,6 +53,8 @@ const TrustBanks = () => {
                 fetchDataByUrl('list-transaction-fee-commission');
             } else if (searchParams.get('type') === 'suspense') {
                 fetchDataByUrl('list-suspense-account');
+            } else if (searchParams.get('type') === 'taxes') {
+                fetchDataByUrl('list-tax-account');
             }
         }
     }, [searchParams]);

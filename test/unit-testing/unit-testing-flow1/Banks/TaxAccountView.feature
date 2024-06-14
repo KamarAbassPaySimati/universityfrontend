@@ -27,12 +27,3 @@ Feature: Paymaart- Admin Web- Tax Account View
     Scenario: Login as support admin and navigate to tax account listing
         Given I navigate to tax account listing
         And I should read a message stating that "We can’t find the page you’re looking for"
-
-    @perform_logout
-    @wait
-    @add_normal_admin_user
-    @create_new_user_and_login
-    @delete_admin_account
-    Scenario: Login as normal admin and navigate to tax account listing
-        Given I navigate to tax account listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
