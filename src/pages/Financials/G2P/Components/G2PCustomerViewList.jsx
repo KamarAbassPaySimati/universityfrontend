@@ -133,6 +133,7 @@ export default function G2PCustomerViewList () {
                 paths={['Financials', 'G2P']}
                 pathurls={['financials/G2P']}
                 header=''
+                g2pHeight='true'
                 minHeightRequired={true}
                 ChildrenElement
             >
@@ -152,7 +153,7 @@ export default function G2PCustomerViewList () {
                             />
                             <div>
                                 <div className="flex items-start">
-                                    <a download href='/public/Sample-file.xlsx'>
+                                    <a download href='/Sample-file.xlsx'>
                                         <button onClick={() => setToastSuccess('Sample file downloaded successfully')} type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
                                             Sample File
                                         </button>
