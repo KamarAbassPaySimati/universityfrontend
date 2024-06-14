@@ -58,7 +58,9 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
             const body = {
                 object_key: isTransactionModal,
                 sender_id: View.paymaart_id,
-                user_amount: View.remaining_amount
+                user_amount: View.remaining_amount,
+                transaction_id: View.transaction_id,
+                created_at: View.created_at
             };
             const response = await dataService.PostAPI('bank-transactions/g2p-transaction', body);
             if (!response.error) {

@@ -21,8 +21,8 @@ Scenario: Transferring amount to G2P customer
       Then I should view G2P customer details
       Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
       When I upload the valid excel sheet as "ValidSheet.xlsx"
-      And I should read a message stating "Sheet uploaded successfully"
+      And I should read a message stating that "Successfully Uploaded G2P sheet"
       When I click on transfer amount button
       Then I should see a confirmation prompt to execute payment
       When I click on confirm button for transfer
-      And I should read a message stating "Sheet transferred successfully" for transfer
+      And I should read a message stating that "Sheet transferred successfully"
