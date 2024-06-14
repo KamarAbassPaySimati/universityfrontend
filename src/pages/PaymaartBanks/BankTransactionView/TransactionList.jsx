@@ -70,7 +70,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
 
     const getDrCr = (value) => {
         let givenValue = value.toString();
-        if (givenValue.substring(0, 0) === '-') {
+        if (givenValue.substring(0, 1) === '-') {
             givenValue = `${givenValue} DR`;
         } else {
             givenValue = `${givenValue} CR`;

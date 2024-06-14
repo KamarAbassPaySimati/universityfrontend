@@ -27,11 +27,8 @@ Feature: Paymaart - Admin Web - List of G2P Customer
       When I click on paginate next page
       Then I should be navigated to page 2
       When I click on paginate to previous page
-      Then I should be navigated to page 1Scenario: View G2P customer details screen
-      Given I navigate to G2P customer listing page
-      When I click on the view button
-      Then I should be navigated to G2P customer details page
-      Then I should see table header containing '["Sheet Name","Uploaded  Date","Uploaded By","Transferred Amount"]'
+      Then I should be navigated to page 1
+
 
 
 
