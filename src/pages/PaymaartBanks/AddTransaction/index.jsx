@@ -58,7 +58,7 @@ export default function AddTransaction () {
             '<Beneficiary> Paymaart ID': {
                 label: getPaymaartIdType(),
                 placeHolder: 'Enter paymaart ID',
-                type: 'input',
+                type: 'inputStaticText',
                 key: 'entry_for',
                 require: true,
                 staticText: getStaticText()

@@ -25,8 +25,7 @@ const InputField = ({
     divClassName,
     editAction,
     disableInput,
-    ViewClass,
-    staticText // New prop for static text
+    ViewClass
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -36,40 +35,29 @@ const InputField = ({
         }
     };
 
-    const handleChange = (e) => {
-        const updatedValue = e.target.value;
-        onChange(updatedValue, id, inputType);
-    };
-
     return (
         <div className={`flex flex-col gap-2 relative ${divClassName || ''}`}>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
-            <div className="relative">
-                {staticText && (
-                    <span className="static-text absolute left-2 top-1/2
-                    transform -translate-y-1/2 text-neutral-primary font-[400] text-[14px] leading-[22px]">
-                        {staticText}
-                    </span>
-                )}
-                <input
-                    autoComplete={autoComplete || 'off'}
-                    data-testid={testId}
-                    value={value}
-                    type={givenType ? isPasswordType ? 'password' : 'text' : type || 'text'}
-                    className={`placeholder:text-neutral-secondary text-neutral-primary ${staticText ? 'pl-[45px]' : 'pl-[10px]'}
-                    ${ViewClass || ((editAction === 'yes' || disableInput) ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]')} 
-                    py-[11px] ${type === 'password' ? 'pr-[62px]' : ''} 
+            <input
+                autoComplete={autoComplete || 'off'}
+                data-testid={testId}
+                value={value}
+                type={givenType ? isPasswordType ? 'password' : 'text' : type || 'text'}
+                className={`placeholder:text-neutral-secondary text-neutral-primary 
+                ${ViewClass || ((editAction === 'yes' || disableInput) ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]')} 
+                px-[10px] py-[11px] ${type === 'password' ? 'pr-[62px]' : ''} 
                     font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal 
-                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr`}
-                    id={id}
-                    placeholder={staticText ? '' : placeholder}
-                    onFocus={() => onFocus(id)}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
-                    maxLength={maxLength}
-                    disabled={editAction === 'yes' || disableInput}
-                />
-            </div>
+                    ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className} rounded-tl rounded-tr `}
+                id={id}
+                placeholder={placeholder}
+                onFocus={() => onFocus(id)}
+                onChange={(e) => onChange(e, id, inputType)}
+                onKeyDown={handleKeyDown}
+                maxLength={maxLength}
+                disabled = {editAction === 'yes' || disableInput}
+
+            />
+            {/* && value.length > 0 */}
             {givenType === 'password' && value.length > 0 &&
                 <div className={`absolute right-0 py-[18.79px] pl-[10px] pr-[23.77px] cursor-pointer 
                     ${error || loginError ? 'bottom-[30px]' : 'bottom-0'}`}
