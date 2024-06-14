@@ -16,7 +16,11 @@ export default function BankTransactionView ({ type }) {
     const handleViewData = async () => {
         try {
             // Fetch data using the provided URL
-            const endPoint = `${type === 'trust-bank' ? 'specific-bank' : 'capital-transactions'}?${searchParams.toString()}`;
+            const endPoint = `${type === 'trust-bank'
+                ? 'specific-bank'
+                : type === 'suspense-account'
+                    ? 'suspense-transactions'
+                    : 'capital-transactions'}?${searchParams.toString()}`;
             await dispatch(BankTransactionViewData(endPoint));
 
             // Handle setting params and checking List length
@@ -33,7 +37,8 @@ export default function BankTransactionView ({ type }) {
         <div>
             <CardHeader
                 activePath='Transaction Details'
-                paths={['Paymaart Banks', type === 'trust-bank' ? 'Trust Banks' : 'Main Capital']}
+                paths={['Paymaart Banks',
+                    type === 'trust-bank' ? 'Trust Banks' : type === 'suspense-account' ? 'Suspense Account' : 'Main Capital']}
                 pathurls={[`paymaart-banks?type=${type}`]}
                 minHeightRequired={true}
                 // buttonText={isEditing ? '' : 'Update'}
@@ -45,7 +50,11 @@ export default function BankTransactionView ({ type }) {
                 ChildrenElement
             >
                 <BankViewTopHeader
-                    Name={type === 'trust-bank' ? 'Trust Bank' : 'Main Capital Account '}
+                    Name={type === 'trust-bank'
+                        ? 'Trust Bank'
+                        : type === 'suspense-account'
+                            ? 'Suspense Account'
+                            : 'Main Capital Account '}
                     Balance={
                         (type === 'trust-bank' && id !== 'PTBAT')
                             ? undefined

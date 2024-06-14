@@ -64,7 +64,9 @@ const BankTable = (
                                             onClick={() => Navigate(
                                                 searchParams.get('type') === 'trust-banks'
                                                     ? `/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`
-                                                    : `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`
+                                                    : searchParams.get('type') === 'suspense'
+                                                        ? `/paymaart-banks/suspense-account/view-suspense-account/${bank?.ref_no}`
+                                                        : `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`
                                             )}
                                         />
                                     </>

@@ -87,20 +87,20 @@ export default function AddTransaction () {
         if (type === 'input') {
             if (id === 'amount') {
                 if (value.target.value?.length <= 18) {
-                    const regex = /^(\d{1,8}(\.\d{0,2})?)?$/;
+                    const regex = /^\d{0,8}(\.\d{0,2})?$/;
                     if (regex.test(value.target.value)) {
-                        console.log('type', type, id, regex.test(value.target.value));
                         setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
-                    } else {
-                        setFiledData((prevState) => ({ ...prevState, [id]: filedData.amount }));
                     }
                 }
-            } else if (id === 'entry_for') {
-                if (value.target.value.length <= 10) {
+            }
+        } else if (type === 'inputStaticText') {
+            if (value.target.value.length <= 8) {
+                const regex = /^\d{0,9}$/;
+                if (regex.test(value.target.value)) {
                     setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
+                } else {
+                    setFiledData((prevState) => ({ ...prevState, [id]: filedData.entry_for }));
                 }
-            } else {
-                setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
             }
         } else {
             setFiledData((prevState) => ({ ...prevState, [id]: value }));
@@ -138,7 +138,7 @@ export default function AddTransaction () {
             try {
                 const payload = {
                     transaction_code: TransactionCode(filedData.transaction_code),
-                    entry_for: filedData?.entry_for,
+                    entry_for: `${getStaticText()}${filedData?.entry_for}`,
                     entry_by: filedData?.entry_by,
                     amount: parseInt(filedData?.amount),
                     transaction_pop_ref_number: filedData.transaction_pop_ref_number,
