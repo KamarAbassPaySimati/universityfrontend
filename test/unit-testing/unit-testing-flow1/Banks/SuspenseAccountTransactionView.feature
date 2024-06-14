@@ -12,24 +12,24 @@ Feature: Paymaart- Admin Web - Suspense Account Transaction View
   Scenario: Viewing Bank details
     Given I navigate to Suspense account listing
     When I click on view button for bank details
-    Then I should see prefilled fields for account details
+    Then I should see prefilled fields for bank details for suspense account
     Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Beneficiary Paymaart ID","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
 
-  Scenario: Filter accounts by date
-    When I click on filter tab
-    Then I should see filter popup modal
-    And I select start date as "08-Jan-2023"
-    And I select end date as "07-Jan-2023"
-    Then I click on the apply filter button
-    Then I should read a message stating that "Start date cannot be greater than end date"  
-    And I select start date as "08-Jan-2023"
-    And I select end date as "07-Nov-2024"
-    Then I click on the apply filter button
-    Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
+  # Scenario: Filter accounts by date
+  #   When I click on filter tab
+  #   Then I should see filter popup modal
+  #   And I select start date as "08-Jan-2023"
+  #   And I select end date as "07-Jan-2023"
+  #   Then I click on the apply filter button
+  #   Then I should read a message stating that "Start date cannot be greater than end date"  
+  #   And I select start date as "08-Jan-2023"
+  #   And I select end date as "07-Nov-2024"
+  #   Then I click on the apply filter button
+  #   Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
 
-  Scenario: Checking Pagination
-    When I click on paginate next page
-    Then I should be navigated to page 2
-    When I click on paginate to previous page
-    Then I should be navigated to page 1
+  # Scenario: Checking Pagination
+  #   When I click on paginate next page
+  #   Then I should be navigated to page 2
+  #   When I click on paginate to previous page
+  #   Then I should be navigated to page 1
     

@@ -22,6 +22,7 @@ export default function BankDetails ({ loading, bankDetails }) {
                         </div>
                     )))
                     : (Object.keys(bankDetails).map((itemkey, index = 0) => (
+                        bankDetails[itemkey] !== undefined &&
                         <div key={index} className='w-1/3 px-1'>
                             <ViewDetail
                                 itemkey={itemkey.replaceAll('_', ' ')}

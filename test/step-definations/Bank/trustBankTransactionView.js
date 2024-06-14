@@ -38,6 +38,25 @@ Then('I should see prefilled fields for bank details', async function () {
     await assert.notEqual(lastUpdateDate, '');
     await assert.notEqual(balance, '');
 });
+Then('I should see prefilled fields for bank details for suspense account', async function () {
+    const refNo = await driver.wait(until.elementLocated(By.css('[data-testid="Ref No."]'))).getText();
+    const Name = await driver.wait(until.elementLocated(By.css('[data-testid="Name"]'))).getText();
+    const purpose = await driver.wait(until.elementLocated(By.css('[data-testid="Purpose"]'))).getText();
+    const lastUpdateDate = await driver.wait(until.elementLocated(By.css('[data-testid="Last Update Date / Time"]'))).getText();
+    const balance = await driver.wait(until.elementLocated(By.css('[data-testid="Balance"]'))).getText();
+
+    await assert.notEqual(refNo, '-');
+    await assert.notEqual(Name, '-');
+    await assert.notEqual(purpose, '-');
+    await assert.notEqual(lastUpdateDate, '-');
+    await assert.notEqual(balance, '-');
+
+    await assert.notEqual(refNo, '');
+    await assert.notEqual(Name, '');
+    await assert.notEqual(purpose, '');
+    await assert.notEqual(lastUpdateDate, '');
+    await assert.notEqual(balance, '');
+});
 
 Then('I should be navigated to bank details page', async function () {
     await driver.get('http://localhost:3000/paymartbanks/bankdetails');
