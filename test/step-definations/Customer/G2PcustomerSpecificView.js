@@ -30,14 +30,14 @@ Then('I should view G2P customer details', async function () {
 });
 
 When('I click on view excel sheet overview', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-sheet-overview"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 });
 
 When('I click on the delete sheet button', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="sheetDeleteButton"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="delete-0"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
 });

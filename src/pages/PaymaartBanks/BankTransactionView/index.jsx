@@ -16,7 +16,8 @@ export default function BankTransactionView ({ type }) {
     const handleViewData = async () => {
         try {
             // Fetch data using the provided URL
-            await dispatch(BankTransactionViewData(searchParams.toString()));
+            const endPoint = `${type === 'trust-bank' ? 'specific-bank' : 'capital-transactions'}?${searchParams.toString()}`;
+            await dispatch(BankTransactionViewData(endPoint));
 
             // Handle setting params and checking List length
         } catch (error) {
@@ -32,7 +33,7 @@ export default function BankTransactionView ({ type }) {
         <div>
             <CardHeader
                 activePath='Transaction Details'
-                paths={['Paymaart Banks', 'Trust Banks']}
+                paths={['Paymaart Banks', type === 'trust-bank' ? 'Trust Banks' : 'Main Capital']}
                 pathurls={[`paymaart-banks?type=${type}`]}
                 minHeightRequired={true}
                 // buttonText={isEditing ? '' : 'Update'}
@@ -43,7 +44,22 @@ export default function BankTransactionView ({ type }) {
                 // headerWithoutButton={isEditing}
                 ChildrenElement
             >
-                <BankViewTopHeader Name={'Trust Bank'}/>
+                <BankViewTopHeader
+                    Name={type === 'trust-bank' ? 'Trust Bank' : 'Main Capital Account '}
+                    Balance={
+                        (type === 'trust-bank' && id !== 'PTBAT')
+                            ? undefined
+                            : <div className='flex items-center mt-2'>
+                                <p className='text-[#4F5962] text-sm font-semibold'>
+                                    { `${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
+                                </p>
+                                <span className='text-black text-lg font-bold ml-2'>
+                                    {Data?.amount || '0'} CR
+                                </span>
+
+                            </div>
+                    }
+                />
                 <div className='h-noDataError overflow-auto scrollBar'>
                     <BankDetails
                         loading={loading}

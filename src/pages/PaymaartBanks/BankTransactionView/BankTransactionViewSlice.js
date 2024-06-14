@@ -10,7 +10,7 @@ const initialState = {
 export const BankTransactionViewData = createAsyncThunk('bankTransactionViewData', async (searchParams, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
-        const res = await dataService.GetAPI(`admin-users/specific-bank?${searchParams}`);
+        const res = await dataService.GetAPI(`admin-users/${searchParams}`);
         return res;
     } catch (error) {
         // Log error or send notification

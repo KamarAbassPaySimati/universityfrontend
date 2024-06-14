@@ -49,6 +49,8 @@ const TrustBanks = () => {
                 fetchDataByUrl(listTrustBank);
             } else if (searchParams.get('type') === 'main-capital') {
                 fetchDataByUrl(listCapitalBank);
+            } else if (searchParams.get('type') === 'transaction-fees-and-commissions') {
+                fetchDataByUrl('list-transaction-fee-commission');
             }
         }
     }, [searchParams]);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function BankViewTopHeader ({ loading, Name }) {
+export default function BankViewTopHeader ({ loading, Name, Balance }) {
     return (
         <>
             <div
@@ -14,7 +14,7 @@ export default function BankViewTopHeader ({ loading, Name }) {
                     </div>
                 </div>
 
-                <p className='mt-2 text-[#4F5962] text-sm font-semibold'>RM balance, Total: 0 CR</p>
+                {Balance}
             </div>
         </>
     );
