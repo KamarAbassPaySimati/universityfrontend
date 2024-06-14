@@ -60,6 +60,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
     };
     const handleClearFilter = () => {
         setIsFilter(false);
+        setSelectedFilter({ start_date: '', end_date: '' });
         const params = Object.fromEntries(searchParams);
         delete params.start_date;
         delete params.end_date;
@@ -205,7 +206,9 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.sender_id}</td>
                                             <td data-testid="name"
-                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'
+                                                title={item?.transaction_id}
+                                            >
                                                 {item?.transaction_id || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>

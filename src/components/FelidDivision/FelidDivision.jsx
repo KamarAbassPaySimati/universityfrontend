@@ -1,5 +1,7 @@
+/* eslint-disable max-len */
 import React, { Fragment } from 'react';
 import InputField from '../InputField/InputField';
+import InputFieldWithSataicValue from '../InputField/InputFieldWithSataicValue';
 import InputFieldWithDropDown from '../InputFieldWithDropDown/InputFieldWithDropDown';
 import GoogleApi from '../InputField/GoogleApi';
 import InputSearch from '../InputField/InputSearch';
@@ -142,33 +144,63 @@ export default function FelidDivision ({
                                                                 label={`${divObj?.label}`}
                                                                 submitSelected={submitSelected}
                                                             />))
-                                                    : (
-                                                        <InputField
-                                                            className={!(submitSelected && (states[divObj?.key] === undefined ||
+                                                    : divObj.type === 'inputStaticText'
+                                                        ? (
+                                                            <InputFieldWithSataicValue
+                                                                className={!(submitSelected && (states[divObj?.key] === undefined ||
+                                                    states[divObj?.key]?.trim() === ''))
+                                                                    ? 'w-[339px]'
+                                                                    : 'w-[339px]'}
+                                                                divClassName='mx-2.5'
+                                                                value={states[divObj?.key]}
+                                                                staticText={divObj?.staticText}
+                                                                // onFocus={handleFocus}
+                                                                id={divObj?.key}
+                                                                testId={divObj?.key}
+                                                                error={divObj?.require &&
+                                                    (submitSelected && (states[divObj?.key] === undefined ||
+                                                    states[divObj?.key]?.trim() === ''))
+                                                                    ? 'Required field'
+                                                                    : undefined}
+                                                                label={`${divObj?.label}`}
+                                                                placeholder={divObj?.placeHolder
+                                                                    ? divObj?.placeHolder
+                                                                    : `Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                                // setEnteredLetter={setEnteredLetter}
+                                                                maxLength="100"
+                                                                onChange={handleOnChange}
+                                                                inputType={divObj?.type}
+                                                                disableInput={divObj?.disable}
+                                                            />)
+                                                        : (
+                                                            <InputField
+                                                                className={!(submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
-                                                                ? 'w-[339px]'
-                                                                : 'w-[339px]'}
-                                                            divClassName='mx-2.5'
-                                                            value={states[divObj?.key]}
-                                                            // onFocus={handleFocus}
-                                                            id={divObj?.key}
-                                                            testId={divObj?.key}
-                                                            error={divObj?.require &&
+                                                                    ? 'w-[339px]'
+                                                                    : 'w-[339px]'}
+                                                                divClassName='mx-2.5'
+                                                                value={states[divObj?.key]}
+                                                                staticText={divObj?.staticText}
+                                                                // onFocus={handleFocus}
+                                                                id={divObj?.key}
+                                                                testId={divObj?.key}
+                                                                error={divObj?.require &&
                                                         (submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
-                                                                ? 'Required field'
-                                                                : undefined}
-                                                            label={`${divObj?.label}`}
-                                                            placeholder={divObj?.placeHolder
-                                                                ? divObj?.placeHolder
-                                                                : `Enter ${divObj?.label.split('(Optional)')[0]}`}
-                                                            // setEnteredLetter={setEnteredLetter}
-                                                            maxLength="100"
-                                                            onChange={handleOnChange}
-                                                            inputType={divObj?.type}
-                                                            disableInput={divObj?.disable}
-                                                        />
-                                                    )}
+                                                                    ? 'Required field'
+                                                                    : undefined}
+                                                                label={`${divObj?.label}`}
+                                                                placeholder={divObj?.placeHolder
+                                                                    ? divObj?.placeHolder
+                                                                    : `Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                                // setEnteredLetter={setEnteredLetter}
+                                                                maxLength="100"
+                                                                onChange={handleOnChange}
+                                                                inputType={divObj?.type}
+                                                                disableInput={divObj?.disable}
+                                                            />
+                                                        )
+                                }
                             </div>))}
                     </div>
                 </Fragment>
