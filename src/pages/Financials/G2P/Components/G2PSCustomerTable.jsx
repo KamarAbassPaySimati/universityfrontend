@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router';
 import { Tooltip } from 'react-tooltip';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import Image from '../../../../components/Image/Image';
@@ -12,13 +11,14 @@ import ConfirmationPopup from '../../../../components/ConfirmationPopup/Confirma
 import { dataService } from '../../../../services/data.services';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 
-function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
-    const Navigate = useNavigate();
+function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustomerView }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState('');
+    const [isTransactionModal, setIsTransactionModal] = useState('');
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [error, setError] = useState();
 
+    // function for delete sheet
     const handleConfirmAction = async () => {
         setError(false);
         try {
@@ -27,7 +27,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
             if (!response.error) {
                 setIsLoading(false);
                 setIsApprovalModalOpen('');
-                // getView();
+                getG2PCustomerView();
                 setToastSuccess('Sheet deleted successfully');
             } else {
                 setIsLoading(false);
@@ -47,6 +47,41 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
     const handleClose = () => {
         setError(false);
         setIsApprovalModalOpen('');
+    };
+
+    // function for Transacction
+    const handleConfirmClick = async () => {
+        console.log(isTransactionModal, 'isTransactionModal');
+        setError(false);
+        try {
+            setIsLoading(true);
+            const body = {
+                object_key: isTransactionModal,
+                sender_id: View.paymaart_id,
+                user_amount: View.remaining_amount
+            };
+            const response = await dataService.PostAPI('bank-transactions/g2p-transaction', body);
+            if (!response.error) {
+                setIsLoading(false);
+                setIsTransactionModal('');
+                setToastSuccess('Sheet transferred successfully');
+            } else {
+                setIsLoading(false);
+                setIsTransactionModal('');
+                setToastError('Something went wrong!');
+            }
+        } catch (error) {
+            setIsLoading(false);
+            setIsTransactionModal('');
+            setToastError('Something went wrong!');
+        }
+    };
+    const handleApprove = (filekey) => {
+        setIsTransactionModal(filekey);
+    };
+    const handleCloseButton = () => {
+        setError(false);
+        setIsTransactionModal('');
     };
 
     return (
@@ -85,14 +120,14 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
                                             window.open(viewLink, '_blank');// Assuming `item.file_key` is the key you want to use
                                         }} />
                                     <Image
-                                        className='cursor-pointer'
+                                        className={`${item.transferred_amount !== null ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                                         toolTipId={`delete-${index}`}
                                         src='delete'
                                         testId={`delete-${index}`}
-                                        onClick={() => handleApproveClick(item._id)}
+                                        onClick={() => item?.transferred_amount === null && handleApproveClick(item._id)}
                                     />
-                                    <Image className='cursor-pointer' toolTipId={`transaction-${index}`} src='transaction' testId={`transaction-${index}`}
-                                        onClick={() => Navigate(`/financials/g2p/${item?.paymaart_id}`)} />
+                                    <Image className={`${item.transferred_amount !== null ? 'cursor-not-allowed' : 'cursor-pointer'}`} toolTipId={`transaction-${index}`} src='transaction' testId={`transaction-${index}`}
+                                        onClick={() => item?.transferred_amount === null && handleApprove(item.file_key)} />
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}
@@ -117,13 +152,6 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
                         ))}
                     </tbody>
                 }
-                {/* <IframeModal
-                    isOpen={selectedIndex !== null} // Check if selectedIndex is set
-                    handleClose={() => setSelectedIndex(null)}
-                    link={selectedFileKey} // Use the selected file key from state
-                    labelValue={selectedFileKey.split('/')[selectedFileKey.split('/').length - 1]} // Extract label value from the key
-                /> */}
-
             </table >
             {(!notFound && error) &&
                 (<NoDataError topValue='mt-6' heading='There are no G2P profile to view yet' />)
@@ -139,6 +167,19 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams }) {
                         title={'Confirm to Delete?'}
                         message={'This will delete the uploaded sheet'}
                         handleSubmit={() => handleConfirmAction()}
+                        isLoading={isLoading}
+                        handleClose={() => setIsApprovalModalOpen('')}
+                        buttonText={'Confirm'}
+                        buttonColor={'bg-accent-positive'}
+                    />
+                </div>
+            </Modal>
+            <Modal center open={isTransactionModal !== ''} onClose={handleCloseButton} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Confirm to Execute Payment?'}
+                        message={'This will complete settlement of G2P request.'}
+                        handleSubmit={() => handleConfirmClick()}
                         isLoading={isLoading}
                         handleClose={() => setIsApprovalModalOpen('')}
                         buttonText={'Confirm'}
