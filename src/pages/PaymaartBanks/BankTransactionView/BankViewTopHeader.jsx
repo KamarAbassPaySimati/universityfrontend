@@ -14,7 +14,7 @@ export default function BankViewTopHeader ({ loading, Name, Balance }) {
                     </div>
                 </div>
 
-                <p className='mt-2 text-[#4F5962] text-sm font-semibold'>{Balance}</p>
+                {Balance}
             </div>
         </>
     );
