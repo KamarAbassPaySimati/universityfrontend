@@ -23,7 +23,7 @@ const TrustBanks = () => {
     const bankTypes = {
         'Trust Banks': 'clear',
         'Main Capital': 'clear',
-        Suspense: 'clear',
+        'Suspense Account': 'clear',
         'Transaction fees & Commissions': 'clear',
         Taxes: 'clear'
 
@@ -37,7 +37,7 @@ const TrustBanks = () => {
                 searchParams.get('type') !== 'main-capital' &&
                 searchParams.get('type') !== 'taxes' &&
                 searchParams.get('type') !== 'transaction-fees-and-commissions' &&
-                searchParams.get('type') !== 'suspense') {
+                searchParams.get('type') !== 'suspense-account') {
                 setSearchParams({ type: 'trust-banks' });
                 // eslint-disable-next-line indent
                     <NotFound link={'/paymaart-banks'}
@@ -51,7 +51,7 @@ const TrustBanks = () => {
                 fetchDataByUrl(listCapitalBank);
             } else if (searchParams.get('type') === 'transaction-fees-and-commissions') {
                 fetchDataByUrl('list-transaction-fee-commission');
-            } else if (searchParams.get('type') === 'suspense') {
+            } else if (searchParams.get('type') === 'suspense-account') {
                 fetchDataByUrl('list-suspense-account');
             } else if (searchParams.get('type') === 'taxes') {
                 fetchDataByUrl('list-tax-account');

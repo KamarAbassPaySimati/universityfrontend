@@ -106,6 +106,12 @@ export default function G2PCustomerViewList () {
                         getG2PCustomerView();
                         e.target.value = '';
                         setFile(null);
+                    } else {
+                        console.log('response', response);
+                        setThreedotLoader(false);
+                        e.target.value = '';
+                        setFile(null);
+                        setToastError(response.data.data.message);
                     }
                 }
             };

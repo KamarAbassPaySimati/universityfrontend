@@ -6,7 +6,7 @@ const { driver } = require('../1_Driver.js');
 Given('I navigate to banks listing', async function () {
     // Write code here that turns the phrase above into concrete actions
     await driver.get('http://localhost:3000/paymaart-banks?type=trust-banks');
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await new Promise(resolve => setTimeout(resolve, 5000));
 });
 Given('I navigate to capital banks listing', async function () {
     // Write code here that turns the phrase above into concrete actions
@@ -25,7 +25,7 @@ Given('I navigate to Transaction fee and commision bank listing', async function
 });
 Given('I navigate to Suspense account listing', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await driver.get('http://localhost:3000/paymaart-banks?type=Suspense-account');
+    await driver.get('http://localhost:3000/paymaart-banks?type=suspense-account');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 Given('I navigate to tax account listing', async function () {
@@ -38,7 +38,7 @@ Then('I should view all the trust banks', async function () {
     // Write code here that turns the phrase above into concrete actions
     const trustBank1 = await driver.wait(until.elementLocated(By.css('[data-testid="trust_banks_tab"]')));
     const trustBank2 = await driver.wait(until.elementLocated(By.css('[data-testid="main_capital_tab"]')));
-    const trustBank3 = await driver.wait(until.elementLocated(By.css('[data-testid="suspense_tab"]')));
+    const trustBank3 = await driver.wait(until.elementLocated(By.css('[data-testid="suspense_account_tab"]')));
     const trustBank4 = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_fees_&_commissions_tab"]')));
     const trustBank5 = await driver.wait(until.elementLocated(By.css('[data-testid="taxes_tab"]')));
 
