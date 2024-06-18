@@ -133,14 +133,14 @@ function SetLimit () {
         navigate('/financials/set-limit');
     };
 
-    const formatNumberWithCommas = (value) => {
-        if (typeof value === 'number') {
-            return value.toLocaleString();
-        } else if (typeof value === 'string' && !isNaN(Number(value))) {
-            return Number(value).toLocaleString();
-        }
-        return value;
-    };
+    // const formatNumberWithCommas = (value) => {
+    //     if (typeof value === 'number') {
+    //         return value.toLocaleString();
+    //     } else if (typeof value === 'string' && !isNaN(Number(value))) {
+    //         return Number(value).toLocaleString();
+    //     }
+    //     return value;
+    // };
 
     const fetchViewLimitData = async () => {
         const response = await dataService.GetAPI('admin-users/view-limit');
@@ -215,10 +215,10 @@ function SetLimit () {
                                         </div>
                                     )
                                     : (
-                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="agentMaxLimit"
-                                        >{formatNumberWithCommas(formData.max_agent || 0)}.00 MWK</p>
+                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="agentMaxLimit">
+                                            {(Number(formData.max_agent) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                        </p>
                                     )}
-
                             </div>
                             <div className='w-1/3 mr-5'>
                                 <p className='font-normal text-sm text-[#A4A9AE]'>Merchant</p>
@@ -239,8 +239,8 @@ function SetLimit () {
                                         </div>
                                     )
                                     : (
-                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="merchantMaxLimit"
-                                        > {formatNumberWithCommas(formData.max_merchant || 0)}.00 MWK
+                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="merchantMaxLimit">
+                                            {(Number(formData.max_merchant) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
                                         </p>
                                     )}
                             </div>
@@ -263,8 +263,9 @@ function SetLimit () {
                                         </div>
                                     )
                                     : (
-                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="customerMaxLimit"
-                                        >{formatNumberWithCommas(formData.max_customer || 0)}.00 MWK</p>
+                                        <p className='mt-2 font-normal text-sm text-[#4F5962]' data-testid="customerMaxLimit">
+                                            {(Number(formData.max_customer) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                        </p>
                                     )}
                             </div>
                         </div>
@@ -316,8 +317,9 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.full_agent || '')}.00 MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit">
+                                                        {(Number(formData.full_agent) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                                    </p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -339,8 +341,9 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.full_merchant || 0)}.00 MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit">
+                                                        {(Number(formData.full_merchant) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                                    </p>
                                                 )}
                                         </div>
                                         <div className='w-1/3'>
@@ -362,8 +365,9 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.full_customer || 0)}.00 MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit">
+                                                        {(Number(formData.full_customer) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                                    </p>
                                                 )}
                                         </div>
                                     </div>
@@ -392,8 +396,9 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.simplified_agent || 0)}.00 MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="agentTransactionLimit">
+                                                        {(Number(formData.simplified_agent) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                                    </p>
                                                 )}
                                         </div>
                                         <div className='w-1/3 mr-5'>
@@ -415,8 +420,9 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.simplified_merchant || 0)}.00 MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="MerchantTransactionLimit">
+                                                        {(Number(formData.simplified_merchant) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                                    </p>
                                                 )}
                                         </div>
                                         <div className='w-1/3'>
@@ -438,8 +444,9 @@ function SetLimit () {
                                                     </div>
                                                 )
                                                 : (
-                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit"
-                                                    >{formatNumberWithCommas(formData.simplified_customer || 0)}.00 MWK</p>
+                                                    <p className='mt-1 font-normal text-sm text-[#4F5962]' data-testid="CustomerTransactionLimit">
+                                                        {(Number(formData.simplified_customer) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} MWK
+                                                    </p>
                                                 )}
                                         </div>
                                     </div>

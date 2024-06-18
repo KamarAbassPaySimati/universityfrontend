@@ -9,7 +9,9 @@ export default function ProfileName ({
     lastLoggedIn,
     CreatedDate,
     viewType,
-    profilePicture
+    profilePicture,
+    Amount,
+    g2pCustomer
 }) {
     return (
         <div className={`flex gap-[27px] justify-center items-center ${loading ? 'animate-pulse z-0 ' : ''}`}>
@@ -30,6 +32,15 @@ export default function ProfileName ({
                 <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Paymaart ID: <span data-testid="paymaart_id" className='font-semibold'>{payMaartID}</span>
                 </div>
+                {g2pCustomer &&
+                <div className='flex items-center'>
+                    <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
+                        Amount: <span data-testid="paymaart_id" className='font-semibold'>{Amount}</span>
+                    </div>
+                    <div className='ml-6'>
+                        Created Date: <span data-testid="paymaart_id" className='font-semibold mr-4'>{CreatedDate}</span>
+                    </div>
+                </div>}
                 {viewType === 'specific' && lastLoggedIn && <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Created Date: <span data-testid="paymaart_id" className='font-semibold mr-4'>{CreatedDate}</span>
                     Last Logged in: <span data-testid="paymaart_id" className={`font-semibold ${lastLoggedIn !== 'Online' ? '' : 'text-accent-positive'}`}>{lastLoggedIn}</span>

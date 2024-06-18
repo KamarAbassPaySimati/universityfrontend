@@ -4,12 +4,15 @@ import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { Tooltip } from 'react-tooltip';
+import { useNavigate } from 'react-router';
 
 const BankTable = (
     {
         loading, List, searchParams
     }
+
 ) => {
+    const Navigate = useNavigate();
     return (
         <>
             <table className='w-full min-w-max '>
@@ -53,7 +56,17 @@ const BankTable = (
 
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
                                     <>
-                                        <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                        <Image
+                                            toolTipId={`eye-${index}`}
+                                            testId={`view-${index}`}
+                                            src='eye'
+                                            className={'cursor-pointer'}
+                                            onClick={() => Navigate(
+                                                searchParams.get('type') === 'trust-banks'
+                                                    ? `/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`
+                                                    : `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`
+                                            )}
+                                        />
                                     </>
                                     <Tooltip
                                         id={`eye-${index}`}
