@@ -61,7 +61,11 @@ const BankTable = (
                                             testId={`view-${index}`}
                                             src='eye'
                                             className={'cursor-pointer'}
-                                            onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`)}
+                                            onClick={() => Navigate(
+                                                searchParams.get('type') === 'trust-banks'
+                                                    ? `/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`
+                                                    : `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`
+                                            )}
                                         />
                                     </>
                                     <Tooltip

@@ -231,11 +231,11 @@ async function getKYCCompletedAgentList () {
     }
 }
 
-async function getKYCCompletedCustomerList (payload) {
+async function getKYCCompletedCustomerList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, payload, { headers: axiosOptions });
+        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
