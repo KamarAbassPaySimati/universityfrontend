@@ -20,7 +20,7 @@
     "assert": "^2.1.0",
     "aws-amplify": "^6.0.28",
     "base32-decode": "^1.0.0",
-    "chromedriver": "^124.0.4",
+    "chromedriver": "^126.0.1",
     "country-list": "^2.3.0",
     "crypto": "^1.0.1",
     "dayjs": "^1.11.10",

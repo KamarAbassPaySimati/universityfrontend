@@ -92,6 +92,8 @@ export default function AddTransaction () {
                         setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
                     }
                 }
+            } else {
+                setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
             }
         } else if (type === 'inputStaticText') {
             if (value.target.value.length <= 8) {
