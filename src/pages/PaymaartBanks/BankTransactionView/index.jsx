@@ -46,7 +46,19 @@ export default function BankTransactionView ({ type }) {
             >
                 <BankViewTopHeader
                     Name={type === 'trust-bank' ? 'Trust Bank' : 'Main Capital Account '}
-                    Balance={type === 'trust-bank' ? 'RM balance, Total: 0 CR' : 'EM balance, Total : 0 CR'}
+                    Balance={
+                        (type === 'trust-bank' && id !== 'PTBAT')
+                            ? undefined
+                            : <div className='flex items-center mt-2'>
+                                <p className='text-[#4F5962] text-sm font-semibold'>
+                                    { `${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
+                                </p>
+                                <span className='text-black text-lg font-bold ml-2'>
+                                    {Data?.amount || '0'} CR
+                                </span>
+
+                            </div>
+                    }
                 />
                 <div className='h-noDataError overflow-auto scrollBar'>
                     <BankDetails
