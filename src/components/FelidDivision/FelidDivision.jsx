@@ -30,7 +30,9 @@ export default function FelidDivision ({
                                                 <InputFieldWithDropDown
                                                     labelName={`${divObj?.label}`}
                                                     value={states[divObj?.key] === undefined ? '' : states[divObj?.key]}
-                                                    placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                    placeholder={divObj?.placeHolder
+                                                        ? divObj?.placeHolder
+                                                        : `Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                     error={divObj?.require &&
                                                         (submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
@@ -65,7 +67,9 @@ export default function FelidDivision ({
                                                                 ? 'Required field'
                                                                 : undefined}
                                                             label={`${divObj?.label}`}
-                                                            placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                            placeholder={divObj?.placeHolder
+                                                                ? divObj?.placeHolder
+                                                                : `Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                             // setEnteredLetter={setEnteredLetter}
                                                             maxLength="100"
                                                             onChange={handleOnChange}
@@ -77,7 +81,9 @@ export default function FelidDivision ({
                                                             id={divObj?.key}
                                                             submitSelected={submitSelected}
                                                             value={states[divObj?.key]}
-                                                            placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                            placeholder={divObj?.placeHolder
+                                                                ? divObj?.placeHolder
+                                                                : `Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                             testId={divObj?.key}
                                                             handleOnChange={handleOnChange}
                                                             states={states}
@@ -115,7 +121,9 @@ export default function FelidDivision ({
                                                                     ? 'Required field'
                                                                     : undefined}
                                                                 label={`${divObj?.label}`}
-                                                                placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                                placeholder={divObj?.placeHolder
+                                                                    ? divObj?.placeHolder
+                                                                    : `Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                                 // setEnteredLetter={setEnteredLetter}
                                                                 maxLength="100"
                                                                 onChange={handleOnChange}
@@ -151,7 +159,9 @@ export default function FelidDivision ({
                                                                 ? 'Required field'
                                                                 : undefined}
                                                             label={`${divObj?.label}`}
-                                                            placeholder={`Enter ${divObj?.label.split('(Optional)')[0]}`}
+                                                            placeholder={divObj?.placeHolder
+                                                                ? divObj?.placeHolder
+                                                                : `Enter ${divObj?.label.split('(Optional)')[0]}`}
                                                             // setEnteredLetter={setEnteredLetter}
                                                             maxLength="100"
                                                             onChange={handleOnChange}

@@ -120,6 +120,7 @@ Then('I should be navigated to page {int}', async function (expectedPage) {
     await new Promise(resolve => setTimeout(resolve, 2000));
     // eslint-disable-next-line max-len
     const currentPage = await driver.wait(until.elementLocated(By.css('[data-testid="paginator"] [aria-current="page"]'))).getText();
+    console.log('currentPage, expectedPage', currentPage, expectedPage);
     assert.equal(currentPage, expectedPage);
 });
 
