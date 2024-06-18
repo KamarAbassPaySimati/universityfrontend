@@ -38,7 +38,7 @@ Then('I should see prefilled fields for bank details', async function () {
     await assert.notEqual(lastUpdateDate, '');
     await assert.notEqual(balance, '');
 });
-Then('I should see prefilled fields for bank details for suspense account', async function () {
+Then('I should see prefilled fields for bank details for transaction', async function () {
     const refNo = await driver.wait(until.elementLocated(By.css('[data-testid="Ref No."]'))).getText();
     const Name = await driver.wait(until.elementLocated(By.css('[data-testid="Name"]'))).getText();
     const purpose = await driver.wait(until.elementLocated(By.css('[data-testid="Purpose"]'))).getText();
