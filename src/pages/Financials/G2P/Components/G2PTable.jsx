@@ -29,7 +29,7 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td data-testid="agent_name" title={user?.full_name}
+                                <td data-testid="customer_name" title={user?.full_name}
                                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.full_name}`}</td>
                                 <td data-testid="paymaart_id" title={user?.paymaart_id}
                                     className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
@@ -38,7 +38,7 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                                     className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px]'>{`${user?.amount.toLocaleString()}.00 MWK`}</td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 min-w-[75px] max-w-[100px] flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                                        onClick={() => Navigate('/')} />
+                                        onClick={() => Navigate(`/financials/g2p/view-profile/${user?.transaction_id}`)} />
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}

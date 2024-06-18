@@ -160,6 +160,8 @@ export default function PersonalDetails ({ isFullKYC, handleStates, states, subm
                 <DatePickerAntd
                     disabled={isFullKYC}
                     label={'Date of Birth'}
+                    type='dob'
+                    testID="date_of_birth"
                     handleStates={handleStates}
                     value={states.dob === undefined ? '' : states.dob}
                     error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
