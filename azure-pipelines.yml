@@ -17,7 +17,7 @@ variables:
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
     - group: pre-production
   - ${{ if or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')) }}:
-    - group: develop
+    - group: qa
 
 
 stages:
