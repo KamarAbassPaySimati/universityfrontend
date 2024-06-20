@@ -14,7 +14,7 @@ async function getFolders (directoryPath) {
         const files = await readdir(directoryPath);
 
         const folders = [];
-        const excludedFolders = ['step-definations', 'support', 'bdd_api', 'bdd_getbearertoken', 'bdd_payload', 'bdd_modules', 'unit-testing'];
+        const excludedFolders = ['step-definations', 'support', 'bdd_api', 'bdd_getbearertoken', 'bdd_payload', 'bdd_modules', 'unit-testing', 'Flow1_Admin', 'Flow1_Agent', 'Flow1_Customer', 'Flow1_Merchant'];
         for (const file of files) {
             const filePath = `${directoryPath}/${file}`;
             const fileStat = await stat(filePath);
