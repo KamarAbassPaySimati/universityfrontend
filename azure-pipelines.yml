@@ -441,6 +441,9 @@ stages:
         - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-living-documentation'
           condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/coverage/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-coverage'
+          condition: always()
 
         # - task: PublishTestResults@2
         #   condition: always()
