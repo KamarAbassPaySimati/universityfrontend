@@ -419,12 +419,12 @@ stages:
         - script: |
             mkdir coverage
             npm run generate_report
-            ls -R reports-xml
+            # ls -R reports-xml
             node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
             export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
             export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-            aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
-            aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
+            aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev
+            aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev
             aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
             if [ $? -ne 0 ]; then
               echo "BDD Living documentation"
