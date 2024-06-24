@@ -162,7 +162,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                 {loading
                     ? <Shimmer column={10} row={10} firstIndex/>
                     : (
-                        Data.transactions.length === 0
+                        Data?.transactions.length === 0
                             ? <NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for'
                             />
                             : <table className='w-full min-w-max mt-7'>
@@ -186,7 +186,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                 </thead>
                                 <tbody className={` text-neutral-primary whitespace-nowrap text-[14px]
                     leading-[24px]`}>
-                                    {Data.transactions && Data.transactions.map((item, index = 0) => (
+                                    {Data?.transactions && Data?.transactions.map((item, index = 0) => (
                                         <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>

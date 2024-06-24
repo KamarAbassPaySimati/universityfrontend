@@ -134,6 +134,17 @@ export const ComponentsBasedOnRole = {
                 element: <AddTransaction type={'main-capital'}/>,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
             },
+            // Paymaart Bank Transaction fees and Commision View
+            {
+                name: 'Paymaart View Transaction fees and Commision',
+                element: <BankTransactionView type={'transaction-fees-and-commissions'}/>,
+                path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id'
+            },
+            {
+                name: 'Paymaart Add Transaction fees and Commision',
+                element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
+                path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
+            },
             {
                 name: 'Agent KYC Registration',
                 element: <RegisterKYC role={'agent'} />,
