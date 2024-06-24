@@ -409,12 +409,12 @@ stages:
             npm install nyc --save-dev --force
             mkdir reports-xml
             node scripts/bdd-execution-split1.js
-            mkdir coverage
-            npm run generate_report
             if [ $? -ne 0 ]; then
               echo "Integration Testing"
               exit 1
             fi
+            mkdir coverage
+            npm run generate_report
           displayName: Integration Testing
         - script: |
             cat log.txt
