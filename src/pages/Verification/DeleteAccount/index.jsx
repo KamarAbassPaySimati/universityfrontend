@@ -103,15 +103,15 @@ function DeleteAccount () {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
             setNotFound(false);
-            params.page_number = 1;
+            params.page = 1;
         }
     }, [List]);
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
     useEffect(() => {
-        if (searchParams.get('page_number') === null) {
-            setSearchParams({ page_number: 1, type: 'agents' });
+        if (searchParams.get('page') === null) {
+            setSearchParams({ page: 1, type: 'agents' });
         } else {
             GetList();
         }
@@ -133,7 +133,7 @@ function DeleteAccount () {
             <div className={`relative ${NotFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {
                     (!notFound && List?.data?.length === 0 &&
-                        searchParams.get('page_number') === '1' && searchParams.get('citizen') === 'all' &&
+                        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
                         searchParams.get('search') === null && searchParams.get('search') === null &&
                         searchParams.get('simplifiedkyc') === null && searchParams.get('fullkyc') === null)
                         ? (
@@ -172,7 +172,7 @@ function DeleteAccount () {
                 }
                 {
                     (!notFound && List?.data?.length === 0 &&
-                        searchParams.get('page_number') === '1' && searchParams.get('citizen') === 'all' &&
+                        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
                         searchParams.get('search') === null &&
                         searchParams.get('simplifiedkyc') === null &&
                         searchParams.get('fullkyc') === null)
