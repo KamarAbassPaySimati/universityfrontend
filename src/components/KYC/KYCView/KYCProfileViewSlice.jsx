@@ -21,8 +21,7 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
     }
 });
 const AddressKeys = ['po_box_no', 'house_number', 'street_name', 'landmark', 'town_village_ta', 'district'];
-const InternatinalAddressKeys = ['intl_po_box_no', 'intl_house_number', 'intl_street_name', 'intl_landmark',
-    'intl_town_village_ta', 'intl_district'];
+const InternatinalAddressKeys = ['intl_address'];
 const TradingAddressKeys = ['trading_house_name', 'trading_street_name', 'trading_town_village_ta', 'trading_district'];
 
 const KYCProfileViewSlice = createSlice({
@@ -78,6 +77,7 @@ const KYCProfileViewSlice = createSlice({
                             AddressValues.push(state.View[item]);
                         }
                     });
+                    console.log(state.View, 'state.View');
                     InternatinalAddressKeys.forEach((item) => {
                         if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             malawiAddress.push(state.View[item]);
