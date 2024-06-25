@@ -322,7 +322,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                                                                     : View?.verification_document
                                                                                                 }
                                                                                                 ${itemkey === 'ID Document' &&
-                                                                                                View?.citizen !== 'Malawian' && View?.id_document === 'Passport'
+                                                                                                    View?.citizen !== 'Malawian' && View?.id_document === 'Passport'
                                                                             ? 'Visa Page'
                                                                             : 'Back'}.${imageItem?.slice(imageItem
                                                                             .lastIndexOf('.') + 1)}`
