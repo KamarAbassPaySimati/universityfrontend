@@ -180,71 +180,68 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
         When I submit the add trust bank transaction form
         Then I should read a message stating that "Transaction details added successfully"
 
-    # Scenario Outline: Add transaction for trust bank with invalid details for Inflow For E-money Float/other E-Funding to PTBA1 | RM credit
-    #     When I select the transaction type as "Inflow For E-money Float/other E-Funding to PTBA1 | RM credit"
-    #     When I enter the transaction amount as <amount> for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
-    #     When I upload the transaction POP document as <POP_document>
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that <message>
-    #     Examples:
-    #         | amount | transaction_pop_ref_no | POP_document        | message          |
-    #         | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
-    #         | "1200" | ""                     | "document_back.png" | "Required field" |
-    #         | "1200" | "TRASACTION9910284"    | ""                  | "Required field" |
+    Scenario Outline: Add transaction for trust bank with invalid details for Inflow For E-money Float/other E-Funding to PTBA1 | RM credit
+        When I select the transaction type as "Inflow For E-money Float/other E-Funding to PTBA1 | RM credit"
+        When I enter the transaction amount as <amount> for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
+        When I upload the transaction POP document as <POP_document>
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that <message>
+        Examples:
+            | amount | transaction_pop_ref_no | POP_document        | message          |
+            | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
+            | "1200" | ""                     | "document_back.png" | "Required field" |
 
-    # Scenario: Add transaction for trust bank with valid details for Inflow For E-money Float/other E-Funding to PTBA1 | RM credit
-    #     When I select the transaction type as "Inflow For E-money Float/other E-Funding to PTBA1 | RM credit"
-    #     When I enter the transaction amount as "100" for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the valid transaction POP Ref.No
-    #     When I upload the transaction POP document as "document_back.png"
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that "Transaction details added successfully"
+    Scenario: Add transaction for trust bank with valid details for Inflow For E-money Float/other E-Funding to PTBA1 | RM credit
+        When I select the transaction type as "Inflow For E-money Float/other E-Funding to PTBA1 | RM credit"
+        When I enter the transaction amount as "100" for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the valid transaction POP Ref.No
+        When I upload the transaction POP document as "document_back.png"
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that "Transaction details added successfully"
 
-    # Scenario Outline: Add transaction for trust bank with invalid details for Inflow for Marketing Campaign Fund to PTBA1 | RM credit
-    #     When I select the transaction type as "Inflow for Marketing Campaign Fund to PTBA1 | RM credit"
-    #     When I enter the transaction amount as <amount> for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
-    #     When I upload the transaction POP document as <POP_document>
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that <message>
-    #     Examples:
-    #         | amount | transaction_pop_ref_no | POP_document        | message          |
-    #         | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
-    #         | "1200" | ""                     | "document_back.png" | "Required field" |
-    #         | "1200" | "TRASACTION9910284"    | ""                  | "Required field" |
+    Scenario Outline: Add transaction for trust bank with invalid details for Inflow for Marketing Campaign Fund to PTBA1 | RM credit
+        When I select the transaction type as "Inflow for Marketing Campaign Fund to PTBA1 | RM credit"
+        When I enter the transaction amount as <amount> for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
+        When I upload the transaction POP document as <POP_document>
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that <message>
+        Examples:
+            | amount | transaction_pop_ref_no | POP_document        | message          |
+            | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
+            | "1200" | ""                     | "document_back.png" | "Required field" |
 
-    # Scenario: Add transaction for trust bank with valid details for Inflow for Marketing Campaign Fund to PTBA1 | RM credit
-    #     When I select the transaction type as "Inflow for Marketing Campaign Fund to PTBA1 | RM credit"
-    #     When I enter the transaction amount as "100" for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the valid transaction POP Ref.No
-    #     When I upload the transaction POP document as "document_back.png"
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that "Transaction details added successfully"
+    Scenario: Add transaction for trust bank with valid details for Inflow for Marketing Campaign Fund to PTBA1 | RM credit
+        When I select the transaction type as "Inflow for Marketing Campaign Fund to PTBA1 | RM credit"
+        When I enter the transaction amount as "100" for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the valid transaction POP Ref.No
+        When I upload the transaction POP document as "document_back.png"
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that "Transaction details added successfully"
 
-    # Scenario Outline: Add transaction for trust bank with invalid details for Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit
-    #     When I select the transaction type as "Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit"
-    #     When I enter the transaction amount as <amount> for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
-    #     When I upload the transaction POP document as <POP_document>
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that <message>
-    #     Examples:
-    #         | amount | transaction_pop_ref_no | POP_document        | message          |
-    #         | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
-    #         | "1200" | ""                     | "document_back.png" | "Required field" |
-    #         | "1200" | "TRASACTION9910284"    | ""                  | "Required field" |
+    Scenario Outline: Add transaction for trust bank with invalid details for Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit
+        When I select the transaction type as "Receipt of Customer Balances Interest from PTBA1 | RM credit"
+        When I enter the transaction amount as <amount> for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
+        When I upload the transaction POP document as <POP_document>
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that <message>
+        Examples:
+            | amount | transaction_pop_ref_no | POP_document        | message          |
+            | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
+            | "1200" | ""                     | "document_back.png" | "Required field" |
 
-    # Scenario: Add transaction for trust bank with valid details for Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit
-    #     When I select the transaction type as "Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit"
-    #     When I enter the transaction amount as "100" for trust bank transaction
-    #     When I should see the entry by field should be disabled for add trust bank transaction
-    #     When I enter the valid transaction POP Ref.No
-    #     When I upload the transaction POP document as "document_back.png"
-    #     When I submit the add trust bank transaction form
-    #     Then I should read a message stating that "Transaction details added successfully"
+    Scenario: Add transaction for trust bank with valid details for Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit
+        When I select the transaction type as "Receipt of Customer Balances Interest from PTBA1 | RM credit"
+        When I enter the transaction amount as "100" for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the valid transaction POP Ref.No
+        When I upload the transaction POP document as "document_back.png"
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that "Transaction details added successfully"

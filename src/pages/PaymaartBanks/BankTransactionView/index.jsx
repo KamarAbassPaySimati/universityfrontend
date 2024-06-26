@@ -85,6 +85,7 @@ export default function BankTransactionView ({ type }) {
                     <TransactionList
                         searchParams={searchParams}
                         setSearchParams={setSearchParams}
+                        type={type}
                     />
                 </div>
             </CardHeader>

@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 
-export default function TransactionList ({ searchParams, setSearchParams }) {
+export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
@@ -111,7 +111,6 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                     Clear
                                 </button>
                             </div>
-                            {console.log('selectedFilter', selectedFilter)}
                             <div className='p-4 flex'>
                                 <div className='px-2.5 w-[200px]'>
                                     <DatePickerAntd
@@ -196,18 +195,27 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 {item?.created_at || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                                title={TransactionDescription(item?.transaction_code)}
+                                                title={
+                                                    TransactionDescription(item?.transaction_code, type,
+                                                        item?.transaction_amount?.toString().substring(0, 1) === '-'
+                                                            ? 'EM debit'
+                                                            : 'CR')}
                                             >
-                                                {TransactionDescription(item?.transaction_code) || '-'}</td>
+                                                {
+                                                    TransactionDescription(item?.transaction_code, type,
+                                                        item?.transaction_amount.toString()?.substring(0, 1) === '-'
+                                                            ? 'EM debit'
+                                                            : 'CR')}
+                                            </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id}</td>
+                                                {item?.sender_id || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                                title={item?.transaction_id}
+                                                title={item?.transaction_id || '-'}
                                             >
                                                 {item?.transaction_id || '-'}</td>
                                             <td data-testid="name"
