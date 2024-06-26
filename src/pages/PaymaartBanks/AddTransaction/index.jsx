@@ -19,9 +19,12 @@ export default function AddTransaction () {
     const Navigate = useNavigate();
     const getPaymaartIdType = () => {
         switch (filedData.transaction_code) {
+        case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
         case `Pay-in by Agent to ${id} | RM credit`:
             return 'Agent Paymaart ID';
+        case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
         case `Pay-in by Standard Customer to ${id} | RM credit`:
+        case `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`:
             return 'Customer Paymaart ID';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'G2P Customer Paymaart ID';
@@ -33,8 +36,11 @@ export default function AddTransaction () {
     const getStaticText = () => {
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
+        case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
             return 'AGT';
+        case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
         case `Pay-in by Standard Customer to ${id} | RM credit`:
+        case `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`:
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'CMR';
         default:
@@ -52,7 +58,11 @@ export default function AddTransaction () {
                 options: [
                     `Pay-in by Agent to ${id} | RM credit`,
                     `Pay-in by Standard Customer to ${id} | RM credit`,
-                    `Pay-in by G2P Customer to ${id} | RM credit`
+                    `Pay-in by G2P Customer to ${id} | RM credit`,
+                    `Pay-in by Paymaart OBO Agent to ${id} | RM credit`,
+                    `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`,
+                    `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`
+
                 ]
             },
             '<Beneficiary> Paymaart ID': {
@@ -90,6 +100,13 @@ export default function AddTransaction () {
                     const regex = /^\d{0,8}(\.\d{0,2})?$/;
                     if (regex.test(value.target.value)) {
                         setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
+                    } else {
+                        setFiledData((prevState) => ({
+                            ...prevState,
+                            [id]: filedData?.amount
+                                ? filedData.amount
+                                : ''
+                        }));
                     }
                 }
             } else {
@@ -101,7 +118,12 @@ export default function AddTransaction () {
                 if (regex.test(value.target.value)) {
                     setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
                 } else {
-                    setFiledData((prevState) => ({ ...prevState, [id]: filedData.entry_for }));
+                    setFiledData((prevState) => ({
+                        ...prevState,
+                        [id]: filedData?.entry_for
+                            ? filedData.entry_for
+                            : ''
+                    }));
                 }
             }
         } else {
@@ -112,9 +134,14 @@ export default function AddTransaction () {
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
         case `Pay-in by Standard Customer to ${id} | RM credit`:
+        case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
             return 'direct-payin';
+        case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
+            return 'payin-on-behalf';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'g2p-payin';
+        case `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`:
+            return 'g2p-on-behalf';
         default:
             return '<Beneficiary> Paymaart ID';
         }
@@ -142,7 +169,7 @@ export default function AddTransaction () {
                     transaction_code: TransactionCode(filedData.transaction_code),
                     entry_for: `${getStaticText()}${filedData?.entry_for}`,
                     entry_by: filedData?.entry_by,
-                    amount: parseInt(filedData?.amount),
+                    amount: parseFloat(filedData?.amount),
                     transaction_pop_ref_number: filedData.transaction_pop_ref_number,
                     pop_file_key: filedData.pop_file_key,
                     bank_id: id
