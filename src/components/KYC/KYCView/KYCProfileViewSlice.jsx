@@ -20,7 +20,7 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
         return rejectWithValue({ message: error });
     }
 });
-const AddressKeys = ['po_box_no', 'house_number', 'street_name', 'landmark', 'town_village_ta', 'district'];
+const AddressKeys = ['house_number', 'street_name', 'landmark', 'town_village_ta', 'district', 'po_box_no'];
 const InternatinalAddressKeys = ['intl_address'];
 const TradingAddressKeys = ['trading_house_name', 'trading_street_name', 'trading_town_village_ta', 'trading_district'];
 
@@ -75,6 +75,7 @@ const KYCProfileViewSlice = createSlice({
                     AddressKeys.forEach((item) => {
                         if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             AddressValues.push(state.View[item]);
+                            console.log(state.View[item]);
                         }
                     });
                     console.log(state.View, 'state.View');
