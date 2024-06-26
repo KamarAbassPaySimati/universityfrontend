@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 
-export default function TransactionList ({ searchParams, setSearchParams }) {
+export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
@@ -175,7 +175,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
-                                        <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
+                                        {type !== 'transaction-fees-and-commissions' && <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>}
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP Ref. No</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP</th>
@@ -202,9 +202,9 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>
-                                            <td data-testid="name"
+                                            {type !== 'transaction-fees-and-commissions' && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id}</td>
+                                                {item?.sender_id}</td>}
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={item?.transaction_id}

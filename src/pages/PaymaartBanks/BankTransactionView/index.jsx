@@ -9,33 +9,47 @@ import { useParams, useSearchParams } from 'react-router-dom';
 import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 
 export default function BankTransactionView ({ type }) {
-    const dispatch = useDispatch();
     const { id } = useParams();
-    const [searchParams, setSearchParams] = useSearchParams({ bank_code: id, page_number: 1 });
+    let accountTypeName;
+    let path;
+    let endpointType;
+    let initialParams = { bank_code: id, page_number: 1 };
+
+    switch (type) {
+    case 'trust-bank':
+        accountTypeName = 'Trust Bank';
+        path = 'Trust Banks';
+        endpointType = 'specific-bank';
+        break;
+    case 'suspense-account':
+        accountTypeName = 'Suspense Account';
+        path = 'Suspense Account';
+        endpointType = 'suspense-transactions';
+        break;
+    case 'main-capital':
+        accountTypeName = 'Main Capital Account';
+        path = 'Main Capital';
+        endpointType = 'capital-transactions';
+        break;
+    case 'transaction-fees-and-commissions':
+        accountTypeName = 'Transaction fees & Commissions Account';
+        path = 'Transaction fees & Commissions';
+        endpointType = 'transaction-commission-transactions';
+        initialParams = { page_number: 1 };
+        break;
+    default:
+        accountTypeName = 'Main Capital Account';
+        path = 'Main Capital';
+        endpointType = 'capital-transactions';
+        break;
+    }
+
+    const dispatch = useDispatch();
+    const [searchParams, setSearchParams] = useSearchParams(initialParams);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const handleViewData = async () => {
         try {
             // Fetch data using the provided URL
-            let endpointType;
-
-            switch (type) {
-            case 'trust-bank':
-                endpointType = 'specific-bank';
-                break;
-            case 'suspense-account':
-                endpointType = 'suspense-transactions';
-                break;
-            case 'main-capital':
-                endpointType = 'capital-transactions';
-                break;
-            case 'transaction-fees-and-commissions':
-                endpointType = 'transaction-fees-and-commissions';
-                break;
-            default:
-                endpointType = 'capital-transactions';
-                break;
-            }
-
             const endPoint = `${endpointType}?${searchParams.toString()}`;
             await dispatch(BankTransactionViewData(endPoint));
 
@@ -49,32 +63,6 @@ export default function BankTransactionView ({ type }) {
     useEffect(() => {
         handleViewData();
     }, [searchParams]);
-
-    let accountTypeName;
-    let path;
-
-    switch (type) {
-    case 'trust-bank':
-        accountTypeName = 'Trust Bank';
-        path = 'Trust Banks';
-        break;
-    case 'suspense-account':
-        accountTypeName = 'Suspense Account';
-        path = 'Suspense Account';
-        break;
-    case 'main-capital':
-        accountTypeName = 'Main Capital Account';
-        path = 'Main Capital';
-        break;
-    case 'transaction-fees-and-commissions':
-        accountTypeName = 'Transaction fees & Commissions Account';
-        path = 'Transaction fees & Commissions';
-        break;
-    default:
-        accountTypeName = 'Main Capital Account';
-        path = 'Main Capital';
-        break;
-    }
 
     const formattedAmount = (amount) => {
         return new Intl.NumberFormat('en-US', {
@@ -123,14 +111,19 @@ export default function BankTransactionView ({ type }) {
                         bankDetails={
                             {
                                 'Ref No.': Data?.ref_no,
-                                Name: type === 'suspense-account' ? Data?.name : Data?.bank_name,
-                                'Account Number': type === 'suspense-account' ? undefined : Data?.account_no,
+                                Name: (type === 'suspense-account' || type === 'transaction-fees-and-commissions')
+                                    ? Data?.name
+                                    : Data?.bank_name,
+                                'Account Number': (type === 'suspense-account' || type === 'transaction-fees-and-commissions')
+                                    ? undefined
+                                    : Data?.account_no,
                                 Purpose: Data?.purpose,
                                 'Last Update Date / Time': formatTimestamp(Data?.updated_at),
                                 Balance: `${formattedAmount(Data?.amount)} MWK`
                             }
                         }/>
                     <TransactionList
+                        type={type}
                         searchParams={searchParams}
                         setSearchParams={setSearchParams}
                     />
