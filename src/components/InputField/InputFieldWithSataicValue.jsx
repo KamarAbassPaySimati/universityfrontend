@@ -36,11 +36,6 @@ const InputFieldWithSataicValue = ({
         }
     };
 
-    const handleChange = (e) => {
-        const updatedValue = e.target.value;
-        onChange(updatedValue, id, inputType);
-    };
-
     return (
         <div className={`flex flex-col gap-2 relative ${divClassName || ''}`}>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
@@ -64,7 +59,7 @@ const InputFieldWithSataicValue = ({
                     id={id}
                     placeholder={staticText ? '' : placeholder}
                     onFocus={() => onFocus(id)}
-                    onChange={handleChange}
+                    onChange={(e) => onChange(e, id, inputType)}
                     onKeyDown={handleKeyDown}
                     maxLength={maxLength}
                     disabled={editAction === 'yes' || disableInput}

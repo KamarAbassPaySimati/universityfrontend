@@ -36,11 +36,9 @@ export default function G2PCustomerViewList () {
     const getG2PCustomerView = async () => {
         try {
             await dispatch(G2PCustomerViewData(`${id}?${searchParams.toString()}`));
-            console.log(G2PCustomerViewData, 'G2PCustomerViewData');
         } catch (error) {
         }
     };
-    console.log(View?.sheets);
     const handleUploadSheet = async () => {
         fileInputRef.current.click();
     };
@@ -108,6 +106,12 @@ export default function G2PCustomerViewList () {
                         getG2PCustomerView();
                         e.target.value = '';
                         setFile(null);
+                    } else {
+                        console.log('response', response);
+                        setThreedotLoader(false);
+                        e.target.value = '';
+                        setFile(null);
+                        setToastError(response.data.data.message);
                     }
                 }
             };
@@ -205,6 +209,7 @@ export default function G2PCustomerViewList () {
                                     modalView={modalView}
                                     setModalView={setModalView}
                                     file={file}
+                                    getG2PCustomerView={getG2PCustomerView}
                                 />
                             </div>}
                         {notFound &&

@@ -85,7 +85,7 @@ When('I enter valid agent paymaart ID', async function () {
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-    await element.sendKeys(global.agentList.data[0].paymaart_id);
+    await element.sendKeys(global.agentList.data[0].paymaart_id.substring(3, 11));
 });
 
 When('I enter valid customer paymaart ID', async function () {
@@ -93,7 +93,7 @@ When('I enter valid customer paymaart ID', async function () {
     await driver.wait(until.elementIsVisible(element));
 
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
-    await element.sendKeys(global.customerList.data[0].paymaart_id);
+    await element.sendKeys(global.customerList.data[0].paymaart_id.substring(3, 11));
 });
 
 When('I enter the transaction amount as {string} for trust bank transaction', async function (amount) {
