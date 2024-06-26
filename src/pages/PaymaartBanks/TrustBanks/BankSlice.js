@@ -35,8 +35,10 @@ const BankSlice = createSlice({
             .addCase(bankAccountList.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 if (!payload?.error) {
-                    state.data = payload?.data.data.slice(1).concat(payload?.data.data.slice(0, 1));
-                    state.List = { success_status: payload?.data.data.success_status, data: state.data };
+                    state.List = {
+                        success_status: payload?.data.data.success_status,
+                        data: payload?.data.data.sort((a, b) => a.ref_no.localeCompare(b.ref_no))
+                    };
                 } else {
                     state.error = payload?.data;
                 }

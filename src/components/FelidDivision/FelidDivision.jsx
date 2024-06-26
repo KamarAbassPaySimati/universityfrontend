@@ -19,8 +19,8 @@ export default function FelidDivision ({
             {Object.keys(divisionObject).map((divItem, index = 0) => (
                 <Fragment key={divisionObject[divItem]}>
                     {divItem !== 'nothing_to_show' &&
-                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
-                    ${index !== 0 ? 'pt-6' : 'pt-4'}`}>{divItem}</p>}
+                    <p className={`text-[#252C32] text-[18px] leading-[16px] font-semibold ml-2.5
+                    ${index !== 0 ? 'pt-7 pb-3' : 'pt-7 pb-3'}`}>{divItem}</p>}
                     <div className='flex flex-wrap'>
                         {Object.values(divisionObject[divItem]).map((divObj, index = 0) => (
                             <div className={'mt-4'} key={index}>

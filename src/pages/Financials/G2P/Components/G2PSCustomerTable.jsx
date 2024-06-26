@@ -184,7 +184,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                         message={'This will complete settlement of G2P request.'}
                         handleSubmit={() => handleConfirmClick()}
                         isLoading={isLoading}
-                        handleClose={() => setIsApprovalModalOpen('')}
+                        handleClose={() => setIsTransactionModal('')}
                         buttonText={'Confirm'}
                         buttonColor={'bg-accent-positive'}
                     />
