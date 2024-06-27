@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useEffect } from 'react';
 import BankViewTopHeader from './BankViewTopHeader';
 import CardHeader from '../../../components/CardHeader';
@@ -35,6 +36,12 @@ export default function BankTransactionView ({ type }) {
         accountTypeName = 'Transaction fees & Commissions Account';
         path = 'Transaction fees & Commissions';
         endpointType = 'transaction-commission-transactions';
+        initialParams = { page_number: 1 };
+        break;
+    case 'taxes':
+        accountTypeName = 'Tax Account';
+        path = 'Taxes';
+        endpointType = 'tax-account-transactions';
         initialParams = { page_number: 1 };
         break;
     default:
@@ -92,11 +99,11 @@ export default function BankTransactionView ({ type }) {
                     Name={accountTypeName}
                     Balance={
                         (((type === 'trust-bank') && id !== 'PTBAT') || type === 'suspense-account' ||
-                        type === 'transaction-fees-and-commissions')
+                            type === 'transaction-fees-and-commissions' || type === 'taxes')
                             ? undefined
                             : <div className='flex items-center mt-2'>
                                 <p className='text-[#4F5962] text-sm font-semibold'>
-                                    { `${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
+                                    {`${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
                                 </p>
                                 <span className='text-black text-lg font-bold ml-2'>
                                     {Data?.amount || '0'} CR
@@ -111,7 +118,7 @@ export default function BankTransactionView ({ type }) {
                         bankDetails={
                             {
                                 'Ref No.': Data?.ref_no,
-                                Name: (type === 'suspense-account' || type === 'transaction-fees-and-commissions')
+                                Name: (type === 'suspense-account' || type === 'transaction-fees-and-commissions' || type === 'taxes')
                                     ? Data?.name
                                     : Data?.bank_name,
                                 'Account Number': (type === 'suspense-account' || type === 'transaction-fees-and-commissions')
@@ -121,7 +128,7 @@ export default function BankTransactionView ({ type }) {
                                 'Last Update Date / Time': formatTimestamp(Data?.updated_at),
                                 Balance: `${formattedAmount(Data?.amount)} MWK`
                             }
-                        }/>
+                        } />
                     <TransactionList
                         type={type}
                         searchParams={searchParams}

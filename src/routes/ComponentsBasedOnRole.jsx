@@ -106,44 +106,55 @@ export const ComponentsBasedOnRole = {
             },
             {
                 name: 'Paymaart View Trust Banks',
-                element: <BankTransactionView type={'trust-bank'}/>,
+                element: <BankTransactionView type={'trust-bank'} />,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id'
             },
             {
                 name: 'Paymaart Add Trust Bank Transaction',
-                element: <AddTransaction type={'trust-bank'}/>,
+                element: <AddTransaction type={'trust-bank'} />,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id/add-transaction'
             },
             {
                 name: 'Paymaart View Suspense Account',
-                element: <BankTransactionView type={'suspense-account'}/>,
+                element: <BankTransactionView type={'suspense-account'} />,
                 path: '/paymaart-banks/suspense-account/view-suspense-account/:id'
             },
             {
                 name: 'Paymaart Add Suspense Account Transaction',
-                element: <AddTransaction type={'suspense-account'}/>,
+                element: <AddTransaction type={'suspense-account'} />,
                 path: '/paymaart-banks/suspense-account/view-suspense-account/:id/add-transaction'
             },
             {
                 name: 'Paymaart View Capital Bank',
-                element: <BankTransactionView type={'main-capital'}/>,
+                element: <BankTransactionView type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id'
             },
             {
                 name: 'Paymaart Add Capital Transaction',
-                element: <AddTransaction type={'main-capital'}/>,
+                element: <AddTransaction type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
             },
             // Paymaart Bank Transaction fees and Commision View
             {
                 name: 'Paymaart View Transaction fees and Commision',
-                element: <BankTransactionView type={'transaction-fees-and-commissions'}/>,
+                element: <BankTransactionView type={'transaction-fees-and-commissions'} />,
                 path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id'
             },
             {
                 name: 'Paymaart Add Transaction fees and Commision',
-                element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
+                element: <AddTransaction type={'transaction-fees-and-commissions'} />,
                 path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
+            },
+            // Paymaart Bank Tax account
+            {
+                name: 'Paymaart View Tax Account',
+                element: <BankTransactionView type={'taxes'} />,
+                path: '/paymaart-banks/taxes/view-taxes/:id'
+            },
+            {
+                name: 'Paymaart Add Tax Account',
+                element: <AddTransaction type={'taxes'} />,
+                path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
             },
             {
                 name: 'Agent KYC Registration',
@@ -297,32 +308,32 @@ export const ComponentsBasedOnRole = {
             },
             {
                 name: 'Paymaart View Trust Banks',
-                element: <BankTransactionView type={'trust-bank'}/>,
+                element: <BankTransactionView type={'trust-bank'} />,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id'
             },
             {
                 name: 'Paymaart Add Trust Bank Transaction',
-                element: <AddTransaction type={'trust-bank'}/>,
+                element: <AddTransaction type={'trust-bank'} />,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id/add-transaction'
             },
             {
                 name: 'Paymaart View Suspense Account',
-                element: <BankTransactionView type={'suspense-account'}/>,
+                element: <BankTransactionView type={'suspense-account'} />,
                 path: '/paymaart-banks/suspense-account/view-suspense-account/:id'
             },
             {
                 name: 'Paymaart Add Suspense Account Transaction',
-                element: <AddTransaction type={'suspense-account'}/>,
+                element: <AddTransaction type={'suspense-account'} />,
                 path: '/paymaart-banks/suspense-account/view-suspense-account/:id/add-transaction'
             },
             {
                 name: 'Paymaart View Capital Bank',
-                element: <BankTransactionView type={'main-capital'}/>,
+                element: <BankTransactionView type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id'
             },
             {
                 name: 'Paymaart Add Capital Transaction',
-                element: <AddTransaction type={'main-capital'}/>,
+                element: <AddTransaction type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
             },
             {
@@ -401,32 +412,32 @@ export const ComponentsBasedOnRole = {
             },
             {
                 name: 'Paymaart View Trust Banks',
-                element: <BankTransactionView type={'trust-bank'}/>,
+                element: <BankTransactionView type={'trust-bank'} />,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id'
             },
             {
                 name: 'Paymaart Add Trust Bank Transaction',
-                element: <AddTransaction type={'trust-bank'}/>,
+                element: <AddTransaction type={'trust-bank'} />,
                 path: '/paymaart-banks/trust-banks/view-trust-bank/:id/add-transaction'
             },
             {
                 name: 'Paymaart View Suspense Account',
-                element: <BankTransactionView type={'suspense-account'}/>,
+                element: <BankTransactionView type={'suspense-account'} />,
                 path: '/paymaart-banks/suspense-account/view-suspense-account/:id'
             },
             {
                 name: 'Paymaart Add Suspense Account Transaction',
-                element: <AddTransaction type={'suspense-account'}/>,
+                element: <AddTransaction type={'suspense-account'} />,
                 path: '/paymaart-banks/suspense-account/view-suspense-account/:id/add-transaction'
             },
             {
                 name: 'Paymaart View Capital Bank',
-                element: <BankTransactionView type={'main-capital'}/>,
+                element: <BankTransactionView type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id'
             },
             {
                 name: 'Paymaart Add Capital Transaction',
-                element: <AddTransaction type={'main-capital'}/>,
+                element: <AddTransaction type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
             }
         ]

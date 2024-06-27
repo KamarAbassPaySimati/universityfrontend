@@ -31,6 +31,9 @@ const BankTable = (
         case 'transaction-fees-and-commissions':
             url = `/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/${bank?.ref_no}`;
             break;
+        case 'taxes':
+            url = `/paymaart-banks/taxes/view-taxes/${bank?.ref_no}`;
+            break;
         default:
             url = `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`;
             break;
