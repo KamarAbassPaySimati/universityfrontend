@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 
-export default function TransactionList ({ searchParams, setSearchParams, type, type }) {
+export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
@@ -212,7 +212,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type, 
                                                 {item?.entered_by || '-'}</td>
                                             {type !== 'transaction-fees-and-commissions' && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id || '-'}</td>
+                                                {item?.sender_id || '-'}</td>}
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={item?.transaction_id || '-'}
