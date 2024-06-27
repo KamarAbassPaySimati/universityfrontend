@@ -318,13 +318,13 @@ stages:
         - task: DownloadPipelineArtifact@2
           name: LivingDoc2
           inputs:
-            artifactName: 'flow1-living-documentation'
+            artifactName: 'flow2-living-documentation'
             targetPath: '$(System.DefaultWorkingDirectory)/reports'
           displayName: 'Download Living Documentation Artifact'
         - task: DownloadPipelineArtifact@2
           name: Coverage2
           inputs:
-            artifactName: 'flow1-coverageData'
+            artifactName: 'flow2-coverageData'
             targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData'
         - script: |
             echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
