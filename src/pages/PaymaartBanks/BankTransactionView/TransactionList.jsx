@@ -12,7 +12,7 @@ import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 
-export default function TransactionList ({ searchParams, setSearchParams }) {
+export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
@@ -162,7 +162,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                 {loading
                     ? <Shimmer column={10} row={10} firstIndex/>
                     : (
-                        Data.transactions.length === 0
+                        Data?.transactions.length === 0
                             ? <NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for'
                             />
                             : <table className='w-full min-w-max mt-7'>
@@ -175,7 +175,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
-                                        <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
+                                        {type !== 'transaction-fees-and-commissions' && <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>}
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP Ref. No</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP</th>
@@ -186,7 +186,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                 </thead>
                                 <tbody className={` text-neutral-primary whitespace-nowrap text-[14px]
                     leading-[24px]`}>
-                                    {Data.transactions && Data.transactions.map((item, index = 0) => (
+                                    {Data?.transactions && Data?.transactions.map((item, index = 0) => (
                                         <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
@@ -202,9 +202,9 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>
-                                            <td data-testid="name"
+                                            {type !== 'transaction-fees-and-commissions' && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id}</td>
+                                                {item?.sender_id}</td>}
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={item?.transaction_id}
@@ -215,10 +215,9 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 {item?.pop_file_ref_no || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
-                                                <Image
-                                                    toolTipId={`eye-${index}`}
-                                                    onClick={() => setSelectedIndex(item.pop_file_key)}
-                                                    testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
+                                                {item.pop_file_key
+                                                    ? <Image toolTipId={`eye-${index}`} onClick={() => setSelectedIndex(item.pop_file_key)} testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
+                                                    : '-'}
                                             </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
