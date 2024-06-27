@@ -200,14 +200,14 @@ export default function RegisterKYC ({ role, type }) {
                 }
                 count = count + 1;
             }
-            if (!((states.intl_street_name === '' || states.intl_street_name === undefined) &&
-            (states.intl_district === '' || states.intl_district === undefined) &&
-            (states.intl_landmark === '' || states.intl_landmark === undefined) &&
-            (states.intl_house_number === '' || states.intl_house_number === undefined) &&
-            (states.intl_po_box_no === '' || states.intl_po_box_no === undefined) &&
-            (states.intl_town_village_ta === '' || states.intl_town_village_ta === undefined))) {
-                const intlData = ['intl_street_name', 'intl_town_village_ta', 'intl_district',
-                    'intl_landmark', 'intl_po_box_no', 'intl_house_number'];
+            if (!(
+                // (states.intl_address === '' || states.intl_address === undefined) &&
+            // (states.intl_district === '' || states.intl_district === undefined) &&
+            // (states.intl_landmark === '' || states.intl_landmark === undefined) &&
+            // (states.intl_house_number === '' || states.intl_house_number === undefined) &&
+            // (states.intl_po_box_no === '' || states.intl_po_box_no === undefined) &&
+                (states.intl_address === '' || states.intl_address === undefined))) {
+                const intlData = ['intl_address'];
                 intlData.map((bank) => {
                     if (states[bank] === '' || states[bank] === undefined) {
                         if (key !== 'skip') {
@@ -507,6 +507,7 @@ export default function RegisterKYC ({ role, type }) {
                 if (!handleValidation('address_details')) {
                     setIsLoadingButton(false);
                 } else {
+                    console.log(states, 'states');
                     const body = {
                         po_box_no: states?.po_box_no,
                         house_number: states?.house_number,
@@ -516,12 +517,12 @@ export default function RegisterKYC ({ role, type }) {
                         district: states?.district,
                         paymaart_id: id,
                         address_details_status: 'completed',
-                        intl_po_box_no: states?.intl_po_box_no,
-                        intl_house_number: states?.intl_house_number,
-                        intl_street_name: states?.intl_street_name,
-                        intl_landmark: states?.intl_landmark,
-                        intl_town_village_ta: states?.intl_town_village_ta,
-                        intl_district: states?.intl_district
+                        intl_address: states?.intl_address
+                        // intl_house_number: states?.intl_house_number,
+                        // intl_street_name: states?.intl_street_name,
+                        // intl_landmark: states?.intl_landmark,
+                        // intl_town_village_ta: states?.intl_town_village_ta,
+                        // intl_district: states?.intl_district
                     };
                     if (states.citizen_type !== 'Malawi citizen') {
                         body.citizen = states.nationality;
