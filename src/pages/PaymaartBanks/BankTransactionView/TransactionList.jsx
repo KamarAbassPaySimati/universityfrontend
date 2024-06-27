@@ -175,7 +175,8 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
-                                        {type !== 'transaction-fees-and-commissions' && <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>}
+                                        {(type !== 'transaction-fees-and-commissions' && type !== 'taxes') &&
+                                        <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>}
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP Ref. No</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP</th>
@@ -202,7 +203,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>
-                                            {type !== 'transaction-fees-and-commissions' && <td data-testid="name"
+                                            {(type !== 'transaction-fees-and-commissions' && type !== 'taxes') && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.sender_id}</td>}
                                             <td data-testid="name"
