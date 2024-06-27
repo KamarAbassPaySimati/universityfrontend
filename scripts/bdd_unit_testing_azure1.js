@@ -1,33 +1,35 @@
 /* eslint-disable max-len */
-const util = require('util');
-const fs = require('fs');
+// const util = require('util');
+// const fs = require('fs');
 const { exec } = require('child_process');
 
-const readdir = util.promisify(fs.readdir);
-const stat = util.promisify(fs.stat);
+// const readdir = util.promisify(fs.readdir);
+// const stat = util.promisify(fs.stat);
 
-const featureDirectory = 'test/unit-testing/unit-testing-flow1';
+// const featureDirectory = 'test/unit-testing/unit-testing-flow1';
 const DELAY_BETWEEN_TESTS = 1000; // 5 seconds
 const DELAY_BETWEEN_PARALLEL_EXECUTIONS = 1000; // 40 seconds
 const MAX_PARALLEL_EXECUTIONS = 12;
 let COUNTER = 0;
 
-async function getFeatureFiles (directory) {
-    let files = await readdir(directory);
-    files = await Promise.all(files.map(async file => {
-        const fullPath = `${directory}/${file}`;
-        const fileStat = await stat(fullPath);
-        if (fileStat.isDirectory()) {
-            return getFeatureFiles(fullPath);
-        } else if (file.endsWith('.feature')) {
-            return fullPath;
-        }
-    }));
-    return files.flat();
-}
+// async function getFeatureFiles (directory) {
+//     let files = await readdir(directory);
+//     files = await Promise.all(files.map(async file => {
+//         const fullPath = `${directory}/${file}`;
+//         const fileStat = await stat(fullPath);
+//         if (fileStat.isDirectory()) {
+//             return getFeatureFiles(fullPath);
+//         } else if (file.endsWith('.feature')) {
+//             return fullPath;
+//         }
+//     }));
+//     return files.flat();
+// }
 
 async function runTestQueue () {
-    const featureFiles = await getFeatureFiles(featureDirectory);
+    const featureFiles = [
+        'test/unit-testing/unit-testing-flow1/1_LoginAndUpdatePassword/login.feature'
+    ];
     console.log(featureFiles);
     const queue = featureFiles.filter(file => file.endsWith('.feature'));
 
