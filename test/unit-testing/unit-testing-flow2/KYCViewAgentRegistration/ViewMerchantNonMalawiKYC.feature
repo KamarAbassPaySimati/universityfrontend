@@ -302,6 +302,7 @@ Feature: Paymaart - Admin Web- Specific Merchant KYC verification View
         When I enter street name as "M1"
         When I select the Nationality
         Then I should see the town and district field getting pre-filled with google API data
+        And I should select the internal Address as "US"
         When I click on save and continue button
         Then I should be redirected to KYC identity details screen
         When I select the ID document as "Passport"

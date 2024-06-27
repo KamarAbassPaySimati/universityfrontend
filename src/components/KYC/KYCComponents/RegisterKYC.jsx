@@ -206,6 +206,7 @@ export default function RegisterKYC ({ role, type }) {
             // (states.intl_landmark === '' || states.intl_landmark === undefined) &&
             // (states.intl_house_number === '' || states.intl_house_number === undefined) &&
             // (states.intl_po_box_no === '' || states.intl_po_box_no === undefined) &&
+                states.citizen_type === 'Non Malawi citizen' &&
                 (states.intl_address === '' || states.intl_address === undefined))) {
                 if (key !== 'skip') {
                     setBankSelected(true);

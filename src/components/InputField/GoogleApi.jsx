@@ -15,10 +15,10 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
 
     const autocompleteOptions = () => {
         switch (id) {
-        // case 'intl_district':
-        //     return {
-        //         types: ['(regions)']
-        //     };
+        case 'intl_district':
+            return {
+                types: ['(regions)']
+            };
         case 'trading_district':
         case 'district':
             return {
@@ -26,8 +26,8 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                 componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
             };
         case 'intl_address':
-        // case 'intl_town_village_ta':
-        // case 'intl_landmark':
+        case 'intl_town_village_ta':
+        case 'intl_landmark':
             return {
                 types: ['address']
             };
@@ -78,30 +78,30 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
             handleOnChange('', 'street_name');
             handleOnChange('', 'town_village_ta');
             break;
-        // case 'intl_district':
-        //     setComponentValue(place.address_components[0].long_name);
-        //     handleOnChange(place.address_components[0].long_name, 'intl_district');
-        //     break;
+        case 'intl_district':
+            setComponentValue(place.address_components[0].long_name);
+            handleOnChange(place.address_components[0].long_name, 'intl_district');
+            break;
         case 'occupation_town':
             setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'occupation_town');
             break;
-        // case 'intl_street_name':
-        // case 'intl_landmark':
-        //     handleOnChange(place.formatted_address, id);
-        //     setComponentValue(place.address_components[0].long_name);
-        //     autofillTownVillageTAAndDistrict(place);
-        //     break;
+        case 'intl_street_name':
+        case 'intl_landmark':
+            handleOnChange(place.formatted_address, id);
+            setComponentValue(place.address_components[0].long_name);
+            autofillTownVillageTAAndDistrict(place);
+            break;
         case 'street_name':
             setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'street_name');
             autofillTownVillageTAAndDistrict(place);
             break;
-        // case 'intl_town_village_ta':
-        //     setComponentValue(place.address_components[0].long_name);
-        //     handleOnChange(place.address_components[0].long_name, 'intl_town_village_ta');
-        //     handleOnChange(place.address_components[1].long_name, 'intl_town_village_ta');
-        //     break;
+        case 'intl_town_village_ta':
+            setComponentValue(place.address_components[0].long_name);
+            handleOnChange(place.address_components[0].long_name, 'intl_town_village_ta');
+            handleOnChange(place.address_components[1].long_name, 'intl_town_village_ta');
+            break;
         case 'town_village_ta':
             setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'town_village_ta');
