@@ -200,22 +200,18 @@ export default function RegisterKYC ({ role, type }) {
                 }
                 count = count + 1;
             }
-            if (!(
+            if ((
                 // (states.intl_address === '' || states.intl_address === undefined) &&
             // (states.intl_district === '' || states.intl_district === undefined) &&
             // (states.intl_landmark === '' || states.intl_landmark === undefined) &&
             // (states.intl_house_number === '' || states.intl_house_number === undefined) &&
             // (states.intl_po_box_no === '' || states.intl_po_box_no === undefined) &&
+                states.citizen_type === 'Non Malawi citizen' &&
                 (states.intl_address === '' || states.intl_address === undefined))) {
-                const intlData = ['intl_address'];
-                intlData.map((bank) => {
-                    if (states[bank] === '' || states[bank] === undefined) {
-                        if (key !== 'skip') {
-                            setBankSelected(true);
-                        }
-                        count = count + 1;
-                    }
-                });
+                if (key !== 'skip') {
+                    setBankSelected(true);
+                }
+                count = count + 1;
             }
             return count === 0;
         case 'trading_details':

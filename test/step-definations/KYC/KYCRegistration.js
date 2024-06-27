@@ -58,6 +58,19 @@ When('I enter street name as {string}', async function (street_name) {
         await driver.wait(until.elementLocated(By.css('[data-testid="street_name"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
     }
 });
+When('I should select the internal Address as {string}', async function (intl_address) {
+    // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="intl_address"]')));
+    await driver.wait(until.elementIsVisible(element));
+
+    await driver.wait(until.elementLocated(By.css('[data-testid="intl_address"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    if (intl_address !== '') {
+        await driver.wait(until.elementLocated(By.css('[data-testid="intl_address"]'))).sendKeys(intl_address);
+        await new Promise(resolve => setTimeout(resolve, 5000));
+        await driver.wait(until.elementLocated(By.css('[data-testid="intl_address"]'))).sendKeys(Key.chord(Key.DOWN, Key.ENTER));
+    }
+});
 
 When('I enter trading street name as {string}', async function (street_name) {
     // Write code here that turns the phrase above into concrete actions
