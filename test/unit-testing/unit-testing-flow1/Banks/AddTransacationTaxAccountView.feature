@@ -1,6 +1,6 @@
-Feature: Paymaart- Admin Web- Add transaction for Tax Account Transaction View
+Feature: Paymaart- Admin Web- Add transaction for Tax Account(VAT) 
 
-As an super/finance admin, I want to view all the transactions in the Paymaart tax bank accoun, so that I have an insight into the e-money transaction histroy
+As an super/finance admin, I want to add the transactions in the Paymaart tax bank accoun, so that I can remove e-money 
 
 Condition of Satisfaction
 By default, the transactions should be listed in reverse chronological order.
