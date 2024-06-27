@@ -215,10 +215,9 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 {item?.pop_file_ref_no || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
-                                                <Image
-                                                    toolTipId={`eye-${index}`}
-                                                    onClick={() => setSelectedIndex(item.pop_file_key)}
-                                                    testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
+                                                {item.pop_file_key
+                                                    ? <Image toolTipId={`eye-${index}`} onClick={() => setSelectedIndex(item.pop_file_key)} testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
+                                                    : '-'}
                                             </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
