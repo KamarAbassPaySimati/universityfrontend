@@ -12,6 +12,7 @@ Feature: Paymaart - Admin Web - Delete G2P Sheet
   @add_admin_user 
   @create_new_user_and_login 
   @get_customer_completed_kyc_list
+  
   Scenario: Add transaction for trust bank with valid details for Pay-in by G2P Customer to PTBA1 | RMcredit
     Given I navigate to banks listing
     When I click on view button for bank details
