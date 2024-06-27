@@ -19,7 +19,7 @@ Feature: Paymaart - Admin Web - Delete G2P Sheet
     When I click on add trust bank transaction
     When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
     When I enter valid customer paymaart ID
-    When I enter the transaction amount as "100" for trust bank transaction
+    When I enter the transaction amount as "10000" for trust bank transaction
     When I should see the entry by field should be disabled for add trust bank transaction
     When I enter the valid transaction POP Ref.No
     When I upload the transaction POP document as "document_back.png"
