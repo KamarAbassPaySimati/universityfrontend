@@ -210,29 +210,25 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>
-                                            {type !== 'transaction-fees-and-commissions' && <td data-testid="name"
-                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id || '-'}</td>
-                                            <td data-testid="name"
-                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                                title={item?.transaction_id || '-'}
-                                            >
-                                                {item?.transaction_id || '-'}</td>
-                                            <td data-testid="name"
-                                                className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.pop_file_ref_no || '-'}</td>
-                                            <td data-testid="name"
-                                                className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
-                                                {item.pop_file_key
-                                                    ? <Image toolTipId={`eye-${index}`} onClick={() => setSelectedIndex(item.pop_file_key)} testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
-                                                    : '-'}
-                                            </td>
-                                            <td data-testid="name"
-                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>
-                                                {getDrCr(item?.transaction_amount) || '-'}</td>
-                                            <td data-testid="name"
-                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>
-                                                {item?.closing_balance || '-'}</td>
+                                            {type !== 'transaction-fees-and-commissions' && 
+                                            <><td data-testid="name"
+                                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                                    {item?.sender_id || '-'}</td><td data-testid="name"
+                                                        className='py-2 px-[10px] text-left truncate max-w-[200px]'
+                                                        title={item?.transaction_id || '-'}
+                                                    >
+                                                        {item?.transaction_id || '-'}</td><td data-testid="name"
+                                                            className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                                        {item?.pop_file_ref_no || '-'}</td><td data-testid="name"
+                                                            className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
+                                                        {item.pop_file_key
+                                                            ? <Image toolTipId={`eye-${index}`} onClick={() => setSelectedIndex(item.pop_file_key)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                                            : '-'}
+                                                    </td><td data-testid="name"
+                                                        className='py-2 px-[10px] text-end truncate max-w-[200px]'>
+                                                        {getDrCr(item?.transaction_amount) || '-'}</td><td data-testid="name"
+                                                            className='py-2 px-[10px] text-end truncate max-w-[200px]'>
+                                                        {item?.closing_balance || '-'}</td></>
                                         </tr>))}
                                 </tbody>
                             </table>
