@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 export function TransactionCode (value) {
     switch (value) {
     // PTBA1 mappings
@@ -101,27 +102,27 @@ export function TransactionCode (value) {
     }
 }
 
-export function TransactionDescription (value) {
+export function TransactionDescription (value, type, transactionType) {
     switch (value) {
     // PTBA1 mappings
     case 'AGTCRPTBA1':
-        return 'Pay-in by Agent to PTBA1 | RM credit';
+        return `Pay-in by Agent to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'RM credit'}`;
     case 'CSTCRPTBA1':
-        return 'Pay-in by Standard Customer to PTBA1 | RM credit';
+        return `Pay-in by Standard Customer to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Standard Customer' : 'RM credit'}`;
     case 'G2PCRPTBA1':
-        return 'Pay-in by G2P Customer to PTBA1 | RM credit';
+        return `Pay-in by G2P Customer to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Suspense Account' : 'RM credit'}`;
     case 'PTCR1PTBA1':
-        return 'Pay-in by Paymaart OBO Agent to PTBA1 | RM credit';
+        return `Pay-in by Paymaart OBO Agent to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'RM credit'}`;
     case 'PTCR2PTBA1':
-        return 'Pay-in by Paymaart OBO Standard Customer to PTBA1 | RM credit';
+        return `Pay-in by Paymaart OBO Standard Customer to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Standard Customer' : 'RM credit'}`;
     case 'PTCR3PTBA1':
-        return 'Pay-in by Paymaart OBO G2P Customer to PTBA1 | RM credit';
+        return `Pay-in by Paymaart OBO G2P Customer to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Suspense Account' : 'RM credit'}`;
     case 'PTCR4PTBA1':
-        return 'Inflow For EM Float/other E-Funding to PTBA1 | RM credit';
+        return `Inflow For EM Float/other E-Funding to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'PTCR5PTBA1':
-        return 'Inflow for Marketing Campaign Fund to PTBA1 | RM credit';
+        return `Inflow for Marketing Campaign Fund to PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'PTINTPTBA1':
-        return 'Receipt of Customer Balances Interest from PTBA1 | RM credit';
+        return `Receipt of Customer Balances Interest from PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'AGTDRPTBA1':
         return 'Pay-out to Agent from PTBA1 | RM debit';
     case 'CSTDRPTBA1':
@@ -137,23 +138,23 @@ export function TransactionDescription (value) {
 
         // PTBA2 mappings
     case 'AGTCRPTBA2':
-        return 'Pay-in by Agent to PTBA2 | RM credit';
+        return `Pay-in by Agent to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'RM credit'}`;
     case 'CSTCRPTBA2':
-        return 'Pay-in by Standard Customer to PTBA2 | RM credit';
+        return `Pay-in by Standard Customer to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Standard Customer' : 'RM credit'}`;
     case 'G2PCRPTBA2':
-        return 'Pay-in by G2P Customer to PTBA2 | RM credit';
+        return `Pay-in by G2P Customer to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Suspense Account' : 'RM credit'}`;
     case 'PTCR1PTBA2':
-        return 'Pay-in by Paymaart OBO Agent to PTBA2 | RM credit';
+        return `Pay-in by Paymaart OBO Agent to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'RM credit'}`;
     case 'PTCR2PTBA2':
-        return 'Pay-in by Paymaart OBO Standard Customer to PTBA2 | RM credit';
+        return `Pay-in by Paymaart OBO Standard Customer to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Standard Customer' : 'RM credit'}`;
     case 'PTCR3PTBA2':
-        return 'Pay-in by Paymaart OBO G2P Customer to PTBA2 | RM credit';
+        return `Pay-in by Paymaart OBO G2P Customer to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Suspense Account' : 'RM credit'}`;
     case 'PTCR4PTBA2':
-        return 'Inflow For EM Float/other E-Funding to PTBA2 | RM credit';
+        return `Inflow For EM Float/other E-Funding to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'PTCR5PTBA2':
-        return 'Inflow for Marketing Campaign Fund to PTBA2 | RM credit';
+        return `Inflow for Marketing Campaign Fund to PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'PTINTPTBA2':
-        return 'Receipt of Customer Balances Interest from PTBA2 | RM credit';
+        return `Receipt of Customer Balances Interest from PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'AGTDRPTBA2':
         return 'Pay-out to Agent from PTBA2 | RM debit';
     case 'CSTDRPTBA2':
@@ -169,23 +170,23 @@ export function TransactionDescription (value) {
 
         // PTBA3 mappings
     case 'AGTCRPTBA3':
-        return 'Pay-in by Agent to PTBA3 | RM credit';
+        return `Pay-in by Agent to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'RM credit'}`;
     case 'CSTCRPTBA3':
-        return 'Pay-in by Standard Customer to PTBA3 | RM credit';
+        return `Pay-in by Standard Customer to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Standard Customer' : 'RM credit'}`;
     case 'G2PCRPTBA3':
-        return 'Pay-in by G2P Customer to PTBA3 | RM credit';
+        return `Pay-in by G2P Customer to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Suspense Account' : 'RM credit'}`;
     case 'PTCR1PTBA3':
-        return 'Pay-in by Paymaart OBO Agent to PTBA3 | RM credit';
+        return `Pay-in by Paymaart OBO Agent to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'RM credit'}`;
     case 'PTCR2PTBA3':
-        return 'Pay-in by Paymaart OBO Standard Customer to PTBA3 | RM credit';
+        return `Pay-in by Paymaart OBO Standard Customer to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Standard Customer' : 'RM credit'}`;
     case 'PTCR3PTBA3':
-        return 'Pay-in by Paymaart OBO G2P Customer to PTBA3 | RM credit';
+        return `Pay-in by Paymaart OBO G2P Customer to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Suspense Account' : 'RM credit'}`;
     case 'PTCR4PTBA3':
-        return 'Inflow For EM Float/other E-Funding to PTBA3 | RM credit';
+        return `Inflow For EM Float/other E-Funding to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'PTCR5PTBA3':
-        return 'Inflow for Marketing Campaign Fund to PTBA3 | RM credit';
+        return `Inflow for Marketing Campaign Fund to PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'PTINTPTBA3':
-        return 'Receipt of Customer Balances Interest from PTBA3 | RM credit';
+        return `Receipt of Customer Balances Interest from PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit PMCA Float' : 'RM credit'}`;
     case 'AGTDRPTBA3':
         return 'Pay-out to Agent from PTBA3 | RM debit';
     case 'CSTDRPTBA3':
