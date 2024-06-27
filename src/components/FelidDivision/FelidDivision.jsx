@@ -17,12 +17,14 @@ export default function FelidDivision ({
     return (
         <>
             {Object.keys(divisionObject).map((divItem, index = 0) => (
+                divisionObject[divItem] !== undefined &&
                 <Fragment key={divisionObject[divItem]}>
                     {divItem !== 'nothing_to_show' &&
                     <p className={`text-[#252C32] text-[18px] leading-[16px] font-semibold ml-2.5
                     ${index !== 0 ? 'pt-7 pb-3' : 'pt-7 pb-3'}`}>{divItem}</p>}
                     <div className='flex flex-wrap'>
                         {Object.values(divisionObject[divItem]).map((divObj, index = 0) => (
+                            divObj !== undefined &&
                             <div className={'mt-4'} key={index}>
                                 {/* checking the condition for type input and options */}
                                 {

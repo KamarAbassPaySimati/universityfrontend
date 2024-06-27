@@ -1,10 +1,9 @@
-const { When, Then } = require('@cucumber/cucumber');
-const { Key, until, By } = require('selenium-webdriver');
+const { Then } = require('@cucumber/cucumber');
+const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 const assert = require('assert');
-const { getModifierKey } = require('../../bdd_modules/index.js');
 
-Then('I should see prefilled fields for Transaction fee and commision bank details for transaction',async function () {
+Then('I should see prefilled fields for Transaction fee and commision bank details for transaction', async function () {
     const refNo = await driver.wait(until.elementLocated(By.css('[data-testid="Ref No."]'))).getText();
     const Name = await driver.wait(until.elementLocated(By.css('[data-testid="Name"]'))).getText();
     const purpose = await driver.wait(until.elementLocated(By.css('[data-testid="Purpose"]'))).getText();
@@ -22,4 +21,4 @@ Then('I should see prefilled fields for Transaction fee and commision bank detai
     await assert.notEqual(purpose, '');
     await assert.notEqual(lastUpdateDate, '');
     await assert.notEqual(balance, '');
-  });
+});
