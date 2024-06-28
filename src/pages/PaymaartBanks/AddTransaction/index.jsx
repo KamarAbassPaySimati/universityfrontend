@@ -84,7 +84,7 @@ export default function AddTransaction () {
                 },
             lll: undefined,
             Amount: {
-                label: 'Amount',
+                label: 'Amount (MWK)',
                 type: 'input',
                 key: 'amount',
                 require: true
