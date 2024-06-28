@@ -61,43 +61,43 @@ export default function Address ({ bankSelected, handleStates, states, submitSel
         'Malawi Address': AddressDetails.nothing_to_show
     };
     const InterNationalAddress = {
-        'International Address (Optional)': {
-            postal_zip_code: {
-                label: 'Postal/Zip Code',
-                type: 'input',
-                key: 'intl_po_box_no',
-                require: true
-            },
-            house_number: {
-                label: 'House Name/Number',
-                type: 'input',
-                key: 'intl_house_number',
-                require: true
-            },
-            street_name: {
-                label: 'Street Name',
+        'International Address': {
+            // postal_zip_code: {
+            //     label: 'Postal/Zip Code',
+            //     type: 'input',
+            //     key: 'intl_po_box_no',
+            //     require: true
+            // },
+            // house_number: {
+            //     label: 'House Name/Number',
+            //     type: 'input',
+            //     key: 'intl_house_number',
+            //     require: true
+            // },
+            address: {
+                label: 'Address',
                 type: 'googleAPI',
-                key: 'intl_street_name',
-                require: true
-            },
-            city_town: {
-                label: 'City/Town',
-                type: 'googleAPI',
-                key: 'intl_landmark',
-                require: true
-            },
-            county_state: {
-                label: 'County/State',
-                type: 'googleAPI',
-                key: 'intl_town_village_ta',
-                require: true
-            },
-            country: {
-                label: 'Country',
-                type: 'googleAPI',
-                key: 'intl_district',
+                key: 'intl_address',
                 require: true
             }
+            // city_town: {
+            //     label: 'City/Town',
+            //     type: 'googleAPI',
+            //     key: 'intl_landmark',
+            //     require: true
+            // },
+            // county_state: {
+            //     label: 'County/State',
+            //     type: 'googleAPI',
+            //     key: 'intl_town_village_ta',
+            //     require: true
+            // },
+            // country: {
+            //     label: 'Country',
+            //     type: 'googleAPI',
+            //     key: 'intl_district',
+            //     require: true
+            // }
         }
     };
     const handleSearchItem = async (id, newValue) => {
