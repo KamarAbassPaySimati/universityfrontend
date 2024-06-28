@@ -486,8 +486,6 @@ stages:
         #   artifact: '$(system.JobId)-living-documentation'
         #   condition: always()
 
-
-
         # - task: PublishTestResults@2
         #   condition: always()
         #   inputs:
