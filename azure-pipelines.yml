@@ -224,6 +224,7 @@ stages:
           displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
+          condition: always()
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
           artifact: 'flow1-coverageData'
         - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
@@ -279,6 +280,7 @@ stages:
           displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
+          condition: always()
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
           artifact: 'flow2-coverageData'
         - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
