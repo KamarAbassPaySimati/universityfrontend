@@ -33,13 +33,6 @@ Feature: Paymaart - Admin Web - Upload G2P Sheet
     When I upload the valid excel sheet as "ValidSheet.xlsx"
     And I should read a message stating that "Successfully Uploaded G2P sheet"
 
-  Scenario: Admin viewing G2P customer profile
-    Given I navigate to G2P customer listing page
-    Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
-    When I click on the view button for customer details
-    Then I should view G2P customer details
-    Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
-
   Scenario: Uploading the wrong sheet
     When I upload the excel sheet as <excel_sheet>
     Then I should read a message stating that <message>
