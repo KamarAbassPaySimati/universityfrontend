@@ -37,7 +37,7 @@ async function runBddByFolder (directoryPaths, flow) {
         const processes = [];
         // Function to execute Cucumber command for each feature
         const runCucumber = (feature, i) => {
-            const command = `./node_modules/@cucumber/cucumber/bin/cucumber.js  --force-exit -f json:./reports/test-report-${flow}-${i}.json -f junit:./reports-xml/TEST-test-report-unit-test-${flow}-${i}.xml --config ./test/integration-testing/${feature}/cucumber.js`;
+            const command = `./node_modules/@cucumber/cucumber/bin/cucumber.js  --force-exit -f json:./reports/test-report-${flow}-${i}.json -f junit:./reports-xml/TEST-test-report-unit-test-${flow}-${i}.xml --config ./test/integration-testing/${feature}/cucumber.js >> log.txt`;
 
             const childProcess = exec(command, (error, stdout, stderr) => {
                 if (error) {

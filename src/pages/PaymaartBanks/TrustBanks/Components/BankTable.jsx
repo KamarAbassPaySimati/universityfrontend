@@ -13,6 +13,31 @@ const BankTable = (
 
 ) => {
     const Navigate = useNavigate();
+
+    const getUrl = (bank) => {
+        const bankType = searchParams.get('type');
+        let url;
+
+        switch (bankType) {
+        case 'trust-banks':
+            url = `/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`;
+            break;
+        case 'main-capital':
+            url = `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`;
+            break;
+        case 'suspense-account':
+            url = `/paymaart-banks/suspense-account/view-suspense-account/${bank?.ref_no}`;
+            break;
+        case 'transaction-fees-and-commissions':
+            url = `/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/${bank?.ref_no}`;
+            break;
+        default:
+            url = `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`;
+            break;
+        }
+        return url;
+    };
+
     return (
         <>
             <table className='w-full min-w-max '>
@@ -61,13 +86,7 @@ const BankTable = (
                                             testId={`view-${index}`}
                                             src='eye'
                                             className={'cursor-pointer'}
-                                            onClick={() => Navigate(
-                                                searchParams.get('type') === 'trust-banks'
-                                                    ? `/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`
-                                                    : searchParams.get('type') === 'suspense-account'
-                                                        ? `/paymaart-banks/suspense-account/view-suspense-account/${bank?.ref_no}`
-                                                        : `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`
-                                            )}
+                                            onClick={() => Navigate(getUrl(bank)) }
                                         />
                                     </>
                                     <Tooltip

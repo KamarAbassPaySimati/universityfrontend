@@ -9,6 +9,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
     const [componentValue, setComponentValue] = useState(value);
 
     const handlePlaceSelect = (place) => {
+        setComponentValue(place.target.value);
         handleOnChange(place.target.value, id);
     };
 
@@ -50,50 +51,65 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
     const handlePlaceSelected = (place) => {
         switch (id) {
         case 'trading_district':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'trading_district');
             handleOnChange('', 'trading_town_village_ta');
             handleOnChange('', 'trading_street_name');
             break;
         case 'trading_town_village_ta':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'trading_town_village_ta');
             handleOnChange(place.address_components[1].long_name, 'trading_district');
             break;
         case 'trading_street_name':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'trading_street_name');
             autofillTownVillageTAAndDistrict(place);
             break;
         case 'country' :
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.formatted_address, 'country');
             handleOnChange('', 'intl_street_name');
             handleOnChange('', 'intl_town_village_ta');
             break;
         case 'district':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'district');
             handleOnChange('', 'street_name');
             handleOnChange('', 'town_village_ta');
             break;
         case 'intl_district':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'intl_district');
             break;
         case 'occupation_town':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'occupation_town');
             break;
         case 'intl_street_name':
         case 'intl_landmark':
             handleOnChange(place.formatted_address, id);
+            setComponentValue(place.address_components[0].long_name);
             autofillTownVillageTAAndDistrict(place);
             break;
         case 'street_name':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'street_name');
             autofillTownVillageTAAndDistrict(place);
             break;
         case 'intl_town_village_ta':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'intl_town_village_ta');
             handleOnChange(place.address_components[1].long_name, 'intl_town_village_ta');
             break;
         case 'town_village_ta':
+            setComponentValue(place.address_components[0].long_name);
             handleOnChange(place.address_components[0].long_name, 'town_village_ta');
             handleOnChange(place.address_components[1].long_name, 'district');
+            break;
+        case 'intl_address':
+            setComponentValue(place.formatted_address);
+            handleOnChange(place.formatted_address, 'intl_address');
             break;
         default:
             break;
