@@ -144,9 +144,9 @@ export default function AddTransaction () {
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
         case `Pay-in by Standard Customer to ${id} | RM credit`:
-        case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
             return 'direct-payin';
         case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
+        case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
             return 'payin-on-behalf';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'g2p-payin';

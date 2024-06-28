@@ -126,7 +126,6 @@ export default function BankTransactionView ({ type }) {
                         type={type}
                         searchParams={searchParams}
                         setSearchParams={setSearchParams}
-                        type={type}
                     />
                 </div>
             </CardHeader>

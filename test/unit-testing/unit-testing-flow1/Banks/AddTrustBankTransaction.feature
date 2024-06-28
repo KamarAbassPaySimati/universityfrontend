@@ -21,7 +21,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     Scenario: Add transaction for trust bank with valid details for Pay-in by Agent to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Agent to PTBA1 | RM credit"
         When I enter valid agent paymaart ID
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -64,7 +64,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     Scenario: Add transaction for trust bank with valid details for Pay-in by Standard Customer to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Standard Customer to PTBA1 | RM credit"
         When I enter valid customer paymaart ID
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -91,7 +91,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     Scenario: Add transaction for trust bank with valid details for Pay-in by G2P Customer to PTBA1 | RMcredit
         When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
         When I enter valid customer paymaart ID
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -119,7 +119,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     Scenario: Add transaction for trust bank with valid details for Pay-in by Paymaart OBO Agent to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Paymaart OBO Agent to PTBA1 | RM credit"
         When I enter valid agent paymaart ID
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -146,7 +146,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     Scenario: Add transaction for trust bank with valid details for Pay-in by Paymaart OBO Standard Customer to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Paymaart OBO Standard Customer to PTBA1 | RM credit"
         When I enter valid customer paymaart ID
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -173,7 +173,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
     Scenario: Add transaction for trust bank with valid details for Pay-in by Paymaart OBO G2P Customer to PTBA1 | RM credit
         When I select the transaction type as "Pay-in by Paymaart OBO G2P Customer to PTBA1 | RM credit"
         When I enter valid customer paymaart ID
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -195,7 +195,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
 
     Scenario: Add transaction for trust bank with valid details for Inflow For E-money Float/other E-Funding to PTBA1 | RM credit
         When I select the transaction type as "Inflow For E-money Float/other E-Funding to PTBA1 | RM credit"
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -217,7 +217,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
 
     Scenario: Add transaction for trust bank with valid details for Inflow for Marketing Campaign Fund to PTBA1 | RM credit
         When I select the transaction type as "Inflow for Marketing Campaign Fund to PTBA1 | RM credit"
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -239,7 +239,7 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
 
     Scenario: Add transaction for trust bank with valid details for Receipt of Customer Balances Interest from <PTBA1>, PTBA1 | RM credit
         When I select the transaction type as "Receipt of Customer Balances Interest from PTBA1 | RM credit"
-        When I enter the transaction amount as "100" for trust bank transaction
+        When I enter the transaction amount as "10000" for trust bank transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
