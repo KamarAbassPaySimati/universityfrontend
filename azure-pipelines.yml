@@ -229,7 +229,11 @@ stages:
           artifact: 'flow1-coverageData'
         - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
           artifact: 'flow1-living-documentation'
-
+        - task: PublishTestResults@2
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/TEST-*.xml'
 
 
     - job: UnitTesting2
@@ -453,6 +457,11 @@ stages:
         - script: |
             cat log.txt
           condition: always()
+        - task: PublishTestResults@2
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/TEST-*.xml'
         # - script: |
         #     # ls -R reports-xml
         #     node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
