@@ -25,7 +25,7 @@ const GoogleApi = ({ testId, labelName, id, placeholder, handleOnChange, value, 
                 types: ['administrative_area_level_2'],
                 componentRestrictions: { country: 'MW' } // 'MW' is the ISO 3166-1 alpha-2 code for Malawi
             };
-        case 'intl_street_name':
+        case 'intl_address':
         case 'intl_town_village_ta':
         case 'intl_landmark':
             return {

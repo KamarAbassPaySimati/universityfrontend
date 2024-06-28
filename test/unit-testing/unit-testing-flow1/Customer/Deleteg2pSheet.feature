@@ -9,20 +9,31 @@ Feature: Paymaart - Admin Web - Delete G2P Sheet
     The number of lines is restricted to 100.
     There should be an option to delete the existing excel saved sheet.
 
-@add_admin_user
-@create_new_user_and_login
-    Scenario: View list all G2P customers
-        Given I navigate to G2P customer listing page
-        Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
+  @add_admin_user 
+  @create_new_user_and_login 
+  @get_customer_completed_kyc_list
+  
+  Scenario: Add transaction for trust bank with valid details for Pay-in by G2P Customer to PTBA1 | RMcredit
+    Given I navigate to banks listing
+    When I click on view button for bank details
+    When I click on add trust bank transaction
+    When I select the transaction type as "Pay-in by G2P Customer to PTBA1 | RMcredit"
+    When I enter valid customer paymaart ID
+    When I enter the transaction amount as "100" for trust bank transaction
+    When I should see the entry by field should be disabled for add trust bank transaction
+    When I enter the valid transaction POP Ref.No
+    When I upload the transaction POP document as "document_back.png"
+    When I submit the add trust bank transaction form
+    Then I should read a message stating that "Transaction details added successfully"
 
-    Scenario: Admin deleting a specific excel sheet
-        Given I navigate to G2P customer listing page
-        When I click on the view button for customer details
-        Then I should view G2P customer details
-        Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
-        When I click on the delete sheet button
-        Then I should see a confirmation prompt for deleting excel sheet
-        When I click on confirm button
-        Then I should read a message stating that "Sheet deleted successfully"
-
-    
+  Scenario: Admin deleting a specific excel sheet
+    Given I navigate to G2P customer listing page
+    When I click on the view button for customer details
+    Then I should view G2P customer details
+    When I upload the valid excel sheet as "ValidSheet.xlsx"
+    And I should read a message stating that "Successfully Uploaded G2P sheet"
+    Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
+    When I click on the delete sheet button
+    Then I should see a confirmation prompt for deleting excel sheet
+    When I click on confirm button
+    Then I should read a message stating that "Sheet deleted successfully"

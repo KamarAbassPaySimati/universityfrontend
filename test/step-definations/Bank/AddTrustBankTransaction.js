@@ -59,7 +59,7 @@ When('I select the transaction type as {string}', async function (transactionTyp
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Inflow For E-money Float/other E-Funding to PTBA1 | RMey credit':
+        case 'Inflow For E-money Float/other E-Funding to PTBA1 | RM credit':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_6"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;

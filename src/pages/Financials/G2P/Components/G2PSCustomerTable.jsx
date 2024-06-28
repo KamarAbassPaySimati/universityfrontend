@@ -67,11 +67,12 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
             if (!response.error) {
                 setIsLoading(false);
                 setIsTransactionModal('');
+                getG2PCustomerView();
                 setToastSuccess('Sheet transferred successfully');
             } else {
                 setIsLoading(false);
                 setIsTransactionModal('');
-                setToastError('Something went wrong!');
+                setToastError(response?.data?.data?.message || 'Something went wrong!');
             }
         } catch (error) {
             setIsLoading(false);
