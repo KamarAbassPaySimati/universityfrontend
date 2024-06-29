@@ -290,7 +290,7 @@ export default function PersonalDetails ({ isFullKYC, handleStates, states, subm
             </div>
             {states.personal_customer === 'Full KYC'
                 ? <>
-                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5
+                    <p className={`text-neutral-primary text-[14px] leading-[16px] font-medium ml-2.5 
                     pt-6`}>Income status</p>
                     <div className='flex flex-wrap'>
                         <div className='mt-4'>

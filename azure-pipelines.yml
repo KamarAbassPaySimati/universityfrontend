@@ -25,6 +25,7 @@ stages:
   jobs:
     - job: "lint"
       displayName: "Code Quality"
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
@@ -50,6 +51,7 @@ stages:
           displayName: 'Lint'
     - job: "secret"
       displayName: "Secret Checking"
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
@@ -60,6 +62,7 @@ stages:
           displayName: 'Lint'
     - job: "licence_complaiance"
       displayName: "License Compliance"
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
@@ -71,6 +74,7 @@ stages:
           displayName: 'License Compliance'
     - job: "sast"
       displayName: 'Static Application Security Testing (SAST)'
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
@@ -79,6 +83,7 @@ stages:
             pip3 install njsscan
             njsscan -w .
           displayName: 'Static Application Security Testing (SAST)'
+
 - stage: Build
   jobs:
     - job: "Download_Environment"
@@ -123,6 +128,7 @@ stages:
           displayName: 'Build'
         - publish: $(System.DefaultWorkingDirectory)/artifact
           artifact: bundle
+
 - stage: Test
   jobs:
     # - job: UnitTesting
@@ -172,6 +178,7 @@ stages:
 
     - job: UnitTesting1
       displayName: "Unit Testing-1"
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
         vmImage: "macos-latest"
@@ -210,6 +217,10 @@ stages:
             mkdir reports-xml
             npm install nyc --save-dev --force
             node scripts/bdd_unit_testing_azure1.js
+            if [ $? -ne 0 ]; then
+              echo "Integration Testing"
+              exit 1
+            fi
           displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
@@ -221,6 +232,7 @@ stages:
 
     - job: UnitTesting2
       displayName: "Unit Testing-2"
+      # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
         vmImage: "macos-latest"
@@ -259,6 +271,10 @@ stages:
             mkdir reports-xml
             npm install nyc --save-dev --force
             node scripts/bdd_unit_testing_azure2.js
+            if [ $? -ne 0 ]; then
+              echo "Integration Testing"
+              exit 1
+            fi
           displayName: Unit Testing
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
@@ -268,43 +284,43 @@ stages:
           condition: always()
 
 
-    - job: BDDReports
-      displayName: 'BDD Living documentation'
-      dependsOn:
-          - UnitTesting1
-          - UnitTesting2
-      condition: or(contains(variables['Build.SourceBranch'], 'feature'), contains(variables['Build.SourceBranch'], 'bugfix'), contains(variables['Build.SourceBranch'], 'hotfix'))
+    # - job: BDDReports
+    #   displayName: 'BDD Living documentation'
+    #   dependsOn:
+    #       - UnitTesting1
+    #       - UnitTesting2
+    #   condition: or(contains(variables['Build.SourceBranch'], 'feature'), contains(variables['Build.SourceBranch'], 'bugfix'), contains(variables['Build.SourceBranch'], 'hotfix'))
 
-      pool:
-        vmImage: "ubuntu-latest"
-      steps:
-        - script: |
-            echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
-            echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
-            source .env
-            mkdir coverage
-            npm install nyc --save-dev --force
-            npm run generate_report
-            npm run generate_report_cobertura
-            ls -R reports-xml
-            node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
-            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
-            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-            aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
-            aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
-            aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
-          displayName: 'BDD Living documentation'
-          condition: always()
-        - task: PublishTestResults@2
-          condition: always()
-          inputs:
-            testResultsFormat: 'JUnit'
-            testResultsFiles: '**/TEST-*.xml'
-        - task: PublishCodeCoverageResults@1
-          condition: always()
-          inputs:
-            codeCoverageTool: 'Cobertura'
-            summaryFileLocation: 'coverage-cobertura/cobertura-coverage.xml'
+    #   pool:
+    #     vmImage: "ubuntu-latest"
+    #   steps:
+    #     - script: |
+    #         echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
+    #         echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
+    #         source .env
+    #         mkdir coverage
+    #         npm install nyc --save-dev --force
+    #         npm run generate_report
+    #         npm run generate_report_cobertura
+    #         ls -R reports-xml
+    #         node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
+    #         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+    #         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+    #         aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
+    #         aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
+    #         aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
+    #       displayName: 'BDD Living documentation'
+    #       condition: always()
+    #     - task: PublishTestResults@2
+    #       condition: always()
+    #       inputs:
+    #         testResultsFormat: 'JUnit'
+    #         testResultsFiles: '**/TEST-*.xml'
+    #     - task: PublishCodeCoverageResults@1
+    #       condition: always()
+    #       inputs:
+    #         codeCoverageTool: 'Cobertura'
+    #         summaryFileLocation: 'coverage-cobertura/cobertura-coverage.xml'
 
     # - job: UnitTestingResult
     #   variables:
@@ -357,6 +373,7 @@ stages:
     - job: IntegrationTesting
       displayName: "Integration Testing"
       condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
+      # condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
       pool:
         vmImage: "macos-latest"
       steps:
@@ -384,6 +401,7 @@ stages:
         - script: |
             npm install pm2@5.3.0 -g
             source .env
+            export NODE_OPTIONS=--max-old-space-size=8192
             npm install express --force
             pm2 start scripts/server.js
             sleep 60
@@ -391,14 +409,50 @@ stages:
             npm install nyc --save-dev --force
             mkdir reports-xml
             node scripts/bdd-execution-split1.js
+            if [ $? -ne 0 ]; then
+              echo "Integration Testing"
+              exit 1
+            fi
+            mkdir coverage
+            npm run generate_report
+          displayName: Integration Testing
+        - script: |
+            cat log.txt
+          condition: always()
+        - script: |
+            # ls -R reports-xml
+            node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
+            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+            aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
+            aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/qa/ --acl public-read
+            aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
+            if [ $? -ne 0 ]; then
+              echo "BDD Living documentation"
+              exit 1
+            fi
+          displayName: BDD Living documentation
+          condition: always()
         - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
           artifact: '$(system.JobId)-failedScenarios'
           condition: always()
-        - task: PublishTestResults@2
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-coverageData'
           condition: always()
-          inputs:
-            testResultsFormat: 'JUnit'
-            testResultsFiles: '**/TEST-*.xml'
+        - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-living-documentation'
+          condition: always()
+
+
+
+        # - task: PublishTestResults@2
+        #   condition: always()
+        #   inputs:
+        #     testResultsFormat: 'JUnit'
+        #     testResultsFiles: '**/TEST-*.xml'
+
+  
+
     - job: BrowserPerformanceTesting
       displayName: "Browser Performance Testing"
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'), contains(variables['build.SourceBranch'], 'qa')), succeeded())
@@ -471,6 +525,7 @@ stages:
                   aws s3 sync dist s3://$ADMIN_S3_BUCKET --acl public-read
                   aws cloudfront create-invalidation --distribution-id $ADMIN_DISTRIBUTION_ID --paths "/*" 
                 displayName: 'Deployment'
+                
     - job: DAST
       displayName: "Dynamic Application Security Testing (DAST)"
       condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'), contains(variables['build.SourceBranch'], 'qa')), succeeded())

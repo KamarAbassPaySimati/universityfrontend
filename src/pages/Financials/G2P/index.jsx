@@ -58,6 +58,7 @@ function G2pList () {
             paths={['financials']}
             pathurls={['financials/G2P']}
             header='G2P'
+            g2pHeight='true'
             minHeightRequired={true}
             headerWithoutButton={true}
             table={true}

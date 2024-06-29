@@ -46,17 +46,17 @@ function InputFieldWithDropDown (props) {
                 <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
                     {labelName}</label>
                 {information &&
-                <div ref={infoRef} className='flex'>
-                    <Image src="info_icon" className="w-5 h-5 cursor-pointer relative" onClick={() => setShowInfo(!showInfo)}/>
-                    <div className='absolute z-10 ml-5'>
-                        <Modal center open={showInfo} onClose={() => setShowInfo(false)} closeIcon={<Image src='x'/>} styles={{ modal: { borderRadius: 10 } }} >
-                            <InformationList
-                                heading={information.heading}
-                                information={information.information}
-                            />
-                        </Modal>
+                    <div ref={infoRef} className='flex'>
+                        <Image src="info_icon" className="w-5 h-5 cursor-pointer relative" onClick={() => setShowInfo(!showInfo)} />
+                        <div className='absolute z-10 ml-5'>
+                            <Modal center open={showInfo} onClose={() => setShowInfo(false)} closeIcon={<Image src='x' />} styles={{ modal: { borderRadius: 10 } }} >
+                                <InformationList
+                                    heading={information.heading}
+                                    information={information.information}
+                                />
+                            </Modal>
+                        </div>
                     </div>
-                </div>
                 }
             </div>
             <div ref={outsideClickRef} className={` ${disable ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'} text-neutral-primary
@@ -69,11 +69,11 @@ function InputFieldWithDropDown (props) {
                     data-testid={testId}
                     title={value}
                     disabled={disable}
-                    className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]  
-                    ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
-                outline-0`}/*  */
+                    className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]
+        ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
+        outline-0 overflow-hidden whitespace-nowrap`}
                     type="button" aria-expanded="false">
-                    {value === '' ? placeholder : value}
+                    <span className=' truncate max-w-[300px] '>{value === '' ? placeholder : value}</span>
                     {show
                         ? <img loading="lazy" decoding="async" src="/images/chevron-up.svg" alt="icon" />
                         : <img loading="lazy" decoding="async" src="/images/chevron-dark-down.svg" alt="icon" />

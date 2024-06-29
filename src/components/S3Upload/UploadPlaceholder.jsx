@@ -82,7 +82,7 @@ export default function UploadPlaceholder ({
                                 />
                             </div>
                         </div>
-                        : <div className="max-w-md mx-auto rounded-lg overflow-hidden md:max-w-xl">
+                        : <div className="max-w-md rounded-lg overflow-hidden md:max-w-xl">
                             <div>
                                 <div className="md:flex">
                                     <div className="w-full py-3">
@@ -121,7 +121,6 @@ export default function UploadPlaceholder ({
                                                         accept="image/jpeg, image/png, application/pdf"
                                                         type="file" className="h-full w-full opacity-0" name=""/>
                                                 </>}
-
                                         </div>
                                     </div>
 
@@ -131,7 +130,6 @@ export default function UploadPlaceholder ({
                             </div>
                         </div>
                     }
-
                     {multiselectImage === undefined && <IframeModal
                         isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]}
                         labelValue={labelValue}/>}

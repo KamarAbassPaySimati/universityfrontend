@@ -13,6 +13,34 @@ const BankTable = (
 
 ) => {
     const Navigate = useNavigate();
+
+    const getUrl = (bank) => {
+        const bankType = searchParams.get('type');
+        let url;
+
+        switch (bankType) {
+        case 'trust-banks':
+            url = `/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`;
+            break;
+        case 'main-capital':
+            url = `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`;
+            break;
+        case 'suspense-account':
+            url = `/paymaart-banks/suspense-account/view-suspense-account/${bank?.ref_no}`;
+            break;
+        case 'transaction-fees-and-commissions':
+            url = `/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/${bank?.ref_no}`;
+            break;
+        case 'taxes':
+            url = `/paymaart-banks/taxes/view-taxes/${bank?.ref_no}`;
+            break;
+        default:
+            url = `/paymaart-banks/main-capital/view-main-capital/${bank?.ref_no}`;
+            break;
+        }
+        return url;
+    };
+
     return (
         <>
             <table className='w-full min-w-max '>
@@ -51,7 +79,7 @@ const BankTable = (
                                 </td>
                                 <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? formatTimestamp(bank?.updated_at) : '-'}</td>
                                 <td title={bank?.balance} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
-                                    {(Number(bank?.balance) || 0).toFixed(2).toLocaleString('en-US', { style: 'currency', currency: 'MWK' })} MWK
+                                    {bank?.balance} MWK
                                 </td>
 
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
@@ -61,7 +89,7 @@ const BankTable = (
                                             testId={`view-${index}`}
                                             src='eye'
                                             className={'cursor-pointer'}
-                                            onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${bank?.ref_no}`)}
+                                            onClick={() => Navigate(getUrl(bank)) }
                                         />
                                     </>
                                     <Tooltip

@@ -45,7 +45,7 @@ export default function Paginator ({ type, setSearchParams, searchParams, curren
                     />
                 </div>
             </div>}
-            <PageInfo totalCount={totalRecords} currentPage={Number(currentPage)} />
+            <PageInfo g2p='true' totalCount={totalRecords} currentPage={Number(currentPage)} />
         </div>
     );
 };

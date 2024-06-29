@@ -22,7 +22,13 @@ Feature: Paymaart - Admin Web - List of G2P Customer
       When I click on paginate to previous page
       Then I should be navigated to page 1
 
-    
+    Scenario: Checking Pagination
+      Given I navigate to G2P customer listing page
+      When I click on paginate next page
+      Then I should be navigated to page 2
+      When I click on paginate to previous page
+      Then I should be navigated to page 1
+
 
 
 
