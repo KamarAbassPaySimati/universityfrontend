@@ -11,6 +11,7 @@ import Paginator from '../../../components/Paginator/Paginator';
 import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
+import { formattedAmount } from '../../../CommonMethods/formattedAmount';
 
 export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -71,9 +72,9 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
     const getDrCr = (value) => {
         let givenValue = value.toString();
         if (givenValue.substring(0, 1) === '-') {
-            givenValue = `${givenValue} DR`;
+            givenValue = `${formattedAmount(givenValue.split('-')[1]).split('MWK')[1].trim()} DR`;
         } else {
-            givenValue = `${givenValue} CR`;
+            givenValue = `${formattedAmount(givenValue).split('MWK')[1].trim()} CR`;
         }
         return givenValue;
     };
@@ -233,7 +234,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 {getDrCr(item?.transaction_amount) || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
-                                                {item?.closing_balance || '-'}</td>
+                                                {item?.closing_balance.substring(0, 1)} {formattedAmount(item?.closing_balance).split('MWK')[1].trim() || '-'}</td>
                                         </tr>))}
                                 </tbody>
                             </table>

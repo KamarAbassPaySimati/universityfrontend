@@ -5,6 +5,7 @@ import Shimmer from '../../../../components/Shimmers/Shimmer';
 import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { Tooltip } from 'react-tooltip';
 import { useNavigate } from 'react-router';
+import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 
 const BankTable = (
     {
@@ -54,7 +55,7 @@ const BankTable = (
                         )}
                         <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Purpose</th>
                         <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Last Update Date / Time</th>
-                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Balance</th>
+                        <th className='py-2 px-[10px] text-right font-[400] min-w-[100px]'>Balance (MWK)</th>
                         <th className='py-2 px-[10px]'></th>
                     </tr>
                 </thead>}
@@ -78,8 +79,8 @@ const BankTable = (
                                     {bank?.ref_no === 'PTBAT' ? '-' : bank?.purpose}
                                 </td>
                                 <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? formatTimestamp(bank?.updated_at) : '-'}</td>
-                                <td title={bank?.balance} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
-                                    {bank?.balance} MWK
+                                <td title={formattedAmount(bank?.balance).split('MWK')[1].trim()} className='py-2 px-[10px] text-right truncate max-w-[300px]'>
+                                    {formattedAmount(bank?.balance).split('MWK')[1].trim()}
                                 </td>
 
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
