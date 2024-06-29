@@ -350,6 +350,17 @@ export const ComponentsBasedOnRole = {
                 name: 'Merchant KYC Registration',
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
+            },
+            // Paymaart Bank Tax account
+            {
+                name: 'Paymaart View Tax Account',
+                element: <BankTransactionView type={'taxes'} />,
+                path: '/paymaart-banks/taxes/view-taxes/:id'
+            },
+            {
+                name: 'Paymaart Add Tax Account',
+                element: <AddTransaction type={'taxes'} />,
+                path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
             }
         ],
     'support-admin':
@@ -439,6 +450,17 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Capital Transaction',
                 element: <AddTransaction type={'main-capital'} />,
                 path: '/paymaart-banks/main-capital/view-main-capital/:id/add-transaction'
+            },
+            // Paymaart Bank Tax account
+            {
+                name: 'Paymaart View Tax Account',
+                element: <BankTransactionView type={'taxes'} />,
+                path: '/paymaart-banks/taxes/view-taxes/:id'
+            },
+            {
+                name: 'Paymaart Add Tax Account',
+                element: <AddTransaction type={'taxes'} />,
+                path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
             }
         ]
 };

@@ -9,7 +9,7 @@ import { dataService } from '../../../services/data.services';
 import { TransactionCode } from '../TransactionCode';
 import GlobalContext from '../../../components/Context/GlobalContext';
 
-export default function AddTransaction () {
+export default function AddTransaction ({ type }) {
     const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
@@ -34,6 +34,7 @@ export default function AddTransaction () {
     };
 
     const getStaticText = () => {
+        console.log(filedData.transaction_code, 'filedData.transaction_code');
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
         case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
@@ -69,19 +70,19 @@ export default function AddTransaction () {
                 ]
             },
             '<Beneficiary> Paymaart ID':
-            (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
-                filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
-            )
-                ? undefined
-                : {
-                    label: getPaymaartIdType(),
-                    placeHolder: 'Enter paymaart ID',
-                    type: 'inputStaticText',
-                    key: 'entry_for',
-                    require: true,
-                    staticText: getStaticText()
-                },
+                (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
+                    filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
+                    filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
+                )
+                    ? undefined
+                    : {
+                        label: getPaymaartIdType(),
+                        placeHolder: 'Enter paymaart ID',
+                        type: 'inputStaticText',
+                        key: 'entry_for',
+                        require: true,
+                        staticText: getStaticText()
+                    },
             lll: undefined,
             Amount: {
                 label: 'Amount (MWK)',
@@ -164,12 +165,12 @@ export default function AddTransaction () {
         setLoading(true);
         setSubmitSelected(false);
         const dataArray =
-        (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
-            filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-            filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
-        )
-            ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
-            : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
+            (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
+                filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
+                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
+            )
+                ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
+                : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
         let dataError = false;
         dataArray.forEach((item) => {
             if (!dataError) {
@@ -222,20 +223,51 @@ export default function AddTransaction () {
             }
         }
     };
+    const determinePathsAndUrls = (type, id) => {
+        switch (type) {
+        case 'trust-bank':
+            return {
+                paths: ['Paymaart Banks', 'Trust Banks', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `trust-banks/view-trust-bank/${id}`]
+            };
+        case 'suspense-account':
+            return {
+                paths: ['Paymaart Banks', 'Suspense Account', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `suspense-account/view-suspense-account/${id}`]
+            };
+        case 'main-capital':
+            return {
+                paths: ['Paymaart Banks', 'Main Capital', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `main-capital/view-main-capital/${id}`]
+            };
+        case 'taxes':
+            return {
+                paths: ['Paymaart Banks', 'Taxes', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `taxes/view-taxes/${id}`]
+            };
+        default:
+            return {
+                paths: [],
+                pathurls: []
+            }; // default or error handling
+        }
+    };
+    const { paths, pathurls } = determinePathsAndUrls(type, id);
 
     return (
         <div>
             <CardHeader
                 activePath={'Add Transaction'}
-                paths={['Paymaart Banks', 'Trust Banks', 'Transaction Details']}
-                pathurls={['paymaart-banks', `trust-banks/view-trust-bank/${id}`]}
+                paths={paths}
+                // pathurls={['paymaart-banks', `trust-banks/view-trust-bank/${id}`]}
+                pathurls={pathurls}
                 header={'Add Transaction'}
                 minHeightRequired={true}
                 table={false}
             >
                 <FelidDivision
-                    divisionClassName = {'w-1/3'}
-                    divisionObject = {InterNationalAddress}
+                    divisionClassName={'w-1/3'}
+                    divisionObject={InterNationalAddress}
                     handleOnChange={handleStates}
                     states={filedData}
                     submitSelected={submitSelected}
