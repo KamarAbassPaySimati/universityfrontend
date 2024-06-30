@@ -103,19 +103,19 @@ export default function AddTransaction ({ type }) {
             },
             ...(type !== 'main-capital' && {
                 '<Beneficiary> Paymaart ID':
-                (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
-                filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
-                )
-                    ? undefined
-                    : {
-                        label: getPaymaartIdType(),
-                        placeHolder: 'Enter paymaart ID',
-                        type: 'inputStaticText',
-                        key: 'entry_for',
-                        require: true,
-                        staticText: getStaticText()
-                    }
+                    (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
+                        filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
+                        filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
+                    )
+                        ? undefined
+                        : {
+                            label: getPaymaartIdType(),
+                            placeHolder: 'Enter paymaart ID',
+                            type: 'inputStaticText',
+                            key: 'entry_for',
+                            require: true,
+                            staticText: getStaticText()
+                        }
             }),
             Amount: {
                 label: 'Amount (MWK)',
@@ -202,10 +202,14 @@ export default function AddTransaction ({ type }) {
     const handleAddTransaction = async () => {
         setLoading(true);
         setSubmitSelected(false);
+        console.log('dataaray');
         const dataArray =
             (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                 filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
+                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
+                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT` ||
+                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT` ||
+                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`
             )
                 ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
                 : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
@@ -220,10 +224,14 @@ export default function AddTransaction ({ type }) {
         });
         // Check for undefined or empty values
         if (dataError) {
+            console.log('am here');
             setSubmitSelected(true);
             setLoading(false);
         } else {
             try {
+                console.log('api');
+                const variable = TransactionCode(filedData.transaction_code);
+                console.log(variable);
                 const payload = {
                     transaction_code: TransactionCode(filedData.transaction_code),
                     entry_by: filedData?.entry_by,
@@ -242,7 +250,16 @@ export default function AddTransaction ({ type }) {
                 case `Receipt of Customer Balances Interest from ${id} | RM credit`:
                     payload.transaction_type = 'float';
                     break;
-
+                case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
+                    payload.transaction_type = 'excess-float';
+                    break;
+                case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
+                    payload.transaction_type = 'excess-float';
+                    break;
+                case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+                    payload.transaction_type = 'excess-float';
+                    break;
+                    // write my three conditions
                 default:
                     payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     break;
