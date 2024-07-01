@@ -198,11 +198,9 @@ export default function AddTransaction ({ type }) {
             return '<Beneficiary> Paymaart ID';
         }
     };
-    console.log(filedData, 'fileddda');
     const handleAddTransaction = async () => {
         setLoading(true);
         setSubmitSelected(false);
-        console.log('dataaray');
         const dataArray =
             (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                 filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
@@ -272,7 +270,8 @@ export default function AddTransaction ({ type }) {
                     setToastError(res.data.data.message);
                 } else {
                     setToastSuccess('Transaction details added successfully ');
-                    Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}`);
+                    type === 'tust-bank' && Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}`);
+                    type === 'main-capital' && Navigate(`/paymaart-banks/main-capital/view-main-capital/${id}`);
                 }
                 setLoading(false);
             } catch (error) {
