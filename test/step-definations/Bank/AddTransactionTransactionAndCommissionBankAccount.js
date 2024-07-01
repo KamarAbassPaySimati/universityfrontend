@@ -5,6 +5,11 @@ const { faker } = require('@faker-js/faker');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 const path = require('path');
 
+Given('I am in Add transaction Page for Transaction Fee and Commission Bank',async function () {
+    await driver.get('http://localhost:3000/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/PMTF/add-transaction');
+    await new Promise(resolve => setTimeout(resolve, 4000));
+});
+
 When('I click on add Transaction for Transaction fee and commission bank', async function () {
     const addTransactionAndCommissionBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="transaction-fees-and-commissions-transaction"]')));
     await driver.wait(until.elementIsVisible(addTransactionAndCommissionBankTransaction));
