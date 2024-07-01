@@ -6,14 +6,14 @@ const { getModifierKey } = require('../../bdd_modules/index.js');
 const path = require('path');
 
 When('I click on add Transaction for Transaction fee and commission bank', async function () {
-    const addTransactionAndCommissionBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="add_Transaction_Fee_and_Commission_Banks_transaction"]')));
+    const addTransactionAndCommissionBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="transaction-fees-and-commissions-transaction"]')));
     await driver.wait(until.elementIsVisible(addTransactionAndCommissionBankTransaction));
     await addTransactionAndCommissionBankTransaction.click();
 });
 
 Then('I should be redirected to add transaction for Transaction fee and commission banks page', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
-    await driver.wait(until.urlContains('/paymaart-banks/Transaction-fee-and-commission-banks/view-Transaction-fee-and-commission-bank/'));
+    await driver.wait(until.urlContains('/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/PMTF/add-transaction'));
 });
 
 When('I select the transaction type as {string} for Transaction fee and commission banks', async function (transactionType) {

@@ -79,8 +79,8 @@ const BankTable = (
                                     {bank?.ref_no === 'PTBAT' ? '-' : bank?.purpose}
                                 </td>
                                 <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? formatTimestamp(bank?.updated_at) : '-'}</td>
-                                <td title={formattedAmount(bank?.balance).split('MWK')[1].trim()} className='py-2 px-[10px] text-right truncate max-w-[300px]'>
-                                    {formattedAmount(bank?.balance).split('MWK')[1].trim()}
+                                <td title={formattedAmount(bank?.balance)} className='py-2 px-[10px] text-right truncate max-w-[300px]'>
+                                    {formattedAmount(bank?.balance)}
                                 </td>
 
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>

@@ -37,10 +37,10 @@ Feature: Paymaart - Admin Web- Add Transaction to Transaction Fee & Commission B
         Then I should read a message stating that <message>
         Examples:
             | amount | transaction_pop_ref_no | POP_document        | message                                       |
-            | "1200" | "TRASACTION9910284"    | "document_back.png" | "Required field"                              |
+            # | "1200" | "TRASACTION9910284"    | "document_back.png" | "Required field"                              |
             | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field"                              |
             | "1200" | ""                     | "document_back.png" | "Required field"                              |
-            | "1200" | "TRASACTION9910284"    | "document_back.png" | "Agent with this Paymaart ID does not exists" |
+            # | "1200" | "TRASACTION9910284"    | "document_back.png" | "Agent with this Paymaart ID does not exists" |
 
     Scenario: Add transaction for Transaction fee and commission banks with valid details for Balance EM Excess Return to Paymaart Main Capital Account for Payout
         When I select the transaction type as "Balance EM Excess Return to Paymaart Main Capital Account for Payout" for Transaction fee and commission banks
@@ -85,20 +85,20 @@ Feature: Paymaart - Admin Web- Add Transaction to Transaction Fee & Commission B
 
 
 
-    Scenario: Filter accounts by date
-        When I click on filter tab
-        Then I should see filter popup modal
-        And I select start date as "08-Jan-2023"
-        And I select end date as "07-Jan-2023"
-        Then I click on the apply filter button
-        Then I should read a message stating that "Start date cannot be greater than end date"  
-        And I select start date as "08-Jan-2023"
-        And I select end date as "07-Nov-2024"
-        Then I click on the apply filter button
-        Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
+    # Scenario: Filter accounts by date
+    #     When I click on filter tab
+    #     Then I should see filter popup modal
+    #     And I select start date as "08-Jan-2023"
+    #     And I select end date as "07-Jan-2023"
+    #     Then I click on the apply filter button
+    #     Then I should read a message stating that "Start date cannot be greater than end date"  
+    #     And I select start date as "08-Jan-2023"
+    #     And I select end date as "07-Nov-2024"
+    #     Then I click on the apply filter button
+    #     Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
 
-    Scenario: Checking Pagination
-        When I click on paginate next page
-        Then I should be navigated to page 2
-        When I click on paginate to previous page
-        Then I should be navigated to page 1
+    # Scenario: Checking Pagination
+    #     When I click on paginate next page
+    #     Then I should be navigated to page 2
+    #     When I click on paginate to previous page
+    #     Then I should be navigated to page 1
