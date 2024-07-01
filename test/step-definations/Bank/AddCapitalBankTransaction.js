@@ -7,7 +7,7 @@ const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Then('I navigate to add captial bank transaction screen', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
-    await driver.wait(until.urlContains('http://localhost:3000/paymaart-banks/main-capital/view-main-capital/PMCA/add-transaction'));
+    await driver.get('http://localhost:3000/paymaart-banks/main-capital/view-main-capital/PMCA/add-transaction');
 });
 
 When('I enter the transaction amount as {string} for capital bank transaction', async function (amount) {
@@ -27,7 +27,7 @@ When('I should see the entry by field should be disabled for add capital bank tr
 
 When('I submit the add capital bank transaction form', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="add_transaction"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -35,7 +35,7 @@ When('I submit the add capital bank transaction form', async function () {
 
 When('I submit the add captial bank transaction form', async function () {
     await new Promise(resolve => setTimeout(resolve, 1000));
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="submit_button"]')));
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="add_transaction"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
     await new Promise(resolve => setTimeout(resolve, 100));
