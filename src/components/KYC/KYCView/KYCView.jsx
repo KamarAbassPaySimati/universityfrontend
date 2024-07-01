@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
-import isTimestampFiveMinutesAgo from '../../../CommonMethods/lastLoggedInTimeStamp';
 import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import KYCSections from './KYCSections';
 import { KYCProfileView } from './KYCProfileViewSlice';
