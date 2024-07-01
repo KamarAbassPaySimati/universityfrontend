@@ -9,7 +9,7 @@ import { dataService } from '../../../services/data.services';
 import { TransactionCode } from '../TransactionCode';
 import GlobalContext from '../../../components/Context/GlobalContext';
 
-export default function AddTransaction () {
+export default function AddTransaction ({ type }) {
     const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
@@ -28,12 +28,17 @@ export default function AddTransaction () {
             return 'Customer Paymaart ID';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'G2P Customer Paymaart ID';
+        case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
+        case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
+        case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+            return 'Amount';
         default:
             return '<Beneficiary> Paymaart ID';
         }
     };
 
     const getStaticText = () => {
+        console.log(filedData.transaction_code, 'filedData.transaction_code');
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
         case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
@@ -48,6 +53,45 @@ export default function AddTransaction () {
         }
     };
 
+    const determineOptions = (type, id) => {
+        switch (type) {
+        case 'trust-bank':
+            return [
+                `Pay-in by Agent to ${id} | RM credit`,
+                `Pay-in by Standard Customer to ${id} | RM credit`,
+                `Pay-in by G2P Customer to ${id} | RM credit`,
+                `Pay-in by Paymaart OBO Agent to ${id} | RM credit`,
+                `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`,
+                `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`,
+                `Inflow For EM Float/other E-Funding to ${id} | RM credit`,
+                `Inflow for Marketing Campaign Fund to ${id} | RM credit`,
+                `Receipt of Customer Balances Interest from ${id} | RM credit`
+            ];
+        case 'main-capital':
+            return [
+                `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`,
+                `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`,
+                `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`
+            ];
+        case 'suspense-account':
+            return [
+                `Suspense transaction 1 for ${id}`,
+                `Suspense transaction 2 for ${id}`,
+                `Suspense transaction 3 for ${id}`
+            ];
+        case 'taxes':
+            return [
+                `Tax transaction 1 for ${id}`,
+                `Tax transaction 2 for ${id}`,
+                `Tax transaction 3 for ${id}`
+            ];
+        default:
+            return [];
+        }
+    };
+
+    const options = determineOptions(type, id);
+
     const InterNationalAddress = {
         nothing_to_show: {
             Type: {
@@ -55,36 +99,26 @@ export default function AddTransaction () {
                 type: 'dropdown',
                 key: 'transaction_code',
                 require: true,
-                options: [
-                    `Pay-in by Agent to ${id} | RM credit`,
-                    `Pay-in by Standard Customer to ${id} | RM credit`,
-                    `Pay-in by G2P Customer to ${id} | RM credit`,
-                    `Pay-in by Paymaart OBO Agent to ${id} | RM credit`,
-                    `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`,
-                    `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`,
-                    `Inflow For EM Float/other E-Funding to ${id} | RM credit`,
-                    `Inflow for Marketing Campaign Fund to ${id} | RM credit`,
-                    `Receipt of Customer Balances Interest from ${id} | RM credit`
-
-                ]
+                options
             },
-            '<Beneficiary> Paymaart ID':
-            (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
-                filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
-            )
-                ? undefined
-                : {
-                    label: getPaymaartIdType(),
-                    placeHolder: 'Enter paymaart ID',
-                    type: 'inputStaticText',
-                    key: 'entry_for',
-                    require: true,
-                    staticText: getStaticText()
-                },
-            lll: undefined,
+            ...(type !== 'main-capital' && {
+                '<Beneficiary> Paymaart ID':
+                    (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
+                        filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
+                        filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
+                    )
+                        ? undefined
+                        : {
+                            label: getPaymaartIdType(),
+                            placeHolder: 'Enter paymaart ID',
+                            type: 'inputStaticText',
+                            key: 'entry_for',
+                            require: true,
+                            staticText: getStaticText()
+                        }
+            }),
             Amount: {
-                label: 'Amount',
+                label: 'Amount (MWK)',
                 type: 'input',
                 key: 'amount',
                 require: true
@@ -156,20 +190,29 @@ export default function AddTransaction () {
         case `Inflow for Marketing Campaign Fund to ${id} | RM credit`:
         case `Receipt of Customer Balances Interest from ${id} | RM credit`:
             return 'float';
+        case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
+        case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
+        case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+            return 'excess-float';
         default:
             return '<Beneficiary> Paymaart ID';
         }
     };
+    console.log(filedData, 'fileddda');
     const handleAddTransaction = async () => {
         setLoading(true);
         setSubmitSelected(false);
+        console.log('dataaray');
         const dataArray =
-        (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
-            filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-            filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
-        )
-            ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
-            : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
+            (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
+                filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
+                filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
+                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT` ||
+                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT` ||
+                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`
+            )
+                ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
+                : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
         let dataError = false;
         dataArray.forEach((item) => {
             if (!dataError) {
@@ -181,10 +224,14 @@ export default function AddTransaction () {
         });
         // Check for undefined or empty values
         if (dataError) {
+            console.log('am here');
             setSubmitSelected(true);
             setLoading(false);
         } else {
             try {
+                console.log('api');
+                const variable = TransactionCode(filedData.transaction_code);
+                console.log(variable);
                 const payload = {
                     transaction_code: TransactionCode(filedData.transaction_code),
                     entry_by: filedData?.entry_by,
@@ -203,7 +250,19 @@ export default function AddTransaction () {
                 case `Receipt of Customer Balances Interest from ${id} | RM credit`:
                     payload.transaction_type = 'float';
                     break;
-
+                case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
+                    payload.transaction_type = 'excess-float';
+                    payload.bank_type = 'PTBA1';
+                    break;
+                case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
+                    payload.transaction_type = 'excess-float';
+                    payload.bank_type = 'PTBA2';
+                    break;
+                case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+                    payload.transaction_type = 'excess-float';
+                    payload.bank_type = 'PTBA3';
+                    break;
+                    // write my three conditions
                 default:
                     payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     break;
@@ -222,20 +281,51 @@ export default function AddTransaction () {
             }
         }
     };
+    const determinePathsAndUrls = (type, id) => {
+        switch (type) {
+        case 'trust-bank':
+            return {
+                paths: ['Paymaart Banks', 'Trust Banks', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `trust-banks/view-trust-bank/${id}`]
+            };
+        case 'suspense-account':
+            return {
+                paths: ['Paymaart Banks', 'Suspense Account', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `suspense-account/view-suspense-account/${id}`]
+            };
+        case 'main-capital':
+            return {
+                paths: ['Paymaart Banks', 'Main Capital', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `main-capital/view-main-capital/${id}`]
+            };
+        case 'taxes':
+            return {
+                paths: ['Paymaart Banks', 'Taxes', 'Transaction Details'],
+                pathurls: ['paymaart-banks', `taxes/view-taxes/${id}`]
+            };
+        default:
+            return {
+                paths: [],
+                pathurls: []
+            }; // default or error handling
+        }
+    };
+    const { paths, pathurls } = determinePathsAndUrls(type, id);
 
     return (
         <div>
             <CardHeader
                 activePath={'Add Transaction'}
-                paths={['Paymaart Banks', 'Trust Banks', 'Transaction Details']}
-                pathurls={['paymaart-banks', `trust-banks/view-trust-bank/${id}`]}
+                paths={paths}
+                // pathurls={['paymaart-banks', `trust-banks/view-trust-bank/${id}`]}
+                pathurls={pathurls}
                 header={'Add Transaction'}
                 minHeightRequired={true}
                 table={false}
             >
                 <FelidDivision
-                    divisionClassName = {'w-1/3'}
-                    divisionObject = {InterNationalAddress}
+                    divisionClassName={'w-1/3'}
+                    divisionObject={InterNationalAddress}
                     handleOnChange={handleStates}
                     states={filedData}
                     submitSelected={submitSelected}
