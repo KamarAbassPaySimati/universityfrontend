@@ -96,15 +96,15 @@ When('I select the transaction type as {string}', async function (transactionTyp
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_6"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_7"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_1"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_8"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:

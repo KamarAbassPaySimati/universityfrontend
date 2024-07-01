@@ -7,7 +7,7 @@ const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Then('I navigate to add captial bank transaction screen', async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
-    await driver.wait(until.urlContains('http://localhost:3000/view/capital-bank/add-transaction'));
+    await driver.wait(until.urlContains('http://localhost:3000/paymaart-banks/main-capital/view-main-capital/PMCA/add-transaction'));
 });
 
 When('I enter the transaction amount as {string} for capital bank transaction', async function (amount) {
