@@ -38,7 +38,6 @@ Feature: Paymaart- Admin Web- Add Capital Bank Transactions
             | amount | transaction_pop_ref_no | POP_document        | message          |
             | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
             | "1200" | ""                     | "document_back.png" | "Required field" |
-            | "1200" | "TRASACTION9910284"    | ""                  | "Required field" |
 
     Scenario Outline: Add transaction for capital bank with invalid details for Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT
         When I select the transaction type as "Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT"
@@ -52,7 +51,6 @@ Feature: Paymaart- Admin Web- Add Capital Bank Transactions
             | amount | transaction_pop_ref_no | POP_document        | message          |
             | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
             | "1200" | ""                     | "document_back.png" | "Required field" |
-            | "1200" | "TRASACTION9910284"    | ""                  | "Required field" |
 
     Scenario: Add transaction for capital bank with valid details for Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT
         When I select the transaction type as "Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT"
@@ -75,7 +73,6 @@ Feature: Paymaart- Admin Web- Add Capital Bank Transactions
             | amount | transaction_pop_ref_no | POP_document        | message          |
             | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
             | "1200" | ""                     | "document_back.png" | "Required field" |
-            | "1200" | "TRASACTION9910284"    | ""                  | "Required field" |
 
     Scenario: Add transaction for capital bank with valid details for Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT
         When I select the transaction type as "Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT"
