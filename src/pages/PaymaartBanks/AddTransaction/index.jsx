@@ -252,12 +252,15 @@ export default function AddTransaction ({ type }) {
                     break;
                 case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
                     payload.transaction_type = 'excess-float';
+                    payload.bank_type = 'PTBA1';
                     break;
                 case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
                     payload.transaction_type = 'excess-float';
+                    payload.bank_type = 'PTBA2';
                     break;
                 case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
                     payload.transaction_type = 'excess-float';
+                    payload.bank_type = 'PTBA3';
                     break;
                     // write my three conditions
                 default:
