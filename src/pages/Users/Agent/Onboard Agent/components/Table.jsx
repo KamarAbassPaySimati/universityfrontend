@@ -3,7 +3,6 @@ import React from 'react';
 import Image from '../../../../../components/Image/Image';
 import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
 import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
-import isTimestampFiveMinutesAgo from '../../../../../CommonMethods/lastLoggedInTimeStamp';
 import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
@@ -43,11 +42,12 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
                                 <td data-testid="phone_number" className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
-                                <td className='py-2 px-[10px]'>{user?.last_logged_in
-                                    ? isTimestampFiveMinutesAgo(user?.last_logged_in)
-                                        ? formatTimestamp(user?.last_logged_in)
-                                        : 'Online'
-                                    : '-'}</td>
+                                <td className='py-2 px-[10px]'>
+                                    {user?.last_logged_in
+                                        ? isNaN(Number(user?.last_logged_in))
+                                            ? <span style={{ color: '#13B681', fontWeight: 'semibold' }}>Online</span>
+                                            : formatTimestamp(user?.last_logged_in)
+                                        : '-'}</td>
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status
                                         ? (
