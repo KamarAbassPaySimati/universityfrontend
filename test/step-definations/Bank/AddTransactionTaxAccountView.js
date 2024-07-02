@@ -12,7 +12,7 @@ When('I click on add transaction button', async function () {
     await driver.wait(until.elementIsVisible(addTaxAccountTransaction));
     await addTaxAccountTransaction.click();
 });
- 
+
 Then('I should see the enter by field is prefilled', async function () {
     const enterByTextField = await driver.wait(until.elementLocated(By.css('[data-testid="entry_by"]')));
     const isEnable = await enterByTextField.isEnabled();
@@ -22,6 +22,7 @@ Then('I should see the enter by field is prefilled', async function () {
 });
 
 When('I click on add button', async function () {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     await driver.wait(until.elementLocated(By.css('[data-testid="add_transaction"]'))).click();
 });
 
