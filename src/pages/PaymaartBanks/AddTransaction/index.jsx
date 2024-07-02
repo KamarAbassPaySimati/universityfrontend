@@ -193,19 +193,19 @@ export default function AddTransaction ({ type }) {
                 setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
             }
         } else if (type === 'inputStaticText') {
-            if (value.target.value.length <= 8) {
-                const regex = /^\d{0,9}$/;
-                if (regex.test(value.target.value)) {
-                    setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
-                } else {
-                    setFiledData((prevState) => ({
-                        ...prevState,
-                        [id]: filedData?.entry_for
-                            ? filedData.entry_for
-                            : ''
-                    }));
-                }
+            // if (value.target.value.length <= 8) {
+            const regex = /^\d{0,9}$/;
+            if (regex.test(value.target.value)) {
+                setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
+            } else {
+                setFiledData((prevState) => ({
+                    ...prevState,
+                    [id]: filedData?.entry_for
+                        ? filedData.entry_for.replace(/[^0-9]/g, '')
+                        : ''
+                }));
             }
+            // }
         } else {
             setFiledData((prevState) => ({ ...prevState, [id]: value }));
         }
