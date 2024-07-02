@@ -461,6 +461,17 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Tax Account',
                 element: <AddTransaction type={'taxes'} />,
                 path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
+            },
+            // Paymaart Bank Transaction fees and Commision View
+            {
+                name: 'Paymaart View Transaction fees and Commision',
+                element: <BankTransactionView type={'transaction-fees-and-commissions'}/>,
+                path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id'
+            },
+            {
+                name: 'Paymaart Add Transaction fees and Commision',
+                element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
+                path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
             }
         ]
 };

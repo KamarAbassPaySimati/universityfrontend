@@ -19,7 +19,7 @@ Then('I should be redirected to view transaction listing screen of that trust ba
 });
 
 When('I click on add trust bank transaction', async function () {
-    const addTrustBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="add_trust_bank_transaction"]')));
+    const addTrustBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="trust-bank-transaction"]')));
     await driver.wait(until.elementIsVisible(addTrustBankTransaction));
     await addTrustBankTransaction.click();
 });

@@ -97,6 +97,12 @@ export function TransactionCode (value) {
     case 'Charge for Bank Services or Transactions by PTBA3 | RM debit':
         return 'PTDR2PTBA3';
 
+        // Transcation Fees and Commissions
+    case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
+        return 'PMTFCOUTFT';
+    case 'Balance EM Excess Return to Paymaart Main Capital Account for Payout':
+        return 'PMTFPOUTRM';
+
     default:
         return 'Invalid description';
     }
@@ -202,6 +208,12 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Outflow for excess Float withdrawal from PMCA, PTBA3 | EM credit to PMCAT';
     case 'PTDR2PTBA3':
         return 'Charge for Bank Services or Transactions by PTBA3 | RM debit';
+
+        // Transcation Fees and Commissions
+    case 'PMTFCOUTFT':
+        return 'Balance EM Excess Return to Paymaart Main Capital Account for Float';
+    case 'PMTFPOUTRM':
+        return 'Balance EM Excess Return to Paymaart Main Capital Account for Payout';
 
     default:
         return 'Invalid transaction code';

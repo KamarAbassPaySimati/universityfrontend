@@ -8,7 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BankTransactionViewData } from './BankTransactionViewSlice';
 import { useParams, useSearchParams } from 'react-router-dom';
 import formatTimestamp from '../../../CommonMethods/formatTimestamp';
-import { formattedAmount } from '../../../CommonMethods/formattedAmount';
 
 export default function BankTransactionView ({ type }) {
     const { id } = useParams();
@@ -72,6 +71,13 @@ export default function BankTransactionView ({ type }) {
         handleViewData();
     }, [searchParams]);
 
+    const formattedAmount = (amount) => {
+        return new Intl.NumberFormat('en-US', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount);
+    };
+
     return (
         <div>
             <CardHeader
@@ -97,10 +103,11 @@ export default function BankTransactionView ({ type }) {
                                 <p className='text-[#4F5962] text-sm font-semibold'>
                                     {`${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
                                 </p>
-                                <span className='text-black text-lg font-bold ml-2'>
-                                    {formattedAmount(Data?.amount).split('MWK')[1].trim() || '0.00'} CR
-                                </span>
-
+                                {loading
+                                    ? <div className="animate-pulse z-0 text-sm font-light text-[#13365C] min-w-[80px]"> <div className={'h-7bg-slate-200 rounded z-[-10] relative'} /> </div>
+                                    : <span className='text-black text-lg font-bold ml-2'>
+                                        {Data?.amount ? formattedAmount(Data?.amount) : '0.00'} CR
+                                    </span>}
                             </div>
                     }
                 />
@@ -118,7 +125,7 @@ export default function BankTransactionView ({ type }) {
                                     : Data?.account_no,
                                 Purpose: Data?.purpose,
                                 'Last Update Date / Time': formatTimestamp(Data?.updated_at),
-                                Balance: `${formattedAmount(Data?.amount).split('MWK')[1].trim()} MWK`
+                                Balance: `${formattedAmount(Data?.amount)} MWK`
                             }
                         } />
                     <TransactionList
