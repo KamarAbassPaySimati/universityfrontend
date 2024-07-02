@@ -6,7 +6,7 @@ Feature: Paymaart - Admin Web- Add Transaction to Transaction Fee & Commission B
     There should be an option to enter the money
     equivalent e-money to be removed from current bank and moved to destination bank
 
-  @add_admin_user @create_new_user_and_login @delete_admin_account
+  @add_admin_user @create_new_user_and_login
   Scenario: Navigating to Transaction fee and commission banks add transactions screen
     Given I navigate to Transaction fee and commision bank listing
     Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
@@ -56,6 +56,7 @@ Feature: Paymaart - Admin Web- Add Transaction to Transaction Fee & Commission B
     When I submit the Transaction fee and commission banks form
     Then I should read a message stating that "Transaction details added successfully"
 
+  @delete_admin_account
   Scenario: Add transaction for Transaction fee and commission banks with valid details for Balance EM Excess Return to Paymaart Main Capital Account for Payout
     Given I am in Add transaction Page for Transaction Fee and Commission Bank
     When I select the transaction type as "Balance EM Excess Return to Paymaart Main Capital Account for Payout" for Transaction fee and commission banks
