@@ -59,7 +59,7 @@ When('I select the transaction type as {string}', async function (transactionTyp
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Inflow For E-money Float/other E-Funding to PTBA1 | RMey credit':
+        case 'Inflow For E-money Float/other E-Funding to PTBA1 | RM credit':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_6"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
@@ -69,6 +69,42 @@ When('I select the transaction type as {string}', async function (transactionTyp
             break;
         case 'Receipt of Customer Balances Interest from PTBA1 | RM credit':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_8"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Settlement to Merchant Biller from PTBA1| EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_0"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Settlement to Merchant Biller from PTBA2| EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_1"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Settlement to Merchant Biller from PTBA3| EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_2"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_3"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Charge for Bank Services or Transactions by PTBA2 |  EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_4"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Charge for Bank Services or Transactions by PTBA3 |  EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_5"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_1"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:
@@ -99,7 +135,7 @@ When('I enter valid customer paymaart ID', async function () {
 When('I enter the transaction amount as {string} for trust bank transaction', async function (amount) {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="amount"]')));
     await driver.wait(until.elementIsVisible(element));
-
+    console.log('amount', amount);
     await element.sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (amount !== '') {
         await element.sendKeys(amount);

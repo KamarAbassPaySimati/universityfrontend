@@ -11,8 +11,9 @@ import Paginator from '../../../components/Paginator/Paginator';
 import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
+import { formattedAmount } from '../../../CommonMethods/formattedAmount';
 
-export default function TransactionList ({ searchParams, setSearchParams }) {
+export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
     const { loading, Data } = useSelector((state) => state.BankTransactionViewData);
     const filterDiv = useRef();
@@ -71,11 +72,25 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
     const getDrCr = (value) => {
         let givenValue = value.toString();
         if (givenValue.substring(0, 1) === '-') {
-            givenValue = `${givenValue} DR`;
+            givenValue = `${formattedAmount(givenValue.split('-')[1]).split('MWK')[1].trim()} DR`;
         } else {
-            givenValue = `${givenValue} CR`;
+            givenValue = `${formattedAmount(givenValue).split('MWK')[1].trim()} CR`;
         }
         return givenValue;
+    };
+    const addTractionNavigation = (type, id) => {
+        switch (type) {
+        case 'trust-bank':
+            return `/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`;
+        case 'suspense-account':
+            return `/paymaart-banks/suspense-account/view-suspense-account/${id}/add-transaction`;
+        case 'main-capital':
+            return `/paymaart-banks/main-capital/view-main-capital/${id}/add-transaction`;
+        case 'taxes':
+            return `/paymaart-banks/taxes/view-taxes/${id}/add-transaction`;
+        default:
+            return '#'; // default or error handling
+        }
     };
     return (
         <div data-testid="view_admin"
@@ -107,11 +122,10 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                     Filter Date Range
                                 </div>
                                 <button data-testid="clear-filter"
-                                    onClick={() => { handleClearFilter(); } } className='font-[400]'>
+                                    onClick={() => { handleClearFilter(); }} className='font-[400]'>
                                     Clear
                                 </button>
                             </div>
-                            {console.log('selectedFilter', selectedFilter)}
                             <div className='p-4 flex'>
                                 <div className='px-2.5 w-[200px]'>
                                     <DatePickerAntd
@@ -122,7 +136,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                         type='start_date'
                                         open={isFilter}
                                         value={selectedFilter.start_date}
-                                        // error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
+                                    // error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
                                     />
                                 </div>
                                 <div className='px-2.5 w-[200px]'>
@@ -133,7 +147,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                         testID="end_date"
                                         handleStates={handleStates}
                                         value={selectedFilter.end_date}
-                                        // error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
+                                    // error={(states.dob === undefined && submitSelected) ? 'Required field' : undefined}
                                     />
                                 </div>
                             </div>
@@ -149,20 +163,21 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                     }
                     {id !== 'PTBAT' && <button data-testid="add_trust_bank_transaction"
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
-                    h-[40px] rounded-[6px]'>
+                    h-[40px] rounded-[6px]'
+                        onClick={() => Navigate(addTractionNavigation(type, id))}>
                         <img src='/images/addIcon.svg'
-                            className='mr-[8px]'/>
+                            className='mr-[8px]' />
                         <p
-                            onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`)}
+                            // onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`)}
                             className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
                     </button>}
                 </div>
             </div>
             <div className='scrollBar overflow-auto '>
                 {loading
-                    ? <Shimmer column={10} row={10} firstIndex/>
+                    ? <Shimmer column={10} row={10} firstIndex />
                     : (
-                        Data.transactions.length === 0
+                        Data?.transactions.length === 0
                             ? <NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for'
                             />
                             : <table className='w-full min-w-max mt-7'>
@@ -175,7 +190,8 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
-                                        <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
+                                        {(type !== 'transaction-fees-and-commissions' && type !== 'taxes') &&
+                                            <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>}
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP Ref. No</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP</th>
@@ -186,7 +202,7 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                 </thead>
                                 <tbody className={` text-neutral-primary whitespace-nowrap text-[14px]
                     leading-[24px]`}>
-                                    {Data.transactions && Data.transactions.map((item, index = 0) => (
+                                    {Data?.transactions && Data?.transactions.map((item, index = 0) => (
                                         <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
@@ -196,18 +212,27 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 {item?.created_at || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                                title={TransactionDescription(item?.transaction_code)}
+                                                title={
+                                                    TransactionDescription(item?.transaction_code, type,
+                                                        item?.transaction_amount?.toString().substring(0, 1) === '-'
+                                                            ? 'EM debit'
+                                                            : 'CR')}
                                             >
-                                                {TransactionDescription(item?.transaction_code) || '-'}</td>
+                                                {
+                                                    TransactionDescription(item?.transaction_code, type,
+                                                        item?.transaction_amount.toString()?.substring(0, 1) === '-'
+                                                            ? 'EM debit'
+                                                            : 'CR')}
+                                            </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {item?.entered_by || '-'}</td>
-                                            <td data-testid="name"
+                                            {(type !== 'transaction-fees-and-commissions' && type !== 'taxes') && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id}</td>
+                                                {item?.sender_id || '-'}</td>}
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                                title={item?.transaction_id}
+                                                title={item?.transaction_id || '-'}
                                             >
                                                 {item?.transaction_id || '-'}</td>
                                             <td data-testid="name"
@@ -215,17 +240,16 @@ export default function TransactionList ({ searchParams, setSearchParams }) {
                                                 {item?.pop_file_ref_no || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] flex items-center justify-center truncate max-w-[200px]'>
-                                                <Image
-                                                    toolTipId={`eye-${index}`}
-                                                    onClick={() => setSelectedIndex(item.pop_file_key)}
-                                                    testId={`view-${index}`} src='eye' className={'cursor-pointer'}/>
+                                                {item.pop_file_key
+                                                    ? <Image toolTipId={`eye-${index}`} onClick={() => setSelectedIndex(item.pop_file_key)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                                    : '-'}
                                             </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
                                                 {getDrCr(item?.transaction_amount) || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
-                                                {item?.closing_balance || '-'}</td>
+                                                {item?.closing_balance.substring(0, 1)} {formattedAmount(item?.closing_balance).split('MWK')[1].trim() || '-'}</td>
                                         </tr>))}
                                 </tbody>
                             </table>
