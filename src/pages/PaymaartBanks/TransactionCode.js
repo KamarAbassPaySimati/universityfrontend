@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export function TransactionCode (value) {
+export function TransactionCode (value, type) {
     switch (value) {
     // PTBA1 mappings
     case 'Pay-in by Agent to PTBA1 | RM credit':
@@ -98,11 +98,19 @@ export function TransactionCode (value) {
         return 'PTDR2PTBA3';
 
         // Transcation Fees and Commissions
+        // Taxes
     case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
-        return 'PMTFCOUTFT';
+        if (type === 'taxes') {
+            return 'PMTXCOUTFT';
+        } else {
+            return 'PMTFCOUTFT';
+        }
     case 'Balance EM Excess Return to Paymaart Main Capital Account for Payout':
-        return 'PMTFPOUTRM';
-
+        if (type === 'taxes') {
+            return 'PMTXPOUTRM';
+        } else {
+            return 'PMTFPOUTRM';
+        }
     default:
         return 'Invalid description';
     }
