@@ -25,6 +25,29 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         start_date: new Date(searchParams.get('start_date')).getTime() / 1000,
         end_date: new Date(searchParams.get('end_date')).getTime() / 1000
     });
+
+    let addTransactionPath;
+    switch (type) {
+    case 'transaction-fees-and-commissions':
+        addTransactionPath = `/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/${id}/add-transaction`;
+        break;
+    case 'trust-bank':
+        addTransactionPath = `/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`;
+        break;
+    case 'suspense-account':
+        addTransactionPath = `/paymaart-banks/suspense-account/view-suspense-account/${id}/add-transaction`;
+        break;
+    case 'main-capital':
+        addTransactionPath = `/paymaart-banks/main-capital/view-main-capital/${id}/add-transaction`;
+        break;
+    case 'taxes':
+        addTransactionPath = `/paymaart-banks/taxes/view-taxes/${id}/add-transaction`;
+        break;
+    default:
+        addTransactionPath = '#'; // default or error handling
+        break;
+    }
+
     const handleStates = (value, id) => {
         setErrorMessage('');
         setSelectedFilter((prevState) => ({ ...prevState, [id]: value }));
@@ -72,25 +95,11 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
     const getDrCr = (value) => {
         let givenValue = value.toString();
         if (givenValue.substring(0, 1) === '-') {
-            givenValue = `${formattedAmount(givenValue.split('-')[1]).split('MWK')[1].trim()} DR`;
+            givenValue = `${formattedAmount(givenValue)} DR`;
         } else {
-            givenValue = `${formattedAmount(givenValue).split('MWK')[1].trim()} CR`;
+            givenValue = `${formattedAmount(givenValue)} CR`;
         }
         return givenValue;
-    };
-    const addTractionNavigation = (type, id) => {
-        switch (type) {
-        case 'trust-bank':
-            return `/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`;
-        case 'suspense-account':
-            return `/paymaart-banks/suspense-account/view-suspense-account/${id}/add-transaction`;
-        case 'main-capital':
-            return `/paymaart-banks/main-capital/view-main-capital/${id}/add-transaction`;
-        case 'taxes':
-            return `/paymaart-banks/taxes/view-taxes/${id}/add-transaction`;
-        default:
-            return '#'; // default or error handling
-        }
     };
     return (
         <div data-testid="view_admin"
@@ -161,15 +170,12 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                         </div>
                     </div>
                     }
-                    {id !== 'PTBAT' && <button data-testid="add_trust_bank_transaction"
+                    {id !== 'PTBAT' && <button data-testid={`${type}-transaction`} onClick={() => Navigate(addTransactionPath)}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
-                    h-[40px] rounded-[6px]'
-                        onClick={() => Navigate(addTractionNavigation(type, id))}>
+                    h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
-                            className='mr-[8px]' />
-                        <p
-                            // onClick={() => Navigate(`/paymaart-banks/trust-banks/view-trust-bank/${id}/add-transaction`)}
-                            className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
+                            className='mr-[8px]'/>
+                        <p className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
                     </button>}
                 </div>
             </div>
@@ -248,8 +254,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
                                                 {getDrCr(item?.transaction_amount) || '-'}</td>
                                             <td data-testid="name"
-                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>
-                                                {item?.closing_balance.substring(0, 1)} {formattedAmount(item?.closing_balance).split('MWK')[1].trim() || '-'}</td>
+                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>{formattedAmount(item?.closing_balance) || '-'}</td>
                                         </tr>))}
                                 </tbody>
                             </table>

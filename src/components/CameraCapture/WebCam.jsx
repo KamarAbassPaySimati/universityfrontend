@@ -28,7 +28,7 @@ export default function WebCam ({ handleStates, handleClose }) {
         if (image) {
             setLoading(true);
             const fileName = `image-${uuidv4()}.jpeg`;
-            var file = dataURLtoFile(image, fileName);
+            const file = dataURLtoFile(image, fileName);
             const capture = await handleUpload(file, uuidv4());
             handleStates(`public/${capture.key}`, 'capture');
             handleClose();
