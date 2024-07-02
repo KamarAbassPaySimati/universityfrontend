@@ -1,4 +1,4 @@
-const { When, Then } = require('@cucumber/cucumber');
+const { When, Then, Given } = require('@cucumber/cucumber');
 const { until, By, Key } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 const { faker } = require('@faker-js/faker');
