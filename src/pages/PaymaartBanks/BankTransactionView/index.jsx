@@ -104,7 +104,13 @@ export default function BankTransactionView ({ type }) {
                                     {`${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
                                 </p>
                                 {loading
-                                    ? <div className="animate-pulse z-0 text-sm font-light text-[#13365C] min-w-[80px]"> <div className={'h-7bg-slate-200 rounded z-[-10] relative'} /> </div>
+                                    ? <tbody className=''>
+                                        <tr className="animate-pulse z-0">
+                                            <td className={'text-sm font-light text-[#13365C] p-2.5 min-w-[180px]'}>
+                                                <div className={'h-7 bg-slate-200 rounded z-[-10] relative'} />
+                                            </td>
+                                        </tr>
+                                    </tbody>
                                     : <span className='text-black text-lg font-bold ml-2'>
                                         {Data?.amount ? formattedAmount(Data?.amount) : '0.00'} CR
                                     </span>}
