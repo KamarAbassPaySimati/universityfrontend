@@ -49,6 +49,23 @@ async function deleteRequestBDDAPI (payload) {
         console.log('API Error', error);
     }
 }
+
+async function deleteRequestCustomer (payload) {
+    const token = await getBddSignedToken();
+
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-user-request`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
 async function createAdminAccountSecure (payload) {
     const token = await getToken();
 
@@ -260,5 +277,6 @@ module.exports = {
     sendMerchantOTP,
     deleteRequestBDDAPI,
     getKYCCompletedAgentList,
-    getKYCCompletedCustomerList
+    getKYCCompletedCustomerList,
+    deleteRequestCustomer
 };

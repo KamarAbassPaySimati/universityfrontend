@@ -6,6 +6,9 @@ Feature: Paymaart - Admin Web - View Delete Account List(Customer)
     There should be an option to see the total number of records eg: 10/100
     There should an option to filter using status
 
+    @add_admin_user
+    @create_new_user_and_login
+    @register_new_customer_and_send_delete_request_for_that_customer
     Scenario: List all the delete request
         Given I navigate to customer delete request listing screen
         Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
@@ -30,7 +33,6 @@ Feature: Paymaart - Admin Web - View Delete Account List(Customer)
     @wait
     @add_finance_admin_user
     @create_new_user_and_login
-    
     Scenario: Login as finance admin and navigate to delete request listing screen
         Given I navigate to customer delete request listing screen
         Then I should read a message stating that "Page Not Found"
@@ -40,7 +42,6 @@ Feature: Paymaart - Admin Web - View Delete Account List(Customer)
     @wait
     @add_support_admin_user
     @create_new_user_and_login
-    
     Scenario: Login as support admin and navigate to delete request listing screen
         Given I navigate to customer delete request listing screen
         Then I should read a message stating that "Page Not Found"
@@ -50,7 +51,6 @@ Feature: Paymaart - Admin Web - View Delete Account List(Customer)
     @wait
     @add_normal_admin_user
     @create_new_user_and_login
-    
     Scenario: Login as normal admin and navigate to delete request listing screen
         Given I navigate to customer delete request listing screen
         Then I should read a message stating that "Page Not Found"
