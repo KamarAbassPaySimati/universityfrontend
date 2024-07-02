@@ -1,11 +1,12 @@
-const { When, Then } = require('@cucumber/cucumber');
+/* eslint-disable max-len */
+const { When, Given, Then } = require('@cucumber/cucumber');
 const { until, By, Key } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 const { faker } = require('@faker-js/faker');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 const path = require('path');
 
-Given('I am in Add transaction Page for Transaction Fee and Commission Bank',async function () {
+Given('I am in Add transaction Page for Transaction Fee and Commission Bank', async function () {
     await driver.get('http://localhost:3000/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/PMTF/add-transaction');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
@@ -41,7 +42,7 @@ When('I select the transaction type as {string} for Transaction fee and commissi
             break;
         }
         await dropdownElement.click();
-        }
+    }
 });
 
 When('I enter the transaction amount as {string} for Transaction fee and commission banks transactions', async function (amount) {
@@ -95,5 +96,3 @@ When('I enter the transaction POP Ref.No as {string} for Transaction fee and com
         await element.sendKeys(refNo);
     }
 });
-
-

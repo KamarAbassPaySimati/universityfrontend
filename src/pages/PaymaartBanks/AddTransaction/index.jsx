@@ -110,9 +110,8 @@ export default function AddTransaction ({ type }) {
             ];
         case 'taxes':
             return [
-                `Tax transaction 1 for ${id}`,
-                `Tax transaction 2 for ${id}`,
-                `Tax transaction 3 for ${id}`
+                'Balance EM Excess Return to Paymaart Main Capital Account for Float',
+                'Balance EM Excess Return to Paymaart Main Capital Account for Payout'
             ];
         case 'transaction-fees-and-commissions':
             return [
@@ -138,7 +137,7 @@ export default function AddTransaction ({ type }) {
                 require: true,
                 options
             },
-            ...(type !== 'main-capital' && type !== 'transaction-fees-and-commissions' && {
+            ...(type !== 'main-capital' && type !== 'taxes' && type !== 'transaction-fees-and-commissions' && {
                 '<Beneficiary> Paymaart ID':
                     (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                         filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
@@ -174,7 +173,6 @@ export default function AddTransaction ({ type }) {
             }
         }
     };
-
     const handleStates = (value, id, type) => {
         if (type === 'input') {
             if (id === 'amount') {
@@ -237,6 +235,9 @@ export default function AddTransaction ({ type }) {
             case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
             case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
                 return 'excess-float';
+            case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
+            case 'Balance EM Excess Return to Paymaart Main Capital Account for Payout':
+                return 'add-tax-account-transaction';
             default:
                 return '<Beneficiary> Paymaart ID';
             }
@@ -253,7 +254,10 @@ export default function AddTransaction ({ type }) {
                 filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT` ||
                 filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT` ||
                 filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT` ||
-                type === 'transaction-fees-and-commissions'
+                type === 'transaction-fees-and-commissions' ||
+                // type === 'taxes'
+                filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Float' ||
+                filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Payout'
             )
                 ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
                 : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
@@ -261,23 +265,20 @@ export default function AddTransaction ({ type }) {
         dataArray.forEach((item) => {
             if (!dataError) {
                 if (filedData[item]?.trim() === '' || filedData[item] === undefined) {
-                    console.log('item', item);
                     dataError = true;
                 }
             }
         });
         // Check for undefined or empty values
         if (dataError) {
-            console.log('am here');
             setSubmitSelected(true);
             setLoading(false);
         } else {
             try {
-                console.log('api');
-                const variable = TransactionCode(filedData.transaction_code);
+                const variable = TransactionCode(filedData.transaction_code, type);
                 console.log(variable);
                 const payload = {
-                    transaction_code: TransactionCode(filedData.transaction_code),
+                    transaction_code: TransactionCode(filedData.transaction_code, type),
                     entry_by: filedData?.entry_by,
                     amount: parseFloat(filedData?.amount),
                     transaction_pop_ref_number: filedData.transaction_pop_ref_number,
@@ -308,7 +309,7 @@ export default function AddTransaction ({ type }) {
                     break;
                     // write my three conditions
                 default:
-                    if (type !== 'transaction-fees-and-commissions') {
+                    if (type !== 'transaction-fees-and-commissions' && type !== 'taxes') {
                         payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     };
                     break;
