@@ -19,6 +19,7 @@ Then('I should be redirected to view transaction listing screen of that trust ba
 });
 
 When('I click on add trust bank transaction', async function () {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const addTrustBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="trust-bank-transaction"]')));
     await driver.wait(until.elementIsVisible(addTrustBankTransaction));
     await addTrustBankTransaction.click();
@@ -170,7 +171,7 @@ When('I upload the transaction POP document as {string}', async function (docume
 });
 
 When('I submit the add trust bank transaction form', async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="add_transaction"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
