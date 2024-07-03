@@ -1,4 +1,5 @@
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given } = require('@cucumber/cucumber');
+// eslint-disable-next-line no-unused-vars
 const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 

@@ -11,7 +11,7 @@ Feature: Paymaart - Admin Web - View Delete Account List(Customer)
     @register_new_customer_and_send_delete_request_for_that_customer
     Scenario: List all the delete request
         Given I navigate to customer delete request listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Status"]'
 
     Scenario: Filter delete request by status
         Given I navigate to customer delete request listing screen

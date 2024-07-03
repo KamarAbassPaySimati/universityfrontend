@@ -108,15 +108,27 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         setSearchParams({ ...params });
     };
 
+    // const getDrCr = (value) => {
+    //     let givenValue = value.toString();
+    //     if (givenValue.substring(0, 1) === '-') {
+    //         givenValue = `${formattedAmount(givenValue)} DR`;
+    //     } else {
+    //         givenValue = `${formattedAmount(givenValue)} CR`;
+    //     }
+    //     return givenValue;
+    // };
+
     const getDrCr = (value) => {
         let givenValue = value.toString();
+        const absValue = Math.abs(value).toString();
         if (givenValue.substring(0, 1) === '-') {
-            givenValue = `${formattedAmount(givenValue)} DR`;
+            givenValue = `${formattedAmount(absValue)} DR`;
         } else {
-            givenValue = `${formattedAmount(givenValue)} CR`;
+            givenValue = `${formattedAmount(absValue)} CR`;
         }
         return givenValue;
     };
+
     return (
         <div data-testid="view_admin"
             className={`min-h-[calc(100vh-550px)] mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
