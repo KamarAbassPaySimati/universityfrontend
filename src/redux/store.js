@@ -28,8 +28,7 @@ export const store = configureStore({
         customerUsers: customerSlice,
         DeleteteAccount: DeleteAccountSlice,
         G2PList: G2PSlice,
-        G2PCustomerView: G2PCustomerViewSlice
-,
+        G2PCustomerView: G2PCustomerViewSlice,
         BankTransactionViewData: BankTransactionViewSlice
     }
 });

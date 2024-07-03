@@ -30,7 +30,7 @@ Given('I navigate to Suspense account listing', async function () {
 });
 Given('I navigate to tax account listing', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await driver.get('http://localhost:3000/paymaart-banks?type=tax-account');
+    await driver.get('http://localhost:3000/paymaart-banks?type=taxes');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
