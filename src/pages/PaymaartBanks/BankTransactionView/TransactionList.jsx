@@ -12,6 +12,8 @@ import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 import { formattedAmount } from '../../../CommonMethods/formattedAmount';
+import moment from 'moment';
+import { useOnClickOutside } from '../../../CommonMethods/outsideClick';
 
 export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -52,14 +54,27 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         setErrorMessage('');
         setSelectedFilter((prevState) => ({ ...prevState, [id]: value }));
     };
-    // useOnClickOutside(filterDiv, () => {
-    //     setIsFilter(false);
-    // });
+
+    useOnClickOutside(filterDiv, () => {
+        setIsFilter(false);
+    });
+
     const handleApplyFilter = () => {
         const params = Object.fromEntries(searchParams);
         params.page_number = 1;
-        const startDate = new Date(selectedFilter.start_date).getTime();
-        const endDate = new Date(selectedFilter.end_date).getTime();
+        const startdate = new Date(selectedFilter.start_date).getTime();
+        const enddate = new Date(selectedFilter.end_date).getTime();
+
+        const startDate = moment(startdate).startOf('day').unix() * 1000;
+        const endDate = moment(enddate).endOf('day').subtract(0, 'minute').unix() * 1000;
+
+        if (!selectedFilter.start_date) {
+            delete params.start_date;
+        }
+        if (!selectedFilter.end_date) {
+            delete params.end_date;
+        }
+
         if (selectedFilter.start_date && selectedFilter.end_date) {
             if (startDate > endDate) {
                 setErrorMessage('Start date cannot be greater than end date');
@@ -82,6 +97,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
 
         setSearchParams({ ...params });
     };
+
     const handleClearFilter = () => {
         setIsFilter(false);
         setSelectedFilter({ start_date: '', end_date: '' });
@@ -174,7 +190,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
-                            className='mr-[8px]'/>
+                            className='mr-[8px]' />
                         <p className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
                     </button>}
                 </div>
