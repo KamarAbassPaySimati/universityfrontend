@@ -107,6 +107,10 @@ When('I select the transaction type as {string}', async function (transactionTyp
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
+        case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
         default:
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));

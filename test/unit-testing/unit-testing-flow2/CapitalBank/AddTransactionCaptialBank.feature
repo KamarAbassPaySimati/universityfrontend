@@ -83,6 +83,28 @@ Feature: Paymaart- Admin Web- Add Capital Bank Transactions
         When I submit the add capital bank transaction form
         Then I should read a message stating that "Transaction details added successfully"
 
+    Scenario Outline: Add transaction for capital bank with invalid details for Inflow For EM/Funding for Transaction fee and Commission
+        When I select the transaction type as "Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF"
+        When I enter the transaction amount as <amount> for capital bank transaction
+        When I should see the entry by field should be disabled for add capital bank transaction
+        When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
+        When I upload the transaction POP document as <POP_document>
+        When I submit the add capital bank transaction form
+        Then I should read a message stating that <message>
+        Examples:
+            | amount | transaction_pop_ref_no | POP_document        | message          |
+            | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
+            | "100" | ""                     | "document_back.png" | "Required field" |
+
+    Scenario: Add transaction for capital bank with valid details for Inflow For EM/Funding for Transaction fee and Commission
+        When I select the transaction type as "Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF"
+        When I enter the transaction amount as "100" for capital bank transaction
+        When I should see the entry by field should be disabled for add capital bank transaction
+        When I enter the valid transaction POP Ref.No
+        When I upload the transaction POP document as "document_back.png"
+        When I submit the add capital bank transaction form
+        Then I should read a message stating that "Transaction details added successfully"
+
 # @get_agent_completed_kyc_list
 #     Scenario: Add transaction for capital bank with valid details for Settlement to Merchant Biller from PTBA1| EM credit to PMCAT
 #         When I select the transaction type as "Settlement to Merchant Biller from PTBA1| EM credit to PMCAT"
