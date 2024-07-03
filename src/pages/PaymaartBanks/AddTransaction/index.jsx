@@ -14,7 +14,7 @@ export default function AddTransaction ({ type }) {
     const [submitSelected, setSubmitSelected] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { user } = useSelector((state) => state.auth);
-    const [filedData, setFiledData] = useState({ entry_by: user.paymaart_id });
+    const [filedData, setFiledData] = useState({ entry_by: user.paymaart_id, amount: '' });
     const [loading, setLoading] = useState(false);
     const Navigate = useNavigate();
     const getPaymaartIdType = () => {
@@ -82,6 +82,16 @@ export default function AddTransaction ({ type }) {
         break;
     }
 
+    const transactionMapping = {
+        'Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT': 'PTBA1',
+        'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT': 'PTBA2',
+        'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT': 'PTBA3'
+    };
+    const merchantMapping = {
+        'Afrimax | MCT24680': 'MCT24680',
+        'Paymaart | MCT13579': 'MCT13579'
+    };
+
     const determineOptions = (type, id) => {
         switch (type) {
         case 'trust-bank':
@@ -100,7 +110,8 @@ export default function AddTransaction ({ type }) {
             return [
                 `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`,
                 `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`,
-                `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`
+                `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`,
+                ...Object.keys(transactionMapping)
             ];
         case 'suspense-account':
             return [
@@ -153,6 +164,15 @@ export default function AddTransaction ({ type }) {
                             staticText: getStaticText()
                         }
             }),
+            ...(Object.keys(transactionMapping).includes(filedData.transaction_code) && {
+                'Merchant Biller Paymaart ID': {
+                    label: 'Merchant Biller Paymaart ID',
+                    type: 'dropdown',
+                    key: 'merchant_biller_id',
+                    require: true,
+                    options: Object.keys(merchantMapping)
+                }
+            }),
             Amount: {
                 label: 'Amount (MWK)',
                 type: 'input',
@@ -173,7 +193,9 @@ export default function AddTransaction ({ type }) {
             }
         }
     };
+
     const handleStates = (value, id, type) => {
+        console.log(value, '-', id, '-', type);
         if (type === 'input') {
             if (id === 'amount') {
                 if (value.target.value?.length <= 18) {
@@ -193,19 +215,19 @@ export default function AddTransaction ({ type }) {
                 setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
             }
         } else if (type === 'inputStaticText') {
-            if (value.target.value.length <= 8) {
-                const regex = /^\d{0,9}$/;
-                if (regex.test(value.target.value)) {
-                    setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
-                } else {
-                    setFiledData((prevState) => ({
-                        ...prevState,
-                        [id]: filedData?.entry_for
-                            ? filedData.entry_for
-                            : ''
-                    }));
-                }
+            // if (value.target.value.length <= 8) {
+            const regex = /^\d{0,9}$/;
+            if (regex.test(value.target.value)) {
+                setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
+            } else {
+                setFiledData((prevState) => ({
+                    ...prevState,
+                    [id]: filedData?.entry_for
+                        ? filedData.entry_for.replace(/[^0-9]/g, '')
+                        : ''
+                }));
             }
+            // }
         } else {
             setFiledData((prevState) => ({ ...prevState, [id]: value }));
         }
@@ -238,6 +260,10 @@ export default function AddTransaction ({ type }) {
             case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
             case 'Balance EM Excess Return to Paymaart Main Capital Account for Payout':
                 return 'add-tax-account-transaction';
+            case 'Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT':
+            case 'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT':
+            case 'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT':
+                return 'settlement';
             default:
                 return '<Beneficiary> Paymaart ID';
             }
@@ -247,7 +273,7 @@ export default function AddTransaction ({ type }) {
     const handleAddTransaction = async () => {
         setLoading(true);
         setSubmitSelected(false);
-        const dataArray =
+        let dataArray =
             (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                 filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
                 filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
@@ -262,6 +288,9 @@ export default function AddTransaction ({ type }) {
                 ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
                 : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
         let dataError = false;
+        if (Object.keys(transactionMapping).includes(filedData.transaction_code)) {
+            dataArray = ['transaction_code', 'merchant_biller_id', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
+        }
         dataArray.forEach((item) => {
             if (!dataError) {
                 if (filedData[item]?.trim() === '' || filedData[item] === undefined) {
@@ -309,11 +338,24 @@ export default function AddTransaction ({ type }) {
                     break;
                     // write my three conditions
                 default:
-                    if (type !== 'transaction-fees-and-commissions' && type !== 'taxes') {
+                    if (type !== 'transaction-fees-and-commissions' && type !== 'taxes' &&
+                        !transactionMapping[filedData.transaction_code]) {
                         payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     };
                     break;
                 }
+
+                // For Settlement Type of Merchant
+                if (transactionMapping[filedData.transaction_code]) {
+                    payload.transaction_type = 'settlement';
+                    payload.bank_type = transactionMapping[filedData.transaction_code];
+                }
+
+                // For Merchant Biller ID
+                if (merchantMapping[filedData.merchant_biller_id]) {
+                    payload.merchant_biller_id = merchantMapping[filedData.merchant_biller_id];
+                }
+
                 const res = await dataService.PostAPI(`bank-transactions/${getEndPoint()}`, payload);
                 if (res.error) {
                     setToastError(res.data.data.message);

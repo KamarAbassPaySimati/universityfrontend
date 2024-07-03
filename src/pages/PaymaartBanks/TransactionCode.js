@@ -111,6 +111,14 @@ export function TransactionCode (value, type) {
         } else {
             return 'PMTFPOUTRM';
         }
+        // Main Capital Settlement for Merchants
+    case 'Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT':
+        return 'MCBDRPTBA1';
+    case 'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT':
+        return 'MCBDRPTBA2';
+    case 'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT':
+        return 'MCBDRPTBA3';
+
     default:
         return 'Invalid description';
     }
