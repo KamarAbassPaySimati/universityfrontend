@@ -16,7 +16,7 @@ import { handleUpload } from '../../../../components/S3Upload/S3Functions';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { BeatLoader } from 'react-spinners';
 
-export default function G2PCustomerViewList () {
+export default function G2PCustomerViewList() {
     const { id } = useParams();
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const dispatch = useDispatch();
@@ -55,6 +55,17 @@ export default function G2PCustomerViewList () {
                 const worksheet = workbook?.Sheets[sheetName];
                 const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
                 const headers = rows[0];
+
+                // Check if all cells in the sheet are empty
+                const isSheetEmpty = rows.every(row => row.every(cell => cell === undefined || cell === null || cell.toString().trim() === ''));
+                if (isSheetEmpty) {
+                    setIsValid(false);
+                    setThreedotLoader(false);
+                    setToastError('Uploaded sheet is empty. Please provide some data and try again');
+                    e.target.value = '';
+                    setFile(null);
+                    return;
+                }
 
                 const requiredHeaders = ['SL No', 'Name', 'Paymaart ID', 'Phone Number', 'Amount', 'Description'];
                 const isValid = requiredHeaders.every(header => headers.includes(header));
