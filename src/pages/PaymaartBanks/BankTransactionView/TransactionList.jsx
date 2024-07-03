@@ -13,6 +13,7 @@ import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 import { formattedAmount } from '../../../CommonMethods/formattedAmount';
 import moment from 'moment';
+import { useOnClickOutside } from '../../../CommonMethods/outsideClick';
 
 export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -54,6 +55,10 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         setSelectedFilter((prevState) => ({ ...prevState, [id]: value }));
     };
 
+    useOnClickOutside(filterDiv, () => {
+        setIsFilter(false);
+    });
+
     const handleApplyFilter = () => {
         const params = Object.fromEntries(searchParams);
         params.page_number = 1;
@@ -62,6 +67,13 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
 
         const startDate = moment(startdate).startOf('day').unix() * 1000;
         const endDate = moment(enddate).endOf('day').subtract(0, 'minute').unix() * 1000;
+
+        if (!selectedFilter.start_date) {
+            delete params.start_date;
+        }
+        if (!selectedFilter.end_date) {
+            delete params.end_date;
+        }
 
         if (selectedFilter.start_date && selectedFilter.end_date) {
             if (startDate > endDate) {
