@@ -72,15 +72,15 @@ When('I select the transaction type as {string}', async function (transactionTyp
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA1| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_0"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_3"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA2| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_1"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_4"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA3| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_2"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
