@@ -111,7 +111,8 @@ export default function AddTransaction ({ type }) {
                 `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`,
                 `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`,
                 `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`,
-                ...Object.keys(transactionMapping)
+                ...Object.keys(transactionMapping),
+                'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF'
             ];
         case 'suspense-account':
             return [
@@ -264,6 +265,8 @@ export default function AddTransaction ({ type }) {
             case 'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT':
             case 'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT':
                 return 'settlement';
+            case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+                return 'pmtf-float';
             default:
                 return '<Beneficiary> Paymaart ID';
             }
@@ -283,7 +286,8 @@ export default function AddTransaction ({ type }) {
                 type === 'transaction-fees-and-commissions' ||
                 // type === 'taxes'
                 filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Float' ||
-                filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Payout'
+                filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Payout' ||
+                filedData.transaction_code === 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF'
             )
                 ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
                 : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
@@ -335,6 +339,9 @@ export default function AddTransaction ({ type }) {
                 case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA3';
+                    break;
+                case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+                    payload.transaction_type = 'pmtf_float';
                     break;
                     // write my three conditions
                 default:
