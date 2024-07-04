@@ -66,13 +66,13 @@ export const getPaths = (viewType, role, status) => {
             return {
                 activePath: 'Customer Profile',
                 paths: ['Verify', 'Delete Account'],
-                pathurls: ['verify/delete-account-requests']
+                pathurls: ['verify/delete-account-requests', '?type=customers']
             };
         case 'agent':
             return {
                 activePath: 'Agent Profile',
                 paths: ['Verify', 'Delete Account'],
-                pathurls: ['verify/delete-account-requests']
+                pathurls: ['verify/delete-account-requests', '?type=agents']
             };
         }
         break;

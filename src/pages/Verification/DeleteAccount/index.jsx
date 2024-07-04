@@ -112,7 +112,11 @@ function DeleteAccount () {
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
     useEffect(() => {
-        if (searchParams.get('page') === null) {
+        if (searchParams.get('page') === null && searchParams.get('type') === null) {
+            setSearchParams({ page: 1, type: 'agents' });
+        } else if (searchParams.get('page') === null) {
+            setSearchParams({ page: 1 });
+        } else if (searchParams.get('type') === null) {
             setSearchParams({ page: 1, type: 'agents' });
         } else {
             GetList();
