@@ -1,5 +1,4 @@
-const assert = require('assert');
-const { Given, When, Then } = require('@cucumber/cucumber');
+const { Given, When } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 
