@@ -263,7 +263,7 @@ async function createTransactionList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/add-user-transactions`, { headers: axiosOptions });
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/add-user-transactions`, null, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);

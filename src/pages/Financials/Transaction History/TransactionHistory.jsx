@@ -155,7 +155,7 @@ const TransactionHistory = () => {
                     />
                     <div>
                         <div className="flex items-start">
-                            <Button isLoading={exportLoading} onClick={handleExport} type='button' text='Export' className='!w-[117px]' />
+                            <Button testId='export-transaction-button' isLoading={exportLoading} onClick={handleExport} type='button' text='Export' className='!w-[117px]' />
                         </div>
                     </div>
                 </div>

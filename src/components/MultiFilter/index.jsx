@@ -187,7 +187,7 @@ const MultiFilter = ({
                             </div>
                         ))}
                     </div>
-                    <Button onClick={handleApplySearchParams} text='Apply' className='!w-[164px] ml-4 mb-5 mt-2' />
+                    <Button testId="apply_filter" onClick={handleApplySearchParams} text='Apply' className='!w-[164px] ml-4 mb-5 mt-2' />
                 </div>
             </div>
             }

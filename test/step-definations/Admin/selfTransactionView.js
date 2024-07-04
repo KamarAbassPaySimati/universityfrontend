@@ -26,17 +26,16 @@ Given('I select filter by Transaction type as {string}', async function (transac
 
 Then('I should see list of transactions where transaction type is {string}', async function (string) {
     await new Promise(resolve => setTimeout(resolve, 1500));
-    const items = await driver.wait(until.elementsLocated(By.css('[data-testid="type"]')));
+    const items = await driver.wait(until.elementsLocated(By.css('[data-testid="transaction_type"]')));
     const itemTexts = await Promise.all(items.map((item) => item.getText()));
     const sortedItemTexts = [...itemTexts].sort();
 
     sortedItemTexts.map(data => {
         return assert(data, string);
     });
+});
 
-    Then('I click on export button for transaction History', async function () {
-        await driver.wait(until.elementLocated(By.css('[data-testid="TransactionListExport"]'))).click();
-        await new Promise(resolve => setTimeout(resolve, 2000));
-    });
-    
+Then('I click on export button for transaction History', async function () {
+    await driver.wait(until.elementLocated(By.css('[data-testid="export-transaction-button"]'))).click();
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });

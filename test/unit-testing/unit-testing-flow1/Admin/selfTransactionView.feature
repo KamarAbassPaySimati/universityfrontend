@@ -43,7 +43,10 @@ Feature: Paymaart - Admin Web - Self Transaction list View
     When I click on filter tab
     Then I should see filter popup modal
     And I select filter by Transaction type as "Pay-out"
+    Then I click on the apply filter button
     Then I should see list of transactions where transaction type is "Pay-out"
+    When I click on filter tab
+    Then I should see filter popup modal
     When I click on clear filter
     Then I should see filter popup modal closed
 

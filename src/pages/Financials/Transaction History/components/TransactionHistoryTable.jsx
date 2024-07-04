@@ -15,14 +15,12 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                 {(List?.transactions?.length > 0 || loading) &&
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                            <th className='py-2 px-[10px] text-left font-[400] '>Service codes</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>
-                                Date/Time
-                            </th>
+                            <th className='py-2 px-[10px] text-left font-[400] '>Service Code</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Date/ Time</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
-                            <th className='py-2 px-[10px] text-end font-[400]'>Amount</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Amount</th>
                             <th className='py-2 px-[10px] min-w-[60px]'></th>
                         </tr>
                     </thead>
@@ -36,7 +34,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                     {transaction?.transaction_code || '-'}
                                 </td>
-                                <td data-testid="created_at"
+                                <td data-testid="dateRow"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                     {transaction?.created_at || '-'}
                                 </td>
@@ -65,7 +63,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                                 : 'CR')}
                                 </td>
                                 <td data-testid="transaction_amount"
-                                    className='py-2 px-[10px] text-end truncate max-w-[200px]'>
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                     {getDrCr(transaction?.transaction_amount) || '-'}
                                 </td>
                                 <td data-testid='transaction_view'
