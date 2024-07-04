@@ -248,8 +248,6 @@ export function TransactionDescription (value, type, transactionType) {
         // Main Capital charge for bank service
     case 'PTCR6PMCA1':
         return 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF';
-    case 'PTDR1PTBA1':
-        return 'Outflow for excess Float withdrawal from PMCA, PTBA1 | EM credit to PMCAT';
 
     default:
         return 'Invalid transaction code';
