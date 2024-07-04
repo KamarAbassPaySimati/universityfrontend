@@ -62,6 +62,12 @@ export const getPaths = (viewType, role, status) => {
         break;
     case 'DeleteAccount':
         switch (role) {
+        case 'customer':
+            return {
+                activePath: 'Customer Profile',
+                paths: ['Verify', 'Delete Account'],
+                pathurls: ['verify/delete-account-requests']
+            };
         case 'agent':
             return {
                 activePath: 'Agent Profile',
@@ -147,6 +153,8 @@ export const getApiurl = (id, viewType, role) => {
     case 'DeleteAccount':
         switch (role) {
         case 'agent':
+            return `specific-requests?user_id=${id}`;
+        case 'customer':
             return `specific-requests?user_id=${id}`;
         }
         break;
