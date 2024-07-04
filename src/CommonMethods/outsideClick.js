@@ -8,6 +8,10 @@ export function useOnClickOutside (ref, handler) {
                 if (!ref.current || ref.current.contains(event.target)) {
                     return;
                 }
+                // Do nothing if clicking on an element with the class 'ant-picker-dropdown' or its descendants
+                if (event.target.closest('.ant-picker-dropdown')) {
+                    return;
+                }
                 handler(event);
             };
             document.addEventListener('mousedown', listener);

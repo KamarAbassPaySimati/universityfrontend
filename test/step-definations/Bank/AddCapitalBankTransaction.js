@@ -50,9 +50,25 @@ When('I enter the paymaart ID as {string} for capital bank transaction', async f
     }
 });
 
-When('I select valid merchant biller paymaart ID', async function () {
-    await driver.wait(until.elementLocated(By.css('[data-testid="biller_paymaartID"]'))).click();
-    const dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="biller_paymaartID_1"]')));
-    await driver.wait(until.elementIsVisible(dropdownElement));
-    await dropdownElement.click();
+When('I select valid merchant biller paymaart ID as {string}', async function (billerId) {
+    let dropdownElement;
+    if (billerId !== '') {
+        await driver.wait(until.elementLocated(By.css('[data-testid="merchant_biller_id"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        switch (billerId) {
+        case 'Afrimax | MCT24680':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="afrimax_|_mct24680"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Paymaart | MCT13579':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_|_mct13579"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        default:
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="afrimax_|_mct24680"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        }
+        await dropdownElement.click();
+    }
 });
