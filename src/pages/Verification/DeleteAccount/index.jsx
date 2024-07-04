@@ -10,6 +10,7 @@ import NoDataError from '../../../components/NoDataError/NoDataError';
 import Paginator from '../../../components/Paginator/Paginator';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { DeleteAccountList } from './DeleteAccountSlice';
+import { capitalizeFirstLetter } from '../../../CommonMethods/textCorrection';
 
 function DeleteAccount () {
     const { List, error, loading } = useSelector(state => state.DeleteteAccount);
@@ -145,7 +146,7 @@ function DeleteAccount () {
                                 setSearchParams={setSearchParams}// pass this as its getting updated
                                 searchParams={searchParams}// pass this because its used
                                 filterOptions={filterOptions}
-                                filterType={'Filter Agent List'}
+                                filterType={`Filter ${capitalizeFirstLetter(searchParams.get('type'))} List`}
                                 placeHolder='Paymaart ID or name '
                                 isLoading={loading}
                                 filterActive={(searchParams.get('status') !== null)}
