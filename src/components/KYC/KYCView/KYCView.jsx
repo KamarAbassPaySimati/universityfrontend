@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
-import isTimestampFiveMinutesAgo from '../../../CommonMethods/lastLoggedInTimeStamp';
 import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import KYCSections from './KYCSections';
 import { KYCProfileView } from './KYCProfileViewSlice';
@@ -177,13 +176,11 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View?.public_profile && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
                                 loading={loading}
                                 viewType={viewType}
-                                lastLoggedIn={View?.last_logged_in === null
-                                    ? '-----'
-                                    : View?.last_logged_in
-                                        ? isTimestampFiveMinutesAgo(View?.last_logged_in)
-                                            ? formatTimestamp(View?.last_logged_in)
-                                            : 'Online'
-                                        : ''}
+                                lastLoggedIn={View?.last_logged_in
+                                    ? isNaN(Number(View?.last_logged_in))
+                                        ? 'Online'
+                                        : formatTimestamp(View?.last_logged_in)
+                                    : '-----'}
                                 CreatedDate={formatTimestamp(View?.user_created_date)}
                             />
                             {!loading &&

@@ -19,7 +19,7 @@ Then('I should be redirected to view transaction listing screen of that trust ba
 });
 
 When('I click on add trust bank transaction', async function () {
-    const addTrustBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="add_trust_bank_transaction"]')));
+    const addTrustBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="trust-bank-transaction"]')));
     await driver.wait(until.elementIsVisible(addTrustBankTransaction));
     await addTrustBankTransaction.click();
 });
@@ -69,6 +69,42 @@ When('I select the transaction type as {string}', async function (transactionTyp
             break;
         case 'Receipt of Customer Balances Interest from PTBA1 | RM credit':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_8"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Settlement to Merchant Biller from PTBA1| EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_3"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Settlement to Merchant Biller from PTBA2| EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_4"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Settlement to Merchant Biller from PTBA3| EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_3"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Charge for Bank Services or Transactions by PTBA2 |  EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_4"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Charge for Bank Services or Transactions by PTBA3 |  EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_5"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_1"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:

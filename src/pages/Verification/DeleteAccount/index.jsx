@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import NotFound from '../../NotFound';
@@ -38,7 +39,7 @@ function DeleteAccount () {
     const GetList = useCallback(async () => {
         url = searchParams.get('type') === 'agents'
             ? 'admin-users/delete-requests?'
-            : searchParams.get('type') === 'customers' ? 'admin-users/customer-kyc-list?' : 'admin-users/merchant-kyc-list?';
+            : searchParams.get('type') === 'customers' ? 'admin-users/delete-requests?' : 'admin-users/delete-requests?';
 
         if (searchParams.get('simplifiedkyc') !== null) {
             // Get the value of 'simplifiedkyc' from the searchParams and split it by ','
