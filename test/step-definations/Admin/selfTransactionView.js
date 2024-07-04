@@ -33,4 +33,10 @@ Then('I should see list of transactions where transaction type is {string}', asy
     sortedItemTexts.map(data => {
         return assert(data, string);
     });
+
+    Then('I click on export button for transaction History', async function () {
+        await driver.wait(until.elementLocated(By.css('[data-testid="TransactionListExport"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    });
+    
 });
