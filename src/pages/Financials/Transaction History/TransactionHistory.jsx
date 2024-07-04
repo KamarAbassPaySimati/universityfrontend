@@ -201,10 +201,10 @@ const TransactionHistory = () => {
                 </div>}
                     {notFound &&
                     <NoDataError
-                        className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
+                        className='h-noDataError1' heading='No data found' text = "404 could not find what you are looking for."/>}
                     {List?.transactions?.length === 0 && !loading &&
                 !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null) &&
-                (<NoDataError className='h-noDataError' heading='No transaction history to view yet' text='Please check back later' />)}
+                (<NoDataError className='h-noDataError1' heading='No transaction history to view yet' text='Please check back later' />)}
                     {!loading && !error && !notFound && List?.transactions?.length !== 0 && <Paginator
                         currentPage={searchParams.get('page_number')}
                         totalPages={Math.ceil(List?.total_count / 10)}

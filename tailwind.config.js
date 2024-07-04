@@ -58,19 +58,22 @@ export default {
                 heightSideBar: 'calc(100vh - 500px)',
                 heightSideBarOne: 'calc(100vh - 400px)',
                 heightFullWithPadding: 'calc(100vh - 57px)',
-                noDataError: 'calc(100vh - 240px)' // tableHeight + tobbar height 49px
+                noDataError: 'calc(100vh - 240px)', // tableHeight + tobbar height 49px
+                noDataError1: 'calc(100vh - 260px)' // tableHeight + tobbar height 49px
             },
             minHeight: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
                 loaderHight: 'calc(100vh - 343px)',
                 heightDropDown: 'calc(100vh - 610px)',
-                noDataError: 'calc(100vh - 240px)'
+                noDataError: 'calc(100vh - 240px)',
+                noDataError1: 'calc(100vh - 260px)'
             },
             maxHeight: {
                 tableHeight: 'calc(100vh - 370px)',
                 tablebodyHeight: 'calc(100vh - 411px)',
-                noDataError: 'calc(100vh - 240px)'
+                noDataError: 'calc(100vh - 240px)',
+                noDataError1: 'calc(100vh - 260px)'
             }
         }
     },
