@@ -19,6 +19,7 @@ Then('I should be redirected to view transaction listing screen of that trust ba
 });
 
 When('I click on add trust bank transaction', async function () {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const addTrustBankTransaction = await driver.wait(until.elementLocated(By.css('[data-testid="trust-bank-transaction"]')));
     await driver.wait(until.elementIsVisible(addTrustBankTransaction));
     await addTrustBankTransaction.click();
@@ -72,15 +73,15 @@ When('I select the transaction type as {string}', async function (transactionTyp
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA1| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_0"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_3"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA2| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_1"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_4"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA3| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_2"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
@@ -105,6 +106,10 @@ When('I select the transaction type as {string}', async function (transactionTyp
             break;
         case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_6"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:
@@ -166,7 +171,7 @@ When('I upload the transaction POP document as {string}', async function (docume
 });
 
 When('I submit the add trust bank transaction form', async function () {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="add_transaction"]')));
     await driver.wait(until.elementIsVisible(element));
     element.click();
