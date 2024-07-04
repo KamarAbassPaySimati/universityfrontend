@@ -31,13 +31,16 @@ const TransactionHistory = () => {
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`/export-user-transactions${searchParams.toString()}`);
+            const res = await dataService.GetAPI(`admin-users/export-user-transactions?${searchParams.toString()}`);
             if (!res.error) {
                 window.open(
-                    res.data.url,
+                    res.data.s3_url,
                     '_blank'
                 );
                 setToastSuccess('Transaction details exported successfully');
+                setExportloading(false);
+            } else {
+                setToastError('An Error Occured!');
                 setExportloading(false);
             }
         } catch (error) {
