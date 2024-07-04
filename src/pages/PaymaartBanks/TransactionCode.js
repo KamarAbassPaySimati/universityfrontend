@@ -124,6 +124,14 @@ export function TransactionCode (value, type) {
     case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
         return 'PTCR6PMCA1';
 
+        // Main Capital charge for Operations for excess Float
+    case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1':
+        return 'PTCASHOPT1';
+    case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2':
+        return 'PTCASHOPT2';
+    case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
+        return 'PTCASHOPT3';
+
     default:
         return 'Invalid description';
     }
@@ -241,14 +249,21 @@ export function TransactionDescription (value, type, transactionType) {
 
         // Transcation Fees and Commissions
     case 'PMTFCOUTFT':
+    case 'PMTXCOUTFT':
         return 'Balance EM Excess Return to Paymaart Main Capital Account for Float';
     case 'PMTFPOUTRM':
+    case 'PMTXPOUTRM' :
         return 'Balance EM Excess Return to Paymaart Main Capital Account for Payout';
 
         // Main Capital charge for bank service
     case 'PTCR6PMCA1':
         return 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF';
-
+    case 'PTCASHOPT1':
+        return 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1';
+    case 'PTCASHOPT2':
+        return 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2';
+    case 'PTCASHOPT3':
+        return 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3';
     default:
         return 'Invalid transaction code';
     }
