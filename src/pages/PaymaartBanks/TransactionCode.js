@@ -28,7 +28,7 @@ export function TransactionCode (value, type) {
         return 'MCTDRPTBA1';
     case 'Settlement to Merchant Biller from PTBA1 | RM debit':
         return 'MCBDRPTBA1';
-    case 'Outflow for excess Float withdrawal from PMCA, PTBA1 | EM credit to PMCAT':
+    case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
         return 'PTDR1PTBA1';
     case 'Charge for Bank Services or Transactions from PTBA1 | RM debit':
         return 'PTDR2PTBA1';
@@ -171,7 +171,7 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Settlement to Merchant Biller from PTBA1 | RM debit';
     case 'PTDR1PTBA1':
         // return 'Outflow to Operations Account (Draw RM) from PTBA1 | RM debit';
-        return 'Outflow for excess Float withdrawal from <PTBA1>, PTBA1 | EM credit to PMCAT';
+        return 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT';
     case 'PTDR2PTBA1':
         return 'Charge for Bank Services or Transactions from PTBA1 | RM debit';
 
@@ -207,7 +207,7 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Settlement to Merchant Biller from PTBA2 | RM debit';
     case 'PTDR1PTBA2':
         // return 'Outflow to Operations Account (Draw RM) from PTBA2 | RM debit';
-        return 'Outflow for excess Float withdrawal from PMCA, PTBA2 | EM credit to PMCAT';
+        return 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT';
     case 'PTDR2PTBA2':
         return 'Charge for Bank Services or Transactions by PTBA2 | RM debit';
 
@@ -243,7 +243,7 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Settlement to Merchant Biller from PTBA3 | RM debit';
     case 'PTDR1PTBA3':
         // return 'Outflow to Operations Account (Draw RM) from PTBA3 | RM debit';
-        return 'Outflow for excess Float withdrawal from PMCA, PTBA3 | EM credit to PMCAT';
+        return 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT';
     case 'PTDR2PTBA3':
         return 'Charge for Bank Services or Transactions by PTBA3 | RM debit';
 

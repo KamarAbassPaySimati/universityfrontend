@@ -30,9 +30,9 @@ export default function AddTransaction ({ type }) {
             return 'Customer Paymaart ID';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'G2P Customer Paymaart ID';
-        case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
-        case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
-        case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+        case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
+        case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+        case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
             return 'Amount';
         default:
             return '<Beneficiary> Paymaart ID';
@@ -45,14 +45,14 @@ export default function AddTransaction ({ type }) {
 
             const arrayValue = bankTypes.reduce((acc, item) => {
                 if (item.ref_no !== 'PTBAT') {
-                    acc.push(`Outflow for excess Float withdrawal from ${id}, ${item.ref_no} | EM credit to PMCAT`);
+                    acc.push(`Outflow for excess Float withdrawal from ${item.ref_no} | EM credit to PMCAT`);
                     acc.push(`Settlement to Merchant Biller from ${item.ref_no} | EM credit to PMCAT`);
                     acc.push(`Payout to Paymaart Operations for excess Float in PMCA to ${item.ref_no}`);
                 }
                 return acc;
             }, []);
 
-            arrayValue.push('Inflow For EM Float/Funding for Transaction fee and Commission | EM credit to PMTF');
+            arrayValue.push('Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF');
             setCapitalBankDropDownValue(arrayValue);
         } catch (error) {
             console.error('Error fetching bank types:', error);
@@ -279,9 +279,9 @@ export default function AddTransaction ({ type }) {
             case `Inflow for Marketing Campaign Fund to ${id} | RM credit`:
             case `Receipt of Customer Balances Interest from ${id} | RM credit`:
                 return 'float';
-            case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
-            case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
-            case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+            case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
+            case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+            case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
             case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1':
             case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2':
             case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
@@ -308,9 +308,9 @@ export default function AddTransaction ({ type }) {
             (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                 filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
                 filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
-                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT` ||
-                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT` ||
-                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT` ||
+                filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT' ||
+                filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT' ||
+                filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT' ||
                 filedData.transaction_code === 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1' ||
                 filedData.transaction_code === 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2' ||
                 filedData.transaction_code === 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3' ||
@@ -359,15 +359,15 @@ export default function AddTransaction ({ type }) {
                 case `Receipt of Customer Balances Interest from ${id} | RM credit`:
                     payload.transaction_type = 'float';
                     break;
-                case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
+                case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA1';
                     break;
-                case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
+                case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA2';
                     break;
-                case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+                case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA3';
                     break;

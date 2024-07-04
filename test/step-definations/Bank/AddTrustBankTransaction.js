@@ -73,15 +73,19 @@ When('I select the transaction type as {string}', async function (transactionTyp
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA1| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_3"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA2| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_4"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Settlement to Merchant Biller from PTBA3| EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_5"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1':
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Payout to Paymaart Operations for excess Float in PMCA to PTBA1"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
@@ -97,19 +101,19 @@ When('I select the transaction type as {string}', async function (transactionTyp
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_1"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_2"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_6"]')));
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:
