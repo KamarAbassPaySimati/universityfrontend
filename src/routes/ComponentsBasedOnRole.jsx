@@ -368,6 +368,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Tax Account',
                 element: <AddTransaction type={'taxes'} />,
                 path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
+            },
+            // Financial Transaction History
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
             }
         ],
     'support-admin':
@@ -479,6 +485,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Transaction fees and Commision',
                 element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
                 path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
+            },
+            // Financial Transaction History
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
             }
         ]
 };
