@@ -8,7 +8,7 @@ function PageInfo ({ totalCount, currentPage, g2p }) {
 
     return (
         <div className={`font-[400] text-[14px] leading-[24px] text-neutral-primary
-        absolute top-0 right-6 flex items-center p-1  ${g2p ? 'py-0' : 'py-6'}`}>
+        absolute top-[20px] right-6 flex items-center p-1  ${g2p ? 'py-0' : 'py-6'}`}>
             Showing {startIndex} to {endIndex} of {totalCount} results
         </div>
     );
