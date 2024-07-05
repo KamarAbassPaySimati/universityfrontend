@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Admin from '../pages/Users/Admin';
@@ -17,6 +18,7 @@ import G2PCustomerViewList from '../pages/Financials/G2P/Components/G2PCustomerV
 import BankTransactionView from '../pages/PaymaartBanks/BankTransactionView';
 import AddTransaction from '../pages/PaymaartBanks/AddTransaction';
 import TransactionHistory from '../pages/Financials/Transaction History/TransactionHistory';
+import ViewTransactionDetails from '../pages/Financials/Transaction History/View Transaction Details/ViewTransactionDetails';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -239,11 +241,17 @@ export const ComponentsBasedOnRole = {
                 element: <G2PCustomerViewList />,
                 path: '/financials/g2p/view-profile/:id'
             },
-            // Financial Transaction History
+            // Financial Transaction History List
             {
                 name: 'List Self Transaction History',
                 element: <TransactionHistory />,
                 path: '/financials/transaction-history'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'View specific Self Transaction History',
+                element: <ViewTransactionDetails />,
+                path: '/financials/transaction-history/:id'
             }
         ],
     admin:
@@ -369,11 +377,17 @@ export const ComponentsBasedOnRole = {
                 element: <AddTransaction type={'taxes'} />,
                 path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
             },
-            // Financial Transaction History
+            // Financial Transaction History List
             {
                 name: 'List Self Transaction History',
                 element: <TransactionHistory />,
                 path: '/financials/transaction-history'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'View specific Self Transaction History',
+                element: <ViewTransactionDetails />,
+                path: '/financials/transaction-history/:id'
             }
         ],
     'support-admin':
@@ -486,11 +500,17 @@ export const ComponentsBasedOnRole = {
                 element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
                 path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
             },
-            // Financial Transaction History
+            // Financial Transaction History List
             {
                 name: 'List Self Transaction History',
                 element: <TransactionHistory />,
                 path: '/financials/transaction-history'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'View specific Self Transaction History',
+                element: <ViewTransactionDetails />,
+                path: '/financials/transaction-history/:id'
             }
         ]
 };
