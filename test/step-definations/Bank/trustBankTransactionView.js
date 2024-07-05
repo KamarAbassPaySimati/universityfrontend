@@ -6,6 +6,7 @@ const assert = require('assert');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 
 When('I click on view button for bank details', async function () {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]'))).click();
     await new Promise(resolve => setTimeout(resolve, 500));
 });
