@@ -73,8 +73,6 @@ export default function BankTransactionView ({ type }) {
 
     const formattedAmount = (amount) => {
         return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'MWK',
             minimumFractionDigits: 2,
             maximumFractionDigits: 2
         }).format(amount);
@@ -105,10 +103,17 @@ export default function BankTransactionView ({ type }) {
                                 <p className='text-[#4F5962] text-sm font-semibold'>
                                     {`${type === 'trust-bank' ? 'RM' : 'EM'} balance, Total: `}
                                 </p>
-                                <span className='text-black text-lg font-bold ml-2'>
-                                    {Data?.amount || '0'} CR
-                                </span>
-
+                                {loading
+                                    ? <tbody className=''>
+                                        <tr className="animate-pulse z-0">
+                                            <td className={'text-sm font-light text-[#13365C] p-2.5 min-w-[180px]'}>
+                                                <div className={'h-7 bg-slate-200 rounded z-[-10] relative'} />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    : <span className='text-black text-lg font-bold ml-2'>
+                                        {Data?.amount ? formattedAmount(Data?.amount) : '0.00'} CR
+                                    </span>}
                             </div>
                     }
                 />

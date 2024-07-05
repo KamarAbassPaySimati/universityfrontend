@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-export function TransactionCode (value) {
+export function TransactionCode (value, type) {
     switch (value) {
     // PTBA1 mappings
     case 'Pay-in by Agent to PTBA1 | RM credit':
@@ -28,7 +28,7 @@ export function TransactionCode (value) {
         return 'MCTDRPTBA1';
     case 'Settlement to Merchant Biller from PTBA1 | RM debit':
         return 'MCBDRPTBA1';
-    case 'Outflow to Operations Account (Draw RM) from PTBA1 | RM debit':
+    case 'Outflow for excess Float withdrawal from PMCA, PTBA1 | EM credit to PMCAT':
         return 'PTDR1PTBA1';
     case 'Charge for Bank Services or Transactions from PTBA1 | RM debit':
         return 'PTDR2PTBA1';
@@ -97,6 +97,28 @@ export function TransactionCode (value) {
     case 'Charge for Bank Services or Transactions by PTBA3 | RM debit':
         return 'PTDR2PTBA3';
 
+        // Transcation Fees and Commissions
+        // Taxes
+    case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
+        if (type === 'taxes') {
+            return 'PMTXCOUTFT';
+        } else {
+            return 'PMTFCOUTFT';
+        }
+    case 'Balance EM Excess Return to Paymaart Main Capital Account for Payout':
+        if (type === 'taxes') {
+            return 'PMTXPOUTRM';
+        } else {
+            return 'PMTFPOUTRM';
+        }
+        // Main Capital Settlement for Merchants
+    case 'Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT':
+        return 'MCBDRPTBA1';
+    case 'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT':
+        return 'MCBDRPTBA2';
+    case 'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT':
+        return 'MCBDRPTBA3';
+
     default:
         return 'Invalid description';
     }
@@ -132,7 +154,8 @@ export function TransactionDescription (value, type, transactionType) {
     case 'MCBDRPTBA1':
         return 'Settlement to Merchant Biller from PTBA1 | RM debit';
     case 'PTDR1PTBA1':
-        return 'Outflow to Operations Account (Draw RM) from PTBA1 | RM debit';
+        // return 'Outflow to Operations Account (Draw RM) from PTBA1 | RM debit';
+        return 'Outflow for excess Float withdrawal from <PTBA1>, PTBA1 | EM credit to PMCAT';
     case 'PTDR2PTBA1':
         return 'Charge for Bank Services or Transactions from PTBA1 | RM debit';
 
@@ -164,7 +187,8 @@ export function TransactionDescription (value, type, transactionType) {
     case 'MCBDRPTBA2':
         return 'Settlement to Merchant Biller from PTBA2 | RM debit';
     case 'PTDR1PTBA2':
-        return 'Outflow to Operations Account (Draw RM) from PTBA2 | RM debit';
+        // return 'Outflow to Operations Account (Draw RM) from PTBA2 | RM debit';
+        return 'Outflow for excess Float withdrawal from PMCA, PTBA2 | EM credit to PMCAT';
     case 'PTDR2PTBA2':
         return 'Charge for Bank Services or Transactions by PTBA2 | RM debit';
 
@@ -196,9 +220,16 @@ export function TransactionDescription (value, type, transactionType) {
     case 'MCBDRPTBA3':
         return 'Settlement to Merchant Biller from PTBA3 | RM debit';
     case 'PTDR1PTBA3':
-        return 'Outflow to Operations Account (Draw RM) from PTBA3 | RM debit';
+        // return 'Outflow to Operations Account (Draw RM) from PTBA3 | RM debit';
+        return 'Outflow for excess Float withdrawal from PMCA, PTBA3 | EM credit to PMCAT';
     case 'PTDR2PTBA3':
         return 'Charge for Bank Services or Transactions by PTBA3 | RM debit';
+
+        // Transcation Fees and Commissions
+    case 'PMTFCOUTFT':
+        return 'Balance EM Excess Return to Paymaart Main Capital Account for Float';
+    case 'PMTFPOUTRM':
+        return 'Balance EM Excess Return to Paymaart Main Capital Account for Payout';
 
     default:
         return 'Invalid transaction code';
