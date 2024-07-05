@@ -24,8 +24,8 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
     const [errorMessage, setErrorMessage] = useState('');
     const Navigate = useNavigate();
     const [selectedFilter, setSelectedFilter] = useState({
-        start_date: new Date(searchParams.get('start_date')).getTime() / 1000,
-        end_date: new Date(searchParams.get('end_date')).getTime() / 1000
+        start_date: new Date(Number(searchParams.get('start_date'))).getTime() * 1000,
+        end_date: new Date(Number(searchParams.get('end_date'))).getTime() * 1000
     });
 
     let addTransactionPath;

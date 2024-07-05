@@ -55,7 +55,7 @@ function G2pList () {
     return (
         <CardHeader
             activePath='G2P'
-            paths={['financials']}
+            paths={['Financials']}
             pathurls={['financials/G2P']}
             header='G2P'
             g2pHeight='true'
