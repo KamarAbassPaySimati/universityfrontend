@@ -105,7 +105,7 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
                                     {
                                         <>
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
-                                                onClick={() => Navigate(`/verify/delete-account-requests/agent-profile/${user?.paymaart_id}`
+                                                onClick={() => Navigate(`/verify/delete-account-requests/${searchParams.get('type').slice(0, -1)}-profile/${user?.paymaart_id}`
                                                 )}
                                             />
                                         </>
