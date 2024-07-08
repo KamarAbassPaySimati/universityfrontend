@@ -26,6 +26,7 @@ const GeocodeComponent = () => {
         { lat: -12.0419, lng: 34.8916 } // Lake Malawi
     ]);
     const [center, setCenter] = useState({ lat: -13.2543, lng: 34.3015 });
+    const [apiresponse, setApiResponse] = useState();
     const [error, setError] = useState(null);
 
     const handleAddressChange = (e) => {
@@ -35,8 +36,11 @@ const GeocodeComponent = () => {
     const handleGeocode = async () => {
         try {
             const response = await geocode(RequestType.ADDRESS, address);
+            console.log(response);
             const { lat, lng } = response.results[0].geometry.location;
-            setLocations({ lat, lng });
+            console.log(lat, 'latitude');
+            console.log(lng, 'latitude');
+            setApiResponse({ lat, lng });
             setError(null);
         } catch (err) {
             setError('Failed to get coordinates. Please check the address and try again.');
@@ -59,10 +63,10 @@ const GeocodeComponent = () => {
             >
                 Get Coordinates
             </button>
-            {locations.lat && locations.lng && (
+            {apiresponse?.lat && apiresponse?.lng && (
                 <div className="mb-4">
-                    <p>Latitude: {locations.lat}</p>
-                    <p>Longitude: {locations.lng}</p>
+                    <p>Latitude: {apiresponse.lat}</p>
+                    <p>Longitude: {apiresponse.lng}</p>
                 </div>
             )}
             {error && (
@@ -92,6 +96,26 @@ const GeocodeComponent = () => {
                     ))}
                 </GoogleMapReact>
             </div>
+            <div className='h-10'></div>
+            {apiresponse?.lat && apiresponse?.lng && <div style={{ height: '50vh', width: '100%' }}>
+                <GoogleMapReact
+                    bootstrapURLKeys={{
+                        key: GOOGLE_API,
+                        libraries: ['places'],
+                        language: 'en',
+                        region: 'us',
+                        mapTypeId: 'terrain' // Change map type here ('terrain', 'roadmap', 'satellite', 'hybrid')
+                    }} // Replace with your actual Google Maps API key
+                    center={apiresponse}
+                    defaultZoom={6}
+                >
+                    <CustomMarker
+                        lat={apiresponse.lat}
+                        lng={apiresponse.lng}
+                        text={`${address}`}
+                    />
+                </GoogleMapReact>
+            </div>}
         </div>
     );
 };
