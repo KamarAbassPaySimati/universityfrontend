@@ -16,6 +16,7 @@ import G2pList from '../pages/Financials/G2P/index';
 import G2PCustomerViewList from '../pages/Financials/G2P/Components/G2PCustomerViewList';
 import BankTransactionView from '../pages/PaymaartBanks/BankTransactionView';
 import AddTransaction from '../pages/PaymaartBanks/AddTransaction';
+import TransactionHistory from '../pages/Financials/Transaction History/TransactionHistory';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -237,6 +238,12 @@ export const ComponentsBasedOnRole = {
                 name: 'G2P Customer View',
                 element: <G2PCustomerViewList />,
                 path: '/financials/g2p/view-profile/:id'
+            },
+            // Financial Transaction History
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
             }
         ],
     admin:
@@ -361,6 +368,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Tax Account',
                 element: <AddTransaction type={'taxes'} />,
                 path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
+            },
+            // Financial Transaction History
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
             }
         ],
     'support-admin':
@@ -472,6 +485,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Transaction fees and Commision',
                 element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
                 path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
+            },
+            // Financial Transaction History
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
             }
         ]
 };
