@@ -14,6 +14,7 @@ import { TransactionDescription } from '../TransactionCode';
 import { formattedAmount } from '../../../CommonMethods/formattedAmount';
 import moment from 'moment';
 import { useOnClickOutside } from '../../../CommonMethods/outsideClick';
+import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 
 export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -220,7 +221,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                                         <th className='py-2 px-[10px] text-left font-[400] '>Service codes</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>
-                                            Date/Time
+                                            Date/Time, CAT
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
@@ -243,7 +244,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 {item?.transaction_code || '-'}</td>
                                             <td data-testid="dateRow"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.created_at || '-'}</td>
+                                                {convertTimestampToCAT(item?.created_at) || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={

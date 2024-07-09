@@ -6,7 +6,7 @@ import GlobalContext from '../../../../components/Context/GlobalContext';
 import { endpoints } from '../../../../services/endpoints';
 import { useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const ViewTransactionDetails = () => {
     // States
@@ -102,7 +102,7 @@ const ViewTransactionDetails = () => {
                                 <p>Txn Fee*</p>
                                 <p>*VAT Include</p>
                                 <p>Txn ID</p>
-                                <p>Txn Date & Time</p>
+                                <p>Date, time</p>
                             </div>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 {dataLoading
@@ -115,7 +115,7 @@ const ViewTransactionDetails = () => {
                                         <p>{transactionDetails?.transaction_fee || '0.00'} MWK</p>
                                         <p>{transactionDetails?.vat || '0.00'} MWK</p>
                                         <p>{transactionDetails?.transaction_id || '-'}</p>
-                                        <p>{formatTimestamp(transactionDetails?.created_at) || '-'}</p>
+                                        <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
                                     </>}
                             </div>
                         </div>

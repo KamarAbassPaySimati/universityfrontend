@@ -6,6 +6,7 @@ import Image from '../../../../components/Image/Image';
 import getDrCr from '../../../../CommonMethods/getDrCr';
 import { TransactionDescription } from '../../../PaymaartBanks/TransactionCode';
 import { useNavigate } from 'react-router';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const navigate = useNavigate();
@@ -16,7 +17,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                             <th className='py-2 px-[10px] text-left font-[400] '>Service Code</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Date/ Time</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Date/ Time, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
@@ -36,7 +37,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                 </td>
                                 <td data-testid="dateRow"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                    {transaction?.created_at || '-'}
+                                    {convertTimestampToCAT(transaction?.created_at) || '-'}
                                 </td>
                                 <td data-testid="beneficiary_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>

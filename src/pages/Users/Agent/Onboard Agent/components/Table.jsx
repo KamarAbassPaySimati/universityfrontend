@@ -2,12 +2,12 @@
 import React from 'react';
 import Image from '../../../../../components/Image/Image';
 import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../../../CommonMethods/formatTimestamp';
 import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../../CommonMethods/ListFunctions';
 import { useNavigate } from 'react-router';
+import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
@@ -26,8 +26,8 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 </div>
                             </th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Phone Number</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Created Date</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Last Logged In</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Created Date, CAT</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Last Logged In, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Status</th>
                             <th className='py-2 px-[10px]'></th>
                         </tr>
@@ -41,12 +41,12 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 <td data-testid="paymaart_id" title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
                                 <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
                                 <td data-testid="phone_number" className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
-                                <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
+                                <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
                                 <td className='py-2 px-[10px]'>
                                     {user?.last_logged_in
                                         ? isNaN(Number(user?.last_logged_in))
                                             ? <span style={{ color: '#13B681', fontWeight: 'semibold' }}>Online</span>
-                                            : formatTimestamp(user?.last_logged_in)
+                                            : convertTimestampToCAT(user?.last_logged_in)
                                         : '-'}</td>
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status
