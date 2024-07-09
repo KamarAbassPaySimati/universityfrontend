@@ -1,10 +1,10 @@
 /* eslint-disable max-len */
 import React, { useState } from 'react';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { useNavigate } from 'react-router';
 import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import TillNumber from '../../../../components/Modals/TillNumber';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 export default function MerchantTableBody ({ user, index }) {
     const Navigate = useNavigate();
@@ -24,7 +24,7 @@ export default function MerchantTableBody ({ user, index }) {
                     title={user?.name}
                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.trading_name}>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
-                <td className='py-2 px-[10px]'>{formatTimestamp(user?.created_at)}</td>
+                <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
                 <td
                     className={`py-2 px-[10px] ${user?.till_numbers?.length > 1 ? ' cursor-pointer underline' : 'cursor-default'}`}
                     onClick={() => user?.till_numbers?.length > 1 && handleTillNumber()}

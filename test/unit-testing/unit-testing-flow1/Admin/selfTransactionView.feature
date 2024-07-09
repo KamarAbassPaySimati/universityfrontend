@@ -12,7 +12,7 @@ Feature: Paymaart - Admin Web - Self Transaction list View
   @add_admin_user @create_new_user_and_login @create_transactions
   Scenario: View All Transactions list
     Given I navigate to Transaction History Page
-    Then I should see table header containing '["Service Code","Date/ Time","Beneficiary Paymaart ID","Transaction ID","Type","Amount"]'
+    Then I should see table header containing '["Service Code","Date/ Time, CAT","Beneficiary Paymaart ID","Transaction ID","Type","Amount"]'
 
   Scenario: Search for non existing record
     Given I navigate to Transaction History Page

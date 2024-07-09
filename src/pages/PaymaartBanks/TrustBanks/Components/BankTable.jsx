@@ -2,10 +2,10 @@
 import React from 'react';
 import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { Tooltip } from 'react-tooltip';
 import { useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const BankTable = (
     {
@@ -54,7 +54,7 @@ const BankTable = (
                             <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Account Number</th>
                         )}
                         <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Purpose</th>
-                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Last Update Date / Time</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[100px]'>Last Update Date / Time, CAT</th>
                         <th className='py-2 px-[10px] text-right font-[400] min-w-[100px]'>Balance (MWK)</th>
                         <th className='py-2 px-[10px]'></th>
                     </tr>
@@ -78,7 +78,7 @@ const BankTable = (
                                     className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {bank?.ref_no === 'PTBAT' ? '-' : bank?.purpose}
                                 </td>
-                                <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? formatTimestamp(bank?.updated_at) : '-'}</td>
+                                <td title = {bank?.updated_at} className='py-2 px-[10px] text-left truncate max-w-[300px]]'>{ bank?.updated_at ? convertTimestampToCAT(bank?.updated_at) : '-'}</td>
                                 <td title={formattedAmount(bank?.balance)} className='py-2 px-[10px] text-right truncate max-w-[300px]'>
                                     {formattedAmount(bank?.balance)}
                                 </td>

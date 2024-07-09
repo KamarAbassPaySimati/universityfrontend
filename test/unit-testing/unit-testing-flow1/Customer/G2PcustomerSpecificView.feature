@@ -33,13 +33,13 @@ Feature: Paymaart - Admin Web - Specific View G2P Customer
     When I upload the valid excel sheet as "ValidSheet.xlsx"
     And I should read a message stating that "Successfully Uploaded G2P sheet"
     Given I navigate to G2P customer listing page
-    Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
+    Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date, CAT","Amount"]'
 
   Scenario: View G2P customer details screen
     Given I navigate to G2P customer listing page
     When I click on the view button for customer details
     Then I should view G2P customer details
-    Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
+    Then I should see table header containing '["Sheet Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
 
   Scenario: Checking Pagination
     Given I navigate to G2P customer listing page

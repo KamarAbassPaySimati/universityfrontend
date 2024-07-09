@@ -20,7 +20,7 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                                 </div>
                             </th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Trading Name</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Created Date</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Created Date, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Till Number</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Location</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Status</th>

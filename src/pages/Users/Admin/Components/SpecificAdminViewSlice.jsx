@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { dataService } from '../../../../services/data.services';
 import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const initialState = {
     loading: true,
@@ -45,10 +45,10 @@ const SpecificAdminViewSlice = createSlice({
                                 : ''}`,
                         Email: state?.View?.email,
                         Role: state?.View?.user_type,
-                        Created_Date: formatTimestamp(state?.View?.created_at),
+                        Created_Date: `${convertTimestampToCAT(state?.View?.created_at)} CAT`,
                         Last_Logged_In: state?.View?.last_logged_in
                             ? isTimestampFiveMinutesAgo(state?.View?.last_logged_in)
-                                ? formatTimestamp(state?.View?.last_logged_in)
+                                ? `${convertTimestampToCAT(state?.View?.last_logged_in)} CAT`
                                 : 'Online'
                             : ''
                     };

@@ -19,7 +19,7 @@ Feature: Paymaart- Admin Web- Onboard Agent- Registration
   @create_new_user_and_login
   Scenario: List all the agent users
     Given I navigate to agent users listing screen
-    Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+    Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
 
   Scenario Outline: Register user with invalid details
     Given I navigate to agent onboarding screen

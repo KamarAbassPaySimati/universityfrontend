@@ -28,12 +28,12 @@ Feature: Paymaart - Admin Web - Upload G2P Sheet
 
   Scenario: Admin viewing G2P customer profile
     Given I navigate to G2P customer listing page
-    Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
+    Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date, CAT","Amount"]'
     When I click on the view button for customer details
     Then I should view G2P customer details
     When I upload the valid excel sheet as "ValidSheet.xlsx"
     And I should read a message stating that "Successfully Uploaded G2P sheet"
-    Then I should see table header containing '["Sheet Name","Uploaded Date","Uploaded By","Transferred Amount"]'
+    Then I should see table header containing '["Sheet Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
 
   Scenario: Uploading the wrong sheet
     When I upload the excel sheet as <excel_sheet>

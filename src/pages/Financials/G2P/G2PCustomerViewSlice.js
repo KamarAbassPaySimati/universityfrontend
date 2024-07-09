@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import { dataService } from '../../../services/data.services';
+import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 
 const initialState = {
     loading: true,
@@ -41,7 +41,7 @@ const G2pCustomerViewSlice = createSlice({
                     state.View = viewData.data;
                     state.userDetails = {
                         Email: state?.View?.sheet_name,
-                        Created_Date: formatTimestamp(state?.View?.created_at),
+                        Created_Date: convertTimestampToCAT(state?.View?.created_at),
                         Role: state?.View?.upload_by,
                         Amount: state?.View?.transferred_amount
                     };

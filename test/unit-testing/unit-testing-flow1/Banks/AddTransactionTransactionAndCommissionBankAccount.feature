@@ -9,10 +9,10 @@ Feature: Paymaart - Admin Web- Add Transaction to Transaction Fee & Commission B
   @add_admin_user @create_new_user_and_login
   Scenario: Navigating to Transaction fee and commission banks add transactions screen
     Given I navigate to Transaction fee and commision bank listing
-    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
     When I click on view button for bank details
     Then I should see prefilled fields for Transaction fee and commision bank details for transaction
-    Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+    Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
     When I click on add Transaction for Transaction fee and commission bank
     Then I should be redirected to add transaction for Transaction fee and commission banks page
 
