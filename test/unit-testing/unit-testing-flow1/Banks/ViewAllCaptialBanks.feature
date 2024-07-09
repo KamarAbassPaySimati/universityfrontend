@@ -17,7 +17,7 @@ Feature: Paymaart - Admin Web - Capital Bank View
     @delete_admin_account
     Scenario: List all the capital banks
         Given I navigate to capital bank listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
 
     @perform_logout
     @wait
@@ -26,7 +26,7 @@ Feature: Paymaart - Admin Web - Capital Bank View
     @delete_admin_account
     Scenario: Login as finance admin and navigate to list capital bank
         Given I navigate to capital bank listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
 
     @perform_logout
     @wait
@@ -45,4 +45,4 @@ Feature: Paymaart - Admin Web - Capital Bank View
     @delete_admin_account
     Scenario: Login as normal admin and view admin listing
         Given I navigate to capital bank listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'

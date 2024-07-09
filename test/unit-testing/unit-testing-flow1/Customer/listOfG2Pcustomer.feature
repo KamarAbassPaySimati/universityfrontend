@@ -13,7 +13,7 @@ Feature: Paymaart - Admin Web - List of G2P Customer
     @create_new_user_and_login
     Scenario: View list all G2P customers
       Given I navigate to G2P customer listing page
-      Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date","Amount"]'
+      Then I should see table header containing '["G2P Customer Name","Paymaart ID","Created Date, CAT","Amount"]'
 
     Scenario: Checking Pagination
       Given I navigate to G2P customer listing page

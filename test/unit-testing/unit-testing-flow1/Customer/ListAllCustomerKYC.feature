@@ -21,7 +21,7 @@ Feature: Paymaart - Admin Web -Customer KYC verification Listing Page
     @create_new_user_and_login
     Scenario: List all the KYC
         Given I navigate to customer KYC listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Submission Date, CAT","KYC Type","Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to customer KYC listing screen
@@ -101,5 +101,5 @@ Feature: Paymaart - Admin Web -Customer KYC verification Listing Page
     @delete_admin_account
     Scenario: Login as normal admin and view admin listing
         When I navigate to customer KYC listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Submission Date","KYC Type","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Submission Date, CAT","KYC Type","Status"]'
         

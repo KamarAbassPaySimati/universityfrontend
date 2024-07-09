@@ -22,7 +22,7 @@ Feature: Paymaart- merchant Web- View all merchant list
     @create_new_user_and_login
     Scenario: Login as super admin and view list all the merchant users
         Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
 
     Scenario: Sort functionality
         Given I navigate to merchant users listing screen

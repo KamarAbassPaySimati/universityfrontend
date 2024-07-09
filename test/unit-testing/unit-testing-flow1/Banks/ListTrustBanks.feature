@@ -17,7 +17,7 @@ Feature: Paymaart - Admin Web -Trust Bank View
     @delete_admin_account
     Scenario: List all the trust banks
         Given I navigate to banks listing
-        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time, CAT","Balance"]'
 
     @perform_logout
     @wait
@@ -26,7 +26,7 @@ Feature: Paymaart - Admin Web -Trust Bank View
     @delete_admin_account
     Scenario: Login as finance admin and navigate to trust bank listing
         Given I navigate to banks listing
-        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time, CAT","Balance"]'
 
 
     @perform_logout
@@ -45,4 +45,4 @@ Feature: Paymaart - Admin Web -Trust Bank View
     @delete_admin_account
     Scenario: Login as normal admin and navigate to trust bank listing
         Given I navigate to banks listing
-        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time, CAT","Balance"]'

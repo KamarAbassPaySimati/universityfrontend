@@ -8,7 +8,7 @@ Feature: Paymaart- Admin Web- Self Specific transaction view
   @add_admin_user @create_new_user_and_login @create_transactions @delete_admin_account @delete_transaction
   Scenario: Viewing specific Transaction
     Given I navigate to Transaction History Page
-    Then I should see table header containing '["Service Code","Date/ Time","Beneficiary Paymaart ID","Transaction ID","Type","Amount"]'
+    Then I should see table header containing '["Service Code","Date/ Time, CAT","Beneficiary Paymaart ID","Transaction ID","Type","Amount"]'
     When I click on the view button for first transaction in list
     Then I should be redirected to transaction details page
 
