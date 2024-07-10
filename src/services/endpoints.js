@@ -14,5 +14,6 @@ export const endpoints = {
     addTrustBank: 'add-trust-bank',
     listTrustBank: 'list-trust-bank',
     listCapitalBank: 'list-capital-bank',
-    approveKyc: 'approve-kyc'
+    approveKyc: 'approve-kyc',
+    viewTransaction: 'view-user-transaction'
 };

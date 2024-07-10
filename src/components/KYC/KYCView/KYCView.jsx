@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
-import formatTimestamp from '../../../CommonMethods/formatTimestamp';
 import KYCSections from './KYCSections';
 import { KYCProfileView } from './KYCProfileViewSlice';
 import ImageViewWithModel from '../../S3Upload/ImageViewWithModel';
@@ -20,6 +19,7 @@ import TillNumber from '../../Modals/TillNumber';
 import { CDN } from '../../../config';
 import { endpoints } from '../../../services/endpoints';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
+import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 
 export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
@@ -143,6 +143,10 @@ export default function KYCView ({ role, viewType, getStatusText }) {
         }
     };
 
+    useEffect(() => {
+        console.log(getPaths(viewType, role), 'hjhj');
+    }, []);
+
     return (
         <>
             <CardHeader
@@ -179,9 +183,9 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 lastLoggedIn={View?.last_logged_in
                                     ? isNaN(Number(View?.last_logged_in))
                                         ? 'Online'
-                                        : formatTimestamp(View?.last_logged_in)
+                                        : `${convertTimestampToCAT(View?.last_logged_in)} CAT`
                                     : '-----'}
-                                CreatedDate={formatTimestamp(View?.user_created_date)}
+                                CreatedDate={`${convertTimestampToCAT(View?.user_created_date)} CAT`}
                             />
                             {!loading &&
                                 <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>

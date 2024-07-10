@@ -1,5 +1,6 @@
+/* eslint-disable max-len */
 const { getAgentPayload, getCustomerPayload, getMerchantPayload } = require('../../bdd_payload/index');
-const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI } = require('../../bdd_api/index');
+const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI, deleteRequestCustomer } = require('../../bdd_api/index');
 const { Before } = require('@cucumber/cucumber');
 
 Before('@register_new_agent', async function () {
@@ -28,6 +29,23 @@ Before('@register_new_agent_and_send_delete_request_for_that_agent', async funct
     }
 });
 
+Before('@register_new_customer_and_send_delete_request_for_that_customer', async function () {
+    try {
+        global.customer_registration_payload = await getCustomerPayload();
+        global.customer_registration_response = await createCustomerAccount(global.customer_registration_payload);
+
+        const deleteRequestPayload = {
+            reasons: ['Deleted For BDD'],
+            user_id: global.customer_registration_response.paymaart_id
+        };
+        console.log('deleteRequestPayload', deleteRequestPayload);
+        global.delete_request_response = await deleteRequestCustomer(deleteRequestPayload);
+        console.log('delete request response', global.delete_request_response);
+    } catch (error) {
+        console.log('Delete Request API Failed', error);
+    }
+});
+
 Before('@register_new_customer', async function () {
     try {
         global.customer_registration_payload = await getCustomerPayload();
@@ -45,5 +63,22 @@ Before('@register_new_merchant', async function () {
         console.log('global.merchant_registration_response', global.merchant_registration_response);
     } catch (error) {
         console.log('Registration of agent failed', error);
+    }
+});
+
+Before('@register_new_customer_and_send_delete_request_for_that_customer', async function () {
+    try {
+        global.customer_registration_payload = await getCustomerPayload();
+        global.customer_registration_response = await createCustomerAccount(global.customer_registration_payload);
+
+        const deleteRequestPayload = {
+            reasons: ['Deleted For BDD'],
+            user_id: global.customer_registration_response.paymaart_id
+        };
+        console.log('deleteRequestPayload', deleteRequestPayload);
+        global.delete_request_response = await deleteRequestBDDAPI(deleteRequestPayload);
+        console.log('delete request response', global.delete_request_response);
+    } catch (error) {
+        console.log('Delete Request API Failed', error);
     }
 });

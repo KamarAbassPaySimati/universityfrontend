@@ -18,7 +18,7 @@ Feature: Paymaart - Admin Web -Admin List
 
     Scenario: List all the admin users
         Given I navigate to admin users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In, CAT", "Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to admin users listing screen

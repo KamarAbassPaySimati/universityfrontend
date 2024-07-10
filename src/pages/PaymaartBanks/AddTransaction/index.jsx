@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import { useNavigate, useParams } from 'react-router';
 import FelidDivision from '../../../components/FelidDivision/FelidDivision';
@@ -8,14 +8,16 @@ import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import { TransactionCode } from '../TransactionCode';
 import GlobalContext from '../../../components/Context/GlobalContext';
-
+import ViewDetail from '../../../components/ViewDeatilComponent/ViewDeatil';
 export default function AddTransaction ({ type }) {
     const { id } = useParams();
     const [submitSelected, setSubmitSelected] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { user } = useSelector((state) => state.auth);
-    const [filedData, setFiledData] = useState({ entry_by: user.paymaart_id });
+    const [filedData, setFiledData] = useState({ entry_by: user.paymaart_id, amount: '' });
     const [loading, setLoading] = useState(false);
+    const [loadingPage, setLoadingPage] = useState(true);
+    const [capitalBankDropDownValue, setCapitalBankDropDownValue] = useState([]);
     const Navigate = useNavigate();
     const getPaymaartIdType = () => {
         switch (filedData.transaction_code) {
@@ -28,15 +30,44 @@ export default function AddTransaction ({ type }) {
             return 'Customer Paymaart ID';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'G2P Customer Paymaart ID';
-        case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
-        case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
-        case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+        case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
+        case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+        case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
             return 'Amount';
         default:
             return '<Beneficiary> Paymaart ID';
         }
     };
+    const getBankTypes = async () => {
+        try {
+            const response = await dataService.GetAPI('admin-users/list-trust-bank');
+            const bankTypes = response.data.data;
 
+            const arrayValue = bankTypes.reduce((acc, item) => {
+                if (item.ref_no !== 'PTBAT') {
+                    acc.push(`Outflow for excess Float withdrawal from ${item.ref_no} | EM credit to PMCAT`);
+                    acc.push(`Settlement to Merchant Biller from ${item.ref_no} | EM credit to PMCAT`);
+                    acc.push(`Payout to Paymaart Operations for excess Float in PMCA to ${item.ref_no}`);
+                }
+                return acc;
+            }, []);
+
+            arrayValue.push('Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF');
+            setCapitalBankDropDownValue(arrayValue);
+        } catch (error) {
+            console.error('Error fetching bank types:', error);
+        } finally {
+            setLoadingPage(false);
+        }
+    };
+
+    useEffect(() => {
+        if (type === 'main-capital') {
+            getBankTypes();
+        } else {
+            setLoadingPage(false);
+        }
+    }, [type]);
     const getStaticText = () => {
         console.log(filedData.transaction_code, 'filedData.transaction_code');
         switch (filedData.transaction_code) {
@@ -82,6 +113,16 @@ export default function AddTransaction ({ type }) {
         break;
     }
 
+    const transactionMapping = {
+        'Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT': 'PTBA1',
+        'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT': 'PTBA2',
+        'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT': 'PTBA3'
+    };
+    const merchantMapping = {
+        'Afrimax | MCT24680': 'MCT24680',
+        'Paymaart | MCT13579': 'MCT13579'
+    };
+
     const determineOptions = (type, id) => {
         switch (type) {
         case 'trust-bank':
@@ -97,11 +138,7 @@ export default function AddTransaction ({ type }) {
                 `Receipt of Customer Balances Interest from ${id} | RM credit`
             ];
         case 'main-capital':
-            return [
-                `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`,
-                `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`,
-                `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`
-            ];
+            return capitalBankDropDownValue.sort();
         case 'suspense-account':
             return [
                 `Suspense transaction 1 for ${id}`,
@@ -128,7 +165,7 @@ export default function AddTransaction ({ type }) {
 
     const options = determineOptions(type, id);
 
-    const InterNationalAddress = {
+    const TransactionFieldValue = {
         nothing_to_show: {
             Type: {
                 label: 'Type',
@@ -153,6 +190,15 @@ export default function AddTransaction ({ type }) {
                             staticText: getStaticText()
                         }
             }),
+            ...(Object.keys(transactionMapping).includes(filedData.transaction_code) && {
+                'Merchant Biller Paymaart ID': {
+                    label: 'Merchant Biller Paymaart ID',
+                    type: 'dropdown',
+                    key: 'merchant_biller_id',
+                    require: true,
+                    options: Object.keys(merchantMapping)
+                }
+            }),
             Amount: {
                 label: 'Amount (MWK)',
                 type: 'input',
@@ -173,7 +219,9 @@ export default function AddTransaction ({ type }) {
             }
         }
     };
+
     const handleStates = (value, id, type) => {
+        console.log(value, '-', id, '-', type);
         if (type === 'input') {
             if (id === 'amount') {
                 if (value.target.value?.length <= 18) {
@@ -193,19 +241,19 @@ export default function AddTransaction ({ type }) {
                 setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
             }
         } else if (type === 'inputStaticText') {
-            if (value.target.value.length <= 8) {
-                const regex = /^\d{0,9}$/;
-                if (regex.test(value.target.value)) {
-                    setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
-                } else {
-                    setFiledData((prevState) => ({
-                        ...prevState,
-                        [id]: filedData?.entry_for
-                            ? filedData.entry_for
-                            : ''
-                    }));
-                }
+            // if (value.target.value.length <= 8) {
+            const regex = /^\d{0,9}$/;
+            if (regex.test(value.target.value)) {
+                setFiledData((prevState) => ({ ...prevState, [id]: value.target.value }));
+            } else {
+                setFiledData((prevState) => ({
+                    ...prevState,
+                    [id]: filedData?.entry_for
+                        ? filedData.entry_for.replace(/[^0-9]/g, '')
+                        : ''
+                }));
             }
+            // }
         } else {
             setFiledData((prevState) => ({ ...prevState, [id]: value }));
         }
@@ -231,13 +279,22 @@ export default function AddTransaction ({ type }) {
             case `Inflow for Marketing Campaign Fund to ${id} | RM credit`:
             case `Receipt of Customer Balances Interest from ${id} | RM credit`:
                 return 'float';
-            case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
-            case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
-            case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+            case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
+            case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+            case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
+            case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1':
+            case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2':
+            case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
                 return 'excess-float';
             case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
             case 'Balance EM Excess Return to Paymaart Main Capital Account for Payout':
                 return 'add-tax-account-transaction';
+            case 'Settlement to Merchant Biller from PTBA1 | EM credit to PMCAT':
+            case 'Settlement to Merchant Biller from PTBA2 | EM credit to PMCAT':
+            case 'Settlement to Merchant Biller from PTBA3 | EM credit to PMCAT':
+                return 'settlement';
+            case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+                return 'pmtf-float';
             default:
                 return '<Beneficiary> Paymaart ID';
             }
@@ -247,21 +304,28 @@ export default function AddTransaction ({ type }) {
     const handleAddTransaction = async () => {
         setLoading(true);
         setSubmitSelected(false);
-        const dataArray =
+        let dataArray =
             (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                 filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
                 filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
-                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT` ||
-                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT` ||
-                filedData.transaction_code === `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT` ||
+                filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT' ||
+                filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT' ||
+                filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT' ||
+                filedData.transaction_code === 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1' ||
+                filedData.transaction_code === 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2' ||
+                filedData.transaction_code === 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3' ||
                 type === 'transaction-fees-and-commissions' ||
                 // type === 'taxes'
                 filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Float' ||
-                filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Payout'
+                filedData.transaction_code === 'Balance EM Excess Return to Paymaart Main Capital Account for Payout' ||
+                filedData.transaction_code === 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF'
             )
                 ? ['transaction_code', 'amount', 'pop_file_key', 'transaction_pop_ref_number']
                 : ['transaction_code', 'entry_for', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
         let dataError = false;
+        if (Object.keys(transactionMapping).includes(filedData.transaction_code)) {
+            dataArray = ['transaction_code', 'merchant_biller_id', 'amount', 'pop_file_key', 'transaction_pop_ref_number'];
+        }
         dataArray.forEach((item) => {
             if (!dataError) {
                 if (filedData[item]?.trim() === '' || filedData[item] === undefined) {
@@ -295,25 +359,44 @@ export default function AddTransaction ({ type }) {
                 case `Receipt of Customer Balances Interest from ${id} | RM credit`:
                     payload.transaction_type = 'float';
                     break;
-                case `Outflow for excess Float withdrawal from ${id}, PTBA1 | EM credit to PMCAT`:
+                case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA1';
                     break;
-                case `Outflow for excess Float withdrawal from ${id}, PTBA2 | EM credit to PMCAT`:
+                case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA2';
                     break;
-                case `Outflow for excess Float withdrawal from ${id}, PTBA3 | EM credit to PMCAT`:
+                case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
                     payload.transaction_type = 'excess-float';
                     payload.bank_type = 'PTBA3';
                     break;
+                case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+                case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1':
+                case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2':
+                case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
+                    payload.transaction_type = 'pmtf_float';
+                    break;
                     // write my three conditions
                 default:
-                    if (type !== 'transaction-fees-and-commissions' && type !== 'taxes') {
+                    if (type !== 'transaction-fees-and-commissions' && type !== 'taxes' &&
+                        !transactionMapping[filedData.transaction_code]) {
                         payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     };
                     break;
                 }
+
+                // For Settlement Type of Merchant
+                if (transactionMapping[filedData.transaction_code]) {
+                    payload.transaction_type = 'settlement';
+                    payload.bank_type = transactionMapping[filedData.transaction_code];
+                }
+
+                // For Merchant Biller ID
+                if (merchantMapping[filedData.merchant_biller_id]) {
+                    payload.merchant_biller_id = merchantMapping[filedData.merchant_biller_id];
+                }
+
                 const res = await dataService.PostAPI(`bank-transactions/${getEndPoint()}`, payload);
                 if (res.error) {
                     setToastError(res.data.data.message);
@@ -339,35 +422,51 @@ export default function AddTransaction ({ type }) {
                 minHeightRequired={true}
                 table={false}
             >
-                <FelidDivision
-                    divisionClassName={'w-1/3'}
-                    divisionObject={InterNationalAddress}
-                    handleOnChange={handleStates}
-                    states={filedData}
-                    submitSelected={submitSelected}
-                />
-                <div className="w-[339px] relative ml-2">
-                    <UploadPlaceholder
-                        label={'Transaction POP'}
-                        labelValue={'Transaction POP'}
-                        testId={'pop_file_key'}
-                        disabled={undefined}
-                        path={`add_transaction/${id}`}
-                        handleUploadImg={handleStates}
-                        selectedUploadImg={'pop_file_key'}
-                        states={filedData}
-                        handleStates={handleStates}
-                        error={submitSelected && (filedData?.pop_file_key?.trim() === '' || filedData.pop_file_key === undefined)}
-                    />
-                </div>
-                <div className='w-[200px] ml-2'>
-                    <Button
-                        testId='add_transaction'
-                        text='Add'
-                        isLoading={loading}
-                        onClick={handleAddTransaction}
-                    />
-                </div>
+                { loadingPage
+                    ? <div className='w-full flex flex-wrap mt-1 -mx-1'>
+
+                        {[...Array(5)].map((_, ind) => (
+                            <div className='w-1/3 px-1' key={_}>
+                                <ViewDetail
+                                    itemkey='Loading...'
+                                    userDetails='Loading...'
+                                    loading={loadingPage}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    : <>
+                        <FelidDivision
+                            divisionClassName={'w-1/3'}
+                            divisionObject={TransactionFieldValue}
+                            handleOnChange={handleStates}
+                            states={filedData}
+                            submitSelected={submitSelected}
+                        />
+                        <div className="w-[339px] relative ml-2">
+                            <UploadPlaceholder
+                                label={'Transaction POP'}
+                                labelValue={'Transaction POP'}
+                                testId={'pop_file_key'}
+                                disabled={undefined}
+                                path={`add_transaction/${id}`}
+                                handleUploadImg={handleStates}
+                                selectedUploadImg={'pop_file_key'}
+                                states={filedData}
+                                handleStates={handleStates}
+                                error={submitSelected && (filedData?.pop_file_key?.trim() === '' ||
+                                    filedData.pop_file_key === undefined)}
+                            />
+                        </div>
+                        <div className='w-[200px] ml-2'>
+                            <Button
+                                testId='add_transaction'
+                                text='Add'
+                                isLoading={loading}
+                                onClick={handleAddTransaction}
+                            />
+                        </div>
+                    </>}
 
             </CardHeader>
         </div>

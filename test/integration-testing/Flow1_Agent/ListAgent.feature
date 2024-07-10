@@ -22,7 +22,7 @@ Feature: Paymaart- agent Web- View all Agent list
     @create_new_user_and_login
     Scenario: List all the agent users
         Given I navigate to agent users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to agent users listing screen

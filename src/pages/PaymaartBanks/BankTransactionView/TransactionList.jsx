@@ -12,6 +12,9 @@ import { useNavigate, useParams } from 'react-router';
 import IframeModal from '../../../components/Iframe/IframeModal';
 import { TransactionDescription } from '../TransactionCode';
 import { formattedAmount } from '../../../CommonMethods/formattedAmount';
+import moment from 'moment';
+import { useOnClickOutside } from '../../../CommonMethods/outsideClick';
+import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 
 export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -22,8 +25,8 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
     const [errorMessage, setErrorMessage] = useState('');
     const Navigate = useNavigate();
     const [selectedFilter, setSelectedFilter] = useState({
-        start_date: new Date(searchParams.get('start_date')).getTime() / 1000,
-        end_date: new Date(searchParams.get('end_date')).getTime() / 1000
+        start_date: new Date(Number(searchParams.get('start_date'))).getTime() * 1000,
+        end_date: new Date(Number(searchParams.get('end_date'))).getTime() * 1000
     });
 
     let addTransactionPath;
@@ -52,14 +55,27 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         setErrorMessage('');
         setSelectedFilter((prevState) => ({ ...prevState, [id]: value }));
     };
-    // useOnClickOutside(filterDiv, () => {
-    //     setIsFilter(false);
-    // });
+
+    useOnClickOutside(filterDiv, () => {
+        setIsFilter(false);
+    });
+
     const handleApplyFilter = () => {
         const params = Object.fromEntries(searchParams);
         params.page_number = 1;
-        const startDate = new Date(selectedFilter.start_date).getTime();
-        const endDate = new Date(selectedFilter.end_date).getTime();
+        const startdate = new Date(selectedFilter.start_date).getTime();
+        const enddate = new Date(selectedFilter.end_date).getTime();
+
+        const startDate = moment(startdate).startOf('day').unix() * 1000;
+        const endDate = moment(enddate).endOf('day').subtract(0, 'minute').unix() * 1000;
+
+        if (!selectedFilter.start_date) {
+            delete params.start_date;
+        }
+        if (!selectedFilter.end_date) {
+            delete params.end_date;
+        }
+
         if (selectedFilter.start_date && selectedFilter.end_date) {
             if (startDate > endDate) {
                 setErrorMessage('Start date cannot be greater than end date');
@@ -82,6 +98,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
 
         setSearchParams({ ...params });
     };
+
     const handleClearFilter = () => {
         setIsFilter(false);
         setSelectedFilter({ start_date: '', end_date: '' });
@@ -92,15 +109,27 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         setSearchParams({ ...params });
     };
 
+    // const getDrCr = (value) => {
+    //     let givenValue = value.toString();
+    //     if (givenValue.substring(0, 1) === '-') {
+    //         givenValue = `${formattedAmount(givenValue)} DR`;
+    //     } else {
+    //         givenValue = `${formattedAmount(givenValue)} CR`;
+    //     }
+    //     return givenValue;
+    // };
+
     const getDrCr = (value) => {
         let givenValue = value.toString();
+        const absValue = Math.abs(value).toString();
         if (givenValue.substring(0, 1) === '-') {
-            givenValue = `${formattedAmount(givenValue)} DR`;
+            givenValue = `${formattedAmount(absValue)} DR`;
         } else {
-            givenValue = `${formattedAmount(givenValue)} CR`;
+            givenValue = `${formattedAmount(absValue)} CR`;
         }
         return givenValue;
     };
+
     return (
         <div data-testid="view_admin"
             className={`min-h-[calc(100vh-550px)] mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
@@ -174,7 +203,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
-                            className='mr-[8px]'/>
+                            className='mr-[8px]' />
                         <p className='text-[14px] font-semibold text-[#ffffff]'>Add Transaction</p>
                     </button>}
                 </div>
@@ -192,7 +221,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                                         <th className='py-2 px-[10px] text-left font-[400] '>Service codes</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>
-                                            Date/Time
+                                            Date/Time, CAT
                                         </th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Entry by</th>
@@ -215,7 +244,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 {item?.transaction_code || '-'}</td>
                                             <td data-testid="dateRow"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.created_at || '-'}</td>
+                                                {convertTimestampToCAT(item?.created_at) || '-'}</td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={

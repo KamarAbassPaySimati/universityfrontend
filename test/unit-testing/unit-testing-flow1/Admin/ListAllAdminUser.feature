@@ -20,7 +20,7 @@ Feature: Paymaart - Admin Web -Admin List
     @create_new_user_and_login
     Scenario: List all the admin users
         Given I navigate to admin users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In, CAT", "Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to admin users listing screen
@@ -83,7 +83,7 @@ Feature: Paymaart - Admin Web -Admin List
     @delete_admin_account
     Scenario: Login as normal admin and view admin listing
         When I navigate to admin users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Email","Phone Number","Role","Last Logged In, CAT", "Status"]'
         Then I should see view admin users button is hidden
         And I should see edit admin users button is hidden
         And I should see "onboard admin user" button is hidden

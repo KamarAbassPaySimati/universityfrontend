@@ -11,10 +11,10 @@ Pagination option should be present if more than 10 transactions(number of recor
   @add_admin_user @create_new_user_and_login
   Scenario: Adding transaction for tax account with valid data
     Given I navigate to tax account listing
-    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
     When I click on view button for bank details
     Then I should see prefilled fields for bank details for transaction
-    Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+    Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
     When I click on add transaction button
     Then I should see the enter by field is prefilled
     When I select the "Balance EM Excess Return to Paymaart Main Capital Account for Float" of transaction
@@ -26,10 +26,10 @@ Pagination option should be present if more than 10 transactions(number of recor
 
   Scenario: Adding transaction for tax account with valid data
     Given I navigate to tax account listing
-    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
     When I click on view button for bank details
     Then I should see prefilled fields for bank details for transaction
-    Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+    Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
     When I click on add transaction button
     Then I should see the enter by field is prefilled
     When I select the "Balance EM Excess Return to Paymaart Main Capital Account for Payout" of transaction
@@ -41,10 +41,10 @@ Pagination option should be present if more than 10 transactions(number of recor
 
   Scenario Outline: Adding transaction for tax account with invalid data
     Given I navigate to tax account listing
-    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+    Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
     When I click on view button for bank details
     Then I should see prefilled fields for bank details for transaction
-    Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+    Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
     When I click on add transaction button
     Then I should see the enter by field is prefilled
     When I click on add button

@@ -20,7 +20,7 @@ Feature: Paymaart- merchant Web- View all merchant list
     @create_new_user_and_login
     Scenario: Login as super admin and view list all the merchant users
         Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to merchant users listing screen
@@ -61,7 +61,7 @@ Feature: Paymaart- merchant Web- View all merchant list
     @delete_admin_account
     Scenario: Login as finance admin and view list of merchants
         Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
 
     @perform_logout
     @wait
@@ -70,7 +70,7 @@ Feature: Paymaart- merchant Web- View all merchant list
     @delete_admin_account
     Scenario: Login as normal admin and view list of merchants
         Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
 
     @perform_logout
     @wait
@@ -79,4 +79,4 @@ Feature: Paymaart- merchant Web- View all merchant list
     @delete_admin_account
     Scenario: Login as support admin and view list of merchants
         Given I navigate to merchant users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date","Till Number","Location","Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'

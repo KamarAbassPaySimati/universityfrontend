@@ -8,14 +8,13 @@ Feature: Paymaart-Admin Web- Capital Bank Transaction View
 
   @add_admin_user
   @create_new_user_and_login
-  @delete_admin_account
 
   Scenario: List all the capital banks
     Given I navigate to capital banks listing
     When I click on view button for bank details
     And I should see prefilled fields for bank details for transaction
-    Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Beneficiary Paymaart ID","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
-
+    Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Beneficiary Paymaart ID","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+  
   Scenario: Filter transactions by date
     When I click on filter tab
     Then I should see filter popup modal
@@ -28,6 +27,7 @@ Feature: Paymaart-Admin Web- Capital Bank Transaction View
     Then I click on the apply filter button
     Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
 
+  @delete_admin_account
   Scenario: Checking Pagination
     When I click on paginate next page
     Then I should be navigated to page 2

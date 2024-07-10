@@ -8,7 +8,7 @@ Feature: Paymaart - Admin Web - Transaction Fee & Commission Bank Account View
     @delete_admin_account
     Scenario: List all the Transaction fee and commision banks
         Given I navigate to Transaction fee and commision bank listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
 
     @perform_logout
     @wait
@@ -17,7 +17,7 @@ Feature: Paymaart - Admin Web - Transaction Fee & Commission Bank Account View
     @delete_admin_account
     Scenario: Login as finance admin and navigate to Transaction fee and commision bank listing
         Given I navigate to Transaction fee and commision bank listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
 
 
     @perform_logout
