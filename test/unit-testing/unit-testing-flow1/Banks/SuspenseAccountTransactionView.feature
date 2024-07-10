@@ -13,7 +13,7 @@ Feature: Paymaart- Admin Web - Suspense Account Transaction View
     Given I navigate to Suspense account listing
     When I click on view button for bank details
     Then I should see prefilled fields for bank details for transaction
-    Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Beneficiary Paymaart ID","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+    Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Beneficiary Paymaart ID","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
 
   # Scenario: Filter accounts by date
   #   When I click on filter tab

@@ -4,8 +4,8 @@ import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import { useNavigate } from 'react-router';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const KycVerificationTable = (
     {
@@ -69,7 +69,7 @@ const KycVerificationTable = (
                         <th className='py-2 px-[10px] text-left font-[400]'>Name</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
                             <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_submission_date" onClick={() => handleSort('submission_date', searchParams, setSearchParams)}>
-                                <span>Submission Date</span>
+                                <span>Submission Date, CAT</span>
                                 <Image src='sort_icon' />
                             </div>
                         </th>
@@ -88,8 +88,8 @@ const KycVerificationTable = (
                                 <td data-testid="name" title={user?.name}
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.name || '-'}
                                 </td>
-                                <td data-testid="submission_date" title = {formatTimestamp(user?.updated_at)} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
-                                    {formatTimestamp(user?.updated_at)}</td>
+                                <td data-testid="submission_date" title = {convertTimestampToCAT(user?.updated_at)} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
+                                    {convertTimestampToCAT(user?.updated_at)}</td>
                                 <td data-testid="kyc_type" title={getKYCTypeTitle(user)} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {getKYCTypeTitle(user)}
                                 </td>

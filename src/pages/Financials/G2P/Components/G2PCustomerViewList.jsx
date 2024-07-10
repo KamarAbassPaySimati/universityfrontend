@@ -6,7 +6,6 @@ import { useParams } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { G2PCustomerViewData } from '../G2PCustomerViewSlice';
 import { useSearchParams } from 'react-router-dom';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import G2PCustomerTable from './G2PSCustomerTable';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Paginator from '../../../../components/Paginator/Paginator';
@@ -15,8 +14,9 @@ import * as XLSX from 'xlsx';
 import { handleUpload } from '../../../../components/S3Upload/S3Functions';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { BeatLoader } from 'react-spinners';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
-export default function G2PCustomerViewList() {
+export default function G2PCustomerViewList () {
     const { id } = useParams();
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const dispatch = useDispatch();
@@ -163,7 +163,7 @@ export default function G2PCustomerViewList() {
                                 UserName={`${View?.first_name} ${View?.middle_name} ${View?.last_name}`}
                                 payMaartID={View?.paymaart_id}
                                 Amount={(View?.amount) ? `${View?.amount}` : `${View?.remaining_amount} MWK`}
-                                CreatedDate={formatTimestamp(View?.created_at)}
+                                CreatedDate={`${convertTimestampToCAT(View?.created_at)} CAT`}
                                 loading={loading}
                             />
                             <div>

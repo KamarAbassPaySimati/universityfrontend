@@ -5,11 +5,11 @@ import { Tooltip } from 'react-tooltip';
 
 import Image from '../../../../components/Image/Image';
 import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import { useNavigate } from 'react-router';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const Navigate = useNavigate();
@@ -28,7 +28,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                 </div>
                             </th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Phone Number</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Created Date</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Created Date, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Status</th>
                             <th className='py-2 px-[10px]'></th>
                         </tr>
@@ -45,8 +45,8 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                     {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}
                                 </td>
 
-                                <td className='py-2 px-[10px] truncate min-w-[80px] max-w-[150px]' title={formatTimestamp(user?.created_at)}>
-                                    {formatTimestamp(user?.created_at)}
+                                <td className='py-2 px-[10px] truncate min-w-[80px] max-w-[150px]' title={convertTimestampToCAT(user?.created_at)}>
+                                    {convertTimestampToCAT(user?.created_at)}
                                 </td>
 
                                 <td data-testid="status" className='py-2 px-[10px] truncate min-w-[50px] max-w-[100px]'>

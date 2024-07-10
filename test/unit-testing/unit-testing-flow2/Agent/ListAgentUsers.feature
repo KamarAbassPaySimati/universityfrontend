@@ -20,7 +20,7 @@ Feature: Paymaart- agent Web- View all Agent list
     @create_new_user_and_login
     Scenario: Login as super admin and view list all the agent users
         Given I navigate to agent users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to agent users listing screen
@@ -61,7 +61,7 @@ Feature: Paymaart- agent Web- View all Agent list
     @delete_admin_account
     Scenario: Login as finance admin and view list of agents
         Given I navigate to agent users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
 
     @perform_logout
     @wait
@@ -70,7 +70,7 @@ Feature: Paymaart- agent Web- View all Agent list
     @delete_admin_account
     Scenario: Login as normal admin and view list of agents
         Given I navigate to agent users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
 
     @perform_logout
     @wait
@@ -79,4 +79,4 @@ Feature: Paymaart- agent Web- View all Agent list
     @delete_admin_account
     Scenario: Login as support admin and view list of agents
         Given I navigate to agent users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
