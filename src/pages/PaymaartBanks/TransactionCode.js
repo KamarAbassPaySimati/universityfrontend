@@ -96,7 +96,6 @@ export function TransactionCode (value, type) {
         return 'PTDR1PTBA3';
     case 'Charge for Bank Services or Transactions by PTBA3 | RM debit':
         return 'PTDR2PTBA3';
-
         // Transcation Fees and Commissions
         // Taxes
     case 'Balance EM Excess Return to Paymaart Main Capital Account for Float':
@@ -131,6 +130,22 @@ export function TransactionCode (value, type) {
         return 'PTCASHOPT2';
     case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
         return 'PTCASHOPT3';
+
+    // suspense account transaction
+    case 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT':
+    case 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT':
+    case 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT':
+    case 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT':
+    case 'Pay-out to Customer Post Deactivation from PTBA2 | EM credit to PMCAT':
+    case 'Pay-out to Customer Post Deactivation from PTBA3 | EM credit to PMCAT':
+        return 'PMSPPOUT02';
+    case 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT':
+    case 'Pay-out to Agent Post Deletion from PTBA2 | EM credit to PMCAT':
+    case 'Pay-out to Agent Post Deletion from PTBA3 | EM credit to PMCAT':
+    case 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT':
+    case 'Pay-out to Customer Post Deletion from PTBA2 | EM credit to PMCAT':
+    case 'Pay-out to Customer Post Deletion from PTBA3 | EM credit to PMCAT':
+        return 'PMSPPOUT03';
 
     default:
         return 'Invalid description';
@@ -264,6 +279,32 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2';
     case 'PTCASHOPT3':
         return 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3';
+        // suspense account transaction
+    case 'PMSPPOUT02AGTPTBA1':
+        return 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT';
+    case 'PMSPPOUT02AGTPTBA2':
+        return 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT';
+    case 'PMSPPOUT02AGTPTBA3':
+        return 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT';
+    case 'PMSPPOUT02CMRPTBA1':
+        return 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT';
+    case 'PMSPPOUT02CMRPTBA2':
+        return 'Pay-out to Customer Post Deactivation from PTBA2 | EM credit to PMCAT';
+    case 'PMSPPOUT02CMRPTBA3':
+        return 'Pay-out to Customer Post Deactivation from PTBA3 | EM credit to PMCAT';
+
+    case 'PMSPPOUT03AGTPTBA1':
+        return 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT';
+    case 'PMSPPOUT03AGTPTBA2':
+        return 'Pay-out to Agent Post Deletion from PTBA2 | EM credit to PMCAT';
+    case 'PMSPPOUT03AGTPTBA3':
+        return 'Pay-out to Agent Post Deletion from PTBA3 | EM credit to PMCAT';
+    case 'PMSPPOUT03CMRPTBA1':
+        return 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT';
+    case 'PMSPPOUT03CMRPTBA2':
+        return 'Pay-out to Customer Post Deletion from PTBA2 | EM credit to PMCAT';
+    case 'PMSPPOUT03CMRPTBA3':
+        return 'Pay-out to Customer Post Deletion from PTBA3 | EM credit to PMCAT';
     default:
         return 'Invalid transaction code';
     }
