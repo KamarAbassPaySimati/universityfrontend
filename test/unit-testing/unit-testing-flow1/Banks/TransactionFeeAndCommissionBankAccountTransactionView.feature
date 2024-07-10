@@ -8,7 +8,6 @@ Feature: Paymaart - Admin Web- Transaction Fee & Commission Bank Transaction Vie
 
     @add_admin_user
     @create_new_user_and_login
-    @delete_admin_account
     Scenario: Viewing Transaction fee and commision banks transactions
         Given I navigate to Transaction fee and commision bank listing
         Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
@@ -28,6 +27,7 @@ Feature: Paymaart - Admin Web- Transaction Fee & Commission Bank Transaction Vie
         Then I click on the apply filter button
         Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
 
+    @delete_admin_account
     Scenario: Checking Pagination
         When I click on paginate next page
         Then I should be navigated to page 2

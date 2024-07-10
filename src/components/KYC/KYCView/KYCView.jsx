@@ -143,6 +143,10 @@ export default function KYCView ({ role, viewType, getStatusText }) {
         }
     };
 
+    useEffect(() => {
+        console.log(getPaths(viewType, role), 'hjhj');
+    }, []);
+
     return (
         <>
             <CardHeader

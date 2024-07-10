@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import Filter from '../Filter/Filter';
 import FilterWithSingleOption from '../FilterWithSingleOption/FilterWithSingleOption';
+import MultiFilter from '../MultiFilter';
 
 const Topbar = ({
     searchParams,
@@ -15,7 +16,11 @@ const Topbar = ({
     singleSelectFilter,
     filter1,
     filter2,
-    filter3
+    filter3,
+    multiFilter,
+    setAppliedFilter,
+    appliedFilter,
+    pageNumber
 
 }) => {
     const [timer, setTimer] = useState(null);
@@ -33,7 +38,11 @@ const Topbar = ({
 
     const handleSearchParams = (key, value) => {
         const params = Object.fromEntries(searchParams);
-        params.page = 1;
+        if (pageNumber) {
+            params.page_number = 1;
+        } else {
+            params.page = 1;
+        }
         if (key === 'search') params[key] = encodeURIComponent(value);
         else params[key] = value;
         if (params.search === '') delete params.search;
@@ -41,7 +50,11 @@ const Topbar = ({
     };
     const handleSearchParamsForFilter = (key, value) => {
         const params = Object.fromEntries(searchParams);
-        params.page = 1;
+        if (pageNumber) {
+            params.page_number = 1;
+        } else {
+            params.page = 1;
+        }
         if (searchParams.get(key) !== null) {
             if (!params[key].split(',').includes(value)) {
                 params[key] = `${searchParams.get(key)},${value}`;
@@ -69,7 +82,11 @@ const Topbar = ({
         // Reset filterValues to an empty object or default values
         const params = Object.fromEntries(searchParams);
         if (filterActive) {
-            params.page = 1;
+            if (pageNumber) {
+                params.page_number = 1;
+            } else {
+                params.page = 1;
+            }
         }
         delete params.role;
         delete params.status;
@@ -80,7 +97,11 @@ const Topbar = ({
         // Reset filterValues to an empty object or default values
         const params = Object.fromEntries(searchParams);
         if (filterActive) {
-            params.page = 1;
+            if (pageNumber) {
+                params.page_number = 1;
+            } else {
+                params.page = 1;
+            }
         }
         delete params.fullkyc;
         delete params.simplifiedkyc;
@@ -111,8 +132,18 @@ const Topbar = ({
                 testId='search-close'
                 className="absolute top-1/2 -translate-y-1/2 left-[340px] cursor-pointer bg-[#F8F8F8]"
             />}
-            {
-                singleSelectFilter
+            {multiFilter
+                ? <MultiFilter
+                        filterOptions={filterOptions}
+                        filterType={filterType}
+                        handleApplySearchParams={ null } // write a function to apply the seach params
+                        searchParams={searchParams}
+                        filterActive={filterActive}
+                        setSearchParams={setSearchParams}
+                        appliedFilter={appliedFilter}
+                        setAppliedFilter={setAppliedFilter}
+                 />
+                : singleSelectFilter
                     ? <FilterWithSingleOption
                             filterOptionOne={filter1}
                             filterOptionTwo={filter2}
@@ -134,7 +165,8 @@ const Topbar = ({
                             searchParams={searchParams}
                             isLoading={isLoading}
                             filterActive={filterActive}
-
+                            appliedFilter={appliedFilter}
+                            setAppliedFilter={setAppliedFilter}
                     />
             }
 

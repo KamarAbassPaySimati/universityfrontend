@@ -259,6 +259,28 @@ async function getKYCCompletedCustomerList () {
     }
 }
 
+async function createTransactionList () {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/add-user-transactions`, null, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function deleteTransactionList () {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.delete(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-user-transactions`, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
 module.exports = {
     getMFASecret,
     addAdminUser,
@@ -278,5 +300,7 @@ module.exports = {
     deleteRequestBDDAPI,
     getKYCCompletedAgentList,
     getKYCCompletedCustomerList,
-    deleteRequestCustomer
+    deleteRequestCustomer,
+    createTransactionList,
+    deleteTransactionList
 };

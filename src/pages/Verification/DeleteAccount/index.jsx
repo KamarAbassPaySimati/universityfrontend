@@ -10,6 +10,7 @@ import NoDataError from '../../../components/NoDataError/NoDataError';
 import Paginator from '../../../components/Paginator/Paginator';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { DeleteAccountList } from './DeleteAccountSlice';
+import { capitalizeFirstLetter } from '../../../CommonMethods/textCorrection';
 
 function DeleteAccount () {
     const { List, error, loading } = useSelector(state => state.DeleteteAccount);
@@ -111,7 +112,11 @@ function DeleteAccount () {
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
     useEffect(() => {
-        if (searchParams.get('page') === null) {
+        if (searchParams.get('page') === null && searchParams.get('type') === null) {
+            setSearchParams({ page: 1, type: 'agents' });
+        } else if (searchParams.get('page') === null) {
+            setSearchParams({ page: 1 });
+        } else if (searchParams.get('type') === null) {
             setSearchParams({ page: 1, type: 'agents' });
         } else {
             GetList();
@@ -145,7 +150,7 @@ function DeleteAccount () {
                                 setSearchParams={setSearchParams}// pass this as its getting updated
                                 searchParams={searchParams}// pass this because its used
                                 filterOptions={filterOptions}
-                                filterType={'Filter Agent List'}
+                                filterType={`Filter ${capitalizeFirstLetter(searchParams.get('type'))} List`}
                                 placeHolder='Paymaart ID or name '
                                 isLoading={loading}
                                 filterActive={(searchParams.get('status') !== null)}

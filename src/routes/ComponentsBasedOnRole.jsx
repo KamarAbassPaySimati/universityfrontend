@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Admin from '../pages/Users/Admin';
@@ -16,6 +17,10 @@ import G2pList from '../pages/Financials/G2P/index';
 import G2PCustomerViewList from '../pages/Financials/G2P/Components/G2PCustomerViewList';
 import BankTransactionView from '../pages/PaymaartBanks/BankTransactionView';
 import AddTransaction from '../pages/PaymaartBanks/AddTransaction';
+import TransactionHistory from '../pages/Financials/Transaction History/TransactionHistory';
+import ViewTransactionDetails from '../pages/Financials/Transaction History/View Transaction Details/ViewTransactionDetails';
+import POC from '../pages/POC/POC';
+import GeocodeComponent from '../pages/POC/ReactGeocode';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -75,6 +80,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Agent Delect Account Request View',
                 element: <KYCView role={'agent'} viewType={'DeleteAccount'} />,
                 path: '/verify/delete-account-requests/agent-profile/:id'
+            },
+            // Customer Delete Account Request View
+            {
+                name: 'Customer Delect Account Request View',
+                element: <KYCView role={'customer'} viewType={'DeleteAccount'} />,
+                path: '/verify/delete-account-requests/customer-profile/:id'
             },
             // Agent Kyc Specific View
             {
@@ -237,6 +248,29 @@ export const ComponentsBasedOnRole = {
                 name: 'G2P Customer View',
                 element: <G2PCustomerViewList />,
                 path: '/financials/g2p/view-profile/:id'
+            },
+            // Financial Transaction History List
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'View specific Self Transaction History',
+                element: <ViewTransactionDetails />,
+                path: '/financials/transaction-history/:id'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'Maps POC',
+                element: <GeocodeComponent />,
+                path: '/poc'
+            },
+            {
+                name: 'Maps POC',
+                element: <POC />,
+                path: '/poc-google'
             }
         ],
     admin:
@@ -361,6 +395,18 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Tax Account',
                 element: <AddTransaction type={'taxes'} />,
                 path: '/paymaart-banks/taxes/view-taxes/:id/add-transaction'
+            },
+            // Financial Transaction History List
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'View specific Self Transaction History',
+                element: <ViewTransactionDetails />,
+                path: '/financials/transaction-history/:id'
             }
         ],
     'support-admin':
@@ -472,6 +518,18 @@ export const ComponentsBasedOnRole = {
                 name: 'Paymaart Add Transaction fees and Commision',
                 element: <AddTransaction type={'transaction-fees-and-commissions'}/>,
                 path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id/add-transaction'
+            },
+            // Financial Transaction History List
+            {
+                name: 'List Self Transaction History',
+                element: <TransactionHistory />,
+                path: '/financials/transaction-history'
+            },
+            // Financial Transaction History View Specific
+            {
+                name: 'View specific Self Transaction History',
+                element: <ViewTransactionDetails />,
+                path: '/financials/transaction-history/:id'
             }
         ]
 };

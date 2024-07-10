@@ -32,7 +32,9 @@ const {
     addAdminUser,
     deleteAdminAccount,
     getKYCCompletedAgentList,
-    getKYCCompletedCustomerList
+    getKYCCompletedCustomerList,
+    createTransactionList,
+    deleteTransactionList
 } = require('../bdd_api/index');
 const {
     extractQRCodeData,
@@ -490,6 +492,21 @@ After('@delete_admin_account', async function () {
             username: global.admin_user.email_address
         };
         await deleteAdminAccount(payload);
+    } catch (error) {
+        console.log('API Error', error);
+    }
+});
+
+Before('@create_transactions', async function () {
+    try {
+        global.transactionList = await createTransactionList();
+    } catch (error) {
+        console.log('API Error', error);
+    }
+});
+After('@delete_transaction', async function () {
+    try {
+        await deleteTransactionList();
     } catch (error) {
         console.log('API Error', error);
     }
