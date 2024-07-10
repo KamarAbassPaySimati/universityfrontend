@@ -16,7 +16,7 @@ Feature: Paymaart - Admin Web- Customer Listing
 
     Scenario: Login as super admin and view list all the customer users
         Given I navigate to customer users listing screen
-        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date", "Status"]'
+        Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
 
     Scenario: Search for non existing record
         Given I navigate to customer users listing screen

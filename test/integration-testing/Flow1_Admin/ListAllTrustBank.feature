@@ -18,4 +18,4 @@ Feature: Paymaart - Admin Web -Trust Bank View
     @create_new_user_and_login
     Scenario: List all the trust banks
         Given I navigate to banks listing
-        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Account Number","Purpose","Last Update Date / Time, CAT","Balance"]'

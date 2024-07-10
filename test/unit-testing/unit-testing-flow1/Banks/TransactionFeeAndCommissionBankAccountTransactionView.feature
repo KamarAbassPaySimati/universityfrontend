@@ -10,10 +10,10 @@ Feature: Paymaart - Admin Web- Transaction Fee & Commission Bank Transaction Vie
     @create_new_user_and_login
     Scenario: Viewing Transaction fee and commision banks transactions
         Given I navigate to Transaction fee and commision bank listing
-        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time","Balance"]'
+        Then I should see table header containing '["Ref. No","Name","Purpose","Last Update Date / Time, CAT","Balance"]'
         When I click on view button for bank details
         Then I should see prefilled fields for Transaction fee and commision bank details for transaction
-        Then I should see table header containing '["Service codes","Date/Time","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
+        Then I should see table header containing '["Service codes","Date/Time, CAT","Type","Entry by","Transaction ID", "Transaction POP Ref. No", "Transaction POP", "Amount", "Closing Balance"]'
 
     Scenario: Filter accounts by date
         When I click on filter tab

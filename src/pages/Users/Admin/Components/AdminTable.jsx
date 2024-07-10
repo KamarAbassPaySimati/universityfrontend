@@ -3,12 +3,12 @@ import React from 'react';
 import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 import { useNavigate } from 'react-router-dom';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const AdminTable = (
     {
@@ -32,7 +32,7 @@ const AdminTable = (
                         <th className='py-2 px-[10px] text-left font-[400]'>Email</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>Phone Number</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>Role</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Last Logged In</th>
+                        <th className='py-2 px-[10px] text-left font-[400]'>Last Logged In, CAT</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>Status</th>
                         <th className='py-2 px-[10px]'></th>
                     </tr>
@@ -58,7 +58,7 @@ const AdminTable = (
                                     <span className={ user?.last_logged_in ? isTimestampFiveMinutesAgo(user?.last_logged_in) ? 'text-[#4F5962]' : 'text-accent-positive' : 'text-[#4F5962]'}>
                                         { user?.last_logged_in
                                             ? isTimestampFiveMinutesAgo(user?.last_logged_in)
-                                                ? formatTimestamp(user?.last_logged_in)
+                                                ? convertTimestampToCAT(user?.last_logged_in)
                                                 : 'Online'
                                             : '-'
                                         }

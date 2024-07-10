@@ -3,13 +3,13 @@ import React, { useContext, useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import Image from '../../../../components/Image/Image';
-import formatTimestamp from '../../../../CommonMethods/formatTimestamp';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { CDN } from '../../../../config';
 import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../../../components/ConfirmationPopup/ConfirmationPopup';
 import { dataService } from '../../../../services/data.services';
 import GlobalContext from '../../../../components/Context/GlobalContext';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustomerView }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -95,7 +95,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
                             <th className='py-2 px-[10px] text-left font-[400]'>Sheet Name</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Uploaded Date</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Uploaded Date, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Uploaded By</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Transferred Amount</th>
                             <th className='py-2 px-[10px]'></th>
@@ -109,7 +109,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="agent_name" title={item?.sheet_name}
                                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${item?.sheet_name}`}</td>
-                                <td className='py-2 px-[10px]'>{formatTimestamp(item?.created_at)}</td>
+                                <td className='py-2 px-[10px]'>{convertTimestampToCAT(item?.created_at)}</td>
                                 <td data-testid="amount" title={item?.uploaded_by}
                                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${item?.uploaded_by}`}</td>
                                 <td data-testid="amount" title={item?.transferred_amount}

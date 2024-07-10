@@ -7,7 +7,7 @@ import TransactionList from './TransactionList';
 import { useDispatch, useSelector } from 'react-redux';
 import { BankTransactionViewData } from './BankTransactionViewSlice';
 import { useParams, useSearchParams } from 'react-router-dom';
-import formatTimestamp from '../../../CommonMethods/formatTimestamp';
+import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 
 export default function BankTransactionView ({ type }) {
     const { id } = useParams();
@@ -130,7 +130,7 @@ export default function BankTransactionView ({ type }) {
                                     ? undefined
                                     : Data?.account_no,
                                 Purpose: Data?.purpose,
-                                'Last Update Date / Time': formatTimestamp(Data?.updated_at),
+                                'Last Update Date / Time': `${convertTimestampToCAT(Data?.updated_at)} CAT`,
                                 Balance: `${formattedAmount(Data?.amount)} MWK`
                             }
                         } />
