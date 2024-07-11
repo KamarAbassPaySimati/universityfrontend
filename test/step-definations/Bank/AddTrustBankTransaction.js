@@ -116,8 +116,12 @@ When('I select the transaction type as {string}', async function (transactionTyp
             dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Pay-out to Agent Post DEL/DEACT from PTBA1 | EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Pay-out to Agent Post DEL/DEACT from PTBA1 | EM credit to PMCAT"]')));
+        case 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:

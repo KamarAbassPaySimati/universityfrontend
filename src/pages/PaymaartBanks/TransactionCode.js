@@ -281,30 +281,30 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3';
         // suspense account transaction
     case 'PMSPPOUT02AGTPTBA1':
-        return 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT';
+        return `Pay-out to Agent Post Deactivation from PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT02AGTPTBA2':
-        return 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT';
+        return `Pay-out to Agent Post Deactivation from PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT02AGTPTBA3':
-        return 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT';
+        return `Pay-out to Agent Post Deactivation from PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT02CMRPTBA1':
-        return 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT';
+        return `Pay-out to Customer Post Deactivation from PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT02CMRPTBA2':
-        return 'Pay-out to Customer Post Deactivation from PTBA2 | EM credit to PMCAT';
+        return `Pay-out to Customer Post Deactivation from PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT02CMRPTBA3':
-        return 'Pay-out to Customer Post Deactivation from PTBA3 | EM credit to PMCAT';
+        return `Pay-out to Customer Post Deactivation from PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
 
     case 'PMSPPOUT03AGTPTBA1':
-        return 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT';
+        return `Pay-out to Agent Post Deletion from PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT03AGTPTBA2':
-        return 'Pay-out to Agent Post Deletion from PTBA2 | EM credit to PMCAT';
+        return `Pay-out to Agent Post Deletion from PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT03AGTPTBA3':
-        return 'Pay-out to Agent Post Deletion from PTBA3 | EM credit to PMCAT';
+        return `Pay-out to Agent Post Deletion from PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Agent' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT03CMRPTBA1':
-        return 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT';
+        return `Pay-out to Customer Post Deletion from PTBA1 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT03CMRPTBA2':
-        return 'Pay-out to Customer Post Deletion from PTBA2 | EM credit to PMCAT';
+        return `Pay-out to Customer Post Deletion from PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT03CMRPTBA3':
-        return 'Pay-out to Customer Post Deletion from PTBA3 | EM credit to PMCAT';
+        return `Pay-out to Customer Post Deletion from PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
     default:
         return 'Invalid transaction code';
     }
