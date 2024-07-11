@@ -230,7 +230,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP Ref. No</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP</th>
-                                        <th className='py-2 px-[10px] text-end font-[400]'>Amount</th>
+                                        <th className='py-2 px-[10px] text-end font-[400]'>Amount (MWK)</th>
                                         <th className='py-2 px-[10px] text-end font-[400]'>Closing Balance</th>
                                         <th className='py-2 px-[10px]'></th>
                                     </tr>
@@ -248,14 +248,14 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={
-                                                    TransactionDescription(item?.transaction_code, type,
+                                                    TransactionDescription((item?.transaction_code === 'PMSPPOUT02' || item?.transaction_code === 'PMSPPOUT03') ? `${item?.transaction_code}${item.sender_id.substring(0, 3)}${item.bank_id}` : item?.transaction_code, type,
                                                         item?.transaction_amount?.toString().substring(0, 1) === '-'
                                                             ? 'EM debit'
                                                             : 'CR')}
                                             >
                                                 {
-                                                    TransactionDescription(item?.transaction_code, type,
-                                                        item?.transaction_amount.toString()?.substring(0, 1) === '-'
+                                                    TransactionDescription((item?.transaction_code === 'PMSPPOUT02' || item?.transaction_code === 'PMSPPOUT03') ? `${item?.transaction_code}${item.sender_id.substring(0, 3)}${item.bank_id}` : item?.transaction_code, type,
+                                                        item?.transaction_amount?.toString().substring(0, 1) === '-'
                                                             ? 'EM debit'
                                                             : 'CR')}
                                             </td>
