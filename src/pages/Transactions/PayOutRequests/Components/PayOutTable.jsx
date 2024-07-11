@@ -49,6 +49,7 @@ const PayOutTable = (
         //     // Add a fallback return value here
         //     return '/verify/kyc-registration/';
         // }
+        return '/transactions/pay-out-requests/';
     };
 
     const Navigate = useNavigate();
@@ -78,10 +79,10 @@ const PayOutTable = (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title={user?.transaction_id}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.transaction_id || '-'}</td>
-                                <td data-testid="name" title={user?.recipient_id}
+                                <td data-testid="recipient_paymaart_id" title={user?.recipient_id}
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.recipient_id || '-'}
                                 </td>
-                                <td data-testid="name" title={`${formattedAmount(user?.amount)} MWK`}
+                                <td data-testid="amount" title={`${formattedAmount(user?.amount)} MWK`}
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>{`${formattedAmount(user?.amount)} MWK` || '-'}
                                 </td>
                                 <td data-testid="submission_date" title = {convertTimestampToCAT(user?.created_at)} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
@@ -104,7 +105,7 @@ const PayOutTable = (
                                     {
                                         <>
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
-                                                onClick={() => Navigate(`${geturl()}${user?.paymaart_id}`
+                                                onClick={() => Navigate(`${geturl()}${user?.request_id}`
                                                 )}
                                             />
                                         </>

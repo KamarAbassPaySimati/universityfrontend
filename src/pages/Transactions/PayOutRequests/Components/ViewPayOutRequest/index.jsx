@@ -3,9 +3,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { SpecificView } from '../SpecificAdminViewSlice';
 import CardHeader from '../../../../../components/CardHeader';
-import ProfileName from '../../../../../components/ProfileName/ProfileName';
 import ViewDetail from '../../../../../components/ViewDeatilComponent/ViewDeatil';
 import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../../../../components/ConfirmationPopup/ConfirmationPopup';
@@ -13,21 +11,22 @@ import GlobalContext from '../../../../../components/Context/GlobalContext';
 
 import { dataService } from '../../../../../services/data.services';
 import { endpoints } from '../../../../../services/endpoints';
+import { PayOutRequestView } from './ViewPayOutRequeSlice';
 
-export default function SpecificAdminView () {
+export default function ViewPayOutRequest () {
     const dispatch = useDispatch();
     const { id } = useParams();
-    const { View, userDetails, loading } = useSelector(state => state.SpecificAdminView); // to get the api respons
+    const { View, TransactionDetails, BankDetails, Reason, loading } = useSelector(state => state.PayOutRequestView); // to get the api respons
     const [isModalOpen, setModalOpen] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { adminActivateDeactivate } = endpoints;
-    const { user } = useSelector((state) => state.auth);
-    const { paymaart_id: PaymaartId } = user;
+    // const { user } = useSelector((state) => state.auth);
+    // const { paymaart_id: PaymaartId } = user;
 
     const getView = () => {
         try {
-            dispatch(SpecificView(id));
+            dispatch(PayOutRequestView(id));
         } catch (error) {
             console.error(error);
         }
@@ -37,9 +36,9 @@ export default function SpecificAdminView () {
     }, []);
 
     // on tap of activate/deactivate button
-    const handleStatusClick = () => {
-        setModalOpen(true);
-    };
+    // const handleStatusClick = () => {
+    //     setModalOpen(true);
+    // };
     const handleClose = () => {
         setModalOpen(false);
     };
@@ -47,7 +46,7 @@ export default function SpecificAdminView () {
         try {
             setIsLoading(true);
             const response = await dataService.PatchAPI(`admin-users/${adminActivateDeactivate}`,
-                { username: userDetails?.Email, status: View.status === 'active' ? 'false' : 'true' });
+                { username: TransactionDetails?.Email, status: View.status === 'active' ? 'false' : 'true' });
             if (!response.error) {
                 setIsLoading(false);
                 setModalOpen(false);
@@ -67,45 +66,43 @@ export default function SpecificAdminView () {
     return (
         <>
             <CardHeader
-                activePath='Admin Profile'
-                paths={['Users', 'Admins']}
+                activePath='Pay-out Request Details'
+                paths={['Transactions', 'Pay-out Requests']}
                 pathurls={['users/admins']}
-                header='Admin Profile'
                 minHeightRequired={true}
-                updateButton={loading || 'Update'}
-                updateButtonPath={`/users/admins/update-admin/${id}`}
-                statusButton={PaymaartId === View?.paymaart_id ? undefined : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
                 ChildrenElement
-                onHandleStatusChange={handleStatusClick}
             >
                 {<>
-                    <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
+                    <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 my-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
                         <div className='flex justify-between items-center'>
-                            <ProfileName
-                                userButtonName={`${View?.first_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`}
-                                UserName={`${View?.first_name || '-'} ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
-                                payMaartID={View?.paymaart_id}
-                                loading={loading}
-                            />
-                            <span className={`py-[2px] px-[10px] text-[13px] font-semibold capitalize 
-                                 ${View?.status === 'active'
-            ? 'bg-[#ECFDF5] text-accent-positive'
-            : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                {View?.status}
-                            </span>
+                            <h1 className='text-[#252C32] font-bold text-[30px] leading-[40px]'>Pay-out Request Details</h1>
+                            <div className='flex'>
+                                <button data-testid="reject_button"
+                                    // onClick={onHandleReject}
+                                    className={`flex  bg-primary-negative py-[8px] px-[16px] 
+                                        justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
+                                    <p className='text-[14px] font-semibold text-[#ffffff]'>Reject</p>
+                                </button>
+                                <button data-testid="activate_deactivate_button"
+                                    // onClick={onHandleStatusChange}
+                                    className={`flex bg-[#13B681] py-[8px] px-[16px] justify-center items-center w-[117px]
+                                    h-[40px] rounded-[6px] ml-4`}>
+                                    <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div data-testid="view_admin" className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
+                    <div data-testid="transaction_details" className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
                 `}>
                         <h1 className='text-[#4F5962] font-semibold text-[18px] leading-[26px] my-2'>
-                            Basic Details
+                            Transaction Details
                         </h1>
                         <div className='w-full flex flex-wrap mt-1 -mx-1'>
                             {loading
-                                ? ([...Array(5)].map((_, ind) => (
+                                ? ([...Array(4)].map((_, ind) => (
                                     <div className='w-1/3 px-1'>
                                         <ViewDetail
                                             itemkey='Loading...'
@@ -114,11 +111,67 @@ export default function SpecificAdminView () {
                                         />
                                     </div>
                                 )))
-                                : (Object.keys(userDetails).map((itemkey, index = 0) => (
+                                : (Object.keys(TransactionDetails).map((itemkey, index = 0) => (
                                     <div key={index} className='w-1/3 px-1'>
                                         <ViewDetail
                                             itemkey={itemkey.replaceAll('_', ' ')}
-                                            userDetails={userDetails[itemkey]}
+                                            userDetails={TransactionDetails[itemkey]}
+                                            loading={loading}
+                                        />
+                                    </div>)
+                                ))}
+                        </div>
+                    </div>
+                    <div data-testid="bank_details" className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
+                flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
+                `}>
+                        <h1 className='text-[#4F5962] font-semibold text-[18px] leading-[26px] my-2'>
+                            Bank Details
+                        </h1>
+                        <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                            {loading
+                                ? ([...Array(3)].map((_, ind) => (
+                                    <div className='w-1/3 px-1'>
+                                        <ViewDetail
+                                            itemkey='Loading...'
+                                            userDetails='Loading...'
+                                            loading={loading}
+                                        />
+                                    </div>
+                                )))
+                                : (Object.keys(BankDetails).map((itemkey, index = 0) => (
+                                    <div key={index} className='w-1/3 px-1'>
+                                        <ViewDetail
+                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                            userDetails={BankDetails[itemkey]}
+                                            loading={loading}
+                                        />
+                                    </div>)
+                                ))}
+                        </div>
+                    </div>
+                    <div data-testid="reason" className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 px-[30px] pt-[24px] pb-[28px] 
+                flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]
+                `}>
+                        <h1 className='text-[#4F5962] font-semibold text-[18px] leading-[26px] my-2'>
+                            Reason
+                        </h1>
+                        <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                            {loading
+                                ? ([...Array(1)].map((_, ind) => (
+                                    <div className='w-ful px-1'>
+                                        <ViewDetail
+                                            itemkey='Loading...'
+                                            userDetails='Loading...'
+                                            loading={loading}
+                                        />
+                                    </div>
+                                )))
+                                : (Object.keys(Reason).map((itemkey, index = 0) => (
+                                    <div key={index} className='w-full px-1'>
+                                        <ViewDetail
+                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                            userDetails={Reason[itemkey]}
                                             loading={loading}
                                         />
                                     </div>)

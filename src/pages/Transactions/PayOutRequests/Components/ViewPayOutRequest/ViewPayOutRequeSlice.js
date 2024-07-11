@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
-import { dataService } from '../../../../services/data.services';
-import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
-import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import { dataService } from '../../../../../services/data.services';
+import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
+import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 
 const initialState = {
     loading: true,
@@ -10,11 +9,11 @@ const initialState = {
     success: ''
 };
 
-export const SpecificView = createAsyncThunk('adminUsers', async (PaymaartId, { rejectWithValue }) => {
+export const PayOutRequestView = createAsyncThunk('adminUsers', async (uuid, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
 
     try {
-        const res = await dataService.GetAPI(`admin-users/view-admin/${PaymaartId}`);
+        const res = await dataService.GetAPI(`payout-transactions/specific-payout?_id=${uuid}`);
         return res;
     } catch (error) {
         // Log error or send notification
@@ -22,7 +21,7 @@ export const SpecificView = createAsyncThunk('adminUsers', async (PaymaartId, { 
     }
 });
 
-const SpecificAdminViewSlice = createSlice({
+const ViewPayOutRequestSlice = createSlice({
     name: 'admin-view',
     initialState,
     reducers: {
@@ -30,38 +29,49 @@ const SpecificAdminViewSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(SpecificView.pending, (state) => {
+            .addCase(PayOutRequestView.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(SpecificView.fulfilled, (state, action) => {
+            .addCase(PayOutRequestView.fulfilled, (state, action) => {
                 state.loading = false;
-                if (!action.payload.error && action.payload.data.success_status) {
-                    state.View = action?.payload?.data?.data[0];
-                    state.userDetails = {
-                        'Phone Number':
-                            `${state?.View?.country_code} ${state?.View?.phone_number
-                                ? formatInputPhone(state?.View?.phone_number)
-                                : ''}`,
-                        Email: state?.View?.email,
-                        Role: state?.View?.user_type,
-                        Created_Date: `${convertTimestampToCAT(state?.View?.created_at)} CAT`,
-                        Last_Logged_In: state?.View?.last_logged_in
-                            ? isTimestampFiveMinutesAgo(state?.View?.last_logged_in)
-                                ? `${convertTimestampToCAT(state?.View?.last_logged_in)} CAT`
-                                : 'Online'
-                            : ''
+                console.log('action.payload', action.payload);
+                if (!action.payload.error) {
+                    state.View = action?.payload?.data;
+                    console.log('state?.View', state?.View);
+                    state.TransactionDetails = {
+                        'Transaction ID': state?.View.transaction_id,
+                        'Paymaart ID': state?.View.recipient_id,
+                        'Date/Time': `${convertTimestampToCAT(state?.View?.created_at)} CAT`,
+                        Amount: `${formattedAmount(state?.View?.amount)} MWK`
+                        // Email: state?.View?.email,
+                        // Role: state?.View?.user_type,
+                        // Last_Logged_In: state?.View?.last_logged_in
+                        //     ? isTimestampFiveMinutesAgo(state?.View?.last_logged_in)
+                        //         ? `${convertTimestampToCAT(state?.View?.last_logged_in)} CAT`
+                        //         : 'Online'
+                        //     : ''
                     };
-                    state.keys = Object.keys(state.userDetails);
+                    state.BankDetails = {
+                        'Bank Name': state?.View.bank_name,
+                        'Bank Account Name': state?.View.account_name,
+                        'Bank Account Number': state?.View.account_number
+                    };
+                    state.Reason = {
+                        'By Agent': 'Lorem Ipsum is simply dummy text'
+                    };
+                    state.keys = Object.keys(state.Reason);
+                    state.keys = Object.keys(state.BankDetails);
+                    state.keys = Object.keys(state.TransactionDetails);
                 } else {
                     state.error = action?.payload?.data?.message;
                 }
             })
-            .addCase(SpecificView.rejected, (state, action) => {
+            .addCase(PayOutRequestView.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action?.payload?.message?.message;
             });
     }
 });
 
-export default SpecificAdminViewSlice.reducer;
+export default ViewPayOutRequestSlice.reducer;
