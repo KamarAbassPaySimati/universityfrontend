@@ -1,9 +1,11 @@
-const { Given } = require('@cucumber/cucumber');
+const { Given, When } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
+const { Key } = require('selenium-webdriver');
+const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I navigate to agent pay-out request listing screen', async function () {
-    await driver.get('http://localhost:3000/transactions/pay-out-requests?page_number=1&type=agent');
+    await driver.get('http://localhost:3000/transactions/pay-out-requests?page=1&type=agents');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
