@@ -13,6 +13,13 @@ Feature: Paymaart- Admin Web - List of Pay-out Request(Agent)
     Scenario: List all agent pay-out request
       Given I navigate to agent pay-out request listing screen
       Then I should see table header containing '["Pay-out Request ID","Recipient Paymaart ID","Amount","Date/Time","Status"]'
+    
+   Scenario: Search for non existing record
+      Given I navigate to agent pay-out request listing screen
+      When I search for particular customer as "CMR88732914"
+      Then I should read a message stating that "No data found"
+      And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
+
 
     @delete_admin_account
     Scenario: Checking Pagination
