@@ -15,7 +15,7 @@ options.addArguments('--no-sandbox');
 options.addArguments('--disable-features=VizDisplayCompositor');
 options.addArguments('enable-automation');
 options.addArguments('--disable-dev-shm-usage');
-options.addArguments('--headless'); // comment this line of code to run in local chrome browser
+// options.addArguments('--headless'); // comment this line of code to run in local chrome browser
 options.addArguments('--window-size=1920,1080');
 options.addArguments('--disable-gpu');
 options.addArguments('--disable-extensions');
@@ -34,7 +34,9 @@ const {
     getKYCCompletedAgentList,
     getKYCCompletedCustomerList,
     createTransactionList,
-    deleteTransactionList
+    deleteTransactionList,
+    getKYCCompletedAgentDeactivateList,
+    getKYCDeactivateCustomerList
 } = require('../bdd_api/index');
 const {
     extractQRCodeData,
@@ -470,6 +472,14 @@ Before('@create_new_user_and_login', async function () {
         console.log('API Error', error);
     }
 });
+Before('@get_agent_deactivate_kyc_list', async function () {
+    try {
+        global.agentList = await getKYCCompletedAgentDeactivateList();
+        console.log('global.agentList', global.agentList);
+    } catch (error) {
+        console.log('API Error', error);
+    }
+});
 Before('@get_agent_completed_kyc_list', async function () {
     try {
         global.agentList = await getKYCCompletedAgentList();
@@ -481,6 +491,13 @@ Before('@get_agent_completed_kyc_list', async function () {
 Before('@get_customer_completed_kyc_list', async function () {
     try {
         global.customerList = await getKYCCompletedCustomerList();
+    } catch (error) {
+        console.log('API Error', error);
+    }
+});
+Before('@get_customer_delative_kyc_list', async function () {
+    try {
+        global.customerList = await getKYCDeactivateCustomerList();
     } catch (error) {
         console.log('API Error', error);
     }
