@@ -19,6 +19,7 @@ import BankTransactionView from '../pages/PaymaartBanks/BankTransactionView';
 import AddTransaction from '../pages/PaymaartBanks/AddTransaction';
 import TransactionHistory from '../pages/Financials/Transaction History/TransactionHistory';
 import ViewTransactionDetails from '../pages/Financials/Transaction History/View Transaction Details/ViewTransactionDetails';
+import PayOutRequests from '../pages/Transactions/PayOutRequests';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -258,6 +259,12 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails />,
                 path: '/financials/transaction-history/:id'
+            },
+            // pay-out
+            {
+                name: 'KYC Verification list',
+                element: <PayOutRequests />,
+                path: '/transactions/pay-out-requests'
             }
         ],
     admin:
@@ -517,6 +524,12 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails />,
                 path: '/financials/transaction-history/:id'
+            },
+            // pay-out
+            {
+                name: 'KYC Verification list',
+                element: <KycVerification />,
+                path: '/transactions/pay-out-requests'
             }
         ]
 };
