@@ -86,7 +86,6 @@ const PayOutTable = (
                                 </td>
                                 <td data-testid="submission_date" title = {convertTimestampToCAT(user?.created_at)} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {convertTimestampToCAT(user?.created_at)}</td>
-                                {console.log('user?.status', user?.status)}
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status
                                         ? (
