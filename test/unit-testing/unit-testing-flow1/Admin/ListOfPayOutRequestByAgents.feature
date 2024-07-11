@@ -16,7 +16,7 @@ Feature: Paymaart- Admin Web - List of Pay-out Request(Agent)
     
    Scenario: Search for non existing record
       Given I navigate to agent pay-out request listing screen
-      When I search for particular customer as "CMR88732914"
+      When I search for particular agent as "AGT88732914"
       Then I should read a message stating that "No data found"
       And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
 
