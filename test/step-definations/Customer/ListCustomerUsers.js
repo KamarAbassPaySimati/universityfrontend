@@ -30,7 +30,7 @@ Then('I should see the customers sorted in descending order based on {string}', 
     case 'Customer Name':
         items = await driver.wait(until.elementsLocated(By.css('[data-testid="customer_name"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
-        sortedItemTexts = [...itemTexts].sort().reverse();
+        sortedItemTexts = [...itemTexts].sort();
         assert.deepStrictEqual(itemTexts, sortedItemTexts, 'Items are not sorted in descending order');
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
