@@ -3,6 +3,10 @@ export const sideNavObject = {
         Dashboard: {
             path: 'dashboard'
         },
+        Transactions: {
+            path: 'transactions',
+            dropdown: ['Pay-out Requests', 'Flagged', 'Log']
+        },
         Users: {
             path: 'users',
             dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
