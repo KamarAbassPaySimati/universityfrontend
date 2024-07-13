@@ -7,7 +7,7 @@ import InformationList from '../InformationList/InformationList';
 import Modal from 'react-responsive-modal';
 
 function InputFieldWithDropDown (props) {
-    const { labelName, value, placeholder, options, id, error, handleInput, testId, information, disable } = props;
+    const { labelName, value, placeholder, options, id, error, handleInput, testId, information, disable, noLabel } = props;
     const [show, setShow] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const infoRef = useRef();
@@ -41,10 +41,10 @@ function InputFieldWithDropDown (props) {
         };
     }, [show]);
     return (
-        <div className=" flex flex-col relative gap-2">
+        <div className={`flex flex-col relative ${noLabel ? '' : 'gap-2'}`}>
             <div className='flex items-center'>
-                <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
-                    {labelName}</label>
+                {!noLabel && <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] mr-4'>
+                    {labelName}</label>}
                 {information &&
                     <div ref={infoRef} className='flex'>
                         <Image src="info_icon" className="w-5 h-5 cursor-pointer relative" onClick={() => setShowInfo(!showInfo)} />
