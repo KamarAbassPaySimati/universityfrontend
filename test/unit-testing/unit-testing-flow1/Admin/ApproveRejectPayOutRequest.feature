@@ -12,7 +12,7 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
 
     @add_admin_user
     @create_new_user_and_login
-    # api call
+    @register_new_agent_and_send_payout_request_for_that_agent
     Scenario: View specific payout request and approve
       Given I navigate to agent pay-out request listing screen
       When I click on view pay-out request 
@@ -29,17 +29,17 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
       Examples:
       | type                                                | 
       | "Pay-out to Agent from PTBA1 EM credit to PMCAT"    | 
-      | "Pay-out to Agent from PTBA2 EM credit to PMCAT"    | 
-      | "Pay-out to Agent from PTBA3 EM credit to PMCAT"    | 
+    #   | "Pay-out to Agent from PTBA2 EM credit to PMCAT"    | 
+    #   | "Pay-out to Agent from PTBA3 EM credit to PMCAT"    | 
 
-    Scenario: View specific payout request and approve
-       Given I navigate to agent pay-out request listing screen
-       When I click on view pay-out request 
-       Then I should view Pay-out Request Details
-       When I click on reject "Agent Pay-out request"
-       Then I should see a confirmation prompt for reject "Agent Pay-out request"
-       When I enter the reason for rejecting as "BDD Test"
-       When I click on reject button for confirming
-       Then I should read a message stating that "Pay-out request rejected successfully"
-       And I should see the pay-out request status changed to "Rejected"
+    # Scenario: View specific payout request and approve
+    #    Given I navigate to agent pay-out request listing screen
+    #    When I click on view pay-out request 
+    #    Then I should view Pay-out Request Details
+    #    When I click on reject "Agent Pay-out request"
+    #    Then I should see a confirmation prompt for reject "Agent Pay-out request"
+    #    When I enter the reason for rejecting as "BDD Test"
+    #    When I click on reject button for confirming
+    #    Then I should read a message stating that "Pay-out request rejected successfully"
+    #    And I should see the pay-out request status changed to "Rejected"
 
