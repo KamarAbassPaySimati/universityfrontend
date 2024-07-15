@@ -86,7 +86,6 @@ function InputFieldWithDropDown (props) {
                 border border-[#E5E4E5] max-h-[210px] overflow-auto bg-[#fff]
                 ${show === true ? 'show' : 'hidden'}`} aria-labelledby="patient-dropdownMenuButton1"
                 >
-                    {console.log('options', options)}
                     {options.map((item, index = 0) => (
                         <li data-testid={`${item?.replaceAll(' ', '_').toLowerCase()}`} onClick={(e) => {
                             e.preventDefault(); setShow(false);
