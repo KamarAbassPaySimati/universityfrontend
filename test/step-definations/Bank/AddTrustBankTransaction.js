@@ -88,15 +88,15 @@ When('I select the transaction type as {string}', async function (transactionTyp
             dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Payout to Paymaart Operations for excess Float in PMCA to PTBA1"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
+        case 'Charge for Bank Services or Transactions by PTBA1 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_3"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Charge for Bank Services or Transactions by PTBA2 |  EM credit to PMCAT':
+        case 'Charge for Bank Services or Transactions by PTBA2 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_4"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Charge for Bank Services or Transactions by PTBA3 |  EM credit to PMCAT':
+        case 'Charge for Bank Services or Transactions by PTBA3 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
