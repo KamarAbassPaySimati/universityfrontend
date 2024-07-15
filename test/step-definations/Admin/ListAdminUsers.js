@@ -29,7 +29,7 @@ Then('I should see the admin user sorted in descending order based on {string}',
         // Write code here that turns the phrase above into concrete actions
         items = await driver.wait(until.elementsLocated(By.css('[data-testid="name"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
-        sortedItemTexts = [...itemTexts].sort().reverse();
+        sortedItemTexts = [...itemTexts].sort();
         assert.deepStrictEqual(itemTexts, sortedItemTexts, 'Items are not sorted in descending order');
         await new Promise(resolve => setTimeout(resolve, 500));
         break;

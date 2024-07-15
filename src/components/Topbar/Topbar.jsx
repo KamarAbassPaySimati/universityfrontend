@@ -20,7 +20,8 @@ const Topbar = ({
     multiFilter,
     setAppliedFilter,
     appliedFilter,
-    pageNumber
+    pageNumber,
+    NoFilter
 
 }) => {
     const [timer, setTimer] = useState(null);
@@ -132,43 +133,45 @@ const Topbar = ({
                 testId='search-close'
                 className="absolute top-1/2 -translate-y-1/2 left-[340px] cursor-pointer bg-[#F8F8F8]"
             />}
-            {multiFilter
-                ? <MultiFilter
-                        filterOptions={filterOptions}
-                        filterType={filterType}
-                        handleApplySearchParams={ null } // write a function to apply the seach params
-                        searchParams={searchParams}
-                        filterActive={filterActive}
-                        setSearchParams={setSearchParams}
-                        appliedFilter={appliedFilter}
-                        setAppliedFilter={setAppliedFilter}
-                 />
-                : singleSelectFilter
-                    ? <FilterWithSingleOption
-                            filterOptionOne={filter1}
-                            filterOptionTwo={filter2}
-                            filterOptionThree={filter3}
-                            handleClearFilter={handleClearFilterForSingleCheck}
-                            filterActive={filterActive}
-                            filterType={filterType}
-                            searchParams={searchParams}
-                            setSearchParams={setSearchParams}
-                            handleSearchParamValue={handleSearchParamsForFilter}
-                            isLoading={isLoading}
-
-                    />
-                    : <Filter
-                            handleClearFilter={handleClearFilter}
+            {NoFilter === undefined && (
+                multiFilter
+                    ? <MultiFilter
                             filterOptions={filterOptions}
                             filterType={filterType}
-                            handleSearchParams={handleSearchParamsForFilter}
+                            handleApplySearchParams={ null } // write a function to apply the seach params
                             searchParams={searchParams}
-                            isLoading={isLoading}
                             filterActive={filterActive}
+                            setSearchParams={setSearchParams}
                             appliedFilter={appliedFilter}
                             setAppliedFilter={setAppliedFilter}
-                    />
-            }
+                     />
+                    : singleSelectFilter
+                        ? <FilterWithSingleOption
+                                filterOptionOne={filter1}
+                                filterOptionTwo={filter2}
+                                filterOptionThree={filter3}
+                                handleClearFilter={handleClearFilterForSingleCheck}
+                                filterActive={filterActive}
+                                filterType={filterType}
+                                searchParams={searchParams}
+                                setSearchParams={setSearchParams}
+                                handleSearchParamValue={handleSearchParamsForFilter}
+                                isLoading={isLoading}
+
+                        />
+                        : <Filter
+                                handleClearFilter={handleClearFilter}
+                                filterOptions={filterOptions}
+                                filterType={filterType}
+                                handleSearchParams={handleSearchParamsForFilter}
+                                searchParams={searchParams}
+                                isLoading={isLoading}
+                                filterActive={filterActive}
+                                appliedFilter={appliedFilter}
+                                setAppliedFilter={setAppliedFilter}
+                        />
+
+            )}
 
         </div>
     );
