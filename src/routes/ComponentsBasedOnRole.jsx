@@ -259,12 +259,6 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails />,
                 path: '/financials/transaction-history/:id'
-            },
-            // pay-out
-            {
-                name: 'KYC Verification list',
-                element: <PayOutRequests />,
-                path: '/transactions/pay-out-requests'
             }
         ],
     admin:
