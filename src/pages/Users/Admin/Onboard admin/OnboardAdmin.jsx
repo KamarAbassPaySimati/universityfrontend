@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import InputField from '../../../../components/InputField/InputField';
@@ -37,6 +38,13 @@ const OnboardAdmin = ({ actionKey }) => {
     const { id } = useParams();
     const dispatch = useDispatch();
 
+    // Constants
+    const specialCharacters = [
+        '!', '"', '#', '$', '%', '&', "'", '(', ')', '*', '+', ',', '-', '.', '/',
+        ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|',
+        '}', '~'
+    ];
+
     const checkCondition = () => {
         return (
             View?.first_name === formData.firstName &&
@@ -45,11 +53,15 @@ const OnboardAdmin = ({ actionKey }) => {
             View?.user_type === formData.role
         );
     };
+
     const handleChange = (e, id) => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
         }
         if (enteredLetter && (id === 'firstName' || id === 'lastName' || id === 'middleName') && /\d/.test(enteredLetter)) {
+            return;
+        }
+        if (enteredLetter && (id === 'firstName' || id === 'lastName' || id === 'middleName') && specialCharacters.includes(enteredLetter)) {
             return;
         }
 
@@ -82,6 +94,41 @@ const OnboardAdmin = ({ actionKey }) => {
         setFormData(prevState => {
             return { ...prevState, [id]: e.target.value };
         });
+    };
+
+    const handlePaste = (e, id) => {
+        let pastedText = (e.clipboardData || window.clipboardData).getData('text');
+        console.log(pastedText, 'uuu', id);
+
+        // Remove all spaces and special characters
+        // Conditional sanitization based on the id
+        if (id === 'firstName' || id === 'lastName' || id === 'middleName') {
+            pastedText = pastedText.replace(/[^a-zA-Z]/g, ''); // Remove non-alphabetic characters
+        } else {
+            pastedText = pastedText.replace(/\s+/g, ''); // Remove all spaces
+        }
+        console.log(pastedText, 'sanitized', id);
+
+        if (id === 'lastName') {
+            setFormData(prevState => {
+                return { ...prevState, [id]: pastedText.toUpperCase() };
+            });
+            e.preventDefault();
+            return;
+        }
+        if (id === 'firstName' || id === 'middleName') {
+            setFormData(prevState => {
+                return { ...prevState, [id]: pastedText.charAt(0).toUpperCase() + pastedText.slice(1) };
+            });
+            e.preventDefault();
+            return;
+        }
+
+        // Fallback case
+        setFormData(prevState => {
+            return { ...prevState, [id]: pastedText };
+        });
+        e.preventDefault();
     };
 
     const handleClick = async (e) => {
@@ -245,6 +292,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             placeholder='Enter first name'
                             setEnteredLetter={setEnteredLetter}
                             maxLength="100"
+                            onPaste={handlePaste}
                         />
                         <InputField
                             className='w-[339px]'
@@ -258,6 +306,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             placeholder='Enter middle name'
                             setEnteredLetter={setEnteredLetter}
                             maxLength="100"
+                            onPaste={handlePaste}
                         />
                         <InputField
                             className='w-[339px]'
@@ -271,6 +320,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             placeholder='Enter last name'
                             setEnteredLetter={setEnteredLetter}
                             maxLength="100"
+                            onPaste={handlePaste}
                         />
                     </div>}
 
@@ -296,6 +346,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             setEnteredLetter={setEnteredLetter}
                             maxLength="100"
                             editAction={actionKey === 'update' ? 'yes' : 'no'}
+                            onPaste={handlePaste}
                         />
                         <InputFieldWithPhoneNumber
                             className='w-[339px]'

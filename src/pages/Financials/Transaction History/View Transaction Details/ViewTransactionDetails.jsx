@@ -85,7 +85,7 @@ const ViewTransactionDetails = () => {
                                     : <>
                                         <p className='h-[24px]'></p>
                                         <p>{transactionDetails?.sender_name || '-'}</p>
-                                        <p>{transactionDetails?.receiver_id || '-'}</p>
+                                        <p>{transactionDetails?.sender_id || '-'}</p>
                                         <p className='h-[24px] mt-[10px]'></p>
                                         <p>{transactionDetails?.receiver_name || '-'}</p>
                                         <p>{transactionDetails?.receiver_id || '-'}</p>

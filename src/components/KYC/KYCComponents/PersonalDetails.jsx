@@ -1,4 +1,5 @@
-import React from 'react';
+/* eslint-disable max-len */
+import React, { useEffect } from 'react';
 import InputTypeRadio from '../../InputField/InputTypeRadio';
 import DatePickerAntd from '../../DatePicker/DatePickerAntd';
 import InputFieldWithDropDown from '../../InputFieldWithDropDown/InputFieldWithDropDown';
@@ -19,6 +20,10 @@ export default function PersonalDetails ({ isFullKYC, handleStates, states, subm
         'Distribute e-payments to third party individuals and/or enterprises',
         'Recruit customers/end users, agents and merchants to enrol on the e-payments platform'
     ];
+
+    useEffect(() => {
+        console.log(states, 'jjj');
+    }, [states]);
 
     const bankInputFelid = {
         'Banking Information for Pay-out (Optional)': {
@@ -342,12 +347,11 @@ export default function PersonalDetails ({ isFullKYC, handleStates, states, subm
                         states={states}
                         submitSelected={submitSelected}
                     />)}
-            {(role === 'agent' || role === 'merchant') && <FelidDivision
-                divisionObject = {bankInputFelid}
-                handleOnChange={handleStates}
-                states={states}
-                submitSelected={bankSelected}
-            />}
+            {(role === 'agent' || role === 'merchant') && type !== 'update'
+                ? <FelidDivision divisionObject = {bankInputFelid} handleOnChange={handleStates} states={states} submitSelected={bankSelected} />
+                : states.bank_details.map((bankDetail, index) => (
+                    <FelidDivision key={index} noHeader={index !== 0} divisionObject={bankInputFelid} handleOnChange={handleStates} states={states.bank_details[index]} submitSelected={bankSelected} />
+                )) }
         </div>
     );
 }
