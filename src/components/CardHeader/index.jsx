@@ -197,7 +197,7 @@ const CardHeader = ({
                                                     className='mr-[8px]' />}
                                                 <p className='text-[14px] font-semibold text-[#ffffff]'>{updateButton}</p>
                                             </button>)
-                                        : (updateButton === true && <div className='ml-6 '><Shimmer hight={'h-10'} /></div>)))
+                                        : (updateButton === true && updateButton === '' && <div className='ml-6 '><Shimmer hight={'h-10'} /></div>)))
                             }
                         </div>
                     </div>

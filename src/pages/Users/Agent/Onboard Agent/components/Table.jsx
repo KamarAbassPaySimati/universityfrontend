@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable max-len */
 import React from 'react';
 import Image from '../../../../../components/Image/Image';
@@ -68,9 +69,13 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                                         onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`
                                         )} />
-                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
+                                    {user?.kyc_status === 'completed'
+                                    ? <span className='w-[24px]'></span>
+                                    : (
+                                        <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                                            onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
                                     />
+                                    )}
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}

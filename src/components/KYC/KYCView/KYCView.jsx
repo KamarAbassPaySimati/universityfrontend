@@ -158,7 +158,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}
+                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : View?.user_kyc_status === 'completed' ? '' : 'Update' : undefined)}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
