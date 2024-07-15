@@ -24,7 +24,7 @@ Feature: Paymaart - Admin Web - List of Agent Transaction
         Then I should read a message stating that "No data found"
         And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
 
-    Scenario: Filter admin users by role
+    Scenario: Filter transactions by date
         When I click on filter tab
         Then I should see filter popup modal
         And I select start date as "08-Jan-2023"
