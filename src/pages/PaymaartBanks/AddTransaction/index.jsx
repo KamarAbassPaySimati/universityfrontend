@@ -17,16 +17,28 @@ export default function AddTransaction ({ type }) {
     const [filedData, setFiledData] = useState({ entry_by: user.paymaart_id, amount: '' });
     const [loading, setLoading] = useState(false);
     const [loadingPage, setLoadingPage] = useState(true);
-    const [capitalBankDropDownValue, setCapitalBankDropDownValue] = useState([]);
+    const [BankDropDownValue, setBankDropDownValue] = useState([]);
     const Navigate = useNavigate();
     const getPaymaartIdType = () => {
         switch (filedData.transaction_code) {
         case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
         case `Pay-in by Agent to ${id} | RM credit`:
+        case 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deletion from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deletion from PTBA3 | EM credit to PMCAT':
             return 'Agent Paymaart ID';
         case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
         case `Pay-in by Standard Customer to ${id} | RM credit`:
         case `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`:
+        case 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deactivation from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deactivation from PTBA3 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deletion from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deletion from PTBA3 | EM credit to PMCAT':
             return 'Customer Paymaart ID';
         case `Pay-in by G2P Customer to ${id} | RM credit`:
             return 'G2P Customer Paymaart ID';
@@ -45,15 +57,23 @@ export default function AddTransaction ({ type }) {
 
             const arrayValue = bankTypes.reduce((acc, item) => {
                 if (item.ref_no !== 'PTBAT') {
-                    acc.push(`Outflow for excess Float withdrawal from ${item.ref_no} | EM credit to PMCAT`);
-                    acc.push(`Settlement to Merchant Biller from ${item.ref_no} | EM credit to PMCAT`);
-                    acc.push(`Payout to Paymaart Operations for excess Float in PMCA to ${item.ref_no}`);
+                    if (type === 'main-capital') {
+                        acc.push(`Outflow for excess Float withdrawal from ${item.ref_no} | EM credit to PMCAT`);
+                        acc.push(`Settlement to Merchant Biller from ${item.ref_no} | EM credit to PMCAT`);
+                        acc.push(`Payout to Paymaart Operations for excess Float in PMCA to ${item.ref_no}`);
+                    } else {
+                        acc.push(`Pay-out to Agent Post Deactivation from ${item.ref_no} | EM credit to PMCAT`);
+                        acc.push(`Pay-out to Customer Post Deactivation from ${item.ref_no} | EM credit to PMCAT`);
+                        acc.push(`Pay-out to Agent Post Deletion from ${item.ref_no} | EM credit to PMCAT`);
+                        acc.push(`Pay-out to Customer Post Deletion from ${item.ref_no} | EM credit to PMCAT`);
+                    }
                 }
                 return acc;
             }, []);
-
-            arrayValue.push('Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF');
-            setCapitalBankDropDownValue(arrayValue);
+            if (type === 'main-capital') {
+                arrayValue.push('Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF');
+            }
+            setBankDropDownValue(arrayValue);
         } catch (error) {
             console.error('Error fetching bank types:', error);
         } finally {
@@ -62,7 +82,7 @@ export default function AddTransaction ({ type }) {
     };
 
     useEffect(() => {
-        if (type === 'main-capital') {
+        if (type === 'main-capital' || type === 'suspense-account') {
             getBankTypes();
         } else {
             setLoadingPage(false);
@@ -73,11 +93,23 @@ export default function AddTransaction ({ type }) {
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
         case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
+        case 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deletion from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Agent Post Deletion from PTBA3 | EM credit to PMCAT':
             return 'AGT';
         case `Pay-in by Paymaart OBO Standard Customer to ${id} | RM credit`:
         case `Pay-in by Standard Customer to ${id} | RM credit`:
         case `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`:
         case `Pay-in by G2P Customer to ${id} | RM credit`:
+        case 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deactivation from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deactivation from PTBA3 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deletion from PTBA2 | EM credit to PMCAT':
+        case 'Pay-out to Customer Post Deletion from PTBA3 | EM credit to PMCAT':
             return 'CMR';
         default:
             return undefined;
@@ -138,13 +170,8 @@ export default function AddTransaction ({ type }) {
                 `Receipt of Customer Balances Interest from ${id} | RM credit`
             ];
         case 'main-capital':
-            return capitalBankDropDownValue.sort();
         case 'suspense-account':
-            return [
-                `Suspense transaction 1 for ${id}`,
-                `Suspense transaction 2 for ${id}`,
-                `Suspense transaction 3 for ${id}`
-            ];
+            return BankDropDownValue.sort();
         case 'taxes':
             return [
                 'Balance EM Excess Return to Paymaart Main Capital Account for Float',
@@ -263,6 +290,8 @@ export default function AddTransaction ({ type }) {
         switch (type) {
         case 'transaction-fees-and-commissions':
             return 'add-commission-account-transaction';
+        case 'suspense-account':
+            return 'suspense-transaction';
         default:
             switch (filedData.transaction_code) {
             case `Pay-in by Agent to ${id} | RM credit`:
@@ -372,10 +401,43 @@ export default function AddTransaction ({ type }) {
                     payload.bank_type = 'PTBA3';
                     break;
                 case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
+                    payload.transaction_type = 'pmtf_float';
+                    break;
                 case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA1':
+                    payload.transaction_type = 'pmtf_float';
+                    payload.bank_type = 'PTBA1';
+                    break;
                 case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA2':
+                    payload.transaction_type = 'pmtf_float';
+                    payload.bank_type = 'PTBA2';
+                    break;
                 case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
                     payload.transaction_type = 'pmtf_float';
+                    payload.bank_type = 'PTBA3';
+                    break;
+                case 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT':
+                case 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT':
+                case 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT':
+                case 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT':
+                    payload.transaction_type = 'delete_payout';
+                    payload.bank_id = 'PTBA1';
+                    payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
+                    break;
+                case 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT':
+                case 'Pay-out to Customer Post Deactivation from PTBA2 | EM credit to PMCAT':
+                case 'Pay-out to Agent Post Deletion from PTBA2 | EM credit to PMCAT':
+                case 'Pay-out to Customer Post Deletion from PTBA2 | EM credit to PMCAT':
+                    payload.transaction_type = 'delete_payout';
+                    payload.bank_id = 'PTBA2';
+                    payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
+                    break;
+                case 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT':
+                case 'Pay-out to Customer Post Deactivation from PTBA3 | EM credit to PMCAT':
+                case 'Pay-out to Agent Post Deletion from PTBA3 | EM credit to PMCAT':
+                case 'Pay-out to Customer Post Deletion from PTBA3 | EM credit to PMCAT':
+                    payload.transaction_type = 'delete_payout';
+                    payload.bank_id = 'PTBA3';
+                    payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     break;
                     // write my three conditions
                 default:

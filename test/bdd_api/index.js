@@ -247,12 +247,32 @@ async function getKYCCompletedAgentList () {
         console.log('API Error', error);
     }
 }
+async function getKYCCompletedAgentDeactivateList () {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/agent-list?page=1&status=inactive`, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
 
 async function getKYCCompletedCustomerList () {
     const axiosOptions = await getToken();
 
     try {
         const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function getKYCDeactivateCustomerList () {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-list?page=1&status=inactive`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -302,5 +322,7 @@ module.exports = {
     getKYCCompletedCustomerList,
     deleteRequestCustomer,
     createTransactionList,
-    deleteTransactionList
+    deleteTransactionList,
+    getKYCCompletedAgentDeactivateList,
+    getKYCDeactivateCustomerList
 };

@@ -2,7 +2,7 @@ export const handleSort = (sortBy, searchParams, setSearchParams) => {
     const params = Object.fromEntries(searchParams);
     params.sortBy = sortBy;
     params.page = 1;
-    params.sortOrder = params.sortOrder === 'asc' ? 'desc' : 'asc';
+    params.order_by = params.order_by === 'ASC' ? 'DESC' : 'ASC';
     setSearchParams({ ...params });
 };
 
