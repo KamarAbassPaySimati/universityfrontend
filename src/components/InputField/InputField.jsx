@@ -26,7 +26,8 @@ const InputField = ({
     editAction,
     disableInput,
     ViewClass,
-    noLabel
+    noLabel,
+    onPaste
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -58,6 +59,11 @@ const InputField = ({
                 onKeyDown={handleKeyDown}
                 maxLength={maxLength}
                 disabled = {editAction === 'yes' || disableInput}
+                onPaste={(e) => {
+                    if (onPaste) {
+                        onPaste(e, id);
+                    }
+                }}
 
             />
             {/* && value.length > 0 */}
