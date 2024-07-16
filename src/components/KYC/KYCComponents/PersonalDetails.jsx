@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 import InputTypeRadio from '../../InputField/InputTypeRadio';
 import DatePickerAntd from '../../DatePicker/DatePickerAntd';
@@ -342,12 +343,11 @@ export default function PersonalDetails ({ isFullKYC, handleStates, states, subm
                         states={states}
                         submitSelected={submitSelected}
                     />)}
-            {(role === 'agent' || role === 'merchant') && <FelidDivision
-                divisionObject = {bankInputFelid}
-                handleOnChange={handleStates}
-                states={states}
-                submitSelected={bankSelected}
-            />}
+            {(role === 'agent' || role === 'merchant') && type !== 'update'
+                ? <FelidDivision divisionObject = {bankInputFelid} handleOnChange={handleStates} states={states} submitSelected={bankSelected} />
+                : states?.bank_details?.map((bankDetail, index) => (
+                    <FelidDivision key={index} noHeader={index !== 0} divisionObject={bankInputFelid} handleOnChange={handleStates} states={states.bank_details[index]} submitSelected={bankSelected} />
+                )) }
         </div>
     );
 }

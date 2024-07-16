@@ -17,7 +17,8 @@ const MultiFilter = ({
     filterActive,
     setSearchParams,
     appliedFilter,
-    setAppliedFilter
+    setAppliedFilter,
+    customClass
 }) => {
     const filterDiv = useRef();
     const initailState = {
@@ -128,7 +129,7 @@ const MultiFilter = ({
                 content="Filter"
             />
             {isFilterOpen && <div className='relative z-[12]'>
-                <div data-testid='filter-modal' className="min-w-[570px] absolute top-[10px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
+                <div data-testid='filter-modal' className="w-[570px] absolute top-[10px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
                         <div className='font-semibold'>
                             {filterType}
@@ -169,7 +170,7 @@ const MultiFilter = ({
                                 <div className='font-semibold mb-2 capitalize'>
                                     {key}
                                 </div>
-                                <div className='flex gap-10'>
+                                <div className='flex gap-x-10 gap-y-4 flex-wrap'>
                                     {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox2
                                             isLoading={false}
@@ -181,6 +182,7 @@ const MultiFilter = ({
                                             searchParams={searchParams}
                                             setAppliedFilter={setAppliedFilter}
                                             appliedFilter={appliedFilter}
+                                            customClass={customClass}
                                         />
                                     ))}
                                 </div>
