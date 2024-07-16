@@ -14,6 +14,7 @@ When('I click on approve {string}', async function (type) {
     case 'Customer KYC':
     case 'Merchant KYC':
     case 'Agent Delete Request':
+    case 'Agent Pay-out request':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="approve_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -44,6 +45,9 @@ Then('I should see a confirmation prompt for approving {string}', async function
     case 'Agent Delete Request':
         assert.equal(modalBody, 'Reason for approval');
         break;
+    case 'Agent Pay-out request':
+        assert.equal(modalBody, 'Fill the below details to approve');
+        break;
     default:
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
@@ -58,6 +62,7 @@ When('I click on reject {string}', async function (type) {
     case 'Customer KYC':
     case 'Merchant KYC':
     case 'Agent Delete Request':
+    case 'Agent Pay-out request':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="reject_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -91,6 +96,14 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
         modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'Reason for rejection');
         break;
+
+    case 'Agent Pay-out request':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, 'Reason for rejection');
+        break;        
     default:
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
