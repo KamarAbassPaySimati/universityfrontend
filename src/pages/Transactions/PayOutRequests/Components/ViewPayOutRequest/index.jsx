@@ -68,7 +68,7 @@ export default function ViewPayOutRequest () {
             <CardHeader
                 activePath='Pay-out Request Details'
                 paths={['Transactions', 'Pay-out Requests']}
-                pathurls={['users/admins']}
+                pathurls={['transactions/pay-out-requests']}
                 minHeightRequired={true}
                 ChildrenElement
             >
