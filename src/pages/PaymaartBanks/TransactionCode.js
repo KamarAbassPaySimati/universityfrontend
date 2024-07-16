@@ -305,6 +305,46 @@ export function TransactionDescription (value, type, transactionType) {
         return `Pay-out to Customer Post Deletion from PTBA2 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
     case 'PMSPPOUT03CMRPTBA3':
         return `Pay-out to Customer Post Deletion from PTBA3 | ${type === 'main-capital' ? transactionType !== 'CR' ? transactionType : 'Credit Customer' : 'EM credit to PMCAT'}`;
+
+    case 'PMMS1':
+        return 'Membership | Prepaid, 30 Days';
+    case 'PMMS2':
+        return 'Membership | Prepaid, 91 Days';
+    case 'PMCN1':
+        return 'Cash-in | Via Paymaart Agent';
+    case 'PMCU1':
+        return 'Cash-out | Via Paymaart Agent';
+    case 'PMPP1':
+        return 'Pay Person | To Paymaart member';
+    case 'PMPP3':
+        return 'Pay Person | To Un-registered user';
+    case 'PMPM1':
+        return 'Pay Afrimax | For Mobile Data, Devices; Services';
+    case 'PMPM2':
+        return 'Pay Paymaart | For Membership services';
+    case 'PMPM3':
+        return 'Pay Merchant | For Goods; Services';
+    case 'PMPG1':
+        return 'Pay via Agent | To Un-registered user';
+    case 'PMPG2':
+        return 'Pay via Agent | For Afrimax; Paymaart';
+    case 'PMPG3':
+        return 'Pay via Agent | For Merchant';
+    case 'PMMS1C':
+        return 'Membership Go | Prepaid, 30 Days';
+    case 'PMMS1A':
+    case 'PMMS1B':
+        return 'Membership Prime, PrimeX | Prepaid, 30 Days';
+    case 'PMCC1':
+        return 'Micro-merchant service, 30 Days';
+    case 'PMCC3':
+        return 'Standard merchant service';
+    case 'PMCU4':
+        return 'Cash-out | Paymaart Agent, Un-registered user';
+    case 'G2PCRPTBA':
+        return 'Pay-in by G2P Customer to Beneficiary | EM credit';
+    case 'G2PCRPMSP':
+        return 'Reverse to  G2P Customer from , PMSP | EM credit';
     default:
         return 'Invalid transaction code';
     }
