@@ -19,7 +19,7 @@ export default function ProfileName ({
                 ? (<div>
                     <img src={profilePicture} alt="profilePicture" className='h-[66px] rounded-[8px] w-fit' />
                 </div>)
-                : (<div className={`${loading ? 'bg-slate-200 text-slate-200 ' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] px-2 w-fit flex justify-center items-center
+                : (<div className={`${loading ? 'bg-slate-200 text-slate-200 w-[66px]' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] px-2 w-fit flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px] uppercase`}>
                     {userButtonName}
                 </div>)

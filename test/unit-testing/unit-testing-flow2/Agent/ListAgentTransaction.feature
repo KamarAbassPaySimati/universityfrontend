@@ -25,6 +25,8 @@ Feature: Paymaart - Admin Web - List of Agent Transaction
         And I should read a message stating that "Try adjusting your search or filter to find what you’re looking for"
 
     Scenario: Filter transactions by date
+        Given I navigate to agent users listing screen
+        When I click on transaction history icon
         When I click on filter tab
         Then I should see filter popup modal
         And I select start date as "08-Jan-2023"

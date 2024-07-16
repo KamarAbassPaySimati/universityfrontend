@@ -14,7 +14,7 @@ const InfoCard = ({
     return (
         <div className={`${bgColor} ${title === 'Wallet Balance' ? 'py-[22px]' : 'pt-[22px] pb-2'} px-10 relative rounded-md text-white w-1/2 flex flex-col justify-between min-h-[156px]`}>
             <p className='text-2xl font-[400]'>{title}</p>
-            <div className='flex flex-col gap-1'>
+            <div className={`flex flex-col ${title === 'Wallet Balance' ? 'gap-1' : ''}`}>
                 {isLoading
                     ? <>
                         <p className='text-3xl font-[700] flex gap-2'>

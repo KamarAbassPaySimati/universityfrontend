@@ -38,7 +38,7 @@ const ViewTransactionList = () => {
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`admin-users/export-user-transactions?${searchParams.toString()}`);
+            const res = await dataService.GetAPI(`admin-users/export-user-transactions?${searchParams.toString()}`); // Change url
             if (!res.error) {
                 window.open(
                     res.data.s3_url,
@@ -108,11 +108,7 @@ const ViewTransactionList = () => {
             <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 mt-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]`}>
                 <div className='flex justify-between items-center' data-testid="transaction-history">
-                    <ProfileName
-                        userButtonName={List?.full_name?.replace(/\b(\w)\w*\s*/g, '$1').toUpperCase() || '---'}
-                        UserName={List?.full_name || '---'}
-                        payMaartID={id}
-                    />
+                    <ProfileName loading={loading} userButtonName={List?.full_name?.replace(/\b(\w)\w*\s*/g, '$1').toUpperCase() || '---'} UserName={List?.full_name || '---'} payMaartID={id} />
                 </div>
             </div>
             <div className={`max-h-[calc(100vh-245px)] min-h-[calc(100vh-265px)] relative z-[9] scrollBar overflow-auto ml-10 mr-5 pr-4 my-6
@@ -130,7 +126,7 @@ const ViewTransactionList = () => {
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MVK`}
                         lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
-                        additionalInfo={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
+                        additionalInfo={`${List?.next_settlement ? convertTimestampToCAT(List?.next_settlement) : '-'}`}
                         imageSrc="commision"
                         bgColor="bg-[#8075A1]"
                         isLoading={loading}
@@ -147,7 +143,7 @@ const ViewTransactionList = () => {
                             text='Export'
                             className='!w-[117px]'
                             isLoading={exportLoading}
-                            onClick={handleExport} 
+                            onClick={handleExport}
                         />
                     </div>
 
