@@ -148,7 +148,7 @@ export function TransactionCode (value, type) {
         return 'PMSPPOUT03';
 
     default:
-        return 'Invalid description';
+        return '-';
     }
 }
 
@@ -346,6 +346,6 @@ export function TransactionDescription (value, type, transactionType) {
     case 'G2PCRPMSP':
         return 'Reverse to  G2P Customer from , PMSP | EM credit';
     default:
-        return 'Invalid transaction code';
+        return '-';
     }
 }
