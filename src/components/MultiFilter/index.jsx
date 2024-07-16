@@ -18,12 +18,11 @@ const MultiFilter = ({
     setSearchParams,
     appliedFilter,
     setAppliedFilter,
-    customClass
+    customClass,
+    initialState,
+    pageNumber
 }) => {
     const filterDiv = useRef();
-    const initailState = {
-        'transaction-type': { 'Pay-Out': false, 'Pay-In': false, G2P: false, Others: false }
-    };
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -34,19 +33,42 @@ const MultiFilter = ({
 
     const checkTrueProperties = (obj) => {
         const trueProperties = [];
-        for (let key in obj) {
+
+        // Mapping of original keys to desired transformations
+        const keyTransformations = {
+            'Pay-in': 'pay_in',
+            'Pay-out': 'pay_out',
+            'Cash-in': 'cash_in',
+            'Cash-out': 'cashout',
+            'Pay Paymaart': 'paymaart',
+            'Pay Afrimax': 'afrimax',
+            'Pay Merchant': 'merchant',
+            Other: 'other'
+        };
+
+        for (const key in obj) {
             if (obj[key] === true) {
-                key = key.toLowerCase().replace('-', '_');
-                console.log(key, 'iii');
-                trueProperties.push(key);
+                // Apply the transformation if the key exists in the mapping
+                if (keyTransformations[key]) {
+                    trueProperties.push(keyTransformations[key]);
+                } else {
+                    // Default transformation: lowercase and replace '-' with '_'
+                    const transformedKey = key.toLowerCase().replace('-', '_');
+                    trueProperties.push(transformedKey);
+                }
             }
         }
+
         return trueProperties.join(',');
     };
 
     const handleApplySearchParams = () => {
         const params = Object.fromEntries(searchParams);
-        params.page_number = 1;
+        if (pageNumber) {
+            params.page_number = 1;
+        } else {
+            params.page = 1;
+        }
         const startdate = new Date(dateRange.start_date).getTime();
         const enddate = new Date(dateRange.end_date).getTime();
 
@@ -80,18 +102,25 @@ const MultiFilter = ({
         }
 
         const transactionTypes = checkTrueProperties(appliedFilter['transaction-type']);
+        console.log(transactionTypes, 'oooo');
         if (transactionTypes) {
             params.transaction_type = transactionTypes;
+        } else {
+            delete params.transaction_type;
         }
 
         setSearchParams({ ...params });
     };
 
     const handleClearFilter = () => {
-        setAppliedFilter(initailState);
+        setAppliedFilter(initialState);
         const params = Object.fromEntries(searchParams);
         if (filterActive) {
-            params.page_number = 1;
+            if (pageNumber) {
+                params.page_number = 1;
+            } else {
+                params.page = 1;
+            }
         }
         delete params.transaction_type;
         delete params.start_date;

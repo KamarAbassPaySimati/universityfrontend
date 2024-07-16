@@ -277,7 +277,7 @@ export const ComponentsBasedOnRole = {
             {
                 name: 'Specific Agent Transaction List',
                 element: <ViewTransactionList />,
-                path: '/users/agents/transaction-history/:id'
+                path: '/users/agents/agents-transaction-histories/:id'
             }
         ],
     admin:

@@ -184,6 +184,7 @@ const TransactionHistory = () => {
                                 setAppliedFilter={setAppliedFilter}
                                 appliedFilter={appliedFilter}
                                 pageNumber={true}
+                                initialState={initailState}
                             />
                         </div>)
                     }

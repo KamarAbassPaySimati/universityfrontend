@@ -6,7 +6,6 @@ import Button from '../../../../components/Button/Button';
 import { useParams, useSearchParams } from 'react-router-dom';
 import Topbar from '../../../../components/Topbar/Topbar';
 import { useDispatch, useSelector } from 'react-redux';
-import TransactionHistoryTable from '../../../Financials/Transaction History/components/TransactionHistoryTable';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import InfoCard from './components/InfoCard';
 import Paginator from '../../../../components/Paginator/Paginator';
@@ -14,6 +13,8 @@ import GlobalContext from '../../../../components/Context/GlobalContext';
 import { dataService } from '../../../../services/data.services';
 import { AgentTransactionHistoryList } from './AgentTransactionSlice';
 import TransactionTable from './components/TransactionTable';
+import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
+import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
 const ViewTransactionList = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
@@ -78,7 +79,7 @@ const ViewTransactionList = () => {
         const params = Object.fromEntries(searchParams);
         if (List?.transactions?.length !== 0) {
             setNotFound(false);
-            params.page_number = 1;
+            params.page = 1;
         }
     }, [List]);
 
@@ -86,8 +87,8 @@ const ViewTransactionList = () => {
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
-        if (searchParams.get('page_number') === null) {
-            setSearchParams({ page_number: 1 });
+        if (searchParams.get('page') === null) {
+            setSearchParams({ page: 1 });
         } else {
             GetList();
         }
@@ -108,12 +109,9 @@ const ViewTransactionList = () => {
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]`}>
                 <div className='flex justify-between items-center' data-testid="transaction-history">
                     <ProfileName
-                        // userButtonName={`${user?.first_name?.[0] || ''}${user?.middle_name?.[0] || ''}${user?.last_name?.[0] || ''}`}
-                        // UserName={`${user?.first_name || '-'} ${user?.middle_name || '-'} ${user?.last_name.toUpperCase() || '-'}`}
-                        // payMaartID={user.paymaart_id}
-                        userButtonName='ABC'
-                        UserName='Abdul Mufeed'
-                        payMaartID='12345'
+                        userButtonName={List?.full_name?.replace(/\b(\w)\w*\s*/g, '$1').toUpperCase() || '---'}
+                        UserName={List?.full_name || '---'}
+                        payMaartID={id}
                     />
                 </div>
             </div>
@@ -123,17 +121,19 @@ const ViewTransactionList = () => {
                 <div className='flex w-full gap-5'>
                     <InfoCard
                         title="Wallet Balance"
-                        amount="24,000.00 MWK"
-                        lastUpdated="12 Jan 2024, 12:30 hours"
+                        amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MVK`}
+                        lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
                         imageSrc="wallet_balance"
+                        isLoading={loading}
                     />
                     <InfoCard
                         title="Gross Agent Commission"
-                        amount="200.00 MWK"
-                        lastUpdated="12 Jan 2024, 12:30 hours"
-                        additionalInfo="Next settlement on: 01 June, 2024"
+                        amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MVK`}
+                        lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
+                        additionalInfo={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
                         imageSrc="commision"
                         bgColor="bg-[#8075A1]"
+                        isLoading={loading}
                     />
                     {/* <WalletCard />
                     <CommisionCard /> */}
@@ -171,8 +171,8 @@ const ViewTransactionList = () => {
                                     multiFilter={true}
                                     setAppliedFilter={setAppliedFilter}
                                     appliedFilter={appliedFilter}
-                                    pageNumber={true}
                                     customClass={true}
+                                    initialState={initailState}
                                 />
                             </div>)
                         }
@@ -195,12 +195,12 @@ const ViewTransactionList = () => {
                 !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null) &&
                 (<NoDataError className='h-noDataError1' heading='No transaction history to view yet' text='Please check back later' />)}
                         {!loading && !error && !notFound && List?.transactions?.length !== 0 && <Paginator
-                            currentPage={searchParams.get('page_number')}
+                            currentPage={searchParams.get('page')}
                             totalPages={Math.ceil(List?.total_records / 10)}
                             setSearchParams={setSearchParams}
                             searchParams={searchParams}
                             totalRecords={List?.total_records}
-                            type='page_number'
+                            type='page'
                         />}
                     </div>
                 </div>
