@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import Image from '../../../../components/Image/Image';
@@ -7,15 +8,25 @@ import { endpoints } from '../../../../services/endpoints';
 import { useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import Modal from 'react-responsive-modal';
+import ConfirmationPopup from '../../../../components/ConfirmationPopup/ConfirmationPopup';
+import CheckboxWithReason from '../../../../components/InputField/CheckboxWithResone';
+import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
+import { useSelector } from 'react-redux';
 
 const ViewTransactionDetails = () => {
     // States
     const [transactionDetails, setTransactionDetails] = useState();
     const [dataLoading, setdataLoading] = useState(false);
+    const [isFlagModelOpen, setIsFlagModelOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [submitSelected, setSubmitSelected] = useState(false);
+    const [selectedCheckBox, setSelectedCheckBox] = useState([]);
+    const { user } = useSelector((state) => state.auth);
 
     const navigate = useNavigate();
     const { id } = useParams();
-    const { setToastError } = useContext(GlobalContext);
+    const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { viewTransaction } = endpoints;
 
     // Functions
@@ -36,12 +47,76 @@ const ViewTransactionDetails = () => {
             setdataLoading(false);
         }
     };
-
+    const handleConfirmAction = async () => {
+        if (selectedCheckBox.length === 0) {
+            setSubmitSelected(true);
+        } else {
+            try {
+                const payload = {
+                    flag: true,
+                    id: transactionDetails.id,
+                    flagged_by: user.paymaart_id,
+                    reasons: selectedCheckBox
+                };
+                setIsLoading(true);
+                const response = await dataService.PostAPI('admin-transactions/flag-transaction', payload);
+                if (!response.error) {
+                    setIsLoading(false);
+                    setToastSuccess('Transaction flagged successfully');
+                    setIsFlagModelOpen(false);
+                } else {
+                    setIsLoading(false);
+                    setToastError('Something went wrong!');
+                }
+            } catch (error) {
+                setIsLoading(false);
+                setToastError('Something went wrong!');
+            }
+        }
+    };
     // Hook Calls
     useEffect(() => {
         getTransactionDetails();
     }, []);
-
+    const flagReason = {
+        'Transaction & System Failures': [
+            'Transaction failure due to security measures',
+            'Inadequate communication about declined payments',
+            'System errors and outages'
+        ],
+        'Policy Clarity & Customer Support': [
+            'Lack of acceptable payment options',
+            'Unclear terms and conditions regarding returns or chargebacks',
+            'Recurring billing complications'
+        ],
+        'Service Quality & Marketing Accuracy': [
+            'Privacy breach incidents',
+            'Discrepancies between advertisements and purchased products'
+        ],
+        'User Experience Challenges': [
+            'Password threats and phishing attacks',
+            'Insufficient privacy protection practices',
+            'Refund denials or delays'
+        ]
+    };
+    const handleCheckBox = (e, id, type, index, selectedIndex, checkboxText) => {
+        setSubmitSelected(false);
+        const isChecked = e.target.checked;
+        const checkedValue = selectedCheckBox;
+        if (isChecked) {
+            checkedValue.push(checkboxText);
+        } else {
+            const index = checkedValue.indexOf(checkboxText);
+            if (index > -1) {
+                checkedValue.splice(index, 1);
+            }
+        }
+        setSelectedCheckBox(checkedValue);
+    };
+    const handleCloseModel = () => {
+        setSelectedCheckBox([]);
+        setIsFlagModelOpen(false);
+    };
     return (
         <CardHeader
             activePath={'Transaction Details'}
@@ -55,7 +130,11 @@ const ViewTransactionDetails = () => {
                     flex flex-col justify-center items-center relative mt-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px]'>
-                        <Image src='flag' className='cursor-pointer' />
+                        <Image
+                            src='flag'
+                            onClick={() => setIsFlagModelOpen(true)}
+                            className='cursor-pointer'
+                        />
                         <Image src='share' className='' />
                     </div>
                     <div className='font-[600] text-[14px] leading-[24px] text-[#A4A9AE] mt-[10px] mb-6'>
@@ -122,6 +201,51 @@ const ViewTransactionDetails = () => {
                     </div>
                 </div>
             </div>
+            <Modal center open={isFlagModelOpen} onClose={handleCloseModel} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={'Flag Transaction'}
+                        message={'Select all applicable'}
+                        messageStyle={'text-[14px] font-medium text-[#A4A9AE] mt-2'}
+                        Reason={(<>
+                            {Object.keys(flagReason).map((item, index = 0) => (
+                                <>
+                                    <CheckboxWithReason
+                                        key={item}
+                                        item={item}
+                                        testId={item}
+                                        handleOnChange={handleCheckBox}
+                                        index={index}
+                                        id={`reject_${index}`}
+                                        type={'main'}
+                                        flag
+                                        // Checked={selectedCheckBox.includes(item)}
+                                    />
+                                    <ol class="space-y-4 ml-2 lower-alpha list-inside text-[12px] font-normal leading-[24px] pb-2">
+                                        <ul class="ps-5 space-y-1 list-disc list-inside">
+                                            {flagReason[item].map((ruleItem) => (
+                                                <div className='flex text-[#4F5962]' key={ruleItem}>
+                                                    <li></li>
+                                                    <span>{ruleItem}</span>
+                                                </div>
+                                            ))}
+                                        </ul>
+                                    </ol>
+                                </>
+                            ))}
+                            {submitSelected && <ErrorMessage error={'Required field'} />
+                            }
+                        </>)}
+                        handleSubmit={handleConfirmAction}
+                        isLoading={isLoading}
+                        handleClose={handleCloseModel}
+                        buttonText={'Confirm'}
+                        buttonColor={'bg-[#3B2A6F]'}
+                        handleReason={() => {}}
+                        error={submitSelected}
+                    />
+                </div>
+            </Modal>
         </CardHeader>
     );
 };
