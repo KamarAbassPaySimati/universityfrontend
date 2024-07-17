@@ -36,7 +36,8 @@ const InputFieldWithButton = ({
     setNumberMaxLength,
     buttonTestId,
     setVerified,
-    verify
+    verify,
+    onPaste
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -100,6 +101,11 @@ const InputFieldWithButton = ({
                     onBlur={handleBlur}
                     onChange={(e) => onChange(e, id)}
                     onKeyDown={handleKeyDown}
+                    onPaste={(e) => {
+                        if (onPaste) {
+                            onPaste(e, id);
+                        }
+                    }}
                 />
                 {verified
                     ? <div className='absolute top-0 right-0 items-center h-[45px] mr-3 flex gap-[10px]'>

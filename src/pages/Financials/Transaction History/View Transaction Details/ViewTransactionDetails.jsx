@@ -7,6 +7,7 @@ import { endpoints } from '../../../../services/endpoints';
 import { useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 
 const ViewTransactionDetails = () => {
     // States
@@ -85,7 +86,7 @@ const ViewTransactionDetails = () => {
                                     : <>
                                         <p className='h-[24px]'></p>
                                         <p>{transactionDetails?.sender_name || '-'}</p>
-                                        <p>{transactionDetails?.receiver_id || '-'}</p>
+                                        <p>{transactionDetails?.sender_id || '-'}</p>
                                         <p className='h-[24px] mt-[10px]'></p>
                                         <p>{transactionDetails?.receiver_name || '-'}</p>
                                         <p>{transactionDetails?.receiver_id || '-'}</p>
@@ -109,11 +110,11 @@ const ViewTransactionDetails = () => {
                                     ? <TransactionDetailsShimmer col={6} />
                                     : <>
                                         <p className='font-[600] text-base'>
-                                            {transactionDetails?.total_amount || '0.00'} MWK
+                                            {formattedAmount(transactionDetails?.total_amount) || '0.00'} MWK
                                         </p>
-                                        <p>{transactionDetails?.transaction_amount || '0.00'} MWK</p>
-                                        <p>{transactionDetails?.transaction_fee || '0.00'} MWK</p>
-                                        <p>{transactionDetails?.vat || '0.00'} MWK</p>
+                                        <p>{formattedAmount(transactionDetails?.transaction_amount) || '0.00'} MWK</p>
+                                        <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
+                                        <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
                                         <p>{transactionDetails?.transaction_id || '-'}</p>
                                         <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
                                     </>}
