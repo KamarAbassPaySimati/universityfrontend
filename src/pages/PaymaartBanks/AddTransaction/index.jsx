@@ -248,7 +248,6 @@ export default function AddTransaction ({ type }) {
     };
 
     const handleStates = (value, id, type) => {
-        console.log(value, '-', id, '-', type);
         if (type === 'input') {
             if (id === 'amount') {
                 if (value.target.value?.length <= 18) {
