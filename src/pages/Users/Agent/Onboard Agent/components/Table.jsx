@@ -76,7 +76,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                             onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
                                     />
                                     )}
-                                    {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
+                                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`)} src='report' />
                                     <Tooltip
                                         id={`eye-${index}`}
                                         className='my-tooltip z-30'
@@ -89,12 +89,12 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                         place="top"
                                         content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                                     />
-                                    {/* <Tooltip
-                                        id={`payin-${index}`}
+                                    <Tooltip
+                                        id={`transactions-${index}`}
                                         className='my-tooltip z-30'
-                                        place="top"
-                                        content="Payin"
-                                    /> */}
+                                        place="top-end"
+                                        content="Transaction History"
+                                    />
                                 </td>
                             </tr>))}
                     </tbody>

@@ -98,7 +98,6 @@ const OnboardAdmin = ({ actionKey }) => {
 
     const handlePaste = (e, id) => {
         let pastedText = (e.clipboardData || window.clipboardData).getData('text');
-        console.log(pastedText, 'uuu', id);
 
         // Remove all spaces and special characters
         // Conditional sanitization based on the id
@@ -107,7 +106,6 @@ const OnboardAdmin = ({ actionKey }) => {
         } else {
             pastedText = pastedText.replace(/\s+/g, ''); // Remove all spaces
         }
-        console.log(pastedText, 'sanitized', id);
 
         if (id === 'lastName') {
             setFormData(prevState => {

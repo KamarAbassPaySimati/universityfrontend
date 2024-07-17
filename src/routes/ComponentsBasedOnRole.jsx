@@ -21,6 +21,7 @@ import TransactionHistory from '../pages/Financials/Transaction History/Transact
 import ViewTransactionDetails from '../pages/Financials/Transaction History/View Transaction Details/ViewTransactionDetails';
 import PayOutRequests from '../pages/Transactions/PayOutRequests';
 import ViewPayOutRequest from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest';
+import ViewTransactionList from '../pages/Users/Agent/ViewTransactionList/ViewTransactionList';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -271,6 +272,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Pay Out Requests Specific View',
                 element: <ViewPayOutRequest />,
                 path: '/transactions/pay-out-requests/:id'
+            },
+            // Specific agent transaction list
+            {
+                name: 'Specific Agent Transaction List',
+                element: <ViewTransactionList />,
+                path: '/users/agents/agents-transaction-histories/:id'
             }
         ],
     admin:
