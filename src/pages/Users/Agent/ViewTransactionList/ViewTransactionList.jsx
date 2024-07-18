@@ -38,7 +38,7 @@ const ViewTransactionList = () => {
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`admin-users/export-user-transactions?${searchParams.toString()}`); // Change url
+            const res = await dataService.GetAPI(`admin-transactions/export-agent-transactions?agent_id=${id}&${searchParams.toString()}`);
             if (!res.error) {
                 window.open(
                     res.data.s3_url,
