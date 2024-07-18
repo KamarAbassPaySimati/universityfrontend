@@ -16,12 +16,12 @@ export default function ConfirmationPopup ({ message, buttonWidth, messageStyle,
             </div>
             {/* {error && <ErrorMessage error={'Required field'} />} */}
             <div className="flex mt-8 gap-6 justify-end">
-                <button className={`${buttonWidth || 'w-[117px]'} border-[#3B2A6F] text-[#3B2A6F] border rounded-md font-normal text-[14px] leading-6`}
+                {CancelButtonText !== '' && <button className={`${buttonWidth || 'w-[117px]'} border-[#3B2A6F] text-[#3B2A6F] border rounded-md font-normal text-[14px] leading-6`}
                     onClick={() => handleClose()}
                     data-testid='cancel_button'
                 >
                     {CancelButtonText || 'Cancel'}
-                </button>
+                </button>}
                 <div className={buttonWidth || 'w-[117px]'}>
                     <Button
                         className={buttonWidth || 'w-[117px]'}
