@@ -57,12 +57,15 @@ const ViewTransactionDetails = () => {
                     flag: true,
                     id: transactionDetails.id,
                     flagged_by: user.paymaart_id,
-                    reasons: selectedCheckBox
+                    reasons: selectedCheckBox,
+                    table_name: transactionDetails.bank_type
                 };
                 setIsLoading(true);
-                const response = await dataService.PostAPI('admin-transactions/flag-transaction', payload);
+                const response = await dataService.PostAPI('admin-transactions/flag-admin-transaction', payload);
                 if (!response.error) {
                     setIsLoading(false);
+                    setdataLoading(true);
+                    getTransactionDetails();
                     setToastSuccess('Transaction flagged successfully');
                     setIsFlagModelOpen(false);
                 } else {
@@ -131,11 +134,12 @@ const ViewTransactionDetails = () => {
                     flex flex-col justify-center items-center relative mt-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px]'>
-                        <Image
-                            src='flag'
-                            onClick={() => setIsFlagModelOpen(true)}
-                            className='cursor-pointer'
-                        />
+                        { transactionDetails?.flagged
+                            ? <Image src='flag' testId={'flag_transaction_button'}
+                            />
+                            : <Image src='flag' onClick={() => setIsFlagModelOpen(true)} className='cursor-pointer' testId={'flag_transaction_button'}
+                            />
+                        }
                         <Image src='share' className='' />
                     </div>
                     <div className='font-[600] text-[14px] leading-[24px] text-[#A4A9AE] mt-[10px] mb-6'>
@@ -203,7 +207,7 @@ const ViewTransactionDetails = () => {
                 </div>
             </div>
             <Modal center open={isFlagModelOpen} onClose={handleCloseModel} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-                <div className='customModal'>
+                <div className='customModal' data-testid="flagTransactionReasonPopUp">
                     <ConfirmationPopup
                         title={'Flag Transaction'}
                         message={'Select all applicable'}

@@ -29,66 +29,15 @@ Feature: Paymaart- Admin Web- Flag transaction(Customer, agent and admin)
     Insufficient privacy protection practices
     Refund denials or delays
 
-    @add_admin_user
-    @create_new_user_and_login
-    Scenario: Flag transaction for admin
-        Given I navigate to specific admin transaction
-        When I click on view transaction for most recent transaction
-        Then I should see the transaction recipt
+    @add_admin_user @create_new_user_and_login @create_transactions @delete_admin_account @delete_transaction
+    Scenario: Viewing specific Transaction
+        Given I navigate to Transaction History Page
+        Then I should see table header containing '["Service Code","Date/ Time, CAT","Beneficiary Paymaart ID","Transaction ID","Type","Amount"]'
+        When I click on the view button for first transaction in list
+        Then I should be redirected to transaction details page
         When I click on flag transaction button
-        Then I should see a select flag transaction reason pop up 
-        When I click confirm flag transaction button 
-        Then I should read a message stating that "Select atleast one"
-        When I select the reason for flag transaction as <reason>
-        And  click confirm flag transaction button
-        Then I should see a message stating that "Transaction flagged successfully"
-        Then I should see the flag transaction button disabled 
-        Examples:
-        | reason |
-        |"Transaction & System Failures"|
-        |"Policy Clarity & Customer Support"|
-        |"Service Quality & Marketing Accuracy"|
-        |"User Experience Challenges"|
-
-    @add_admin_user
-    @create_new_user_and_login
-    Scenario: Flag transaction for agent
-        Given I navigate to specific agent transaction
-        When I click on view transaction for most recent transaction
-        Then I should see the transaction recipt
-        When I click on flag transaction button
-        Then I should see a select flag transaction reason pop up 
-        When  click confirm flag transaction button 
-        Then I should read a message stating that "Select atleast one"
-        When I select the reason for flag transaction as <reason>
-        And  click confirm flag transaction button
-        Then I should see a message stating that "Transaction flagged successfully"
-        Then I should see the flag transaction button disabled 
-        Examples:
-        | reason |
-        |"Transaction & System Failures"|
-        |"Policy Clarity & Customer Support"|
-        |"Service Quality & Marketing Accuracy"|
-        |"User Experience Challenges"|  
-
-
-    @add_admin_user
-    @create_new_user_and_login
-    Scenario: Flag transaction for customer
-        Given I navigate to specific customer transaction
-        When I click on view transaction for most recent transaction
-        Then I should see the transaction recipt
-        When I click on flag transaction button
-        Then I should see a select flag transaction reason pop up 
-        When  click confirm flag transaction button
-        Then I should read a message stating that "Select atleast one"
-        When I select the reason for flag transaction as <reason>
-        And  click confirm flag transaction button
-        Then I should see a message stating that "Transaction flagged successfully"
-        Then I should see the flag transaction button disabled 
-        Examples:
-        | reason |
-        |"Transaction & System Failures"|
-        |"Policy Clarity & Customer Support"|
-        |"Service Quality & Marketing Accuracy"|
-        |"User Experience Challenges"|
+        When I click on confirm button
+        Then I should read a message stating that "Select at least 1"
+        When I select the reason for flag transaction as "Transaction & System Failures"
+        When I click on confirm button
+        Then I should read a message stating that "Transaction flagged successfully"
