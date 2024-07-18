@@ -117,14 +117,14 @@ const ViewTransactionList = () => {
                 <div className='flex w-full gap-5'>
                     <InfoCard
                         title="Wallet Balance"
-                        amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MVK`}
+                        amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MWK`}
                         lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
                         imageSrc="wallet_balance"
                         isLoading={loading}
                     />
                     <InfoCard
                         title="Gross Agent Commission"
-                        amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MVK`}
+                        amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
                         lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
                         additionalInfo={`${List?.next_settlement ? convertTimestampToCAT(List?.next_settlement) : '-'}`}
                         imageSrc="commision"
