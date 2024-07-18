@@ -233,7 +233,7 @@ const ViewTransactionDetails = () => {
                                     </ol>
                                 </>
                             ))}
-                            {submitSelected && <ErrorMessage error={'Required field'} />
+                            {submitSelected && <ErrorMessage error={'Select at least 1'} />
                             }
                         </>)}
                         handleSubmit={handleConfirmAction}
