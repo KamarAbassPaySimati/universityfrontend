@@ -16,6 +16,7 @@ import BankTransactionViewSlice from '../pages/PaymaartBanks/BankTransactionView
 import transactionHistorySlice from '../pages/Financials/Transaction History/transactionHistorySlice';
 import PayOutRequestsSlice from '../pages/Transactions/PayOutRequests/PayOutRequestsSlice';
 import ViewPayOutRequestSlice from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest/ViewPayOutRequeSlice';
+import AgentTransactionSlice from '../pages/Users/Agent/ViewTransactionList/AgentTransactionSlice';
 
 export const store = configureStore({
     reducer: {
@@ -35,6 +36,7 @@ export const store = configureStore({
         G2PList: G2PSlice,
         G2PCustomerView: G2PCustomerViewSlice,
         BankTransactionViewData: BankTransactionViewSlice,
-        transactionHistory: transactionHistorySlice
+        transactionHistory: transactionHistorySlice,
+        agentTransactionHistory: AgentTransactionSlice
     }
 });
