@@ -566,7 +566,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                                 className={` mb-1 ${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : 'text-neutral-secondary '}`}
                                                             >{itemKey || '-'}</p>
                                                             <span
-                                                                title={userDetails}
                                                                 data-testid={itemKey}
                                                                 className={`${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : 'text-neutral-primary max-w-[300px]'} 
                                                           cursor-default break-words block overflow-hidden text-ellipsis ${itemKey === 'Role' ? 'capitalize' : ''}`}>
