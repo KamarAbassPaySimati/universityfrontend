@@ -34,6 +34,22 @@ async function addAdminUser (payload) {
     }
 }
 
+async function deletePayoutRequest (payload) {
+    const token = await getBddSignedToken();
+
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+
+    try {
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/payouyt-request`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
 async function deleteRequestBDDAPI (payload) {
     const token = await getBddSignedToken();
 
@@ -44,6 +60,22 @@ async function deleteRequestBDDAPI (payload) {
 
     try {
         const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/agent-users/bdd-delete-request`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function payoutRequestBDDAPI (payload) {
+    const token = await getBddSignedToken();
+
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+    console.log('axiosOptions', axiosOptions);
+    try {
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/payout-request`, payload, { headers: axiosOptions });
+        console.log('data_data', data);
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -247,11 +279,11 @@ async function getKYCCompletedAgentList () {
         console.log('API Error', error);
     }
 }
-async function getKYCCompletedAgentDeactivateList () {
+async function getKYCCompletedAgentActiveList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/agent-list?page=1&status=inactive`, { headers: axiosOptions });
+        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/agent-list?page=1&status=active`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -323,6 +355,8 @@ module.exports = {
     deleteRequestCustomer,
     createTransactionList,
     deleteTransactionList,
-    getKYCCompletedAgentDeactivateList,
-    getKYCDeactivateCustomerList
+    getKYCCompletedAgentActiveList,
+    getKYCDeactivateCustomerList,
+    deletePayoutRequest,
+    payoutRequestBDDAPI
 };

@@ -106,7 +106,7 @@ export const nationality = [
     'Luxembourger',
     'Macedonian',
     'Malagasy',
-    'Malawian',
+    // 'Malawian',
     'Malaysian',
     'Maldivan',
     'Malian',

@@ -57,10 +57,6 @@ const ViewPayOutRequestSlice = createSlice({
                         'Bank Account Name': state?.View.account_name,
                         'Bank Account Number': state?.View.account_number
                     };
-                    state.Reason = {
-                        'By Agent': 'Lorem Ipsum is simply dummy text'
-                    };
-                    state.keys = Object.keys(state.Reason);
                     state.keys = Object.keys(state.BankDetails);
                     state.keys = Object.keys(state.TransactionDetails);
                 } else {

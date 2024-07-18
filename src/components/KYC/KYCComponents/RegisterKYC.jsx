@@ -744,10 +744,16 @@ export default function RegisterKYC ({ role, type }) {
                 );
                 setProgressBarStatus({ ...statusObject });
             }
+            object.bank_details = [];
             if (res.data.bank_details) {
-                object.bank_name = res.data.bank_details.bank_name;
-                object.account_number = res.data.bank_details.account_number;
-                object.account_name = res.data.bank_details.account_name;
+                res.data.bank_details.forEach(bankDetail => {
+                    const sideObject = {
+                        bank_name: bankDetail.bank_name,
+                        account_number: bankDetail.account_number,
+                        account_name: bankDetail.account_name
+                    };
+                    object.bank_details.push(sideObject); // Push each bank detail object into the bank_details array
+                });
             }
             setStates({ ...object });
         } catch (error) {
