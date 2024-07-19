@@ -25,7 +25,7 @@ const InfoCard = ({
                                     </td>
                                 </tr>
                             </tbody>
-                            MVK
+                            MWK
                         </p>
                         <p className='text-sm font-[400] text-neutral-secondary flex'>
                             Last Updated:

@@ -143,10 +143,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
         }
     };
 
-    useEffect(() => {
-        console.log(getPaths(viewType, role), 'hjhj');
-        console.log(userDetails, 'iiii');
-    }, [userDetails]);
+    const bankDetails = ['Bank Name', 'Account Number', 'Account Name'];
 
     return (
         <>
@@ -159,7 +156,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Update' : undefined)}
+                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : View?.user_kyc_status === 'completed' ? View?.kyc_type === 'simplified' && View?.citizen === 'Malawian' ? 'Update' : '' : 'Update' : undefined)}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
@@ -561,8 +558,23 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                     />
                                                 </div>
                                             )))
-                                            : (
-                                                userDetails.bankDetails.map((bankDetail, idx) => (
+                                            : (userDetails.bankDetails.length === 0
+                                                ? bankDetails.map((itemKey, index) => (
+                                                    <div key={itemKey + index} className="w-1/3 px-1 hello">
+                                                        <div className={`text-[14px] leading-[24px] font-[400] mt-6 ${loading ? 'animate-pulse z-0' : ''}`}>
+                                                            <p
+                                                                className={` mb-1 ${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : 'text-neutral-secondary '}`}
+                                                            >{itemKey || '-'}</p>
+                                                            <span
+                                                                data-testid={itemKey}
+                                                                className={`${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : 'text-neutral-primary max-w-[300px]'} 
+                                                          cursor-default break-words block overflow-hidden text-ellipsis ${itemKey === 'Role' ? 'capitalize' : ''}`}>
+                                                                -
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))
+                                                : userDetails.bankDetails.map((bankDetail, idx) => (
                                                     <div key={idx} className={`w-full flex ${idx}`}>
                                                         {idx === 0
                                                             ? (

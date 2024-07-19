@@ -345,9 +345,11 @@ export default function PersonalDetails ({ isFullKYC, handleStates, states, subm
                     />)}
             {(role === 'agent' || role === 'merchant') && type !== 'update'
                 ? <FelidDivision divisionObject = {bankInputFelid} handleOnChange={handleStates} states={states} submitSelected={bankSelected} />
-                : states?.bank_details?.map((bankDetail, index) => (
-                    <FelidDivision key={index} noHeader={index !== 0} divisionObject={bankInputFelid} handleOnChange={handleStates} states={states.bank_details[index]} submitSelected={bankSelected} />
-                )) }
+                : (states?.bank_details?.length === 0
+                    ? <FelidDivision divisionObject={bankInputFelid} handleOnChange={handleStates} states={states} submitSelected={bankSelected} />
+                    : states?.bank_details?.map((bankDetail, index) => (
+                        <FelidDivision key={index} noHeader={index !== 0} divisionObject={bankInputFelid} handleOnChange={handleStates} states={states.bank_details[index]} submitSelected={bankSelected} />
+                    ))) }
         </div>
     );
 }
