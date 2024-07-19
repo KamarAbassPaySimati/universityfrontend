@@ -951,15 +951,25 @@ export default function RegisterKYC ({ role, type }) {
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm'}
-                        message={`'Upgrade to Full KYC' requires additional documentation 
-                        for verification.  Select 'Edit Simplified KYC' to modify existing details`}
+                        message={'\'Upgrade to Full KYC\' requires additional documentation for verification.' +
+                        (states.citizen_type === 'Malawi citizen' &&
+                         states.completed === true &&
+                         states.personal_customer === 'Simplified KYC'
+                            ? ''
+                            : ' Select \'Edit Simplified KYC\' to modify existing details')}
                         handleSubmit={handleSimplifiedToFull}
                         isLoading={false}
                         handleClose={handleSubmit}
                         buttonText={'Upgrade to Full KYC'}
                         buttonColor={'bg-[#3B2A6F]'}
                         buttonWidth='w-[155px]'
-                        CancelButtonText={'Edit Simplified KYC'}
+                        CancelButtonText={
+                            states.citizen_type === 'Malawi citizen' &&
+                            states.completed === true &&
+                            states.personal_customer === 'Simplified KYC'
+                                ? ''
+                                : 'Edit Simplified KYC'
+                        }
                     />
                 </div>
             </Modal>
