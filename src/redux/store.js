@@ -17,12 +17,14 @@ import transactionHistorySlice from '../pages/Financials/Transaction History/tra
 import PayOutRequestsSlice from '../pages/Transactions/PayOutRequests/PayOutRequestsSlice';
 import ViewPayOutRequestSlice from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest/ViewPayOutRequeSlice';
 import AgentTransactionSlice from '../pages/Users/Agent/ViewTransactionList/AgentTransactionSlice';
+import flaggedSlice from '../pages/Transactions/Flagged/flaggedSlice';
 
 export const store = configureStore({
     reducer: {
         globalData: GlobalSlice,
         auth: authSlice,
         agentUsers: agentSlice,
+        flaggedUsers: flaggedSlice,
         adminUsers: AdminSlice,
         SpecificAdminView: SpecificAdminViewSlice,
         PayOutRequestView: ViewPayOutRequestSlice,

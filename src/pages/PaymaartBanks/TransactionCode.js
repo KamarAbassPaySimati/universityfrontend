@@ -345,6 +345,9 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Pay-in by G2P Customer to Beneficiary | EM credit';
     case 'G2PCRPMSP':
         return 'Reverse to  G2P Customer from , PMSP | EM credit';
+    case 'PMSPPOUT':
+        return 'Balance RM Payout to Beneficiary on Paymaart Account Deactivation/Deletion';
+
     default:
         return '-';
     }
