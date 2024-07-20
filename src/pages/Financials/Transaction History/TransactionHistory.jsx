@@ -122,17 +122,12 @@ const TransactionHistory = () => {
         arr.forEach(value => {
             // Revert the transformation
             const originalValue = revertKey(value);
-            console.log(value, 'va', originalValue, 'ori');
             // Update the corresponding status property in the newState object
             newState[type][originalValue] = true;
         });
 
         return newState;
     }
-
-    useEffect(() => {
-        console.log(List, 'kkk');
-    }, [List]);
 
     return (
         <CardHeader
@@ -184,6 +179,7 @@ const TransactionHistory = () => {
                                 setAppliedFilter={setAppliedFilter}
                                 appliedFilter={appliedFilter}
                                 pageNumber={true}
+                                initialState={initailState}
                             />
                         </div>)
                     }

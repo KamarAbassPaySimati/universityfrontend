@@ -13,12 +13,13 @@ import { handleSearchParams } from '../../../CommonMethods/ListFunctions';
 
 const TrustBanks = () => {
     const [searchParams, setSearchParams] = useSearchParams();
+    const [pageLoading, setPageLoading] = useState(true);
     const [isShownLayer, setIsShwonLayer] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const { setToastError } = useContext(GlobalContext);
-    const { List, error, loading } = useSelector(state => state.bankAccounts);
+    const { List, error } = useSelector(state => state.bankAccounts);
     const { listTrustBank, listCapitalBank } = endpoints;
     const bankTypes = {
         'Trust Banks': 'clear',
@@ -45,6 +46,7 @@ const TrustBanks = () => {
             }
         }
         if (searchParams.get('type') !== null) {
+            setPageLoading(true);
             if (searchParams.get('type') === 'trust-banks') {
                 fetchDataByUrl(listTrustBank);
             } else if (searchParams.get('type') === 'main-capital') {
@@ -62,9 +64,12 @@ const TrustBanks = () => {
         try {
             // Fetch data using the provided URL
             await dispatch(bankAccountList(url));
-
+            setTimeout(() => {
+                setPageLoading(false);
+            }, 200);
             // Handle setting params and checking List length
         } catch (error) {
+            setPageLoading(false);
             console.error(error);
             // Handle error
             setToastError('Something went wrong!');
@@ -74,11 +79,6 @@ const TrustBanks = () => {
     function handleCloseOverlay () {
         setIsShwonLayer(false);
     }
-    useEffect(() => {
-        if (searchParams.get('type') === null) {
-            setSearchParams({ type: 'trust-banks' });
-        }
-    }, []);
     function formatType (type) {
         if (type !== undefined || type !== null) {
             return type
@@ -133,7 +133,7 @@ const TrustBanks = () => {
                     <div className='ml-[10px] w-full overflow-hidden'>
                         <div className='scrollBar pb-[8px] h-[calc(100vh - 10px - 48px)] overflow-auto'>
                             {!error && <BankTable
-                                loading={loading}
+                                loading={pageLoading}
                                 List={List}
                                 searchParams={searchParams}
                             />}

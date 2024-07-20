@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 /* eslint-disable max-len */
 import React from 'react';
 import Image from '../../../../../components/Image/Image';
@@ -11,7 +12,7 @@ import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
-
+    console.log(List);
     return (
         <>
             <table className='w-full min-w-max'>
@@ -68,10 +69,14 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                                         onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`
                                         )} />
-                                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
+                                    {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
+                                    ? <span className='w-[24px]'></span>
+                                    : (
+                                        <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                                            onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
                                     />
-                                    {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
+                                    )}
+                                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`)} src='report' />
                                     <Tooltip
                                         id={`eye-${index}`}
                                         className='my-tooltip z-30'
@@ -84,12 +89,12 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                         place="top"
                                         content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                                     />
-                                    {/* <Tooltip
-                                        id={`payin-${index}`}
+                                    <Tooltip
+                                        id={`transactions-${index}`}
                                         className='my-tooltip z-30'
-                                        place="top"
-                                        content="Payin"
-                                    /> */}
+                                        place="top-end"
+                                        content="Transaction History"
+                                    />
                                 </td>
                             </tr>))}
                     </tbody>
