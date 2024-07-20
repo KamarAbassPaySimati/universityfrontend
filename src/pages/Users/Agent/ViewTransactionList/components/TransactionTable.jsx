@@ -20,7 +20,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Amount</th>
+                            <th className='py-2 px-[10px] text-right font-[400]'>Amount</th>
                             <th className='py-2 px-[10px] min-w-[60px]'></th>
                         </tr>
                     </thead>
@@ -49,13 +49,13 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                     {transaction?.receiver_id || '-'}
                                 </td>
                                 <td data-testid="transaction_type"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                    title={transaction?.transaction_type?.replace(/_/g, '-').replace(/\b\w/g, char => char.toUpperCase())}
+                                    className="py-2 px-[10px] text-left truncate max-w-[200px] capitalize"
+                                    title={transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase())}
                                 >
-                                    {transaction?.transaction_type?.replace(/_/g, '-').replace(/\b\w/g, char => char.toUpperCase())}
+                                    {transaction?.transaction_type}
                                 </td>
                                 <td data-testid="transaction_amount"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                    className='py-2 px-[10px] text-right truncate max-w-[200px]'>
                                     {`${formattedAmount(transaction?.transaction_amount)} MWK` || '0.00 MWK'}
                                 </td>
                                 <td data-testid='transaction_view'
