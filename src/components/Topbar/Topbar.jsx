@@ -93,6 +93,7 @@ const Topbar = ({
         }
         delete params.role;
         delete params.status;
+        delete params['Flagged Reason'];
         delete params.filter;
         setSearchParams({ ...params });
     };
@@ -172,6 +173,7 @@ const Topbar = ({
                                 searchParams={searchParams}
                                 isLoading={isLoading}
                                 filterActive={filterActive}
+                                customClass={customClass}
                                 appliedFilter={appliedFilter}
                                 setAppliedFilter={setAppliedFilter}
                         />

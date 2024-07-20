@@ -53,11 +53,20 @@ const ViewTransactionDetails = () => {
             setSubmitSelected(true);
         } else {
             try {
+                const obj = {
+                    ft01: 'Transaction & System Failures',
+                    ft02: 'Policy Clarity & Customer Support',
+                    ft03: 'Service Quality & Marketing Accuracy',
+                    ft04: 'User Experience Challenges'
+                };
                 const payload = {
                     flag: true,
                     id: transactionDetails.id,
                     flagged_by: user.paymaart_id,
-                    reasons: selectedCheckBox,
+                    reasons: selectedCheckBox.map(value => {
+                        const key = Object.keys(obj).find(key => obj[key] === value);
+                        return key; // Return the key if found
+                    }).filter(key => key !== undefined), // Filter out any undefined values
                     table_name: transactionDetails.bank_type
                 };
                 setIsLoading(true);
@@ -119,6 +128,7 @@ const ViewTransactionDetails = () => {
     };
     const handleCloseModel = () => {
         setSelectedCheckBox([]);
+        setSubmitSelected(false);
         setIsFlagModelOpen(false);
     };
     return (
@@ -135,7 +145,7 @@ const ViewTransactionDetails = () => {
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px]'>
                         { transactionDetails?.flagged
-                            ? <Image src='flag' testId={'flag_transaction_button'}
+                            ? <Image src='flagged' testId={'flag_transaction_button'}
                             />
                             : <Image src='flag' onClick={() => setIsFlagModelOpen(true)} className='cursor-pointer' testId={'flag_transaction_button'}
                             />

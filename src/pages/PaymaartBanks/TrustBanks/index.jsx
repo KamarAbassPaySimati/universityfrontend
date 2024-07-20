@@ -61,12 +61,13 @@ const TrustBanks = () => {
         }
     }, [searchParams]);
     const fetchDataByUrl = async (url) => {
+        setPageLoading(true);
         try {
             // Fetch data using the provided URL
             await dispatch(bankAccountList(url));
             setTimeout(() => {
                 setPageLoading(false);
-            }, 200);
+            }, 1000);
             // Handle setting params and checking List length
         } catch (error) {
             setPageLoading(false);
