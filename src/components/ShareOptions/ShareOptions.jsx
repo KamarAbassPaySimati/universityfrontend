@@ -65,8 +65,10 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
             console.error('Failed to share on WhatsApp:', error);
             setToastError('An Error Occurred!');
         } finally {
-            setLoadingWhatsapp(false);
             setIsModalOpen(false);
+            setTimeout(() => {
+                setLoadingWhatsapp(false);
+            }, 500); // Delay of 500 milliseconds (0.5 seconds)
         }
     };
 
@@ -86,8 +88,10 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
             console.error('Failed to share via Email:', error);
             setToastError('An Error Occurred!');
         } finally {
-            setLoadingEmail(false);
             setIsModalOpen(false);
+            setTimeout(() => {
+                setLoadingEmail(false);
+            }, 500); // Delay of 500 milliseconds (0.5 seconds)
         }
     };
 
@@ -106,7 +110,7 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
                     Share transaction via
                 </p>
                 <div className="flex gap-[18px]">
-                    <div onClick={shareOnWhatsApp} className={`h-[70px] w-[70px] flex justify-center items-center rounded-full cursor-pointer ${(loadingWhatsapp || loadingEmail) ? 'cursor-not-allowed' : 'cursor-pointer'} ${loadingWhatsapp ? '' : 'hover:bg-[#F0ECFF]'}`}>
+                    <div onClick={shareOnWhatsApp} className={`h-[70px] w-[70px] flex justify-center items-center rounded-full ${(loadingWhatsapp || loadingEmail) ? 'cursor-not-allowed' : 'cursor-pointer'} ${loadingWhatsapp ? '' : 'hover:bg-[#F0ECFF]'}`}>
                         {loadingWhatsapp
                             ? <ColorRing visible={true} height="40" width="40" ariaLabel="blocks-loading" wrapperClass="blocks-wrapper" colors={['#3B2A6F', '#3B2A6F', '#3B2A6F', '#3B2A6F']}/>
                             : <Image className='h-10' src='whatsapp-logo' />
