@@ -9,6 +9,25 @@ import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 
 const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const navigate = useNavigate();
+
+    // Mapping of original keys to desired transformations
+    const keyTransformations = {
+        'Pay-in': 'pay_in',
+        'Pay-out': 'pay_out',
+        'Cash-in': 'cash_in',
+        'Cash-out': 'cashout',
+        'Pay Paymaart': 'paymaart',
+        'Pay Afrimax': 'afrimax',
+        'Pay Merchant': 'merchant',
+        Other: 'other',
+        'Unregistered Cash-in': 'unregistered_cash_in',
+        'Unregistered Cashout': 'unregistered_cashout'
+    };
+
+    const getKeyByValue = (obj, value) => {
+        return Object.keys(obj).find(key => obj[key] === value);
+    };
+
     return (
         <>
             <table className='w-full min-w-max'>
@@ -20,7 +39,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
-                            <th className='py-2 px-[10px] text-right font-[400]'>Amount</th>
+                            <th className='py-2 px-[10px] text-right font-[400]'>Amount (MWK)</th>
                             <th className='py-2 px-[10px] min-w-[60px]'></th>
                         </tr>
                     </thead>
@@ -49,14 +68,14 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                     {transaction?.receiver_id || '-'}
                                 </td>
                                 <td data-testid="transaction_type"
-                                    className="py-2 px-[10px] text-left truncate max-w-[200px] capitalize"
-                                    title={transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase())}
+                                    className="py-2 px-[10px] text-left truncate max-w-[200px]"
+                                    title={getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase())}
                                 >
-                                    {transaction?.transaction_type}
+                                    {getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase())}
                                 </td>
                                 <td data-testid="transaction_amount"
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>
-                                    {`${formattedAmount(transaction?.transaction_amount)} MWK` || '0.00 MWK'}
+                                    {`${formattedAmount(transaction?.transaction_amount)}` || '0.00'}
                                 </td>
                                 <td data-testid='transaction_view'
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>

@@ -12,6 +12,24 @@ export const handleUpload = async (file, path) => {
                 accessLevel: 'guest'// defaults to `guest` but can be 'private' | 'protected' | 'guest'
             }
         }).result;
+        console.log(result, 'result');
+        return result;
+    } catch (error) {
+        console.log('Error : ', error);
+    }
+};
+
+export const handleUploadBase64 = async (base64String, path) => {
+    try {
+        const result = await uploadData({
+            key: `${path}/${uuidv4()}/transaction-details`,
+            data: base64String,
+            options: {
+                contentEncoding: 'base64',
+                contentType: 'image/png', // optional, automatically inferred if not provided,
+                accessLevel: 'guest' // defaults to `guest` but can be 'private' | 'protected' | 'guest'
+            }
+        }).result;
         return result;
     } catch (error) {
         console.log('Error : ', error);
