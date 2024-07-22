@@ -20,7 +20,7 @@ Then('I should be navigated to transaction history page', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="transaction-history"]')));
     await driver.wait(until.elementIsVisible(element));
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 4000));
     const actual_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_id, this.paymaart_id);
 
