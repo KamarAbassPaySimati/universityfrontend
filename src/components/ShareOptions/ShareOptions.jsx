@@ -98,7 +98,7 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
     return (
         <Modal center open={isModalOpen} onClose={() => setIsModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
             <div className='customModal'>
-                <div className="flex justify-between border-b border-neutral-outline pb-4">
+                <div className="flex justify-between border-b border-neutral-outline pb-3">
                     <p data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-[#000000]">
                         Share
                     </p>
@@ -110,13 +110,13 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
                     Share transaction via
                 </p>
                 <div className="flex gap-[18px]">
-                    <div onClick={shareOnWhatsApp} className={`h-[70px] w-[70px] flex justify-center items-center rounded-full ${(loadingWhatsapp || loadingEmail) ? 'cursor-not-allowed' : 'cursor-pointer'} ${loadingWhatsapp ? '' : 'hover:bg-[#F0ECFF]'}`}>
+                    <div onClick={shareOnWhatsApp} className={`h-[70px] w-[70px] flex justify-center items-center rounded-full ${(loadingEmail) ? 'cursor-not-allowed' : 'cursor-pointer'} ${loadingWhatsapp ? '' : 'hover:bg-[#F0ECFF]'}`}>
                         {loadingWhatsapp
                             ? <ColorRing visible={true} height="40" width="40" ariaLabel="blocks-loading" wrapperClass="blocks-wrapper" colors={['#3B2A6F', '#3B2A6F', '#3B2A6F', '#3B2A6F']}/>
                             : <Image className='h-10' src='whatsapp-logo' />
                         }
                     </div>
-                    <div onClick={shareViaEmail} className={`h-[70px] w-[70px] flex justify-center items-center rounded-full ${(loadingWhatsapp || loadingEmail) ? 'cursor-not-allowed' : 'cursor-pointer'} ${loadingEmail ? '' : 'hover:bg-[#F0ECFF]'}`}>
+                    <div onClick={shareViaEmail} className={`h-[70px] w-[70px] flex justify-center items-center rounded-full ${(loadingWhatsapp) ? 'cursor-not-allowed' : 'cursor-pointer'} ${loadingEmail ? '' : 'hover:bg-[#F0ECFF]'}`}>
                         {loadingEmail
                             ? <ColorRing visible={true} height="40" width="40" ariaLabel="blocks-loading" wrapperClass="blocks-wrapper" colors={['#3B2A6F', '#3B2A6F', '#3B2A6F', '#3B2A6F']}/>
                             : <Image className='h-10' src='mail-logo' />
