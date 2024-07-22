@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import Image from '../../../../components/Image/Image';
 import { dataService } from '../../../../services/data.services';
@@ -14,6 +14,7 @@ import ConfirmationPopup from '../../../../components/ConfirmationPopup/Confirma
 import CheckboxWithReason from '../../../../components/InputField/CheckboxWithResone';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useSelector } from 'react-redux';
+import ShareOptions from '../../../../components/ShareOptions/ShareOptions';
 
 const ViewTransactionDetails = () => {
     // States
@@ -24,11 +25,13 @@ const ViewTransactionDetails = () => {
     const [submitSelected, setSubmitSelected] = useState(false);
     const [selectedCheckBox, setSelectedCheckBox] = useState([]);
     const { user } = useSelector((state) => state.auth);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const navigate = useNavigate();
     const { id } = useParams();
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { viewTransaction } = endpoints;
+    const captureRef = useRef();
 
     // Functions
     const getTransactionDetails = async () => {
@@ -131,6 +134,7 @@ const ViewTransactionDetails = () => {
         setSubmitSelected(false);
         setIsFlagModelOpen(false);
     };
+
     return (
         <CardHeader
             activePath={'Transaction Details'}
@@ -139,18 +143,18 @@ const ViewTransactionDetails = () => {
             header='Transaction Details'
             minHeightRequired={true}
         >
-            <div className='flex justify-center items-center'>
+            <div className='flex justify-center items-center' ref={captureRef}>
                 <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] p-[30px]
-                    flex flex-col justify-center items-center relative mt-4'>
+                    flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
-                    <div className='absolute top-[23px] right-[23px] flex gap-[14px]'>
+                    <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
                         { transactionDetails?.flagged
                             ? <Image src='flagged' testId={'flag_transaction_button'}
                             />
                             : <Image src='flag' onClick={() => setIsFlagModelOpen(true)} className='cursor-pointer' testId={'flag_transaction_button'}
                             />
                         }
-                        <Image src='share' className='' />
+                        <Image src='share' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
                     </div>
                     <div className='font-[600] text-[14px] leading-[24px] text-[#A4A9AE] mt-[10px] mb-6'>
                         Thank you for using Paymaart
@@ -261,6 +265,7 @@ const ViewTransactionDetails = () => {
                     />
                 </div>
             </Modal>
+            <ShareOptions isModalOpen={isShareModalOpen} setIsModalOpen={setIsShareModalOpen} captureRef={captureRef} />
         </CardHeader>
     );
 };
