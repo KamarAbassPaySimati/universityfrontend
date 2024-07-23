@@ -21,7 +21,9 @@ const Topbar = ({
     setAppliedFilter,
     appliedFilter,
     pageNumber,
-    NoFilter
+    NoFilter,
+    customClass,
+    initialState
 
 }) => {
     const [timer, setTimer] = useState(null);
@@ -144,6 +146,9 @@ const Topbar = ({
                             setSearchParams={setSearchParams}
                             appliedFilter={appliedFilter}
                             setAppliedFilter={setAppliedFilter}
+                            customClass={customClass}
+                            initialState={initialState}
+                            pageNumber={pageNumber}
                      />
                     : singleSelectFilter
                         ? <FilterWithSingleOption

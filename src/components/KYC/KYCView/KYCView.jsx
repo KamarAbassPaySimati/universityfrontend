@@ -145,7 +145,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
     useEffect(() => {
         console.log(getPaths(viewType, role), 'hjhj');
-    }, []);
+        console.log(userDetails, 'iiii');
+    }, [userDetails]);
 
     return (
         <>
@@ -561,15 +562,34 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                 </div>
                                             )))
                                             : (
-                                                Object.keys(userDetails.bankDetails).map((itemkey, index = 0) => (
-                                                    <div key={index} className='w-1/3 px-1'>
-                                                        <ViewDetail
-                                                            itemkey={itemkey.replaceAll('_', ' ')}
-                                                            userDetails={userDetails.bankDetails[itemkey]}
-                                                            loading={loading}
-                                                        />
-                                                    </div>)
-                                                )
+                                                userDetails.bankDetails.map((bankDetail, idx) => (
+                                                    <div key={idx} className={`w-full flex ${idx}`}>
+                                                        {idx === 0
+                                                            ? (
+                                                                Object.keys(bankDetail).map((itemkey, index) => (
+                                                                    <div key={index} className='w-1/3 px-1 hello'>
+                                                                        <ViewDetail
+                                                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                                                            userDetails={bankDetail[itemkey]} // Changed to bankDetail[itemkey] to correctly access the value
+                                                                            loading={loading}
+                                                                        />
+                                                                    </div>
+                                                                ))
+                                                            )
+                                                            : (
+                                                                <div className="w-full px-1 flex">
+                                                                    {Object.keys(bankDetail).map((itemkey, index) => (
+                                                                        <div key={index} className={`w-1/3 ${index === 0 ? '' : 'px-1'}`}>
+                                                                            <p className={`${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : 'text-neutral-primary max-w-[300px]'} 
+                                                                                cursor-default break-words block overflow-hidden text-ellipsis`}>
+                                                                                {bankDetail[itemkey]}
+                                                                            </p>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            )}
+                                                    </div>
+                                                ))
                                             )
                                         }
                                     </div>

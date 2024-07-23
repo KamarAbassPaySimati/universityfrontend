@@ -5,7 +5,8 @@ export default function FilterCheckbox2 ({
     valueOf,
     checkboxText,
     setAppliedFilter,
-    appliedFilter
+    appliedFilter,
+    customClass
 }) {
     const toggleFilter = () => {
         setAppliedFilter(prevState => ({
@@ -18,7 +19,7 @@ export default function FilterCheckbox2 ({
     };
 
     return (
-        <div className="filter-checkbox checkbox relative">
+        <div className={`filter-checkbox checkbox relative ${customClass ? 'w-[148px]' : ''}`}>
             <input
                 className=''
                 type="checkbox"

@@ -161,15 +161,11 @@ const KYCProfileViewSlice = createSlice({
                             'Monthly Withdrawal': state?.View?.monthly_withdrawal,
                             'Monthly Income': state?.View?.monthly_income
                         },
-                        bankDetails: {
-                            'Bank Name': state?.View?.bank_details ? state?.View?.bank_details[0]?.bank_name : '',
-                            'Account Number': state?.View?.bank_details
-                                ? state?.View?.bank_details[0]?.account_number
-                                : '',
-                            'Account Name': state?.View?.bank_details
-                                ? state?.View?.bank_details[0]?.account_name
-                                : ''
-                        },
+                        bankDetails: state?.View?.bank_details?.map(bank => ({
+                            'Bank Name': bank?.bank_name || '',
+                            'Account Number': bank?.account_number || '',
+                            'Account Name': bank?.account_name || ''
+                        })) || [],
                         Occupation: { 'Occupation / Source of Funds': state?.View?.occupation, ...Occupation }
                     };
                     state.keys = Object.keys(state.userDetails);

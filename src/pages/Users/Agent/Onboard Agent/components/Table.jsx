@@ -71,7 +71,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
                                         onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
                                     />
-                                    {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
+                                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`)} src='report' />
                                     <Tooltip
                                         id={`eye-${index}`}
                                         className='my-tooltip z-30'
