@@ -8,10 +8,10 @@ const initialState = {
     success: ''
 };
 
-export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHistory', async ({ searchParams, id }, { rejectWithValue }) => {
+export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHistory', async ({ searchParams, id, type }, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
-        const res = await dataService.GetAPI(`admin-transactions/agent-transactions?agent_id=${id}&${searchParams.toString()}`);
+        const res = await dataService.GetAPI(`admin-transactions/${type === 'customer' ? 'customer-transaction?customer_id=' : 'agent-transactions?agent_id='}${id}&${searchParams.toString()}`);
         return res;
     } catch (error) {
         // Log error or send notification
