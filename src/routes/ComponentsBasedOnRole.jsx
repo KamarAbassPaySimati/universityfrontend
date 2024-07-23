@@ -23,6 +23,7 @@ import PayOutRequests from '../pages/Transactions/PayOutRequests';
 import ViewPayOutRequest from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest';
 import ViewTransactionList from '../pages/Users/Agent/ViewTransactionList/ViewTransactionList';
 import Flagged from '../pages/Transactions/Flagged';
+import TransactionsLog from '../pages/Transactions/TransactionsLog/TransactionsLog';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -285,6 +286,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Flagged List',
                 element: <Flagged />,
                 path: '/transactions/flagged'
+            },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
             }
         ],
     admin:
@@ -421,6 +428,12 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails />,
                 path: '/financials/transaction-history/:id'
+            },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
             }
         ],
     'support-admin':

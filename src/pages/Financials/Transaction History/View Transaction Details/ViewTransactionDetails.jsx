@@ -198,9 +198,9 @@ const ViewTransactionDetails = () => {
                                 <p className='font-[600] text-base'>Total Amount</p>
                                 <p>Amount</p>
                                 <p>Txn Fee*</p>
-                                <p>*VAT Include</p>
+                                <p>*VAT Included</p>
                                 <p>Txn ID</p>
-                                <p>Date, time</p>
+                                <p>Date, time (CAT)</p>
                             </div>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 {dataLoading
@@ -213,7 +213,7 @@ const ViewTransactionDetails = () => {
                                         <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
                                         <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
                                         <p>{transactionDetails?.transaction_id || '-'}</p>
-                                        <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
+                                        <p>{`${convertTimestampToCAT(transactionDetails?.created_at)}` || '-'}</p>
                                     </>}
                             </div>
                         </div>
