@@ -1,14 +1,13 @@
 /* eslint-disable max-len */
 import React from 'react';
-import Shimmer from '../../../../components/Shimmers/Shimmer';
-import NoDataError from '../../../../components/NoDataError/NoDataError';
-import Image from '../../../../components/Image/Image';
-import getDrCr from '../../../../CommonMethods/getDrCr';
-import { TransactionDescription } from '../../../PaymaartBanks/TransactionCode';
+import Shimmer from '../../../../../components/Shimmers/Shimmer';
+import NoDataError from '../../../../../components/NoDataError/NoDataError';
+import Image from '../../../../../components/Image/Image';
+import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 import { useNavigate } from 'react-router';
-import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 
-const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
+const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const navigate = useNavigate();
     return (
         <>
@@ -18,16 +17,16 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                         <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
                             <th className='py-2 px-[10px] text-left font-[400] '>Service Code</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Date/ Time, CAT</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
-                            <th className='py-2 px-[10px] text-right font-[400]'>Amount (MWK)</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>Amount</th>
                             <th className='py-2 px-[10px] min-w-[60px]'></th>
                         </tr>
                     </thead>
                 }
                 {loading
-                    ? <Shimmer column={8} row={10} firstIndex />
+                    ? <Shimmer column={7} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.transactions?.map((transaction, index) => (
                             <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
@@ -39,33 +38,25 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                     {convertTimestampToCAT(transaction?.created_at) || '-'}
                                 </td>
-                                <td data-testid="beneficiary_id"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                    {transaction?.beneficiary_id || '-'}
-                                </td>
                                 <td data-testid="transaction_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                     title={transaction?.transaction_id || '-'}
                                 >
                                     {transaction?.transaction_id || '-'}
                                 </td>
+                                <td data-testid="beneficiary_id"
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                    {transaction?.receiver_id || '-'}
+                                </td>
                                 <td data-testid="transaction_type"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'
-                                    title={
-                                        TransactionDescription(transaction?.transaction_code, null,
-                                            transaction?.transaction_amount?.toString().substring(0, 1) === '-'
-                                                ? 'EM debit'
-                                                : 'CR')}
+                                    title={transaction?.transaction_type?.replace(/_/g, '-').replace(/\b\w/g, char => char.toUpperCase())}
                                 >
-                                    {
-                                        TransactionDescription(transaction?.transaction_code, null,
-                                            transaction?.transaction_amount.toString()?.substring(0, 1) === '-'
-                                                ? 'EM debit'
-                                                : 'CR')}
+                                    {transaction?.transaction_type?.replace(/_/g, '-').replace(/\b\w/g, char => char.toUpperCase())}
                                 </td>
                                 <td data-testid="transaction_amount"
-                                    className='py-2 px-[10px] text-right truncate max-w-[200px]'>
-                                    {getDrCr(transaction?.transaction_amount) || '-'}
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                    {`${formattedAmount(transaction?.transaction_amount)} MWK` || '0.00 MWK'}
                                 </td>
                                 <td data-testid='transaction_view'
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
@@ -84,4 +75,4 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
         </>
     );
 };
-export default TransactionHistoryTable;
+export default TransactionTable;

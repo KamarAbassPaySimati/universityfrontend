@@ -744,10 +744,16 @@ export default function RegisterKYC ({ role, type }) {
                 );
                 setProgressBarStatus({ ...statusObject });
             }
+            object.bank_details = [];
             if (res.data.bank_details) {
-                object.bank_name = res.data.bank_details.bank_name;
-                object.account_number = res.data.bank_details.account_number;
-                object.account_name = res.data.bank_details.account_name;
+                res.data.bank_details.forEach(bankDetail => {
+                    const sideObject = {
+                        bank_name: bankDetail.bank_name,
+                        account_number: bankDetail.account_number,
+                        account_name: bankDetail.account_name
+                    };
+                    object.bank_details.push(sideObject); // Push each bank detail object into the bank_details array
+                });
             }
             setStates({ ...object });
         } catch (error) {
@@ -945,15 +951,25 @@ export default function RegisterKYC ({ role, type }) {
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm'}
-                        message={`'Upgrade to Full KYC' requires additional documentation 
-                        for verification.  Select 'Edit Simplified KYC' to modify existing details`}
+                        message={'\'Upgrade to Full KYC\' requires additional documentation for verification.' +
+                        (states.citizen_type === 'Malawi citizen' &&
+                         states.completed === true &&
+                         states.personal_customer === 'Simplified KYC'
+                            ? ''
+                            : ' Select \'Edit Simplified KYC\' to modify existing details')}
                         handleSubmit={handleSimplifiedToFull}
                         isLoading={false}
                         handleClose={handleSubmit}
                         buttonText={'Upgrade to Full KYC'}
                         buttonColor={'bg-[#3B2A6F]'}
                         buttonWidth='w-[155px]'
-                        CancelButtonText={'Edit Simplified KYC'}
+                        CancelButtonText={
+                            states.citizen_type === 'Malawi citizen' &&
+                            states.completed === true &&
+                            states.personal_customer === 'Simplified KYC'
+                                ? ''
+                                : 'Edit Simplified KYC'
+                        }
                     />
                 </div>
             </Modal>
