@@ -12,6 +12,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.react-responsive-modal-modal:has(.customModal) {
+  min-width: 290px !important;
+  border-radius: 16px !important;
+  padding: 30px 20px !important;
+}
+
 .react-responsive-modal-modal {
   padding: 0 !important;
 }
