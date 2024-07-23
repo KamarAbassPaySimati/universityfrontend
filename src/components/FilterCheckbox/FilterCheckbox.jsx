@@ -6,7 +6,8 @@ export default function FilterCheckbox ({
     valueOf,
     checkboxText,
     handleSearchParams,
-    isLoading
+    isLoading,
+    customClass
 }) {
     /**
      * The function `handleOnChangeCheckbox` updates the state by toggling the boolean value of a
@@ -28,7 +29,7 @@ export default function FilterCheckbox ({
         }
     };
     return (
-        <div className="filter-checkbox checkbox relative">
+        <div className={`filter-checkbox checkbox relative ${customClass ? 'w-[330px]' : ''}`}>
             <input
                 className=''
                 type="checkbox"

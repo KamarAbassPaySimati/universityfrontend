@@ -21,7 +21,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                             <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Amount</th>
+                            <th className='py-2 px-[10px] text-right font-[400]'>Amount (MWK)</th>
                             <th className='py-2 px-[10px] min-w-[60px]'></th>
                         </tr>
                     </thead>
@@ -64,7 +64,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                                 : 'CR')}
                                 </td>
                                 <td data-testid="transaction_amount"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                    className='py-2 px-[10px] text-right truncate max-w-[200px]'>
                                     {getDrCr(transaction?.transaction_amount) || '-'}
                                 </td>
                                 <td data-testid='transaction_view'

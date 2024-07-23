@@ -58,11 +58,11 @@ Feature: Paymaart - Admin Web - List of Agent Transaction
     #         | "Pay-Merchant"   |"Pay-Merchant"    |
     #         | "Other"          |"Other"           |
 
-    # Scenario: Exporting transaction list
-    #     Given I navigate to agent users listing screen
-    #     When I click on transaction history icon
-    #     When I click on export button for transaction History
-    #     Then I should read a message stating that "Transaction details exported successfully"
+    Scenario: Exporting transaction list
+        Given I navigate to agent users listing screen
+        When I click on transaction history icon
+        When I click on export button for transaction History
+        Then I should read a message stating that "Transaction details exported successfully"
 
 
     @delete_admin_account
