@@ -167,7 +167,8 @@ export default function AddTransaction ({ type }) {
                 `Pay-in by Paymaart OBO G2P Customer to ${id} | RM credit`,
                 `Inflow For EM Float/other E-Funding to ${id} | RM credit`,
                 `Inflow for Marketing Campaign Fund to ${id} | RM credit`,
-                `Receipt of Customer Balances Interest from ${id} | RM credit`
+                `Receipt of Customer Balances Interest from ${id} | RM credit`,
+                `Charge for Bank Services or Transactions from ${id} | RM debit`
             ];
         case 'main-capital':
         case 'suspense-account':
@@ -205,7 +206,8 @@ export default function AddTransaction ({ type }) {
                 '<Beneficiary> Paymaart ID':
                     (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                         filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
-                        filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit`
+                        filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
+                        filedData.transaction_code === `Charge for Bank Services or Transactions from ${id} | RM debit`
                     )
                         ? undefined
                         : {
@@ -323,6 +325,10 @@ export default function AddTransaction ({ type }) {
                 return 'settlement';
             case 'Inflow For EM Float/Funding for Transaction fee and Commission| EM credit to PMTF':
                 return 'pmtf-float';
+            case 'Charge for Bank Services or Transactions from PTBA1 | RM debit':
+            case 'Charge for Bank Services or Transactions from PTBA2 | RM debit':
+            case 'Charge for Bank Services or Transactions from PTBA3 | RM debit':
+                return 'bank-charges';
             default:
                 return '<Beneficiary> Paymaart ID';
             }
@@ -335,6 +341,7 @@ export default function AddTransaction ({ type }) {
         let dataArray =
             (filedData.transaction_code === `Inflow For EM Float/other E-Funding to ${id} | RM credit` ||
                 filedData.transaction_code === `Inflow for Marketing Campaign Fund to ${id} | RM credit` ||
+                filedData.transaction_code === `Charge for Bank Services or Transactions from ${id} | RM debit` ||
                 filedData.transaction_code === `Receipt of Customer Balances Interest from ${id} | RM credit` ||
                 filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT' ||
                 filedData.transaction_code === 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT' ||
@@ -437,6 +444,12 @@ export default function AddTransaction ({ type }) {
                     payload.transaction_type = 'delete_payout';
                     payload.bank_id = 'PTBA3';
                     payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
+                    break;
+                case `Charge for Bank Services or Transactions from ${id} | RM debit`:
+                    console.log('nnnn');
+                    payload.transaction_type = 'bank_charges';
+                    payload.entered_by = payload.entry_by;
+                    delete payload.entry_by;
                     break;
                     // write my three conditions
                 default:

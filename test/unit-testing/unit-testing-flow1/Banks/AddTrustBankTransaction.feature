@@ -245,3 +245,25 @@ Feature: Paymaart -Admin Web - Add Transaction for Trust Bank
         When I upload the transaction POP document as "document_back.png"
         When I submit the add trust bank transaction form
         Then I should read a message stating that "Transaction details added successfully"
+
+    Scenario Outline: Add transaction for trust bank with invalid details for Charge for Bank Services or Transactions by <PTBA1> | EM credit to PMCAT
+        When I select the transaction type as "Charge for Bank Services or Transactions by PTBA1 | EM credit to PMCAT"
+        When I enter the transaction amount as <amount> for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the transaction POP Ref.No as <transaction_pop_ref_no>
+        When I upload the transaction POP document as <POP_document>
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that <message>
+        Examples:
+            | amount | transaction_pop_ref_no | POP_document        | message          |
+            | ""     | "TRASACTION9910284"    | "document_back.png" | "Required field" |
+            | "1200" | ""                     | "document_back.png" | "Required field" |
+
+    Scenario: Add transaction for trust bank with valid details for Charge for Bank Services or Transactions by <PTBA1> | EM credit to PMCAT
+        When I select the transaction type as "Charge for Bank Services or Transactions by PTBA1 | EM credit to PMCAT"
+        When I enter the transaction amount as "10000" for trust bank transaction
+        When I should see the entry by field should be disabled for add trust bank transaction
+        When I enter the valid transaction POP Ref.No
+        When I upload the transaction POP document as "document_back.png"
+        When I submit the add trust bank transaction form
+        Then I should read a message stating that "Transaction details added successfully"

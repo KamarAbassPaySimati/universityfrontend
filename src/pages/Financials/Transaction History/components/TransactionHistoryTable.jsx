@@ -27,7 +27,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                     </thead>
                 }
                 {loading
-                    ? <Shimmer column={8} row={10} firstIndex />
+                    ? <Shimmer column={7} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.transactions?.map((transaction, index) => (
                             <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
