@@ -68,6 +68,7 @@ const TransactionHistory = () => {
                 setNotFound(true);
             } else {
                 setToastError('Something went wrong!');
+                setNotFound(true);
             }
         }
     }, [error]);

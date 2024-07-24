@@ -52,13 +52,13 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                 <td data-testid="transaction_type"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                     title={
-                                        TransactionDescription((transaction?.transaction_code === 'PMSPPOUT02' || transaction?.transaction_code === 'PMSPPOUT03') ? `${transaction?.transaction_code}${transaction.sender_id.substring(0, 3)}${transaction.bank_id}` : transaction?.transaction_code,
+                                        TransactionDescription((transaction?.transaction_code === 'PMSPPOUT02' || transaction?.transaction_code === 'PMSPPOUT03') ? `${transaction?.transaction_code}${transaction.sender_id.substring(0, 3)}${transaction.bank_id}` : transaction?.transaction_code, `${transaction?.bank_type === 'capital_bank' ? 'main-capital' : ''}`,
                                             transaction?.transaction_amount?.toString().substring(0, 1) === '-'
                                                 ? 'EM debit'
                                                 : 'CR')}
                                 >
                                     {
-                                        TransactionDescription((transaction?.transaction_code === 'PMSPPOUT02' || transaction?.transaction_code === 'PMSPPOUT03') ? `${transaction?.transaction_code}${transaction.sender_id.substring(0, 3)}${transaction.bank_id}` : transaction?.transaction_code,
+                                        TransactionDescription((transaction?.transaction_code === 'PMSPPOUT02' || transaction?.transaction_code === 'PMSPPOUT03') ? `${transaction?.transaction_code}${transaction.sender_id.substring(0, 3)}${transaction.bank_id}` : transaction?.transaction_code, `${transaction?.bank_type === 'capital_bank' ? 'main-capital' : ''}`,
                                             transaction?.transaction_amount?.toString().substring(0, 1) === '-'
                                                 ? 'EM debit'
                                                 : 'CR')}
