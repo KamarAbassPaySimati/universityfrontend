@@ -7,7 +7,7 @@ import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 import { useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 
-const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
+const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId }) => {
     const navigate = useNavigate();
 
     // Mapping of original keys to desired transformations
@@ -25,6 +25,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
     };
 
     const getKeyByValue = (obj, value) => {
+        console.log(Object.keys(obj).find(key => obj[key] === value), 'llll');
         return Object.keys(obj).find(key => obj[key] === value);
     };
 
@@ -69,9 +70,9 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid="transaction_type"
                                     className="py-2 px-[10px] text-left truncate max-w-[200px]"
-                                    title={getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase())}
+                                    title={getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase()).replace(/_/g, ' ')}
                                 >
-                                    {getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase())}
+                                    {getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase()).replace(/_/g, ' ')}
                                 </td>
                                 <td data-testid="transaction_amount"
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>
@@ -79,7 +80,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid='transaction_view'
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
-                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/financials/transaction-history/${transaction?.transaction_id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/agents/agents-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
                                 </td>
                             </tr>
                         ))}

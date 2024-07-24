@@ -185,6 +185,7 @@ const ViewTransactionList = ({ type }) => {
                         setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
+                        paymaartId={id}
                     />
                 </div>}
                         {notFound &&

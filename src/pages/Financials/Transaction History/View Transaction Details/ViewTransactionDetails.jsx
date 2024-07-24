@@ -16,7 +16,7 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useSelector } from 'react-redux';
 import ShareOptions from '../../../../components/ShareOptions/ShareOptions';
 
-const ViewTransactionDetails = () => {
+const ViewTransactionDetails = ({ type }) => {
     // States
     const [transactionDetails, setTransactionDetails] = useState();
     const [dataLoading, setdataLoading] = useState(false);
@@ -28,29 +28,63 @@ const ViewTransactionDetails = () => {
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
     const navigate = useNavigate();
-    const { id } = useParams();
+    const { id, agentId, transactionType } = useParams();
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { viewTransaction } = endpoints;
     const captureRef = useRef();
+
+    let navigation;
+    let paths;
+    let pathurls;
+    let getUrl;
+
+    if (type === 'agent') {
+        navigation = `/users/agents/agents-transaction-histories/${agentId}`;
+        paths = ['Users', 'Agents', 'Transaction History'];
+        pathurls = ['users/agents', '', `agents-transaction-histories/${agentId}`];
+        getUrl = `admin-users/view-agent-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${agentId}`;
+    } else {
+        navigation = '/financials/transaction-history';
+        paths = ['Financials', 'Transaction History'];
+        pathurls = ['financials/transaction-history'];
+        getUrl = `admin-users/${viewTransaction}/${id}`;
+    }
+
+    const getValueType = (transactionType) => {
+        if (transactionType === 'pay_in') {
+            return 'Pay-in';
+        }
+        if (transactionType === 'cash_in') {
+            return 'Cash-in';
+        }
+        if (transactionType === 'payout') {
+            return 'Pay-out';
+        }
+        if (transactionType === 'cashout') {
+            return 'Cash-out';
+        }
+        return 'Txn';
+    };
 
     // Functions
     const getTransactionDetails = async () => {
         setdataLoading(true);
         try {
-            const response = await dataService.GetAPI(`admin-users/${viewTransaction}/${id}`);
+            const response = await dataService.GetAPI(getUrl);
             if (!response.error) {
                 setTransactionDetails(response?.data?.data);
             } else {
-                navigate('/financials/transaction-history');
+                navigate(navigation);
                 setToastError('An Error Occured!');
             }
             setdataLoading(false);
         } catch (error) {
-            navigate('/financials/transaction-history');
+            navigate(navigation);
             setToastError('An Error Occured!');
             setdataLoading(false);
         }
     };
+
     const handleConfirmAction = async () => {
         if (selectedCheckBox.length === 0) {
             setSubmitSelected(true);
@@ -90,10 +124,12 @@ const ViewTransactionDetails = () => {
             }
         }
     };
+
     // Hook Calls
     useEffect(() => {
         getTransactionDetails();
     }, []);
+
     const flagReason = {
         'Transaction & System Failures': [
             'Transaction failure due to security measures',
@@ -115,6 +151,7 @@ const ViewTransactionDetails = () => {
             'Refund denials or delays'
         ]
     };
+
     const handleCheckBox = (e, id, type, index, selectedIndex, checkboxText) => {
         setSubmitSelected(false);
         const isChecked = e.target.checked;
@@ -129,6 +166,7 @@ const ViewTransactionDetails = () => {
         }
         setSelectedCheckBox(checkedValue);
     };
+
     const handleCloseModel = () => {
         setSelectedCheckBox([]);
         setSubmitSelected(false);
@@ -138,8 +176,8 @@ const ViewTransactionDetails = () => {
     return (
         <CardHeader
             activePath={'Transaction Details'}
-            paths={['Financials', 'Transaction History']}
-            pathurls={['financials/transaction-history']}
+            paths={paths}
+            pathurls={pathurls}
             header='Transaction Details'
             minHeightRequired={true}
         >
@@ -167,8 +205,32 @@ const ViewTransactionDetails = () => {
                                 <p>Paymaart Name</p>
                                 <p>Paymaart ID</p>
                                 <p className='font-[500] text-base mt-[10px]'>To</p>
-                                <p>Paymaart Name</p>
-                                <p>Paymaart ID</p>
+                                {transactionType === 'payout'
+                                    ? <>
+                                        <p>Bank</p>
+                                        <p>Acct. Name</p>
+                                        <p>Acct. No</p>
+                                    </>
+                                    : <>
+                                        <p>Paymaart Name</p>
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>{transactionDetails?.phone_number ? 'Phone Number' : 'Paymaart ID'}</p>}
+                                    </>}
+                                {(transactionDetails?.obo_name ||
+                                transactionDetails?.obo_id ||
+                                transactionDetails?.afrimax_name ||
+                                transactionDetails?.afrimax_id) &&
+                                <>
+                                    <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                    <p>Paymaart Name</p>
+                                    <p>Paymaart ID</p>
+                                    {(transactionDetails?.afrimax_name ||
+                                    transactionDetails?.afrimax_id) && (
+                                        <>
+                                            <p>Afrimax Name</p>
+                                            <p>Afrimax ID</p>
+                                        </>
+                                    )}
+                                </>}
                             </div>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 {dataLoading
@@ -176,7 +238,7 @@ const ViewTransactionDetails = () => {
                                         {[...Array(2)]?.map((item, index) => (
                                             <div className='flex flex-col gap-1' key={index}>
                                                 <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                <TransactionDetailsShimmer col={2} />
+                                                <TransactionDetailsShimmer col={transactionType === 'payout' && index === 1 ? 3 : 2} />
                                             </div>
                                         ))}
                                     </>
@@ -185,8 +247,32 @@ const ViewTransactionDetails = () => {
                                         <p>{transactionDetails?.sender_name || '-'}</p>
                                         <p>{transactionDetails?.sender_id || '-'}</p>
                                         <p className='h-[24px] mt-[10px]'></p>
-                                        <p>{transactionDetails?.receiver_name || '-'}</p>
-                                        <p>{transactionDetails?.receiver_id || '-'}</p>
+                                        {transactionType === 'payout'
+                                            ? <>
+                                                <p>{transactionDetails?.bank_name || '-'}</p>
+                                                <p>{transactionDetails?.account_name || '-'}</p>
+                                                <p>{transactionDetails?.account_no || '-'}</p>
+                                            </>
+                                            : <>
+                                                <p>{transactionDetails?.receiver_name || '-'}</p>
+                                                <p>{transactionDetails?.phone_number || transactionDetails?.receiver_id || '-'}</p>
+                                            </>}
+                                        {(transactionDetails?.obo_name ||
+                                        transactionDetails?.obo_id ||
+                                        transactionDetails?.afrimax_name ||
+                                        transactionDetails?.afrimax_id) &&
+                                        <>
+                                            <p className='h-[24px] mt-[10px]'></p>
+                                            <p>{transactionDetails?.obo_name || '-'}</p>
+                                            <p>{transactionDetails?.obo_id || '-'}</p>
+                                            {(transactionDetails?.afrimax_name ||
+                                            transactionDetails?.afrimax_id) && (
+                                                <>
+                                                    <p>{transactionDetails?.afrimax_name || '-'}</p>
+                                                    <p>{transactionDetails?.afrimax_id || '-'}</p>
+                                                </>
+                                            )}
+                                        </>}
                                     </>}
                             </div>
                         </div>
@@ -195,25 +281,29 @@ const ViewTransactionDetails = () => {
                          text-neutral-primary font[400] text-sm rounded-lg mt-2 mb-[50px]'>
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
-                                <p className='font-[600] text-base'>Total Amount</p>
-                                <p>Amount</p>
+                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
                                 <p>Txn Fee*</p>
                                 <p>*VAT Include</p>
                                 <p>Txn ID</p>
                                 <p>Date, time</p>
+                                {transactionDetails?.commission && <p>Commission Earned</p>}
+                                {transactionDetails?.agent_closing_balance && <p>Balance</p>}
+                                {transactionDetails?.note && <p>Note</p>}
                             </div>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 {dataLoading
                                     ? <TransactionDetailsShimmer col={6} />
                                     : <>
                                         <p className='font-[600] text-base'>
-                                            {formattedAmount(transactionDetails?.total_amount) || '0.00'} MWK
+                                            {formattedAmount(transactionDetails?.transaction_amount) || '0.00'} MWK
                                         </p>
-                                        <p>{formattedAmount(transactionDetails?.transaction_amount) || '0.00'} MWK</p>
                                         <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
                                         <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
                                         <p>{transactionDetails?.transaction_id || '-'}</p>
                                         <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
+                                        {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
+                                        {transactionDetails?.agent_closing_balance && <p>{transactionDetails?.agent_closing_balance}</p>}
+                                        {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
                                     </>}
                             </div>
                         </div>

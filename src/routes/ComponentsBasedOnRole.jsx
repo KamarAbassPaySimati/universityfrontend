@@ -291,6 +291,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Flagged List',
                 element: <Flagged />,
                 path: '/transactions/flagged'
+            },
+            // Specific agent view specific transaction
+            {
+                name: 'Specific Agentiew Specific Transaction',
+                element: <ViewTransactionDetails type='agent' />,
+                path: '/users/agents/agents-transaction-histories/view/:agentId/:transactionType/:id'
             }
         ],
     admin:
