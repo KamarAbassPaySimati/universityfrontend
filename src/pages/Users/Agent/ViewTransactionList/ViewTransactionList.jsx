@@ -99,8 +99,8 @@ const ViewTransactionList = ({ type }) => {
     return (
         <CardHeader
             activePath={'Transaction History'}
-            paths={['Users', 'Agents']}
-            pathurls={['users/agents']}
+            paths={['Users', type === 'customer' ? 'Customer' : 'Agents']}
+            pathurls={[type === 'customer' ? 'users/customers' : 'users/agents']}
             header=''
             g2pHeight='true'
             minHeightRequired={true}
