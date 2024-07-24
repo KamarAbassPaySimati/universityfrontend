@@ -25,7 +25,9 @@ const InputField = ({
     divClassName,
     editAction,
     disableInput,
-    ViewClass
+    ViewClass,
+    noLabel,
+    onPaste
 }) => {
     const [isPasswordType, setIsPasswordType] = useState(true);
 
@@ -37,7 +39,9 @@ const InputField = ({
 
     return (
         <div className={`flex flex-col gap-2 relative ${divClassName || ''}`}>
-            <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
+            {!noLabel && <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px] hi'>
+                {label}
+                </label>}
             <input
                 autoComplete={autoComplete || 'off'}
                 data-testid={testId}
@@ -55,6 +59,11 @@ const InputField = ({
                 onKeyDown={handleKeyDown}
                 maxLength={maxLength}
                 disabled = {editAction === 'yes' || disableInput}
+                onPaste={(e) => {
+                    if (onPaste) {
+                        onPaste(e, id);
+                    }
+                }}
 
             />
             {/* && value.length > 0 */}

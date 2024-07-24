@@ -12,14 +12,17 @@ export default function FelidDivision ({
     handleOnChange,
     states,
     submitSelected,
-    handleSearchItem
+    handleSearchItem,
+    noHeader,
+    noLabel
 }) {
+    console.log(states, 'states');
     return (
         <>
             {Object.keys(divisionObject).map((divItem, index = 0) => (
                 divisionObject[divItem] !== undefined &&
                 <Fragment key={divisionObject[divItem]}>
-                    {divItem !== 'nothing_to_show' &&
+                    {divItem !== 'nothing_to_show' && !noHeader &&
                     <p className={`text-[#252C32] text-[18px] leading-[16px] font-semibold ml-2.5
                     ${index !== 0 ? 'pt-7 pb-3' : 'pt-7 pb-3'}`}>{divItem}</p>}
                     <div className='flex flex-wrap'>
@@ -32,6 +35,7 @@ export default function FelidDivision ({
                                         ? (
                                             <div className='mx-[10px] w-[339px]'>
                                                 <InputFieldWithDropDown
+                                                    noLabel={noLabel}
                                                     labelName={`${divObj?.label}`}
                                                     value={states[divObj?.key] === undefined ? '' : states[divObj?.key]}
                                                     placeholder={divObj?.placeHolder
@@ -56,6 +60,7 @@ export default function FelidDivision ({
                                                 divObj?.disable
                                                     ? (
                                                         <InputField
+                                                            noLabel={noLabel}
                                                             className={!(submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
                                                                 ? 'w-[339px]'
@@ -109,6 +114,7 @@ export default function FelidDivision ({
                                                     ? (divObj?.disable
                                                         ? (
                                                             <InputField
+                                                                noLabel={noLabel}
                                                                 className={!(submitSelected &&
                                                                     (states[divObj?.key] === undefined ||
                                                             states[divObj?.key]?.trim() === ''))
@@ -176,6 +182,7 @@ export default function FelidDivision ({
                                                             />)
                                                         : (
                                                             <InputField
+                                                                noLabel={noLabel}
                                                                 className={!(submitSelected && (states[divObj?.key] === undefined ||
                                                         states[divObj?.key]?.trim() === ''))
                                                                     ? 'w-[339px]'

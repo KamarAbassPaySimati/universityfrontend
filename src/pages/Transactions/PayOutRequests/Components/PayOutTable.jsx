@@ -64,7 +64,7 @@ const PayOutTable = (
                         <th className='py-2 px-[10px] text-right font-[400]'>Amount</th>
                         <th className='py-2 px-[10px] text-left font-[400]'>
                             <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_submission_date" onClick={() => handleSort('order_by', searchParams, setSearchParams)}>
-                                <span>Date/Time</span>
+                                <span>Date/Time In, CAT</span>
                                 <Image src='sort_icon' />
                             </div>
                         </th>

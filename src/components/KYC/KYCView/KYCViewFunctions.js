@@ -105,7 +105,7 @@ export const getStatusColor = (status) => {
         };
     case 'pending':
         return {
-            color: 'bg-[#D9E8FE] text-[#0066F6]',
+            color: 'bg-[#F0ECFF] text-[#67389A]',
             text: 'Pending'
         };
     case 'rejected':

@@ -21,7 +21,9 @@ const Topbar = ({
     setAppliedFilter,
     appliedFilter,
     pageNumber,
-    NoFilter
+    NoFilter,
+    customClass,
+    initialState
 
 }) => {
     const [timer, setTimer] = useState(null);
@@ -91,6 +93,7 @@ const Topbar = ({
         }
         delete params.role;
         delete params.status;
+        delete params['Flagged Reason'];
         delete params.filter;
         setSearchParams({ ...params });
     };
@@ -144,6 +147,9 @@ const Topbar = ({
                             setSearchParams={setSearchParams}
                             appliedFilter={appliedFilter}
                             setAppliedFilter={setAppliedFilter}
+                            customClass={customClass}
+                            initialState={initialState}
+                            pageNumber={pageNumber}
                      />
                     : singleSelectFilter
                         ? <FilterWithSingleOption
@@ -167,6 +173,7 @@ const Topbar = ({
                                 searchParams={searchParams}
                                 isLoading={isLoading}
                                 filterActive={filterActive}
+                                customClass={customClass}
                                 appliedFilter={appliedFilter}
                                 setAppliedFilter={setAppliedFilter}
                         />

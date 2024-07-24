@@ -12,6 +12,7 @@ const Filter = ({
     handleSearchParams,
     searchParams,
     isLoading,
+    customClass,
     filterActive
 }) => {
     const filterDiv = useRef();
@@ -36,7 +37,7 @@ const Filter = ({
                 content="Filter"
             />
             {isFilterOpen && <div className='relative z-[12]'>
-                <div data-testid='filter-modal' className="absolute top-[10px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
+                <div data-testid='filter-modal' className="max-w-[740px] absolute top-[10px] right-2 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
                     <div className='p-4 flex justify-between border-b border-neutral-outline'>
                         <div className='font-semibold'>
                             {filterType}
@@ -51,10 +52,11 @@ const Filter = ({
                                 <div className='font-semibold mb-2 capitalize'>
                                     {key}
                                 </div>
-                                <div className='flex gap-10'>
+                                <div className='flex gap-10 flex-wrap'>
                                     {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox
                                             isLoading={isLoading}
+                                            customClass={customClass}
                                             key={option} // active
                                             id={option} // active
                                             valueOf={key} // status

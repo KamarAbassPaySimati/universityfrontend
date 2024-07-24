@@ -88,15 +88,15 @@ When('I select the transaction type as {string}', async function (transactionTyp
             dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Payout to Paymaart Operations for excess Float in PMCA to PTBA1"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Charge for Bank Services or Transactions by PTBA1 |  EM credit to PMCAT':
-            dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_3"]')));
+        case 'Charge for Bank Services or Transactions by PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Charge for Bank Services or Transactions from PTBA1 | RM debit"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Charge for Bank Services or Transactions by PTBA2 |  EM credit to PMCAT':
+        case 'Charge for Bank Services or Transactions by PTBA2 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_4"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
-        case 'Charge for Bank Services or Transactions by PTBA3 |  EM credit to PMCAT':
+        case 'Charge for Bank Services or Transactions by PTBA3 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type_5"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
@@ -122,6 +122,14 @@ When('I select the transaction type as {string}', async function (transactionTyp
             break;
         case 'Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT':
             dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT"]')));
+            await driver.wait(until.elementIsVisible(dropdownElement));
+            break;
+        case 'Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT':
+            dropdownElement = await driver.wait(until.elementLocated(By.xpath('//*[text()="Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT"]')));
             await driver.wait(until.elementIsVisible(dropdownElement));
             break;
         default:

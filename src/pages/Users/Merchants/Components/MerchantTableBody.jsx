@@ -50,9 +50,13 @@ export default function MerchantTableBody ({ user, index }) {
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                         onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
                         )} />
-                    <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                        onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
-                    />
+                    {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
+                        ? <span className='w-[24px]'></span>
+                        : (
+                            <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
+                                onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
+                            />
+                        )}
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'
