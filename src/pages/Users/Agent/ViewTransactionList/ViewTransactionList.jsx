@@ -16,7 +16,7 @@ import TransactionTable from './components/TransactionTable';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
-const ViewTransactionList = () => {
+const ViewTransactionList = ({ type }) => {
     const [searchParams, setSearchParams] = useSearchParams({ });
     const [notFound, setNotFound] = useState(false);
     const [exportLoading, setExportloading] = useState(false);
@@ -32,7 +32,9 @@ const ViewTransactionList = () => {
     const { List, loading, error } = useSelector(state => state.agentTransactionHistory);
 
     const filterOptions = {
-        'Transaction Type': ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
+        'Transaction Type': type === 'customer'
+            ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'Pay G2P']
+            : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
 
     const handleExport = async () => {
@@ -58,7 +60,7 @@ const ViewTransactionList = () => {
 
     const GetList = useCallback(async () => {
         try {
-            dispatch(AgentTransactionHistoryList({ searchParams, id }));
+            dispatch(AgentTransactionHistoryList({ searchParams, id, type }));
         } catch (error) {
             console.error(error);
         }
@@ -112,7 +114,7 @@ const ViewTransactionList = () => {
                 </div>
             </div>
             <div className={`max-h-[calc(100vh-245px)] min-h-[calc(100vh-265px)] relative z-[9] scrollBar overflow-auto ml-10 mr-5 pr-4 my-6
-                flex flex-col `}
+                ${type === 'customer' ? '' : 'flex flex-col'} `}
             >
                 <div className='flex w-full gap-5'>
                     <InfoCard
@@ -121,8 +123,9 @@ const ViewTransactionList = () => {
                         lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
                         imageSrc="wallet_balance"
                         isLoading={loading}
+                        type={type}
                     />
-                    <InfoCard
+                    {type !== 'customer' && <InfoCard
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
                         lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
@@ -130,7 +133,7 @@ const ViewTransactionList = () => {
                         imageSrc="commision"
                         bgColor="bg-[#8075A1]"
                         isLoading={loading}
-                    />
+                    />}
                     {/* <WalletCard />
                     <CommisionCard /> */}
                 </div>

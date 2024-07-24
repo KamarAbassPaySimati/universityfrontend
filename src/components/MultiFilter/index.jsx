@@ -43,6 +43,8 @@ const MultiFilter = ({
             'Pay Paymaart': 'paymaart',
             'Pay Afrimax': 'afrimax',
             'Pay Merchant': 'merchant',
+            'Interest Earned': 'interest',
+            Refund: 'refund',
             Other: 'other'
         };
 
