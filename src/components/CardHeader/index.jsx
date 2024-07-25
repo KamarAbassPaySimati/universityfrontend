@@ -31,14 +31,18 @@ const CardHeader = ({
     function cumulativeSum (arr) {
         const result = [];
         let sum = '';
+
         for (let i = 0; i < arr.length; i++) {
-            if (i === arr.length - 1) {
-                sum += arr[i];
-            } else {
-                sum += arr[i] + '/';
+            if (arr[i] !== '') {
+                if (sum !== '') {
+                    sum += '/' + arr[i];
+                } else {
+                    sum += arr[i];
+                }
             }
             result.push(sum);
         }
+
         return result;
     }
     // const handleToggle = (index) => {

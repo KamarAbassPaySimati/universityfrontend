@@ -14,8 +14,8 @@ export default function RuleDropdown ({ heading, rules, textColor, imageSrc, Gui
             </button>
             {open && (Guid
                 ? <GuidList information={rules} />
-                : <ol class="space-y-4 lower-alpha list-inside text-[14px] font-normal leading-[24px] ">
-                    <ul class="ps-5 mt-2 space-y-1 list-disc list-inside">
+                : <ol className="space-y-4 lower-alpha list-inside text-[14px] font-normal leading-[24px] ">
+                    <ul className="ps-5 mt-2 space-y-1 list-disc list-inside">
                         {Object.keys(rules).map((ruleItem) => (
                             rules[ruleItem].text &&
                             <div className='flex' key={ruleItem}>
