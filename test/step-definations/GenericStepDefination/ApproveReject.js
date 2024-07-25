@@ -103,7 +103,7 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
 
         modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
         assert.equal(modalBody, 'Reason for rejection');
-        break;        
+        break;
     default:
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
