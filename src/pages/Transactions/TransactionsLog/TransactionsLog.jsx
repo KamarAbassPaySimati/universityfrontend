@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import { useSearchParams } from 'react-router-dom';
@@ -12,7 +13,7 @@ import TransactionLogTable from './components/TransactionLogTable';
 const TransactionsLog = () => {
     const [notFound, setNotFound] = useState(false);
     const { setToastError } = useContext(GlobalContext);
-    const { List, error, loading } = useSelector(state => state.kycVerifications);
+    const { List, error, loading } = useSelector(state => state.transactionLog);
     const initialToggleButtons = [
         { key: 'Pay-in', status: true },
         { key: 'Pay-out', status: false }
@@ -29,10 +30,10 @@ const TransactionsLog = () => {
     let url = '';
     const GetList = useCallback(async () => {
         url = searchParams.get('type') === 'pay-in'
-            ? 'transactions-log/payin'
-            : searchParams.get('type') === 'pay-out' ? 'transactions-log/payout' : 'transactions-log/payin';
+            ? 'admin-transactions/transaction-logs?filter_by=payin'
+            : searchParams.get('type') === 'pay-out' ? 'admin-transactions/transaction-logs?filter_by=payout' : 'admin-transactions/transaction-logs?filter_by=payin';
         if (searchParams.get('page') !== null) {
-            url += `page=${searchParams.get('page')}`;
+            url += `&page=${searchParams.get('page')}`;
         }
         if (searchParams.get('search') !== null) {
             url += `&search=${searchParams.get('search')}`;
