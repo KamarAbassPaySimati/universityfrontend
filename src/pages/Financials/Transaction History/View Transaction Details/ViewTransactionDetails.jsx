@@ -98,15 +98,18 @@ const ViewTransactionDetails = ({ type }) => {
                 };
                 const payload = {
                     flag: true,
-                    id: transactionDetails.id,
+                    id: transactionDetails.id || id,
                     flagged_by: user.paymaart_id,
                     reasons: selectedCheckBox.map(value => {
                         const key = Object.keys(obj).find(key => obj[key] === value);
                         return key; // Return the key if found
                     }).filter(key => key !== undefined), // Filter out any undefined values
-                    table_name: transactionDetails.bank_type
+                    table_name: transactionDetails.bank_type || 'user_account'
                 };
                 setIsLoading(true);
+                // The endpoint to flag a transaction depends on the user type:
+                // - For agents and admins, use 'admin-transactions/flag-admin-transaction'.
+                // - For customers, use 'admin-transactions/flag-customer-transaction'.
                 const response = await dataService.PostAPI('admin-transactions/flag-admin-transaction', payload);
                 if (!response.error) {
                     setIsLoading(false);
