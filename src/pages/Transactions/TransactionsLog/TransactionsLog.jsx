@@ -100,6 +100,7 @@ const TransactionsLog = () => {
             table={true}
             searchParams={searchParams}// pass this because its used
             setSearchParams={setSearchParams}
+            dataLoading={loading}
         >
             <div className={`relative ${notFound || List?.records?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {
@@ -152,12 +153,12 @@ const TransactionsLog = () => {
                                 className='h-tableHeight'
                                 heading='No data found'
                                 text='Try adjusting your search or filter to find what you’re looking for' />))}
-                {!loading && !error && !notFound && List?.recodes?.length !== 0 && <Paginator
+                {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
-                    totalPages={Math.ceil(List?.total_count / 10)}
+                    totalPages={Math.ceil(List?.total_records / 10)}
                     setSearchParams={setSearchParams}
                     searchParams={searchParams}
-                    totalRecords={List?.total_count}
+                    totalRecords={List?.total_records}
                 />}
             </div>
         </CardHeader>

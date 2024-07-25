@@ -4,37 +4,13 @@ import { useNavigate } from 'react-router';
 import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
+import { getStatusStyles, getStatusText } from '../../../../CommonMethods/getStatusUI';
 
 function DeleteAccountTable ({ List, loading, searchParams }) {
     const Navigate = useNavigate();
 
-    const getStatusStyles = (status) => {
-        switch (status) {
-        case 'pending':
-            return 'bg-[#F0ECFF] text-[#67389A]';
-        case 'approved':
-            return 'bg-accent-positive-secondary text-accent-positive';
-        case 'rejected':
-            return 'bg-accent-negative-secondary text-primary-negative';
-        default:
-            return ''; // Default styles when status doesn't match any condition
-        }
-    };
-
-    const getStatusText = (status) => {
-        switch (status) {
-        case 'pending':
-            return 'Pending';
-        case 'rejected':
-            return 'Rejected';
-        case 'approved':
-            return 'Approved';
-        default:
-            return '-'; // Default text when status doesn't match any condition
-        }
-    };
-
     // DONT REMOVE IT IS REQUIRED
+    // eslint-disable-next-line no-unused-vars
     const geturl = () => {
         switch (searchParams.get('type')) {
         case 'agents':
@@ -48,6 +24,7 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
             return '/verify/kyc-registration/';
         }
     };
+
     const formatPhoneNumber = (countryCode, phoneNumber) => {
         const cleanPhoneNumber = phoneNumber.replace(/\s+/g, '');
         const formattedPhoneNumber = `${cleanPhoneNumber.slice(0, 2)} ${cleanPhoneNumber.slice(2, 5)} ${cleanPhoneNumber.slice(5, 9)}`;
