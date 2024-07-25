@@ -260,7 +260,7 @@ export const ComponentsBasedOnRole = {
             // Financial Transaction History View Specific
             {
                 name: 'View specific Self Transaction History',
-                element: <ViewTransactionDetails />,
+                element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
             },
             // pay-out
@@ -437,7 +437,7 @@ export const ComponentsBasedOnRole = {
             // Financial Transaction History View Specific
             {
                 name: 'View specific Self Transaction History',
-                element: <ViewTransactionDetails />,
+                element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
             }
         ],
@@ -560,7 +560,7 @@ export const ComponentsBasedOnRole = {
             // Financial Transaction History View Specific
             {
                 name: 'View specific Self Transaction History',
-                element: <ViewTransactionDetails />,
+                element: <ViewTransactionDetails type='admin'/>,
                 path: '/financials/transaction-history/:id'
             },
             // pay-out

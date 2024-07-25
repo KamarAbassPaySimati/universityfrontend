@@ -99,15 +99,18 @@ const ViewTransactionDetails = ({ type }) => {
                 };
                 const payload = {
                     flag: true,
-                    id: transactionDetails.id,
+                    id: transactionDetails.id || id,
                     flagged_by: user.paymaart_id,
                     reasons: selectedCheckBox.map(value => {
                         const key = Object.keys(obj).find(key => obj[key] === value);
                         return key; // Return the key if found
                     }).filter(key => key !== undefined), // Filter out any undefined values
-                    table_name: transactionDetails.bank_type
+                    table_name: transactionDetails.bank_type || 'user_account'
                 };
                 setIsLoading(true);
+                // The endpoint to flag a transaction depends on the user type:
+                // - For agents and admins, use 'admin-transactions/flag-admin-transaction'.
+                // - For customers, use 'admin-transactions/flag-customer-transaction'.
                 const response = await dataService.PostAPI('admin-transactions/flag-admin-transaction', payload);
                 if (!response.error) {
                     setIsLoading(false);
@@ -182,18 +185,18 @@ const ViewTransactionDetails = ({ type }) => {
             header='Transaction Details'
             minHeightRequired={true}
         >
-            <div className='flex justify-center items-center' ref={captureRef}>
+            <div data-testid='transaction_details' className='flex justify-center items-center' ref={captureRef}>
                 <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] p-[30px]
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
                         { transactionDetails?.flagged
-                            ? <Image src='flagged' testId={'flag_transaction_button'}
+                            ? <Image src='flagged' testId='flag_transaction_button'
                             />
-                            : <Image src='flag' onClick={() => { if (!dataLoading) setIsFlagModelOpen(true); }} className='cursor-pointer' testId={'flag_transaction_button'}
+                            : <Image src='flag' onClick={() => { if (!dataLoading) setIsFlagModelOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} testId={'flag_transaction_button'}
                             />
                         }
-                        <Image src='share' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
+                        <Image src='share' testId='share_transaction_button' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
                     </div>
                     <div className='font-[600] text-[14px] leading-[24px] text-[#A4A9AE] mt-[10px] mb-6'>
                         Thank you for using Paymaart
@@ -257,7 +260,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             </>
                                             : <>
                                                 <p>{transactionDetails?.receiver_name || '-'}</p>
-                                                <p>{transactionDetails?.receiver_phone_no || transactionDetails?.receiver_id || '-'}</p>
+                                                <p data-testid="beneficiary_paymaart_id">{transactionDetails?.receiver_phone_no || transactionDetails?.receiver_id || '-'}</p>
                                             </>}
                                         {(transactionDetails?.obo_name ||
                                         transactionDetails?.obo_id ||
@@ -297,13 +300,13 @@ const ViewTransactionDetails = ({ type }) => {
                                 {dataLoading
                                     ? <TransactionDetailsShimmer col={5} />
                                     : <>
-                                        <p className='font-[600] text-base'>
+                                        <p data-testid="amount" className='font-[600] text-base'>
                                             {formattedAmount(Math.abs(transactionDetails?.transaction_amount)) || '0.00'} MWK
                                         </p>
                                         <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
                                         <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
-                                        <p>{transactionDetails?.transaction_id || '-'}</p>
+                                        <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
                                         <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
                                         {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
