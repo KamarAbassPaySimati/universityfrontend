@@ -85,7 +85,7 @@ const ViewTransactionList = ({ type }) => {
         }
     }, [List]);
 
-    /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
+    /* This `useEffect`  hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
