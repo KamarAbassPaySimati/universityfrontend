@@ -192,7 +192,7 @@ const ViewTransactionDetails = ({ type }) => {
                         { transactionDetails?.flagged
                             ? <Image src='flagged' testId={'flag_transaction_button'}
                             />
-                            : <Image src='flag' onClick={() => setIsFlagModelOpen(true)} className='cursor-pointer' testId={'flag_transaction_button'}
+                            : <Image src='flag' onClick={() => { if (!dataLoading) setIsFlagModelOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} testId={'flag_transaction_button'}
                             />
                         }
                         <Image src='share' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
