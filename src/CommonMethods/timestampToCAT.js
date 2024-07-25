@@ -13,3 +13,17 @@ export default function convertTimestampToCAT (timestamp) {
 
     return formattedTime;
 };
+
+export function convertTimestampToDateYear (timestamp) {
+    if (!timestamp && isNaN(Number(timestamp))) {
+        return null;
+    }
+    // Create a DateTime object from the timestamp assuming the timestamp is in seconds
+    const utcDateTime = DateTime.fromSeconds(Number(timestamp), { zone: 'utc' });
+    const catDateTime = utcDateTime.setZone('Africa/Blantyre');
+
+    // Format the DateTime object in the desired format
+    const formattedTime = catDateTime.toFormat('dd LLL yy');
+
+    return formattedTime;
+};

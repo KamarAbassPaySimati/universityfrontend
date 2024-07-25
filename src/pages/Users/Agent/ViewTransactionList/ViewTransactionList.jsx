@@ -85,7 +85,7 @@ const ViewTransactionList = ({ type }) => {
         }
     }, [List]);
 
-    /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
+    /* This `useEffect`  hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
@@ -99,7 +99,7 @@ const ViewTransactionList = ({ type }) => {
     return (
         <CardHeader
             activePath={'Transaction History'}
-            paths={['Users', type === 'customer' ? 'Customer' : 'Agents']}
+            paths={['Users', type === 'customer' ? 'Customers' : 'Agents']}
             pathurls={[type === 'customer' ? 'users/customers' : 'users/agents']}
             header=''
             g2pHeight='true'
@@ -118,6 +118,7 @@ const ViewTransactionList = ({ type }) => {
             >
                 <div className='flex w-full gap-5'>
                     <InfoCard
+                        testId='wallet_balance_card'
                         title="Wallet Balance"
                         amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MWK`}
                         lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
@@ -126,6 +127,7 @@ const ViewTransactionList = ({ type }) => {
                         type={type}
                     />
                     {type !== 'customer' && <InfoCard
+                        testId='commission_card'
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
                         lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
@@ -185,6 +187,7 @@ const ViewTransactionList = ({ type }) => {
                         setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
+                        paymaartId={id}
                     />
                 </div>}
                         {notFound &&
