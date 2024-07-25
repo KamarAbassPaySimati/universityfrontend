@@ -52,6 +52,9 @@ const ViewTransactionDetails = ({ type }) => {
     }
 
     const getValueType = (transactionType) => {
+        if (!transactionType) {
+            return 'Txn';
+        }
         if (transactionType === 'pay_in') {
             return 'Pay-in';
         }
@@ -328,7 +331,7 @@ const ViewTransactionDetails = ({ type }) => {
                             {Object.keys(flagReason).map((item, index = 0) => (
                                 <>
                                     <CheckboxWithReason
-                                        key={item}
+                                        key={item + index}
                                         item={item}
                                         testId={item}
                                         handleOnChange={handleCheckBox}
@@ -338,10 +341,10 @@ const ViewTransactionDetails = ({ type }) => {
                                         flag
                                         // Checked={selectedCheckBox.includes(item)}
                                     />
-                                    <ol class="space-y-4 ml-2 lower-alpha list-inside text-[12px] font-normal leading-[24px] pb-2">
-                                        <ul class="ps-5 space-y-1 list-disc list-inside">
-                                            {flagReason[item].map((ruleItem) => (
-                                                <div className='flex text-[#4F5962]' key={ruleItem}>
+                                    <ol className="space-y-4 ml-2 lower-alpha list-inside text-[12px] font-normal leading-[24px] pb-2">
+                                        <ul className="ps-5 space-y-1 list-disc list-inside">
+                                            {flagReason[item].map((ruleItem, idx) => (
+                                                <div className='flex text-[#4F5962]' key={ruleItem + idx}>
                                                     <li></li>
                                                     <span>{ruleItem}</span>
                                                 </div>
