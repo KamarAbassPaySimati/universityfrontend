@@ -593,7 +593,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                                     {Object.keys(bankDetail).map((itemkey, index) => (
                                                                         <div key={index} className={`w-1/3 ${index === 0 ? '' : 'px-1'}`}>
                                                                             <p className={`${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : 'text-neutral-primary max-w-[300px]'} 
-                                                                                cursor-default break-words block overflow-hidden text-ellipsis`}>
+                                                                                cursor-default break-words block overflow-hidden text-ellipsis text-[14px] leading-[24px] font-[400]`}>
                                                                                 {bankDetail[itemkey]}
                                                                             </p>
                                                                         </div>
