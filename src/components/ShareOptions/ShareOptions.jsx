@@ -107,7 +107,7 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
 
     return (
         <Modal center open={isModalOpen} onClose={() => setIsModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-            <div className='customModal'>
+            <div className='customShareModal'>
                 <div className="flex justify-between border-b border-neutral-outline pb-3">
                     <p data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-[#000000]">
                         Share

@@ -1,18 +1,21 @@
-const { When, Then } = require('@cucumber/cucumber');
-const { until, By } = require('selenium-webdriver');
+const { Given, When, Then } = require('@cucumber/cucumber');
+const { until, By, Key } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 const assert = require('assert');
+const { getModifierKey, customSortDateDesc, customSortDateAsc } = require('../../bdd_modules/index.js');
 
-Given('I am in transactions log page', async function() {
-    await driver.get('http://localhost:3000/transactions/transactions_log');
+Given('I am in transactions log page', async function () {
+    await driver.get('http://localhost:3000/transactions/log');
 });
 
-When('I click on pay in tab', async function(){
-    await driver.wait(until.elementLocated(By.css('[data-testid="payinTab"]'))).click();
+When('I click on pay in tab', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="pay-in"]'))).click();
 });
 
-When('I click on pay out tab', async function(){
-    await driver.wait(until.elementLocated(By.css('[data-testid="payoutTab"]'))).click();
+When('I click on pay out tab', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="pay-out"]'))).click();
 });
 
 When('I search for particular transaction logs as {string}', async function (searchTerm) {
@@ -33,7 +36,7 @@ Then('I should see the transaction logs sorted in descending order based on {str
     switch (sortBy) {
     case 'Submission Date':
         // Write code here that turns the phrase above into concrete actions
-        items = await driver.wait(until.elementsLocated(By.css('[data-testid="submission_date"]')));
+        items = await driver.wait(until.elementsLocated(By.css('[data-testid="date"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
         sortedItemTexts = [...itemTexts].sort(customSortDateDesc);
         console.log('itemTexts', itemTexts);
@@ -55,7 +58,7 @@ Then('I should see the transaction logs sorted in ascending order based on {stri
     switch (sortBy) {
     case 'Submission Date':
         // Write code here that turns the phrase above into concrete actions
-        items = await driver.wait(until.elementsLocated(By.css('[data-testid="submission_date"]')));
+        items = await driver.wait(until.elementsLocated(By.css('[data-testid="date"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
         sortedItemTexts = [...itemTexts].sort(customSortDateAsc);
         console.log('itemTexts asc', itemTexts);

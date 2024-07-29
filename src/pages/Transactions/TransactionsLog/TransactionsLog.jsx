@@ -30,8 +30,8 @@ const TransactionsLog = () => {
     let url = '';
     const GetList = useCallback(async () => {
         url = searchParams.get('type') === 'pay-in'
-            ? 'admin-transactions/transaction-logs?filter_by=payin'
-            : searchParams.get('type') === 'pay-out' ? 'admin-transactions/transaction-logs?filter_by=payout' : 'admin-transactions/transaction-logs?filter_by=payin';
+            ? `admin-transactions/transaction-logs?filter_by=payin${searchParams.get('sort_by') ? `&sort_by=${searchParams.get('sort_by')}` : ''}`
+            : searchParams.get('type') === 'pay-out' ? `admin-transactions/transaction-logs?filter_by=payout${searchParams.get('sort_by') ? `&sort_by=${searchParams.get('sort_by')}` : ''}` : `admin-transactions/transaction-logs?filter_by=payin${searchParams.get('sort_by') ? `&sort_by=${searchParams.get('sort_by')}` : ''}`;
         if (searchParams.get('page') !== null) {
             url += `&page=${searchParams.get('page')}`;
         }
@@ -63,7 +63,7 @@ const TransactionsLog = () => {
 
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
-        if (List?.records?.length !== 0) {
+        if (List?.data?.length !== 0) {
             setNotFound(false);
             params.page = 1;
         }
@@ -102,11 +102,10 @@ const TransactionsLog = () => {
             setSearchParams={setSearchParams}
             dataLoading={loading}
         >
-            <div className={`relative ${notFound || List?.records?.length === 0 ? '' : 'thead-border-bottom'}`}>
+            <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {
-                    (!notFound && List?.records?.length === 0 &&
+                    (!notFound && List?.data?.length === 0 &&
                     searchParams.get('page') === '1' &&
-                    searchParams.get('search') === null &&
                     searchParams.get('search') === null)
                         ? (
                             <></>
@@ -122,7 +121,7 @@ const TransactionsLog = () => {
                         </div>)
                 }
                 {
-                    (List?.records?.length !== 0 && !notFound) &&
+                    (List?.data?.length !== 0 && !notFound) &&
                     <div className='h-tableHeight scrollBar overflow-auto'>
                         <TransactionLogTable
                             error={error}
@@ -139,20 +138,20 @@ const TransactionsLog = () => {
                     text = "404 could not find what you are looking for."/>}
 
                 {
-                    (!notFound && List?.records?.length === 0 &&
+                    (!notFound && List?.data?.length === 0 &&
                         searchParams.get('page') === '1' &&
                         searchParams.get('search') === null)
                         ? (
 
                             <NoDataError className='h-noDataError'
-                                heading='No profiles for verification'
-                                text='No profiles currently require verification. Please check back later.' />
+                                heading='No data found'
+                                text='Please check back later.' />
                         )
-                        : (List?.records?.length === 0 &&
+                        : (List?.data?.length === 0 &&
                             (<NoDataError
                                 className='h-tableHeight'
                                 heading='No data found'
-                                text='Try adjusting your search or filter to find what you’re looking for' />))}
+                                text='Try adjusting your search to find what you’re looking for' />))}
                 {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.total_records / 10)}

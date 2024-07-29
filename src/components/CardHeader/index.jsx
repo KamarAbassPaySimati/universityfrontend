@@ -216,6 +216,7 @@ const CardHeader = ({
                             {/* toggle buttons  */}
                             {toggleButtons && toggleButtons.map((item, index) => (
                                 <button
+                                    data-testid={item.key.toLowerCase()}
                                     key={index}
                                     onClick={() => { if (!dataLoading) handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams); }}
                                     className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
