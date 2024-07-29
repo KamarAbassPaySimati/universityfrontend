@@ -280,6 +280,12 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionList />,
                 path: '/users/agents/agents-transaction-histories/:id'
             },
+            // Specific Customer transaction list
+            {
+                name: 'Specific Customer Transaction List',
+                element: <ViewTransactionList type={'customer'}/>,
+                path: '/users/customers/customers-transaction-histories/:id'
+            },
             // Flagged List
             {
                 name: 'Flagged List',
@@ -308,6 +314,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Onboard Customer Users',
                 element: <OnboardAgent role={'customer'} />,
                 path: '/users/customers/register-customer'
+            },
+            // Specific Customer transaction list
+            {
+                name: 'Specific Customer Transaction List',
+                element: <ViewTransactionList type={'customer'}/>,
+                path: '/users/customers/customers-transaction-histories/:id'
             },
             {
                 name: 'KYC Verification list',
