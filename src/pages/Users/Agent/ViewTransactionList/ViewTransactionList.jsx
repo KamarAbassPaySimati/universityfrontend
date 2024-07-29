@@ -16,7 +16,7 @@ import TransactionTable from './components/TransactionTable';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 
-const ViewTransactionList = () => {
+const ViewTransactionList = ({ type }) => {
     const [searchParams, setSearchParams] = useSearchParams({ });
     const [notFound, setNotFound] = useState(false);
     const [exportLoading, setExportloading] = useState(false);
@@ -32,7 +32,9 @@ const ViewTransactionList = () => {
     const { List, loading, error } = useSelector(state => state.agentTransactionHistory);
 
     const filterOptions = {
-        'Transaction Type': ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
+        'Transaction Type': type === 'customer'
+            ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'Pay G2P']
+            : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
 
     const handleExport = async () => {
@@ -58,7 +60,7 @@ const ViewTransactionList = () => {
 
     const GetList = useCallback(async () => {
         try {
-            dispatch(AgentTransactionHistoryList({ searchParams, id }));
+            dispatch(AgentTransactionHistoryList({ searchParams, id, type }));
         } catch (error) {
             console.error(error);
         }
@@ -83,7 +85,7 @@ const ViewTransactionList = () => {
         }
     }, [List]);
 
-    /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
+    /* This `useEffect`  hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
@@ -97,8 +99,8 @@ const ViewTransactionList = () => {
     return (
         <CardHeader
             activePath={'Transaction History'}
-            paths={['Users', 'Agents']}
-            pathurls={['users/agents']}
+            paths={['Users', type === 'customer' ? 'Customers' : 'Agents']}
+            pathurls={[type === 'customer' ? 'users/customers' : 'users/agents']}
             header=''
             g2pHeight='true'
             minHeightRequired={true}
@@ -112,17 +114,20 @@ const ViewTransactionList = () => {
                 </div>
             </div>
             <div className={`max-h-[calc(100vh-245px)] min-h-[calc(100vh-265px)] relative z-[9] scrollBar overflow-auto ml-10 mr-5 pr-4 my-6
-                flex flex-col `}
+                ${type === 'customer' ? '' : 'flex flex-col'} `}
             >
                 <div className='flex w-full gap-5'>
                     <InfoCard
+                        testId='wallet_balance_card'
                         title="Wallet Balance"
                         amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MWK`}
                         lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
                         imageSrc="wallet_balance"
                         isLoading={loading}
+                        type={type}
                     />
-                    <InfoCard
+                    {type !== 'customer' && <InfoCard
+                        testId='commission_card'
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
                         lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
@@ -130,7 +135,7 @@ const ViewTransactionList = () => {
                         imageSrc="commision"
                         bgColor="bg-[#8075A1]"
                         isLoading={loading}
-                    />
+                    />}
                     {/* <WalletCard />
                     <CommisionCard /> */}
                 </div>
@@ -182,6 +187,7 @@ const ViewTransactionList = () => {
                         setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
+                        paymaartId={id}
                     />
                 </div>}
                         {notFound &&

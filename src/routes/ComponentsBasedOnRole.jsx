@@ -260,7 +260,7 @@ export const ComponentsBasedOnRole = {
             // Financial Transaction History View Specific
             {
                 name: 'View specific Self Transaction History',
-                element: <ViewTransactionDetails />,
+                element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
             },
             // pay-out
@@ -280,11 +280,23 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionList />,
                 path: '/users/agents/agents-transaction-histories/:id'
             },
+            // Specific Customer transaction list
+            {
+                name: 'Specific Customer Transaction List',
+                element: <ViewTransactionList type={'customer'}/>,
+                path: '/users/customers/customers-transaction-histories/:id'
+            },
             // Flagged List
             {
                 name: 'Flagged List',
                 element: <Flagged />,
                 path: '/transactions/flagged'
+            },
+            // Specific agent view specific transaction
+            {
+                name: 'Specific Agentiew Specific Transaction',
+                element: <ViewTransactionDetails type='agent' />,
+                path: '/users/agents/agents-transaction-histories/view/:agentId/:transactionType/:id'
             }
         ],
     admin:
@@ -308,6 +320,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Onboard Customer Users',
                 element: <OnboardAgent role={'customer'} />,
                 path: '/users/customers/register-customer'
+            },
+            // Specific Customer transaction list
+            {
+                name: 'Specific Customer Transaction List',
+                element: <ViewTransactionList type={'customer'}/>,
+                path: '/users/customers/customers-transaction-histories/:id'
             },
             {
                 name: 'KYC Verification list',
@@ -419,7 +437,7 @@ export const ComponentsBasedOnRole = {
             // Financial Transaction History View Specific
             {
                 name: 'View specific Self Transaction History',
-                element: <ViewTransactionDetails />,
+                element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
             }
         ],
@@ -542,7 +560,7 @@ export const ComponentsBasedOnRole = {
             // Financial Transaction History View Specific
             {
                 name: 'View specific Self Transaction History',
-                element: <ViewTransactionDetails />,
+                element: <ViewTransactionDetails type='admin'/>,
                 path: '/financials/transaction-history/:id'
             },
             // pay-out
