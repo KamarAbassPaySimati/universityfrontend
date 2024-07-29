@@ -75,6 +75,9 @@ const ViewTransactionDetails = ({ type }) => {
         if (transactionType === 'interest') {
             return 'Interest';
         }
+        if (transactionType === 'refund') {
+            return 'Refund';
+        }
         return 'Txn';
     };
 

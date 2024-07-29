@@ -8,9 +8,8 @@ Feature: Paymaart- Admin Web - Customer Specific Transaction View
     @delete_admin_account
     Scenario: Login as super admin and view customer transactions
         Given I navigate to customer users listing screen
-        When I click on transaction history icon
+        When I click on customer transaction history icon
         Then I should be navigated to transaction history page
-        Then I should see table header containing '["Service Code","Date/ Time, CAT","Transaction ID","Beneficiary Paymaart ID", "Type","Amount"]'
-        And I should see wallet balance
         When I click on view transaction for most recent transaction
         Then I should see the transaction receipt
+        Then I should see the flag transaction and share button

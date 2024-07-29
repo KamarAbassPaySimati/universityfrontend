@@ -77,7 +77,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid="transaction_amount"
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>
-                                    {`${formattedAmount(transaction?.transaction_amount)}` || '0.00'}
+                                    {`${formattedAmount(Math.abs(transaction?.transaction_amount))}` || '0.00'}
                                 </td>
                                 <td data-testid='transaction_view'
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
