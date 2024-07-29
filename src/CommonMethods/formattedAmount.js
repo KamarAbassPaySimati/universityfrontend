@@ -1,4 +1,7 @@
 export const formattedAmount = (amount) => {
+    if (!amount) {
+        return null;
+    }
     return new Intl.NumberFormat('en-US', {
         // style: 'currency',
         // currency: 'MWK',

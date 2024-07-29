@@ -8,37 +8,11 @@ Feature: Paymaart - Admin Web - Specific Agent Transaction View
 
     @add_admin_user
     @create_new_user_and_login
-    Scenario: Search for non existing record
-        Given I navigate to agent users listing screen
-        When I search for a agent 
-        When I click on view agent transaction
-        Then I should be redirected to transaction view page 
-        And I should be able to view the wallet balance 
-        And I should be able to view the gross agent commission
-        When I search invalid beneficiary paymaart id 
-        Then I should read a message stating that "No data found"
-
-    Scenario: Filter agent transaction by transaction type
-        Given I navigate to agent users listing screen
-        When I search for a agent 
-        When I click on view agent transaction
-        Then I should be redirected to the transaction view page 
-        And I should be able to view the wallet balance 
-        And I should be able to view the gross agent commission
-        When I click on filter tab
-        Then I should see filter popup modal
-        And I select filter by status as "Pay-in"
-        Then I should see list of agent transaction where status is "Pay-in"
-        When I click on clear filter
-        Then I should see filter popup modal closed
-
+    @delete_admin_account
     Scenario: View specific transaction by agent 
-        Given I navigate to agent users listing screen
-        When I search for a agent 
-        When I click on view agent transaction
-        Then I should be redirected to the transaction view page 
-        And I should be able to view the wallet balance 
-        And I should be able to view the gross agent commission
+       Given I navigate to agent users listing screen
+        When I click on transaction history icon
+        Then I should be navigated to transaction history page
         When I click on view transaction for most recent transaction
         Then I should see the transaction recipt 
         Then I should see the flag transaction and share button

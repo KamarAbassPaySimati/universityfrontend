@@ -7,7 +7,7 @@ import GlobalContext from '../../../../components/Context/GlobalContext';
 import { endpoints } from '../../../../services/endpoints';
 import { useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
-import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import convertTimestampToCAT, { convertTimestampToDateYear } from '../../../../CommonMethods/timestampToCAT';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../../../components/ConfirmationPopup/ConfirmationPopup';
@@ -15,6 +15,7 @@ import CheckboxWithReason from '../../../../components/InputField/CheckboxWithRe
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useSelector } from 'react-redux';
 import ShareOptions from '../../../../components/ShareOptions/ShareOptions';
+import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 
 const ViewTransactionDetails = ({ type }) => {
     // States
@@ -51,16 +52,19 @@ const ViewTransactionDetails = ({ type }) => {
     }
 
     const getValueType = (transactionType) => {
+        if (!transactionType) {
+            return 'Txn';
+        }
         if (transactionType === 'pay_in') {
             return 'Pay-in';
         }
-        if (transactionType === 'cash_in') {
+        if (transactionType === 'cash_in' || transactionType === 'unregistered_cash_in') {
             return 'Cash-in';
         }
         if (transactionType === 'payout') {
             return 'Pay-out';
         }
-        if (transactionType === 'cashout') {
+        if (transactionType.includes('cashout')) {
             return 'Cash-out';
         }
         return 'Txn';
@@ -184,18 +188,18 @@ const ViewTransactionDetails = ({ type }) => {
             header='Transaction Details'
             minHeightRequired={true}
         >
-            <div className='flex justify-center items-center' ref={captureRef}>
+            <div data-testid='transaction_details' className='flex justify-center items-center' ref={captureRef}>
                 <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] p-[30px]
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
                         { transactionDetails?.flagged
-                            ? <Image src='flagged' testId={'flag_transaction_button'}
+                            ? <Image src='flagged' testId='flag_transaction_button'
                             />
                             : <Image src='flag' onClick={() => { if (!dataLoading) setIsFlagModelOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} testId={'flag_transaction_button'}
                             />
                         }
-                        <Image src='share' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
+                        <Image src='share' testId='share_transaction_button' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
                     </div>
                     <div className='font-[600] text-[14px] leading-[24px] text-[#A4A9AE] mt-[10px] mb-6'>
                         Thank you for using Paymaart
@@ -210,24 +214,25 @@ const ViewTransactionDetails = ({ type }) => {
                                 <p className='font-[500] text-base mt-[10px]'>To</p>
                                 {transactionType === 'payout'
                                     ? <>
-                                        <p>Bank</p>
-                                        <p>Acct. Name</p>
-                                        <p>Acct. No</p>
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. No</p>}
                                     </>
                                     : <>
-                                        <p>Paymaart Name</p>
-                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>{transactionDetails?.phone_number ? 'Phone Number' : 'Paymaart ID'}</p>}
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Paymaart Name</p>}
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>{transactionDetails?.receiver_phone_no ? 'Phone Number' : 'Paymaart ID'}</p>}
                                     </>}
                                 {(transactionDetails?.obo_name ||
                                 transactionDetails?.obo_id ||
                                 transactionDetails?.afrimax_name ||
                                 transactionDetails?.afrimax_id) &&
+                                !dataLoading &&
                                 <>
                                     <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
-                                    <p>Paymaart Name</p>
-                                    <p>Paymaart ID</p>
+                                    {transactionDetails?.obo_name && !dataLoading && <p>Paymaart Name</p>}
+                                    {transactionDetails?.obo_id && !dataLoading && <p>Paymaart ID</p>}
                                     {(transactionDetails?.afrimax_name ||
-                                    transactionDetails?.afrimax_id) && (
+                                    transactionDetails?.afrimax_id) && !dataLoading && (
                                         <>
                                             <p>Afrimax Name</p>
                                             <p>Afrimax ID</p>
@@ -258,7 +263,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             </>
                                             : <>
                                                 <p>{transactionDetails?.receiver_name || '-'}</p>
-                                                <p>{transactionDetails?.phone_number || transactionDetails?.receiver_id || '-'}</p>
+                                                <p data-testid="beneficiary_paymaart_id">{transactionDetails?.receiver_phone_no || transactionDetails?.receiver_id || '-'}</p>
                                             </>}
                                         {(transactionDetails?.obo_name ||
                                         transactionDetails?.obo_id ||
@@ -266,8 +271,8 @@ const ViewTransactionDetails = ({ type }) => {
                                         transactionDetails?.afrimax_id) &&
                                         <>
                                             <p className='h-[24px] mt-[10px]'></p>
-                                            <p>{transactionDetails?.obo_name || '-'}</p>
-                                            <p>{transactionDetails?.obo_id || '-'}</p>
+                                            {transactionDetails?.obo_name && <p>{transactionDetails?.obo_name || '-'}</p>}
+                                            {transactionDetails?.obo_id && <p>{transactionDetails?.obo_id || '-'}</p>}
                                             {(transactionDetails?.afrimax_name ||
                                             transactionDetails?.afrimax_id) && (
                                                 <>
@@ -287,26 +292,29 @@ const ViewTransactionDetails = ({ type }) => {
                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
                                 <p>Txn Fee*</p>
                                 <p>*VAT Include</p>
+                                {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
                                 <p>Txn ID</p>
                                 <p>Date, time</p>
-                                {transactionDetails?.commission && <p>Commission Earned</p>}
-                                {transactionDetails?.agent_closing_balance && <p>Balance</p>}
-                                {transactionDetails?.note && <p>Note</p>}
+                                {transactionDetails?.agent_closing_balance && !dataLoading && <p>Balance</p>}
+                                {transactionDetails?.note && !dataLoading && <p>Note</p>}
+                                {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && !dataLoading && <p>Membership</p>}
                             </div>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 {dataLoading
-                                    ? <TransactionDetailsShimmer col={6} />
+                                    ? <TransactionDetailsShimmer col={5} />
                                     : <>
-                                        <p className='font-[600] text-base'>
-                                            {formattedAmount(transactionDetails?.transaction_amount) || '0.00'} MWK
+                                        <p data-testid="amount" className='font-[600] text-base'>
+                                            {formattedAmount(Math.abs(transactionDetails?.transaction_amount)) || '0.00'} MWK
                                         </p>
                                         <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
                                         <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
-                                        <p>{transactionDetails?.transaction_id || '-'}</p>
-                                        <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
-                                        {transactionDetails?.agent_closing_balance && <p>{transactionDetails?.agent_closing_balance}</p>}
+                                        <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
+                                        <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
+                                        {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
+                                        {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && <p>{capitalizeFirstLetter(transactionDetails?.membership).replace(/Primex/i, 'PrimeX') || '-'}</p>}
+                                        {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && <p>{`${convertTimestampToDateYear(transactionDetails?.membership_start) || '---'} - ${convertTimestampToDateYear(transactionDetails?.membership_expiry)}`}</p>}
                                     </>}
                             </div>
                         </div>
@@ -323,7 +331,7 @@ const ViewTransactionDetails = ({ type }) => {
                             {Object.keys(flagReason).map((item, index = 0) => (
                                 <>
                                     <CheckboxWithReason
-                                        key={item}
+                                        key={item + index}
                                         item={item}
                                         testId={item}
                                         handleOnChange={handleCheckBox}
@@ -333,10 +341,10 @@ const ViewTransactionDetails = ({ type }) => {
                                         flag
                                         // Checked={selectedCheckBox.includes(item)}
                                     />
-                                    <ol class="space-y-4 ml-2 lower-alpha list-inside text-[12px] font-normal leading-[24px] pb-2">
-                                        <ul class="ps-5 space-y-1 list-disc list-inside">
-                                            {flagReason[item].map((ruleItem) => (
-                                                <div className='flex text-[#4F5962]' key={ruleItem}>
+                                    <ol className="space-y-4 ml-2 lower-alpha list-inside text-[12px] font-normal leading-[24px] pb-2">
+                                        <ul className="ps-5 space-y-1 list-disc list-inside">
+                                            {flagReason[item].map((ruleItem, idx) => (
+                                                <div className='flex text-[#4F5962]' key={ruleItem + idx}>
                                                     <li></li>
                                                     <span>{ruleItem}</span>
                                                 </div>
