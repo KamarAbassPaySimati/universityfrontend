@@ -52,7 +52,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                         {List?.transactions?.map((transaction, index) => (
                             <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
                                 <td data-testid="transaction_code"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px] min-w-[100px]'>
                                     {transaction?.transaction_code || '-'}
                                 </td>
                                 <td data-testid="dateRow"
@@ -60,7 +60,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                     {convertTimestampToCAT(transaction?.created_at) || '-'}
                                 </td>
                                 <td data-testid="transaction_id"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px] min-w-[250px]'
                                     title={transaction?.transaction_id || '-'}
                                 >
                                     {transaction?.transaction_id || '-'}

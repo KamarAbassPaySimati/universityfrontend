@@ -312,6 +312,7 @@ const ViewTransactionDetails = ({ type }) => {
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
                                 <p>Txn ID</p>
                                 <p>Date, time</p>
+                                {transactionType === 'afrimax' && <p>Plan</p>}
                                 {transactionDetails?.agent_closing_balance && !dataLoading && <p>Balance</p>}
                                 {transactionDetails?.note && !dataLoading && <p>Note</p>}
                                 {transactionType === 'interest' && <p>Interest Period</p>}
@@ -332,6 +333,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
                                         <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
                                         <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
+                                        {transactionType === 'afrimax' && <p>{ transactionDetails?.afrimax_plan_name || '-'}</p>}
                                         {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
                                         {transactionType === 'interest' &&
