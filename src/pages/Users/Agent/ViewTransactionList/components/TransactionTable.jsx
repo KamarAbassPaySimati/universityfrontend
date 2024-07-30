@@ -7,7 +7,7 @@ import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 import { useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 
-const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId }) => {
+const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type }) => {
     const navigate = useNavigate();
 
     // Mapping of original keys to desired transformations
@@ -20,8 +20,9 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
         'Pay Afrimax': 'afrimax',
         'Pay Merchant': 'merchant',
         Other: 'other',
-        'Unregistered Cash-in': 'unregistered_cash_in',
-        'Unregistered Cashout': 'unregistered_cashout'
+        'Un-registered Cash-in': 'unregistered_cash_in',
+        'Un-registered Cash-out': 'unregistered_cashout',
+        'Cash-out request': 'cashout_request'
     };
 
     const getKeyByValue = (obj, value) => {
@@ -51,7 +52,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                         {List?.transactions?.map((transaction, index) => (
                             <tr className='border-b border-neutral-outline h-[48px]' key={`transactions${index}`}>
                                 <td data-testid="transaction_code"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px] min-w-[100px]'>
                                     {transaction?.transaction_code || '-'}
                                 </td>
                                 <td data-testid="dateRow"
@@ -59,7 +60,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                     {convertTimestampToCAT(transaction?.created_at) || '-'}
                                 </td>
                                 <td data-testid="transaction_id"
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px] min-w-[250px]'
                                     title={transaction?.transaction_id || '-'}
                                 >
                                     {transaction?.transaction_id || '-'}
@@ -76,11 +77,11 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid="transaction_amount"
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>
-                                    {`${formattedAmount(transaction?.transaction_amount)}` || '0.00'}
+                                    {`${formattedAmount(Math.abs(transaction?.transaction_amount))}` || '0.00'}
                                 </td>
                                 <td data-testid='transaction_view'
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
-                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/agents/agents-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/${type}/${type}-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
                                 </td>
                             </tr>
                         ))}

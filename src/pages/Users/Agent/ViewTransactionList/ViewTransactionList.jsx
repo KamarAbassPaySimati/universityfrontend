@@ -15,6 +15,7 @@ import { AgentTransactionHistoryList } from './AgentTransactionSlice';
 import TransactionTable from './components/TransactionTable';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import getInitials from '../../../../CommonMethods/getInitials';
 
 const ViewTransactionList = ({ type }) => {
     const [searchParams, setSearchParams] = useSearchParams({ });
@@ -32,7 +33,7 @@ const ViewTransactionList = ({ type }) => {
     const { List, loading, error } = useSelector(state => state.agentTransactionHistory);
 
     const filterOptions = {
-        'Transaction Type': type === 'customer'
+        'Transaction Type': type === 'customers'
             ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'Pay G2P']
             : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
@@ -99,8 +100,8 @@ const ViewTransactionList = ({ type }) => {
     return (
         <CardHeader
             activePath={'Transaction History'}
-            paths={['Users', type === 'customer' ? 'Customers' : 'Agents']}
-            pathurls={[type === 'customer' ? 'users/customers' : 'users/agents']}
+            paths={['Users', type === 'customers' ? 'Customers' : 'Agents']}
+            pathurls={[type === 'customers' ? 'users/customers' : 'users/agents']}
             header=''
             g2pHeight='true'
             minHeightRequired={true}
@@ -110,28 +111,28 @@ const ViewTransactionList = ({ type }) => {
             <div className={`max-h-[calc(100vh-120px)] scrollBar overflow-auto mx-10 mb-8 mt-8 px-[30px] pt-[24px] pb-[28px] 
                 flex flex-col bg-[#FFFFFF] border border-neutral-outline rounded-[6px]`}>
                 <div className='flex justify-between items-center' data-testid="transaction-history">
-                    <ProfileName loading={loading} userButtonName={List?.full_name?.replace(/\b(\w)\w*\s*/g, '$1').toUpperCase() || '---'} UserName={List?.full_name || '---'} payMaartID={id} />
+                    <ProfileName loading={loading} userButtonName={getInitials(List?.full_name, 3)?.toUpperCase() || '---'} UserName={List?.full_name || '---'} payMaartID={id} />
                 </div>
             </div>
             <div className={`max-h-[calc(100vh-245px)] min-h-[calc(100vh-265px)] relative z-[9] scrollBar overflow-auto ml-10 mr-5 pr-4 my-6
-                ${type === 'customer' ? '' : 'flex flex-col'} `}
+                ${type === 'customers' ? '' : 'flex flex-col'} `}
             >
                 <div className='flex w-full gap-5'>
                     <InfoCard
                         testId='wallet_balance_card'
                         title="Wallet Balance"
                         amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MWK`}
-                        lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
+                        lastUpdated={`${List?.balance_updated_at ? `${convertTimestampToCAT(List?.balance_updated_at)} CAT` : '-'}`}
                         imageSrc="wallet_balance"
                         isLoading={loading}
                         type={type}
                     />
-                    {type !== 'customer' && <InfoCard
+                    {type !== 'customers' && <InfoCard
                         testId='commission_card'
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
-                        lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
-                        additionalInfo={`${List?.next_settlement ? convertTimestampToCAT(List?.next_settlement) : '-'}`}
+                        lastUpdated={`${List?.commission_updated_at ? `${convertTimestampToCAT(List?.commission_updated_at)} CAT` : '-'}`}
+                        additionalInfo={`${List?.next_settlement ? `${convertTimestampToCAT(List?.next_settlement)} CAT` : '-'}`}
                         imageSrc="commision"
                         bgColor="bg-[#8075A1]"
                         isLoading={loading}
@@ -188,6 +189,7 @@ const ViewTransactionList = ({ type }) => {
                         notFound={notFound}
                         searchParams={searchParams}
                         paymaartId={id}
+                        type={type}
                     />
                 </div>}
                         {notFound &&

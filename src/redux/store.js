@@ -18,6 +18,7 @@ import PayOutRequestsSlice from '../pages/Transactions/PayOutRequests/PayOutRequ
 import ViewPayOutRequestSlice from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest/ViewPayOutRequeSlice';
 import AgentTransactionSlice from '../pages/Users/Agent/ViewTransactionList/AgentTransactionSlice';
 import flaggedSlice from '../pages/Transactions/Flagged/flaggedSlice';
+import TransactionLogSlice from '../pages/Transactions/TransactionsLog/TransactionLogSlice';
 
 export const store = configureStore({
     reducer: {
@@ -39,6 +40,7 @@ export const store = configureStore({
         G2PCustomerView: G2PCustomerViewSlice,
         BankTransactionViewData: BankTransactionViewSlice,
         transactionHistory: transactionHistorySlice,
-        agentTransactionHistory: AgentTransactionSlice
+        agentTransactionHistory: AgentTransactionSlice,
+        transactionLog: TransactionLogSlice
     }
 });
