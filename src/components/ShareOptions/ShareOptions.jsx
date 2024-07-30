@@ -2,7 +2,8 @@
 import React, { useContext, useState } from 'react';
 import Modal from 'react-responsive-modal';
 import Image from '../Image/Image';
-import html2canvas from 'html2canvas';
+// import html2canvas from 'html2canvas';
+import html2pdf from 'html2pdf.js';
 import { handleUploadBase64 } from '../S3Upload/S3Functions';
 import { CDN } from '../../config';
 import GlobalContext from '../Context/GlobalContext';
@@ -14,39 +15,50 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
 
     const { setToastError } = useContext(GlobalContext);
 
-    // Function to handle capturing the image and uploading it
-    const handleCaptureImage = async () => {
-    // Temporarily hide elements before capturing the screenshot
+    // Function to handle capturing the HTML content and generating a PDF
+    const handleCapturePdf = async () => {
         const elementsToHide = document.querySelectorAll('.hide-during-capture');
-        elementsToHide[0].style.display = 'none';
+        elementsToHide.forEach(element => {
+            element.style.display = 'none';
+        });
 
-        // Capture the screenshot
-        const canvas = await html2canvas(captureRef.current);
-        const base64String = canvas.toDataURL('image/png');
+        const options = {
+            margin: 1,
+            filename: 'TransactionHistory.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
 
-        // Display the hidden elements again
-        elementsToHide[0].style.display = '';
-
-        // Remove the data URI scheme if present
-        const base64Data = base64String.replace(/^data:image\/\w+;base64,/, '');
-
-        // Decode base64 string to binary array
-        const binaryString = atob(base64Data);
-        const length = binaryString.length;
-        const binaryArray = new Uint8Array(length);
-        for (let i = 0; i < length; i++) {
-            binaryArray[i] = binaryString.charCodeAt(i);
-        }
-
-        // Handle the upload
         try {
-            const capture = await handleUploadBase64(binaryArray, 'TransactionHistory');
-            const url = `${CDN}public/${capture.key}`;
-            return url;
-        } catch (error) {
-            console.error('Upload failed:', error);
-            setToastError('An Error Occured!');
-            throw error; // Re-throw the error to handle it in the caller function
+            const pdf = await html2pdf().from(captureRef.current).set(options).outputPdf('blob');
+            const reader = new FileReader();
+            reader.readAsDataURL(pdf);
+            return new Promise((resolve, reject) => {
+                reader.onloadend = async () => {
+                    const base64String = reader.result.replace(/^data:application\/pdf;base64,/, '');
+                    const binaryString = atob(base64String);
+                    const length = binaryString.length;
+                    const binaryArray = new Uint8Array(length);
+                    for (let i = 0; i < length; i++) {
+                        binaryArray[i] = binaryString.charCodeAt(i);
+                    }
+
+                    try {
+                        const capture = await handleUploadBase64(binaryArray, 'TransactionHistory', 'application/pdf'); // if image the image/png
+                        const url = `${CDN}public/${capture.key}`;
+                        resolve(url);
+                    } catch (error) {
+                        console.error('Upload failed:', error);
+                        setToastError('An Error Occurred!');
+                        reject(error);
+                    }
+                };
+            });
+        } finally {
+            elementsToHide.forEach(element => {
+                element.style.display = '';
+            });
         }
     };
 
@@ -57,8 +69,7 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
         }
         setLoadingWhatsapp(true);
         try {
-            const URL = await handleCaptureImage();
-            // const text = `Check out this image: ${encodeURI(URL)}`;
+            const URL = await handleCapturePdf();
             const whatsappUrl = `https://web.whatsapp.com/send?text=${encodeURI(URL)}`;
             window.open(whatsappUrl, '_blank');
         } catch (error) {
@@ -79,8 +90,7 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
         }
         setLoadingEmail(true);
         try {
-            const URL = await handleCaptureImage();
-            // const subject = 'Check out this image';
+            const URL = await handleCapturePdf();
             const body = `${URL}`;
             const mailtoUrl = `mailto:?&body=${encodeURIComponent(body)}`;
             window.location.href = mailtoUrl;
@@ -97,7 +107,7 @@ const ShareOptions = ({ isModalOpen, setIsModalOpen, captureRef }) => {
 
     return (
         <Modal center open={isModalOpen} onClose={() => setIsModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
-            <div className='customModal'>
+            <div className='customShareModal'>
                 <div className="flex justify-between border-b border-neutral-outline pb-3">
                     <p data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-[#000000]">
                         Share

@@ -23,6 +23,7 @@ import PayOutRequests from '../pages/Transactions/PayOutRequests';
 import ViewPayOutRequest from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest';
 import ViewTransactionList from '../pages/Users/Agent/ViewTransactionList/ViewTransactionList';
 import Flagged from '../pages/Transactions/Flagged';
+import TransactionsLog from '../pages/Transactions/TransactionsLog/TransactionsLog';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -277,13 +278,13 @@ export const ComponentsBasedOnRole = {
             // Specific agent transaction list
             {
                 name: 'Specific Agent Transaction List',
-                element: <ViewTransactionList />,
+                element: <ViewTransactionList type='agents' />,
                 path: '/users/agents/agents-transaction-histories/:id'
             },
             // Specific Customer transaction list
             {
                 name: 'Specific Customer Transaction List',
-                element: <ViewTransactionList type={'customer'}/>,
+                element: <ViewTransactionList type='customers' />,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
             // Flagged List
@@ -292,11 +293,23 @@ export const ComponentsBasedOnRole = {
                 element: <Flagged />,
                 path: '/transactions/flagged'
             },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
+            },
             // Specific agent view specific transaction
             {
                 name: 'Specific Agentiew Specific Transaction',
                 element: <ViewTransactionDetails type='agent' />,
                 path: '/users/agents/agents-transaction-histories/view/:agentId/:transactionType/:id'
+            },
+            // Specific customer view specific transaction
+            {
+                name: 'Specific Agentiew Specific Transaction',
+                element: <ViewTransactionDetails type='customer' />,
+                path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
             }
         ],
     admin:
@@ -324,7 +337,7 @@ export const ComponentsBasedOnRole = {
             // Specific Customer transaction list
             {
                 name: 'Specific Customer Transaction List',
-                element: <ViewTransactionList type={'customer'}/>,
+                element: <ViewTransactionList type='customers'/>,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
             {
@@ -439,6 +452,12 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
+            },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
             }
         ],
     'support-admin':

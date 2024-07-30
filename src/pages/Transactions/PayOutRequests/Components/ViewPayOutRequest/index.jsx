@@ -84,7 +84,11 @@ export default function ViewPayOutRequest () {
                     status: isApproveModalOpen ? 'approved' : 'rejected',
                     amount: parseFloat(View.amount),
                     tax_amount: parseFloat(View.tax_amount),
-                    vat_amount: parseFloat(View.vat_amount)
+                    vat_amount: parseFloat(View.vat_amount),
+                    transaction_id: View?.transaction_id,
+                    pop_file_key: states?.pop_file_key,
+                    transaction_code: states?.transaction_code,
+                    pop_file_ref_no: states?.pop_file_ref_no
                 };
                 switch (states.transaction_code) {
                 case 'Pay-out to Agent from  PTBA1 | EM credit to PMCAT':
