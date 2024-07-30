@@ -278,13 +278,13 @@ export const ComponentsBasedOnRole = {
             // Specific agent transaction list
             {
                 name: 'Specific Agent Transaction List',
-                element: <ViewTransactionList />,
+                element: <ViewTransactionList type='agents' />,
                 path: '/users/agents/agents-transaction-histories/:id'
             },
             // Specific Customer transaction list
             {
                 name: 'Specific Customer Transaction List',
-                element: <ViewTransactionList type={'customer'}/>,
+                element: <ViewTransactionList type='customers' />,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
             // Flagged List
@@ -304,6 +304,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Agentiew Specific Transaction',
                 element: <ViewTransactionDetails type='agent' />,
                 path: '/users/agents/agents-transaction-histories/view/:agentId/:transactionType/:id'
+            },
+            // Specific customer view specific transaction
+            {
+                name: 'Specific Agentiew Specific Transaction',
+                element: <ViewTransactionDetails type='customer' />,
+                path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
             }
         ],
     admin:
@@ -331,7 +337,7 @@ export const ComponentsBasedOnRole = {
             // Specific Customer transaction list
             {
                 name: 'Specific Customer Transaction List',
-                element: <ViewTransactionList type={'customer'}/>,
+                element: <ViewTransactionList type='customers'/>,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
             {
