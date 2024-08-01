@@ -23,3 +23,28 @@ export const getStatusText = (status) => {
         return '-'; // Default text when status doesn't match any condition
     }
 };
+
+export const getValueType = (transactionType) => {
+    if (!transactionType) {
+        return 'Txn';
+    }
+    if (transactionType === 'pay_in') {
+        return 'Pay-in';
+    }
+    if (transactionType === 'cash_in' || transactionType === 'unregistered_cash_in') {
+        return 'Cash-in';
+    }
+    if (transactionType === 'payout') {
+        return 'Pay-out';
+    }
+    if (transactionType.includes('cashout')) {
+        return 'Cash-out';
+    }
+    if (transactionType === 'interest') {
+        return 'Interest';
+    }
+    if (transactionType === 'refund') {
+        return 'Refund';
+    }
+    return 'Txn';
+};
