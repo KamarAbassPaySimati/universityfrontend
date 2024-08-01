@@ -6,6 +6,14 @@ export const handleSort = (sortBy, searchParams, setSearchParams) => {
     setSearchParams({ ...params });
 };
 
+export const handleSortWithKey = (key, searchParams, setSearchParams) => {
+    console.log(key, 'hello uioyyuty');
+    const params = Object.fromEntries(searchParams);
+    params.page = 1;
+    params[key] = params[key] === 'ASC' ? 'DESC' : 'ASC';
+    setSearchParams({ ...params });
+};
+
 export const handleSearchParams = (key, value, searchParams, setSearchParams, page) => {
     const params = Object.fromEntries(searchParams);
     params[key] = value;

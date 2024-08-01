@@ -1,6 +1,5 @@
-/* eslint-disable max-len */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { dataService } from '../../../../services/data.services';
+import { dataService } from '../../../services/data.services';
 
 const initialState = {
     loading: true,
@@ -8,10 +7,11 @@ const initialState = {
     success: ''
 };
 
-export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHistory', async ({ searchParams, id, type }, { rejectWithValue }) => {
+export const TransactionLogList = createAsyncThunk('TransactionLog', async (url, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
+
     try {
-        const res = await dataService.GetAPI(`admin-transactions/${type === 'customers' ? 'customer-transaction?customer_id=' : 'agent-transactions?agent_id='}${id}&${searchParams.toString()}`);
+        const res = await dataService.GetAPI(url);
         return res;
     } catch (error) {
         // Log error or send notification
@@ -20,20 +20,20 @@ export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHis
     }
 });
 
-const agentTransactionHistorySlice = createSlice({
-    name: 'agent-transaction-history',
+const TransactionLogSlice = createSlice({
+    name: 'transaction-log',
     initialState,
     reducers: {
 
     },
     extraReducers: (builder) => {
         builder
-            .addCase(AgentTransactionHistoryList.pending, (state) => {
+            .addCase(TransactionLogList.pending, (state) => {
                 state.loading = true;
                 state.error = null;
                 state.List = [];
             })
-            .addCase(AgentTransactionHistoryList.fulfilled, (state, { payload }) => {
+            .addCase(TransactionLogList.fulfilled, (state, { payload }) => {
                 state.loading = false;
                 if (!payload?.error) {
                     state.List = payload?.data;
@@ -41,11 +41,11 @@ const agentTransactionHistorySlice = createSlice({
                     state.error = payload?.data;
                 }
             })
-            .addCase(AgentTransactionHistoryList.rejected, (state, { payload }) => {
+            .addCase(TransactionLogList.rejected, (state, { payload }) => {
                 state.loading = false;
                 state.error = payload?.message;
             });
     }
 });
 
-export default agentTransactionHistorySlice.reducer;
+export default TransactionLogSlice.reducer;
