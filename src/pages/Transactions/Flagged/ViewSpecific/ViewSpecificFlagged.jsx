@@ -9,17 +9,18 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { getStatusStyles, getStatusText, getValueType } from '../../../../CommonMethods/getStatusUI';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
-import convertTimestampToCAT, { getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
+import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { dataService } from '../../../../services/data.services';
+import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 
 const ViewSpecificFlagged = () => {
-    const [states, setState] = useState({});
+    // const [states, setState] = useState({});
     const [flaggedDetails, setFlaggedDetails] = useState();
     const [isRejectModalOpen, setRejectModalOpen] = useState();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isApproveModalOpen, setApproveModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const { setToastError } = useContext(GlobalContext);
 
     const { id, senderId, transactionType } = useParams();
     const navigate = useNavigate();
@@ -61,9 +62,9 @@ const ViewSpecificFlagged = () => {
     };
 
     const handleReason = (event) => {
-        const newValue = event.target.value;
+        // const newValue = event.target.value;
         setSubmitSelected(false);
-        setState((prevState) => ({ ...prevState, reason: newValue }));
+        // setState((prevState) => ({ ...prevState, reason: newValue }));
     };
 
     const getFlaggedDetails = async () => {
@@ -134,7 +135,7 @@ const ViewSpecificFlagged = () => {
                                 <button data-testid="reject_button"
                                     onClick={() => {
                                         setRejectModalOpen(true);
-                                        setState({});
+                                        // setState({});
                                     }}
                                     className={`${isLoading
                                         ? 'h-10 bg-neutral-primary rounded animate-pulse w-[117px]'
