@@ -24,6 +24,7 @@ import ViewPayOutRequest from '../pages/Transactions/PayOutRequests/Components/V
 import ViewTransactionList from '../pages/Users/Agent/ViewTransactionList/ViewTransactionList';
 import Flagged from '../pages/Transactions/Flagged';
 import TransactionsLog from '../pages/Transactions/TransactionsLog/TransactionsLog';
+import ViewSpecificFlagged from '../pages/Transactions/Flagged/ViewSpecific/ViewSpecificFlagged';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -301,15 +302,21 @@ export const ComponentsBasedOnRole = {
             },
             // Specific agent view specific transaction
             {
-                name: 'Specific Agentiew Specific Transaction',
+                name: 'Specific Agent view Specific Transaction',
                 element: <ViewTransactionDetails type='agent' />,
                 path: '/users/agents/agents-transaction-histories/view/:agentId/:transactionType/:id'
             },
             // Specific customer view specific transaction
             {
-                name: 'Specific Agentiew Specific Transaction',
+                name: 'Specific Customer view Specific Transaction',
                 element: <ViewTransactionDetails type='customer' />,
                 path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
+            },
+            // View specific flagged transaction
+            {
+                name: 'View specific flagged transaction',
+                element: <ViewSpecificFlagged />,
+                path: '/transactions/flagged/view/:senderId/:transactionType/:id'
             }
         ],
     admin:
