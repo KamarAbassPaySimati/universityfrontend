@@ -16,6 +16,7 @@ import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import { useSelector } from 'react-redux';
 import ShareOptions from '../../../../components/ShareOptions/ShareOptions';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
+import { getValueType } from '../../../../CommonMethods/getStatusUI';
 
 const ViewTransactionDetails = ({ type }) => {
     // States
@@ -55,31 +56,6 @@ const ViewTransactionDetails = ({ type }) => {
         pathurls = ['financials/transaction-history'];
         getUrl = `admin-users/${viewTransaction}/${id}`;
     }
-
-    const getValueType = (transactionType) => {
-        if (!transactionType) {
-            return 'Txn';
-        }
-        if (transactionType === 'pay_in') {
-            return 'Pay-in';
-        }
-        if (transactionType === 'cash_in' || transactionType === 'unregistered_cash_in') {
-            return 'Cash-in';
-        }
-        if (transactionType === 'payout') {
-            return 'Pay-out';
-        }
-        if (transactionType.includes('cashout')) {
-            return 'Cash-out';
-        }
-        if (transactionType === 'interest') {
-            return 'Interest';
-        }
-        if (transactionType === 'refund') {
-            return 'Refund';
-        }
-        return 'Txn';
-    };
 
     // Functions
     const getTransactionDetails = async () => {
@@ -204,11 +180,11 @@ const ViewTransactionDetails = ({ type }) => {
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
-                        { transactionDetails?.flagged
+                        { !transactionType?.includes('request') && (transactionDetails?.flagged
                             ? <Image src='flagged' testId='flag_transaction_button'
                             />
                             : <Image src='flag' onClick={() => { if (!dataLoading) setIsFlagModelOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} testId={'flag_transaction_button'}
-                            />
+                            />)
                         }
                         <Image src='share' testId='share_transaction_button' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
                     </div>
@@ -314,7 +290,7 @@ const ViewTransactionDetails = ({ type }) => {
                                 </>}
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
                                 <p>Txn ID</p>
-                                <p>Date, time</p>
+                                <p>Date, time (CAT)</p>
                                 {transactionType === 'afrimax' && <p>Plan</p>}
                                 {transactionDetails?.agent_closing_balance && !dataLoading && <p>Balance</p>}
                                 {transactionDetails?.note && !dataLoading && <p>Note</p>}
@@ -335,7 +311,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         </>}
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
                                         <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
-                                        <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
+                                        <p>{convertTimestampToCAT(transactionDetails?.created_at) || '-'}</p>
                                         {transactionType === 'afrimax' && <p>{ transactionDetails?.afrimax_plan_name || '-'}</p>}
                                         {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
