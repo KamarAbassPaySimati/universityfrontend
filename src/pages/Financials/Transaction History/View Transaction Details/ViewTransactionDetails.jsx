@@ -7,7 +7,7 @@ import GlobalContext from '../../../../components/Context/GlobalContext';
 import { endpoints } from '../../../../services/endpoints';
 import { useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
-import convertTimestampToCAT, { convertTimestampToDateYear } from '../../../../CommonMethods/timestampToCAT';
+import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../../../components/ConfirmationPopup/ConfirmationPopup';
@@ -44,6 +44,11 @@ const ViewTransactionDetails = ({ type }) => {
         paths = ['Users', 'Agents', 'Transaction History'];
         pathurls = ['users/agents', '', `agents-transaction-histories/${agentId}`];
         getUrl = `admin-users/view-agent-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${agentId}`;
+    } else if (type === 'customer') {
+        navigation = `/users/customers/customers-transaction-histories/${agentId}`;
+        paths = ['Users', 'Customers', 'Transaction History'];
+        pathurls = ['users/customers', '', `customers-transaction-histories/${agentId}`];
+        getUrl = `admin-users/view-customer-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${agentId}`;
     } else {
         navigation = '/financials/transaction-history';
         paths = ['Financials', 'Transaction History'];
@@ -66,6 +71,12 @@ const ViewTransactionDetails = ({ type }) => {
         }
         if (transactionType.includes('cashout')) {
             return 'Cash-out';
+        }
+        if (transactionType === 'interest') {
+            return 'Interest';
+        }
+        if (transactionType === 'refund') {
+            return 'Refund';
         }
         return 'Txn';
     };
@@ -210,7 +221,7 @@ const ViewTransactionDetails = ({ type }) => {
                             <div className='w-1/2 flex flex-col gap-1'>
                                 <p className='font-[500] text-base'>From</p>
                                 <p>Paymaart Name</p>
-                                <p>Paymaart ID</p>
+                                {transactionType !== 'interest' && <p>Paymaart ID</p>}
                                 <p className='font-[500] text-base mt-[10px]'>To</p>
                                 {transactionType === 'payout'
                                     ? <>
@@ -228,7 +239,9 @@ const ViewTransactionDetails = ({ type }) => {
                                 transactionDetails?.afrimax_id) &&
                                 !dataLoading &&
                                 <>
-                                    <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                    {type !== 'customer'
+                                        ? <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                        : <p className='mt-1'></p>}
                                     {transactionDetails?.obo_name && !dataLoading && <p>Paymaart Name</p>}
                                     {transactionDetails?.obo_id && !dataLoading && <p>Paymaart ID</p>}
                                     {(transactionDetails?.afrimax_name ||
@@ -252,8 +265,12 @@ const ViewTransactionDetails = ({ type }) => {
                                     </>
                                     : <>
                                         <p className='h-[24px]'></p>
-                                        <p>{transactionDetails?.sender_name || '-'}</p>
-                                        <p>{transactionDetails?.sender_id || '-'}</p>
+                                        {transactionType !== 'interest'
+                                            ? <>
+                                                <p>{transactionDetails?.sender_name || '-'}</p>
+                                                <p>{transactionDetails?.sender_id || '-'}</p>
+                                            </>
+                                            : <p>Paymaart Bank</p>}
                                         <p className='h-[24px] mt-[10px]'></p>
                                         {transactionType === 'payout'
                                             ? <>
@@ -262,7 +279,7 @@ const ViewTransactionDetails = ({ type }) => {
                                                 <p>{transactionDetails?.account_no || '-'}</p>
                                             </>
                                             : <>
-                                                <p>{transactionDetails?.receiver_name || '-'}</p>
+                                                <p>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || '-')}</p>
                                                 <p data-testid="beneficiary_paymaart_id">{transactionDetails?.receiver_phone_no || transactionDetails?.receiver_id || '-'}</p>
                                             </>}
                                         {(transactionDetails?.obo_name ||
@@ -270,7 +287,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         transactionDetails?.afrimax_name ||
                                         transactionDetails?.afrimax_id) &&
                                         <>
-                                            <p className='h-[24px] mt-[10px]'></p>
+                                            {<p className={`${type !== 'customer' ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
                                             {transactionDetails?.obo_name && <p>{transactionDetails?.obo_name || '-'}</p>}
                                             {transactionDetails?.obo_id && <p>{transactionDetails?.obo_id || '-'}</p>}
                                             {(transactionDetails?.afrimax_name ||
@@ -290,13 +307,18 @@ const ViewTransactionDetails = ({ type }) => {
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
-                                <p>Txn Fee*</p>
-                                <p>*VAT Include</p>
+                                {transactionType !== 'interest' &&
+                                <>
+                                    <p>Txn Fee*</p>
+                                    <p>*VAT Include</p>
+                                </>}
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
                                 <p>Txn ID</p>
                                 <p>Date, time</p>
+                                {transactionType === 'afrimax' && <p>Plan</p>}
                                 {transactionDetails?.agent_closing_balance && !dataLoading && <p>Balance</p>}
                                 {transactionDetails?.note && !dataLoading && <p>Note</p>}
+                                {transactionType === 'interest' && <p>Interest Period</p>}
                                 {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && !dataLoading && <p>Membership</p>}
                             </div>
                             <div className='w-1/2 flex flex-col gap-1'>
@@ -306,13 +328,22 @@ const ViewTransactionDetails = ({ type }) => {
                                         <p data-testid="amount" className='font-[600] text-base'>
                                             {formattedAmount(Math.abs(transactionDetails?.transaction_amount)) || '0.00'} MWK
                                         </p>
-                                        <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
-                                        <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
+                                        {transactionType !== 'interest' &&
+                                        <>
+                                            <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
+                                            <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
+                                        </>}
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
                                         <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
                                         <p>{`${convertTimestampToCAT(transactionDetails?.created_at)} CAT` || '-'}</p>
+                                        {transactionType === 'afrimax' && <p>{ transactionDetails?.afrimax_plan_name || '-'}</p>}
                                         {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
+                                        {transactionType === 'interest' &&
+                                        <>
+                                            <p>Customer Interest</p>
+                                            <p>{`${getQuarterEndDate(transactionDetails?.created_at)}`}</p>
+                                        </>}
                                         {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && <p>{capitalizeFirstLetter(transactionDetails?.membership).replace(/Primex/i, 'PrimeX') || '-'}</p>}
                                         {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && <p>{`${convertTimestampToDateYear(transactionDetails?.membership_start) || '---'} - ${convertTimestampToDateYear(transactionDetails?.membership_expiry)}`}</p>}
                                     </>}
