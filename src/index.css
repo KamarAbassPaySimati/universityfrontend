@@ -12,7 +12,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.react-responsive-modal-modal:has(.customModal) {
+.react-responsive-modal-modal:has(.customShareModal) {
   min-width: 290px !important;
   border-radius: 16px !important;
   padding: 30px 20px !important;
