@@ -122,7 +122,7 @@ const ViewTransactionList = ({ type }) => {
                         testId='wallet_balance_card'
                         title="Wallet Balance"
                         amount={`${List?.total_balance ? formattedAmount(List?.total_balance) : '0.00'} MWK`}
-                        lastUpdated={`${List?.balance_updated_at ? convertTimestampToCAT(List?.balance_updated_at) : '-'}`}
+                        lastUpdated={`${List?.balance_updated_at ? `${convertTimestampToCAT(List?.balance_updated_at)} CAT` : '-'}`}
                         imageSrc="wallet_balance"
                         isLoading={loading}
                         type={type}
@@ -131,8 +131,8 @@ const ViewTransactionList = ({ type }) => {
                         testId='commission_card'
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
-                        lastUpdated={`${List?.commission_updated_at ? convertTimestampToCAT(List?.commission_updated_at) : '-'}`}
-                        additionalInfo={`${List?.next_settlement ? convertTimestampToCAT(List?.next_settlement) : '-'}`}
+                        lastUpdated={`${List?.commission_updated_at ? `${convertTimestampToCAT(List?.commission_updated_at)} CAT` : '-'}`}
+                        additionalInfo={`${List?.next_settlement ? `${convertTimestampToCAT(List?.next_settlement)} CAT` : '-'}`}
                         imageSrc="commision"
                         bgColor="bg-[#8075A1]"
                         isLoading={loading}

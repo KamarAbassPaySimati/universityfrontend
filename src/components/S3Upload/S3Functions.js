@@ -19,14 +19,14 @@ export const handleUpload = async (file, path) => {
     }
 };
 
-export const handleUploadBase64 = async (base64String, path) => {
+export const handleUploadBase64 = async (base64String, path, contentType) => {
     try {
         const result = await uploadData({
             key: `${path}/${uuidv4()}/transaction-details`,
             data: base64String,
             options: {
                 contentEncoding: 'base64',
-                contentType: 'image/png', // optional, automatically inferred if not provided,
+                contentType, // optional, automatically inferred if not provided,
                 accessLevel: 'guest' // defaults to `guest` but can be 'private' | 'protected' | 'guest'
             }
         }).result;

@@ -23,7 +23,7 @@ import { dataService } from '../../services/data.services';
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight
+    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
@@ -216,9 +216,10 @@ const CardHeader = ({
                             {/* toggle buttons  */}
                             {toggleButtons && toggleButtons.map((item, index) => (
                                 <button
+                                    data-testid={item.key.toLowerCase()}
                                     key={index}
-                                    onClick={() => handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams)}
-                                    className={`-py-2 h-10 text-[14px] text-neutral-primary ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
+                                    onClick={() => { if (!dataLoading) handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams); }}
+                                    className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
                                 >
                                     {item.key}
                                 </button>
