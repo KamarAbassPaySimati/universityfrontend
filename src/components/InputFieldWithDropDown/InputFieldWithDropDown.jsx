@@ -7,7 +7,7 @@ import InformationList from '../InformationList/InformationList';
 import Modal from 'react-responsive-modal';
 
 function InputFieldWithDropDown (props) {
-    const { labelName, value, placeholder, options, id, error, handleInput, testId, information, disable, noLabel } = props;
+    const { button, labelName, value, placeholder, options, id, error, handleInput, testId, information, disable, noLabel } = props;
     const [show, setShow] = useState(false);
     const [showInfo, setShowInfo] = useState(false);
     const infoRef = useRef();
@@ -59,9 +59,9 @@ function InputFieldWithDropDown (props) {
                     </div>
                 }
             </div>
-            <div ref={outsideClickRef} className={` ${disable ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'} text-neutral-primary
-                     leading-[22px] focus:outline-none border-b focus:border-primary-normal flex justify-center items-center
-                     rounded-tl rounded-tr  ${error ? 'border-error' : 'border-[#DDDDDD]'}
+            <div ref={outsideClickRef} className={`${button ? 'border rounded w-[130px]' : 'border-b rounded-tl rounded-tr focus:outline-none focus:border-primary-normal'} ${disable ? 'bg-[#D1D4D7]' : 'bg-[#F8F8F8]'} text-neutral-primary
+                     leading-[22px] flex justify-center items-center
+                       ${error ? 'border-error' : 'border-[#DDDDDD]'}
                      `} style={{ borderBottomColor: show ? '#3B2A6F' : '' }}>
                 <button
                     ref={buttonRef}
@@ -69,14 +69,14 @@ function InputFieldWithDropDown (props) {
                     data-testid={testId}
                     title={value}
                     disabled={disable}
-                    className={`flex justify-between items-center px-[10px] py-[10px] w-full font-[400] text-[14px]
+                    className={`flex justify-between items-center ${button ? 'px-2 py-1' : 'px-[10px] py-[10px]'} w-full font-[400] text-[14px]
         ${value === '' ? 'text-[#8E949A]' : 'text-[#4F5962]'} 
         outline-0 overflow-hidden whitespace-nowrap`}
                     type="button" aria-expanded="false">
                     <span className=' truncate max-w-[300px] '>{value === '' ? placeholder : value}</span>
                     {show
-                        ? <img loading="lazy" decoding="async" src="/images/chevron-up.svg" alt="icon" />
-                        : <img loading="lazy" decoding="async" src="/images/chevron-dark-down.svg" alt="icon" />
+                        ? <img loading="lazy" decoding="async" src={button ? '/images/chevron-down.svg' : '/images/chevron-up.svg'} alt="icon" className={button ? 'transform scale-y-[-1]' : ''}/>
+                        : <img loading="lazy" decoding="async" src={button ? '/images/chevron-down.svg' : '/images/chevron-dark-down.svg'} alt="icon" />
                     }
                 </button>
                 <ul id="#patient-dropdownMenuButton1"
