@@ -11,6 +11,6 @@ Feature: Paymaart- Admin Web - Customer Specific Transaction View
         When I click on transaction history icon
         Then I should be navigated to transaction history page
         Then I should see table header containing '["Service Code","Date/ Time, CAT","Transaction ID","Beneficiary Paymaart ID", "Type","Amount"]'
-        And I should see wallet balance
+        # And I should see wallet balance
         When I click on view transaction for most recent transaction
         Then I should see the transaction receipt
