@@ -12,7 +12,7 @@ Feature: Paymaart- Admin Web- Insights of Customer Pay-in/Cash-in/Cash-out
     Given I navigate to dashboard page
     Then I should see "Customer Pay-in; Cash-in; Cash-out" graph
 
-  Scenario: Exporting insights of agent Pay-in, cash-in and Pay-out
+  Scenario: Exporting insights of Customer Pay-in, cash-in and Pay-out
     Given I navigate to dashboard page
     When I click on export button for "Customer Pay-in; Cash-in; Cash-out"
     Then I should read a message stating that "Exported successfully" 
