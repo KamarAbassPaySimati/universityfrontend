@@ -41,13 +41,13 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.transactions?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td data-testid="paymaart_id" title={convertTimestampToCAT(user?.created_at) || '-'} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{convertTimestampToCAT(user?.created_at) || '-'}</td>
-                                <td data-testid="agent_name" title={user?.transaction_id} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.transaction_id}`}</td>
-                                <td data-testid="agent_name" title={user?.flagged_by} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.flagged_by}`}</td>
-                                <td data-testid="agent_name" title={user?.sender_id} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.sender_id}`}</td>
-                                <td data-testid="agent_name" title={user?.reversal_admin_name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.reversal_admin_name || '-'}`}</td>
-                                <td data-testid="agent_name" title={user?.reasons.map(key => obj[key]).join(', ')} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.reasons.map(key => obj[key]).join(', ')}` || '-'}</td>
-                                <td data-testid="agent_name" title={formattedAmount(user?.amount)} className='py-2 px-[10px] text-right truncate min-w-[200px] max-w-[200px]'>{`${formattedAmount(user?.amount) || '-'} `}</td>
+                                <td data-testid="paymaart_id" title={convertTimestampToCAT(user?.created_at) || '-'} className='py-2 px-[10px] text-left truncate min-w-[200px] max-w-[200px]'>{convertTimestampToCAT(user?.created_at) || '-'}</td>
+                                <td data-testid="transaction_id" title={user?.transaction_id} className='py-2 px-[10px] truncate min-w-[250px] max-w-[250px]'>{user?.transaction_id || '-'}</td>
+                                <td data-testid="flagged_by" title={user?.flagged_by} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.flagged_by || '-'}</td>
+                                <td data-testid="beneficiary_paymaart_id" title={user?.receiver_id} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.receiver_id || '-'}</td>
+                                <td data-testid="reversal_admin_name" title={user?.reversal_admin_name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.reversal_admin_name || '-'}`}</td>
+                                <td data-testid="reason" title={user?.reasons.map(key => obj[key]).join(', ')} className='py-2 px-[10px] truncate min-w-[250px] max-w-[250px]'>{`${user?.reasons.map(key => obj[key]).join(', ')}` || '-'}</td>
+                                <td data-testid="amount" title={formattedAmount(user?.amount)} className='py-2 px-[10px] text-right truncate min-w-[150px] max-w-[150px]'>{`${formattedAmount(Math.abs(user?.amount)) || '0.00'} `}</td>
 
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status
@@ -65,7 +65,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                                        onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`
+                                        onClick={() => Navigate(`/transactions/flagged/view/${user?.sender_id}/${user?.transaction_type}/${user?.id}`
                                         )} />
                                     <Tooltip
                                         id={`eye-${index}`}
