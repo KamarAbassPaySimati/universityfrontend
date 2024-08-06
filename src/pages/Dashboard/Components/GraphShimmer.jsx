@@ -22,7 +22,7 @@ const GraphShimmer = () => {
 
     const shimmerElementStyle = {
         width: '200px',
-        height: '350px',
+        height: '200px',
         padding: '10px',
         background: 'linear-gradient(to right, transparent 0%, #eeececf3 50%, transparent 100%)',
         backgroundSize: '200% 100%',
@@ -33,10 +33,6 @@ const GraphShimmer = () => {
         <div>
             <style>{shimmerKeyframes}</style>
             <div style={shimmerStyle}>
-                <div style={shimmerElementStyle}></div>
-                <div style={shimmerElementStyle}></div>
-                <div style={shimmerElementStyle}></div>
-                <div style={shimmerElementStyle}></div>
                 <div style={shimmerElementStyle}></div>
                 <div style={shimmerElementStyle}></div>
                 <div style={shimmerElementStyle}></div>

@@ -8,16 +8,15 @@ Given('I navigate to dashboard page', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
-When('I click on export button for {string}', async function () {
-    const button = await driver.wait(until.elementLocated(By.css('[data-testid="export_button"]')));
-    await driver.wait(until.elementIsVisible(button));
-    await button.click();
+When('I click on export button for export', async function () {
+    await driver.wait(until.elementLocated(By.css('[data-testid="export_button"]'))).click();
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 Then('I should see {string} graph', async function (graphType) {
     switch (graphType) {
     case 'Agent Registrations':
-        const graph = await driver.wait(until.elementLocated(By.css('[data-testid="agent-registartion"]')));
+        const graph = await driver.wait(until.elementLocated(By.css('[data-testid="Agent Registrations"]')));
         await driver.wait(until.elementIsVisible(graph));
     }
 });

@@ -1,26 +1,24 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React from 'react';
 // import SingleTickButton from '../SingleTickButton/SingleTickButton';
 import Button from '../Button/Button';
 import DatePickerAntd from '../DatePicker/DatePickerAntd';
 
 export default function DateFilter ({
-    filterType, setIsFilterOpen, handleClearFilter, filterOptionOne, searchParams, setSearchParams,
-    isLoading
+    dateRange, setDateRange, handleApply, handleClearFilter
 }) {
-    const [dateRange, setDateRange] = useState({});
-    const handleStates = () => {
-
+    const handleStates = (value, id, type) => {
+        setDateRange((prevState) => ({ ...prevState, [id]: value }));
     };
     return (
         <div className='relative z-[12]'>
             <div data-testid='filter-modal' className="w-[400px] absolute top-[36px] right-7 rounded-[8px] z-[999] bg-white border border-neutral-outline text-[14px] leading-[24px] text-neutral-primary">
-                <div className='p-4 flex justify-between border-b border-neutral-outline'>
+                <div className='p-3 flex justify-between border-b border-neutral-outline'>
                     <div className='font-semibold'>
                         Filter Date Range
                     </div>
                     <button data-testid="clear-filter"
-                        // onClick={() => { setIsFilterOpen(false); handleClearFilter(); } }
+                        onClick={handleClearFilter}
                         className='font-[400]'>
                         Clear
                     </button>
@@ -49,7 +47,7 @@ export default function DateFilter ({
                 </div>
                 {/* <div className='ml-6 mb-2'><ErrorMessage error={errorMessage} /></div> */}
                 <Button testId="apply_filter"
-                    // onClick={handleApplySearchParams}
+                    onClick={handleApply}
                     text='Apply' className='!w-[164px] ml-4 mb-5 mt-2' />
             </div>
         </div>

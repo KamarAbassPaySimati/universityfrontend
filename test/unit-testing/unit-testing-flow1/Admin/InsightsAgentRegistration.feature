@@ -15,8 +15,8 @@ Feature: Paymaart- Admin Web- Insights of Agent Registartion
 
   Scenario: Exporting insights of agent registration
     Given I navigate to dashboard page
-    When I click on export button for "Agent Registartions"
-    Then I should read a message stating that "Transaction details exported successfully" 
+    When I click on export button for export
+    Then I should read a message stating that "Exported successfully" 
 
   
     
