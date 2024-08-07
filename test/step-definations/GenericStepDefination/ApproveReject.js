@@ -15,6 +15,7 @@ When('I click on approve {string}', async function (type) {
     case 'Merchant KYC':
     case 'Agent Delete Request':
     case 'Agent Pay-out request':
+    case 'Flag Transaction':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="approve_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -48,6 +49,9 @@ Then('I should see a confirmation prompt for approving {string}', async function
     case 'Agent Pay-out request':
         assert.equal(modalBody, 'Fill the below details to approve');
         break;
+    case 'Flag Transaction':
+        assert.equal(modalBody, 'This action will refund the transaction amount');
+        break;
     default:
         assert.equal(modalBody, 'This will allow Agent to gain access to Paymaart');
         break;
@@ -63,6 +67,7 @@ When('I click on reject {string}', async function (type) {
     case 'Merchant KYC':
     case 'Agent Delete Request':
     case 'Agent Pay-out request':
+    case 'Flag Transaction':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="reject_button"]')));
         await driver.wait(until.elementIsVisible(element));
         await element.click();
@@ -98,6 +103,13 @@ Then('I should see a confirmation prompt for reject {string}', async function (t
         break;
 
     case 'Agent Pay-out request':
+        element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
+        await driver.wait(until.elementIsVisible(element));
+
+        modalBody = await driver.wait(until.elementLocated(By.css('[data-testid="modal-body"]'))).getText();
+        assert.equal(modalBody, 'Reason for rejection');
+        break;
+    case 'Flag Transaction':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
         await driver.wait(until.elementIsVisible(element));
 

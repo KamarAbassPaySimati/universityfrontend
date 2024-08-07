@@ -14,13 +14,14 @@ import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 
 const ViewSpecificFlagged = () => {
-    // const [states, setState] = useState({});
+    const [states, setState] = useState({});
     const [flaggedDetails, setFlaggedDetails] = useState();
     const [isRejectModalOpen, setRejectModalOpen] = useState();
     const [submitSelected, setSubmitSelected] = useState(false);
     const [isApproveModalOpen, setApproveModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const { setToastError } = useContext(GlobalContext);
+    const [isButtonLoading, setIsButtonLoading] = useState(false);
+    const { setToastError, setToastSuccess } = useContext(GlobalContext);
 
     const { id, senderId, transactionType } = useParams();
     const navigate = useNavigate();
@@ -53,27 +54,54 @@ const ViewSpecificFlagged = () => {
         'payout_approved'
     ];
 
-    const handleConfirmReject = async () => {
-        // Reject
-    };
-
-    const handleConfirmApprove = async () => {
-        // Approve
+    // Approve and Reject API Call
+    const handleConfirmApproveReject = async (method) => {
+        const payload = {
+            id,
+            transaction_id: flaggedDetails?.transaction_id,
+            transaction_type: transactionType,
+            status: method
+        };
+        if (method === 'rejected') {
+            if (states.reason === undefined || states.reason === '') {
+                setSubmitSelected(true);
+                return;
+            }
+            payload.status_note = states.reason;
+        }
+        setIsButtonLoading(true);
+        try {
+            const response = await dataService.PostAPI('admin-transactions/approve-reject', payload);
+            if (!response.error) {
+                setToastSuccess(`Flagged transaction ${method} successfully`);
+                getFlaggedDetails();
+            } else {
+                setToastError('Something went wrong!');
+            }
+            setIsButtonLoading(false);
+            setApproveModalOpen(false);
+            setRejectModalOpen(false);
+        } catch (error) {
+            setApproveModalOpen(false);
+            setRejectModalOpen(false);
+            setIsButtonLoading(false);
+            setToastError('Something went wrong!');
+        }
     };
 
     const handleReason = (event) => {
-        // const newValue = event.target.value;
+        const newValue = event.target.value;
         setSubmitSelected(false);
-        // setState((prevState) => ({ ...prevState, reason: newValue }));
+        setState((prevState) => ({ ...prevState, reason: newValue }));
     };
 
     const getFlaggedDetails = async () => {
         const flagURL = `admin-transactions/specific-flag?flag_id=${id}${callTransactionHistoryType?.includes(transactionType) ? '&condition=reasons' : ''}`;
         const transactionURL = `admin-users/view-agent-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${senderId}`;
         setIsLoading(true);
+        setFlaggedDetails({});
         try {
             const flagResponse = await dataService.GetAPI(flagURL);
-            console.log(flagResponse?.data, 'aaaaaaaaaaa');
             if (!flagResponse.error) {
                 setFlaggedDetails(prevData => {
                     return { ...flagResponse?.data, ...prevData };
@@ -84,7 +112,6 @@ const ViewSpecificFlagged = () => {
             }
             if (callTransactionHistoryType?.includes(transactionType)) {
                 const response = await dataService.GetAPI(transactionURL);
-                console.log(response?.data?.data, 'zzzzzzzzzzz');
                 if (!response.error) {
                     setFlaggedDetails(prevData => {
                         return { ...response?.data?.data, ...prevData };
@@ -105,10 +132,6 @@ const ViewSpecificFlagged = () => {
     useEffect(() => {
         getFlaggedDetails();
     }, []);
-
-    useEffect(() => {
-        console.log(flaggedDetails, 'transaction details');
-    }, [flaggedDetails]);
 
     return (
         <>
@@ -131,30 +154,34 @@ const ViewSpecificFlagged = () => {
                                 </span>
                             </div>
                             {(flaggedDetails?.status !== 'rejected' && flaggedDetails?.status !== 'approved') &&
-                            <div className='flex gap-4'>
-                                <button data-testid="reject_button"
-                                    onClick={() => {
-                                        setRejectModalOpen(true);
-                                        // setState({});
-                                    }}
-                                    className={`${isLoading
-                                        ? 'h-10 bg-neutral-primary rounded animate-pulse w-[117px]'
-                                        : `flex  bg-primary-negative py-[8px] px-[16px] 
+                                <div className='flex gap-4'>
+                                    <button data-testid="reject_button"
+                                        onClick={() => {
+                                            if (!isLoading) {
+                                                setRejectModalOpen(true);
+                                                setState({});
+                                            }
+                                        }}
+                                        className={`${isLoading
+                                            ? 'h-10 bg-neutral-primary rounded animate-pulse w-[117px] cursor-default'
+                                            : `flex  bg-primary-negative py-[8px] px-[16px] 
                                     justify-center items-center h-[40px] rounded-[6px] w-[117px]`}`}>
-                                    {!isLoading && <p className='text-[14px] font-semibold text-[#ffffff]'>Reject</p>}
-                                </button>
-                                <button data-testid="approve_button"
-                                    onClick={() => {
-                                        setApproveModalOpen(true);
-                                        setSubmitSelected(false);
-                                    }}
-                                    className={`${isLoading
-                                        ? 'h-10 bg-neutral-primary rounded animate-pulse w-[117px]'
-                                        : `flex bg-[#13B681] py-[8px] px-[16px] justify-center items-center w-[117px] 
+                                        {!isLoading && <p className='text-[14px] font-semibold text-[#ffffff]'>Reject</p>}
+                                    </button>
+                                    <button data-testid="approve_button"
+                                        onClick={() => {
+                                            if (!isLoading) {
+                                                setApproveModalOpen(true);
+                                                setSubmitSelected(false);
+                                            }
+                                        }}
+                                        className={`${isLoading
+                                            ? 'h-10 bg-neutral-primary rounded animate-pulse w-[117px] cursor-default'
+                                            : `flex bg-[#13B681] py-[8px] px-[16px] justify-center items-center w-[117px] 
                                         h-[40px] rounded-[6px]`}`}>
-                                    {!isLoading && <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>}
-                                </button>
-                            </div>}
+                                        {!isLoading && <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>}
+                                    </button>
+                                </div>}
                         </div>
                     </div>
                     <div data-testid="transaction_details" className={`max-h-[calc(100vh-240px)] scrollBar overflow-auto flex flex-col
@@ -164,7 +191,7 @@ const ViewSpecificFlagged = () => {
                         </h1>
 
                         <div className='flex gap-[58px] mt-5 flex-wrap' data-testid="transaction_details">
-                            <div data-testid='transaction_details' className='flex justify-center items-center'>
+                            <div data-testid='transaction_details' className=''>
                                 <div className='bg-[#FFFFFF] flex flex-col justify-center items-center relative'>
                                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border
                             bg-background-light text-neutral-primary font[400] text-sm rounded-lg'>
@@ -185,24 +212,24 @@ const ViewSpecificFlagged = () => {
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no ? 'Phone Number' : 'Paymaart ID'}</p>}
                                                     </>}
                                                 {(flaggedDetails?.obo_name ||
-                                flaggedDetails?.obo_id ||
-                                flaggedDetails?.afrimax_name ||
-                                flaggedDetails?.afrimax_id) &&
-                                !isLoading &&
-                                <>
-                                    {!transactionType?.includes('CMR')
-                                        ? <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
-                                        : <p className='mt-1'></p>}
-                                    {flaggedDetails?.obo_name && !isLoading && <p>Paymaart Name</p>}
-                                    {flaggedDetails?.obo_id && !isLoading && <p>Paymaart ID</p>}
-                                    {(flaggedDetails?.afrimax_name ||
-                                    flaggedDetails?.afrimax_id) && !isLoading && (
-                                        <>
-                                            <p>Afrimax Name</p>
-                                            <p>Afrimax ID</p>
-                                        </>
-                                    )}
-                                </>}
+                                                    flaggedDetails?.obo_id ||
+                                                    flaggedDetails?.afrimax_name ||
+                                                    flaggedDetails?.afrimax_id) &&
+                                                    !isLoading &&
+                                                    <>
+                                                        {!transactionType?.includes('CMR')
+                                                            ? <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                                            : <p className='mt-1'></p>}
+                                                        {flaggedDetails?.obo_name && !isLoading && <p>Paymaart Name</p>}
+                                                        {flaggedDetails?.obo_id && !isLoading && <p>Paymaart ID</p>}
+                                                        {(flaggedDetails?.afrimax_name ||
+                                                            flaggedDetails?.afrimax_id) && !isLoading && (
+                                                            <>
+                                                                <p>Afrimax Name</p>
+                                                                <p>Afrimax ID</p>
+                                                            </>
+                                                        )}
+                                                    </>}
                                             </div>
                                             <div className='w-1/2 flex flex-col gap-1'>
                                                 {isLoading
@@ -234,21 +261,21 @@ const ViewSpecificFlagged = () => {
                                                                 <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id || '-'}</p>
                                                             </>}
                                                         {(flaggedDetails?.obo_name ||
-                                        flaggedDetails?.obo_id ||
-                                        flaggedDetails?.afrimax_name ||
-                                        flaggedDetails?.afrimax_id) &&
-                                        <>
-                                            {<p className={`${!transactionType?.includes('CMR') ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
-                                            {flaggedDetails?.obo_name && <p>{flaggedDetails?.obo_name || '-'}</p>}
-                                            {flaggedDetails?.obo_id && <p>{flaggedDetails?.obo_id || '-'}</p>}
-                                            {(flaggedDetails?.afrimax_name ||
-                                            flaggedDetails?.afrimax_id) && (
-                                                <>
-                                                    <p>{flaggedDetails?.afrimax_name || '-'}</p>
-                                                    <p>{flaggedDetails?.afrimax_id || '-'}</p>
-                                                </>
-                                            )}
-                                        </>}
+                                                            flaggedDetails?.obo_id ||
+                                                            flaggedDetails?.afrimax_name ||
+                                                            flaggedDetails?.afrimax_id) &&
+                                                            <>
+                                                                {<p className={`${!transactionType?.includes('CMR') ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
+                                                                {flaggedDetails?.obo_name && <p>{flaggedDetails?.obo_name || '-'}</p>}
+                                                                {flaggedDetails?.obo_id && <p>{flaggedDetails?.obo_id || '-'}</p>}
+                                                                {(flaggedDetails?.afrimax_name ||
+                                                                    flaggedDetails?.afrimax_id) && (
+                                                                    <>
+                                                                        <p>{flaggedDetails?.afrimax_name || '-'}</p>
+                                                                        <p>{flaggedDetails?.afrimax_id || '-'}</p>
+                                                                    </>
+                                                                )}
+                                                            </>}
                                                     </>}
                                             </div>
                                         </div>
@@ -259,13 +286,13 @@ const ViewSpecificFlagged = () => {
                                             <div className='w-1/2 flex flex-col gap-1'>
                                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
                                                 {transactionType !== 'interest' &&
-                                                <>
-                                                    <p>Txn Fee*</p>
-                                                    <p>*VAT Include</p>
-                                                </>}
+                                                    <>
+                                                        <p>Txn Fee*</p>
+                                                        <p>*VAT Included</p>
+                                                    </>}
                                                 {flaggedDetails?.commission && !isLoading && <p>Commission Earned</p>}
                                                 <p>Txn ID</p>
-                                                <p>Date, time</p>
+                                                <p>Date, time (CAT)</p>
                                                 {transactionType === 'afrimax' && <p>Plan</p>}
                                                 {flaggedDetails?.agent_closing_balance && !isLoading && <p>Balance</p>}
                                                 {flaggedDetails?.note && !isLoading && <p>Note</p>}
@@ -280,21 +307,21 @@ const ViewSpecificFlagged = () => {
                                                             {formattedAmount(Math.abs(flaggedDetails?.transaction_amount)) || '0.00'} MWK
                                                         </p>
                                                         {transactionType !== 'interest' &&
-                                                        <>
-                                                            <p>{formattedAmount(flaggedDetails?.transaction_fee) || '0.00'} MWK</p>
-                                                            <p>{formattedAmount(flaggedDetails?.vat) || '0.00'} MWK</p>
-                                                        </>}
+                                                            <>
+                                                                <p>{formattedAmount(flaggedDetails?.transaction_fee) || '0.00'} MWK</p>
+                                                                <p>{formattedAmount(flaggedDetails?.vat) || '0.00'} MWK</p>
+                                                            </>}
                                                         {flaggedDetails?.commission && <p>{formattedAmount(flaggedDetails?.commission) || '0.00'} MWK</p>}
                                                         <p data-testid="transaction_id">{flaggedDetails?.transaction_id || '-'}</p>
-                                                        <p>{`${convertTimestampToCAT(flaggedDetails?.created_at)} CAT` || '-'}</p>
-                                                        {transactionType === 'afrimax' && <p>{ flaggedDetails?.afrimax_plan_name || '-'}</p>}
+                                                        <p>{`${convertTimestampToCAT(flaggedDetails?.created_at)}` || '-'}</p>
+                                                        {transactionType === 'afrimax' && <p>{flaggedDetails?.afrimax_plan_name || '-'}</p>}
                                                         {flaggedDetails?.agent_closing_balance && <p>{formattedAmount(flaggedDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                                         {flaggedDetails?.note && <p>{flaggedDetails?.note}</p>}
                                                         {transactionType === 'interest' &&
-                                                        <>
-                                                            <p>Customer Interest</p>
-                                                            <p>{`${getQuarterEndDate(flaggedDetails?.created_at)}`}</p>
-                                                        </>}
+                                                            <>
+                                                                <p>Customer Interest</p>
+                                                                <p>{`${getQuarterEndDate(flaggedDetails?.created_at)}`}</p>
+                                                            </>}
                                                         {(flaggedDetails?.membership || flaggedDetails?.membership_start || flaggedDetails?.membership_expiry) && <p>{capitalizeFirstLetter(flaggedDetails?.membership).replace(/Primex/i, 'PrimeX') || '-'}</p>}
                                                         {(flaggedDetails?.membership || flaggedDetails?.membership_start || flaggedDetails?.membership_expiry) && <p>{`${convertTimestampToDateYear(flaggedDetails?.membership_start) || '---'} - ${convertTimestampToDateYear(flaggedDetails?.membership_expiry)}`}</p>}
                                                     </>}
@@ -320,14 +347,23 @@ const ViewSpecificFlagged = () => {
                                             {flaggedDetails?.flagged_by || '-'}
                                         </p>}
                                 </div>
-                                <div className='flex flex-col gap-1'>
+                                <div className='flex flex-col gap-1 max-w-[450px]'>
                                     <p className='text-neutral-secondary'>Reversal Admin</p>
                                     {isLoading
                                         ? <TransactionDetailsShimmer col={1} />
-                                        : <p className='text-neutral-primary'>
+                                        : <p className='text-neutral-primary break-words'>
                                             {flaggedDetails?.reversal_admin_name || '-'}
                                         </p>}
                                 </div>
+                                {flaggedDetails?.status_note &&
+                                <div className='flex flex-col gap-1 max-w-[450px]'>
+                                    <p className='text-neutral-secondary'>Admin Note</p>
+                                    {isLoading
+                                        ? <TransactionDetailsShimmer col={1} />
+                                        : <p className='text-neutral-primary break-words'>
+                                            {flaggedDetails?.status_note || '-'}
+                                        </p>}
+                                </div>}
                             </div>
                         </div>
                     </div>
@@ -347,8 +383,8 @@ const ViewSpecificFlagged = () => {
                             {submitSelected && <ErrorMessage error={'Required field'} />
                             }
                         </>)}
-                        handleSubmit={handleConfirmReject}
-                        isLoading={isLoading}
+                        handleSubmit={() => handleConfirmApproveReject('rejected')}
+                        isLoading={isButtonLoading}
                         handleClose={() => setRejectModalOpen(false)}
                         buttonText={'Reject'}
                         buttonColor={'bg-primary-negative'}
@@ -363,8 +399,8 @@ const ViewSpecificFlagged = () => {
                         title={'Confirm to Approve?'}
                         message='This action will refund the transaction amount'
                         messageStyle={undefined}
-                        handleSubmit={handleConfirmApprove}
-                        isLoading={isLoading}
+                        handleSubmit={() => handleConfirmApproveReject('approved')}
+                        isLoading={isButtonLoading}
                         handleClose={() => setApproveModalOpen(false)}
                         buttonText={'Approve'}
                         buttonColor={'bg-accent-positive'}

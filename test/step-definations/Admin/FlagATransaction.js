@@ -4,6 +4,7 @@ const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 
 When('I click on flag transaction button', async function () {
+    await new Promise(resolve => setTimeout(resolve, 1500));
     await driver.wait(until.elementLocated(By.css('[data-testid="flag_transaction_button"]'))).click();
 });
 
