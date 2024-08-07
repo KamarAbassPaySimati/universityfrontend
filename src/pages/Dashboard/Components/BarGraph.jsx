@@ -29,7 +29,7 @@ ChartJS.register(
     Legend
 );
 
-export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
+export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple }) {
     const [states, setStates] = useState(initialStates);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -58,8 +58,16 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
             const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `membership=${states.membership.toUpperCase()}&` : ''}${params !== undefined ? `${params.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
             let count = 0;
             res.data.data.forEach(element => {
-                if (element.count !== 0) {
-                    count = count + 1;
+                if (multiple) {
+                    multiple.forEach(item => {
+                        if (item.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_') !== 0) {
+                            count = count + 1;
+                        }
+                    });
+                } else {
+                    if (element.count !== 0) {
+                        count = count + 1;
+                    }
                 }
             });
             setData(count === 0 ? [] : res.data);
@@ -123,6 +131,65 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
             setExportloading(false);
         }
     };
+    const color = ['rgba(59, 42, 111, 0.7)', 'rgba(167, 159, 190, 1)', 'rgba(240, 236, 255, 1)'];
+
+    const getGroupDataSet = () => {
+        const array = [];
+        if (multiple) {
+            console.log('data', data);
+            multiple.forEach((element, index) => {
+                console.log('eleme', element.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_'));
+                array.push({
+                    label: element,
+                    data: data?.data?.map((data) => data[element.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_')]),
+                    backgroundColor: color[index],
+                    borderRadius: 0,
+                    minBarLength: 5
+                });
+            });
+        } else {
+            array.push({
+                // label: 'Count',
+                data: data?.data?.map((data, index) => data.count),
+                backgroundColor: [
+                    'rgba(59, 42, 111, 0.7)'
+                ],
+                borderRadius: 0,
+                barThickness: data?.data?.length < 8 ? 50 : undefined,
+                minBarLength: 5,
+                borderWidth: 1
+            });
+        }
+        console.log('array', array);
+
+        return array;
+    };
+    const scale = multiple
+        ? {
+            x: {
+                grid: {
+                    display: false
+                },
+                categoryPercentage: 0.5,
+                barPercentage: 0.8
+            },
+            y: {
+                grid: {
+                    borderDash: [3, 3]
+                },
+                min: 0,
+                ticks: {
+                    beginAtZero: true
+                }
+            }
+        }
+        : {
+            x: {
+                grid: {
+                    display: false
+                }
+            }
+        };
     return (
         <div className='py-[24px]'>
             <div className='h-[350px] border-[#F0ECFF] border p-4 rounded-[6px] '>
@@ -142,6 +209,15 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
                             button
                             dateRange={setOpenDate}
                         />}
+                        {multiple && multiple.map((ele, ind) => (
+                            <div className='flex justify-center items-center' key={ind + 'clor'}>
+                                <div
+                                    className='rounded-full h-4 w-4 flex'
+                                    style={{ backgroundColor: color[ind] }}
+                                ></div>
+                                <h1 className='pl-2 text-[#4F5962] text-[12px] font-normal leading-[20px]'>{ele}</h1>
+                            </div>
+                        ))}
                         <InputFieldWithDropDown
                             labelName="Ref No."
                             value={states.dateRangeType}
@@ -179,19 +255,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
                                         : data?.scale === 'hour'
                                             ? item.hour.split(' ')[1].slice(0, 5)
                                             : item[data?.scale]),
-                                    datasets: [
-                                        {
-                                        // label: 'Count',
-                                            data: data.data.map((data, index) => data.count),
-                                            backgroundColor: [
-                                                'rgba(59, 42, 111, 0.7)'
-                                            ],
-                                            borderRadius: 0,
-                                            barThickness: data.data.length < 8 ? 50 : undefined,
-                                            minBarLength: 5,
-                                            borderWidth: 1
-                                        }
-                                    ]
+                                    datasets: getGroupDataSet()
                                 }}
                                 options={{
                                     responsive: true,
@@ -219,13 +283,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
                                             loop: true
                                         }
                                     },
-                                    scales: {
-                                        x: {
-                                            grid: {
-                                                display: false
-                                            }
-                                        }
-                                    }
+                                    scales: scale
                                 }}
                             />)
 
@@ -234,7 +292,10 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
                 {(!loading && data.length === 0) && <div className='flex justify-center items-center h-full'>
                     <div className='border border-[#E5E9EB] text-center p-2 rounded-lg px-8 text-[#4F5962] font-normal text-[12px] leading-5'>No Data Found</div>
                 </div> }
-                {(!loading && data.length !== 0) && <h1 className='font-semibold text-[#52525B] text-center text-[14px] leading-[24px] px-1 pb-4 pt-2'>Time of day(Hours)</h1>}
+                {(!loading && data.length !== 0) && <h1 className='font-semibold text-[#52525B] text-center text-[14px] leading-[24px] px-1 pb-4 pt-2'>{
+                    data?.scale === 'day'
+                        ? 'Days'
+                        : data?.scale === 'month' ? 'Months' : 'Time of day(Hours)'}</h1>}
             </div>
         </div>
     );

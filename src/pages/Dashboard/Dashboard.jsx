@@ -33,6 +33,12 @@ const Dashboard = () => {
                         endpoint='customer-registration-insight'
                         initialStates={{ dateRangeType: 'Today', membership: 'All' }}
                     />
+                    <BarGraph
+                        DashboardName ="Agent Cash-in; Cash-out (MWK)"
+                        endpoint='agent-cashin-cashout'
+                        initialStates={{ dateRangeType: 'Today', membership: 'All' }}
+                        multiple={['Cash-in', 'Cash-out']}
+                    />
 
                 </div>
             </CardHeader>

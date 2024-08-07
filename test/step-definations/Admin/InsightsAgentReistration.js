@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable no-case-declarations */
 const { When, Given, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
@@ -16,6 +17,9 @@ When('I click on export button for {string}', async function (graphType) {
     case 'Customer Registrations':
         await driver.wait(until.elementLocated(By.css('[data-testid="Customer Registrations Export"]'))).click();
         break;
+    case 'Agent Cash-in; Cash-out':
+        await driver.wait(until.elementLocated(By.css('[data-testid="Agent Cash-in; Cash-out (MWK) Export"]'))).click();
+        break;
     }
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
@@ -29,5 +33,10 @@ Then('I should see {string} graph', async function (graphType) {
     case 'Customer Registrations':
         const customerGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Customer Registrations"]')));
         await driver.wait(until.elementIsVisible(customerGraph));
+        break;
+    case 'Agent Cash-in; Cash-out':
+        const customerpayinGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Agent Cash-in; Cash-out (MWK)"]')));
+        await driver.wait(until.elementIsVisible(customerpayinGraph));
+        break;
     }
 });

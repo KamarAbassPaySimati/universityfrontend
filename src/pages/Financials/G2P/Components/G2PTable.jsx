@@ -6,6 +6,7 @@ import Shimmer from '../../../../components/Shimmers/Shimmer';
 import Image from '../../../../components/Image/Image';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 
 function G2PTable ({ loading, error, List, notFound, searchParams, setSearchParams }) {
     const Navigate = useNavigate();
@@ -19,7 +20,7 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                             <th className='py-2 px-[10px] text-left font-[400]'>G2P Customer Name</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Paymaart ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Created Date, CAT</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Amount</th>
+                            <th className='py-2 px-[10px] text-right font-[400]'>Amount (MWK)</th>
                             <th className='py-2 px-[10px]'></th>
                         </tr>
                     </thead>
@@ -35,8 +36,8 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                                     className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
                                 <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
                                 <td data-testid="amount" title={user?.amount.toLocaleString()}
-                                    className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px]'>
-                                    {user?.amount.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                    className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px] text-right'>
+                                    {formattedAmount(user?.amount) || '-'}
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 min-w-[75px] max-w-[100px] flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
