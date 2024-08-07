@@ -29,14 +29,14 @@ ChartJS.register(
     Legend
 );
 
-export default function BarGraph () {
-    const [states, setStates] = useState({ dateRangeType: 'Today' });
+export default function BarGraph ({ DashboardName, endpoint, initialStates }) {
+    const [states, setStates] = useState(initialStates);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [openDate, setOpenDate] = useState(false);
     const [dateRange, setDateRange] = useState({});
     const [exportLoading, setExportloading] = useState(false);
-    const { setToastError, setToastSuccess } = useContext(GlobalContext);
+    const { setToastError, setToastSuccess, setToastInformation } = useContext(GlobalContext);
     const [isParams, setIsParams] = useState('');
     const handleInput = (value, id) => {
         if (value !== 'Date Range') {
@@ -47,7 +47,7 @@ export default function BarGraph () {
             setOpenDate(true);
         }
         setStates(prevState => {
-            return { ...prevState, dateRangeType: value };
+            return { ...prevState, [id]: value };
         });
     };
 
@@ -55,7 +55,7 @@ export default function BarGraph () {
         try {
             setLoading(true); // Set loading state to true before API call
             setIsParams(params);
-            const res = await dataService.GetAPI(`admin-dashboard/agent-registration-insight?${params !== undefined ? `${params.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
+            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `membership=${states.membership.toUpperCase()}&` : ''}${params !== undefined ? `${params.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
             let count = 0;
             res.data.data.forEach(element => {
                 if (element.count !== 0) {
@@ -102,14 +102,17 @@ export default function BarGraph () {
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`admin-dashboard/export-agent-registration-insight?${isParams !== undefined ? `${isParams.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
-            console.log('res', res.data);
+            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `membership=${states.membership.toUpperCase()}&` : ''}${isParams !== undefined ? `${isParams.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
             if (!res.error) {
-                window.open(
-                    res.data.s3_url,
-                    '_blank'
-                );
-                setToastSuccess('Exported successfully');
+                if (res.data.s3_url) {
+                    window.open(
+                        res.data.s3_url,
+                        '_blank'
+                    );
+                    setToastSuccess('Exported successfully');
+                } else {
+                    setToastInformation(`${res.data.message}`);
+                }
                 setExportloading(false);
             } else {
                 setToastError('An Error Occured!');
@@ -121,103 +124,118 @@ export default function BarGraph () {
         }
     };
     return (
-        <div className='h-[324px]'>
-            <div className='flex justify-between'>
-                <h1 className='font-semibold text-[18px] leading-[26px] px-1 pb-4' data-testid="Agent Registrations">Agent Registrations</h1>
-                <div className='flex gap-7'>
-                    <InputFieldWithDropDown
-                        labelName="Ref No."
-                        value={states.dateRangeType}
-                        placeholder="Enter Ref No."
-                        error={false}
-                        options={['Today', 'Yesterday', 'Last 7 days', 'Last 30 days', 'Date Range']}
-                        id="refNo"
-                        testId="refNo"
-                        handleInput={handleInput}
-                        noLabel
-                        button
-                        dateRange={setOpenDate}
-                    />
-                    {openDate &&
-                    <DateFilter
-                        dateRange={dateRange}
-                        setDateRange={setDateRange}
-                        handleApply={handleApply}
-                        handleClearFilter={handleClearFilter}
-                    />}
-                    <button data-testid="export_button" onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
-                        <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export'/>
-                    </button>
-                    <HoverToolTip id='export'/>
+        <div className='py-[24px]'>
+            <div className='h-[350px] border-[#F0ECFF] border p-4 rounded-[6px] '>
+                <div className='flex justify-between'>
+                    <h1 className='font-semibold text-[18px] leading-[26px] px-1 pb-4' data-testid={DashboardName}>{DashboardName}</h1>
+                    <div className='flex gap-7'>
+                        {DashboardName === 'Customer Registrations' && <InputFieldWithDropDown
+                            labelName="Ref No."
+                            value={states.membership}
+                            placeholder="Enter Ref No."
+                            error={false}
+                            options={['All', 'Go', 'Prime', 'PrimeX']}
+                            id="membership"
+                            testId="membership"
+                            handleInput={handleInput}
+                            noLabel
+                            button
+                            dateRange={setOpenDate}
+                        />}
+                        <InputFieldWithDropDown
+                            labelName="Ref No."
+                            value={states.dateRangeType}
+                            placeholder="Enter Ref No."
+                            error={false}
+                            options={['Today', 'Yesterday', 'Last 7 days', 'Last 30 days', 'Date Range']}
+                            id="dateRangeType"
+                            testId="dateRangeType"
+                            handleInput={handleInput}
+                            noLabel
+                            button
+                            dateRange={setOpenDate}
+                        />
+                        {openDate &&
+                        <DateFilter
+                            dateRange={dateRange}
+                            setDateRange={setDateRange}
+                            handleApply={handleApply}
+                            handleClearFilter={handleClearFilter}
+                        />}
+                        <button data-testid={`${DashboardName} Export`} onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
+                            <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export'/>
+                        </button>
+                        <HoverToolTip id='export'/>
+                    </div>
                 </div>
-            </div>
-            <div className="">
-                {loading
-                    ? <GraphShimmer />
-                    : (
-                        data?.length !== 0 && <Bar height={250}
-                            data={{
-                                labels: data.data?.map((item) => data?.scale === 'day'
-                                    ? formatDate(item.day)
-                                    : data?.scale === 'hour'
-                                        ? item.hour.split(' ')[1].slice(0, 5)
-                                        : item[data?.scale]),
-                                datasets: [
-                                    {
+                <div className="">
+                    {loading
+                        ? <GraphShimmer />
+                        : (
+                            data?.length !== 0 && <Bar height={250}
+                                data={{
+                                    labels: data.data?.map((item) => data?.scale === 'day'
+                                        ? formatDate(item.day)
+                                        : data?.scale === 'hour'
+                                            ? item.hour.split(' ')[1].slice(0, 5)
+                                            : item[data?.scale]),
+                                    datasets: [
+                                        {
                                         // label: 'Count',
-                                        data: data.data.map((data, index) => data.count),
-                                        backgroundColor: [
-                                            'rgba(59, 42, 111, 0.7)'
-                                        ],
-                                        borderRadius: 0,
-                                        barThickness: data.data.length < 8 ? 50 : undefined,
-                                        minBarLength: 5,
-                                        borderWidth: 1
-                                    }
-                                ]
-                            }}
-                            options={{
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    title: {
-                                        display: false
-                                    },
-                                    legend: {
-                                        display: false
-                                    },
-                                    tooltip: {
-                                        backgroundColor: '#E5E9EB',
-                                        titleColor: '#4F5962',
-                                        labelTextColor: '#4F5962',
-                                        bodyColor: '#4F5962'
-                                    }
-                                },
-                                animations: {
-                                    tension: {
-                                        duration: 1000,
-                                        easing: 'linear',
-                                        from: 1,
-                                        to: 0,
-                                        loop: true
-                                    }
-                                },
-                                scales: {
-                                    x: {
-                                        grid: {
+                                            data: data.data.map((data, index) => data.count),
+                                            backgroundColor: [
+                                                'rgba(59, 42, 111, 0.7)'
+                                            ],
+                                            borderRadius: 0,
+                                            barThickness: data.data.length < 8 ? 50 : undefined,
+                                            minBarLength: 5,
+                                            borderWidth: 1
+                                        }
+                                    ]
+                                }}
+                                options={{
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    plugins: {
+                                        title: {
                                             display: false
+                                        },
+                                        legend: {
+                                            display: false
+                                        },
+                                        tooltip: {
+                                            backgroundColor: '#E5E9EB',
+                                            titleColor: '#4F5962',
+                                            labelTextColor: '#4F5962',
+                                            bodyColor: '#4F5962'
+                                        }
+                                    },
+                                    animations: {
+                                        tension: {
+                                            duration: 1000,
+                                            easing: 'linear',
+                                            from: 1,
+                                            to: 0,
+                                            loop: true
+                                        }
+                                    },
+                                    scales: {
+                                        x: {
+                                            grid: {
+                                                display: false
+                                            }
                                         }
                                     }
-                                }
-                            }}
-                        />)
+                                }}
+                            />)
 
-                }
+                    }
+                </div>
+                {(!loading && data.length === 0) && <div className='flex justify-center items-center h-full'>
+                    <div className='border border-[#E5E9EB] text-center p-2 rounded-lg px-8 text-[#4F5962] font-normal text-[12px] leading-5'>No Data Found</div>
+                </div> }
+                {(!loading && data.length !== 0) && <h1 className='font-semibold text-[#52525B] text-center text-[14px] leading-[24px] px-1 pb-4 pt-2'>Time of day(Hours)</h1>}
             </div>
-            {(!loading && data.length === 0) && <div className='flex justify-center items-center h-full'>
-                <div className='border border-[#E5E9EB] text-center p-2 rounded-lg px-8 text-[#4F5962] font-normal text-[12px] leading-5'>No Data Found</div>
-            </div> }
-            {(!loading && data.length !== 0) && <h1 className='font-semibold text-[#52525B] text-center text-[14px] leading-[24px] px-1 pb-4'>Time of day(Hours)</h1>}
         </div>
     );
 }

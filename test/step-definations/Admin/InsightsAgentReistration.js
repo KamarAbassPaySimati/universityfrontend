@@ -8,15 +8,26 @@ Given('I navigate to dashboard page', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
-When('I click on export button for export', async function () {
-    await driver.wait(until.elementLocated(By.css('[data-testid="export_button"]'))).click();
+When('I click on export button for {string}', async function (graphType) {
+    switch (graphType) {
+    case 'Agent Registrations':
+        await driver.wait(until.elementLocated(By.css('[data-testid="Agent Registrations Export"]'))).click();
+        break;
+    case 'Customer Registrations':
+        await driver.wait(until.elementLocated(By.css('[data-testid="Customer Registrations Export"]'))).click();
+        break;
+    }
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 Then('I should see {string} graph', async function (graphType) {
     switch (graphType) {
     case 'Agent Registrations':
-        const graph = await driver.wait(until.elementLocated(By.css('[data-testid="Agent Registrations"]')));
-        await driver.wait(until.elementIsVisible(graph));
+        const agentGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Agent Registrations"]')));
+        await driver.wait(until.elementIsVisible(agentGraph));
+        break;
+    case 'Customer Registrations':
+        const customerGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Customer Registrations"]')));
+        await driver.wait(until.elementIsVisible(customerGraph));
     }
 });
