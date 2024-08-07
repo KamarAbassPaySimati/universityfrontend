@@ -39,6 +39,12 @@ const Dashboard = () => {
                         initialStates={{ dateRangeType: 'Today', membership: 'All' }}
                         multiple={['Cash-in', 'Cash-out']}
                     />
+                    <BarGraph
+                        DashboardName ="Admin KYC Approval"
+                        endpoint='kyc-agent-insights'
+                        initialStates={{ dateRangeType: 'Today', membership: 'All' }}
+                        multiple={['Agent', 'Customer', 'Merchant']}
+                    />
 
                 </div>
             </CardHeader>

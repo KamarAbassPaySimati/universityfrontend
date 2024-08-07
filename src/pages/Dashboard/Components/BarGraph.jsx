@@ -55,7 +55,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
         try {
             setLoading(true); // Set loading state to true before API call
             setIsParams(params);
-            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `membership=${states.membership.toUpperCase()}&` : ''}${params !== undefined ? `${params.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
+            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${params !== undefined ? `${params.substring(1)}` : ''}`);
             let count = 0;
             res.data.data.forEach(element => {
                 if (multiple) {
@@ -110,7 +110,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `membership=${states.membership.toUpperCase()}&` : ''}${isParams !== undefined ? `${isParams.substring(1)}` : `timePeriod=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}`}`);
+            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${isParams !== undefined ? `${isParams.substring(1)}` : ''}`);
             if (!res.error) {
                 if (res.data.s3_url) {
                     window.open(

@@ -61,7 +61,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                 sender_id: View.paymaart_id,
                 user_amount: View.remaining_amount,
                 transaction_id: View.transaction_id,
-                created_at: View.created_at,
+                created_at: parseInt(View.created_at),
                 g2p_transaction_expiry: View.created_at
             };
             const response = await dataService.PostAPI('bank-transactions/g2p-transaction', body);
