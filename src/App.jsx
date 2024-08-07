@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import NavigationRoutes from './routes/routes';
 import { motion } from 'framer-motion';
 import { Amplify } from 'aws-amplify';
-import { awsConfig } from './config';
+import { awsConfig, STAGE } from './config';
 import Toast from './components/Toast/Toast';
 import GlobalContext from './components/Context/GlobalContext';
 import { Hub } from 'aws-amplify/utils';
@@ -12,6 +12,34 @@ import { fetchUserAttributes } from 'aws-amplify/auth';
 import { login, logout, setUser } from './pages/auth/authSlice';
 import { useDispatch } from 'react-redux';
 
+import { AwsRum } from 'aws-rum-web';
+if (STAGE?.includes('dev')) {
+    let awsRum = null;
+    try {
+        console.log(STAGE);
+        const config = {
+            sessionSampleRate: 1,
+            identityPoolId: 'eu-west-1:a0c59e5d-0f7f-4888-b380-e685e1919756',
+            endpoint: 'https://dataplane.rum.eu-west-1.amazonaws.com',
+            telemetries: ['performance', 'errors', 'http'],
+            allowCookies: true,
+            enableXRay: false
+        };
+
+        const APPLICATION_ID = '690ef686-b115-4a3d-a191-2cb4b6b704ed';
+        const APPLICATION_VERSION = '1.0.0';
+        const APPLICATION_REGION = 'eu-west-1';
+
+        awsRum = new AwsRum(
+            APPLICATION_ID,
+            APPLICATION_VERSION,
+            APPLICATION_REGION,
+            config
+        );
+    } catch (error) {
+        // Ignore errors thrown during CloudWatch RUM web client initialization
+    }
+}
 Amplify.configure(awsConfig);
 
 function App (props) {
