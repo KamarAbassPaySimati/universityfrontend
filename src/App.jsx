@@ -13,20 +13,21 @@ import { login, logout, setUser } from './pages/auth/authSlice';
 import { useDispatch } from 'react-redux';
 
 import { AwsRum } from 'aws-rum-web';
-if (STAGE?.includes('dev')) {
+// console.log(STAGE);
+if (STAGE?.includes('prod')) {
     let awsRum = null;
     try {
-        console.log(STAGE);
+        console.log('dev', STAGE);
         const config = {
             sessionSampleRate: 1,
-            identityPoolId: 'eu-west-1:a0c59e5d-0f7f-4888-b380-e685e1919756',
+            identityPoolId: 'eu-west-1:e076455e-09ba-4dea-be50-9547bf91779d',
             endpoint: 'https://dataplane.rum.eu-west-1.amazonaws.com',
             telemetries: ['performance', 'errors', 'http'],
             allowCookies: true,
             enableXRay: false
         };
 
-        const APPLICATION_ID = '690ef686-b115-4a3d-a191-2cb4b6b704ed';
+        const APPLICATION_ID = 'b8fe1828-224d-4f33-bc94-f655dad022e9';
         const APPLICATION_VERSION = '1.0.0';
         const APPLICATION_REGION = 'eu-west-1';
 
@@ -36,10 +37,13 @@ if (STAGE?.includes('dev')) {
             APPLICATION_REGION,
             config
         );
+        console.log("sakjd")
     } catch (error) {
+        console.log(error);
         // Ignore errors thrown during CloudWatch RUM web client initialization
     }
 }
+
 Amplify.configure(awsConfig);
 
 function App (props) {
