@@ -29,7 +29,11 @@ export function TransactionCode (value, type) {
     case 'Settlement to Merchant Biller from PTBA1 | RM debit':
         return 'MCBDRPTBA1';
     case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
-        return 'PTDR1PTBA1';
+        return 'PTDR2PTBA1';
+    case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
+        return 'PTDR2PTBA2';
+    case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
+        return 'PTDR2PTBA3';
     case 'Charge for Bank Services or Transactions from PTBA1 | RM debit':
         return 'PTDR2PTBA1';
 

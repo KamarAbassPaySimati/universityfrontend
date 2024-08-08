@@ -79,7 +79,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>
                                     {`${formattedAmount(Math.abs(transaction?.transaction_amount))}` || '0.00'}
                                 </td>
-                                <td data-testid='transaction_view'
+                                <td data-testid={`transaction_view-${index}`}
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
                                     <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/${type}/${type}-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
                                 </td>
