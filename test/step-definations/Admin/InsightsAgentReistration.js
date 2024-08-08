@@ -23,6 +23,9 @@ When('I click on export button for {string}', async function (graphType) {
     case 'Agent Pay-in; Pay-out':
         await driver.wait(until.elementLocated(By.css('[data-testid="Agent Pay-in; Pay-out (MWK) Export"]'))).click();
         break;
+    case 'Customer Pay-in; Cash-in; Cash-out':
+        await driver.wait(until.elementLocated(By.css('[data-testid="Customer Pay-in; Cash-in; Cash-out (MWK) Export"]'))).click();
+        break;
     }
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
@@ -44,6 +47,10 @@ Then('I should see {string} graph', async function (graphType) {
     case 'Agent Pay-in; Pay-out':
         const customerpayoutGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Agent Pay-in; Pay-out (MWK)"]')));
         await driver.wait(until.elementIsVisible(customerpayoutGraph));
+        break;
+    case 'Customer Pay-in; Cash-in; Cash-out':
+        const customercashinGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Customer Pay-in; Cash-in; Cash-out (MWK)"]')));
+        await driver.wait(until.elementIsVisible(customercashinGraph));
         break;
     }
 });

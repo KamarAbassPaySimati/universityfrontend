@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Image from '../../Image/Image';
 import Button from '../../Button/Button';
 import { dataService } from '../../../services/data.services';
@@ -9,8 +9,10 @@ import { useNavigate } from 'react-router-dom';
 const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
     const { resendCredentials } = endpoints;
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
+    const [buttonClickCount, setButtonClickCount] = useState(0);
     const Navigate = useNavigate();
     const handleResendCredentials = async () => {
+        setButtonClickCount(buttonClickCount + 1);
         const endPoint = accessRole === 'agent' ? 'agent-users' : accessRole === 'merchant' ? 'merchant-users' : 'customer-user';
         const response = await dataService.PostAPI(`${endPoint}/${resendCredentials}`, { email });
         if (!response.error) {
@@ -35,10 +37,13 @@ const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
                     </p>
                     <p className='mt-10'>
                         Didn’t receive credentials?
-                        <span className='text-[16px] leading-[24px] text-primary-normal cursor-pointer'
+                        <button
+                            className={`text-[16px] 
+                                leading-[24px] text-primary-normal ${buttonClickCount === 3 ? '' : 'cursor-pointer'}`}
+                            disabled={buttonClickCount === 3}
                             onClick={handleResendCredentials}>
                         &nbsp;Resend
-                        </span>
+                        </button>
                     </p>
                     <p className='mt-[37px]'>
                         Click below to complete {accessRole}’s KYC registration
@@ -47,13 +52,15 @@ const RegistrationSuccessful = ({ email, accessRole, paymartId }) => {
                         className='max-w-[200px] mt-2'
                         testId='verify_KYC'
                         text='KYC Registration'
-                        onClick={() => Navigate(
-                            accessRole === 'agent'
-                                ? `/users/agents/register-agent/kyc-registration/${paymartId}`
-                                : accessRole === 'merchant'
-                                    ? `/users/merchants/register-merchant/kyc-registration/${paymartId}`
-                                    : `/users/customers/register-customer/kyc-registration/${paymartId}`
-                        )}
+                        onClick={() => {
+                            Navigate(
+                                accessRole === 'agent'
+                                    ? `/users/agents/register-agent/kyc-registration/${paymartId}`
+                                    : accessRole === 'merchant'
+                                        ? `/users/merchants/register-merchant/kyc-registration/${paymartId}`
+                                        : `/users/customers/register-customer/kyc-registration/${paymartId}`
+                            );
+                        }}
                     />
                 </div>
             </div>
