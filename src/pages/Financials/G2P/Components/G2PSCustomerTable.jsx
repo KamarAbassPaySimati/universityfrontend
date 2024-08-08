@@ -15,7 +15,7 @@ import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustomerView }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState('');
-    const [isTransactionModal, setIsTransactionModal] = useState('');
+    const [isTransactionModal, setIsTransactionModal] = useState({});
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const [error, setError] = useState();
 
@@ -57,27 +57,27 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
         try {
             setIsLoading(true);
             const body = {
-                object_key: isTransactionModal,
+                object_key: isTransactionModal.file_key,
                 sender_id: View.paymaart_id,
                 user_amount: View.remaining_amount,
                 transaction_id: View.transaction_id,
-                created_at: parseInt(View.created_at),
-                g2p_transaction_expiry: View.created_at
+                created_at: parseInt(isTransactionModal.created_at),
+                g2p_transaction_expiry: parseInt(View.created_at)
             };
             const response = await dataService.PostAPI('bank-transactions/g2p-transaction', body);
             if (!response.error) {
                 setIsLoading(false);
-                setIsTransactionModal('');
+                setIsTransactionModal({});
                 getG2PCustomerView();
                 setToastSuccess('Sheet transferred successfully');
             } else {
                 setIsLoading(false);
-                setIsTransactionModal('');
+                setIsTransactionModal({});
                 setToastError(response?.data?.data?.message || 'Something went wrong!');
             }
         } catch (error) {
             setIsLoading(false);
-            setIsTransactionModal('');
+            setIsTransactionModal({});
             setToastError('Something went wrong!');
         }
     };
@@ -86,7 +86,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
     };
     const handleCloseButton = () => {
         setError(false);
-        setIsTransactionModal('');
+        setIsTransactionModal({});
     };
 
     return (
@@ -132,7 +132,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                                         onClick={() => item?.transferred_amount === null && handleApproveClick(item._id)}
                                     />
                                     <Image className={`${item.transferred_amount !== null ? 'cursor-not-allowed' : 'cursor-pointer'}`} toolTipId={`transaction-${index}`} src='transaction' testId={`transaction-${index}`}
-                                        onClick={() => item?.transferred_amount === null && handleApprove(item.file_key)} />
+                                        onClick={() => item?.transferred_amount === null && handleApprove(item)} />
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}
@@ -179,14 +179,14 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                     />
                 </div>
             </Modal>
-            <Modal center open={isTransactionModal !== ''} onClose={handleCloseButton} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={Object.keys(isTransactionModal).length !== 0} onClose={handleCloseButton} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm to Execute Payment?'}
                         message={'This will complete settlement of G2P request.'}
                         handleSubmit={() => handleConfirmClick()}
                         isLoading={isLoading}
-                        handleClose={() => setIsTransactionModal('')}
+                        handleClose={() => setIsTransactionModal({})}
                         buttonText={'Confirm'}
                         buttonColor={'bg-accent-positive'}
                     />
