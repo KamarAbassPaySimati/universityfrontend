@@ -264,7 +264,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 {item?.entered_by || '-'}</td>
                                             {(type !== 'transaction-fees-and-commissions' && type !== 'taxes') && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.sender_id || '-'}</td>}
+                                                {(id === 'PTBAT' || id === 'PTBA1' || id === 'PTBA2' || id === 'PTBA3') ? item?.receiver_id : item?.sender_id || '-'}</td>}
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={item?.transaction_id || '-'}
@@ -283,7 +283,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
                                                 {getDrCr(item?.transaction_amount) || '-'}</td>
                                             <td data-testid="name"
-                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>{formattedAmount(item?.closing_balance) || '-'}</td>
+                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>{formattedAmount(id === 'PTBAT' ? item?.closing_balance_ptbat : item?.closing_balance) || '-'}</td>
                                         </tr>))}
                                 </tbody>
                             </table>

@@ -591,7 +591,7 @@ export default function RegisterKYC ({ role, type }) {
                     setButtonStatus('In review');
                     const body = {
                         gender: states.gender,
-                        dob: Number(new Date(states.dob).getTime() / 1000).toString(),
+                        dob: parseInt(new Date(states.dob).getTime() / 1000).toString(),
                         occupation: states.occupation,
                         purpose_of_relation: states.purpose.join('\n'),
                         monthly_income: states.monthly_income,

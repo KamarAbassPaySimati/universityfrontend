@@ -11,8 +11,8 @@ Feature: Paymaart- Admin Web - Add transaction to Suspense Account Transaction V
     @add_admin_user @create_new_user_and_login
     Scenario: Add transaction for suspence account with valid details for Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT
         When I select the transaction type as "Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT"
-        When I enter the paymaart ID as "AGT369851" for suspense account transaction
-        When I enter the transaction amount as "10" for suspense account transaction
+        When I enter the paymaart ID as "AGT941188" for suspense account transaction
+        When I enter the transaction amount as "1" for suspense account transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -36,8 +36,8 @@ Feature: Paymaart- Admin Web - Add transaction to Suspense Account Transaction V
 
     Scenario: Add transaction for suspence account with valid details for Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT
         When I select the transaction type as "Pay-out to Customer Post Deactivation from PTBA1 | EM credit to PMCAT"
-        When I enter the paymaart ID as "CMR81996509" for suspense account transaction
-        When I enter the transaction amount as "10" for suspense account transaction
+        When I enter the paymaart ID as "CMR72951797" for suspense account transaction
+        When I enter the transaction amount as "1" for suspense account transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -61,8 +61,8 @@ Feature: Paymaart- Admin Web - Add transaction to Suspense Account Transaction V
 
     Scenario: Add transaction for suspence account with valid details for Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT
         When I select the transaction type as "Pay-out to Agent Post Deletion from PTBA1 | EM credit to PMCAT"
-        When I enter the paymaart ID as "AGT369851" for suspense account transaction
-        When I enter the transaction amount as "10" for suspense account transaction
+        When I enter the paymaart ID as "AGT941188" for suspense account transaction
+        When I enter the transaction amount as "1" for suspense account transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"
@@ -86,8 +86,8 @@ Feature: Paymaart- Admin Web - Add transaction to Suspense Account Transaction V
 
     Scenario: Add transaction for suspence account with valid details for Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT
         When I select the transaction type as "Pay-out to Customer Post Deletion from PTBA1 | EM credit to PMCAT"
-        When I enter the paymaart ID as "CMR81996509" for suspense account transaction
-        When I enter the transaction amount as "10" for suspense account transaction
+        When I enter the paymaart ID as "CMR72951797" for suspense account transaction
+        When I enter the transaction amount as "1" for suspense account transaction
         When I should see the entry by field should be disabled for add trust bank transaction
         When I enter the valid transaction POP Ref.No
         When I upload the transaction POP document as "document_back.png"

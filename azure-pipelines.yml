@@ -122,6 +122,7 @@ stages:
         - script: |
             node --version
             npm --version
+            export NODE_OPTIONS=--max-old-space-size=8192
             npm run build
             mkdir artifact
             mv dist artifact
