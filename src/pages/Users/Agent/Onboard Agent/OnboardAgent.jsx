@@ -70,6 +70,7 @@ const OnboardAgent = ({ role }) => {
     const [timer, setTimer] = useState(0);
     const [resendCount, setResendCount] = useState(0);
     const [countryCode, setCountryCode] = useState('+265');
+    const [countryCodeAlpha, setCountryCodeAlpha] = useState('MW');
     const [numberMaxLength, setNumberMaxLength] = useState(11);
     const [isResendLoading, setIsResendLoading] = useState(false);
     const [isPhoneOtpResendLoading, setisPhoneOtpResendLoading] = useState(false);
@@ -95,7 +96,7 @@ const OnboardAgent = ({ role }) => {
         '}', '~'
     ];
 
-    const handleChange = (e, id) => {
+    const handleChange = (e, id, countryCodeAlpha) => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
         }
@@ -137,7 +138,7 @@ const OnboardAgent = ({ role }) => {
             setVerified(prevState => {
                 return { ...prevState, [id]: false };
             });
-            const formattedPhoneNumber = formatInputPhone(e.target.value);
+            const formattedPhoneNumber = formatInputPhone(e.target.value, countryCodeAlpha, role);
             setFormData(prevState => {
                 return { ...prevState, [id]: formattedPhoneNumber };
             });
@@ -621,6 +622,9 @@ const OnboardAgent = ({ role }) => {
                             setNumberMaxLength={setNumberMaxLength}
                             setVerified={setVerified}
                             verify={verify.phoneNumber}
+                            countryCodeAlpha={countryCodeAlpha}
+                            setCountryCodeAlpha={setCountryCodeAlpha}
+                            role={role}
                         />
                         {verify.phoneNumber && verified.email &&
                             <InputFieldWithButton

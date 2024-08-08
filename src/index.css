@@ -126,7 +126,7 @@ body {
   background-color: #3B2A6F;
 }
 
-.scrollBar::-webkit-scrollbar:horizontal, .whiteScrollBar::-webkit-scrollbar:horizontal {
+.scrollBar::-webkit-scrollbar:horizontal, .whiteScrollBar::-webkit-scrollbar:horizontal, .thin-scrollBar::-webkit-scrollbar:horizontal {
   height: 4px;
   background-color: transparent;
   border-radius: 0px !important;
@@ -139,6 +139,17 @@ body {
   width: 4px;
   height: 45px;
   right: 20px;
+}
+
+.thin-scrollBar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.thin-scrollBar::-webkit-scrollbar-thumb {
+  background-color:  #A79FBE;
+  border: transparent;
+  border-radius: 22px; 
+  height: 60px;
 }
 
 /* check box  */
