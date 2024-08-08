@@ -98,7 +98,7 @@ const Admin = () => {
             pathurls={['users/admins']}
             header='List of Admins'
             minHeightRequired={true}
-            buttonText={CurrentUserRole === 'Super admin' ? 'Register Admin' : null}
+            buttonText={CurrentUserRole === 'super-admin' ? 'Register Admin' : null}
             navigationPath='/users/admins/register-admin'
             table={true}
             headerWithoutButton={false}

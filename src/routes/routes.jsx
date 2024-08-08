@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
-import Dashboard from '../pages/Dashboard/Dashboard';
 import Profile from '../pages/Profile';
 import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
@@ -96,7 +95,6 @@ export default function NavigationRoutes (props) {
                                                     <Route path={nav.path} element={React.cloneElement(nav.element, props)}
                                                         key={nav.path}/>
                                                 ))}
-                                                <Route path="/dashboard" element={<Dashboard />} />
                                                 <Route path="/profile" element={<Profile />} />
                                                 <Route path="/profile/update-password" element={<UpdatePassword />} />
                                                 <Route path="/users/agents" element={<Agent />} />

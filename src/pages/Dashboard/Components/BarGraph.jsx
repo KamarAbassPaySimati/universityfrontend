@@ -140,9 +140,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
     const getGroupDataSet = () => {
         const array = [];
         if (multiple) {
-            console.log('data', data);
             multiple.forEach((element, index) => {
-                console.log('eleme', element.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_'));
                 array.push({
                     label: element,
                     data: data?.data?.map((data) => data[element.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_')]),
@@ -304,7 +302,6 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             handleApply={handleApply}
                             handleClearFilter={handleClearFilter}
                         />}
-                        {console.log('CurrentUserRole', CurrentUserRole)}
                         {
                             CurrentUserRole === 'Super admin' &&
                             <>
