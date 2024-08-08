@@ -18,6 +18,7 @@ import DateFilter from '../../../components/DateFilter';
 import moment from 'moment';
 import HoverToolTip from '../../../components/HoverToolTip';
 import GlobalContext from '../../../components/Context/GlobalContext';
+import { formattedAmount } from '../../../CommonMethods/formattedAmount';
 
 // Register necessary components
 ChartJS.register(
@@ -29,7 +30,7 @@ ChartJS.register(
     Legend
 );
 
-export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple }) {
+export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple, count }) {
     const [states, setStates] = useState(initialStates);
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -60,7 +61,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
             res.data.data.forEach(element => {
                 if (multiple) {
                     multiple.forEach(item => {
-                        if (item.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_') !== 0) {
+                        if (element[item.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_')] !== 0) {
                             count = count + 1;
                         }
                     });
@@ -164,7 +165,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
 
         return array;
     };
-    const scale = multiple
+    const scale = count
         ? {
             x: {
                 grid: {
@@ -179,22 +180,64 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                 },
                 min: 0,
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    callback: function (value, index, values) {
+                        // Format Y-axis values here (e.g., adding units or commas)
+                        return formattedAmount(value); // Example: formats number with commas
+                    }
                 }
             }
         }
+        : multiple
+            ? {
+                x: {
+                    grid: {
+                        display: false
+                    },
+                    categoryPercentage: 0.5,
+                    barPercentage: 0.8
+                },
+                y: {
+                    grid: {
+                        borderDash: [3, 3]
+                    },
+                    min: 0,
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }
+            }
+            : {
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            };
+    const toolTipValue = count === undefined
+        ? {
+            backgroundColor: '#E5E9EB',
+            titleColor: '#4F5962',
+            labelTextColor: '#4F5962',
+            bodyColor: '#4F5962'
+        }
         : {
-            x: {
-                grid: {
-                    display: false
+            backgroundColor: '#E5E9EB',
+            titleColor: '#4F5962',
+            labelTextColor: '#4F5962',
+            bodyColor: '#4F5962',
+            callbacks: {
+                label: (tooltipItem) => {
+                    // Format the label (data value)
+                    return `${tooltipItem.dataset.label}: ${formattedAmount(tooltipItem.raw)}`;
                 }
             }
         };
     return (
         <div className='py-[24px]'>
             <div className='h-[350px] border-[#F0ECFF] border p-4 rounded-[6px] '>
-                <div className='flex justify-between'>
-                    <h1 className='font-semibold text-[18px] leading-[26px] px-1 pb-4' data-testid={DashboardName}>{DashboardName}</h1>
+                <div className='flex justify-between pb-4'>
+                    <h1 className='font-semibold text-[18px] leading-[26px] px-1 pt-1' data-testid={DashboardName}>{DashboardName}</h1>
                     <div className='flex gap-7'>
                         {DashboardName === 'Customer Registrations' && <InputFieldWithDropDown
                             labelName="Ref No."
@@ -267,12 +310,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                                         legend: {
                                             display: false
                                         },
-                                        tooltip: {
-                                            backgroundColor: '#E5E9EB',
-                                            titleColor: '#4F5962',
-                                            labelTextColor: '#4F5962',
-                                            bodyColor: '#4F5962'
-                                        }
+                                        tooltip: toolTipValue
                                     },
                                     animations: {
                                         tension: {

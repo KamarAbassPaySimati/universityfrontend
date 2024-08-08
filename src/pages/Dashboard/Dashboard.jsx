@@ -36,13 +36,21 @@ const Dashboard = () => {
                     <BarGraph
                         DashboardName ="Agent Cash-in; Cash-out (MWK)"
                         endpoint='agent-cashin-cashout'
-                        initialStates={{ dateRangeType: 'Today', membership: 'All' }}
+                        initialStates={{ dateRangeType: 'Today' }}
                         multiple={['Cash-in', 'Cash-out']}
+                        count
+                    />
+                    <BarGraph
+                        DashboardName ="Agent Pay-in; Pay-out (MWK)"
+                        endpoint='agent-payin-payout'
+                        initialStates={{ dateRangeType: 'Today' }}
+                        multiple={['Pay-in', 'Pay-out']}
+                        count
                     />
                     <BarGraph
                         DashboardName ="Admin KYC Approval"
                         endpoint='kyc-agent-insights'
-                        initialStates={{ dateRangeType: 'Today', membership: 'All' }}
+                        initialStates={{ dateRangeType: 'Today' }}
                         multiple={['Agent', 'Customer', 'Merchant']}
                     />
 
