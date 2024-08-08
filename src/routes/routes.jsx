@@ -25,7 +25,7 @@ export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn, user } = auth;
     // const { user_type } = user;
-    const [CurrentUserRole, setCurrentUserRole] = useState('super-admin');
+    const [CurrentUserRole, setCurrentUserRole] = useState('Super admin');
     const [ToastError, setToastError] = useState('');
 
     const dispatch = useDispatch();

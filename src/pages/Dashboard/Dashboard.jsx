@@ -34,24 +34,30 @@ const Dashboard = () => {
                         initialStates={{ dateRangeType: 'Today', membership: 'All' }}
                     />
                     <BarGraph
-                        DashboardName ="Agent Cash-in; Cash-out (MWK)"
+                        DashboardName ="Agent Cash-in; Cash-out"
                         endpoint='agent-cashin-cashout'
                         initialStates={{ dateRangeType: 'Today' }}
                         multiple={['Cash-in', 'Cash-out']}
                         count
                     />
                     <BarGraph
-                        DashboardName ="Agent Pay-in; Pay-out (MWK)"
+                        DashboardName ="Agent Pay-in; Pay-out"
                         endpoint='agent-payin-payout'
                         initialStates={{ dateRangeType: 'Today' }}
                         multiple={['Pay-in', 'Pay-out']}
                         count
                     />
                     <BarGraph
-                        DashboardName ="Customer Pay-in; Cash-in; Cash-out (MWK)"
+                        DashboardName ="Customer Pay-in; Cash-in; Cash-out"
                         endpoint='customer-payin-cashin-cashout'
                         initialStates={{ dateRangeType: 'Today' }}
                         multiple={['Pay-in', 'Cash-in', 'Cash-out']}
+                        count
+                    />
+                    <BarGraph
+                        DashboardName ="Customer e-Payments"
+                        endpoint='agent-registration-insight'
+                        initialStates={{ dateRangeType: 'Today', transaction_type: 'All' }}
                         count
                     />
                     <BarGraph

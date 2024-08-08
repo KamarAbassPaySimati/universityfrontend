@@ -19,6 +19,7 @@ import moment from 'moment';
 import HoverToolTip from '../../../components/HoverToolTip';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { formattedAmount } from '../../../CommonMethods/formattedAmount';
+import { useSelector } from 'react-redux';
 
 // Register necessary components
 ChartJS.register(
@@ -33,6 +34,8 @@ ChartJS.register(
 export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple, count }) {
     const [states, setStates] = useState(initialStates);
     const [data, setData] = useState([]);
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const [loading, setLoading] = useState(true);
     const [openDate, setOpenDate] = useState(false);
     const [dateRange, setDateRange] = useState({});
@@ -56,7 +59,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
         try {
             setLoading(true); // Set loading state to true before API call
             setIsParams(params);
-            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${params !== undefined ? `${params.substring(1)}` : ''}`);
+            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type.toUpperCase()}&` : ''}${params !== undefined ? `${params.substring(1)}` : ''}`);
             let count = 0;
             res.data.data.forEach(element => {
                 if (multiple) {
@@ -111,7 +114,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${isParams !== undefined ? `${isParams.substring(1)}` : ''}`);
+            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type.toUpperCase()}&` : ''}${isParams !== undefined ? `${isParams.substring(1)}` : ''}`);
             if (!res.error) {
                 if (res.data.s3_url) {
                     window.open(
@@ -161,8 +164,6 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                 borderWidth: 1
             });
         }
-        console.log('array', array);
-
         return array;
     };
     const scale = count
@@ -182,8 +183,12 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                 ticks: {
                     beginAtZero: true,
                     callback: function (value, index, values) {
-                        // Format Y-axis values here (e.g., adding units or commas)
-                        return formattedAmount(value); // Example: formats number with commas
+                        // Check if value is 0, and format it explicitly
+                        if (value === 0) {
+                            return '0.00 MWK';
+                        }
+                        // Format other Y-axis values
+                        return `${formattedAmount(value)} MWK`;
                     }
                 }
             }
@@ -228,8 +233,13 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
             bodyColor: '#4F5962',
             callbacks: {
                 label: (tooltipItem) => {
-                    // Format the label (data value)
-                    return `${tooltipItem.dataset.label}: ${formattedAmount(tooltipItem.raw)}`;
+                    // Check if the value is 0, and format it explicitly
+                    const formattedValue = tooltipItem.raw === 0 ? '0.00' : formattedAmount(tooltipItem.raw);
+
+                    // Format the label based on whether `multiple` is true or false
+                    return multiple
+                        ? `${tooltipItem.dataset.label}: ${formattedValue} MWK`
+                        : `${formattedValue} MWK`;
                 }
             }
         };
@@ -247,6 +257,19 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             options={['All', 'Go', 'Prime', 'PrimeX']}
                             id="membership"
                             testId="membership"
+                            handleInput={handleInput}
+                            noLabel
+                            button
+                            dateRange={setOpenDate}
+                        />}
+                        {DashboardName === 'Customer e-Payments' && <InputFieldWithDropDown
+                            labelName="Ref No."
+                            value={states.transaction_type}
+                            placeholder="Enter Ref No."
+                            error={false}
+                            options={['All', 'Pay Merchant', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
+                            id="transaction_type"
+                            testId="transaction_type"
                             handleInput={handleInput}
                             noLabel
                             button
@@ -281,10 +304,16 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             handleApply={handleApply}
                             handleClearFilter={handleClearFilter}
                         />}
-                        <button data-testid={`${DashboardName} Export`} onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
-                            <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export'/>
-                        </button>
-                        <HoverToolTip id='export'/>
+                        {console.log('CurrentUserRole', CurrentUserRole)}
+                        {
+                            CurrentUserRole === 'Super admin' &&
+                            <>
+                                <button data-testid={`${DashboardName} Export`} onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
+                                    <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export'/>
+                                </button>
+                                <HoverToolTip id='export'/>
+                            </>
+                        }
                     </div>
                 </div>
                 <div className="">
