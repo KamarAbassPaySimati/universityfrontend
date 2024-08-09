@@ -128,7 +128,6 @@ export const handleStates = (value, id, type, setStates, states) => {
         }
     }
     setStates((prevState) => ({ ...prevState, ...obj }));
-    console.log(obj, 'states');
 };
 
 export const AddressDetails = ['street_name', 'town_village_ta', 'district'];

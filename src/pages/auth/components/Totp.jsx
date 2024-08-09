@@ -64,6 +64,7 @@ const Totp = ({ Qrcode }) => {
                 dispatch(setUser(userAttributes));
                 dispatch(login());
                 navigate('/dashboard');
+                window.location.reload();
                 setIsLoading(false);
             }
         } catch (error) {

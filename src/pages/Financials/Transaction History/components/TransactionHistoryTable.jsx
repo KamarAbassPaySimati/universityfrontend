@@ -67,7 +67,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>
                                     {getDrCr(transaction?.transaction_amount) || '-'}
                                 </td>
-                                <td data-testid='transaction_view'
+                                <td data-testid={`transaction_view-${index}`}
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
                                     <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/financials/transaction-history/${transaction?.transaction_id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
                                 </td>
