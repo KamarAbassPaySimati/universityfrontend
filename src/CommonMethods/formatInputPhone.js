@@ -1,7 +1,7 @@
-import { parsePhoneNumberFromString } from 'libphonenumber-js';
+// import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 export const formatInputPhone = (inputPhoneNumber, countryCodeAlpha, role) => {
-    if (role !== 'customer') {
+    if (role !== 'customer' || countryCodeAlpha === 'MW') {
         // Remove all non-digit characters from the input
         const digitsOnly = inputPhoneNumber.replace(/\D/g, '');
 
@@ -21,20 +21,31 @@ export const formatInputPhone = (inputPhoneNumber, countryCodeAlpha, role) => {
 
         return formattedPhoneNumber;
     } else {
-        try {
-            // Parse the phone number with the given country code
-            const phoneNumber = parsePhoneNumberFromString(inputPhoneNumber, countryCodeAlpha);
+        const digitsOnly = inputPhoneNumber.replace(/\D/g, '');
 
-            // Check if the phone number is valid
-            if (phoneNumber && phoneNumber.isValid()) {
-                // Format the phone number in the desired format
-                return phoneNumber.formatNational(); // or use formatInternational() for international format
-            } else {
-                return inputPhoneNumber; // Return the original input if the number is not valid
-            }
-        } catch (error) {
-            console.error('Error parsing phone number:', error);
-            return inputPhoneNumber; // Return the original input in case of an error
+        // Apply the desired formatting
+        let formattedPhoneNumber = '';
+        for (let i = 0; i < digitsOnly.length; i++) {
+            formattedPhoneNumber += digitsOnly[i];
         }
+
+        return formattedPhoneNumber;
+
+        // Formatting mobile number based on country code using libphonenumber-js npm package
+        // try {
+        //     // Parse the phone number with the given country code
+        //     const phoneNumber = parsePhoneNumberFromString(inputPhoneNumber, countryCodeAlpha);
+
+        //     // Check if the phone number is valid
+        //     if (phoneNumber && phoneNumber.isValid()) {
+        //         // Format the phone number in the desired format
+        //         return phoneNumber.formatNational(); // or use formatInternational() for international format
+        //     } else {
+        //         return inputPhoneNumber; // Return the original input if the number is not valid
+        //     }
+        // } catch (error) {
+        //     console.error('Error parsing phone number:', error);
+        //     return inputPhoneNumber; // Return the original input in case of an error
+        // }
     }
 };
