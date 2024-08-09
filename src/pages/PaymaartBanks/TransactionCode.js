@@ -353,6 +353,8 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Balance RM Payout to Beneficiary on Paymaart Account Deactivation/Deletion';
     case 'PMSPRTPM':
         return 'Balance EM Return to Paymaart User on Account Reactivation';
+    case 'PMPU1':
+        return 'Pay-out';
     default:
         return '-';
     }
