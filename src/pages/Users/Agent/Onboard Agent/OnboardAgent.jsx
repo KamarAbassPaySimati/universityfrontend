@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from 'react';
@@ -312,7 +313,7 @@ const OnboardAgent = ({ role }) => {
             last_name: formData.lastName,
             type: 'sms',
             country_code: countryCode,
-            value: formData.phoneNumber.replace(/\s/g, '')
+            value: formData.phoneNumber.replace(/\s/g, '').replace(/[()\-]/g, '').replace(/\D/g, '').replace(/^0/, '') // Remove all whitespace  // Remove parentheses and dashes // Remove any non-numeric characters // Remove leading zero
         };
 
         if (text.includes('Otp')) {
@@ -451,7 +452,7 @@ const OnboardAgent = ({ role }) => {
             middle_name: addBackslashBeforeApostrophe(formData.middleName),
             last_name: addBackslashBeforeApostrophe(formData.lastName),
             country_code: countryCode,
-            phone_number: formData.phoneNumber.replace(/\s/g, ''),
+            phone_number: formData.phoneNumber.replace(/\s/g, '').replace(/[()\-]/g, '').replace(/\D/g, '').replace(/^0/, ''), // Remove all whitespace  // Remove parentheses and dashes // Remove any non-numeric characters // Remove leading zero
             email: addBackslashBeforeApostrophe(formData.email),
             email_otp_id: otpId.email,
             phone_otp_id: otpId.phoneNumber,
