@@ -98,7 +98,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                             <th className='py-2 px-[10px] text-left font-[400]'>Sheet Name</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Uploaded Date, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Uploaded By</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Transferred Amount (MWK)</th>
+                            <th className='py-2 px-[10px] text-right font-[400]'>Transferred Amount (MWK)</th>
                             <th className='py-2 px-[10px]'></th>
                         </tr>
                     </thead>
@@ -114,8 +114,8 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                                 <td data-testid="amount" title={item?.uploaded_by}
                                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${item?.uploaded_by}`}</td>
                                 <td data-testid="amount" title={item?.transferred_amount}
-                                    className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px]'>
-                                    {item?.transferred_amount ? `${formattedAmount(item.transferred_amount)} .00 MWK` : '-'}
+                                    className='py-2 px-[10px] text-right truncate min-w-[100px] max-w-[100px]'>
+                                    {item?.transferred_amount ? `${formattedAmount(item.transferred_amount)}` : '-'}
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}

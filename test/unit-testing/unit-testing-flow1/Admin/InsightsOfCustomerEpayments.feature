@@ -14,4 +14,4 @@ Feature: Paymaart- Admin Web- Insights of Customer e-payments
   Scenario: Exporting insights of Customer e-payments
     Given I navigate to dashboard page
     When I click on export button for "Customer e-Payments"
-    Then I should read a message stating that "Exported successfully"
+    Then I should read a message stating that "Your transactions are being processed. Once exported, you will receive an email notification"
