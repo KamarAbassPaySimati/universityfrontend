@@ -285,7 +285,7 @@ const ViewTransactionDetails = ({ type }) => {
                                 {transactionType !== 'interest' &&
                                 <>
                                     <p>Txn Fee*</p>
-                                    <p>*VAT Include</p>
+                                    <p>*VAT Included</p>
                                 </>}
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
                                 <p>Txn ID</p>
