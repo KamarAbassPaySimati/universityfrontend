@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import NavigationRoutes from './routes/routes';
 import { motion } from 'framer-motion';

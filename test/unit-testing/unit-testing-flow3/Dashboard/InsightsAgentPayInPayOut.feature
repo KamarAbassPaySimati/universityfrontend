@@ -15,4 +15,4 @@ Feature: Paymaart- Admin Web- Insights of Agent Pay-in/Pay-out
   Scenario: Exporting insights of agent Pay-in and Pay-out
     Given I navigate to dashboard page
     When I click on export button for "Agent Pay-in; Pay-out"
-    Then I should read a message stating that "Exported successfully" 
+    Then I should read a message stating that "Your transactions are being processed. Once exported, you will receive an email notification" 

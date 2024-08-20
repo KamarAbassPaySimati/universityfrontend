@@ -15,4 +15,4 @@ Feature: Paymaart- Admin Web- Insights of Customer Pay-in/Cash-in/Cash-out
   Scenario: Exporting insights of Customer Pay-in, cash-in and Pay-out
     Given I navigate to dashboard page
     When I click on export button for "Customer Pay-in; Cash-in; Cash-out"
-    Then I should read a message stating that "Exported successfully" 
+    Then I should read a message stating that "Your transactions are being processed. Once exported, you will receive an email notification" 
