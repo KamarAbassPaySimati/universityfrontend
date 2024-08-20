@@ -9,7 +9,8 @@ Feature: Paymaart - Admin Web- Approve/Reject Flagged Transaction
   When a reject action is taken, e-money is to be refunded fully to the respective sender and entry to be reflected in customer Refund status list.
   Notification to be sent to the relevant parties. based on the membership type
 
-   @add_admin_user @create_new_user_and_login @create_transactions
+    @add_admin_user 
+    @create_new_user_and_login @create_transactions
     Scenario: flaging specific Transaction
         Given I navigate to Transaction History Page
         When I click on the view button for first transaction in list
@@ -30,8 +31,8 @@ Feature: Paymaart - Admin Web- Approve/Reject Flagged Transaction
 
     Scenario: Approving flagged transaction
         Given I am on the flagged transaction page  
-        When I click on the view button for first flagged transaction in list
-        Then I should be redirected to flagged transaction details page
+        When I click on view pending flagged transaction
+        Then I should be redirected to flagged transaction details page 
         When I click on approve "Flag Transaction"
         Then I should see a confirmation prompt for approving "Flag Transaction"
         When I click on confirm button
@@ -40,7 +41,7 @@ Feature: Paymaart - Admin Web- Approve/Reject Flagged Transaction
     @delete_admin_account @delete_transaction
     Scenario: Rejecting flagged transaction
         Given I am on the flagged transaction page  
-        When I click on the view button for second flagged transaction in list
+        When I click on view pending flagged transaction
         Then I should be redirected to flagged transaction details page
         When I click on reject "Flag Transaction"
         Then I should see a confirmation prompt for reject "Flag Transaction"
