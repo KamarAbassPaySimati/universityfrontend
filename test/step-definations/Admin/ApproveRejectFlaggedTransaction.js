@@ -17,10 +17,3 @@ When('I click on the view button for second transaction in list', async function
     await driver.wait(until.elementLocated(By.css('[data-testid="transaction_view-1"]'))).click();
     await new Promise(resolve => setTimeout(resolve, 500));
 });
-
-When('I click on the view button for second flagged transaction in list', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-1"]')));
-    await driver.wait(until.elementIsVisible(element));
-    this.beneficiaryt_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="beneficiary_paymaart_id"]'))).getText();
-    await element.click();
-});
