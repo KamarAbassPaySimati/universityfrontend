@@ -24,7 +24,7 @@ const CustomDatePicker = ({ testID, label, handleStates, value, error, disabled,
                 format={'DD-MMM-YYYY'}
                 value={value && dayjs(value)}
                 suffixIcon={<Image src='calendar'/>}
-                disabledDate={type === 'dob' ? getDisabledDate : undefined}
+                disabledDate={(type === 'dob' || type === 'dashBoard') ? getDisabledDate : undefined}
                 onChange={(date, dateString) => handleStates(date, type)}
             />
             {error && <div className='mt-2'><ErrorMessage error={error} /></div>}
