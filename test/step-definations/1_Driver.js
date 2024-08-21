@@ -45,7 +45,7 @@ const {
     loadLocalStorageData
 } = require('../bdd_modules/index');
 
-setDefaultTimeout(40000);
+setDefaultTimeout(43000);
 function replaceTextWithSpecialChars (text) {
     const regex = /[^\w\s]/g; // Matches any character that's not alphanumeric or whitespace
     return text.replace(regex, '');

@@ -322,6 +322,11 @@ export const ComponentsBasedOnRole = {
     admin:
         [
             {
+                name: 'Dashboard',
+                element: <Dashboard />,
+                path: '/dashboard'
+            },
+            {
                 name: 'Admin Users List',
                 element: <Admin />,
                 path: '/users/admins'
@@ -470,6 +475,11 @@ export const ComponentsBasedOnRole = {
     'support-admin':
         [
             {
+                name: 'Dashboard',
+                element: <Dashboard />,
+                path: '/dashboard'
+            },
+            {
                 name: 'Onboard Agent Users',
                 element: <OnboardAgent role={'agent'} />,
                 path: '/users/agents/register-agent'
@@ -502,6 +512,11 @@ export const ComponentsBasedOnRole = {
         ],
     'finance-admin':
         [
+            {
+                name: 'Dashboard',
+                element: <Dashboard />,
+                path: '/dashboard'
+            },
             {
                 name: 'Paymaart Trust Banks',
                 element: <TrustBanks />,
