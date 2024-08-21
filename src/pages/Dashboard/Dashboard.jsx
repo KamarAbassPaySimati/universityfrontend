@@ -56,7 +56,7 @@ const Dashboard = () => {
                     />
                     <BarGraph
                         DashboardName ="Customer e-Payments"
-                        endpoint='agent-registration-insight'
+                        endpoint='customer-epayment-insight'
                         initialStates={{ dateRangeType: 'Today', transaction_type: 'All' }}
                         count
                     />

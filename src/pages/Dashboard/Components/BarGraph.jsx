@@ -95,6 +95,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
         return `${day} ${formattedDate}`;
     };
     const handleApply = () => {
+        console.log('click');
         const startdate = new Date(dateRange.start_date).getTime();
         const enddate = new Date(dateRange.end_date).getTime();
 
@@ -265,7 +266,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             value={states.transaction_type}
                             placeholder="Enter Ref No."
                             error={false}
-                            options={['All', 'Pay Merchant', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
+                            options={['All', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
                             id="transaction_type"
                             testId="transaction_type"
                             handleInput={handleInput}
