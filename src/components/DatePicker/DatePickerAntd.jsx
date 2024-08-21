@@ -6,7 +6,7 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
 dayjs.extend(customParseFormat);
 
-const CustomDatePicker = ({ testID, label, handleStates, value, error, disabled, type }) => {
+const CustomDatePicker = ({ testID, label, handleStates, value, error, disabled, type, disabledDate }) => {
     const getDisabledDate = (current) => {
         return current && current > Date.now();
     };
@@ -24,7 +24,7 @@ const CustomDatePicker = ({ testID, label, handleStates, value, error, disabled,
                 format={'DD-MMM-YYYY'}
                 value={value && dayjs(value)}
                 suffixIcon={<Image src='calendar'/>}
-                disabledDate={(type === 'dob' || type === 'dashBoard') ? getDisabledDate : undefined}
+                disabledDate={(type === 'dob' || disabledDate) ? getDisabledDate : undefined}
                 onChange={(date, dateString) => handleStates(date, type)}
             />
             {error && <div className='mt-2'><ErrorMessage error={error} /></div>}

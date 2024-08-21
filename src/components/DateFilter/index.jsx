@@ -10,6 +10,7 @@ export default function DateFilter ({
     dateRange, setDateRange, handleApply, handleClearFilter
 }) {
     const handleStates = (value, id, type) => {
+        setErrorMessage('');
         setDateRange((prevState) => ({ ...prevState, [id]: value }));
     };
     const [errorMessage, setErrorMessage] = useState('');
@@ -54,19 +55,21 @@ export default function DateFilter ({
                                 label={'Start date'}
                                 testID="start_date"
                                 handleStates={handleStates}
-                                type='dashBoard'
+                                type='start_date'
                                 value={dateRange.start_date}
                                 error={errorMessage !== ''}
+                                disabledDate={true}
                             />
                         </div>
                         <div className='px-2.5 w-[200px]'>
                             <DatePickerAntd
                                 label={'End date'}
-                                type='dashBoard'
+                                type='end_date'
                                 testID="end_date"
                                 handleStates={handleStates}
                                 value={dateRange.end_date}
                                 error={errorMessage !== ''}
+                                disabledDate={true}
                             />
                         </div>
                     </div>
