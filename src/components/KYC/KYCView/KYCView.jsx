@@ -338,10 +338,10 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                                         font-normal px-1'>-</h1>
                                                                     )
                                                             ))}
-                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && (
+                                                            {(itemkey === 'ID Document') && (View?.id_document === 'Passport') && View?.citizen !== 'Malawian' && (
                                                                 <>
-                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: Single/Multiple entry visa</p>
-                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: 3</p>
+                                                                    <p className='font-normal text-sm text-[#4F5962] mt-3 pl-1'>Type of Visa/Permit: {View?.nature_of_permit}</p>
+                                                                    <p className='font-normal text-sm text-[#4F5962] pl-1'>Visa/Permit reference number: {View?.ref_no}</p>
                                                                 </>
                                                             )}
                                                         </div>
