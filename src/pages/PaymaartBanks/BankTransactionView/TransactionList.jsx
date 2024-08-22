@@ -283,7 +283,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                                 className='py-2 px-[10px] text-end truncate max-w-[200px]'>
                                                 {getDrCr(item?.transaction_amount) || '-'}</td>
                                             <td data-testid="name"
-                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>{formattedAmount(id === 'PTBAT' ? item?.closing_balance_ptbat : item?.closing_balance) || '-'}</td>
+                                                className='py-2 px-[10px] text-end truncate max-w-[200px]'>{formattedAmount(id === 'PTBAT' ? item?.closing_balance_ptbat : item?.closing_balance) + ' MWK' || '-'}</td>
                                         </tr>))}
                                 </tbody>
                             </table>
