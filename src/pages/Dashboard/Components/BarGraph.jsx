@@ -265,7 +265,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             value={states.transaction_type}
                             placeholder="Enter Ref No."
                             error={false}
-                            options={['All', 'Pay Merchant', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
+                            options={['All', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
                             id="transaction_type"
                             testId="transaction_type"
                             handleInput={handleInput}
