@@ -95,7 +95,6 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
         return `${day} ${formattedDate}`;
     };
     const handleApply = () => {
-        console.log('click');
         const startdate = new Date(dateRange.start_date).getTime();
         const enddate = new Date(dateRange.end_date).getTime();
 
