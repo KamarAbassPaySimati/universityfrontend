@@ -51,6 +51,9 @@ When('I enter the email address as {string} for customer registration', async fu
 When('I enter the phone number as {string} for customer registration', async function (phone_number) {
     // Write code here that turns the phrase above into concrete actions
     await driver.wait(until.elementLocated(By.css('[data-testid="change_code"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="change_code_search"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    await driver.wait(until.elementLocated(By.css('[data-testid="change_code_search"]'))).sendKeys('+91');
+    await driver.wait(until.elementLocated(By.css('[data-testid="change_code_option"]'))).click();
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
     if (phone_number !== '') {
         await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);

@@ -12,7 +12,7 @@ import Slugify from '../../../CommonMethods/Sulgify';
 import GlobalContext from '../../../components/Context/GlobalContext';
 
 const Flagged = () => {
-    const [searchParams, setSearchParams] = useSearchParams({ });
+    const [searchParams, setSearchParams] = useSearchParams({});
     const [notFound, setNotFound] = useState(false);
     const { setToastError } = useContext(GlobalContext);
     const dispatch = useDispatch();
@@ -99,42 +99,45 @@ const Flagged = () => {
         >
             <div className={`relative ${notFound || List?.transactions?.length === 0 ? '' : 'thead-border-bottom'}`}>
                 {(!notFound && List?.transactions?.length === 0 &&
-                        searchParams.get('Flagged Reason') === null &&
                     searchParams.get('search') === null)
                     ? (
-                        <></>
+                        <NoDataError className='h-noDataError'
+                            heading='No flagged transactions'
+                            text='Please check back later.'
+                        />
                     )
                     : (!notFound &&
-                    <div className='bg-[#fff] border-b border-neutral-outline'>
-                        <Topbar
-                            setSearchParams={setSearchParams}
-                            searchParams={searchParams}
-                            filterOptions={filterOptions}
-                            placeHolder="Paymaart ID or transaction ID"
-                            filterType='Filter  Flagged Transaction'
-                            isLoading={loading}
-                            customClass={true}
-                            filterActive={(searchParams.get('Flagged Reason') !== null)}
-                        />
-                    </div>)
+                        <div className='bg-[#fff] border-b border-neutral-outline'>
+                            <Topbar
+                                setSearchParams={setSearchParams}
+                                searchParams={searchParams}
+                                filterOptions={filterOptions}
+                                placeHolder="Paymaart ID or transaction ID"
+                                filterType='Filter  Flagged Transaction'
+                                isLoading={loading}
+                                customClass={true}
+                                filterActive={(searchParams.get('Flagged Reason') !== null)}
+                            />
+                        </div>)
                 }
                 {List?.transactions?.length === 0 && !loading &&
-                (searchParams.get('Flagged Reason') !== null || searchParams.get('search') !== null)
+                    (searchParams.get('search') !== null)
                     ? (<NoDataError className='h-noDataError' heading='No data found' text='Try adjusting your filter or search to find what you’re looking for' />)
-                    : <div className='overflow-auto scrollBar h-tableHeight'>
-                        <Table
-                            error={error}
-                            loading={loading}
-                            List={List}
-                            setSearchParams={setSearchParams}
-                            notFound={notFound}
-                            searchParams={searchParams}
-                        />
-                    </div>
+                    : (List?.transactions?.length !== 0 &&
+                        <div className='overflow-auto scrollBar h-tableHeight'>
+                            <Table
+                                error={error}
+                                loading={loading}
+                                List={List}
+                                setSearchParams={setSearchParams}
+                                notFound={notFound}
+                                searchParams={searchParams}
+                            />
+                        </div>)
                 }
                 {notFound &&
-                <NoDataError
-                    className='h-noDataError' heading='No data found' text = "404 could not find what you are looking for."/>}
+                    <NoDataError
+                        className='h-noDataError' heading='No data found' text="404 could not find what you are looking for." />}
                 {!loading && !error && !notFound && List?.transactions?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.total_records / 10)}

@@ -231,7 +231,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP Ref. No</th>
                                         <th className='py-2 px-[10px] text-left font-[400]'>Transaction POP</th>
                                         <th className='py-2 px-[10px] text-end font-[400]'>Amount (MWK)</th>
-                                        <th className='py-2 px-[10px] text-end font-[400]'>Closing Balance</th>
+                                        <th className='py-2 px-[10px] text-end font-[400]'>Closing Balance (MWK)</th>
                                         <th className='py-2 px-[10px]'></th>
                                     </tr>
                                 </thead>
