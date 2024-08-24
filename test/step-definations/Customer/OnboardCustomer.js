@@ -77,13 +77,17 @@ When('I enter a valid email address for customer registration', async function (
 });
 
 When('I enter a valid phone number for customer registration', async function () {
-    // Write code here that turns the phrase above into concrete actions
-    let phone_number = `10${faker.phone.number('########')}`;
-    if (phone_number.startsWith('0')) {
-        // Replace the first character with '9'
-        phone_number = '9' + phone_number.substring(1);
-    }
-    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE);
+    // Generate a valid Indian phone number starting with 7, 8, or 9 and followed by 9 random digits
+    const validPrefixes = ['7', '8', '9'];
+    const phone_number = `${faker.helpers.arrayElement(validPrefixes)}${faker.phone.number('#########')}`; // 9 random digits
+
+    // Select the country code for India (+91)
+    await driver.wait(until.elementLocated(By.css('[data-testid="change_code"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="change_code_search"]'))).sendKeys(Key.chord(getModifierKey(), 'a'), Key.DELETE, '+91');
+    await driver.wait(until.elementLocated(By.css('[data-testid="change_code_option"]'))).click();
+
+    // Clear and enter the generated phone number
+    await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).clear();
     await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).sendKeys(phone_number);
 });
 
