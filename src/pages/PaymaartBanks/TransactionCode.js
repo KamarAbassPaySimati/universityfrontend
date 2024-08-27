@@ -29,11 +29,11 @@ export function TransactionCode (value, type) {
     case 'Settlement to Merchant Biller from PTBA1 | RM debit':
         return 'MCBDRPTBA1';
     case 'Outflow for excess Float withdrawal from PTBA1 | EM credit to PMCAT':
-        return 'PTDR2PTBA1';
+        return 'PTDR1PTBA1';
     case 'Outflow for excess Float withdrawal from PTBA2 | EM credit to PMCAT':
-        return 'PTDR2PTBA2';
+        return 'PTDR1PTBA2';
     case 'Outflow for excess Float withdrawal from PTBA3 | EM credit to PMCAT':
-        return 'PTDR2PTBA3';
+        return 'PTDR1PTBA3';
     case 'Charge for Bank Services or Transactions from PTBA1 | RM debit':
         return 'PTDR2PTBA1';
 
@@ -353,6 +353,8 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Balance RM Payout to Beneficiary on Paymaart Account Deactivation/Deletion';
     case 'PMSPRTPM':
         return 'Balance EM Return to Paymaart User on Account Reactivation';
+    case 'PMPU1':
+        return 'Pay-out';
     default:
         return '-';
     }

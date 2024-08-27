@@ -6,10 +6,10 @@ const until = require('selenium-webdriver').until;
 const By = require('selenium-webdriver').By;
 const { driver } = require('../1_Driver.js');
 
-When('I click on the view button for first flagged transaction in list', async function () {
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
+When('I click on view pending flagged transaction', async function () {
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-pending"]')));
     await driver.wait(until.elementIsVisible(element));
-    this.beneficiaryt_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="beneficiary_paymaart_id"]'))).getText();
+    this.beneficiaryt_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="beneficiary_paymaart_id_pending"]'))).getText();
     await element.click();
 });
 
@@ -19,4 +19,11 @@ Then('I should be redirected to flagged transaction details page', async functio
 
     const to_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_details"] [data-testid="beneficiary_paymaart_id"]'))).getText();
     assert.equal(to_paymaart_id, this.beneficiaryt_paymaart_id);
+});
+
+When('I click on the view button for first flagged transaction in list', async function () {
+    const element = await driver.wait(until.elementLocated(By.css('[data-testid^="view-"]')));
+    await driver.wait(until.elementIsVisible(element));
+    this.beneficiaryt_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid^="beneficiary_paymaart_id_"]'))).getText();
+    await element.click();
 });

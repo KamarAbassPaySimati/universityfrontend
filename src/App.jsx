@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import NavigationRoutes from './routes/routes';
 import { motion } from 'framer-motion';
@@ -37,7 +38,7 @@ if (STAGE?.includes('prod')) {
             APPLICATION_REGION,
             config
         );
-        console.log("sakjd")
+        console.log('sakjd');
     } catch (error) {
         console.log(error);
         // Ignore errors thrown during CloudWatch RUM web client initialization
