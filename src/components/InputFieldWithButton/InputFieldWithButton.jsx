@@ -4,6 +4,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import Image from '../Image/Image';
 import formatTime from '../../CommonMethods/formatTimer';
 import { BeatLoader } from 'react-spinners';
+import Dropdown from '../Dropdown';
 
 const InputFieldWithButton = ({
     value,
@@ -37,7 +38,10 @@ const InputFieldWithButton = ({
     buttonTestId,
     setVerified,
     verify,
-    onPaste
+    onPaste,
+    role,
+    countryCodeAlpha,
+    setCountryCodeAlpha
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -77,14 +81,29 @@ const InputFieldWithButton = ({
         }
     };
 
+    const handleCountryCodeChange = (selectedCode, selectedCodeAlpha) => {
+        setCountryCode(selectedCode);
+        setCountryCodeAlpha(selectedCodeAlpha);
+        const maxLength = selectedCode === '+265' ? 11 : 15;
+        setNumberMaxLength(maxLength);
+    };
+
     return (
         <div className='flex flex-col gap-2 relative'>
             <label htmlFor={id} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{label}</label>
             <div className='bg-[#F8F8F8] relative w-fit flex justify-center items-center'>
-                {phoneNumber &&
-                <div data-testid='change_code' onClick={handleCountryCode} className={`min-w-[45px] pl-[10px] font-[400] text-[14px] leading-[22px] text-primary-normal py-[11px] border-b ${isFocused ? 'border-primary-normal' : 'border-[#DDDDDD]'} ${error ? 'border-error' : 'border-[#DDDDDD]'}`}>
-                    {countryCode}
-                </div>}
+                {phoneNumber && role !== 'customer' &&
+                    <div data-testid='change_code' onClick={handleCountryCode} className={`min-w-[45px] pl-[10px] font-[400] text-[14px] leading-[22px] text-primary-normal py-[11px] border-b ${isFocused ? 'border-primary-normal' : 'border-[#DDDDDD]'} ${error ? 'border-error' : 'border-[#DDDDDD]'}`}>
+                        {countryCode}
+                    </div>}
+                {phoneNumber && role === 'customer' &&
+                    <Dropdown
+                        selectedCode={countryCode}
+                        onChange={handleCountryCodeChange}
+                        error={error}
+                        isFocused={isFocused}
+                    />
+                }
                 <input
                     disabled={inputDisabled || isLoading}
                     maxLength={maxLength}
@@ -93,13 +112,14 @@ const InputFieldWithButton = ({
                     value={value}
                     type={type || 'text'}
                     className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px]
-                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
+                    font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px] 
+                    ${phoneNumber && role === 'customer' ? '!w-[270px]' : ''}
                     ${error || loginError ? 'border-error' : 'border-[#DDDDDD]'} ${className}`}
                     id={id}
                     placeholder={placeholder}
                     onFocus={handleFocus}
                     onBlur={handleBlur}
-                    onChange={(e) => onChange(e, id)}
+                    onChange={(e) => onChange(e, id, countryCodeAlpha)}
                     onKeyDown={handleKeyDown}
                     onPaste={(e) => {
                         if (onPaste) {

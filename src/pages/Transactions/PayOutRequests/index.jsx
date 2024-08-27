@@ -16,8 +16,8 @@ const PayOutRequests = () => {
     const { List, error, loading } = useSelector(state => state.PayOutRequests);
     // filter options
     const initialToggleButtons = [
-        { key: 'Agents', status: true },
-        { key: 'Merchants', status: false }
+        { key: 'Agents', status: true }
+        // { key: 'Merchants', status: false }  // currently merchant isnot there so its commented
     ];
     const [toggleButtons, setToggleButtons] = useState(initialToggleButtons);
 
@@ -189,15 +189,13 @@ const PayOutRequests = () => {
 
                 {
                     (!notFound && List?.records?.length === 0 &&
-        searchParams.get('page') === '1' && searchParams.get('citizen') === 'all' &&
-        searchParams.get('search') === null &&
-        searchParams.get('simplifiedkyc') === null &&
-        searchParams.get('fullkyc') === null)
+        searchParams.get('page') === '1' &&
+        searchParams.get('search') === null)
                         ? (
 
                             <NoDataError className='h-noDataError'
-                                heading='No profiles for verification'
-                                text='No profiles currently require verification. Please check back later.' />
+                                heading='No pay-out requests'
+                                text='No pay-out request. Please check back later.' />
                         )
                         : (List?.records?.length === 0 &&
             (

@@ -7,7 +7,7 @@ const { driver } = require('../1_Driver.js');
 
 When('I click on view agent', async function () {
     // Write code here that turns the phrase above into concrete actions
-    await new Promise(resolve => setTimeout(resolve, 4000));
+    await new Promise(resolve => setTimeout(resolve, 5000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="view-0"]')));
     await driver.wait(until.elementIsVisible(element));
 
@@ -15,7 +15,6 @@ When('I click on view agent', async function () {
     this.name = await driver.wait(until.elementLocated(By.css('[data-testid="agent_name"]'))).getText();
     this.phoneNumber = await driver.wait(until.elementLocated(By.css('[data-testid="phone_number"]'))).getText();
     this.status = await driver.wait(until.elementLocated(By.css('[data-testid="status"]'))).getText();
-
     await element.click();
 });
 

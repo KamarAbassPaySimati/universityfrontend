@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import NavigationRoutes from './routes/routes';
 import { motion } from 'framer-motion';
@@ -31,13 +32,14 @@ if (STAGE?.includes('prod')) {
         const APPLICATION_VERSION = '1.0.0';
         const APPLICATION_REGION = 'eu-west-1';
 
+        // eslint-disable-next-line no-unused-vars
         awsRum = new AwsRum(
             APPLICATION_ID,
             APPLICATION_VERSION,
             APPLICATION_REGION,
             config
         );
-        console.log("sakjd")
+        console.log('sakjd');
     } catch (error) {
         console.log(error);
         // Ignore errors thrown during CloudWatch RUM web client initialization
