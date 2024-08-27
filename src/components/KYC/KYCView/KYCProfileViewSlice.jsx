@@ -75,10 +75,8 @@ const KYCProfileViewSlice = createSlice({
                     AddressKeys.forEach((item) => {
                         if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             AddressValues.push(state.View[item]);
-                            console.log(state.View[item]);
                         }
                     });
-                    console.log(state.View, 'state.View');
                     InternatinalAddressKeys.forEach((item) => {
                         if (state.View[item] !== null && state.View[item]?.trim()?.length !== 0) {
                             malawiAddress.push(state.View[item]);

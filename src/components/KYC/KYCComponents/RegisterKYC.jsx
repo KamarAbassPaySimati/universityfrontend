@@ -503,7 +503,6 @@ export default function RegisterKYC ({ role, type }) {
                 if (!handleValidation('address_details')) {
                     setIsLoadingButton(false);
                 } else {
-                    console.log(states, 'states');
                     const body = {
                         po_box_no: states?.po_box_no,
                         house_number: states?.house_number,

@@ -59,7 +59,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
         try {
             setLoading(true); // Set loading state to true before API call
             setIsParams(params);
-            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type.toUpperCase()}` : ''}${params !== undefined ? `${params}` : ''}`);
+            const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type === 'Pay Person' ? 'pay_person' : states.transaction_type === 'Pay Paymaart' ? 'paymaart' : 'afrimax'}` : ''}${params !== undefined ? `${params}` : ''}`);
             let count = 0;
             res.data.data.forEach(element => {
                 if (multiple) {
@@ -114,7 +114,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type.toUpperCase()}&` : ''}${isParams !== undefined ? `${isParams}` : ''}&paymaart_id=${user.paymaart_id}`);
+            const res = await dataService.GetAPI(`admin-dashboard/export-${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${(DashboardName === 'Customer Registrations' && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase()}&` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type === 'Pay Person' ? 'pay_person' : states.transaction_type === 'Pay Paymaart' ? 'paymaart' : 'afrimax'}&` : ''}${isParams !== undefined ? `${isParams}` : ''}&paymaart_id=${user.paymaart_id}`);
             if (!res.error) {
                 if (res.data.s3_url) {
                     window.open(
@@ -265,7 +265,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             value={states.transaction_type}
                             placeholder="Enter Ref No."
                             error={false}
-                            options={['All', 'Pay Merchant', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
+                            options={['All', 'Pay Person', 'Pay Paymaart', 'Pay Afrimax']}
                             id="transaction_type"
                             testId="transaction_type"
                             handleInput={handleInput}

@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable max-len */
 /* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from 'react';
@@ -70,6 +71,7 @@ const OnboardAgent = ({ role }) => {
     const [timer, setTimer] = useState(0);
     const [resendCount, setResendCount] = useState(0);
     const [countryCode, setCountryCode] = useState('+265');
+    const [countryCodeAlpha, setCountryCodeAlpha] = useState('MW');
     const [numberMaxLength, setNumberMaxLength] = useState(11);
     const [isResendLoading, setIsResendLoading] = useState(false);
     const [isPhoneOtpResendLoading, setisPhoneOtpResendLoading] = useState(false);
@@ -95,7 +97,7 @@ const OnboardAgent = ({ role }) => {
         '}', '~'
     ];
 
-    const handleChange = (e, id) => {
+    const handleChange = (e, id, countryCodeAlpha) => {
         if (enteredLetter && enteredLetter === ' ') {
             return;
         }
@@ -137,7 +139,7 @@ const OnboardAgent = ({ role }) => {
             setVerified(prevState => {
                 return { ...prevState, [id]: false };
             });
-            const formattedPhoneNumber = formatInputPhone(e.target.value);
+            const formattedPhoneNumber = formatInputPhone(e.target.value, countryCodeAlpha, role);
             setFormData(prevState => {
                 return { ...prevState, [id]: formattedPhoneNumber };
             });
@@ -311,7 +313,7 @@ const OnboardAgent = ({ role }) => {
             last_name: formData.lastName,
             type: 'sms',
             country_code: countryCode,
-            value: formData.phoneNumber.replace(/\s/g, '')
+            value: formData.phoneNumber.replace(/\s/g, '').replace(/[()\-]/g, '').replace(/\D/g, '').replace(/^0/, '') // Remove all whitespace  // Remove parentheses and dashes // Remove any non-numeric characters // Remove leading zero
         };
 
         if (text.includes('Otp')) {
@@ -450,7 +452,7 @@ const OnboardAgent = ({ role }) => {
             middle_name: addBackslashBeforeApostrophe(formData.middleName),
             last_name: addBackslashBeforeApostrophe(formData.lastName),
             country_code: countryCode,
-            phone_number: formData.phoneNumber.replace(/\s/g, ''),
+            phone_number: formData.phoneNumber.replace(/\s/g, '').replace(/[()\-]/g, '').replace(/\D/g, '').replace(/^0/, ''), // Remove all whitespace  // Remove parentheses and dashes // Remove any non-numeric characters // Remove leading zero
             email: addBackslashBeforeApostrophe(formData.email),
             email_otp_id: otpId.email,
             phone_otp_id: otpId.phoneNumber,
@@ -621,6 +623,9 @@ const OnboardAgent = ({ role }) => {
                             setNumberMaxLength={setNumberMaxLength}
                             setVerified={setVerified}
                             verify={verify.phoneNumber}
+                            countryCodeAlpha={countryCodeAlpha}
+                            setCountryCodeAlpha={setCountryCodeAlpha}
+                            role={role}
                         />
                         {verify.phoneNumber && verified.email &&
                             <InputFieldWithButton

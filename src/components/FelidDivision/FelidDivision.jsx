@@ -16,7 +16,6 @@ export default function FelidDivision ({
     noHeader,
     noLabel
 }) {
-    console.log(states, 'states');
     return (
         <>
             {Object.keys(divisionObject).map((divItem, index = 0) => (
