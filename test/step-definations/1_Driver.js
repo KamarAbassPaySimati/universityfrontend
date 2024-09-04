@@ -3,7 +3,7 @@
 /* eslint-disable no-undef */
 const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout, Before, After } = require('@cucumber/cucumber');
 const chrome = require('selenium-webdriver/chrome');
-const { Key, until, By } = require('selenium-webdriver');
+const { Key, until, By,Browser,Builder } = require('selenium-webdriver');
 const chromedriver = require('chromedriver');
 const { createCoverageMap } = require('istanbul-lib-coverage');
 const fs = require('fs');
@@ -15,7 +15,7 @@ options.addArguments('--no-sandbox');
 options.addArguments('--disable-features=VizDisplayCompositor');
 options.addArguments('enable-automation');
 options.addArguments('--disable-dev-shm-usage');
-options.addArguments('--headless'); // comment this line of code to run in local chrome browser
+// options.addArguments('--headless'); // comment this line of code to run in local chrome browser
 options.addArguments('--window-size=1920,1080');
 options.addArguments('--disable-gpu');
 options.addArguments('--disable-extensions');
@@ -24,7 +24,11 @@ options.addArguments('enable-features=NetworkServiceInProcess');
 options.addArguments('--use-fake-device-for-media-stream');
 options.addArguments('--use-fake-ui-for-media-stream');
 const { v4: uuidv4 } = require('uuid');
-global.driver = chrome.Driver.createSession(options, service);
+global.driver = new Builder()
+    .forBrowser(Browser.CHROME)
+    .setChromeOptions(options)
+    .build();
+
 
 const { faker } = require('@faker-js/faker');
 const {
