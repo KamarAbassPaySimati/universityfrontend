@@ -8,7 +8,6 @@ const chromedriver = require('chromedriver');
 const { createCoverageMap } = require('istanbul-lib-coverage');
 const fs = require('fs');
 const path = require('path');
-const service = new chrome.ServiceBuilder(chromedriver.path).build();
 const options = new chrome.Options();
 options.addArguments('--disable-dev-shm-usage');
 options.addArguments('--no-sandbox');
