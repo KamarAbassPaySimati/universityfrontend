@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 // CustomDropdown.js
 import React, { useState } from 'react';
-import { countyCode } from '../JsonLists/countryCode';
 
 const Dropdown = ({ selectedCode, onChange, error, isFocused }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,14 +15,14 @@ const Dropdown = ({ selectedCode, onChange, error, isFocused }) => {
         setIsOpen(false);
         setSearchQuery('');
     };
+    const countryCodes = ['+91', '+44', '+1', '+234', '+39', '+265', '+27', '+46'];
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
     };
 
-    const filteredCountryCodes = countyCode.filter((country) =>
-        country.dial_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        country.code.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredCountryCodes = countryCodes.filter(
+        code => code.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     return (
@@ -47,14 +46,18 @@ const Dropdown = ({ selectedCode, onChange, error, isFocused }) => {
                         className='w-full px-2 py-2 text-[14px] border-b border-gray-300 focus:outline-none text-primary-normal'
                     />
                     {filteredCountryCodes.map((country) => (
-                        <div
-                            key={country.code}
-                            onClick={() => handleOptionClick(country.dial_code, country.code)}
-                            className='px-2 py-2 text-[14px] hover:bg-gray-200 cursor-pointer text-primary-normal'
-                            data-testid={'change_code_option'}
-                        >
-                            {country.dial_code}
-                        </div>
+                        <>
+                            <div
+                                key={country}
+                                onClick={() => handleOptionClick(country, country)}
+                                className='px-2 py-2 text-[14px] hover:bg-gray-200 cursor-pointer text-primary-normal'
+                                data-testid={'change_code_option'}
+                            >
+                                {country}
+                            </div>
+
+                        </>
+
                     ))}
                 </div>
             )}

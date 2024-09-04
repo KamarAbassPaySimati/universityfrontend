@@ -10,7 +10,7 @@ import { Tooltip } from 'react-tooltip';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import Button from '../../../../components/Button/Button';
 import SecurityQuestionsShimmer from '../../../../components/Shimmers/SecurityQuestionsShimmer';
-import { formatInputPhone } from '../../../../CommonMethods/formatInputPhone';
+// import { formatInputPhone } from '../../../../CommonMethods/formatInputPhone';
 import validation from './validation';
 import ErrorMessage from '../../../../components/ErrorMessage/ErrorMessage';
 import verificationValidation from './verificationValidation';
@@ -19,6 +19,7 @@ import { endpoints } from '../../../../services/endpoints';
 import RegistrationSuccessful from '../../../../components/KYC/KYCComponents/RegistrationSuccessful';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 import ProfileUploadPlaceholder from '../../../../components/S3Upload/ProfileImageUpload';
+import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
 const OnboardAgent = ({ role }) => {
     const initialState = {
@@ -139,7 +140,7 @@ const OnboardAgent = ({ role }) => {
             setVerified(prevState => {
                 return { ...prevState, [id]: false };
             });
-            const formattedPhoneNumber = formatInputPhone(e.target.value, countryCodeAlpha, role);
+            const formattedPhoneNumber = formatLocalPhoneNumber(countryCode, e.target.value);
             setFormData(prevState => {
                 return { ...prevState, [id]: formattedPhoneNumber };
             });
@@ -474,9 +475,6 @@ const OnboardAgent = ({ role }) => {
         }
     };
 
-    useEffect(() => {
-    }, []);
-
     return (
         <CardHeader
             activePath={role === 'agent' ? 'Register Agent' : role === 'merchant' ? 'Register Merchant' : 'Register Customer'}
@@ -606,6 +604,7 @@ const OnboardAgent = ({ role }) => {
                             testId='phone_number'
                             buttonTestId='verify_phone_number'
                             error={formErrors.phoneNumber}
+                            setFormData={setFormData}
                             label='Phone Number'
                             placeholder='Enter phone number'
                             value={formData.phoneNumber}
