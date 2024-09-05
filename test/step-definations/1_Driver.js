@@ -4,7 +4,6 @@
 const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout, Before, After } = require('@cucumber/cucumber');
 const chrome = require('selenium-webdriver/chrome');
 const { Key, until, By,Browser,Builder } = require('selenium-webdriver');
-const chromedriver = require('chromedriver');
 const { createCoverageMap } = require('istanbul-lib-coverage');
 const fs = require('fs');
 const path = require('path');
