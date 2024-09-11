@@ -41,7 +41,8 @@ const InputFieldWithButton = ({
     onPaste,
     role,
     countryCodeAlpha,
-    setCountryCodeAlpha
+    setCountryCodeAlpha,
+    setFormData
 }) => {
     const handleKeyDown = (e) => {
         if (setEnteredLetter) {
@@ -82,10 +83,28 @@ const InputFieldWithButton = ({
     };
 
     const handleCountryCodeChange = (selectedCode, selectedCodeAlpha) => {
+        setFormData(prevState => {
+            return { ...prevState, phoneNumber: '' };
+        });
         setCountryCode(selectedCode);
         setCountryCodeAlpha(selectedCodeAlpha);
-        const maxLength = selectedCode === '+265' ? 11 : 15;
-        setNumberMaxLength(maxLength);
+        switch (selectedCodeAlpha) {
+        case '+91': // India
+        case '+44': // United Kingdom (UK)
+        case '+1': // United States (US)
+        case '+234': // Nigeria
+        case '+39': // Italy
+            setNumberMaxLength(10);
+            return; // as per your correction
+        case '+265': // Malawi
+        case '+27': // South Africa
+        case '+46': // Sweden
+            setNumberMaxLength(9);
+            return;
+        default:
+            setNumberMaxLength(15);
+             // or handle unknown country codes
+        }
     };
 
     return (
