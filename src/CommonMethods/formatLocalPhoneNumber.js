@@ -9,16 +9,10 @@ export default function formatLocalPhoneNumber (countryCode, phoneNumber) {
         return phoneNumber.replace(/(\d{4})(\d{6})/, '$1 $2');
 
     case '+1': // United States (US)
+    case '+234': // Nigeria
+    case '+39': // Italy
         // Format: 123-456-7890
         return phoneNumber.replace(/(\d{3})(\d{3})(\d{4})/, '$1 $2 $3');
-
-    case '+234': // Nigeria
-        // Format: 123 456 7890
-        return phoneNumber.replace(/(\d{3})(\d{6})/, '$1 $2');
-
-    case '+39': // Italy
-        // Format: 123 456 7890
-        return phoneNumber.replace(/(\d{3})(\d{6})/, '$1 $2');
 
         // case '+265': // Malawi
         //     // Format: 123 456 789

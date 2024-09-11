@@ -15,7 +15,7 @@ const Dropdown = ({ selectedCode, onChange, error, isFocused }) => {
         setIsOpen(false);
         setSearchQuery('');
     };
-    const countryCodes = ['+91', '+44', '+1', '+234', '+39', '+265', '+27', '+46'];
+    const countryCodes = ['+1', '+27', '+39', '+44', '+46', '+91', '+234', '+265'];
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
