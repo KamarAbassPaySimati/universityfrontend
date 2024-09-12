@@ -604,7 +604,7 @@ stages:
 - stage: Deploy
   jobs:
     - deployment: Deployment
-      condition: succeeded()
+      condition: condition: and(or(contains(variables['Build.Reason'], 'PullRequest'),contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'qa'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded())
       displayName: Deployment
       pool:
         vmImage: 'macos-latest'
