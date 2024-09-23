@@ -14,7 +14,6 @@ When('I click on approve {string}', async function (type) {
     case 'Customer KYC':
     case 'Merchant KYC':
     case 'Agent Delete Request':
-    case 'Agent Pay-out request':
     case 'Flag Transaction':
         element = await driver.wait(until.elementLocated(By.css('[data-testid="approve_button"]')));
         await driver.wait(until.elementIsVisible(element));

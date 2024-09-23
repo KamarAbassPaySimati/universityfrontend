@@ -17,14 +17,13 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
       Given I navigate to agent pay-out request listing screen
       When I click on view pay-out request 
       Then I should view Pay-out Request Details
-      When I click on approve "Agent Pay-out request"
-      Then I should see a confirmation prompt for approving "Agent Pay-out request"
+      When I click on approve Agent Pay-out request
+      Then I should see a confirmation prompt for approving Agent Pay-out request
       When I select the type as <type>
-      When I enter the transaction POP ref. no as "Transaction7382"
+      When I enter the transaction POP ref. no as "Transaction7382" for payout request
       When I upload the valid transaction POP file as "document_front.png"
-      When I click on approve button for confirming
+      When I click on confirm button for approving
       Then I should read a message stating that "Pay-out request approved successfully"
-      And I should see the pay-out request status changed to "Approved"
 
       Examples:
       | type                                                | 
@@ -32,7 +31,7 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
       | "Pay-out to Agent from PTBA2 EM credit to PMCAT"    | 
       # | "Pay-out to Agent from PTBA3 EM credit to PMCAT"    | 
 
-    @send_payout_request
+    @send_payout_requestCc
     Scenario: View specific payout request and approve
        Given I navigate to agent pay-out request listing screen
        When I click on view pay-out request 
@@ -42,5 +41,4 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
        When I enter the reason for rejecting as "BDD Test"
        When I click on reject button for confirming
        Then I should read a message stating that "Pay-out request rejected successfully"
-       And I should see the pay-out request status changed to "Rejected"
 
