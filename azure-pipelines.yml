@@ -132,50 +132,50 @@ stages:
 
 - stage: Test
   jobs:
-    # - job: UnitTesting
-    #   displayName: "Unit Testing"
-    #   condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "macos-latest"
-    #   steps:
-    #     - task: Cache@2
-    #       inputs:
-    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #         restoreKeys: |
-    #           npm | "$(Agent.OS)"
-    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #         cacheHitVar: CACHE_RESTORED
-    #       displayName: Cache npm
-    #     - script: |
-    #         npm install --force
-    #       condition: ne(variables.CACHE_RESTORED, 'true')
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: Environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - script: |
-    #         npm install pm2@5.3.0 -g
-    #         source .env
-    #         echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
-    #         echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
-    #         npm install express --force
-    #         pm2 start scripts/server.js
-    #         node --version
-    #         sleep 5
-    #         mkdir reports
-    #         mkdir reports-xml
-    #         npm install nyc --save-dev --force
-    #         node scripts/bdd_unit_testing_azure.js
-    #       displayName: Unit Testing
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-    #       artifact: '$(system.JobId)-failedScenarios'
-    #       condition: always()
+    - job: UnitTesting
+      displayName: "Unit Testing"
+      condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
+      pool:
+        vmImage: "macos-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            npm install pm2@5.3.0 -g
+            source .env
+            echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
+            echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
+            npm install express --force
+            pm2 start scripts/server.js
+            node --version
+            sleep 5
+            mkdir reports
+            mkdir reports-xml
+            npm install nyc --save-dev --force
+            node scripts/bdd_unit_testing_azure.js
+          displayName: Unit Testing
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-failedScenarios'
+          condition: always()
 
     - job: UnitTesting1
       displayName: "Unit Testing-1"
@@ -428,53 +428,53 @@ stages:
             codeCoverageTool: 'Cobertura'
             summaryFileLocation: 'coverage-cobertura/cobertura-coverage.xml'
 
-    # - job: UnitTestingResult
-    #   variables:
-    #     myVariable: $[replace(variables['BUILD.SOURCEBRANCH'], 'refs/heads/', '')]
-    #   displayName: "Unit Testing Result"
-    #   condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'))
-    #   dependsOn: UnitTesting
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #   - task: Cache@2
-    #     inputs:
-    #       key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #       restoreKeys: |
-    #         npm | "$(Agent.OS)"
-    #       path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #       cacheHitVar: CACHE_RESTORED
-    #     displayName: Cache npm
-    #   - script: |
-    #       npm install --cache .npm
-    #     condition: ne(variables.CACHE_RESTORED, 'true')
-    #   - script: |
-    #      mkdir reports
-    #      mkdir test/step-definations/coverageData/
-    #   - task: DownloadPipelineArtifact@2
-    #     name: reports
-    #     inputs:
-    #       artifact: reports
-    #       targetPath: '$(System.DefaultWorkingDirectory)/reports'
-    #   - task: DownloadPipelineArtifact@2
-    #     name: coverage
-    #     inputs:
-    #       artifact: coverage
-    #       targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData/'
-    #   - script: |
-    #       echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
-    #       echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
-    #       source .env
-    #       mkdir coverage
-    #       npm install nyc --save-dev --force
-    #       npm run generate_report
-    #       node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
-    #       export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
-    #       export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-    #       aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
-    #       aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
-    #       aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
-    #     displayName: 'BDD Living documentation'
+    - job: UnitTestingResult
+      variables:
+        myVariable: $[replace(variables['BUILD.SOURCEBRANCH'], 'refs/heads/', '')]
+      displayName: "Unit Testing Result"
+      condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'))
+      dependsOn: UnitTesting
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+      - task: Cache@2
+        inputs:
+          key: 'npmV3 | "$(Agent.OS)" | package.json'
+          restoreKeys: |
+            npm | "$(Agent.OS)"
+          path: "$(System.DefaultWorkingDirectory)/node_modules"
+          cacheHitVar: CACHE_RESTORED
+        displayName: Cache npm
+      - script: |
+          npm install --cache .npm
+        condition: ne(variables.CACHE_RESTORED, 'true')
+      - script: |
+         mkdir reports
+         mkdir test/step-definations/coverageData/
+      - task: DownloadPipelineArtifact@2
+        name: reports
+        inputs:
+          artifact: reports
+          targetPath: '$(System.DefaultWorkingDirectory)/reports'
+      - task: DownloadPipelineArtifact@2
+        name: coverage
+        inputs:
+          artifact: coverage
+          targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData/'
+      - script: |
+          echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
+          echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
+          source .env
+          mkdir coverage
+          npm install nyc --save-dev --force
+          npm run generate_report
+          node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
+          export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+          export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+          aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
+          aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
+          aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
+        displayName: 'BDD Living documentation'
     
     - job: IntegrationTesting
       displayName: "Integration Testing"
@@ -604,7 +604,7 @@ stages:
 - stage: Deploy
   jobs:
     - deployment: Deployment
-      condition: succeeded()
+      condition: and(or(contains(variables['Build.Reason'], 'PullRequest'),contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'qa'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded())
       displayName: Deployment
       pool:
         vmImage: 'macos-latest'

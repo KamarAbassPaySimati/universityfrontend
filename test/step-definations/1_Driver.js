@@ -3,12 +3,10 @@
 /* eslint-disable no-undef */
 const { AfterAll, BeforeAll, AfterStep, setDefaultTimeout, Before, After } = require('@cucumber/cucumber');
 const chrome = require('selenium-webdriver/chrome');
-const { Key, until, By } = require('selenium-webdriver');
-const chromedriver = require('chromedriver');
+const { Key, until, By, Browser, Builder } = require('selenium-webdriver');
 const { createCoverageMap } = require('istanbul-lib-coverage');
 const fs = require('fs');
 const path = require('path');
-const service = new chrome.ServiceBuilder(chromedriver.path).build();
 const options = new chrome.Options();
 options.addArguments('--disable-dev-shm-usage');
 options.addArguments('--no-sandbox');
@@ -24,7 +22,10 @@ options.addArguments('enable-features=NetworkServiceInProcess');
 options.addArguments('--use-fake-device-for-media-stream');
 options.addArguments('--use-fake-ui-for-media-stream');
 const { v4: uuidv4 } = require('uuid');
-global.driver = chrome.Driver.createSession(options, service);
+global.driver = new Builder()
+    .forBrowser(Browser.CHROME)
+    .setChromeOptions(options)
+    .build();
 
 const { faker } = require('@faker-js/faker');
 const {
