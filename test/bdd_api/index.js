@@ -333,6 +333,18 @@ async function deleteTransactionList () {
     }
 }
 
+async function send_payout_request (payload) {
+
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/bdd-payout`, payload, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
 module.exports = {
     getMFASecret,
     addAdminUser,
@@ -358,5 +370,6 @@ module.exports = {
     getKYCCompletedAgentActiveList,
     getKYCDeactivateCustomerList,
     deletePayoutRequest,
-    payoutRequestBDDAPI
+    payoutRequestBDDAPI,
+    send_payout_request
 };
