@@ -131,7 +131,7 @@ export default function BankTransactionView ({ type }) {
                                     : Data?.account_no,
                                 Purpose: Data?.purpose,
                                 'Last Update Date / Time': `${convertTimestampToCAT(Data?.updated_at)} CAT`,
-                                Balance: `${formattedAmount(Data?.amount)} MWK`
+                                Balance: `${formattedAmount(type === 'main-capital' ? Data?.total_amount : Data?.amount)} MWK`
                             }
                         } />
                     <TransactionList
