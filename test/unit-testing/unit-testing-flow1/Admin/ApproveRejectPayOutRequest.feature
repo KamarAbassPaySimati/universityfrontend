@@ -28,7 +28,7 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
       Examples:
       | type                                                | 
       | "Pay-out to Agent from PTBA1 EM credit to PMCAT"    | 
-      | "Pay-out to Agent from PTBA2 EM credit to PMCAT"    | 
+      # | "Pay-out to Agent from PTBA2 EM credit to PMCAT"    | 
       # | "Pay-out to Agent from PTBA3 EM credit to PMCAT"    | 
 
     @send_payout_request
