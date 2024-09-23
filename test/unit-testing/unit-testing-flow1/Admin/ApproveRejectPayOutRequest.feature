@@ -31,7 +31,7 @@ Feature: Paymaart- Admin Web-Approve/Reject Pay-out Request
       | "Pay-out to Agent from PTBA2 EM credit to PMCAT"    | 
       # | "Pay-out to Agent from PTBA3 EM credit to PMCAT"    | 
 
-    @send_payout_requestCc
+    @send_payout_request
     Scenario: View specific payout request and approve
        Given I navigate to agent pay-out request listing screen
        When I click on view pay-out request 
