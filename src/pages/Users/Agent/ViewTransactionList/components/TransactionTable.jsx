@@ -6,6 +6,7 @@ import Image from '../../../../../components/Image/Image';
 import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 import { useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
+import formatPhoneNumber from '../../../../../CommonMethods/formatPhoneNumber';
 
 const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type }) => {
     const navigate = useNavigate();
@@ -67,7 +68,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid="beneficiary_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                    {transaction?.receiver_id || '-'}
+                                    {transaction?.transaction_type === 'pay_unregister' ? formatPhoneNumber(transaction?.receiver_id) || '-' : transaction?.receiver_id || '-'}
                                 </td>
                                 <td data-testid="transaction_type"
                                     className="py-2 px-[10px] text-left truncate max-w-[200px]"
