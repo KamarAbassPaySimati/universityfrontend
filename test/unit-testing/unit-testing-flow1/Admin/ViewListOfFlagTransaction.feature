@@ -13,7 +13,7 @@ Feature: Paymaart - Admin Web- View List of Flagged Transaction
         When a refund action is taken, e-money is to be refunded fully to the respective sender.
     Notification to be sent to the relevant parties. based on the membership type
 
-    @add_admin_user @create_new_user_and_login @create_transactions @delete_admin_account @delete_transaction
+    @add_admin_user @create_new_user_and_login @create_transactions  @delete_transaction
     Scenario: Viewing specific Transaction
         Given I navigate to Transaction History Page
         Then I should see table header containing '["Service Code","Date/ Time, CAT","Beneficiary Paymaart ID","Transaction ID","Type","Amount"]'
