@@ -25,6 +25,7 @@ Given('I navigate to onboard trust bank', async function () {
 
 When('I select valid bank ref no.', async function () {
     // Write code here that turns the phrase above into concrete actions
+    await new Promise(resolve => setTimeout(resolve, 1000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="refNo"]')));
     await driver.wait(until.elementIsVisible(element));
     await driver.wait(until.elementLocated(By.css('[data-testid="refNo"]'))).click();

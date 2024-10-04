@@ -11,6 +11,7 @@ When('I click on notification bell', async function () {
 });
 
 Then('I should view list of notifications', async function () {
+    await new Promise(resolve => setTimeout(resolve, 2000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="notification_list"]')));
     await driver.wait(until.elementIsVisible(element));
 });
@@ -19,6 +20,8 @@ When('I click on view agent delete request notification', async function () {
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="view_delete_request_notification"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
 });
 
 Then('I should be redirected to view delete request screen', async function () {
