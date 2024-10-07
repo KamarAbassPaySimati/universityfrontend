@@ -9,7 +9,7 @@ Feature: Paymaart- Admin Web - List of Pay-out Request(Agent)
 
     @add_admin_user
     @create_new_user_and_login
-    # api for send pay out req
+    @send_payout_request
     Scenario: List all agent pay-out request
       Given I navigate to agent pay-out request listing screen
       Then I should see table header containing '["Pay-out Request ID","Recipient Paymaart ID","Amount","Date/Time","Status"]'

@@ -37,7 +37,8 @@ const {
     createTransactionList,
     deleteTransactionList,
     getKYCCompletedAgentDeactivateList,
-    getKYCDeactivateCustomerList
+    getKYCDeactivateCustomerList,
+    send_payout_request
 } = require('../bdd_api/index');
 const {
     extractQRCodeData,
@@ -522,6 +523,32 @@ Before('@create_transactions', async function () {
         console.log('API Error', error);
     }
 });
+
+Before('@send_payout_request', async function () {
+    global.payload = {
+        message: 'Payout request successful',
+        transaction_details: {
+            paymaart_name: 'John Test ACCOUNT',
+            paymaart_id: 'AGT182548',
+            bank_name: 'Inernational Bank',
+            account_name: 'Abhishek C Sreejith',
+            account_number: '98765456789',
+            amount: '30.00',
+            txn_fee: '17.17',
+            vat: '2.83',
+            transaction_id: 'AGT20240913104929138839',
+            date_time: 1726204769,
+            balance: '122902602.91'
+        }
+    };
+    // console.log('payload', payload)
+    try {
+        await send_payout_request(payload);
+    } catch (err) {
+        console.log('err', err);
+    }
+});
+
 After('@delete_transaction', async function () {
     try {
         await deleteTransactionList();
