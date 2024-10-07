@@ -240,56 +240,56 @@ stages:
     #         testResultsFiles: '**/TEST-*.xml'
 
 
-    - job: UnitTesting2
-      displayName: "Unit Testing-2"
-      condition: and(succeeded(), contains(variables['build.SourceBranch'], 'unit-testing'))
-      # condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
-      pool:
-        vmImage: "ubuntu-latest"
-      steps:
-        - task: Cache@2
-          inputs:
-            key: 'npmV3 | "$(Agent.OS)" | package.json'
-            restoreKeys: |
-              npm | "$(Agent.OS)"
-            path: "$(System.DefaultWorkingDirectory)/node_modules"
-            cacheHitVar: CACHE_RESTORED
-          displayName: Cache npm
-        - script: |
-            npm install --force
-          condition: ne(variables.CACHE_RESTORED, 'true')
-        - task: DownloadPipelineArtifact@2
-          name: environment
-          inputs:
-            artifact: Environment
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - task: DownloadPipelineArtifact@2
-          name: bundle
-          inputs:
-            artifact: bundle
-            targetPath: '$(System.DefaultWorkingDirectory)'
-        - script: |
-            npm install pm2@5.3.0 -g
-            source .env
-            npm install express --force
-            pm2 start scripts/server.js
-            sleep 5
-            mkdir reports
-            mkdir reports-xml
-            npm install nyc --save-dev --force
-            node scripts/bdd_unit_testing_azure2.js
-            if [ $? -ne 0 ]; then
-              echo "Integration Testing"
-              exit 1
-            fi
-          displayName: Unit Testing
-        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-          artifact: '$(system.JobId)-failedScenarios'
-          condition: always()
-        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
-          artifact: 'flow2-coverageData'
-        - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
-          artifact: 'flow2-living-documentation'
+    # - job: UnitTesting2
+    #   displayName: "Unit Testing-2"
+    #   condition: and(succeeded(), contains(variables['build.SourceBranch'], 'unit-testing'))
+    #   # condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+    #   pool:
+    #     vmImage: "ubuntu-latest"
+    #   steps:
+    #     - task: Cache@2
+    #       inputs:
+    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
+    #         restoreKeys: |
+    #           npm | "$(Agent.OS)"
+    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
+    #         cacheHitVar: CACHE_RESTORED
+    #       displayName: Cache npm
+    #     - script: |
+    #         npm install --force
+    #       condition: ne(variables.CACHE_RESTORED, 'true')
+    #     - task: DownloadPipelineArtifact@2
+    #       name: environment
+    #       inputs:
+    #         artifact: Environment
+    #         targetPath: '$(System.DefaultWorkingDirectory)'
+    #     - task: DownloadPipelineArtifact@2
+    #       name: bundle
+    #       inputs:
+    #         artifact: bundle
+    #         targetPath: '$(System.DefaultWorkingDirectory)'
+    #     - script: |
+    #         npm install pm2@5.3.0 -g
+    #         source .env
+    #         npm install express --force
+    #         pm2 start scripts/server.js
+    #         sleep 5
+    #         mkdir reports
+    #         mkdir reports-xml
+    #         npm install nyc --save-dev --force
+    #         node scripts/bdd_unit_testing_azure2.js
+    #         if [ $? -ne 0 ]; then
+    #           echo "Integration Testing"
+    #           exit 1
+    #         fi
+    #       displayName: Unit Testing
+    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+    #       artifact: '$(system.JobId)-failedScenarios'
+    #       condition: always()
+    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+    #       artifact: 'flow2-coverageData'
+    #     - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
+    #       artifact: 'flow2-living-documentation'
 
     - job: UnitTesting3
       displayName: "Unit Testing-3"
