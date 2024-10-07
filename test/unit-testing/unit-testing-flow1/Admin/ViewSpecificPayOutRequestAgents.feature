@@ -6,7 +6,7 @@ Feature: Paymaart - Admin Web -View Specific Pay-out Request(Agent)
     @add_admin_user
     @create_new_user_and_login
     @delete_admin_account
-    # api call
+    @send_payout_request
     Scenario: View specific payout request of agent
       Given I navigate to agent pay-out request listing screen
       When I click on view pay-out request 

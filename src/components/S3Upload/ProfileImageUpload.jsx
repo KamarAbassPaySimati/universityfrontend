@@ -39,7 +39,7 @@ export default function ProfileUploadPlaceholder ({ path, selectedUploadImg, sta
                     <div className="relative mt-[1px]">
                         <img
                             src={`${CDN}${states[selectedUploadImg]}`}
-                            className="relative w-[100px] h-[100px] rounded-[10px] overflow-hidden"
+                            className="relative w-[100px] h-[100px] rounded-[10px] overflow-hidden object-cover"
                         />
                         <Image
                             src="deleteProfile"
@@ -108,7 +108,7 @@ export default function ProfileUploadPlaceholder ({ path, selectedUploadImg, sta
                     </div>
                     <div className=' flex flex-col mt-auto'>
                         <p className='font-400 text-[12px]
-                                     text-[#A4A9AE]'>Supported file types: .png, .jpg, .jpeg for images</p>
+                                    text-[#A4A9AE]'>Supported file types: .png, .jpg, .jpeg for images</p>
                         <p className='font-400 text-[12px] text-[#A4A9AE] mb-[4px]'>Max file size: 10MB</p>
                     </div>
 
