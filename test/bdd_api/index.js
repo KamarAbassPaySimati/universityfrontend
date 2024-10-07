@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable max-len */
 
 const axios = require('axios');
@@ -319,7 +320,7 @@ async function createTransactionList () {
     } catch (error) {
         console.log('API Error', error);
         if (error.response.status === 401) {
-            return await createTransactionList()
+            return await createTransactionList();
         }
     }
 }
@@ -336,7 +337,6 @@ async function deleteTransactionList () {
 }
 
 async function send_payout_request (payload) {
-
     const axiosOptions = await getToken();
 
     try {

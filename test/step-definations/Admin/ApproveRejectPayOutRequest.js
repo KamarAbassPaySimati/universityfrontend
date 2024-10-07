@@ -1,3 +1,7 @@
+/* eslint-disable eol-last */
+/* eslint-disable prefer-const */
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable camelcase */
 const assert = require('assert');
 const { When, Then } = require('@cucumber/cucumber');
