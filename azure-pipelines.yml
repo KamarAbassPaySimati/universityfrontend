@@ -26,7 +26,7 @@ stages:
     - job: "lint"
       displayName: "Code Quality"
       # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      condition: or(and(contains(variables['Build.Reason'], 'PullRequest'),  succeeded('Test')), and(contains(variables['build.SourceBranch'], 'qa'), succeeded('Test')), and(or(contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -134,7 +134,7 @@ stages:
   jobs:
     - job: UnitTesting
       displayName: "Unit Testing"
-      condition: or(and(contains(variables['Build.Reason'], 'PullRequest'),  succeeded('Test')), and(contains(variables['build.SourceBranch'], 'qa'), succeeded('Test')), and(or(contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded())
+      condition: or(and(contains(variables['Build.Reason'], 'PullRequest'),  succeeded('Test')), and(contains(variables['build.SourceBranch'], 'qa'), succeeded('Test')), and(or(contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded()))
       pool:
         vmImage: "macos-latest"
       steps:
