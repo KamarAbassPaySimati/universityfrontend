@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable max-len */
 
 const axios = require('axios');
@@ -319,7 +320,7 @@ async function createTransactionList () {
     } catch (error) {
         console.log('API Error', error);
         if (error.response.status === 401) {
-            return await createTransactionList()
+            return await createTransactionList();
         }
     }
 }
@@ -329,6 +330,17 @@ async function deleteTransactionList () {
 
     try {
         const data = await axios.delete(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-user-transactions`, { headers: axiosOptions });
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+
+async function send_payout_request (payload) {
+    const axiosOptions = await getToken();
+
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/bdd-payout`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -360,5 +372,6 @@ module.exports = {
     getKYCCompletedAgentActiveList,
     getKYCDeactivateCustomerList,
     deletePayoutRequest,
-    payoutRequestBDDAPI
+    payoutRequestBDDAPI,
+    send_payout_request
 };
