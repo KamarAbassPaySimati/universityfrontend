@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { formatInputPhone } from '../../../CommonMethods/phoneNumberFormat';
 import { dataService } from '../../../services/data.services';
 import { occupationEduction } from '../KYCComponents/KYCFunctions';
+import formatLocalPhoneNumber from '../../../CommonMethods/formatLocalPhoneNumber';
 
 const initialState = {
     loading: true,
@@ -98,7 +98,7 @@ const KYCProfileViewSlice = createSlice({
                     state.address = {
                         'Phone Number':
                         `${state?.View?.country_code} ${state?.View?.phone_number
-                            ? formatInputPhone(state?.View?.phone_number)
+                            ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
                             : ''}`,
                         Email: state?.View?.email,
                         Address: AddressValues.join(', ')
@@ -106,7 +106,7 @@ const KYCProfileViewSlice = createSlice({
                     state.nonMalawiAddress = {
                         'Phone Number':
                         `${state?.View?.country_code} ${state?.View?.phone_number
-                            ? formatInputPhone(state?.View?.phone_number)
+                            ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
                             : ''}`,
                         Email: state?.View?.email,
                         Nationality: state?.View?.citizen === 'Non Malawian' ? '-' : state?.View?.citizen,
@@ -117,7 +117,7 @@ const KYCProfileViewSlice = createSlice({
                     state.not_started = {
                         'Phone Number':
                         `${state?.View?.country_code} ${state?.View?.phone_number
-                            ? formatInputPhone(state?.View?.phone_number)
+                            ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
                             : ''}`,
                         Email: state?.View?.email
                     };
