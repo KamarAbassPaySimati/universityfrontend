@@ -8,6 +8,7 @@ import { Tooltip } from 'react-tooltip';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import { getStatusColor } from '../../../../components/KYC/KYCView/KYCViewFunctions';
+import formatID from '../../../../CommonMethods/formatId';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
@@ -43,8 +44,8 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title={convertTimestampToCAT(user?.created_at) || '-'} className='py-2 px-[10px] text-left truncate min-w-[200px] max-w-[200px]'>{convertTimestampToCAT(user?.created_at) || '-'}</td>
                                 <td data-testid="transaction_id" title={user?.transaction_id} className='py-2 px-[10px] truncate min-w-[250px] max-w-[250px]'>{user?.transaction_id || '-'}</td>
-                                <td data-testid="flagged_by" title={user?.flagged_by} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.flagged_by || '-'}</td>
-                                <td data-testid={`beneficiary_paymaart_id_${user.status === 'pending' ? 'pending' : 'other'}`} title={user?.receiver_id} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.receiver_id || '-'}</td>
+                                <td data-testid="flagged_by" title={user?.flagged_by} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{formatID(user?.flagged_by) || '-'}</td>
+                                <td data-testid={`beneficiary_paymaart_id_${user.status === 'pending' ? 'pending' : 'other'}`} title={formatID(user?.receiver_id)} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{formatID(user?.receiver_id) || '-'}</td>
                                 <td data-testid="reversal_admin_name" title={user?.reversal_admin_name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.reversal_admin_name || '-'}`}</td>
                                 <td data-testid="reason" title={user?.reasons.map(key => obj[key]).join(', ')} className='py-2 px-[10px] truncate min-w-[250px] max-w-[250px]'>{`${user?.reasons.map(key => obj[key]).join(', ')}` || '-'}</td>
                                 <td data-testid="amount" title={formattedAmount(user?.amount)} className='py-2 px-[10px] text-right truncate min-w-[150px] max-w-[150px]'>{`${formattedAmount(Math.abs(user?.amount)) || '0.00'} `}</td>

@@ -9,6 +9,7 @@ import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../../CommonMethods/ListFunctions';
 import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
+import formatID from '../../../../../CommonMethods/formatId';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
@@ -39,7 +40,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td data-testid="paymaart_id" title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
+                                <td data-testid="paymaart_id" title={formatID(user?.paymaart_id)} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(user?.paymaart_id) || '-'}</td>
                                 <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
                                 <td data-testid="phone_number" className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
