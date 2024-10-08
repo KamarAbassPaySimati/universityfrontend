@@ -108,7 +108,7 @@ async function createAdminAccountSecure (payload) {
     };
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/onboard-admin`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/admin-users/onboard-admin`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -164,7 +164,7 @@ async function createAgentAccount (payload) {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/create-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/agent-users/create-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -179,7 +179,7 @@ async function verifyAgentOTP (token) {
     };
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/verify-otp-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/agent-users/verify-otp-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -190,7 +190,7 @@ async function sendAgentOTP (payload) {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/send-otp-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/agent-users/send-otp-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -201,7 +201,7 @@ async function createCustomerAccount (payload) {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/customer-user/create-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/customer-user/create-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -216,7 +216,7 @@ async function verifyCustomerOTP (token) {
     };
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/customer-user/verify-otp-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/customer-user/verify-otp-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -227,7 +227,7 @@ async function sendCustomerOTP (payload) {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/customer-user/send-otp-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/customer-user/send-otp-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -238,7 +238,7 @@ async function createMerchantAccount (payload) {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/create-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/create-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -253,7 +253,7 @@ async function verifyMerchantOTP (token) {
     };
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/verify-otp-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/verify-otp-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -263,7 +263,7 @@ async function sendMerchantOTP (payload) {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/send-otp-secure`, payload, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/merchant-users/send-otp-secure`, payload, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -274,7 +274,7 @@ async function getKYCCompletedAgentList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/agent-users/get-agent-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, { headers: axiosOptions });
+        const data = await axios.get(`https://${process.env.VITE_DOMAIN_NAME}/v1/agent-users/get-agent-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -284,7 +284,7 @@ async function getKYCCompletedAgentActiveList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/agent-list?page=1&status=active`, { headers: axiosOptions });
+        const data = await axios.get(`https://${process.env.VITE_DOMAIN_NAME}/v1/admin-users/agent-list?page=1&status=active`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -295,7 +295,7 @@ async function getKYCCompletedCustomerList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, { headers: axiosOptions });
+        const data = await axios.get(`https://${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-kyc-list?page=1&citizenship=all&simplifiedStatus=completed&fullStatus=completed`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -305,7 +305,7 @@ async function getKYCDeactivateCustomerList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.get(`https:/${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-list?page=1&status=inactive`, { headers: axiosOptions });
+        const data = await axios.get(`https://${process.env.VITE_DOMAIN_NAME}/v1/admin-users/customer-list?page=1&status=inactive`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -315,7 +315,7 @@ async function getKYCDeactivateCustomerList () {
 async function createTransactionList () {
     const axiosOptions = await getToken();
     try {
-        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/add-user-transactions`, {}, { headers: axiosOptions });
+        const data = await axios.post(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/add-user-transactions`, {}, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
@@ -329,7 +329,7 @@ async function deleteTransactionList () {
     const axiosOptions = await getToken();
 
     try {
-        const data = await axios.delete(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-user-transactions`, { headers: axiosOptions });
+        const data = await axios.delete(`https://${process.env.VITE_DOMAIN_NAME}/v1/bdd/delete-user-transactions`, { headers: axiosOptions });
         return data.data;
     } catch (error) {
         console.log('API Error', error);
