@@ -1,5 +1,5 @@
 export default function formatPhoneNumber (phoneNumber) {
-    if (phoneNumber === null) {
+    if (phoneNumber !== null) {
         if (phoneNumber.startsWith('+91')) {
             const remainingDigits = phoneNumber.slice(3);
             let formattedNumber = '+91 ';
