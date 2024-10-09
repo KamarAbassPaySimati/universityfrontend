@@ -258,7 +258,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             </>
                                             : <>
                                                 <p>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || '-')}</p>
-                                                <p data-testid="beneficiary_paymaart_id">{formatPhoneNumber(transactionDetails?.receiver_phone_no) || formatID(transactionDetails?.receiver_id) || '-'}</p>
+                                                <p data-testid="beneficiary_paymaart_id">{(transactionDetails?.receiver_phone_no && formatPhoneNumber(transactionDetails?.receiver_phone_no)) || transactionDetails?.receiver_id || '-'}</p>
                                             </>}
                                         {(transactionDetails?.obo_name ||
                                         transactionDetails?.obo_id ||
