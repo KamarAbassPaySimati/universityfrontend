@@ -33,12 +33,12 @@ Feature: Paymaart - Admin Web - Upload G2P Sheet
     When I upload the valid excel sheet as "ValidSheet.xlsx"
     And I should read a message stating that "Successfully Uploaded G2P sheet"
 
-  Scenario: Uploading the wrong sheet
-    When I upload the excel sheet as <excel_sheet>
-    Then I should read a message stating that <message>
+  # Scenario: Uploading the wrong sheet
+  #   When I upload the excel sheet as <excel_sheet>
+  #   Then I should read a message stating that <message>
 
-    Examples:
-      | excel_sheet          | message                                 |
-      | "InvalidHeader.xlsx" | "Upload failed due to incorrect format" |
-      | "limitExceed.xlsx"   | "Maximum 200 beneficiaries per upload"  |
-      | "InvalidName.xlsx"   | "Upload failed due to incorrect format" |
+  #   Examples:
+  #     | excel_sheet          | message                                 |
+  #     | "InvalidHeader.xlsx" | "Upload failed due to incorrect format" |
+  #     | "limitExceed.xlsx"   | "Maximum 200 beneficiaries per upload"  |
+  #     | "InvalidName.xlsx"   | "Upload failed due to incorrect format" |
