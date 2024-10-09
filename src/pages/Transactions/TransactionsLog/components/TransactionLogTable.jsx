@@ -8,6 +8,7 @@ import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import IframeModal from '../../../../components/Iframe/IframeModal';
 import { getStatusStyles, getStatusText } from '../../../../CommonMethods/getStatusUI';
 import formatID from '../../../../CommonMethods/formatId';
+import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
 
 const TransactionLogTable = ({ loading, error, List, setSearchParams, notFound, searchParams }) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -58,8 +59,8 @@ const TransactionLogTable = ({ loading, error, List, setSearchParams, notFound, 
                                 <td data-testid="transaction_id" title={item?.transaction_id}
                                     className='py-2 px-[10px] text-left truncate max-w-[250px] min-w-[250px]'>{item?.transaction_id || '-'}
                                 </td>
-                                <td data-testid="beneficiary_paymaart_id" title={formatID(item?.reciever_id)}
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>{formatID(item?.reciever_id) || '-'}
+                                <td data-testid="beneficiary_paymaart_id" title={item?.reciever_id?.startsWith('+') ? formatPhoneNumber(item?.reciever_id) : formatID(item?.reciever_id)}
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>{(item?.reciever_id?.startsWith('+') ? formatPhoneNumber(item?.reciever_id) : formatID(item?.reciever_id)) || '-'}
                                 </td>
                                 <td data-testid="entry_by" title={formatID(item?.entered_by)}
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>{formatID(item?.entered_by) || '-'}
