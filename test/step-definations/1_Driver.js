@@ -313,7 +313,7 @@ Before('@add_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Super Admin',
             phone_number: main_phone_number,
-            paymaart_id: response.paymaartId,
+            paymaart_id: `${response.paymaartId.slice(0, 3)} ${response.paymaartId.slice(3, 7)} ${response.paymaartId.slice(7)}`,
             phone_number_without_country_code: phone_number
         };
         await new Promise(resolve => setTimeout(resolve, 4000));
@@ -361,7 +361,7 @@ Before('@add_finance_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Finance Admin',
             phone_number: main_phone_number,
-            paymaart_id: response.paymaartId,
+            paymaart_id: `${response.paymaartId.slice(0, 3)} ${response.paymaartId.slice(3, 7)} ${response.paymaartId.slice(7)}`,
             phone_number_without_country_code: phone_number
         };
         await new Promise(resolve => setTimeout(resolve, 4000));
@@ -409,7 +409,7 @@ Before('@add_support_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Support Admin',
             phone_number: main_phone_number,
-            paymaart_id: response.paymaartId,
+            paymaart_id: `${response.paymaartId.slice(0, 3)} ${response.paymaartId.slice(3, 7)} ${response.paymaartId.slice(7)}`,
             phone_number_without_country_code: phone_number
         };
         await new Promise(resolve => setTimeout(resolve, 4000));
@@ -457,7 +457,7 @@ Before('@add_normal_admin_user', async function () {
             username: email.toLowerCase(),
             role: 'Admin',
             phone_number: main_phone_number,
-            paymaart_id: response.paymaartId,
+            paymaart_id: `${response.paymaartId.slice(0, 3)} ${response.paymaartId.slice(3, 7)} ${response.paymaartId.slice(7)}`,
             phone_number_without_country_code: phone_number
         };
         console.log('response', response);

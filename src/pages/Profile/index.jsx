@@ -6,7 +6,6 @@ import Button2 from '../../components/Button2/Button2';
 import { useNavigate } from 'react-router-dom';
 import formatPhoneNumber from '../../CommonMethods/formatPhoneNumber';
 import ProfileName from '../../components/ProfileName/ProfileName';
-import formatID from '../../CommonMethods/formatId';
 
 const Profile = () => {
     const { user } = useSelector(state => state.auth);
@@ -26,7 +25,7 @@ const Profile = () => {
                     <ProfileName
                         userButtonName={`${user?.first_name?.[0] || ''}${user?.middle_name?.[0] || ''}${user?.last_name?.[0] || ''}`}
                         UserName={`${user?.first_name || '-'} ${user?.middle_name || '-'} ${user?.last_name.toUpperCase() || '-'}`}
-                        payMaartID={formatID(user.paymaart_id)}
+                        payMaartID={user.paymaart_id}
                     />
                     <div className='mt-1'>
                         <Button2
