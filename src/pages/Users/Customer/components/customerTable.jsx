@@ -89,6 +89,12 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                         place="top"
                                         content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                                     />
+                                    <Tooltip
+                                        id={`transactions-${index}`}
+                                        className='my-tooltip z-30'
+                                        place="top-end"
+                                        content="Transaction History"
+                                    />
                                     {/* <Tooltip
                                         id={`payin-${index}`}
                                         className='my-tooltip z-30'

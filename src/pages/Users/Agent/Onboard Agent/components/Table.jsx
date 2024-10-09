@@ -2,13 +2,13 @@
 /* eslint-disable max-len */
 import React from 'react';
 import Image from '../../../../../components/Image/Image';
-import { formatInputPhone } from '../../../../../CommonMethods/phoneNumberFormat';
 import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../../CommonMethods/ListFunctions';
 import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
+import formatLocalPhoneNumber from '../../../../../CommonMethods/formatLocalPhoneNumber';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
@@ -41,7 +41,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
                                 <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
-                                <td data-testid="phone_number" className='py-2 px-[10px]'>{`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
+                                <td data-testid="phone_number" className='py-2 px-[10px]'>{`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}</td>
                                 <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
                                 <td className='py-2 px-[10px]'>
                                     {user?.last_logged_in
