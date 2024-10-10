@@ -2,10 +2,8 @@ export default function formatPhoneNumber (phoneNumber) {
     if (phoneNumber.startsWith('+91')) {
         const remainingDigits = phoneNumber.slice(3);
         let formattedNumber = '+91 ';
-        // Format in 3-digit segments
-        formattedNumber += remainingDigits.slice(0, 3) + ' ';
-        formattedNumber += remainingDigits.slice(3, 6) + ' ';
-        formattedNumber += remainingDigits.slice(6);
+        formattedNumber += remainingDigits.slice(0, 5) + ' ';
+        formattedNumber += remainingDigits.slice(5);
         return formattedNumber;
     } else if (phoneNumber.startsWith('+265')) {
         const remainingDigits = phoneNumber.slice(4);

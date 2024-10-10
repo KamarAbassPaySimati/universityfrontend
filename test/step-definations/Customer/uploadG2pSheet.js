@@ -6,7 +6,7 @@ const { driver } = require('../1_Driver.js');
 const path = require('path');
 When('I upload the excel sheet as {string}', async function (sheet) {
     let element;
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await new Promise(resolve => setTimeout(resolve, 4000));
     if (sheet !== '') {
         element = await driver.wait(until.elementLocated(By.css('[data-testid="excel_sheet"]')));
         const filePath = path.join(__dirname, `../../support/${sheet}`);

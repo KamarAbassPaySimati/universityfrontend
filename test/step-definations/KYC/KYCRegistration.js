@@ -381,6 +381,7 @@ When('I select the verification document as {string}', async function (type) {
         await dropdownElement.click();
         break;
     }
+    await new Promise(resolve => setTimeout(resolve, 2000));
 });
 
 Then('I should be redirected to KYC personal details screen', async function () {

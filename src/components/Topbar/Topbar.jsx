@@ -95,6 +95,8 @@ const Topbar = ({
         delete params.status;
         delete params['Flagged Reason'];
         delete params.filter;
+        delete params.start_date;
+        delete params.end_date;
         setSearchParams({ ...params });
     };
     const handleClearFilterForSingleCheck = () => {

@@ -42,9 +42,9 @@ Feature: Paymaart - Admin Web - Self Transaction list View
     Given I navigate to Transaction History Page
     When I click on filter tab
     Then I should see filter popup modal
-    And I select filter by Transaction type as "Pay-out"
+    And I select filter by Transaction type as "Pay-in"
     Then I click on the apply filter button
-    Then I should see list of transactions where transaction type is "Pay-out"
+    Then I should see list of transactions where transaction type is "Pay-in"
     When I click on filter tab
     Then I should see filter popup modal
     When I click on clear filter
