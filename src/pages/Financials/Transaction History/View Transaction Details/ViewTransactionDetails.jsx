@@ -18,6 +18,7 @@ import ShareOptions from '../../../../components/ShareOptions/ShareOptions';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 import { getValueType } from '../../../../CommonMethods/getStatusUI';
 import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
+import formatID from '../../../../CommonMethods/formatId';
 
 const ViewTransactionDetails = ({ type }) => {
     // States
@@ -245,7 +246,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         {transactionType !== 'interest'
                                             ? <>
                                                 <p>{transactionDetails?.sender_name || '-'}</p>
-                                                <p>{transactionDetails?.sender_id || '-'}</p>
+                                                <p>{formatID(transactionDetails?.sender_id) || '-'}</p>
                                             </>
                                             : <p>Paymaart Bank</p>}
                                         <p className='h-[24px] mt-[10px]'></p>

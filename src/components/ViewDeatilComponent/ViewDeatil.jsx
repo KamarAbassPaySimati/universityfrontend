@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
+import formatID from '../../CommonMethods/formatId';
 
 export default function ViewDetail ({ itemkey, userDetails, loading }) {
     return (
@@ -11,9 +12,8 @@ export default function ViewDetail ({ itemkey, userDetails, loading }) {
                 title={userDetails}
                 data-testid={itemkey}
                 className={`${loading ? 'text-slate-200 bg-slate-200 max-w-[200px]' : (itemkey === 'Last Logged In' && userDetails === 'Online') ? 'text-accent-positive' : 'text-neutral-primary max-w-[300px]'} 
-                  cursor-default 
-                                    break-words block overflow-hidden text-ellipsis ${itemkey === 'Role' ? 'capitalize' : ''}`}>
-                {userDetails || '-'}
+                cursor-default break-words block overflow-hidden text-ellipsis ${itemkey === 'Role' ? 'capitalize' : ''}`}>
+                {itemkey === 'Paymaart ID' ? formatID(userDetails) : userDetails || '-'}
             </span>
         </div>
     );

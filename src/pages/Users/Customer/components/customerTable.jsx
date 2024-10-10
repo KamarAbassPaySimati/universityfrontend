@@ -8,6 +8,7 @@ import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
+import formatID from '../../../../CommonMethods/formatId';
 
 const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const Navigate = useNavigate();
@@ -37,7 +38,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td data-testid="paymaart_id" title={user?.paymaart_id} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
+                                <td data-testid="paymaart_id" title={formatID(user?.paymaart_id)} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(user?.paymaart_id) || '-'}</td>
                                 <td data-testid="customer_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[150px] max-w-[150px]'>{`${user?.name}`}</td>
                                 <td className='py-2 px-[10px] truncate min-w-[130px] max-w-[110px]' title={`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}>
                                     {`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}

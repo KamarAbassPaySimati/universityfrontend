@@ -12,6 +12,7 @@ import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
+import formatID from '../../../../CommonMethods/formatId';
 
 const ViewSpecificFlagged = () => {
     const [states, setState] = useState({});
@@ -246,7 +247,7 @@ const ViewSpecificFlagged = () => {
                                                         {transactionType !== 'interest'
                                                             ? <>
                                                                 <p>{flaggedDetails?.sender_name || '-'}</p>
-                                                                <p>{flaggedDetails?.sender_id || '-'}</p>
+                                                                <p>{formatID(flaggedDetails?.sender_id) || '-'}</p>
                                                             </>
                                                             : <p>Paymaart Bank</p>}
                                                         <p className='h-[24px] mt-[10px]'></p>
@@ -258,7 +259,7 @@ const ViewSpecificFlagged = () => {
                                                             </>
                                                             : <>
                                                                 <p>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || '-')}</p>
-                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id || '-'}</p>
+                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || formatID(flaggedDetails?.receiver_id) || '-'}</p>
                                                             </>}
                                                         {(flaggedDetails?.obo_name ||
                                                             flaggedDetails?.obo_id ||
@@ -344,7 +345,7 @@ const ViewSpecificFlagged = () => {
                                     {isLoading
                                         ? <TransactionDetailsShimmer col={1} />
                                         : <p className='text-neutral-primary'>
-                                            {flaggedDetails?.flagged_by || '-'}
+                                            {formatID(flaggedDetails?.flagged_by) || '-'}
                                         </p>}
                                 </div>
                                 <div className='flex flex-col gap-1 max-w-[450px]'>
