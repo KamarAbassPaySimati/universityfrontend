@@ -178,7 +178,7 @@ const ViewTransactionDetails = ({ type }) => {
             minHeightRequired={true}
         >
             <div data-testid='transaction_details' className='flex justify-center items-center' ref={captureRef}>
-                <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] p-[30px]
+                <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] pt-[30px] pb-[10px]
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
@@ -281,7 +281,7 @@ const ViewTransactionDetails = ({ type }) => {
                         </div>
                     </div>
                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
-                         text-neutral-primary font[400] text-sm rounded-lg mt-2 mb-[50px]'>
+                         text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
@@ -327,6 +327,11 @@ const ViewTransactionDetails = ({ type }) => {
                                     </>}
                             </div>
                         </div>
+                    </div>
+                    <div className='mt-[15px] flex justify-center text-[#A4A9AE] text-[12px] leading-[15.6px] gap-3'>
+                        <span>www.paymaart.com</span>
+                        <span>.</span>
+                        <span>hello@paymaart.com</span>
                     </div>
                 </div>
             </div>
