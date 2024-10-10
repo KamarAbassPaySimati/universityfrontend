@@ -281,7 +281,7 @@ const ViewTransactionDetails = ({ type }) => {
                         </div>
                     </div>
                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
-                         text-neutral-primary font[400] text-sm rounded-lg mt-2 mb-[50px]'>
+                         text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
