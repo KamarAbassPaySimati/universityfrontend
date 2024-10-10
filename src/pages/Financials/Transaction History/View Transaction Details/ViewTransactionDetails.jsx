@@ -178,7 +178,7 @@ const ViewTransactionDetails = ({ type }) => {
             minHeightRequired={true}
         >
             <div data-testid='transaction_details' className='flex justify-center items-center' ref={captureRef}>
-                <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] p-[30px]
+                <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] pt-[30px] pb-[10px]
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
@@ -327,6 +327,11 @@ const ViewTransactionDetails = ({ type }) => {
                                     </>}
                             </div>
                         </div>
+                    </div>
+                    <div className='mt-[15px] flex justify-center text-[#A4A9AE] text-[12px] leading-[15.6px] gap-3'>
+                        <span>www.paymaart.com</span>
+                        <span>.</span>
+                        <span>hello@paymaart.com</span>
                     </div>
                 </div>
             </div>
