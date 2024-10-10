@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
 import { dataService } from '../../../../services/data.services';
 import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
 const initialState = {
     loading: true,
@@ -41,7 +41,7 @@ const SpecificAdminViewSlice = createSlice({
                     state.userDetails = {
                         'Phone Number':
                             `${state?.View?.country_code} ${state?.View?.phone_number
-                                ? formatInputPhone(state?.View?.phone_number)
+                                ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
                                 : ''}`,
                         Email: state?.View?.email,
                         Role: state?.View?.user_type,

@@ -524,30 +524,30 @@ Before('@create_transactions', async function () {
     }
 });
 
-Before('@send_payout_request', async function(){
+Before('@send_payout_request', async function () {
     global.payload = {
-        "message": "Payout request successful",
-        "transaction_details": {
-            "paymaart_name": "John Test ACCOUNT",
-            "paymaart_id": "AGT182548",
-            "bank_name": "Inernational Bank",
-            "account_name": "Abhishek C Sreejith",
-            "account_number": "98765456789",
-            "amount": "30.00",
-            "txn_fee": "17.17",
-            "vat": "2.83",
-            "transaction_id": "AGT20240913104929138839",
-            "date_time": 1726204769,
-            "balance": "122902602.91"
+        message: 'Payout request successful',
+        transaction_details: {
+            paymaart_name: 'John Test ACCOUNT',
+            paymaart_id: 'AGT182548',
+            bank_name: 'Inernational Bank',
+            account_name: 'Abhishek C Sreejith',
+            account_number: '98765456789',
+            amount: '30.00',
+            txn_fee: '17.17',
+            vat: '2.83',
+            transaction_id: 'AGT20240913104929138839',
+            date_time: 1726204769,
+            balance: '122902602.91'
         }
-    }   
+    };
     // console.log('payload', payload)
-    try{
+    try {
         await send_payout_request(payload);
-    }catch(err){
-        console.log('err', err)
+    } catch (err) {
+        console.log('err', err);
     }
-})
+});
 
 After('@delete_transaction', async function () {
     try {

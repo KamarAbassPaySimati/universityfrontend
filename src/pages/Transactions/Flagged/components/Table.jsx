@@ -53,7 +53,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     {user?.status
                                         ? (
                                             <span className={`py-[2px] px-[10px] rounded text-[13px] font-semibold capitalize 
-                                             ${getStatusColor(user.status).color}`}>
+                                            ${getStatusColor(user.status).color}`}>
                                                 {getStatusColor(user.status).text}
                                             </span>
                                         )
@@ -79,7 +79,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                 }
             </table>
             {!notFound && error &&
-                (<NoDataError heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
+                (<NoDataError className='h-tableHeight' heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&
                 (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                 (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}

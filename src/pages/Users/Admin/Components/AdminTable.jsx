@@ -2,13 +2,13 @@
 import React from 'react';
 import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
-import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
 import isTimestampFiveMinutesAgo from '../../../../CommonMethods/lastLoggedInTimeStamp';
 import { useNavigate } from 'react-router-dom';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { Tooltip } from 'react-tooltip';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
 const AdminTable = (
     {
@@ -49,9 +49,9 @@ const AdminTable = (
                                     {`${user?.name}`}</td>
                                 <td data-testid="email" title = {user?.email} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
                                     {user?.email}</td>
-                                <td data-testid="phone" title = {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}
+                                <td data-testid="phone" title = {`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}
                                     className='py-2 px-[10px] text-left truncate max-w-[300px]'>
-                                    {`${user?.country_code} ${formatInputPhone(user?.phone_number)}`}</td>
+                                    {`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}</td>
                                 <td data-testid="user_role" title = {user?.user_type}
                                     className='py-2 px-[10px] text-left truncate capitalize'>{user?.user_type || '-'}</td>
                                 <td className='py-2 px-[10px] text-left truncate'>

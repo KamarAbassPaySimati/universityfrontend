@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useRef } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -31,7 +32,7 @@ export default function NotificationPopup ({
             }, delay);
         };
     }
-    const handleOnClick = (paymaartId, type) => {
+    const handleOnClick = (paymaartId, type, transactionId, senderId) => {
         const subString = paymaartId.substring(0, 3);
         switch (type) {
         case 'kyc':
@@ -63,6 +64,13 @@ export default function NotificationPopup ({
             default:
                 break;
             }
+            break;
+        case 'flag':
+            navigate(`/transactions/flagged/view/${senderId}/${type}/${transactionId}`);
+            break;
+        case 'payout':
+            navigate(`/transactions/pay-out-requests/${transactionId}`);
+            break;
         }
     };
 
@@ -88,10 +96,16 @@ export default function NotificationPopup ({
                 >
                     {notificationData.map((notificationItem, notificationIndex) => (
                         <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}
-                            onClick={() => handleOnClick(notificationItem.user_id, notificationItem.type)}
-                            data-testid={notificationItem.type === 'kyc'
-                                ? 'view_kyc_notification'
-                                : 'view_delete_request_notification'}
+                            onClick={() => handleOnClick(notificationItem.user_id, notificationItem.type, notificationItem.request_id, notificationItem.sender_id)}
+                            data-testid={
+                                notificationItem.type === 'kyc'
+                                    ? 'view_kyc_notification'
+                                    : notificationItem.type === 'delete'
+                                        ? 'view_delete_request_notification'
+                                        : notificationItem.type === 'flag'
+                                            ? 'view_flag_transaction_notification'
+                                            : 'view_payout_transaction_notification'
+                            }
                         >
                             <div className='flex items-center w-[90%]'>
                                 <div className='w-[15%]'>
@@ -101,10 +115,18 @@ export default function NotificationPopup ({
                                     <p className='font-normal text-sm text-[#4F5962]'>
                                         {notificationItem?.type === 'kyc'
                                             ? `Pending KYC Registration for ${notificationItem.user_id}`
-                                            : `Pending Delete Account Request for ${notificationItem.user_id}`}</p>
+                                            : notificationItem?.type === 'delete'
+                                                ? `Pending Delete Account Request for ${notificationItem.user_id}`
+                                                : notificationItem?.type === 'flag'
+                                                    ? `Pending Flag Transaction Request for ${notificationItem.user_id}`
+                                                    : `Pending Payout Request for ${notificationItem.user_id}`}</p>
                                     <p className='font-normal text-sm text-[#4F5962]'>{notificationItem.type === 'kyc'
                                         ? 'There are pending KYC Registrations requiring your attention.'
-                                        : 'There are pending Delete Account Request requiring your attention.'}</p>
+                                        : notificationItem.type === 'delete'
+                                            ? 'There are pending Delete Account Requests requiring your attention.'
+                                            : notificationItem.type === 'flag'
+                                                ? 'There are flagged transactions requiring your attention.'
+                                                : 'There are pending Payout Transactions requiring your attention.'}</p>
                                 </div>
                             </div>
                             <div className='w-[12%] '>
