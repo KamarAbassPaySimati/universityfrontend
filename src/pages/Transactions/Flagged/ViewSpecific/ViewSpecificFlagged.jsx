@@ -202,7 +202,7 @@ const ViewSpecificFlagged = () => {
                                                 <p>Paymaart Name</p>
                                                 {transactionType !== 'interest' && <p>Paymaart ID</p>}
                                                 <p className='font-[500] text-base mt-[10px]'>To</p>
-                                                {transactionType === 'payout'
+                                                {transactionType === 'payout' || transactionType === 'payout_approved'
                                                     ? <>
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
@@ -238,7 +238,7 @@ const ViewSpecificFlagged = () => {
                                                         {[...Array(2)]?.map((item, index) => (
                                                             <div className='flex flex-col gap-1' key={index}>
                                                                 <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                                <TransactionDetailsShimmer col={transactionType === 'payout' && index === 1 ? 3 : 2} />
+                                                                <TransactionDetailsShimmer col={(transactionType === 'payout' || transactionType === 'payout_approved') && index === 1 ? 3 : 2} />
                                                             </div>
                                                         ))}
                                                     </>
@@ -251,7 +251,7 @@ const ViewSpecificFlagged = () => {
                                                             </>
                                                             : <p>Paymaart Bank</p>}
                                                         <p className='h-[24px] mt-[10px]'></p>
-                                                        {transactionType === 'payout'
+                                                        {transactionType === 'payout' || transactionType === 'payout_approved'
                                                             ? <>
                                                                 <p>{flaggedDetails?.bank_name || '-'}</p>
                                                                 <p>{flaggedDetails?.account_name || '-'}</p>

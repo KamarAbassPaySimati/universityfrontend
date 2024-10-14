@@ -201,7 +201,7 @@ const ViewTransactionDetails = ({ type }) => {
                                 <p>Paymaart Name</p>
                                 {transactionType !== 'interest' && <p>Paymaart ID</p>}
                                 <p className='font-[500] text-base mt-[10px]'>To</p>
-                                {transactionType === 'payout'
+                                {transactionType === 'payout' || transactionType === 'payout_approved'
                                     ? <>
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
@@ -237,7 +237,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         {[...Array(2)]?.map((item, index) => (
                                             <div className='flex flex-col gap-1' key={index}>
                                                 <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                <TransactionDetailsShimmer col={transactionType === 'payout' && index === 1 ? 3 : 2} />
+                                                <TransactionDetailsShimmer col={(transactionType === 'payout' || transactionType === 'payout_approved') && index === 1 ? 3 : 2} />
                                             </div>
                                         ))}
                                     </>
@@ -250,7 +250,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             </>
                                             : <p>Paymaart Bank</p>}
                                         <p className='h-[24px] mt-[10px]'></p>
-                                        {transactionType === 'payout'
+                                        {transactionType === 'payout' || transactionType === 'payout_approved'
                                             ? <>
                                                 <p>{transactionDetails?.bank_name || '-'}</p>
                                                 <p>{transactionDetails?.account_name || '-'}</p>
@@ -258,7 +258,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             </>
                                             : <>
                                                 <p>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || '-')}</p>
-                                                <p data-testid="beneficiary_paymaart_id">{(transactionDetails?.receiver_phone_no && formatPhoneNumber(transactionDetails?.receiver_phone_no)) || transactionDetails?.receiver_id || '-'}</p>
+                                                <p data-testid="beneficiary_paymaart_id">{(transactionDetails?.receiver_phone_no && formatPhoneNumber(transactionDetails?.receiver_phone_no)) || formatID(transactionDetails?.receiver_id) || '-'}</p>
                                             </>}
                                         {(transactionDetails?.obo_name ||
                                         transactionDetails?.obo_id ||
