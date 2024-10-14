@@ -267,7 +267,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         <>
                                             {<p className={`${type !== 'customer' ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
                                             {transactionDetails?.obo_name && <p>{transactionDetails?.obo_name || '-'}</p>}
-                                            {transactionDetails?.obo_id && <p>{transactionDetails?.obo_id || '-'}</p>}
+                                            {transactionDetails?.obo_id && <p>{formatID(transactionDetails?.obo_id) || '-'}</p>}
                                             {(transactionDetails?.afrimax_name ||
                                             transactionDetails?.afrimax_id) && (
                                                 <>

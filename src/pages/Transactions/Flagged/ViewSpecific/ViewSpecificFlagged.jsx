@@ -268,7 +268,7 @@ const ViewSpecificFlagged = () => {
                                                             <>
                                                                 {<p className={`${!transactionType?.includes('CMR') ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
                                                                 {flaggedDetails?.obo_name && <p>{flaggedDetails?.obo_name || '-'}</p>}
-                                                                {flaggedDetails?.obo_id && <p>{flaggedDetails?.obo_id || '-'}</p>}
+                                                                {flaggedDetails?.obo_id && <p>{formatID(flaggedDetails?.obo_id) || '-'}</p>}
                                                                 {(flaggedDetails?.afrimax_name ||
                                                                     flaggedDetails?.afrimax_id) && (
                                                                     <>
