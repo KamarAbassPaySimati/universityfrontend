@@ -7,6 +7,7 @@ import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 import { useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 import formatPhoneNumber from '../../../../../CommonMethods/formatPhoneNumber';
+import formatID from '../../../../../CommonMethods/formatId';
 
 const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type }) => {
     const navigate = useNavigate();
@@ -68,7 +69,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid="beneficiary_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                    {transaction?.transaction_type === 'pay_unregister' ? (transaction?.receiver_id && formatPhoneNumber(transaction?.receiver_id)) || '-' : transaction?.receiver_id || '-'}
+                                    {transaction?.transaction_type === 'pay_unregister' ? (transaction?.receiver_id && formatPhoneNumber(transaction?.receiver_id)) || '-' : (transaction?.receiver_id?.startsWith('+') ? formatPhoneNumber(transaction?.receiver_id) : formatID(transaction?.receiver_id)) || '-'}
                                 </td>
                                 <td data-testid="transaction_type"
                                     className="py-2 px-[10px] text-left truncate max-w-[200px]"
