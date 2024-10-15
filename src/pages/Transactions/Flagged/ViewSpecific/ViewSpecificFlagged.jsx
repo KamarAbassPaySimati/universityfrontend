@@ -13,6 +13,7 @@ import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } 
 import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 import formatID from '../../../../CommonMethods/formatId';
+import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
 
 const ViewSpecificFlagged = () => {
     const [states, setState] = useState({});
@@ -259,7 +260,7 @@ const ViewSpecificFlagged = () => {
                                                             </>
                                                             : <>
                                                                 <p>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || '-')}</p>
-                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || formatID(flaggedDetails?.receiver_id) || '-'}</p>
+                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id?.startsWith('+') ? formatPhoneNumber(flaggedDetails?.receiver_id) : formatID(flaggedDetails?.receiver_id) || '-'}</p>
                                                             </>}
                                                         {(flaggedDetails?.obo_name ||
                                                             flaggedDetails?.obo_id ||

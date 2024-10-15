@@ -69,7 +69,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid="beneficiary_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                    {transaction?.transaction_type === 'pay_unregister' ? (transaction?.receiver_id && formatPhoneNumber(transaction?.receiver_id)) || '-' : formatID(transaction?.receiver_id) || '-'}
+                                    {transaction?.transaction_type === 'pay_unregister' ? (transaction?.receiver_id && formatPhoneNumber(transaction?.receiver_id)) || '-' : (transaction?.receiver_id?.startsWith('+') ? formatPhoneNumber(transaction?.receiver_id) : formatID(transaction?.receiver_id)) || '-'}
                                 </td>
                                 <td data-testid="transaction_type"
                                     className="py-2 px-[10px] text-left truncate max-w-[200px]"

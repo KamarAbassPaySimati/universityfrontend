@@ -245,7 +245,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         <p className='h-[24px]'></p>
                                         {transactionType !== 'interest'
                                             ? <>
-                                                <p>{transactionDetails?.sender_name || '-'}</p>
+                                                <p className='break-word'>{transactionDetails?.sender_name || '-'}</p>
                                                 <p>{formatID(transactionDetails?.sender_id) || '-'}</p>
                                             </>
                                             : <p>Paymaart Bank</p>}
