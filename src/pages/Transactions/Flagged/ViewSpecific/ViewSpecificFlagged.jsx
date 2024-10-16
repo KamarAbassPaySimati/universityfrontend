@@ -211,7 +211,7 @@ const ViewSpecificFlagged = () => {
                                                     </>
                                                     : <>
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Paymaart Name</p>}
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no ? 'Phone Number' : 'Paymaart ID'}</p>}
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no ? 'Phone Number' : (flaggedDetails?.receiver_id.startsWith('+') ? 'Phone Number' : 'Paymaart ID')}</p>}
                                                     </>}
                                                 {(flaggedDetails?.obo_name ||
                                                     flaggedDetails?.obo_id ||
@@ -329,6 +329,11 @@ const ViewSpecificFlagged = () => {
                                                     </>}
                                             </div>
                                         </div>
+                                    </div>
+                                    <div className='mt-[15px] flex justify-center text-[#A4A9AE] text-[12px] leading-[15.6px] gap-3'>
+                                        <span>www.paymaart.com</span>
+                                        <span>.</span>
+                                        <span>hello@paymaart.com</span>
                                     </div>
                                 </div>
                             </div>
