@@ -107,6 +107,10 @@ const OnboardAdmin = ({ actionKey }) => {
             pastedText = pastedText.replace(/\s+/g, ''); // Remove all spaces
         }
 
+        if (['firstName', 'lastName', 'middleName'].includes(id)) {
+            pastedText = pastedText.slice(0, 20);
+        }
+
         if (id === 'lastName') {
             setFormData(prevState => {
                 return { ...prevState, [id]: pastedText.toUpperCase() };
