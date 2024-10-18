@@ -289,7 +289,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             label='First Name'
                             placeholder='Enter first name'
                             setEnteredLetter={setEnteredLetter}
-                            maxLength="100"
+                            maxLength="20"
                             onPaste={handlePaste}
                         />
                         <InputField
@@ -303,7 +303,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             label='Middle Name'
                             placeholder='Enter middle name'
                             setEnteredLetter={setEnteredLetter}
-                            maxLength="100"
+                            maxLength="20"
                             onPaste={handlePaste}
                         />
                         <InputField
@@ -317,7 +317,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             label='Last Name'
                             placeholder='Enter last name'
                             setEnteredLetter={setEnteredLetter}
-                            maxLength="100"
+                            maxLength="20"
                             onPaste={handlePaste}
                         />
                     </div>}
