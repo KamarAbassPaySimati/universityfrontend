@@ -285,7 +285,13 @@ const ViewTransactionDetails = ({ type }) => {
                                     <div className='w-1/2 pb-1'>
                                         {dataLoading
                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                            : <p data-testid="beneficiary_paymaart_id">{transactionDetails?.receiver_phone_no || transactionDetails?.receiver_id?.startsWith('+') ? formatPhoneNumber(transactionDetails?.receiver_id) : formatID(transactionDetails?.receiver_id) || '-'}</p>}
+                                            : <p data-testid="beneficiary_paymaart_id">
+                                                {transactionDetails?.receiver_phone_no
+                                                    ? formatPhoneNumber(transactionDetails?.receiver_phone_no)
+                                                    : transactionDetails?.receiver_id?.startsWith('+')
+                                                        ? formatPhoneNumber(transactionDetails?.receiver_id)
+                                                        : formatID(transactionDetails?.receiver_id) || '-'}
+                                            </p>}
                                     </div>
                                 </div>
                             </>}

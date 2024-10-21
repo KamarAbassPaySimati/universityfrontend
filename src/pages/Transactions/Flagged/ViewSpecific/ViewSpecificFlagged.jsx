@@ -284,7 +284,13 @@ const ViewSpecificFlagged = () => {
                                                     <div className='w-1/2 pb-1'>
                                                         {isLoading
                                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                                            : <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id?.startsWith('+') ? formatPhoneNumber(flaggedDetails?.receiver_id) : formatID(flaggedDetails?.receiver_id) || '-'}</p>}
+                                                            : <p data-testid="beneficiary_paymaart_id">
+                                                                {flaggedDetails?.receiver_phone_no
+                                                                    ? formatPhoneNumber(flaggedDetails?.receiver_phone_no)
+                                                                    : flaggedDetails?.receiver_id?.startsWith('+')
+                                                                        ? formatPhoneNumber(flaggedDetails?.receiver_id)
+                                                                        : formatID(flaggedDetails?.receiver_id) || '-'}
+                                                            </p>}
                                                     </div>
                                                 </div>
                                             </>}
