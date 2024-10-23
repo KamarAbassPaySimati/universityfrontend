@@ -195,89 +195,169 @@ const ViewTransactionDetails = ({ type }) => {
                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border
                             bg-background-light text-neutral-primary font[400] text-sm rounded-lg'>
                         <div className='w-full flex gap-1'>
-                            <div className='w-1/2 flex flex-col gap-1'>
+                            <div className='w-1/2 pb-1'>
                                 <p className='font-[500] text-base'>From</p>
+                            </div>
+                            <div className='w-1/2 pb-1'>
+                                <p className='h-[24px]'></p>
+                            </div>
+                        </div>
+
+                        <div className='w-full flex gap-1'>
+                            <div className='w-1/2 pb-1'>
                                 <p>Paymaart Name</p>
-                                {transactionType !== 'interest' && <p>Paymaart ID</p>}
+                            </div>
+                            <div className='w-1/2 pb-1'>
+                                {dataLoading
+                                    ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                    : transactionType !== 'interest' ? <p className='break-word'>{transactionDetails?.sender_name || '-'}  </p> : <p>Paymaart Bank</p>}
+                            </div>
+                        </div>
+                        {transactionType !== 'interest' && <div className='w-full flex gap-1'>
+                            <div className='w-1/2 pb-1'>
+                                <p>Paymaart ID</p>
+                            </div>
+                            <div className='w-1/2 pb-1'>
+                                {dataLoading
+                                    ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                    : transactionType !== 'interest' && <p>{formatID(transactionDetails?.sender_id) || '-'}  </p> }
+                            </div>
+                        </div>}
+
+                        <div className='w-full flex gap-1'>
+                            <div className='w-1/2 pb-1'>
                                 <p className='font-[500] text-base mt-[10px]'>To</p>
-                                {transactionType === 'payout' || transactionType === 'payout_approved'
-                                    ? <>
+                            </div>
+                            <div className='w-1/2 pb-1'>
+                                <p className='h-[24px]'></p>
+                            </div>
+                        </div>
+
+                        {transactionType === 'payout' || transactionType === 'payout_approved'
+                            ? <>
+                                <div className='w-full flex gap-1'>
+                                    <div className='w-1/2 pb-1'>
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
+                                    </div>
+                                    <div className='w-1/2 pb-1'>
+                                        {dataLoading
+                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                            : <p>{transactionDetails?.bank_name || '-'}</p> }
+                                    </div>
+                                </div>
+                                <div className='w-full flex gap-1'>
+                                    <div className='w-1/2 pb-1'>
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
+                                    </div>
+                                    <div className='w-1/2 pb-1'>
+                                        {dataLoading
+                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                            : <p>{transactionDetails?.account_name || '-'}</p>}
+                                    </div>
+                                </div>
+                                <div className='w-full flex gap-1'>
+                                    <div className='w-1/2 pb-1'>
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. No</p>}
-                                    </>
-                                    : <>
+                                    </div>
+                                    <div className='w-1/2 pb-1'>
+                                        {dataLoading
+                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                            : <p>{transactionDetails?.account_no || '-'}</p> }
+                                    </div>
+                                </div>
+                            </>
+                            : <>
+                                <div className='w-full flex gap-1'>
+                                    <div className='w-1/2 pb-1'>
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Paymaart Name</p>}
-                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>{transactionDetails?.receiver_phone_no ? 'Phone Number' : 'Paymaart ID'}</p>}
-                                    </>}
-                                {(transactionDetails?.obo_name ||
+                                    </div>
+                                    <div className='w-1/2 pb-1'>
+                                        {dataLoading
+                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                            : <p className='break-word'>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || transactionDetails?.merchantName || '-')}</p> }
+                                    </div>
+                                </div>
+                                <div className='w-full flex gap-1'>
+                                    <div className='w-1/2 pb-1'>
+                                        {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>{transactionDetails?.receiver_phone_no || transactionDetails?.receiver_id?.startsWith('+') ? 'Phone Number' : 'Paymaart ID'}</p>}
+                                    </div>
+                                    <div className='w-1/2 pb-1'>
+                                        {dataLoading
+                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                            : <p data-testid="beneficiary_paymaart_id">
+                                                {transactionDetails?.receiver_phone_no
+                                                    ? formatPhoneNumber(transactionDetails?.receiver_phone_no)
+                                                    : transactionDetails?.receiver_id?.startsWith('+')
+                                                        ? formatPhoneNumber(transactionDetails?.receiver_id)
+                                                        : formatID(transactionDetails?.receiver_id) || '-'}
+                                            </p>}
+                                    </div>
+                                </div>
+                            </>}
+                        {(transactionDetails?.obo_name ||
                                 transactionDetails?.obo_id ||
                                 transactionDetails?.afrimax_name ||
                                 transactionDetails?.afrimax_id) &&
                                 !dataLoading &&
                                 <>
                                     {type !== 'customer'
-                                        ? <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
-                                        : <p className='mt-1'></p>}
-                                    {transactionDetails?.obo_name && !dataLoading && <p>Paymaart Name</p>}
-                                    {transactionDetails?.obo_id && !dataLoading && <p>Paymaart ID</p>}
+                                        ? <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='h-[24px] mt-[10px]'></p>
+                                            </div>
+                                        </div>
+                                        : <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='mt-1'></p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='mt-1'></p>
+                                            </div>
+                                        </div>}
+                                    {transactionDetails?.obo_name && !dataLoading &&
+                                    (<div className='w-full flex gap-1'>
+                                        <div className='w-1/2 pb-1'>
+                                            <p>Paymaart Name</p>
+                                        </div>
+                                        <div className='w-1/2 pb-1'>
+                                            <p className='break-word'>{transactionDetails?.obo_name || '-'}</p>
+                                        </div>
+                                    </div>)
+                                    }
+                                    {transactionDetails?.obo_id && !dataLoading &&
+                                    (<div className='w-full flex gap-1'>
+                                        <div className='w-1/2 pb-1'>
+                                            <p>Paymaart ID</p>
+                                        </div>
+                                        <div className='w-1/2 pb-1'>
+                                            <p>{formatID(transactionDetails?.obo_id) || '-'}</p>
+                                        </div>
+                                    </div>)}
                                     {(transactionDetails?.afrimax_name ||
                                     transactionDetails?.afrimax_id) && !dataLoading && (
                                         <>
-                                            <p>Afrimax Name</p>
-                                            <p>Afrimax ID</p>
+                                            <div className='w-full flex gap-1'>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p>Afrimax Name</p>
+                                                </div>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p className='break-word'>{transactionDetails?.afrimax_name || '-'}</p>
+                                                </div>
+                                            </div>
+                                            <div className='w-full flex gap-1'>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p>Afrimax ID</p>
+                                                </div>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p>{transactionDetails?.afrimax_id || '-'}</p>
+                                                </div>
+                                            </div>
                                         </>
                                     )}
                                 </>}
-                            </div>
-                            <div className='w-1/2 flex flex-col gap-1'>
-                                {dataLoading
-                                    ? <>
-                                        {[...Array(2)]?.map((item, index) => (
-                                            <div className='flex flex-col gap-1' key={index}>
-                                                <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                <TransactionDetailsShimmer col={(transactionType === 'payout' || transactionType === 'payout_approved') && index === 1 ? 3 : 2} />
-                                            </div>
-                                        ))}
-                                    </>
-                                    : <>
-                                        <p className='h-[24px]'></p>
-                                        {transactionType !== 'interest'
-                                            ? <>
-                                                <p className='break-word'>{transactionDetails?.sender_name || '-'}</p>
-                                                <p>{formatID(transactionDetails?.sender_id) || '-'}</p>
-                                            </>
-                                            : <p>Paymaart Bank</p>}
-                                        <p className='h-[24px] mt-[10px]'></p>
-                                        {transactionType === 'payout' || transactionType === 'payout_approved'
-                                            ? <>
-                                                <p>{transactionDetails?.bank_name || '-'}</p>
-                                                <p>{transactionDetails?.account_name || '-'}</p>
-                                                <p>{transactionDetails?.account_no || '-'}</p>
-                                            </>
-                                            : <>
-                                                <p>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || transactionDetails?.merchantName || '-')}</p>
-                                                <p data-testid="beneficiary_paymaart_id">{(transactionDetails?.receiver_phone_no && formatPhoneNumber(transactionDetails?.receiver_phone_no)) || formatID(transactionDetails?.receiver_id) || '-'}</p>
-                                            </>}
-                                        {(transactionDetails?.obo_name ||
-                                        transactionDetails?.obo_id ||
-                                        transactionDetails?.afrimax_name ||
-                                        transactionDetails?.afrimax_id) &&
-                                        <>
-                                            {<p className={`${type !== 'customer' ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
-                                            {transactionDetails?.obo_name && <p>{transactionDetails?.obo_name || '-'}</p>}
-                                            {transactionDetails?.obo_id && <p>{formatID(transactionDetails?.obo_id) || '-'}</p>}
-                                            {(transactionDetails?.afrimax_name ||
-                                            transactionDetails?.afrimax_id) && (
-                                                <>
-                                                    <p>{transactionDetails?.afrimax_name || '-'}</p>
-                                                    <p>{transactionDetails?.afrimax_id || '-'}</p>
-                                                </>
-                                            )}
-                                        </>}
-                                    </>}
-                            </div>
-                        </div>
                     </div>
                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
