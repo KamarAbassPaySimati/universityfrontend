@@ -12,6 +12,8 @@ import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
+import formatID from '../../../../CommonMethods/formatId';
+import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
 
 const ViewSpecificFlagged = () => {
     const [states, setState] = useState({});
@@ -196,89 +198,166 @@ const ViewSpecificFlagged = () => {
                                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border
                             bg-background-light text-neutral-primary font[400] text-sm rounded-lg'>
                                         <div className='w-full flex gap-1'>
-                                            <div className='w-1/2 flex flex-col gap-1'>
+                                            <div className='w-1/2 pb-1'>
                                                 <p className='font-[500] text-base'>From</p>
-                                                <p>Paymaart Name</p>
-                                                {transactionType !== 'interest' && <p>Paymaart ID</p>}
-                                                <p className='font-[500] text-base mt-[10px]'>To</p>
-                                                {transactionType === 'payout'
-                                                    ? <>
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. No</p>}
-                                                    </>
-                                                    : <>
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Paymaart Name</p>}
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no ? 'Phone Number' : 'Paymaart ID'}</p>}
-                                                    </>}
-                                                {(flaggedDetails?.obo_name ||
-                                                    flaggedDetails?.obo_id ||
-                                                    flaggedDetails?.afrimax_name ||
-                                                    flaggedDetails?.afrimax_id) &&
-                                                    !isLoading &&
-                                                    <>
-                                                        {!transactionType?.includes('CMR')
-                                                            ? <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
-                                                            : <p className='mt-1'></p>}
-                                                        {flaggedDetails?.obo_name && !isLoading && <p>Paymaart Name</p>}
-                                                        {flaggedDetails?.obo_id && !isLoading && <p>Paymaart ID</p>}
-                                                        {(flaggedDetails?.afrimax_name ||
-                                                            flaggedDetails?.afrimax_id) && !isLoading && (
-                                                            <>
-                                                                <p>Afrimax Name</p>
-                                                                <p>Afrimax ID</p>
-                                                            </>
-                                                        )}
-                                                    </>}
                                             </div>
-                                            <div className='w-1/2 flex flex-col gap-1'>
-                                                {isLoading
-                                                    ? <>
-                                                        {[...Array(2)]?.map((item, index) => (
-                                                            <div className='flex flex-col gap-1' key={index}>
-                                                                <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                                <TransactionDetailsShimmer col={transactionType === 'payout' && index === 1 ? 3 : 2} />
-                                                            </div>
-                                                        ))}
-                                                    </>
-                                                    : <>
-                                                        <p className='h-[24px]'></p>
-                                                        {transactionType !== 'interest'
-                                                            ? <>
-                                                                <p>{flaggedDetails?.sender_name || '-'}</p>
-                                                                <p>{flaggedDetails?.sender_id || '-'}</p>
-                                                            </>
-                                                            : <p>Paymaart Bank</p>}
-                                                        <p className='h-[24px] mt-[10px]'></p>
-                                                        {transactionType === 'payout'
-                                                            ? <>
-                                                                <p>{flaggedDetails?.bank_name || '-'}</p>
-                                                                <p>{flaggedDetails?.account_name || '-'}</p>
-                                                                <p>{flaggedDetails?.account_no || '-'}</p>
-                                                            </>
-                                                            : <>
-                                                                <p>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || '-')}</p>
-                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id || '-'}</p>
-                                                            </>}
-                                                        {(flaggedDetails?.obo_name ||
-                                                            flaggedDetails?.obo_id ||
-                                                            flaggedDetails?.afrimax_name ||
-                                                            flaggedDetails?.afrimax_id) &&
-                                                            <>
-                                                                {<p className={`${!transactionType?.includes('CMR') ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
-                                                                {flaggedDetails?.obo_name && <p>{flaggedDetails?.obo_name || '-'}</p>}
-                                                                {flaggedDetails?.obo_id && <p>{flaggedDetails?.obo_id || '-'}</p>}
-                                                                {(flaggedDetails?.afrimax_name ||
-                                                                    flaggedDetails?.afrimax_id) && (
-                                                                    <>
-                                                                        <p>{flaggedDetails?.afrimax_name || '-'}</p>
-                                                                        <p>{flaggedDetails?.afrimax_id || '-'}</p>
-                                                                    </>
-                                                                )}
-                                                            </>}
-                                                    </>}
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='h-[24px]'></p>
                                             </div>
                                         </div>
+                                        <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>Paymaart Name</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                {isLoading
+                                                    ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                    : transactionType !== 'interest' ? <p className='break-word'>{flaggedDetails?.sender_name || '-'}  </p> : <p>Paymaart Bank</p>}
+                                            </div>
+                                        </div>
+                                        {transactionType !== 'interest' && <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>Paymaart ID</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                {isLoading
+                                                    ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                    : transactionType !== 'interest' && <p>{formatID(flaggedDetails?.sender_id) || '-'}  </p> }
+                                            </div>
+                                        </div>}
+                                        <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='font-[500] text-base mt-[10px]'>To</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='h-[24px]'></p>
+                                            </div>
+                                        </div>
+                                        {transactionType === 'payout' || transactionType === 'payout_approved'
+                                            ? <>
+                                                <div className='w-full flex gap-1'>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
+                                                    </div>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading
+                                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                            : <p>{flaggedDetails?.bank_name || '-'}</p> }
+                                                    </div>
+                                                </div>
+                                                <div className='w-full flex gap-1'>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
+                                                    </div>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading
+                                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                            : <p>{flaggedDetails?.account_name || '-'}</p>}
+                                                    </div>
+                                                </div>
+                                                <div className='w-full flex gap-1'>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. No</p>}
+                                                    </div>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading
+                                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                            : <p>{flaggedDetails?.account_no || '-'}</p> }
+                                                    </div>
+                                                </div>
+                                            </>
+                                            : <>
+                                                <div className='w-full flex gap-1'>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Paymaart Name</p>}
+                                                    </div>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading
+                                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                            : <p className='break-word'>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || flaggedDetails?.merchantName || '-')}</p> }
+                                                    </div>
+                                                </div>
+                                                <div className='w-full flex gap-1'>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id?.startsWith('+') ? 'Phone Number' : 'Paymaart ID'}</p>}
+                                                    </div>
+                                                    <div className='w-1/2 pb-1'>
+                                                        {isLoading
+                                                            ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
+                                                            : <p data-testid="beneficiary_paymaart_id">
+                                                                {flaggedDetails?.receiver_phone_no
+                                                                    ? formatPhoneNumber(flaggedDetails?.receiver_phone_no)
+                                                                    : flaggedDetails?.receiver_id?.startsWith('+')
+                                                                        ? formatPhoneNumber(flaggedDetails?.receiver_id)
+                                                                        : formatID(flaggedDetails?.receiver_id) || '-'}
+                                                            </p>}
+                                                    </div>
+                                                </div>
+                                            </>}
+                                        {(flaggedDetails?.obo_name ||
+                                flaggedDetails?.obo_id ||
+                                flaggedDetails?.afrimax_name ||
+                                flaggedDetails?.afrimax_id) &&
+                                !isLoading &&
+                                <>
+                                    {!transactionType?.includes('CMR')
+                                        ? <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='h-[24px] mt-[10px]'></p>
+                                            </div>
+                                        </div>
+                                        : <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='mt-1'></p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='mt-1'></p>
+                                            </div>
+                                        </div>}
+                                    {flaggedDetails?.obo_name && !isLoading &&
+                                    (<div className='w-full flex gap-1'>
+                                        <div className='w-1/2 pb-1'>
+                                            <p>Paymaart Name</p>
+                                        </div>
+                                        <div className='w-1/2 pb-1'>
+                                            <p className='break-word'>{flaggedDetails?.obo_name || '-'}</p>
+                                        </div>
+                                    </div>)
+                                    }
+                                    {flaggedDetails?.obo_id && !isLoading &&
+                                    (<div className='w-full flex gap-1'>
+                                        <div className='w-1/2 pb-1'>
+                                            <p>Paymaart ID</p>
+                                        </div>
+                                        <div className='w-1/2 pb-1'>
+                                            <p>{formatID(flaggedDetails?.obo_id) || '-'}</p>
+                                        </div>
+                                    </div>)}
+                                    {(flaggedDetails?.afrimax_name ||
+                                    flaggedDetails?.afrimax_id) && !isLoading && (
+                                        <>
+                                            <div className='w-full flex gap-1'>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p>Afrimax Name</p>
+                                                </div>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p className='break-word'>{flaggedDetails?.afrimax_name || '-'}</p>
+                                                </div>
+                                            </div>
+                                            <div className='w-full flex gap-1'>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p>Afrimax ID</p>
+                                                </div>
+                                                <div className='w-1/2 pb-1'>
+                                                    <p>{flaggedDetails?.afrimax_id || '-'}</p>
+                                                </div>
+                                            </div>
+                                        </>
+                                    )}
+                                </>}
                                     </div>
                                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
@@ -328,6 +407,11 @@ const ViewSpecificFlagged = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className='mt-[15px] flex justify-center text-[#A4A9AE] text-[12px] leading-[15.6px] gap-3'>
+                                        <span>www.paymaart.com</span>
+                                        <span>.</span>
+                                        <span>hello@paymaart.com</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className='flex flex-col gap-5 font-[400] text-sm leading-6'>
@@ -344,7 +428,7 @@ const ViewSpecificFlagged = () => {
                                     {isLoading
                                         ? <TransactionDetailsShimmer col={1} />
                                         : <p className='text-neutral-primary'>
-                                            {flaggedDetails?.flagged_by || '-'}
+                                            {formatID(flaggedDetails?.flagged_by) || '-'}
                                         </p>}
                                 </div>
                                 <div className='flex flex-col gap-1 max-w-[450px]'>

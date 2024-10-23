@@ -16,6 +16,7 @@ import moment from 'moment';
 import { useOnClickOutside } from '../../../CommonMethods/outsideClick';
 import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 import formatPhoneNumber from '../../../CommonMethods/formatPhoneNumber';
+import formatID from '../../../CommonMethods/formatId';
 
 export default function TransactionList ({ searchParams, setSearchParams, type }) {
     const [isFilter, setIsFilter] = useState(false);
@@ -262,16 +263,16 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                                             </td>
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                                {item?.entered_by || '-'}</td>
+                                                {formatID(item?.entered_by) || '-'}</td>
                                             {(type !== 'transaction-fees-and-commissions' && type !== 'taxes') && <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                                 {(id === 'PTBAT' || id === 'PTBA1' || id === 'PTBA2' || id === 'PTBA3')
                                                     ? (item?.receiver_id?.startsWith('+')
                                                         ? formatPhoneNumber(item.receiver_id)
-                                                        : item.receiver_id)
+                                                        : formatID(item.receiver_id))
                                                     : (item?.sender_id?.startsWith('+')
                                                         ? formatPhoneNumber(item.sender_id)
-                                                        : item.sender_id) || '-'}</td>}
+                                                        : formatID(item.sender_id)) || '-'}</td>}
                                             <td data-testid="name"
                                                 className='py-2 px-[10px] text-left truncate max-w-[200px]'
                                                 title={item?.transaction_id || '-'}

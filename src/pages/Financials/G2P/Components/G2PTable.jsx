@@ -7,6 +7,7 @@ import Image from '../../../../components/Image/Image';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
+import formatID from '../../../../CommonMethods/formatId';
 
 function G2PTable ({ loading, error, List, notFound, searchParams, setSearchParams }) {
     const Navigate = useNavigate();
@@ -32,8 +33,8 @@ function G2PTable ({ loading, error, List, notFound, searchParams, setSearchPara
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="customer_name" title={user?.full_name}
                                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.full_name ? user.full_name : '-'}</td>
-                                <td data-testid="paymaart_id" title={user?.paymaart_id}
-                                    className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{user?.paymaart_id || '-'}</td>
+                                <td data-testid="paymaart_id" title={formatID(user?.paymaart_id)}
+                                    className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(user?.paymaart_id) || '-'}</td>
                                 <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
                                 <td data-testid="amount" title={user?.amount.toLocaleString()}
                                     className='py-2 px-[10px] truncate min-w-[100px] max-w-[100px] text-right'>

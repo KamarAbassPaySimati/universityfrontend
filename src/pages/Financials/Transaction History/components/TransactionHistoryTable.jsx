@@ -7,6 +7,7 @@ import getDrCr from '../../../../CommonMethods/getDrCr';
 import { TransactionDescription } from '../../../PaymaartBanks/TransactionCode';
 import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import formatID from '../../../../CommonMethods/formatId';
 
 const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const navigate = useNavigate();
@@ -41,7 +42,7 @@ const TransactionHistoryTable = ({ loading, error, List, notFound, searchParams,
                                 </td>
                                 <td data-testid="beneficiary_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
-                                    {transaction?.beneficiary_id || '-'}
+                                    {formatID(transaction?.beneficiary_id) || '-'}
                                 </td>
                                 <td data-testid="transaction_id"
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'

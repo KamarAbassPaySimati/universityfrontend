@@ -107,6 +107,10 @@ const OnboardAdmin = ({ actionKey }) => {
             pastedText = pastedText.replace(/\s+/g, ''); // Remove all spaces
         }
 
+        if (['firstName', 'lastName', 'middleName'].includes(id)) {
+            pastedText = pastedText.slice(0, 20);
+        }
+
         if (id === 'lastName') {
             setFormData(prevState => {
                 return { ...prevState, [id]: pastedText.toUpperCase() };
@@ -289,7 +293,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             label='First Name'
                             placeholder='Enter first name'
                             setEnteredLetter={setEnteredLetter}
-                            maxLength="100"
+                            maxLength="20"
                             onPaste={handlePaste}
                         />
                         <InputField
@@ -303,7 +307,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             label='Middle Name'
                             placeholder='Enter middle name'
                             setEnteredLetter={setEnteredLetter}
-                            maxLength="100"
+                            maxLength="20"
                             onPaste={handlePaste}
                         />
                         <InputField
@@ -317,7 +321,7 @@ const OnboardAdmin = ({ actionKey }) => {
                             label='Last Name'
                             placeholder='Enter last name'
                             setEnteredLetter={setEnteredLetter}
-                            maxLength="100"
+                            maxLength="20"
                             onPaste={handlePaste}
                         />
                     </div>}

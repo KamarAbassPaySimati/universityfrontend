@@ -4,6 +4,7 @@ import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { formatTimeAgo } from '../../CommonMethods/formatTimeAgo';
 import { useNavigate } from 'react-router';
+import formatID from '../../CommonMethods/formatId';
 
 export default function NotificationPopup ({
     loading,
@@ -114,12 +115,12 @@ export default function NotificationPopup ({
                                 <div className='ml-2.5 w-[85%]'>
                                     <p className='font-normal text-sm text-[#4F5962]'>
                                         {notificationItem?.type === 'kyc'
-                                            ? `Pending KYC Registration for ${notificationItem.user_id}`
+                                            ? `Pending KYC Registration for ${formatID(notificationItem.user_id)}`
                                             : notificationItem?.type === 'delete'
-                                                ? `Pending Delete Account Request for ${notificationItem.user_id}`
+                                                ? `Pending Delete Account Request for ${formatID(notificationItem.user_id)}`
                                                 : notificationItem?.type === 'flag'
-                                                    ? `Pending Flag Transaction Request for ${notificationItem.user_id}`
-                                                    : `Pending Payout Request for ${notificationItem.user_id}`}</p>
+                                                    ? `Pending Flag Transaction Request for ${formatID(notificationItem.user_id)}`
+                                                    : `Pending Payout Request for ${formatID(notificationItem.user_id)}`}</p>
                                     <p className='font-normal text-sm text-[#4F5962]'>{notificationItem.type === 'kyc'
                                         ? 'There are pending KYC Registrations requiring your attention.'
                                         : notificationItem.type === 'delete'

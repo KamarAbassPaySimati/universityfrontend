@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import TillNumber from '../../../../components/Modals/TillNumber';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import formatID from '../../../../CommonMethods/formatId';
 
 export default function MerchantTableBody ({ user, index }) {
     const Navigate = useNavigate();
@@ -16,10 +17,10 @@ export default function MerchantTableBody ({ user, index }) {
         <>
             <tr className='border-b border-neutral-outline h-[48px]'>
                 <td
-                    title={user?.paymaart_id}
+                    title={formatID(user?.paymaart_id)}
                     data-testid="paymaart_id"
                     className='py-2 px-[10px] text-left min-w-[70px] max-w-[70px]'
-                >{user?.paymaart_id || '-'}</td>
+                >{formatID(user?.paymaart_id) || '-'}</td>
                 <td data-testid="merchant_name"
                     title={user?.name}
                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>

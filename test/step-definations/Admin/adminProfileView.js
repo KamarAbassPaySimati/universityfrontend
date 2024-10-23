@@ -47,7 +47,7 @@ Then('I should see my phone number', async function () {
 Then('I should see my paymaart ID', async function () {
     // Write code to verify that the name displayed matches the expected value
     const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="profile_info_card"] [data-testid="paymaart_id"]'))).getText();
-    assert.equal(actual_paymaart_ID, global.admin_user.paymaart_id);
+    assert.equal(actual_paymaart_ID, `${global.admin_user.paymaart_id.slice(0, 3)} ${global.admin_user.paymaart_id.slice(3, 7)} ${global.admin_user.paymaart_id.slice(7)}`);
 });
 
 Then('I should see the option to update my password', async function () {
