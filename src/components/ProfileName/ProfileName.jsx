@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
 import React from 'react';
+import formatID from '../../CommonMethods/formatId';
 
 export default function ProfileName ({
     userButtonName,
@@ -30,7 +31,7 @@ export default function ProfileName ({
                     {UserName}
                 </div>
                 <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
-                    Paymaart ID: <span data-testid="paymaart_id" className='font-semibold'>{payMaartID}</span>
+                    Paymaart ID: <span data-testid="paymaart_id" className='font-semibold'>{formatID(payMaartID)}</span>
                 </div>
                 {g2pCustomer &&
                 <div className='flex items-center'>

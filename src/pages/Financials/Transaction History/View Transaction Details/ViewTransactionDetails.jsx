@@ -18,6 +18,7 @@ import ShareOptions from '../../../../components/ShareOptions/ShareOptions';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 import { getValueType } from '../../../../CommonMethods/getStatusUI';
 import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
+import formatID from '../../../../CommonMethods/formatId';
 
 const ViewTransactionDetails = ({ type }) => {
     // States
@@ -176,7 +177,7 @@ const ViewTransactionDetails = ({ type }) => {
             minHeightRequired={true}
         >
             <div data-testid='transaction_details' className='flex justify-center items-center' ref={captureRef}>
-                <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] p-[30px]
+                <div className='border-background-light border bg-[#FFFFFF] w-[723px] rounded-[14px] pt-[30px] pb-[10px]
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
@@ -199,7 +200,7 @@ const ViewTransactionDetails = ({ type }) => {
                                 <p>Paymaart Name</p>
                                 {transactionType !== 'interest' && <p>Paymaart ID</p>}
                                 <p className='font-[500] text-base mt-[10px]'>To</p>
-                                {transactionType === 'payout'
+                                {transactionType === 'payout' || transactionType === 'payout_approved'
                                     ? <>
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
                                         {dataLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
@@ -235,7 +236,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         {[...Array(2)]?.map((item, index) => (
                                             <div className='flex flex-col gap-1' key={index}>
                                                 <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                <TransactionDetailsShimmer col={transactionType === 'payout' && index === 1 ? 3 : 2} />
+                                                <TransactionDetailsShimmer col={(transactionType === 'payout' || transactionType === 'payout_approved') && index === 1 ? 3 : 2} />
                                             </div>
                                         ))}
                                     </>
@@ -243,20 +244,20 @@ const ViewTransactionDetails = ({ type }) => {
                                         <p className='h-[24px]'></p>
                                         {transactionType !== 'interest'
                                             ? <>
-                                                <p>{transactionDetails?.sender_name || '-'}</p>
-                                                <p>{transactionDetails?.sender_id || '-'}</p>
+                                                <p className='break-word'>{transactionDetails?.sender_name || '-'}</p>
+                                                <p>{formatID(transactionDetails?.sender_id) || '-'}</p>
                                             </>
                                             : <p>Paymaart Bank</p>}
                                         <p className='h-[24px] mt-[10px]'></p>
-                                        {transactionType === 'payout'
+                                        {transactionType === 'payout' || transactionType === 'payout_approved'
                                             ? <>
                                                 <p>{transactionDetails?.bank_name || '-'}</p>
                                                 <p>{transactionDetails?.account_name || '-'}</p>
                                                 <p>{transactionDetails?.account_no || '-'}</p>
                                             </>
                                             : <>
-                                                <p>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || '-')}</p>
-                                                <p data-testid="beneficiary_paymaart_id">{(transactionDetails?.receiver_phone_no && formatPhoneNumber(transactionDetails?.receiver_phone_no)) || transactionDetails?.receiver_id || '-'}</p>
+                                                <p>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || transactionDetails?.merchantName || '-')}</p>
+                                                <p data-testid="beneficiary_paymaart_id">{(transactionDetails?.receiver_phone_no && formatPhoneNumber(transactionDetails?.receiver_phone_no)) || formatID(transactionDetails?.receiver_id) || '-'}</p>
                                             </>}
                                         {(transactionDetails?.obo_name ||
                                         transactionDetails?.obo_id ||
@@ -265,7 +266,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         <>
                                             {<p className={`${type !== 'customer' ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
                                             {transactionDetails?.obo_name && <p>{transactionDetails?.obo_name || '-'}</p>}
-                                            {transactionDetails?.obo_id && <p>{transactionDetails?.obo_id || '-'}</p>}
+                                            {transactionDetails?.obo_id && <p>{formatID(transactionDetails?.obo_id) || '-'}</p>}
                                             {(transactionDetails?.afrimax_name ||
                                             transactionDetails?.afrimax_id) && (
                                                 <>
@@ -279,7 +280,7 @@ const ViewTransactionDetails = ({ type }) => {
                         </div>
                     </div>
                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
-                         text-neutral-primary font[400] text-sm rounded-lg mt-2 mb-[50px]'>
+                         text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
@@ -325,6 +326,11 @@ const ViewTransactionDetails = ({ type }) => {
                                     </>}
                             </div>
                         </div>
+                    </div>
+                    <div className='mt-[15px] flex justify-center text-[#A4A9AE] text-[12px] leading-[15.6px] gap-3'>
+                        <span>www.paymaart.com</span>
+                        <span>.</span>
+                        <span>hello@paymaart.com</span>
                     </div>
                 </div>
             </div>

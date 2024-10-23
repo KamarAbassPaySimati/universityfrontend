@@ -12,6 +12,8 @@ import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
 import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
+import formatID from '../../../../CommonMethods/formatId';
+import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
 
 const ViewSpecificFlagged = () => {
     const [states, setState] = useState({});
@@ -201,7 +203,7 @@ const ViewSpecificFlagged = () => {
                                                 <p>Paymaart Name</p>
                                                 {transactionType !== 'interest' && <p>Paymaart ID</p>}
                                                 <p className='font-[500] text-base mt-[10px]'>To</p>
-                                                {transactionType === 'payout'
+                                                {transactionType === 'payout' || transactionType === 'payout_approved'
                                                     ? <>
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Bank</p>}
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Acct. Name</p>}
@@ -209,7 +211,7 @@ const ViewSpecificFlagged = () => {
                                                     </>
                                                     : <>
                                                         {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>Paymaart Name</p>}
-                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no ? 'Phone Number' : 'Paymaart ID'}</p>}
+                                                        {isLoading ? <TransactionDetailsShimmer col={1} /> : <p>{flaggedDetails?.receiver_phone_no ? 'Phone Number' : (flaggedDetails?.receiver_id.startsWith('+') ? 'Phone Number' : 'Paymaart ID')}</p>}
                                                     </>}
                                                 {(flaggedDetails?.obo_name ||
                                                     flaggedDetails?.obo_id ||
@@ -237,7 +239,7 @@ const ViewSpecificFlagged = () => {
                                                         {[...Array(2)]?.map((item, index) => (
                                                             <div className='flex flex-col gap-1' key={index}>
                                                                 <p className={`h-[24px] ${index === 1 ? 'mt-[10px]' : ''}`}></p>
-                                                                <TransactionDetailsShimmer col={transactionType === 'payout' && index === 1 ? 3 : 2} />
+                                                                <TransactionDetailsShimmer col={(transactionType === 'payout' || transactionType === 'payout_approved') && index === 1 ? 3 : 2} />
                                                             </div>
                                                         ))}
                                                     </>
@@ -246,11 +248,11 @@ const ViewSpecificFlagged = () => {
                                                         {transactionType !== 'interest'
                                                             ? <>
                                                                 <p>{flaggedDetails?.sender_name || '-'}</p>
-                                                                <p>{flaggedDetails?.sender_id || '-'}</p>
+                                                                <p>{formatID(flaggedDetails?.sender_id) || '-'}</p>
                                                             </>
                                                             : <p>Paymaart Bank</p>}
                                                         <p className='h-[24px] mt-[10px]'></p>
-                                                        {transactionType === 'payout'
+                                                        {transactionType === 'payout' || transactionType === 'payout_approved'
                                                             ? <>
                                                                 <p>{flaggedDetails?.bank_name || '-'}</p>
                                                                 <p>{flaggedDetails?.account_name || '-'}</p>
@@ -258,7 +260,7 @@ const ViewSpecificFlagged = () => {
                                                             </>
                                                             : <>
                                                                 <p>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || '-')}</p>
-                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id || '-'}</p>
+                                                                <p data-testid="beneficiary_paymaart_id">{flaggedDetails?.receiver_phone_no || flaggedDetails?.receiver_id?.startsWith('+') ? formatPhoneNumber(flaggedDetails?.receiver_id) : formatID(flaggedDetails?.receiver_id) || '-'}</p>
                                                             </>}
                                                         {(flaggedDetails?.obo_name ||
                                                             flaggedDetails?.obo_id ||
@@ -267,7 +269,7 @@ const ViewSpecificFlagged = () => {
                                                             <>
                                                                 {<p className={`${!transactionType?.includes('CMR') ? 'h-[24px] mt-[10px]' : 'mt-1'}`}></p>}
                                                                 {flaggedDetails?.obo_name && <p>{flaggedDetails?.obo_name || '-'}</p>}
-                                                                {flaggedDetails?.obo_id && <p>{flaggedDetails?.obo_id || '-'}</p>}
+                                                                {flaggedDetails?.obo_id && <p>{formatID(flaggedDetails?.obo_id) || '-'}</p>}
                                                                 {(flaggedDetails?.afrimax_name ||
                                                                     flaggedDetails?.afrimax_id) && (
                                                                     <>
@@ -328,6 +330,11 @@ const ViewSpecificFlagged = () => {
                                             </div>
                                         </div>
                                     </div>
+                                    <div className='mt-[15px] flex justify-center text-[#A4A9AE] text-[12px] leading-[15.6px] gap-3'>
+                                        <span>www.paymaart.com</span>
+                                        <span>.</span>
+                                        <span>hello@paymaart.com</span>
+                                    </div>
                                 </div>
                             </div>
                             <div className='flex flex-col gap-5 font-[400] text-sm leading-6'>
@@ -344,7 +351,7 @@ const ViewSpecificFlagged = () => {
                                     {isLoading
                                         ? <TransactionDetailsShimmer col={1} />
                                         : <p className='text-neutral-primary'>
-                                            {flaggedDetails?.flagged_by || '-'}
+                                            {formatID(flaggedDetails?.flagged_by) || '-'}
                                         </p>}
                                 </div>
                                 <div className='flex flex-col gap-1 max-w-[450px]'>

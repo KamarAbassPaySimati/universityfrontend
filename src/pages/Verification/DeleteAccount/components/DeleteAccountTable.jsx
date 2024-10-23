@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
 import { getStatusStyles, getStatusText } from '../../../../CommonMethods/getStatusUI';
+import formatID from '../../../../CommonMethods/formatId';
 
 function DeleteAccountTable ({ List, loading, searchParams }) {
     const Navigate = useNavigate();
@@ -51,8 +52,8 @@ function DeleteAccountTable ({ List, loading, searchParams }) {
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                                <td data-testid="paymaart_id" title={user?.paymaart_id}
-                                    className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.paymaart_id || '-'}</td>
+                                <td data-testid="paymaart_id" title={formatID(user?.paymaart_id)}
+                                    className='py-2 px-[10px] text-left truncate max-w-[50px]'>{formatID(user?.paymaart_id) || '-'}</td>
                                 <td data-testid="agent_name" title={user?.name}
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.name || '-'}
                                 </td>

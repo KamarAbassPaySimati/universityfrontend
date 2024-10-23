@@ -7,6 +7,7 @@ import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
+import formatID from '../../../../CommonMethods/formatId';
 
 const PayOutTable = (
     {
@@ -79,8 +80,8 @@ const PayOutTable = (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title={user?.transaction_id}
                                     className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.transaction_id || '-'}</td>
-                                <td data-testid="recipient_paymaart_id" title={user?.recipient_id}
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>{user?.recipient_id || '-'}
+                                <td data-testid="recipient_paymaart_id" title={formatID(user?.recipient_id)}
+                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>{formatID(user?.recipient_id) || '-'}
                                 </td>
                                 <td data-testid="amount" title={`${formattedAmount(user?.amount)} MWK`}
                                     className='py-2 px-[10px] text-right truncate max-w-[200px]'>{`${formattedAmount(user?.amount)} MWK` || '-'}

@@ -6,6 +6,7 @@ import InputFieldWithDropDown from '../InputFieldWithDropDown/InputFieldWithDrop
 import GoogleApi from '../InputField/GoogleApi';
 import InputSearch from '../InputField/InputSearch';
 import InputSearchMultiselect from '../InputField/InputSearchMultiselect';
+import formatID from '../../CommonMethods/formatId';
 
 export default function FelidDivision ({
     divisionObject,
@@ -187,7 +188,7 @@ export default function FelidDivision ({
                                                                     ? 'w-[339px]'
                                                                     : 'w-[339px]'}
                                                                 divClassName='mx-2.5'
-                                                                value={states[divObj?.key]}
+                                                                value={divObj?.label === 'Entry by' ? formatID(states[divObj?.key]) : states[divObj?.key]}
                                                                 staticText={divObj?.staticText}
                                                                 // onFocus={handleFocus}
                                                                 id={divObj?.key}
