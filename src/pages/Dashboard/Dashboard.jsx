@@ -34,6 +34,11 @@ const Dashboard = () => {
                         initialStates={{ dateRangeType: 'Today', membership: 'All' }}
                     />
                     <BarGraph
+                        DashboardName ="Merchant Registrations"
+                        endpoint='merchant-registration-insight'
+                        initialStates={{ dateRangeType: 'Today', membership: 'All' }}
+                    />
+                    <BarGraph
                         DashboardName ="Agent Cash-in; Cash-out"
                         endpoint='agent-cashin-cashout'
                         initialStates={{ dateRangeType: 'Today' }}

@@ -17,6 +17,9 @@ When('I click on export button for {string}', async function (graphType) {
     case 'Customer Registrations':
         await driver.wait(until.elementLocated(By.css('[data-testid="Customer Registrations Export"]'))).click();
         break;
+    case 'Merchant Registrations':
+        await driver.wait(until.elementLocated(By.css('[data-testid="Merchant Registrations Export"]'))).click();
+        break;
     case 'Agent Cash-in; Cash-out':
         await driver.wait(until.elementLocated(By.css('[data-testid="Agent Cash-in; Cash-out Export"]'))).click();
         break;
@@ -42,6 +45,10 @@ Then('I should see {string} graph', async function (graphType) {
     case 'Customer Registrations':
         const customerGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Customer Registrations"]')));
         await driver.wait(until.elementIsVisible(customerGraph));
+        break;
+    case 'Merchant Registrations':
+        const MerchantGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Merchant Registrations"]')));
+        await driver.wait(until.elementIsVisible(MerchantGraph));
         break;
     case 'Agent Cash-in; Cash-out':
         const customerpayinGraph = await driver.wait(until.elementLocated(By.css('[data-testid="Agent Cash-in; Cash-out"]')));
