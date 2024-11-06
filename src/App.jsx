@@ -39,7 +39,6 @@ if (STAGE?.includes('prod')) {
             APPLICATION_REGION,
             config
         );
-        console.log('sakjd');
     } catch (error) {
         console.log(error);
         // Ignore errors thrown during CloudWatch RUM web client initialization
