@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const { getAgentPayload, getCustomerPayload, getMerchantPayload } = require('../../bdd_payload/index');
-const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI, deleteRequestCustomer, payoutRequestBDDAPI,deleteRequestMerchant } = require('../../bdd_api/index');
+const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI, deleteRequestCustomer, payoutRequestBDDAPI, deleteRequestMerchant } = require('../../bdd_api/index');
 const { Before } = require('@cucumber/cucumber');
 
 Before('@register_new_agent', async function () {
