@@ -91,6 +91,12 @@ export const ComponentsBasedOnRole = {
                 element: <KYCView role={'customer'} viewType={'DeleteAccount'} />,
                 path: '/verify/delete-account-requests/customer-profile/:id'
             },
+            // Customer Delete Account Request View
+            {
+                name: 'Merchant Delect Account Request View',
+                element: <KYCView role={'merchant'} viewType={'DeleteAccount'} />,
+                path: '/verify/delete-account-requests/merchant-profile/:id'
+            },
             // Agent Kyc Specific View
             {
                 name: 'Agent Kyc Specific View',
