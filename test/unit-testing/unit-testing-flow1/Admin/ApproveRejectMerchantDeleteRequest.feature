@@ -10,7 +10,7 @@ Feature: Paymaart- Admin Web -Approve/Reject Delete Account(Merchant)
 
     @add_admin_user
     @create_new_user_and_login
-    @register_new_merchant_and_send_delete_request_for_that_agent
+    @register_new_merchant_and_send_delete_request_for_that_merchant
     Scenario: View specific merchant and approve delete request
         Given I navigate to merchant delete request listing screen
         When I search for recently created merchant
@@ -23,7 +23,7 @@ Feature: Paymaart- Admin Web -Approve/Reject Delete Account(Merchant)
         Then I should read a message stating that "Account deletion request approved successfully"
         And I should see the delete request status changed to "Approved"
 
-    @register_new_merchant_and_send_delete_request_for_that_agent
+    @register_new_merchant_and_send_delete_request_for_that_merchant
     Scenario: View specific merchant and reject delete request
         Given I navigate to merchant delete request listing screen
         When I search for recently created merchant
