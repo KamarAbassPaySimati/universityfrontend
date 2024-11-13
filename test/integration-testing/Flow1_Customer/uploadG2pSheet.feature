@@ -30,7 +30,7 @@ Feature: Paymaart - Admin Web - Upload G2P Sheet
     Given I navigate to G2P customer listing page
     When I click on the view button for customer details
     Then I should view G2P customer details
-    When I upload the valid excel sheet as "ValidSheet.xlsx"
+    When I upload the valid excel sheet as "ValidSheetIntegration.xlsx"
     And I should read a message stating that "Successfully Uploaded G2P sheet"
 
   # Scenario: Uploading the wrong sheet
