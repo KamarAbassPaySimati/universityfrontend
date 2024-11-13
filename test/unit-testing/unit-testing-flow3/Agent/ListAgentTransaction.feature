@@ -34,9 +34,9 @@ Feature: Paymaart - Admin Web - List of Agent Transaction
         Then I click on the apply filter button
         Then I should read a message stating that "Start date cannot be greater than end date"  
         And I select start date as "08-Jan-2023"
-        And I select end date as "07-Nov-2024"
+        And I select end date as "07-Nov-2025"
         Then I click on the apply filter button
-        Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2024"
+        Then I should see list of transactions where between "08 Jan 2023" and "07 Nov 2025"
 
     # need api for this scenario
     # Scenario Outline: Filter transactions by transaction type
