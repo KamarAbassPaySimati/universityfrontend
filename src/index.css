@@ -53,6 +53,9 @@ body {
   min-width: 306px !important;
   border-radius: 8px !important;
 }
+.react-responsive-modal-modal:has(.securityQuestionModal) {
+  border-radius: 8px !important;
+}
 .react-responsive-modal-modal {
   max-width: 900px !important;
 }

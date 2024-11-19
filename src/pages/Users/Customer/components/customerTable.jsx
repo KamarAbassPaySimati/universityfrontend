@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import Shimmer from '../../../../components/Shimmers/Shimmer';
@@ -9,9 +9,15 @@ import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 import formatID from '../../../../CommonMethods/formatId';
+import { list } from 'postcss';
+import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQuestions';
 
 const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
     const Navigate = useNavigate();
+    const [isUnlockCustomer, setIsUnlockCustomer] = useState(false);
+    const handleUnlockCustomer = () => {
+        setIsUnlockCustomer(true);
+    };
 
     return (
         <>
@@ -76,7 +82,9 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                             />
                                         )}
                                     <Image testId={`customer-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/customers/customers-transaction-histories/${user?.paymaart_id}`)} src='report' />
-
+                                    {user?.is_locked
+                                        ? <Image testId={`customer-lock-btn-${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlockCustomer()} src='lock'/>
+                                        : <Image src='unlock' className='cursor-default'/>}
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                                     <Tooltip
                                         id={`eye-${index}`}
@@ -93,8 +101,14 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                     <Tooltip
                                         id={`transactions-${index}`}
                                         className='my-tooltip z-30'
-                                        place="top-end"
+                                        place="top"
                                         content="Transaction History"
+                                    />
+                                    <Tooltip
+                                        id={`lock-${index}`}
+                                        className='my-tooltip z-30'
+                                        place="top-end"
+                                        content="Locked"
                                     />
                                     {/* <Tooltip
                                         id={`payin-${index}`}
@@ -107,6 +121,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                     </tbody>
                 }
             </table>
+            <AccountUnlockQuestions isModalOpen={isUnlockCustomer} setModalOpen={setIsUnlockCustomer} type='customer' user={list} />
             {!notFound && error &&
                 (<NoDataError heading='There are no customers added yet' text='Click “Register Customer” to add customer' />)}
             {List?.data?.length === 0 && !loading &&

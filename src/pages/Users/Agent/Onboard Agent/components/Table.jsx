@@ -1,6 +1,6 @@
 /* eslint-disable indent */
 /* eslint-disable max-len */
-import React from 'react';
+import React, { useState } from 'react';
 import Image from '../../../../../components/Image/Image';
 import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
@@ -10,10 +10,14 @@ import { useNavigate } from 'react-router';
 import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
 import formatLocalPhoneNumber from '../../../../../CommonMethods/formatLocalPhoneNumber';
 import formatID from '../../../../../CommonMethods/formatId';
+import AccountUnlockQuestions from '../../../../../components/Modals/AccountUnlockQuestions';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
-    console.log(List);
+    const [isUnlockAgent, setIsUnlockAgent] = useState(false);
+    const handleUnlockAgent = () => {
+        setIsUnlockAgent(true);
+    };
     return (
         <>
             <table className='w-full min-w-max'>
@@ -78,6 +82,9 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     />
                                     )}
                                     <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`)} src='report' />
+                                    {!user?.is_locked
+                                     ? <Image testId={`agent-lock-btn-${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlockAgent()} src='lock'/>
+                                     : <Image src='unlock' className='cursor-default'/>}
                                     <Tooltip
                                         id={`eye-${index}`}
                                         className='my-tooltip z-30'
@@ -93,14 +100,21 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     <Tooltip
                                         id={`transactions-${index}`}
                                         className='my-tooltip z-30'
-                                        place="top-end"
+                                        place="top"
                                         content="Transaction History"
+                                    />
+                                    <Tooltip
+                                        id={`lock-${index}`}
+                                        className='my-tooltip z-30'
+                                        place="top-end"
+                                        content="Locked"
                                     />
                                 </td>
                             </tr>))}
                     </tbody>
                 }
             </table>
+            <AccountUnlockQuestions isModalOpen={isUnlockAgent} setModalOpen={setIsUnlockAgent} type='agent' user={List}/>
             {!notFound && error &&
                 (<NoDataError heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&

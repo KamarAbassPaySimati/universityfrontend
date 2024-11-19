@@ -6,10 +6,15 @@ import Image from '../../../../components/Image/Image';
 import TillNumber from '../../../../components/Modals/TillNumber';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatID from '../../../../CommonMethods/formatId';
+import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQuestions';
 
 export default function MerchantTableBody ({ user, index }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
+    const [isUnlockMerchnat, setIsUnlockMerchnat] = useState(false);
+    const handleUnlockMerchnnat = () => {
+        setIsUnlockMerchnat(true);
+    };
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
     };
@@ -58,6 +63,9 @@ export default function MerchantTableBody ({ user, index }) {
                                 onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
                             />
                         )}
+                    {user?.is_locked
+                        ? <Image testId={`merchant-lock-btn-${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlockMerchnnat()} src='lock'/>
+                        : <Image src='unlock' className='cursor-default'/>}
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'
@@ -70,9 +78,16 @@ export default function MerchantTableBody ({ user, index }) {
                         place="top"
                         content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                     />
+                    <Tooltip
+                        id={`lock-${index}`}
+                        className='my-tooltip z-30'
+                        place="top-end"
+                        content="Locked"
+                    />
                 </td>
             </tr>
             <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={user} />
+            <AccountUnlockQuestions isModalOpen={isUnlockMerchnat} setModalOpen={setIsUnlockMerchnat} type='merchant' user={user} />
         </>
     );
 }
