@@ -82,7 +82,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                                             />
                                         )}
                                     <Image testId={`customer-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/customers/customers-transaction-histories/${user?.paymaart_id}`)} src='report' />
-                                    {user?.is_locked
+                                    {user?.isLocked
                                         ? <Image testId={`customer-lock-btn-${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlockCustomer()} src='lock'/>
                                         : <Image src='unlock' className='cursor-default'/>}
                                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}

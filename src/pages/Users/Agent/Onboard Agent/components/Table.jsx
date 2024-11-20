@@ -82,7 +82,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                     />
                                     )}
                                     <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`)} src='report' />
-                                    {!user?.is_locked
+                                    {user?.isLocked
                                      ? <Image testId={`agent-lock-btn-${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlockAgent()} src='lock'/>
                                      : <Image src='unlock' className='cursor-default'/>}
                                     <Tooltip

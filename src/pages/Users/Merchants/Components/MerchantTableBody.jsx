@@ -63,7 +63,7 @@ export default function MerchantTableBody ({ user, index }) {
                                 onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
                             />
                         )}
-                    {user?.is_locked
+                    {user?.isLocked
                         ? <Image testId={`merchant-lock-btn-${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlockMerchnnat()} src='lock'/>
                         : <Image src='unlock' className='cursor-default'/>}
                     <Tooltip

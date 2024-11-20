@@ -43,9 +43,6 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
             const isAnswerCorrect = true;
             if (isAnswerCorrect) {
                 setCorrectAttemptCount(prev => prev + 1);
-                if (correctAttemptCount === 2) {
-                    setIsVerified(true);
-                }
                 setError('');
             } else {
                 console.log('call api');
@@ -53,6 +50,9 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
         } catch (err) {
             setError('Verification failed. Please try again.');
         } finally {
+            if (correctAttemptCount === 1) {
+                setIsVerified(true);
+            }
             setIsLoading(false);
         }
     };
@@ -125,8 +125,8 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
                         </div>
                     </div>
                     <div className='flex justify-between mt-2'>
-                        <ErrorMessage className={'mt-2'} error={'Required field'} />
-                        <p className='text-[14px] leading-[16px] text-neutral-primary font-medium'>0/2</p>
+                        <ErrorMessage className={'mt-2'} error={error} />
+                        <p className='text-[14px] leading-[16px] text-neutral-primary font-medium'>{correctAttemptCount}/2</p>
                     </div>
                 </div>
                 <div className="flex mt-8 gap-6 justify-end">
