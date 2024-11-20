@@ -74,6 +74,12 @@ export const getPaths = (viewType, role, status) => {
                 paths: ['Verify', 'Delete Account'],
                 pathurls: ['verify/delete-account-requests', '?type=agents']
             };
+        case 'merchant':
+            return {
+                activePath: 'Agent Profile',
+                paths: ['Verify', 'Delete Account'],
+                pathurls: ['verify/delete-account-requests', '?type=agents']
+            };
         }
         break;
     default:
@@ -155,6 +161,8 @@ export const getApiurl = (id, viewType, role) => {
         case 'agent':
             return `specific-requests?user_id=${id}`;
         case 'customer':
+            return `specific-requests?user_id=${id}`;
+        case 'merchant':
             return `specific-requests?user_id=${id}`;
         }
         break;
