@@ -7,6 +7,8 @@ import { BeatLoader } from 'react-spinners';
 import Image from '../Image/Image';
 import GlobalContext from '../Context/GlobalContext';
 
+const bankNames = ['CDH Investment Bank', 'Ecobank', 'International Bank', 'National Bank', 'Sate Bank', 'FDH Bank', 'First Capital Bank', 'Centenary Bank', 'National Bank'];
+
 const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
     const { setToastSuccess } = useContext(GlobalContext);
     const [isLoading, setIsLoading] = useState(false);
@@ -14,6 +16,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
     const [value, setValue] = useState('');
     const [isVerified, setIsVerified] = useState(false);
     const [correctAttemptCount, setCorrectAttemptCount] = useState(0);
+    const [isOpen, setIsOpen] = useState(false);
 
     const handleClose = () => {
         setValue('');
@@ -32,6 +35,11 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
         }
     };
 
+    const handleSelectBank = (bank) => {
+        setValue(bank);
+        setIsOpen(false);
+    };
+
     const handleVerify = async () => {
         if (!value.trim()) {
             setError('Required field');
@@ -47,6 +55,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
             } else {
                 console.log('call api');
             }
+            setValue('');
         } catch (err) {
             setError('Verification failed. Please try again.');
         } finally {
@@ -95,18 +104,43 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, type }) => {
                     <div className='flex flex-col gap-2 relative'>
                         <label htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>What was your childhood nickname?</label>
                         <div className='bg-[#F8F8F8] relative w-fit flex justify-center items-center'>
-                            <input
-                                disabled={isLoading}
+                            {/* <input
+                                disabled={isLoading || isVerified}
                                 maxLength={100}
                                 data-testid="account-unlock-answer"
                                 value={value}
                                 type='text'
-                                className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px] 
+                                className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
                                     ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
                                 id={'a'}
                                 placeholder='Answer'
                                 onChange={handleInputChange}
-                            />
+                            /> */}
+                            <div
+                                data-testid='change_code'
+                                onClick={() => (isLoading || isVerified) && isOpen ? setIsOpen(false) : setIsOpen(true)}
+                                className={`flex justify-between w-[350px] placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
+                                    ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
+                            >
+                                {value === '' ? 'Select Bank' : value}
+                                <img src='/images/chevron-down.svg' className={`ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                            </div>
+                            {isOpen && (
+                                <div className='absolute z-50 mt-1 w-[60%] h-28 left-0 top-11 thin-scrollBar overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg'>
+                                    {bankNames.map((bank) => (
+                                        <>
+                                            <div
+                                                key={bank}
+                                                onClick={() => handleSelectBank(bank)}
+                                                className='px-2 py-2 text-[14px] hover:bg-gray-200 cursor-pointer text-primary-normal'
+                                                data-testid={'change_code_option'}
+                                            >
+                                                {bank}
+                                            </div>
+                                        </>
+                                    ))}
+                                </div>
+                            )}
                             {isVerified
                                 ? <div className='absolute top-0 right-0 items-center h-[45px] mr-3 flex gap-[10px]'>
                                     <Image src='greenTick' />
