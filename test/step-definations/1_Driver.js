@@ -38,7 +38,8 @@ const {
     deleteTransactionList,
     getKYCCompletedAgentDeactivateList,
     getKYCDeactivateCustomerList,
-    send_payout_request
+    send_payout_request,
+    locking_account
 } = require('../bdd_api/index');
 const {
     extractQRCodeData,
@@ -554,6 +555,30 @@ After('@delete_transaction', async function () {
         await deleteTransactionList();
     } catch (error) {
         console.log('API Error', error);
+    }
+});
+
+Before('@locking_agent_account', async function () {
+    try {
+        global.lock_customer_agent_response = await locking_account(global.agent_registration_response.paymaart_id);
+    } catch (error) {
+        console.log('failed to lock agent account', error);
+    }
+});
+
+Before('@locking_customer_account', async function () {
+    try {
+        global.lock_customer_account_response = await locking_account(global.customer_registration_response.paymaart_id);
+    } catch (error) {
+        console.log('failed to lock customer account', error);
+    }
+});
+
+Before('@locking_merchant_account', async function () {
+    try {
+         global.lock_merchant_account_response = await locking_account(global.merchant_registration_response.paymaart_id);
+    } catch (error) {
+        console.log('failed to lock merchant account', error);
     }
 });
 

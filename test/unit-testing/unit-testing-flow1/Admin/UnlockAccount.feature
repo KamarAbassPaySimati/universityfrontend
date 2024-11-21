@@ -13,7 +13,7 @@ If incorrect answers are provided for all five questions, the account will be lo
 @add_admin_user
 @create_new_user_and_login
 @register_new_agent
-#api for locked account
+@locking_agent_account
 Scenario: Login as super admin and view list all the agent users to unlock account
     Given I navigate to agent users listing screen
     Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
@@ -29,7 +29,7 @@ Scenario: Login as super admin and view list all the agent users to unlock accou
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
 
 @register_new_customer
-#api for locked account
+@locking_customer_account
 Scenario: View list of customers and unlock account
     Given I navigate to customer users listing screen
     Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
@@ -45,7 +45,7 @@ Scenario: View list of customers and unlock account
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
 
 @register_new_merchant
-#api for locked account
+@locking_merchant_account
 Scenario: View list of merchants and unlock account
     Given I navigate to merchant users listing screen
     Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
