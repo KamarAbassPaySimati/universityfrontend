@@ -10,29 +10,81 @@ import Image from '../Image/Image';
 import GlobalContext from '../Context/GlobalContext';
 import { formatInputLocalPhoneNumber } from '../../CommonMethods/formatLocalPhoneNumber';
 import { formatDate, formatLastFourDigitID } from '../../CommonMethods/formatInput';
+import { dataService } from '../../services/data.services';
+import Shimmer from '../Shimmers/Shimmer';
 
 const bankNames = ['CDH Investment Bank', 'Ecobank', 'International Bank', 'National Bank', 'Sate Bank', 'FDH Bank', 'First Capital Bank', 'Centenary Bank', 'National Bank'];
 
 const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
-    const { setToastSuccess } = useContext(GlobalContext);
+    const { setToastSuccess, setToastError } = useContext(GlobalContext);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
     const [value, setValue] = useState('');
     const [isVerified, setIsVerified] = useState(false);
     const [correctAttemptCount, setCorrectAttemptCount] = useState(0);
     const [isOpen, setIsOpen] = useState(false);
+    const [prevAppearedQuestion, setPrevAppearedQuestion] = useState([]);
     const [question, setQuestion] = useState({
         question: '',
-        answerType: ''
+        answerType: '',
+        questionId: ''
     });
 
     useEffect(() => {
-        setQuestion({ question: 'What was your childhood nickname?', answerType: 'text' });
-    }, []);
+        if (isModalOpen) {
+            handleAnswerSubmit();
+        }
+    }, [isModalOpen]);
+
+    const formatInput = (value, type) => {
+        switch (type) {
+        case 'dob':
+            return formatDate(value);
+        case 'paymaart_id':
+            return formatLastFourDigitID(value);
+        case 'phone_number':
+            return formatInputLocalPhoneNumber(value);
+        default:
+            return value;
+        }
+    };
+
+    const handleAnswerSubmit = async () => {
+        try {
+            setIsLoading(true);
+            const response = await dataService.PostAPI(('admin-users/unlock-user'),
+                {
+                    paymaart_id: user.paymaart_id,
+                    question_id: question.questionId,
+                    answer: value,
+                    questions: prevAppearedQuestion
+                });
+            if (!response.error) {
+                setPrevAppearedQuestion(prev => [...prev, response.data.id]);
+                console.log(response);
+                setQuestion({ question: response.data.question, answerType: response.data.type, questionId: response.data.id });
+                response.data.correct_attempts !== 0 && setCorrectAttemptCount(response.data.correct_attempts);
+            } else {
+                console.log('error', response);
+                setError(response.data.message);
+            }
+        } catch (error) {
+            setIsLoading(false);
+            setToastError('Something went wrong!');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     const handleClose = () => {
         setValue('');
         setError('');
+        setPrevAppearedQuestion([]);
+        setQuestion({
+            question: '',
+            answerType: '',
+            questionId: ''
+        });
         setCorrectAttemptCount(0);
         setIsVerified(false);
         setModalOpen(false);
@@ -40,21 +92,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
     };
 
     const handleInputChange = (e) => {
-        let inputValue = e.target.value;
-        switch (question.answerType) {
-        case 'date':
-            inputValue = formatDate(e.target.value);
-            break;
-        case 'id':
-            inputValue = formatLastFourDigitID(e.target.value);
-            break;
-        case 'phone':
-            inputValue = formatInputLocalPhoneNumber(e.target.value);
-            break;
-        default:
-            break;
-        }
-        setValue(inputValue);
+        setValue(formatInput(e.target.value, question.answerType));
         if (error) {
             setError('');
         }
@@ -72,22 +110,11 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
         }
         setIsLoading(true);
         try {
-            console.log('Api call to verify');
-            const isAnswerCorrect = true;
-            if (isAnswerCorrect) {
-                setCorrectAttemptCount(prev => prev + 1);
-                setQuestion({ question: 'What was your childhood nickname?', answerType: 'bank' });
-                setError('');
-            } else {
-                console.log('call api');
-            }
-            setValue('');
+            handleAnswerSubmit();
         } catch (err) {
             setError('Verification failed. Please try again.');
         } finally {
-            if (correctAttemptCount === 1) {
-                setIsVerified(true);
-            }
+            setValue('');
             setIsLoading(false);
         }
     };
@@ -110,13 +137,13 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
         }
     };
 
-    console.log(user);
+    // console.log(user);
 
     return (
         <Modal center open={isModalOpen} onClose={handleClose}
             closeIcon={<div style={{ color: 'white' }} disabled></div>}
         >
-            <div className="p-6 w-[531px] h-[292px] bg-white securityQuestionModal" data-testid="modal">
+            <div className="p-6 w-[531px] h-[292px] bg-white securityQuestionModal scrollbar-hide" data-testid="modal">
                 <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
                     Unlock Account
                 </h1>
@@ -125,11 +152,17 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
                 </p>
                 <div className='w-[70%]'>
                     <div className='flex flex-col gap-2 relative'>
-                        <label htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{question.question}</label>
+                        <label htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{isLoading
+                            ? (
+                                <Shimmer column={1} row={1} hight={'h-4'} />
+                            )
+                            : (
+                                question.question
+                            )}</label>
                         <div className='bg-[#F8F8F8] relative w-fit flex justify-center items-center'>
-                            {question.answerType === 'bank' &&
+                            {question.answerType === 'bank_name' &&
                                 (<>
-                                    <div data-testid='change_code'
+                                    <div data-testid='bank'
                                         onClick={() => (isLoading || isVerified) && isOpen ? setIsOpen(false) : setIsOpen(true)}
                                         className={`flex justify-between w-[350px] placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
                                 ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
@@ -154,7 +187,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
                                         </div>
                                     )} </>)
                             }
-                            {question.answerType === 'text' && (
+                            {question.answerType !== 'bank_name' && (
                                 <input
                                     disabled={isLoading || isVerified}
                                     maxLength={30}
@@ -199,6 +232,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
                     </button>}
                     <div className={'w-[117px]'}>
                         <Button
+                            disabled={correctAttemptCount < 2}
                             className={'w-[117px]'}
                             onClick={handleConfirm}
                             isLoading={isLoading}
@@ -207,7 +241,6 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user }) => {
                             buttonColor={'bg-primary-normal'}
                         />
                     </div>
-
                 </div>
             </div>
         </Modal>
