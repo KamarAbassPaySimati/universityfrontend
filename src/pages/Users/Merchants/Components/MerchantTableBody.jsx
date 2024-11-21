@@ -87,7 +87,7 @@ export default function MerchantTableBody ({ user, index }) {
                 </td>
             </tr>
             <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={user} />
-            <AccountUnlockQuestions isModalOpen={isUnlockMerchnat} setModalOpen={setIsUnlockMerchnat} type='merchant' user={user} />
+            <AccountUnlockQuestions isModalOpen={isUnlockMerchnat} setModalOpen={setIsUnlockMerchnat} user={user} />
         </>
     );
 }

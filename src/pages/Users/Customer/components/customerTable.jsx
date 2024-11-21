@@ -121,7 +121,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                     </tbody>
                 }
             </table>
-            <AccountUnlockQuestions isModalOpen={isUnlockCustomer} setModalOpen={setIsUnlockCustomer} type='customer' user={list} />
+            <AccountUnlockQuestions isModalOpen={isUnlockCustomer} setModalOpen={setIsUnlockCustomer} user={list} />
             {!notFound && error &&
                 (<NoDataError heading='There are no customers added yet' text='Click “Register Customer” to add customer' />)}
             {List?.data?.length === 0 && !loading &&

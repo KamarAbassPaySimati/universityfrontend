@@ -114,7 +114,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                     </tbody>
                 }
             </table>
-            <AccountUnlockQuestions isModalOpen={isUnlockAgent} setModalOpen={setIsUnlockAgent} type='agent' user={List}/>
+            <AccountUnlockQuestions isModalOpen={isUnlockAgent} setModalOpen={setIsUnlockAgent} user={List}/>
             {!notFound && error &&
                 (<NoDataError heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&
