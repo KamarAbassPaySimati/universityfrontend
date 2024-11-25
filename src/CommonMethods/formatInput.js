@@ -11,7 +11,7 @@ export function formatLastFourDigitID (input) {
     }
 
     // If more than 2 digits, add space after first two
-    return `${limitedDigits.slice(0, 2)} ${limitedDigits.slice(2)}`;
+    return limitedDigits;
 }
 
 export function formatDate (input) {

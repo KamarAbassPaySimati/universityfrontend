@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
@@ -7,13 +7,30 @@ import TillNumber from '../../../../components/Modals/TillNumber';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatID from '../../../../CommonMethods/formatId';
 import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQuestions';
+import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock';
+import GlobalContext from '../../../../components/Context/GlobalContext';
 
 export default function MerchantTableBody ({ user, index }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
-    const [isUnlockMerchnat, setIsUnlockMerchnat] = useState(false);
+    const [isUnlock, setIsUnlock] = useState(false);
+    const { setToastError } = useContext(GlobalContext);
+    const [prevAppearedQuestion, setPrevAppearedQuestion] = useState([]);
+    const [correctAttemptCount, setCorrectAttemptCount] = useState(0);
+
+    const [question, setQuestion] = useState({
+        question: '',
+        answerType: '',
+        questionId: ''
+    });
     const handleUnlockMerchnnat = () => {
-        setIsUnlockMerchnat(true);
+        // setIsUnlock(true);
+        handleAnswerSubmit({
+            paymaart_id: user.paymaart_id,
+            question_id: '',
+            answer: '',
+            questions: []
+        }, setToastError, setIsUnlock, setPrevAppearedQuestion, setQuestion, setCorrectAttemptCount);
     };
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
@@ -87,7 +104,17 @@ export default function MerchantTableBody ({ user, index }) {
                 </td>
             </tr>
             <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={user} />
-            <AccountUnlockQuestions isModalOpen={isUnlockMerchnat} setModalOpen={setIsUnlockMerchnat} user={user} />
+            <AccountUnlockQuestions
+                isModalOpen={isUnlock}
+                setModalOpen={setIsUnlock}
+                user={user}
+                question={question}
+                setQuestion={setQuestion}
+                prevAppearedQuestion={prevAppearedQuestion}
+                setPrevAppearedQuestion={setPrevAppearedQuestion}
+                correctAttemptCount={correctAttemptCount}
+                setCorrectAttemptCount={setCorrectAttemptCount}
+            />
         </>
     );
 }
