@@ -20,10 +20,7 @@ Scenario: Login as super admin and view list all the agent users to unlock accou
     When I search for recently created agent
     When I click on the unlock button for first account in the list
     Then I should see a popup modal asking security questions
-    When I enter the security question answer as "qwerty"
-    When I click on the verify button security question
-    Then I should read a message stating that "Invalid Security Question Answer" 
-    When I enter the security question answer as ""
+    When I enter the security question answer for agent
     Then I should see the verify security question button text changed to "VERIFIED"
     When I click on Request Reset Link
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
@@ -36,10 +33,7 @@ Scenario: View list of customers and unlock account
     When I search for recently created customer
     When I click on the unlock button for first account in the list
     Then I should see a popup modal asking security questions
-    When I enter the security question answer as "qwerty"
-    When I click on the verify button security question
-    Then I should read a message stating that "Invalid Security Question Answer" 
-    When I enter the security question answer as ""
+    When I enter the security question answer for customer
     Then I should see the verify security question button text changed to "VERIFIED"
     When I click on Request Reset Link
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
@@ -52,10 +46,7 @@ Scenario: View list of merchants and unlock account
     When I search for recently created customer
      When I click on the unlock button for first account in the list
     Then I should see a popup modal asking security questions
-    When I enter the security question answer as "qwerty"
-    When I click on the verify button security question
-    Then I should read a message stating that "Invalid Security Question Answer" 
-    When I enter the security question answer as ""
+    When I enter the security question answer for merchant
     Then I should see the verify security question button text changed to "VERIFIED"
     When I click on Request Reset Link
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
