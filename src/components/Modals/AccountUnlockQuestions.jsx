@@ -6,38 +6,25 @@ import Modal from 'react-responsive-modal';
 import Button from '../Button/Button';
 import GlobalContext from '../Context/GlobalContext';
 import { formatInputLocalPhoneNumber } from '../../CommonMethods/formatLocalPhoneNumber';
-import { formatDate, formatLastFourDigitID } from '../../CommonMethods/formatInput';
+import { formatLastFourDigitID } from '../../CommonMethods/formatInput';
 import Shimmer from '../Shimmers/Shimmer';
+import { handleAnswerSubmit } from './AccountUnlock';
+import UnlockConformation from './UnlockConformation';
 
 const bankNames = ['CDH Investment Bank', 'Ecobank', 'International Bank', 'National Bank', 'Sate Bank', 'FDH Bank', 'First Capital Bank', 'Centenary Bank', 'National Bank'];
 
-const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, setQuestion, correctAttemptCount, setCorrectAttemptCount, prevAppearedQuestion, setPrevAppearedQuestion }) => {
-    const { setToastSuccess } = useContext(GlobalContext);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState('');
+const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, setQuestion, prevAppearedQuestion, setPrevAppearedQuestion }) => {
+    const { setToastSuccess, setToastError } = useContext(GlobalContext);
+    const [isLoadingNext, setIsLoadingNext] = useState(false);
     const [value, setValue] = useState('');
     const [isVerified, setIsVerified] = useState(false);
-    // const [correctAttemptCount, setCorrectAttemptCount] = useState(0);
+    const [isResetLink, setIsResetLink] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    // const [prevAppearedQuestion, setPrevAppearedQuestion] = useState([]);
-    // const [question, setQuestion] = useState({
-    //     question: '',
-    //     answerType: '',
-    //     questionId: ''
-    // });
-
-    // useEffect(() => {
-    //     if (isModalOpen) {
-    //         handleAnswerSubmit();
-    //     }
-    // }, [isModalOpen]);
     const formatInput = (value, type) => {
-        console.log('bvvvvvv', value, type);
         switch (type) {
-        case 'dob':
-            return formatDate(value);
+        case 'string':
+            return value;
         case 'paymaart_id':
-            console.log('formatLastFourDigitID(value)', formatLastFourDigitID(value));
             return formatLastFourDigitID(value);
         case 'phone_number':
             return formatInputLocalPhoneNumber(value);
@@ -48,24 +35,18 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
 
     const handleClose = () => {
         setValue('');
-        setError('');
         setPrevAppearedQuestion([]);
-        // setQuestion({
-        //     question: '',
-        //     answerType: '',
-        //     questionId: ''
-        // });
-        setCorrectAttemptCount(0);
+        setQuestion({
+            question: '',
+            answerType: '',
+            questionId: ''
+        });
         setIsVerified(false);
-        setModalOpen(false);
         setModalOpen(false);
     };
 
     const handleInputChange = (e) => {
         setValue(formatInput(e.target.value, question.answerType));
-        if (error) {
-            setError('');
-        }
     };
 
     const handleSelectBank = (bank) => {
@@ -73,54 +54,68 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
         setIsOpen(false);
     };
 
-    const handleConfirm = async () => {
-        setIsLoading(true);
+    const handleConfirm = async (resetLink) => {
         try {
-            console.log('Mail sent');
-            setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
-            handleClose();
+            setIsLoadingNext(true);
+            await handleAnswerSubmit({
+                paymaart_id: user.paymaart_id,
+                question_id: question.questionId,
+                answer: value,
+                questions: prevAppearedQuestion,
+                to_reset: resetLink
+            }, setToastError, undefined, setPrevAppearedQuestion, setQuestion, setIsResetLink); // setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
+            setValue('');
+            setIsLoadingNext(false);
         } catch (err) {
-            setError('Failed to unlock account. Please try again.');
+            // setError('Failed to unlock account. Please try again.');
         } finally {
-            setIsLoading(false);
+            setIsLoadingNext(false);
         }
     };
-
-    // console.log(user);
-
+    const handleCloseResetLink = () => {
+        setIsResetLink(false);
+        handleClose();
+    };
+    const handleResetLink = () => {
+        handleConfirm(true);
+        setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
+        handleClose();
+        setIsResetLink(false);
+    };
     return (
         <Modal center open={isModalOpen} onClose={handleClose}
             closeIcon={<div style={{ color: 'white' }} disabled></div>}
         >
-            <div className="p-6 w-[531px] bg-white securityQuestionModal scrollbar-hide" data-testid="modal">
-                <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
+            {!isResetLink
+                ? <div className="p-6 w-[531px] bg-white securityQuestionModal scrollbar-hide" data-testid="modal">
+                    <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
                     Unlock Account
-                </h1>
-                <p data-testid="modal-body" className={'text-[14px] leading-[24px] font-[400] text-neutral-secondary Text mt-2 mb-3'}>
+                    </h1>
+                    <p data-testid="modal-body" className={'text-[14px] leading-[24px] font-[400] text-neutral-secondary Text mt-2 mb-3'}>
                     Please answer the security question to unlock the account
-                </p>
-                <div className='w-[70%]'>
-                    <div className='flex flex-col gap-2 relative'>
-                        <label htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{isLoading
-                            ? (
-                                <Shimmer column={1} row={1} hight={'h-4'} />
-                            )
-                            : (
-                                question.question
-                            )}</label>
-                        <div className='bg-[#F8F8F8] relative w-fit flex justify-center items-center'>
-                            {question.answerType === 'bank_name' &&
+                    </p>
+                    <div className='w-[70%]'>
+                        <div className='flex flex-col gap-2 relative'>
+                            <label htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{isLoadingNext
+                                ? (
+                                    <Shimmer column={1} row={1} hight={'h-4'} />
+                                )
+                                : (
+                                    question.question
+                                )}</label>
+                            <div className=' relative flex justify-center items-center'>
+                                {question.answerType === 'bank_name' &&
                                 (<>
                                     <div data-testid='bank'
-                                        onClick={() => (isLoading || isVerified) && isOpen ? setIsOpen(false) : setIsOpen(true)}
-                                        className={`flex justify-between w-[350px] placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
-                                ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
+                                        onClick={() => setIsOpen(!isOpen)}
+                                        className={`flex justify-between w-full placeholder:text-neutral-secondary bg-[#F8F8F8] cursor-pointer text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal
+                                border-[#DDDDDD]`}
                                     >
                                         {value === '' ? 'Select Bank' : value}
                                         <img src='/images/chevron-down.svg' className={`ml-1 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
                                     </div>
                                     {isOpen && (
-                                        <div className='absolute z-50 mt-1 w-[60%] h-24 left-0 top-11 thin-scrollBar overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg'>
+                                        <div className='absolute z-50 mt-1 w-full h-20 left-0 top-11 thin-scrollBar overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg'>
                                             {bankNames.map((bank) => (
                                                 <>
                                                     <div
@@ -135,44 +130,46 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                             ))}
                                         </div>
                                     )} </>)
-                            }
-                            {question.answerType !== 'bank_name' && (
-                                <input
-                                    disabled={isLoading || isVerified}
-                                    maxLength={30}
-                                    data-testid="account-unlock-answer"
-                                    value={value}
-                                    type='text'
-                                    className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
-                                    ${error ? 'border-error' : 'border-[#DDDDDD]'}`}
-                                    id={'a'}
-                                    placeholder='Answer'
-                                    onChange={handleInputChange}
-                                />)
-                            }
+                                }
+                                {question.answerType !== 'bank_name' && (
+                                    <input
+                                        disabled={isLoadingNext || isVerified}
+                                        maxLength={30}
+                                        data-testid="account-unlock-answer"
+                                        value={value}
+                                        type='text'
+                                        className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
+                                    border-[#DDDDDD]`}
+                                        id={'a'}
+                                        placeholder='Answer'
+                                        onChange={handleInputChange}
+                                    />)
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex mt-8 gap-6 justify-end">
+                        {<button className={'w-[117px] border-[#3B2A6F] text-[#3B2A6F] border rounded-md font-normal text-[14px] leading-6'}
+                            onClick={() => handleClose()}
+                            data-testid='cancel_button'
+                        >
+                            {'Cancel'}
+                        </button>}
+                        {console.log('isLoading', isLoadingNext)}
+                        <div className={'w-[117px]'}>
+                            <Button
+                                disabled={value.trim().length === 0}
+                                className={'w-[117px]'}
+                                onClick={() => handleConfirm(false)}
+                                isLoading={isLoadingNext}
+                                text={'Next'}
+                                testId="confirm_button"
+                                buttonColor={'bg-primary-normal'}
+                            />
                         </div>
                     </div>
                 </div>
-                <div className="flex mt-8 gap-6 justify-end">
-                    {<button className={'w-[117px] border-[#3B2A6F] text-[#3B2A6F] border rounded-md font-normal text-[14px] leading-6'}
-                        onClick={() => handleClose()}
-                        data-testid='cancel_button'
-                    >
-                        {'Cancel'}
-                    </button>}
-                    <div className={'w-[117px]'}>
-                        <Button
-                            disabled={value.length !== 0}
-                            className={'w-[117px]'}
-                            onClick={handleConfirm}
-                            isLoading={isLoading}
-                            text={'Next'}
-                            testId="confirm_button"
-                            buttonColor={'bg-primary-normal'}
-                        />
-                    </div>
-                </div>
-            </div>
+                : <UnlockConformation handleCloseResetLink={handleCloseResetLink} handleResetLink={handleResetLink}/>}
         </Modal>
     );
 };
