@@ -576,7 +576,7 @@ Before('@locking_customer_account', async function () {
 
 Before('@locking_merchant_account', async function () {
     try {
-         global.lock_merchant_account_response = await locking_account(global.merchant_registration_response.paymaart_id);
+        global.lock_merchant_account_response = await locking_account(global.merchant_registration_response.paymaart_id);
     } catch (error) {
         console.log('failed to lock merchant account', error);
     }
