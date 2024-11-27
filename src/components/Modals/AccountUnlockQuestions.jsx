@@ -46,7 +46,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
     };
 
     const handleInputChange = (e) => {
-        setValue(formatInput(e.target.value, question.answerType));
+        setValue(formatInput(e.target.value, question?.answerType));
     };
 
     const handleSelectBank = (bank) => {
