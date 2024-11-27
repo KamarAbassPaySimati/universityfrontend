@@ -46,7 +46,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
     };
 
     const handleInputChange = (e) => {
-        setValue(formatInput(e.target.value, question.answerType));
+        setValue(formatInput(e.target.value, question?.answerType));
     };
 
     const handleSelectBank = (bank) => {
@@ -101,10 +101,10 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                     <Shimmer column={1} row={1} hight={'h-4'} />
                                 )
                                 : (
-                                    question.question
+                                    question?.question
                                 )}</label>
                             <div className=' relative flex justify-center items-center'>
-                                {question.answerType === 'bank_name' &&
+                                {question?.answerType === 'bank_name' &&
                                 (<>
                                     <div data-testid='bank'
                                         onClick={() => setIsOpen(!isOpen)}
@@ -131,7 +131,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                         </div>
                                     )} </>)
                                 }
-                                {question.answerType !== 'bank_name' && (
+                                {question?.answerType !== 'bank_name' && (
                                     <input
                                         disabled={isLoadingNext || isVerified}
                                         maxLength={30}
