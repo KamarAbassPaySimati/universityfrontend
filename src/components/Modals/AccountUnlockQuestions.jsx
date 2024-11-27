@@ -87,7 +87,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
             closeIcon={<div style={{ color: 'white' }} disabled></div>}
         >
             {!isResetLink
-                ? <div className="p-6 w-[531px] bg-white securityQuestionModal scrollbar-hide" data-testid="modal">
+                ? <div className="p-6 w-[531px] bg-white securityQuestionModal scrollbar-hide" data-testid='security_question_modal'>
                     <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
                     Unlock Account
                     </h1>
@@ -101,10 +101,10 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                     <Shimmer column={1} row={1} hight={'h-4'} />
                                 )
                                 : (
-                                    question.question
+                                    question?.question
                                 )}</label>
                             <div className=' relative flex justify-center items-center'>
-                                {question.answerType === 'bank_name' &&
+                                {question?.answerType === 'bank_name' &&
                                 (<>
                                     <div data-testid='bank'
                                         onClick={() => setIsOpen(!isOpen)}
@@ -131,11 +131,12 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                         </div>
                                     )} </>)
                                 }
-                                {question.answerType !== 'bank_name' && (
+                                {question?.answerType !== 'bank_name' && (
                                     <input
                                         disabled={isLoadingNext || isVerified}
                                         maxLength={30}
-                                        data-testid="security-question-answer"                                        value={value}
+                                        data-testid="security-question-answer"
+                                        value={value}
                                         type='text'
                                         className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
                                     border-[#DDDDDD]`}
@@ -154,7 +155,6 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                         >
                             {'Cancel'}
                         </button>}
-                        {console.log('isLoading', isLoadingNext)}
                         <div className={'w-[117px]'}>
                             <Button
                                 disabled={value.trim().length === 0}
