@@ -346,7 +346,7 @@ export function TransactionDescription (value, type, transactionType) {
     case 'PMCU4':
         return 'Cash-out | Paymaart Agent, Un-registered user';
     case 'G2PCRPTBA':
-        return 'Pay-in by G2P Customer to Beneficiary | EM credit';
+        return 'G2P Payments | EM CRedit';
     case 'G2PCRPMSP':
         return 'Reverse to  G2P Customer from , PMSP | EM credit';
     case 'PMSPPOUT':
