@@ -96,7 +96,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                     </p>
                     <div className='w-[70%]'>
                         <div className='flex flex-col gap-2 relative'>
-                            <label htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{isLoadingNext
+                            <label data-testid="security-question" htmlFor={'a'} className='text-neutral-primary text-[14px] font-[500] leading-[16px]'>{isLoadingNext
                                 ? (
                                     <Shimmer column={1} row={1} hight={'h-4'} />
                                 )
@@ -135,8 +135,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                     <input
                                         disabled={isLoadingNext || isVerified}
                                         maxLength={30}
-                                        data-testid="account-unlock-answer"
-                                        value={value}
+                                        data-testid="security-question-answer"                                        value={value}
                                         type='text'
                                         className={`placeholder:text-neutral-secondary bg-[#F8F8F8] text-neutral-primary px-[10px] py-[11px] font-[400] text-[14px] leading-[22px] focus:outline-none border-b focus:border-primary-normal pr-[119px]
                                     border-[#DDDDDD]`}
@@ -163,7 +162,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                 onClick={() => handleConfirm(false)}
                                 isLoading={isLoadingNext}
                                 text={'Next'}
-                                testId="confirm_button"
+                                testId="verify_security_question"
                                 buttonColor={'bg-primary-normal'}
                             />
                         </div>

@@ -2,7 +2,7 @@ const { Then, When } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
 
 When("I click on the unlock button for first account in the list", async function () {
-    await driver.wait(until.elementLocated(By.css('[data-testid="unlock_button"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="unlock_button_0"]'))).click();
     await new Promise(resolve => setTimeout(resolve, 500));
 })
 
@@ -31,10 +31,10 @@ When('I enter the security question answer for agent',async function () {
           agent_answer = `${global.agent_registration_payload.country_code}${phone_number}`;
           break;
       case "What is the name of the Malawi bank linked to your PaySimati account?":
-          agent_answer = "State Bank";
+          agent_answer = global.agent_registration_payload.last_name;
           break;
       case "What is your date of birth, as registered with PaySimati?":
-          agent_answer = "09/10/2005";
+          agent_answer = global.agent_registration_payload.middle_name;
           break;    
       default:
           throw new Error(`No predefined answer found for the question: "${displayedQuestion}"`);
@@ -68,11 +68,11 @@ When('I enter the security question answer for customer',async function () {
           let phone_number = global.customer_registration_payload.phone_number.replace(" ","")
           customer_answer = `${global.customer_registration_payload.country_code}${phone_number}`;
           break;
-      case "What is the name of the Malawi bank linked to your PaySimati account?":
-          customer_answer = "State Bank";
+      case "Please spell your Lastname as registered with your Paymaart/Paysimati account":
+          customer_answer = global.customer_registration_payload.last_name;
           break;
-      case "What is your date of birth, as registered with PaySimati?":
-          customer_answer = "09/10/2005";
+      case "Please spell your Middlename as registered with your Paymaart/Paysimati account":
+          customer_answer = global.customer_registration_payload.middle_name;
           break;    
       default:
           throw new Error(`No predefined answer found for the question: "${displayedQuestion}"`);
@@ -107,10 +107,10 @@ When('I enter the security question answer for merchant',async function () {
             merchant_answer = `${global.merchant_registration_payload.country_code}${phone_number}`;
             break;
         case "What is the name of the Malawi bank linked to your PaySimati account?":
-            merchant_answer = "State Bank";
+            merchant_answer = global.merchant_registration_payload.last_name;
             break;
         case "What is your date of birth, as registered with PaySimati?":
-            merchant_answer = "09/10/2005";
+            merchant_answer = global.merchant_registration_payload.middle_name;
             break;    
         default:
             throw new Error(`No predefined answer found for the question: "${displayedQuestion}"`);

@@ -26,12 +26,12 @@ const UnlockConformation = ({ handleCloseResetLink, handleResetLink }) => {
             <div className={'flex item-center justify-center'}>
                 <div className='w-[200px]'>
                     <Button
-                        // disabled={value.trim().length === 0}
+                        disabled={isLoading}
                         className={'w-[117px]'}
                         onClick={() => handleResetLinkClick()}
                         isLoading={isLoading}
                         text={'Request Reset Link'}
-                        testId="confirm_button"
+                        testId="request_reset_link"
                         buttonColor={'bg-primary-normal'}
                     />
                 </div>
