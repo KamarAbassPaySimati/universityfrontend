@@ -60,7 +60,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
             await handleAnswerSubmit({
                 paymaart_id: user.paymaart_id,
                 question_id: question.questionId,
-                answer: value,
+                answer: question?.answerType === 'phone_number' ? value.split(' ').join('') : value,
                 questions: prevAppearedQuestion,
                 to_reset: resetLink
             }, setToastError, undefined, setPrevAppearedQuestion, setQuestion, setIsResetLink); // setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
@@ -134,7 +134,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                 {question?.answerType !== 'bank_name' && (
                                     <input
                                         disabled={isLoadingNext || isVerified}
-                                        maxLength={30}
+                                        maxLength={50}
                                         data-testid="security-question-answer"
                                         value={value}
                                         type='text'

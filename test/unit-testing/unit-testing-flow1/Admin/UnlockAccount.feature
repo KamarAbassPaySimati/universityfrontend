@@ -24,30 +24,28 @@ Scenario: Login as super admin and view list all the agent users to unlock accou
     When I click on Request Reset Link
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
 
-# @register_new_customer
-# @locking_customer_account
-# Scenario: View list of customers and unlock account
-#     Given I navigate to customer users listing screen
-#     Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
-#     When I search for recently created customer
-#     When I click on the unlock button for first account in the list
-#     Then I should see a popup modal asking security questions
-#     When I enter the security question answer for customer
-#     Then I should see the verify security question button text changed to "VERIFIED"
-#     When I click on Request Reset Link
-#     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
+@register_new_customer
+@locking_customer_account
+Scenario: View list of customers and unlock account
+    Given I navigate to customer users listing screen
+    Then I should see table header containing '["Paymaart ID","Name","Phone Number","Created Date, CAT", "Status"]'
+    When I search for recently created customer
+    When I click on the unlock button for first account in the list
+    Then I should see a popup modal asking security questions
+    When I enter the security question answer for customer
+    When I click on Request Reset Link
+    Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
 
-# @register_new_merchant
-# @locking_merchant_account
-# Scenario: View list of merchants and unlock account
-#     Given I navigate to merchant users listing screen
-#     Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
-#     When I search for recently created customer
-#      When I click on the unlock button for first account in the list
-#     Then I should see a popup modal asking security questions
-#     When I enter the security question answer for merchant
-#     Then I should see the verify security question button text changed to "VERIFIED"
-#     When I click on Request Reset Link
-#     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
+@register_new_merchant
+@locking_merchant_account
+Scenario: View list of merchants and unlock account
+    Given I navigate to merchant users listing screen
+    Then I should see table header containing '["Paymaart ID","Name","Trading Name","Created Date, CAT","Till Number","Location","Status"]'
+    When I search for recently created merchant
+     When I click on the unlock button for first account in the list
+    Then I should see a popup modal asking security questions
+    When I enter the security question answer for merchant
+    When I click on Request Reset Link
+    Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
 
 
