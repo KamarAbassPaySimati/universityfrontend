@@ -162,7 +162,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                                 onClick={() => handleConfirm(false)}
                                 isLoading={isLoadingNext}
                                 text={'Next'}
-                                testId="verify_security_question"
+                                testId="next_security_question"
                                 buttonColor={'bg-primary-normal'}
                             />
                         </div>

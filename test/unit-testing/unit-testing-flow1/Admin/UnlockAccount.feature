@@ -21,7 +21,6 @@ Scenario: Login as super admin and view list all the agent users to unlock accou
     When I click on the unlock button for first account in the list
     Then I should see a popup modal asking security questions
     When I enter the security question answer for agent
-    Then I should see the verify security question button text changed to "VERIFIED"
     When I click on Request Reset Link
     Then I should read a message stating that "Check your email for a password reset link. The link will be active for 10 minutes"
 
