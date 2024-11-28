@@ -1,30 +1,16 @@
 /* eslint-disable max-len */
 import React, { useContext, useRef, useState } from 'react';
-import InputField from '../../../components/InputField/InputField';
-import PasswordValidator from '../../../components/PasswordValidator/PasswordValidator';
-import Button from '../../../components/Button/Button';
 import { dataService } from '../../../services/data.services';
 import passwordCheck from '../../../CommonMethods/passwordCheck';
 import GlobalContext from '../../../components/Context/GlobalContext';
-import ReCAPTCHA from 'react-google-recaptcha';
-import { siteKey } from '../../../config';
 import pinCheck from '../../../CommonMethods/pinCheck';
+import NewPasswordForm from './NewPasswordForm';
+import PasswordGuidelines from './PasswordGuidelines';
 
 const AUTH_TYPES = {
     PIN: 'PIN',
     PASSWORD: 'Password'
 };
-const PasswordGuidelines = () => (
-    <div className='z-20 left-0 ml-[80px] mb-5 w-max max-w-[calc(100vw-90px)] break-words place-self-start hidden md:block'>
-        <h1 className='text-[#fff] font-[500] text-[16px]'>Note: Password Guidelines</h1>
-        <ul className='text-[#fff] font-[400] text-[14px] marker:text-[#fff] list-outside list-disc ml-6'>
-            <li>Passwords must not include spaces or any punctuation marks like &apos;.&apos;, &apos;!&apos;, or &apos;?&apos;.</li>
-            <li>Avoid using easily guessable personal information such as your name, birthdate, or common words.</li>
-            <li>Do not use simple patterns like &apos;12345678&apos;, &apos;22446688&apos;, &apos;password&apos;, or sequential keyboard patterns like &apos;qwerty&apos;.</li>
-            <li>Make sure passwords are created with random combinations of characters for better security.</li>
-        </ul>
-    </div>
-);
 
 const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => {
     const reCaptchaRef = useRef();
@@ -34,101 +20,116 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => 
     const [confirmPassword, setConfirmPassword] = useState('');
     const [pin, setPin] = useState('');
     const [confirmPin, setConfirmPin] = useState('');
-    const [newPasswordError, setNewPasswordError] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
-    const [newPinError, setNewPinError] = useState('');
-    const [confirmPinError, setConfirmPinError] = useState('');
+    const [errors, setErrors] = useState({
+        newPassword: '',
+        confirmPassword: '',
+        newPin: '',
+        confirmPin: ''
+    });
     const [isCriteriaMet, setIsCriteriaMet] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [enteredLetter, setEnteredLetter] = useState();
     const { setToastError } = useContext(GlobalContext);
+
+    const validatePin = () => {
+        const newErrors = { ...errors };
+        let isValid = true;
+
+        if (pin.trim() === '') {
+            newErrors.newPin = 'This field is mandatory';
+            isValid = false;
+        } else if (!pinCheck(pin)) {
+            newErrors.newPin = 'The PIN must be 6 digits and numeric only.';
+            isValid = false;
+        }
+
+        if (confirmPin.trim() === '') {
+            newErrors.confirmPin = 'This field is mandatory';
+            isValid = false;
+        } else if (pin !== confirmPin) {
+            newErrors.confirmPin = 'PIN does not match';
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
+
+    const validatePassword = () => {
+        const newErrors = { ...errors };
+        let isValid = true;
+
+        if (password.trim() === '') {
+            newErrors.newPassword = 'This field is mandatory';
+            isValid = false;
+        } else if (!isCriteriaMet) {
+            newErrors.newPassword = 'Password criteria is not met';
+            isValid = false;
+        } else if (!passwordCheck(password)) {
+            newErrors.newPassword = 'Weak password. Check guidelines for strong passwords.';
+            isValid = false;
+        }
+
+        if (confirmPassword.trim() === '') {
+            newErrors.confirmPassword = 'This field is mandatory';
+            isValid = false;
+        } else if (password !== confirmPassword) {
+            newErrors.confirmPassword = 'Password does not match';
+            isValid = false;
+        }
+
+        setErrors(newErrors);
+        return isValid;
+    };
 
     const handleClick = async (e) => {
         e.preventDefault();
         if (window.location.host !== 'localhost:3000') {
             await reCaptchaRef.current.executeAsync();
         }
-        if (activeType === 'PIN') {
-            if (pin.trim() === '' && confirmPin.trim() === '') {
-                setNewPinError('This field is mandatory');
-                setConfirmPinError('This field is mandatory');
-            } else if (pin.trim() === '') {
-                setNewPinError('This field is mandatory');
-            } else if (confirmPin.trim() === '') {
-                setConfirmPinError('This field is mandatory');
-            } else if (pin !== confirmPin) {
-            // passwords do not match
-                setConfirmPasswordError('Pin does not match');
-            } else if (!pinCheck(pin)) {
-                setNewPasswordError('The PIN must be 6 digits and numeric only.');
-            } else {
-            // call api
-                try {
-                    setIsLoading(true);
-                    const response = await dataService.PostAPIWithoutHeader('admin-users/reset-password',
-                        { token, new_password: password });
-                    if (!response.error) {
-                        setIsSuccess(true);
-                    } else if (response?.data?.status === 401) {
-                        setIsValidToken(true);
-                    } else if (response?.data.status === 400) {
-                        setNewPasswordError(response?.data?.data?.message);
-                        setIsLoading(false);
-                        setIsSuccess(false);
-                    } else {
-                        setNewPasswordError(response?.data?.data?.message);
-                        setIsLoading(false);
-                        setIsSuccess(false);
-                    }
-                } catch (error) {
+
+        const isValid = activeType === 'PIN'
+            ? validatePin()
+            : validatePassword();
+
+        if (isValid) {
+            setErrors({
+                newPassword: '',
+                confirmPassword: '',
+                newPin: '',
+                confirmPin: ''
+            });
+            try {
+                setIsLoading(true);
+                const endpoint = 'admin-users/reset-password';
+                const payload = activeType === 'PIN'
+                    ? { token, new_pin: pin }
+                    : { token, new_password: password };
+
+                const response = await dataService.PostAPIWithoutHeader(endpoint, payload);
+
+                if (!response.error) {
+                    setIsSuccess(true);
+                    console.log('hehehehehe');
+                } else if (response?.data?.status === 401) {
+                    setIsValidToken(true);
+                } else if (response?.data.status === 400) {
+                    const errorKey = activeType === 'PIN' ? 'newPin' : 'newPassword';
+                    setErrors(prev => ({
+                        ...prev,
+                        [errorKey]: response?.data?.data?.message || 'An error occurred'
+                    }));
                     setIsLoading(false);
+                    setIsSuccess(false);
+                } else {
                     setToastError('Something went wrong!');
+                    setIsLoading(false);
                     setIsSuccess(false);
                 }
-            }
-            if (window.location.host !== 'localhost:3000') {
-                await reCaptchaRef.current.reset();
-            }
-        } else {
-            if (password.trim() === '' && confirmPassword.trim() === '') {
-                setNewPasswordError('This field is mandatory');
-                setConfirmPasswordError('This field is mandatory');
-            } else if (password.trim() === '') {
-                setNewPasswordError('This field is mandatory');
-            } else if (confirmPassword.trim() === '') {
-                setConfirmPasswordError('This field is mandatory');
-            } else if (!isCriteriaMet) {
-            // Pssword Criteria did not met
-                setNewPasswordError('Password criteria is not met');
-            } else if (password !== confirmPassword) {
-            // passwords do not match
-                setConfirmPasswordError('Password does not match');
-            } else if (!passwordCheck(password)) {
-                setNewPasswordError('Weak password. Check guidelines for strong passwords.');
-            } else {
-            // call api
-                try {
-                    setIsLoading(true);
-                    const response = await dataService.PostAPIWithoutHeader('admin-users/reset-password',
-                        { token, new_pin: pin });
-                    if (!response.error) {
-                        setIsSuccess(true);
-                    } else if (response?.data?.status === 401) {
-                        setIsValidToken(true);
-                    } else if (response?.data.status === 400) {
-                        setNewPinError(response?.data?.data?.message);
-                        setIsLoading(false);
-                        setIsSuccess(false);
-                    } else {
-                        setNewPinError(response?.data?.data?.message);
-                        setIsLoading(false);
-                        setIsSuccess(false);
-                    }
-                } catch (error) {
-                    setIsLoading(false);
-                    setToastError('Something went wrong!');
-                    setIsSuccess(false);
-                }
+            } catch (error) {
+                setIsLoading(false);
+                setToastError('Something went wrong!');
+                setIsSuccess(false);
             }
         }
         if (window.location.host !== 'localhost:3000') {
@@ -144,11 +145,11 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => 
         const inputMap = {
             PIN: {
                 'New Pin': setPin,
-                'Confirm Pin': setConfirmPin
+                'Confirm New Pin': setConfirmPin
             },
             PASSWORD: {
                 'New Password': setPassword,
-                'Confirm Password': setConfirmPassword
+                'Confirm New Password': setConfirmPassword
             }
         };
         const setter = inputMap[activeType]?.[id];
@@ -159,12 +160,12 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => 
     const focusHandler = (id) => {
         const errorMap = {
             PIN: {
-                'New Pin': setNewPinError,
-                'Confirm Pin': setConfirmPinError
+                'New Pin': setErrors.newPin,
+                'Confirm Pin': setErrors.confirmPin
             },
             PASSWORD: {
-                'New Password': setNewPinError,
-                'Confirm Password': setConfirmPinError
+                'New Password': setErrors.newPassword,
+                'Confirm Password': setErrors.confirmPassword
             }
         };
         const errorSetter = errorMap[activeType]?.[id];
@@ -208,107 +209,40 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => 
                             </div>
                         </div>
                         {activeType === 'PIN'
-                            ? (<form className='flex flex-col gap-[12px]'>
-                                <InputField
+                            ? (
+                                <NewPasswordForm
+                                    type="PIN"
                                     value={pin}
+                                    confirmValue={confirmPin}
                                     onChange={changeHandler}
                                     onFocus={focusHandler}
-                                    id='New Pin'
-                                    testId='new_pin'
-                                    error={newPinError}
-                                    label='New Pin'
-                                    placeholder='Enter new pin'
-                                    givenType='pin'
+                                    errors={errors}
+                                    reCaptchaRef={reCaptchaRef}
+                                    handleClick={handleClick}
+                                    recaptchaLoaded={recaptchaLoaded}
+                                    isLoading={isLoading}
                                     setEnteredLetter={setEnteredLetter}
+                                    asyncScriptOnLoad={asyncScriptOnLoad}
+                                    setIsCriteriaMet={setIsCriteriaMet}
                                 />
-                                {/* <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                            <PasswordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
-                        </div> */}
-                                <InputField
-                                    value={confirmPin}
-                                    onChange={changeHandler}
-                                    onFocus={focusHandler}
-                                    id='Confirm New Pin'
-                                    testId='new_confirm_pin'
-                                    error={confirmPinError}
-                                    label='Confirm New Pin'
-                                    placeholder='Re-enter new pin'
-                                    givenType='pin'
-                                    setEnteredLetter={setEnteredLetter}
-                                />
-                                {(window.location.host !== 'localhost:3000') && (
-                                    <ReCAPTCHA
-                                        style={{ display: 'inline-block', height: '10px !important' }}
-                                        theme="dark"
-                                        size="invisible"
-                                        ref={reCaptchaRef}
-                                        sitekey={siteKey}
-                                        // onChange={handleChangeRecap}
-                                        asyncScriptOnLoad={asyncScriptOnLoad}
-                                    />
-                                )}
-                                <div className='mt-6'>
-                                    <Button
-                                        text="Reset"
-                                        testId='submit_button'
-                                        onClick={handleClick}
-                                        disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
-                                        isLoading={isLoading}
-                                    />
-                                </div>
-                            </form>)
+                            )
                             : (
-                                <>
-                                    <form className='flex flex-col gap-[12px]'>
-                                        <InputField
-                                            value={password}
-                                            onChange={changeHandler}
-                                            onFocus={focusHandler}
-                                            id='New Password'
-                                            testId='new_password'
-                                            error={newPasswordError}
-                                            label='New Password'
-                                            placeholder='Enter new password'
-                                            givenType='password'
-                                            setEnteredLetter={setEnteredLetter}
-                                        />
-                                        {/* <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                            <PasswordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
-                        </div> */}
-                                        <InputField
-                                            value={confirmPassword}
-                                            onChange={changeHandler}
-                                            onFocus={focusHandler}
-                                            id='Confirm New Password'
-                                            testId='new_confirm_password'
-                                            error={confirmPasswordError}
-                                            label='Confirm New Password'
-                                            placeholder='Re-enter new password'
-                                            givenType='password'
-                                            setEnteredLetter={setEnteredLetter}
-                                        />
-                                        {(window.location.host !== 'localhost:3000') && (
-                                            <ReCAPTCHA
-                                                style={{ display: 'inline-block', height: '10px !important' }}
-                                                theme="dark"
-                                                size="invisible"
-                                                ref={reCaptchaRef}
-                                                sitekey={siteKey}
-                                                // onChange={handleChangeRecap}
-                                                asyncScriptOnLoad={asyncScriptOnLoad}
-                                            />
-                                        )}
-                                        <div className='mt-6'>
-                                            <Button
-                                                text="Reset"
-                                                testId='submit_button'
-                                                onClick={handleClick}
-                                                disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
-                                                isLoading={isLoading}
-                                            />
-                                        </div>
-                                    </form>
-                                </>)
+                                <NewPasswordForm
+                                    type="PASSWORD"
+                                    value={password}
+                                    confirmValue={confirmPassword}
+                                    onChange={changeHandler}
+                                    onFocus={focusHandler}
+                                    errors={errors}
+                                    reCaptchaRef={reCaptchaRef}
+                                    handleClick={handleClick}
+                                    recaptchaLoaded={recaptchaLoaded}
+                                    isLoading={isLoading}
+                                    setEnteredLetter={setEnteredLetter}
+                                    asyncScriptOnLoad={asyncScriptOnLoad}
+                                    setIsCriteriaMet={setIsCriteriaMet}
+                                />
+                            )
                         }
                     </div>
                 </div>
@@ -326,142 +260,23 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => 
                             Reset Password
                         </div>
                     </div>
-                    <form className='flex flex-col gap-[12px]'>
-                        <InputField
-                            value={password}
-                            onChange={changeHandler}
-                            onFocus={focusHandler}
-                            id='New Password'
-                            testId='new_password'
-                            error={newPasswordError}
-                            label='New Password'
-                            placeholder='Enter new password'
-                            givenType='password'
-                            setEnteredLetter={setEnteredLetter}
-                        />
-                        <div className='ml-[1px] mt-[0.5px] mb-[4px]'>
-                            <PasswordValidator newPassword={password} setIsCriteriaMet={setIsCriteriaMet} />
-                        </div>
-                        <InputField
-                            value={confirmPassword}
-                            onChange={changeHandler}
-                            onFocus={focusHandler}
-                            id='Confirm New Password'
-                            testId='new_confirm_password'
-                            error={confirmPasswordError}
-                            label='Confirm New Password'
-                            placeholder='Re-enter new password'
-                            givenType='password'
-                            setEnteredLetter={setEnteredLetter}
-                        />
-                        {(window.location.host !== 'localhost:3000') && (
-                            <ReCAPTCHA
-                                style={{ display: 'inline-block', height: '10px !important' }}
-                                theme="dark"
-                                size="invisible"
-                                ref={reCaptchaRef}
-                                sitekey={siteKey}
-                                // onChange={handleChangeRecap}
-                                asyncScriptOnLoad={asyncScriptOnLoad}
-                            />
-                        )}
-                        <div className='mt-6'>
-                            <Button
-                                text="Reset"
-                                testId='submit_button'
-                                onClick={handleClick}
-                                disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
-                                isLoading={isLoading}
-                            />
-                        </div>
-                    </form>
+                    <NewPasswordForm
+                        type="PASSWORD"
+                        value={password}
+                        confirmValue={confirmPassword}
+                        onChange={changeHandler}
+                        onFocus={focusHandler}
+                        errors={errors}
+                        reCaptchaRef={reCaptchaRef}
+                        handleClick={handleClick}
+                        recaptchaLoaded={recaptchaLoaded}
+                        isLoading={isLoading}
+                        setEnteredLetter={setEnteredLetter}
+                        asyncScriptOnLoad={asyncScriptOnLoad}
+                        setIsCriteriaMet={setIsCriteriaMet}
+                    />
                 </div>
             </div>)
     );
 };
 export default NewPasswordSet;
-
-// const AUTH_TYPES = {
-//     PIN: 'PIN',
-//     PASSWORD: 'PASSWORD'
-// };
-
-// const formConfig = {
-//     [AUTH_TYPES.PIN]: [
-//         {
-//             id: 'New Pin',
-//             testId: 'new_pin',
-//             value: pin,
-//             error: newPinError,
-//             label: 'New Pin',
-//             placeholder: 'Enter new pin',
-//             givenType: 'pin'
-//         },
-//         {
-//             id: 'Confirm New Pin',
-//             testId: 'new_confirm_pin',
-//             value: confirmPin,
-//             error: confirmPinError,
-//             label: 'Confirm New Pin',
-//             placeholder: 'Re-enter new pin',
-//             givenType: 'pin'
-//         }
-//     ],
-//     [AUTH_TYPES.PASSWORD]: [
-//         {
-//             id: 'New Password',
-//             testId: 'new_password',
-//             value: password,
-//             error: newPasswordError,
-//             label: 'New Password',
-//             placeholder: 'Enter new password',
-//             givenType: 'password'
-//         },
-//         {
-//             id: 'Confirm New Password',
-//             testId: 'new_confirm_password',
-//             value: confirmPassword,
-//             error: confirmPasswordError,
-//             label: 'Confirm New Password',
-//             placeholder: 'Re-enter new password',
-//             givenType: 'password'
-//         }
-//     ]
-// };
-
-// const AuthForm = () => {
-//     const fields = formConfig[activeType];
-
-//     return (
-//         <form className='flex flex-col gap-[12px]'>
-//             {fields.map((field) => (
-//                 <InputField
-//                     key={field.id}
-//                     {...field}
-//                     onChange={changeHandler}
-//                     onFocus={focusHandler}
-//                     setEnteredLetter={setEnteredLetter}
-//                 />
-//             ))}
-//             {window.location.host !== 'localhost:3000' && (
-//                 <ReCAPTCHA
-//                     style={{ display: 'inline-block', height: '10px !important' }}
-//                     theme="dark"
-//                     size="invisible"
-//                     ref={reCaptchaRef}
-//                     sitekey={siteKey}
-//                     asyncScriptOnLoad={asyncScriptOnLoad}
-//                 />
-//             )}
-//             <div className='mt-6'>
-//                 <Button
-//                     text="Reset"
-//                     testId='submit_button'
-//                     onClick={handleClick}
-//                     disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
-//                     isLoading={isLoading}
-//                 />
-//             </div>
-//         </form>
-//     );
-// };
