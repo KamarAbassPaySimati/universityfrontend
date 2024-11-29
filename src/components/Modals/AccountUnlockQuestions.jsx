@@ -63,7 +63,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                 answer: question?.answerType === 'phone_number' ? value.split(' ').join('') : value,
                 questions: prevAppearedQuestion,
                 to_reset: resetLink
-            }, setToastError, undefined, setPrevAppearedQuestion, setQuestion, setIsResetLink); // setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
+            }, setToastError, setModalOpen, setPrevAppearedQuestion, setQuestion, setIsResetLink); // setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
             setValue('');
             setIsLoadingNext(false);
         } catch (err) {
