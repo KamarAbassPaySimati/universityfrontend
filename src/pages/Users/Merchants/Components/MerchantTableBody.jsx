@@ -89,7 +89,7 @@ export default function MerchantTableBody ({ user, index }) {
                             </svg>
                             <span class="sr-only">Loading...</span>
                         </div>
-                        : !user?.isLocked
+                        : user?.is_locked
                             ? <Image testId={`unlock_button_${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlock()} src='lock'/>
                             : <Image src='unlock' className='cursor-default'/>}
                     <Tooltip

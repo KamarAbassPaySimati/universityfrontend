@@ -18,6 +18,9 @@ Then('I should see a popup modal asking security questions', async function () {
 
 When('I enter the security question answer for agent', async function () {
     for (let i = 0; i < 2; i++) {
+        if (i !== 0) {
+            await new Promise(resolve => setTimeout(resolve, 1300));
+        }
         const questionElement = await driver.wait(until.elementLocated(By.css('[data-testid="security-question"]')));
         await driver.wait(until.elementIsVisible(questionElement));
 
@@ -65,6 +68,9 @@ When('I enter the security question answer for agent', async function () {
 When('I enter the security question answer for customer', async function () {
     const count = 2;
     for (let i = 0; i < count; i++) {
+        if (i !== 0) {
+            await new Promise(resolve => setTimeout(resolve, 1300));
+        }
         const questionElement = await driver.wait(until.elementLocated(By.css('[data-testid="security-question"]')));
         await driver.wait(until.elementIsVisible(questionElement));
 
@@ -113,6 +119,9 @@ When('I enter the security question answer for customer', async function () {
 When('I enter the security question answer for merchant', async function () {
     const count = 2;
     for (let i = 0; i < count; i++) {
+        if (i !== 0) {
+            await new Promise(resolve => setTimeout(resolve, 1300));
+        }
         const questionElement = await driver.wait(until.elementLocated(By.css('[data-testid="security-question"]')));
         await driver.wait(until.elementIsVisible(questionElement));
 
