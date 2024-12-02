@@ -6,7 +6,7 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import CustomerTableBody from './CustomerTableBody';
 
-const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
+const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearchParams, GetList }) => {
     return (
         <>
             <table className='w-full min-w-max'>
@@ -31,7 +31,7 @@ const CustomerTable = ({ loading, error, List, notFound, searchParams, setSearch
                     ? <Shimmer column={6} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <CustomerTableBody user={user} index={index} key={index}/>
+                            <CustomerTableBody user={user} index={index} key={index} GetList={GetList}/>
                         ))}
                     </tbody>
                 }

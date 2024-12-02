@@ -10,7 +10,7 @@ import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQ
 import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 
-export default function MerchantTableBody ({ user, index }) {
+export default function MerchantTableBody ({ user, index, GetList }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const [isUnlock, setIsUnlock] = useState(false);
@@ -121,6 +121,7 @@ export default function MerchantTableBody ({ user, index }) {
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}
                 setPrevAppearedQuestion={setPrevAppearedQuestion}
+                GetList={GetList}
             />
         </>
     );
