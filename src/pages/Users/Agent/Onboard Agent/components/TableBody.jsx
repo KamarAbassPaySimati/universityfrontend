@@ -10,7 +10,7 @@ import { handleAnswerSubmit } from '../../../../../components/Modals/AccountUnlo
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 import formatLocalPhoneNumber from '../../../../../CommonMethods/formatLocalPhoneNumber';
 
-export default function TableBody ({ user, index }) {
+export default function TableBody ({ user, index, GetList }) {
     const Navigate = useNavigate();
     const [isUnlock, setIsUnlock] = useState(false);
     const { setToastError } = useContext(GlobalContext);
@@ -118,6 +118,7 @@ export default function TableBody ({ user, index }) {
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}
                 setPrevAppearedQuestion={setPrevAppearedQuestion}
+                GetList={GetList}
             />
         </>
     );

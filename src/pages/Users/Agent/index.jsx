@@ -108,6 +108,7 @@ const Agent = () => {
                         setSearchParams={setSearchParams}
                         notFound={notFound}
                         searchParams={searchParams}
+                        GetList={GetList}
                     />
                 </div>}
                 {notFound &&

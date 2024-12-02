@@ -8,7 +8,7 @@ import { handleSort } from '../../../../../CommonMethods/ListFunctions';
 import AccountUnlockQuestions from '../../../../../components/Modals/AccountUnlockQuestions';
 import TableBody from './TableBody';
 
-const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
+const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, GetList }) => {
     const [isUnlockAgent, setIsUnlockAgent] = useState(false);
 
     return (
@@ -36,7 +36,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                     ? <Shimmer column={6} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <TableBody user={user} index={index} key={index}/>))}
+                            <TableBody user={user} index={index} key={index} GetList={GetList}/>))}
                     </tbody>
                 }
             </table>
