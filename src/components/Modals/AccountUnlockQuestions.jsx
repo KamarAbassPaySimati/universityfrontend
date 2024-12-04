@@ -13,7 +13,7 @@ import UnlockConformation from './UnlockConformation';
 
 const bankNames = ['CDH Investment Bank', 'Ecobank', 'International Bank', 'National Bank', 'Sate Bank', 'FDH Bank', 'First Capital Bank', 'Centenary Bank', 'National Bank'];
 
-const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, setQuestion, prevAppearedQuestion, setPrevAppearedQuestion }) => {
+const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, setQuestion, prevAppearedQuestion, setPrevAppearedQuestion, GetList }) => {
     const { setToastSuccess, setToastError } = useContext(GlobalContext);
     const [isLoadingNext, setIsLoadingNext] = useState(false);
     const [value, setValue] = useState('');
@@ -43,6 +43,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
         });
         setIsVerified(false);
         setModalOpen(false);
+        GetList();
     };
 
     const handleInputChange = (e) => {
@@ -63,7 +64,7 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
                 answer: question?.answerType === 'phone_number' ? value.split(' ').join('') : value,
                 questions: prevAppearedQuestion,
                 to_reset: resetLink
-            }, setToastError, undefined, setPrevAppearedQuestion, setQuestion, setIsResetLink); // setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
+            }, setToastError, resetLink ? handleClose : setModalOpen, setPrevAppearedQuestion, setQuestion, setIsResetLink); // setToastSuccess('Check your email for a password reset link. The link will be active for 10 minutes.');
             setValue('');
             setIsLoadingNext(false);
         } catch (err) {

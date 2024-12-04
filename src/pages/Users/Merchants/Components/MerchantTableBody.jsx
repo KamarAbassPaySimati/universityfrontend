@@ -10,7 +10,7 @@ import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQ
 import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 
-export default function MerchantTableBody ({ user, index }) {
+export default function MerchantTableBody ({ user, index, GetList }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const [isUnlock, setIsUnlock] = useState(false);
@@ -89,7 +89,7 @@ export default function MerchantTableBody ({ user, index }) {
                             </svg>
                             <span class="sr-only">Loading...</span>
                         </div>
-                        : !user?.isLocked
+                        : user?.is_locked
                             ? <Image testId={`unlock_button_${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlock()} src='lock'/>
                             : <Image src='unlock' className='cursor-default'/>}
                     <Tooltip
@@ -121,6 +121,7 @@ export default function MerchantTableBody ({ user, index }) {
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}
                 setPrevAppearedQuestion={setPrevAppearedQuestion}
+                GetList={GetList}
             />
         </>
     );

@@ -363,7 +363,7 @@ async function send_payout_request (payload) {
     }
 }
 
-async function locking_account (paymaart_id) {
+async function lockingAccount (paymaart_id) {
     const axiosOptions = await getToken();
 
     try {
@@ -402,5 +402,5 @@ module.exports = {
     deletePayoutRequest,
     payoutRequestBDDAPI,
     send_payout_request,
-    locking_account
+    lockingAccount
 };

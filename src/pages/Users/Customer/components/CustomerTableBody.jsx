@@ -10,7 +10,7 @@ import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock'
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
-export default function CustomerTableBody ({ user, index }) {
+export default function CustomerTableBody ({ user, index, GetList }) {
     const Navigate = useNavigate();
     const [isUnlock, setIsUnlock] = useState(false);
     const { setToastError } = useContext(GlobalContext);
@@ -81,7 +81,7 @@ export default function CustomerTableBody ({ user, index }) {
                             </svg>
                             <span class="sr-only">Loading...</span>
                         </div>
-                        : !user?.isLocked
+                        : user?.is_locked
                             ? <Image testId={`unlock_button_${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlock()} src='lock'/>
                             : <Image src='unlock' className='cursor-default'/>}
                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
@@ -125,6 +125,7 @@ export default function CustomerTableBody ({ user, index }) {
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}
                 setPrevAppearedQuestion={setPrevAppearedQuestion}
+                GetList={GetList}
             />
         </>
     );
