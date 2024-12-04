@@ -13,7 +13,7 @@ const PasswordUpdateSuccess = ({ activeType = 'PASSWORD' }) => {
                 <div className='flex flex-col'>
                     <h2 className='font-[400] text-[20px] text-[#000000]'>{`${capitalizeFirstLetter(activeType)} Changed`}</h2>
                     <h2 className='font-[400] text-[14px] mt-[7.58px] text-[#A4A9AE]'>
-                        {`Your ${capitalizeFirstLetter(activeType)} has been successfully changed`}
+                        {`Your ${activeType.toLowerCase()} has been successfully changed`}
                     </h2>
                 </div>
             </div>
