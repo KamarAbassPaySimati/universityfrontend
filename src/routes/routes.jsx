@@ -20,6 +20,7 @@ import Agent from '../pages/Users/Agent';
 import Toast from '../components/Toast/Toast';
 import Merchant from '../pages/Users/Merchants';
 import Customer from '../pages/Users/Customer';
+import SetNewPasswordWithPin from '../pages/auth/SetNewPasswordWithPin';
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
     const { loggedIn, user } = auth;
@@ -63,7 +64,7 @@ export default function NavigationRoutes (props) {
 
     useEffect(() => {
         if (!pageLoading && !loggedIn && (window.location.pathname !== '/forgot-password' &&
-        window.location.pathname !== '/set-new-password')) {
+        window.location.pathname !== '/set-new-password' && window.location.pathname !== '/set-new-password-with-pin')) {
             navigate('/');
         } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
             navigate('/dashboard');
@@ -86,6 +87,9 @@ export default function NavigationRoutes (props) {
                                     <Route
                                         path={'/set-new-password'}
                                         element={<SetNewPassword />} />
+                                    <Route
+                                        path={'/set-new-password-with-pin'}
+                                        element={<SetNewPasswordWithPin />} />
                                 </>
                                 : (
                                     CurrentUserRole && ComponentsBasedOnRole[CurrentUserRole] && (
