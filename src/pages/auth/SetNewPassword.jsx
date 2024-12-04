@@ -54,6 +54,7 @@ const SetNewPassword = () => {
                                                 token={token}
                                                 setIsValidToken={setIsValidToken}
                                                 isWithPin={false}
+                                                activeType={'PASSWORD'}
                                             />
                                             <PasswordGuidelines />
                                         </>

@@ -12,9 +12,8 @@ const AUTH_TYPES = {
     PASSWORD: 'Password'
 };
 
-const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => {
+const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin, activeType, setActiveType }) => {
     const reCaptchaRef = useRef();
-    const [activeType, setActiveType] = useState('PIN');
     const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -101,16 +100,15 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin }) => 
             });
             try {
                 setIsLoading(true);
-                const endpoint = 'admin-users/reset-password';
+                const endpoint = isWithPin ? 'admin-users/reset-unlock-password' : 'admin-users/reset-password';
                 const payload = activeType === 'PIN'
-                    ? { token, new_pin: pin }
+                    ? { token, new_password: pin }
                     : { token, new_password: password };
 
                 const response = await dataService.PostAPIWithoutHeader(endpoint, payload);
 
                 if (!response.error) {
                     setIsSuccess(true);
-                    console.log('hehehehehe');
                 } else if (response?.data?.status === 401) {
                     setIsValidToken(true);
                 } else if (response?.data.status === 400) {

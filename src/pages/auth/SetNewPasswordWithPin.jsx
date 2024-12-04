@@ -9,6 +9,7 @@ import Loading from '../../components/Loading/Loading';
 
 const SetNewPasswordWithPin = () => {
     const [isSuccess, setIsSuccess] = useState(false);
+    const [activeType, setActiveType] = useState('PIN');
     // eslint-disable-next-line no-unused-vars
     const [urlPrams, setUrlParams] = useSearchParams();
     const [screenLoading, setScreenLoading] = useState(true);
@@ -16,7 +17,7 @@ const SetNewPasswordWithPin = () => {
     const [token, setToken] = useState('');
     useEffect(() => {
         const verifyJWT = async (token) => {
-            const response = await dataService.PostAPIWithoutHeader('admin-users/verify-token', { token });
+            const response = await dataService.PostAPIWithoutHeader('admin-users/reset-unlock-password', { token });
             if (!response.error) {
                 setIsValidToken(true);
             } else {
@@ -43,8 +44,7 @@ const SetNewPasswordWithPin = () => {
                     {/* <img className='fixed bottom-[30px] right-[100px] object-cover z-10' src='images/login_img.svg' /> */}
                     <div >
                         <div className='min-h-screen min-w-screen flex flex-col justify-center items-center gap-20'>
-                            {/* {!isValidToken TODO:CHANGE this */}
-                            {isValidToken
+                            {!isValidToken
                                 ? <TokenInvalid />
                                 : !isSuccess
                                     ? (
@@ -54,11 +54,13 @@ const SetNewPasswordWithPin = () => {
                                                 token={token}
                                                 setIsValidToken={setIsValidToken}
                                                 isWithPin={true}
+                                                activeType={activeType}
+                                                setActiveType={setActiveType}
                                             />
                                         </>
                                     )
                                     : (
-                                        <PasswordUpdateSuccess />
+                                        <PasswordUpdateSuccess activeType={activeType} />
                                     )}
                         </div>
                     </div>
