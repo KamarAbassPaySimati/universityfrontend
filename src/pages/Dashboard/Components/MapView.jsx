@@ -138,6 +138,7 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
                             scroll='thin-scrollBar'
                             height='max-h-[210px]'
                             searchIcon
+                            toolTip
                         />
                         {
                             CurrentUserRole === 'Super admin' &&

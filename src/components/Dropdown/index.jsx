@@ -3,7 +3,24 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Image from '../Image/Image';
 
-const Dropdown = ({ initialSelect, onChange, error = false, isFocused = false, data, testid, testidInput, testidOpions, className, optionClassname, textColor, height, noDataMessage, scroll, searchIcon = false }) => {
+const Dropdown = ({
+    initialSelect,
+    onChange,
+    error = false,
+    isFocused = false,
+    data,
+    testid,
+    testidInput,
+    testidOpions,
+    className,
+    optionClassname,
+    textColor,
+    height,
+    noDataMessage,
+    scroll,
+    searchIcon = false,
+    toolTip = false
+}) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const outsideClickRef = useRef();
@@ -79,6 +96,7 @@ const Dropdown = ({ initialSelect, onChange, error = false, isFocused = false, d
                 ref={buttonRef}
                 data-testid={testid}
                 onClick={handleDropdownClick}
+                title={toolTip ? initialSelect : ''}
                 className={`pl-2 outline-none font-[400] pr-[5px] text-[14px] leading-[22px] bg-[#F8F8F8] border-b cursor-pointer flex items-center justify-between ${isFocused ? 'border-primary-normal' : 'border-[#DDDDDD]'} ${error ? 'border-error' : 'border-[#DDDDDD]'} ${className} ${scroll}`}
             >
                 {initialSelect}
