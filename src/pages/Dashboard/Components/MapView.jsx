@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Tooltip, GeoJSON, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -17,7 +17,7 @@ const DEFAULT_ZOOM = 6;
 const FILTERED_ZOOM = 10;
 
 const createDotIcon = () => new L.DivIcon({
-    className: 'custom-dot-icon',
+    className: 'custom-dot-icon cursor-pointer',
     html: `<div style="
         width: 8px;
         height: 8px;
@@ -53,6 +53,7 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
     const [loading, setLoading] = useState(true);
     const [exportLoading, setExportloading] = useState(false);
     const { setToastError, setToastSuccess, setToastInformation } = useContext(GlobalContext);
+    const [mapKey, setMapKey] = useState(0);
 
     const getCoordinatesByDistrict = (districtName) => {
         if (districtName === 'All') {
@@ -68,6 +69,7 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
                 setCurrentZoom(FILTERED_ZOOM);
             }
         }
+        setMapKey(prev => prev + 1);
     };
 
     const handleInput = (value) => {
@@ -93,6 +95,35 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
         };
         fetchMapData();
     }, [endpoint]);
+
+    const memoizedMarkers = useMemo(() => {
+        return data.map((region, index) => (
+            <Marker
+                key={`${index}-${filter}`}
+                position={[region.latitude, region.longitude]}
+                icon={createDotIcon()}
+            >
+                <Tooltip
+                    direction="center"
+                    className='rounded-xl p-0 m-0'
+                    offset={
+                        region?.merchant_count
+                            ? [5 * String(region.merchant_count).length, 0]
+                            : [5, 0]
+                    }
+                    opacity={1}
+                    permanent={filter !== 'All' && filter === region.district}
+                >
+                    <div className='map-tooltip'>
+                        <div className='map-dot'></div>
+                        <div className='text-center w-fit text-[12px] text-[#4F5962]'>
+                            {region?.merchant_count}
+                        </div>
+                    </div>
+                </Tooltip>
+            </Marker>
+        ));
+    }, [data, filter]);
 
     const handleExport = async () => {
         try {
@@ -160,6 +191,7 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
                         : data.length > 0
                             ? (
                                 <MapContainer
+                                    key={mapKey}
                                     className='z-10'
                                     center={[filteredCordinate.latitude, filteredCordinate.longitude]}
                                     zoom={currentZoom}
@@ -182,22 +214,8 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
                                         url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
                                         attribution='&copy; <a href="https://carto.com/attributions">CartoDB</a>'
                                     />
-                                    <GeoJSON data={malawiGeoJSON} style={{ color: '#3B2A6F', weight: 0.5, fillOpacity: 0.08 }} />
-                                    {data.map((region, index) => (
-                                        <Marker
-                                            key={index}
-                                            position={[region.latitude, region.longitude]}
-                                            icon={createDotIcon()}
-                                        >
-                                            <Tooltip direction="center" className='rounded-xl p-0 m-0' offset={[18, 0]} opacity={1}
-                                                permanent={filter !== 'All'} >
-                                                <div className='map-tooltip'>
-                                                    <div className='map-dot'></div>
-                                                    <div className='text-center w-[100%] text-[12px] text-[#4F5962]'>{region?.merchant_count}</div>
-                                                </div>
-                                            </Tooltip>
-                                        </Marker>
-                                    ))}
+                                    <GeoJSON data={malawiGeoJSON} className='cursor-grab' style={{ color: '#3B2A6F', weight: 0.8, fillOpacity: 0.08 }} />
+                                    {memoizedMarkers}
                                 </MapContainer>
                             )
                             : (
