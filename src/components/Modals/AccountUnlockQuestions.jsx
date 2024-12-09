@@ -1,7 +1,7 @@
 /* eslint-disable no-const-assign */
 /* eslint-disable react/jsx-indent */
 /* eslint-disable max-len */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Modal from 'react-responsive-modal';
 import Button from '../Button/Button';
 import GlobalContext from '../Context/GlobalContext';
@@ -83,6 +83,34 @@ const AccountUnlockQuestions = ({ isModalOpen, setModalOpen, user, question, set
         handleClose();
         setIsResetLink(false);
     };
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            // Close modal on Escape key
+            if (event.key === 'Escape') {
+                handleClose();
+            }
+
+            // Handle submit/next on Enter key
+            if (event.key === 'Enter' && isModalOpen && !isResetLink) {
+                // Only submit if there's a value and not already loading
+                if (value.trim().length > 0 && !isLoadingNext) {
+                    handleConfirm(false);
+                }
+            }
+        };
+
+        // Add event listener when modal is open
+        if (isModalOpen) {
+            window.addEventListener('keydown', handleKeyDown);
+        }
+
+        // Cleanup event listener
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isModalOpen, value, isLoadingNext, isResetLink]);
+
     return (
         <Modal center open={isModalOpen} onClose={handleClose}
             closeIcon={<div style={{ color: 'white' }} disabled></div>}
