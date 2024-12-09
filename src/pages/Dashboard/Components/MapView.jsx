@@ -12,12 +12,14 @@ import GlobalContext from '../../../components/Context/GlobalContext';
 import HoverToolTip from '../../../components/HoverToolTip';
 import Dropdown from '../../../components/Dropdown';
 
+// Default map settings
 const DEFAULT_CORDINATE = { latitude: -13.5, longitude: 32.5 };
 const DEFAULT_ZOOM = 6;
 const FILTERED_ZOOM = 10;
 
+// Custom icon for the marker on the map
 const createDotIcon = () => new L.DivIcon({
-    className: 'custom-dot-icon cursor-pointer',
+    className: 'custom-dot-icon cursor-default',
     html: `<div style="
         width: 8px;
         height: 8px;
@@ -55,6 +57,7 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
     const { setToastError, setToastSuccess, setToastInformation } = useContext(GlobalContext);
     const [mapKey, setMapKey] = useState(0);
 
+    // Get map coordinates by district name and adjust map center/zoom accordingly
     const getCoordinatesByDistrict = (districtName) => {
         if (districtName === 'All') {
             setFilterCordinate(DEFAULT_CORDINATE);
@@ -125,10 +128,11 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
         ));
     }, [data, filter]);
 
+    // Handle export action
     const handleExport = async () => {
         try {
             setExportloading(true);
-            const res = await dataService.GetAPI('hello');
+            const res = await dataService.GetAPI(`merchant-dashboard/export-merchant-list?district=${filter}`);
             if (!res.error) {
                 if (res.data.s3_url) {
                     window.open(
