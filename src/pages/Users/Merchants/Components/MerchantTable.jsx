@@ -5,7 +5,7 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Image from '../../../../components/Image/Image';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import MerchantTableBody from './MerchantTableBody';
-const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearchParams }) => {
+const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearchParams, GetList }) => {
     return (
         <>
             <table className='w-full min-w-max'>
@@ -32,7 +32,7 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                     ? <Shimmer column={8} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <MerchantTableBody key={index} user={user} index={index}/>
+                            <MerchantTableBody key={index} user={user} index={index} GetList={GetList}/>
                         ))}
                     </tbody>
                 }

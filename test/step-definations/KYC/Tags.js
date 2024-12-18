@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 const { getAgentPayload, getCustomerPayload, getMerchantPayload } = require('../../bdd_payload/index');
-const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI, deleteRequestCustomer, payoutRequestBDDAPI, deleteRequestMerchant } = require('../../bdd_api/index');
+const { createAgentAccount, createCustomerAccount, createMerchantAccount, deleteRequestBDDAPI, deleteRequestCustomer, payoutRequestBDDAPI, deleteRequestMerchant, lockingAccount } = require('../../bdd_api/index');
 const { Before } = require('@cucumber/cucumber');
 
 Before('@register_new_agent', async function () {
@@ -9,6 +9,38 @@ Before('@register_new_agent', async function () {
         global.agent_registration_response = await createAgentAccount(global.agent_registration_payload);
     } catch (error) {
         console.log('Registration of agent failed', error);
+    }
+});
+
+Before('@register_new_agent_and_lock_that_agent', async function () {
+    try {
+        global.agent_registration_payload = await getAgentPayload();
+        global.agent_registration_response = await createAgentAccount(global.agent_registration_payload);
+        global.lock_agent_accountt_response = await lockingAccount(global.agent_registration_response.paymaart_id);
+    } catch (error) {
+        console.log('Locking of agent user failed', error);
+    }
+});
+
+Before('@register_new_customer_and_lock_that_customer', async function () {
+    try {
+        global.customer_registration_payload = await getCustomerPayload();
+        global.customer_registration_response = await createCustomerAccount(global.customer_registration_payload);
+        global.lock_customer_account_response = await lockingAccount(global.customer_registration_response.paymaart_id);
+        console.log('global.customer_registration_response', global.customer_registration_response);
+    } catch (error) {
+        console.log('Locking of agent user failed', error);
+    }
+});
+
+Before('@register_new_merchant_and_lock_that_merchant', async function () {
+    try {
+        global.merchant_registration_payload = await getMerchantPayload();
+        global.merchant_registration_response = await createMerchantAccount(global.merchant_registration_payload);
+        global.lock_merchant_account_response = await lockingAccount(global.merchant_registration_response.paymaart_id);
+        console.log('global.merchant_registration_response', global.merchant_registration_response);
+    } catch (error) {
+        console.log('Locking of agent user failed', error);
     }
 });
 

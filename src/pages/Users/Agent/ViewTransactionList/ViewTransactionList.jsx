@@ -34,7 +34,7 @@ const ViewTransactionList = ({ type }) => {
 
     const filterOptions = {
         'Transaction Type': type === 'customers'
-            ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'Pay G2P']
+            ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'G2P Pay-in']
             : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
 

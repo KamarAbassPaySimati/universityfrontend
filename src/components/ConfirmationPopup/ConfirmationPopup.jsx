@@ -32,7 +32,6 @@ export default function ConfirmationPopup ({ message, buttonWidth, messageStyle,
                         buttonColor={buttonColor}
                     />
                 </div>
-
             </div>
         </div>
     );

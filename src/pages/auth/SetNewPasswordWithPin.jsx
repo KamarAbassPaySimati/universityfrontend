@@ -6,10 +6,10 @@ import { dataService } from '../../services/data.services';
 import { useSearchParams } from 'react-router-dom';
 import TokenInvalid from './components/TokenInvalid';
 import Loading from '../../components/Loading/Loading';
-import PasswordGuidelines from './components/PasswordGuidelines';
 
-const SetNewPassword = () => {
+const SetNewPasswordWithPin = () => {
     const [isSuccess, setIsSuccess] = useState(false);
+    const [activeType, setActiveType] = useState('PIN');
     // eslint-disable-next-line no-unused-vars
     const [urlPrams, setUrlParams] = useSearchParams();
     const [screenLoading, setScreenLoading] = useState(true);
@@ -17,7 +17,7 @@ const SetNewPassword = () => {
     const [token, setToken] = useState('');
     useEffect(() => {
         const verifyJWT = async (token) => {
-            const response = await dataService.PostAPIWithoutHeader('admin-users/verify-token', { token });
+            const response = await dataService.PostAPIWithoutHeader('admin-users/reset-unlock-password', { token });
             if (!response.error) {
                 setIsValidToken(true);
             } else {
@@ -53,14 +53,14 @@ const SetNewPassword = () => {
                                                 setIsSuccess={setIsSuccess}
                                                 token={token}
                                                 setIsValidToken={setIsValidToken}
-                                                isWithPin={false}
-                                                activeType={'PASSWORD'}
+                                                isWithPin={true}
+                                                activeType={activeType}
+                                                setActiveType={setActiveType}
                                             />
-                                            <PasswordGuidelines />
                                         </>
                                     )
                                     : (
-                                        <PasswordUpdateSuccess />
+                                        <PasswordUpdateSuccess activeType={activeType} />
                                     )}
                         </div>
                     </div>
@@ -70,4 +70,4 @@ const SetNewPassword = () => {
     );
 };
 
-export default SetNewPassword;
+export default SetNewPasswordWithPin;
