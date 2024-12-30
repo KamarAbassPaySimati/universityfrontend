@@ -16,7 +16,6 @@ async function getCredentials() {
       }).promise();
       const identityId = identityIdResponse.IdentityId;
 
-  
       // Step 5: Retrieve AWS temporary credentials
       const credentialsResponse = await cognitoIdentity.getCredentialsForIdentity({
         IdentityId: identityId,
