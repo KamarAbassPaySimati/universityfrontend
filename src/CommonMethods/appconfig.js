@@ -9,7 +9,7 @@ import AWS from "aws-sdk";
 async function getCredentials() {
     const { idToken } = (await fetchAuthSession()).tokens ?? {};
     const identityPoolId = import.meta.env.VITE_ADMIN_COGNITO_IDENTITY_POOL_ID;
-    const providerName = import.meta.env.VITE_ADMIN_COGNITO_LOGIN_URL; // Replace with your User Pool provider name
+    const providerName = import.meta.env.VITE_EMPLOYEE_COGNITO_LOGIN_URL; // Replace with your User Pool provider name
     const region = import.meta.env.VITE_REGION; // Load the region from the environment variable
     const cognitoIdentity = new AWS.CognitoIdentity({ region });
     const identityIdResponse = await cognitoIdentity
