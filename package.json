@@ -15,6 +15,7 @@
     "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt"
   },
   "dependencies": {
+    "@aws-sdk/client-appconfigdata": "^3.716.0",
     "@reduxjs/toolkit": "^2.2.1",
     "antd": "^5.16.1",
     "assert": "^2.1.0",

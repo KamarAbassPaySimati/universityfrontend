@@ -14,6 +14,7 @@ import { login, logout, setUser } from './pages/auth/authSlice';
 import { useDispatch } from 'react-redux';
 
 import { AwsRum } from 'aws-rum-web';
+//import fetchFeatureFlags from './CommonMethods/appconfig';
 // console.log(STAGE);
 if (STAGE?.includes('prod')) {
     let awsRum = null;
@@ -106,6 +107,9 @@ function App (props) {
             }
         });
     }, []);
+    // useEffect(()=>{
+    //         fetchFeatureFlags()
+    //     })
     return (
         <GlobalContext.Provider value={{
             setToastSuccess,
