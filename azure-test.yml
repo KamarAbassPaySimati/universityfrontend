@@ -1,9 +1,8 @@
 trigger:
   branches:
     include:
-      - qa
-      - pre-production
-      - master
+      - none
+      
 pr:
   branches:
     include:
