@@ -2,6 +2,7 @@ import React from 'react';
 import CardHeader from '../../components/CardHeader';
 import KYCTopWithType from '../../components/KYC/KYCTopWithType';
 import BarGraph from './Components/BarGraph';
+import MapView from './Components/MapView';
 
 const Dashboard = () => {
     return (
@@ -71,7 +72,11 @@ const Dashboard = () => {
                         initialStates={{ dateRangeType: 'Today' }}
                         multiple={['Agent', 'Customer', 'Merchant']}
                     />
-
+                    <MapView
+                        DashboardName ="Merchant Based on Location"
+                        endpoint='merchant-registration-insight-graph'
+                        initialStates={{ districtFilter: 'All' }}
+                    />
                 </div>
             </CardHeader>
         </div>

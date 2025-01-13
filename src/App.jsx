@@ -14,6 +14,8 @@ import { login, logout, setUser } from './pages/auth/authSlice';
 import { useDispatch } from 'react-redux';
 
 import { AwsRum } from 'aws-rum-web';
+// import { fetchFeatureFlags } from './CommonMethods/appconfig';
+
 // console.log(STAGE);
 if (STAGE?.includes('prod')) {
     let awsRum = null;
@@ -56,6 +58,7 @@ function App (props) {
     const [ToastInformation, setToastInformation] = useState('');
     const { updateLoggedIn } = endpoints;
     const dispatch = useDispatch();
+    // fetchFeatureFlags();
 
     useEffect(() => {
         Hub.listen('auth', async ({ payload }) => {
@@ -67,6 +70,7 @@ function App (props) {
                     if (userAttributes) {
                         dispatch(setUser(userAttributes));
                         dispatch(login());
+                        // fetchFeatureFlags();
                     }
                 } catch (error) {
                     if (
@@ -106,6 +110,9 @@ function App (props) {
             }
         });
     }, []);
+    // useEffect(()=>{
+    //         fetchFeatureFlags()
+    //     })
     return (
         <GlobalContext.Provider value={{
             setToastSuccess,
