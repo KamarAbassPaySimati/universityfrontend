@@ -138,7 +138,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -211,7 +211,7 @@ stages:
       steps:
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
