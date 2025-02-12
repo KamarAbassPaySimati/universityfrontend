@@ -51,6 +51,7 @@ const Topbar = ({
         if (params.search === '') delete params.search;
         setSearchParams({ ...params });
     };
+
     const handleSearchParamsForFilter = (key, value) => {
         const params = Object.fromEntries(searchParams);
         if (pageNumber) {
