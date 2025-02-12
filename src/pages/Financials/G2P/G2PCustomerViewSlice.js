@@ -33,11 +33,9 @@ const G2pCustomerViewSlice = createSlice({
                 state.error = null;
             })
             .addCase(G2PCustomerViewData.fulfilled, (state, action) => {
-                console.log(action, 'dhjdhsdhs');
                 state.loading = false;
                 if (!action.payload.error) {
                     const viewData = action.payload.data;
-                    console.log(viewData, 'viewData');
                     state.View = viewData.data;
                     state.userDetails = {
                         Email: state?.View?.sheet_name,
