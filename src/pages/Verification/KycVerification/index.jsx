@@ -201,7 +201,6 @@ const KycVerification = () => {
                                 singleSelectFilter={true}
                             />
                         </div>)
-
                 }
                 {
                     (List?.data?.length !== 0 && !notFound) &&
