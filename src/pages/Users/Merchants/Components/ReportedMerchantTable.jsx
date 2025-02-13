@@ -22,7 +22,7 @@ const ReportedMerchantTable = ({ loading, error, List, notFound, searchParams, s
                             </th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Phone Number</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Email</th>
-                            <div data-testid="sort_merchant_name" className='cursor-pointer flex gap-1 w-fit' onClick={() => handleSort('name', searchParams, setSearchParams)}>
+                            <div data-testid="sort_merchant_name" className='cursor-pointer flex gap-1 w-fit py-2 px-[10px] text-left font-[400]' onClick={() => handleSort('name', searchParams, setSearchParams)}>
                                 <span>Reported date</span>
                                 <Image src='sort_icon' />
                             </div>

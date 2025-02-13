@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,7 +9,7 @@ import GlobalContext from '../../../components/Context/GlobalContext';
 import MerchantTable from './Components/MerchantTable';
 import NoDataError from '../../../components/NoDataError/NoDataError';
 import Paginator from '../../../components/Paginator/Paginator';
-import { MerchantList } from './merchantSlice';
+import { MerchantList, ReportedMerchantList } from './merchantSlice';
 import ReportedMerchantTable from './Components/ReportedMerchantTable';
 
 const Merchant = () => {
@@ -45,11 +46,15 @@ const Merchant = () => {
     Here's a breakdown of what it does: */
     const GetList = useCallback(async () => {
         try {
-            dispatch(MerchantList(searchParams));
+            if (searchParams.get('type') === 'reported merchants') {
+                dispatch(ReportedMerchantList(searchParams));
+            } else {
+                dispatch(MerchantList(searchParams));
+            }
         } catch (error) {
             console.error(error);
         }
-    }, [searchParams]);
+    }, [searchParams, dispatch]);
 
     useEffect(() => {
         if (error) {
@@ -60,6 +65,7 @@ const Merchant = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
@@ -73,7 +79,7 @@ const Merchant = () => {
     function changes. */
     useEffect(() => {
         if (searchParams.get('page') === null) {
-            setSearchParams({ page: 1 });
+            setSearchParams({ page: 1, type: 'all merchants' });
         } else {
             GetList();
         }
@@ -110,7 +116,7 @@ const Merchant = () => {
                                 setSearchParams={setSearchParams}
                                 searchParams={searchParams}
                                 filterOptions={filterOptions}
-                                placeHolder="Paymaart ID, name, trading name or till number "
+                                placeHolder={`${searchParams.get('type') === 'all merchants' ? 'Paymaart ID, name, trading name or till number' : 'Paymaart ID, name, phone number or email'} `}
                                 filterType='Filter merchant list'
                                 isLoading={loading}
                                 filterActive={(searchParams.get('status') !== null)}
