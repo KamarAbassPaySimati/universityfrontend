@@ -7,7 +7,6 @@ import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import ReportedMerchantTableBody from './ReportedMerchantTableBody';
 
 const ReportedMerchantTable = ({ loading, error, List, notFound, searchParams, setSearchParams, GetList }) => {
-    console.log(List?.data, 'List');
     return (
         <>
             <table className='w-full min-w-max'>

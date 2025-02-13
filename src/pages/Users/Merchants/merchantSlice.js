@@ -18,7 +18,6 @@ export const MerchantList = createAsyncThunk('merchantUsers/fetchAll', async (se
         return rejectWithValue({ message: error });
     }
 });
-
 // Fetch reported merchants
 export const ReportedMerchantList = createAsyncThunk('merchantUsers/fetchReported', async (searchParams, { rejectWithValue }) => {
     try {

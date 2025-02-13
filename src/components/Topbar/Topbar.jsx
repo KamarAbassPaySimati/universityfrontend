@@ -46,8 +46,9 @@ const Topbar = ({
         } else {
             params.page = 1;
         }
-        if (key === 'search') params[key] = encodeURIComponent(value);
+        if (key === 'search') params[key] = (value);
         else params[key] = value;
+
         if (params.search === '') delete params.search;
         setSearchParams({ ...params });
     };
@@ -125,7 +126,7 @@ const Topbar = ({
                 onChange={handleSearch}
                 placeholder= {placeHolder}
                 className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
-                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[350px] ml-4 pr-8 rounded-[4px]
+                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[360px] ml-4 pr-8 rounded-[4px]
                 ${search?.length > 0 ? 'bg-[#F8F8F8]' : ''}`}
             />
             <Image
@@ -139,7 +140,7 @@ const Topbar = ({
                 testId='search-close'
                 className="absolute top-1/2 -translate-y-1/2 left-[340px] cursor-pointer bg-[#F8F8F8]"
             />}
-            {NoFilter === undefined && (
+            {NoFilter === undefined && !(searchParams.get('type') === 'reported merchants') && (
                 multiFilter
                     ? <MultiFilter
                             filterOptions={filterOptions}

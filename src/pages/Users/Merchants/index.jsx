@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import { useDispatch, useSelector } from 'react-redux';
@@ -115,7 +116,7 @@ const Merchant = () => {
                                 setSearchParams={setSearchParams}
                                 searchParams={searchParams}
                                 filterOptions={filterOptions}
-                                placeHolder="Paymaart ID, name, trading name or till number "
+                                placeHolder={`${searchParams.get('type') === 'all merchants' ? 'Paymaart ID, name, trading name or till number' : 'Paymaart ID, name, phone number or email'} `}
                                 filterType='Filter merchant list'
                                 isLoading={loading}
                                 filterActive={(searchParams.get('status') !== null)}
