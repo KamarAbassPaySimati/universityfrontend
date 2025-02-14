@@ -13,7 +13,7 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
     // Construct URL safely using query parameters instead of string interpolation
     try {
         const res = await dataService.GetAPI(`admin-users/${url}`);
-        if (url.includes('reported-merchnats')) {
+        if (url.includes('reported-merchants')) {
             return { res, viewType: 'Reported-merchants' };
         }
         return res;
@@ -40,16 +40,14 @@ const KYCProfileViewSlice = createSlice({
                 state.error = null;
             })
             .addCase(KYCProfileView.fulfilled, (state, action) => {
-                console.log(KYCProfileView.fulfilled, 'ffhhfh');
                 state.loading = false;
                 if (action.payload?.viewType === 'Reported-merchants') {
-                    console.log(action?.payload?.data, 'action?.payload?.data');
-                    state.userDetails = action?.payload?.data; // please check where the object is
+                    state.userDetails = action?.payload?.res.data; // please check where the object is
+                    state.View = action?.payload?.res?.data;
                     return;
                 }
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
-                    console.log(state.View, 'state.View');
                     const AddressValues = [];
                     const malawiAddress = [];
                     const tradingAddressValues = [];
@@ -177,7 +175,6 @@ const KYCProfileViewSlice = createSlice({
                         Occupation: { 'Occupation / Source of Funds': state?.View?.occupation, ...Occupation }
                     };
                     state.keys = Object.keys(state.userDetails);
-                    console.log(state.userDetails, 'llll');
                 } else {
                     state.error = action?.payload?.data?.message;
                 }

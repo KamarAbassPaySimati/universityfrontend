@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-operators */
 /* eslint-disable max-len */
 import React, { Fragment, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
@@ -37,7 +38,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [inputValue, setInputValue] = useState('');
     const [error, setError] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
-    console.log(userDetails, 'userDetails');
 
     const getView = () => {
         try {
@@ -192,21 +192,32 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                         <div className='flex justify-between items-center' data-testid="user_details">
                             <ProfileName
                                 userButtonName={
-                                    `${View?.first_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`}
-                                UserName={`${View?.first_name || '-'} 
-                                ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`}
-                                payMaartID={View?.paymaart_id}
+                                    viewType === 'Reported_merchants'
+                                        ? (View?.merchant_name
+                                            ? View.merchant_name.split(' ').map(word => word[0]).join('')
+                                            : '')
+                                        : `${View?.merchant_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`
+                                }
+                                UserName={
+                                    viewType === 'Reported_merchants'
+                                        ? View?.merchant_name || '-'
+                                        : `${View?.first_name || '-'} ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`
+                                }
+                                payMaartID={viewType === 'Reported_merchants'
+                                    ? View?.merchant_id || '-'
+                                    : View?.paymaart_id}
                                 profilePicture={(role === 'customer' && View?.profile_pic !== null && View?.profile_pic !== undefined && View?.public_profile && View.profile_pic !== '') ? `${CDN}${View?.profile_pic}` : undefined}
                                 loading={loading}
                                 viewType={viewType}
-                                lastLoggedIn={View?.last_logged_in
+                                lastLoggedIn={(viewType !== 'Reported_merchants') &&
+                                    View?.last_logged_in
                                     ? isNaN(Number(View?.last_logged_in))
                                         ? 'Online'
                                         : `${convertTimestampToCAT(View?.last_logged_in)} CAT`
                                     : '-----'}
-                                CreatedDate={`${convertTimestampToCAT(View?.user_created_date)} CAT`}
+                                CreatedDate={(viewType !== 'Reported_merchants') && ` ${convertTimestampToCAT(View?.user_created_date)} CAT`}
                             />
-                            {!loading &&
+                            {!loading && (viewType !== 'Reported_merchants') &&
                                 <div className='flex flex-col items-end text-[14px] leading-6 font-semibold text-[#4F5962] mb-1'>
                                     {viewType !== 'DeleteAccount' && (View?.user_kyc_status !== 'not_started' && <p data-testid="kyc_type"
                                         className='mb-1'>{View?.kyc_type === 'full' ? 'Full KYC' : 'Simplified KYC'},
@@ -255,6 +266,42 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 )}
                             </div>
                         }
+                        {viewType === 'Reported_merchants' &&
+                            <KYCSections
+                                heading='Merchant Details'
+                                testId='merchant_details'
+                                data-testid="merchant_details"
+                                childe={
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(3)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                Object.keys(userDetails?.basicDetails
+                                                ).map((itemkey, index = 0) =>
+                                                    (<div key={index} className='w-1/3 px-1'>
+                                                        <ViewDetail
+                                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                                            userDetails={
+                                                                userDetails?.basicDetails[itemkey]
+                                                            }
+                                                            loading={loading}
+                                                        />
+                                                    </div>)
+                                                )
+                                            )
+                                        }
+                                    </div>
+                                }
+                            />
+                        }
                         {viewType !== 'Reported_merchants' &&
                             <KYCSections
                                 heading='Basic Details'
@@ -291,7 +338,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 }
                             />
                         }
-                        {(viewType !== 'Reported_merchants' || viewType !== 'DeleteAccount') && (View?.user_kyc_status !== 'not_started') && <>
+                        {(viewType !== 'Reported_merchants') && (viewType !== 'DeleteAccount' && View?.user_kyc_status !== 'not_started') && <>
                             <KYCSections
                                 heading='Identity Details'
                                 testId='identity_details'
@@ -629,7 +676,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                         }
                                     </div>
                                 }
-                            /></>}
+                            /></>
+                        }
                     </div>
                 </>}
             </CardHeader >
