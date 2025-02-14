@@ -25,7 +25,7 @@ export default function ReportedMerchantTableBody ({ user, index, GetList }) {
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{convertTimestampToCAT(user?.created_at)}</td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.merchant_id}`
+                        onClick={() => Navigate(`/users/merchants/reported-merchant/specific-view/${user?.id}`
                         )} />
                     <Tooltip
                         id={`eye-${index}`}

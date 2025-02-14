@@ -82,6 +82,12 @@ export const getPaths = (viewType, role, status) => {
             };
         }
         break;
+    case 'Reported_merchants':
+        return {
+            activePath: 'Reported Merchant Details',
+            paths: ['Users', 'Merchants'],
+            pathurls: ['users/merchants']
+        };
     default:
         break;
     }
@@ -166,6 +172,8 @@ export const getApiurl = (id, viewType, role) => {
             return `specific-requests?user_id=${id}`;
         }
         break;
+    case 'Reported_merchants':
+        return `reported-merchants/${id}`;
     default:
         break;
     }

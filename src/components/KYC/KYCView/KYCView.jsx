@@ -36,6 +36,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const [inputValue, setInputValue] = useState('');
     const [error, setError] = useState(false);
+    const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    console.log(userDetails, 'userDetails');
 
     const getView = () => {
         try {
@@ -44,9 +46,11 @@ export default function KYCView ({ role, viewType, getStatusText }) {
             console.error(error);
         }
     };
+
     useEffect(() => {
         getView();
     }, []);
+
     const handleApproveClick = () => {
         setIsApprovalModalOpen(true);
     };
@@ -145,6 +149,10 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
     const bankDetails = ['Bank Name', 'Account Number', 'Account Name'];
 
+    const handleupdatebutton = () => {
+        setIsUpdateModalOpen(true);
+    };
+
     return (
         <>
             <CardHeader
@@ -156,13 +164,26 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={loading || (viewType === 'specific' ? View?.user_kyc_status === 'not_started' ? 'Complete KYC Registration' : View?.user_kyc_status === 'completed' ? View?.kyc_type === 'simplified' && View?.citizen === 'Malawian' ? 'Update' : '' : 'Update' : undefined)}
+                updateButton={(loading) || (viewType === 'Reported_merchants'
+                    ? 'Update Status'
+                    : (viewType === 'specific'
+                        ? (() => {
+                            switch (View?.user_kyc_status) {
+                            case 'not_started':
+                                return 'Complete KYC Registration';
+                            case 'completed':
+                                return (View?.kyc_type === 'simplified' && View?.citizen === 'Malawian') ? 'Update' : '';
+                            default:
+                                return 'Update';
+                            }
+                        })()
+                        : undefined))}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
+                handleupdatebutton={(viewType === 'Reported_merchants' ? handleupdatebutton : null)}
                 ChildrenElement
-            // onHandleStatusChange={handleStatusClick}
             >
                 {<>
                     <div className={` mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] 
@@ -234,41 +255,43 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 )}
                             </div>
                         }
-                        <KYCSections
-                            heading='Basic Details'
-                            testId='basic_details'
-                            data-testid="basic_details"
-                            childe={
-                                <div className='w-full flex flex-wrap mt-1 -mx-1'>
-                                    {loading
-                                        ? ([...Array(3)].map((_, ind) => (
-                                            <div className='w-1/3 px-1' key={ind}>
-                                                <ViewDetail
-                                                    itemkey='Loading...'
-                                                    userDetails='Loading...'
-                                                    loading={loading}
-                                                />
-                                            </div>
-                                        )))
-                                        : (
-                                            Object.keys(userDetails.basicDetails
-                                            ).map((itemkey, index = 0) =>
-                                                (<div key={index} className='w-1/3 px-1'>
+                        {viewType !== 'Reported_merchants' &&
+                            <KYCSections
+                                heading='Basic Details'
+                                testId='basic_details'
+                                data-testid="basic_details"
+                                childe={
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(3)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
                                                     <ViewDetail
-                                                        itemkey={itemkey.replaceAll('_', ' ')}
-                                                        userDetails={
-                                                            userDetails.basicDetails[itemkey]
-                                                        }
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
                                                         loading={loading}
                                                     />
-                                                </div>)
+                                                </div>
+                                            )))
+                                            : (
+                                                Object.keys(userDetails?.basicDetails
+                                                ).map((itemkey, index = 0) =>
+                                                    (<div key={index} className='w-1/3 px-1'>
+                                                        <ViewDetail
+                                                            itemkey={itemkey.replaceAll('_', ' ')}
+                                                            userDetails={
+                                                                userDetails?.basicDetails[itemkey]
+                                                            }
+                                                            loading={loading}
+                                                        />
+                                                    </div>)
+                                                )
                                             )
-                                        )
-                                    }
-                                </div>
-                            }
-                        />
-                        {viewType !== 'DeleteAccount' && (View?.user_kyc_status !== 'not_started') && <>
+                                        }
+                                    </div>
+                                }
+                            />
+                        }
+                        {(viewType !== 'Reported_merchants' || viewType !== 'DeleteAccount') && (View?.user_kyc_status !== 'not_started') && <>
                             <KYCSections
                                 heading='Identity Details'
                                 testId='identity_details'
@@ -285,13 +308,13 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                 </div>
                                             )))
                                             : (
-                                                Object.keys(userDetails.identityDetails).map((itemkey, index = 0) => (
+                                                Object.keys(userDetails?.identityDetails).map((itemkey, index = 0) => (
                                                     <div key={index} className='flex flex-wrap xl:px-[40px] xl:w-1/3 w-1/2'>
                                                         <div key={index} className=''>
                                                             <h1
                                                                 className='mt-4 text-[#A4A9AE] text-[14px] leading-6 font-normal'
                                                             >{itemkey}</h1>
-                                                            {userDetails.identityDetails[itemkey]?.map((imageItem, index) => (
+                                                            {userDetails?.identityDetails[itemkey]?.map((imageItem, index) => (
                                                                 (imageItem !== null && imageItem !== '')
                                                                     ? (
                                                                         <div key={imageItem} className='pr-2'>
@@ -609,7 +632,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                             /></>}
                     </div>
                 </>}
-            </CardHeader>
+            </CardHeader >
             <Modal center open={isActivateModalOpen} onClose={() => setIsActivateModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
@@ -647,29 +670,36 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                     />
                 </div>
             </Modal>
-            {(isRejectModalOpen && viewType === 'kyc') && <KYCReject
-                View={View}
-                userDetails={userDetails.basicDetails}
-                setIsRejectModalOpen={setIsRejectModalOpen}
-                id={id}
-                getView={getView}
-            />}
-            {(isRejectModalOpen && viewType === 'DeleteAccount') && <KYCReject
-                View={View}
-                userDetails={userDetails.basicDetails}
-                setIsRejectModalOpen={setIsRejectModalOpen}
-                message={'Reason for rejection'}
-                Reason={viewType === 'DeleteAccount' && (
-                    <>
-                        <label htmlFor=""></label>
-                        <input data-testid="reason" className={'w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded'} placeholder="Enter Reason">
-                        </input>
-                    </>)}
-                id={id}
-                getView={getView}
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-            />}
+            {
+                (isRejectModalOpen && viewType === 'kyc') && <KYCReject
+                    View={View}
+                    userDetails={userDetails.basicDetails}
+                    setIsRejectModalOpen={setIsRejectModalOpen}
+                    id={id}
+                    getView={getView}
+                />
+            }
+            {
+                (isRejectModalOpen && viewType === 'DeleteAccount') && <KYCReject
+                    View={View}
+                    userDetails={userDetails.basicDetails}
+                    setIsRejectModalOpen={setIsRejectModalOpen}
+                    message={'Reason for rejection'}
+                    Reason={viewType === 'DeleteAccount' && (
+                        <>
+                            <label htmlFor=""></label>
+                            <input data-testid="reason" className={'w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded'} placeholder="Enter Reason">
+                            </input>
+                        </>)}
+                    id={id}
+                    getView={getView}
+                    inputValue={inputValue}
+                    setInputValue={setInputValue}
+                />
+            }
+            {isUpdateModalOpen &&
+                <p>Hiii</p>
+            }
             <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={View} />
         </>
     );
