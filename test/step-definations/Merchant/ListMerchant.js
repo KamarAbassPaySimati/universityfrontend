@@ -5,7 +5,7 @@ const { driver } = require('../1_Driver.js');
 const { getModifierKey } = require('../../bdd_modules/index.js');
 
 Given('I navigate to merchant users listing screen', async function () {
-    await driver.get('http://localhost:3000/users/merchants?page=1');
+    await driver.get('http://localhost:3000/users/merchants?page=1&type=all+merchants');
     await new Promise(resolve => setTimeout(resolve, 4000));
 });
 
