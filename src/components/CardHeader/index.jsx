@@ -23,7 +23,7 @@ import { dataService } from '../../services/data.services';
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading
+    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
@@ -202,7 +202,14 @@ const CardHeader = ({
                                             </button>))
                                     : (statusButton && ((updateButton !== '' && updateButton !== true)
                                         ? (
-                                            <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
+                                            <button data-testid="update_button"
+                                                onClick={() => {
+                                                    if (handleupdatebutton) {
+                                                        handleupdatebutton();
+                                                        return;
+                                                    };
+                                                    navigate(updateButtonPath);
+                                                }}
                                                 className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                                                 {updateButton === 'Update' && <Image src='update'
