@@ -68,7 +68,6 @@ const ViewTransactionList = ({ type }) => {
     }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400) {
                 setNotFound(true);

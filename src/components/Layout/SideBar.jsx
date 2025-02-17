@@ -81,9 +81,17 @@ const SideBar = ({ role }) => {
         dispatch(setDropdown(key));
     };
 
-    const handleOptionClick = (nav, option, key) => {
-        navigate(nav.toLowerCase() + '/' + Slugify(option));
+    const handleOptionClick = (nav, option, key, currentPath) => {
+        const targetPath = `/${nav.toLowerCase()}/${Slugify(option)}`;
+
+        if (currentPath === targetPath) {
+            // eslint-disable-next-line no-useless-return
+            return; // Prevent navigation if already on the same option
+        } else {
+            navigate(targetPath);
+        }
     };
+
     // useGlobalSignout();
 
     return (
@@ -112,7 +120,7 @@ const SideBar = ({ role }) => {
                                     <>
                                         {sideNavObject[role][nav]?.dropdown?.map((option) => (
                                             <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
-                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown)} >
+                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown, location.pathname)} >
                                                 {option}
                                             </div>
                                         ))}

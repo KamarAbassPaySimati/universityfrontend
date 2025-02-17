@@ -16,6 +16,7 @@ const Merchant = () => {
     const [searchParams, setSearchParams] = useSearchParams({});
     const [notFound, setNotFound] = useState(false);
     const { setToastError } = useContext(GlobalContext);
+    const [isStateLoading, setIsStateLoading] = useState(false);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.merchantUsers);
 
@@ -85,6 +86,14 @@ const Merchant = () => {
         }
     }, [GetList]);
 
+    useEffect(() => {
+        if (List?.data?.length === 0 && !loading) {
+            setIsStateLoading(false);
+        } else {
+            setIsStateLoading(true);
+        }
+    }, [loading]);
+
     return (
         <CardHeader
             activePath='Merchants'
@@ -101,6 +110,7 @@ const Merchant = () => {
             setSearchParams={setSearchParams}
             onToggle={handleToggle}
             toggleButtons={toggleButtons}
+            isStateLoading={isStateLoading}
 
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
