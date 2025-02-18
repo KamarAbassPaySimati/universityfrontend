@@ -1,10 +1,11 @@
 /* eslint-disable max-len */
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { formatTimeAgo } from '../../CommonMethods/formatTimeAgo';
 import { useNavigate } from 'react-router';
 import formatID from '../../CommonMethods/formatId';
+import Shimmer from '../Shimmers/Shimmer';
 
 export default function NotificationPopup ({
     loading,
@@ -16,6 +17,17 @@ export default function NotificationPopup ({
     useOnClickOutside(NotificationRef, () => {
         setIsNotification(false);
     });
+
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Show shimmer for 2 seconds
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     const handleScroll = debounce(() => {
         // Check if there is no loading and there is more data to fetch
@@ -72,6 +84,9 @@ export default function NotificationPopup ({
         case 'payout':
             navigate(`/transactions/pay-out-requests/${transactionId}`);
             break;
+        case 'report-merchant':
+            navigate(`/users/merchants/reported-merchant/specific-view/${transactionId}`);
+            break;
         }
     };
 
@@ -87,56 +102,70 @@ export default function NotificationPopup ({
         >
             <p className='text-[#4F5962] font-bold text-[16px] pb-[6px] border-b borer-[#E5E9EB]'>Notifications</p>
             <div className='h-[480px] overflow-auto scrollBar' onScroll={handleScroll}>
-                <InfiniteScroll
-                    dataLength={notificationData.length}
-                    next={() => setPage(page + 1)}
-                    hasMore={hasMore}
-                    loader={<p>Loading...</p>}
-                    scrollableTarget="scrollBar"
-                    scrollThreshold={0.9}
-                >
-                    {notificationData.map((notificationItem, notificationIndex) => (
-                        <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}
-                            onClick={() => handleOnClick(notificationItem.user_id, notificationItem.type, notificationItem.request_id, notificationItem.sender_id)}
-                            data-testid={
-                                notificationItem.type === 'kyc'
-                                    ? 'view_kyc_notification'
-                                    : notificationItem.type === 'delete'
-                                        ? 'view_delete_request_notification'
-                                        : notificationItem.type === 'flag'
-                                            ? 'view_flag_transaction_notification'
-                                            : 'view_payout_transaction_notification'
-                            }
-                        >
-                            <div className='flex items-center w-[90%]'>
-                                <div className='w-[15%]'>
-                                    <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
-                                </div>
-                                <div className='ml-2.5 w-[85%]'>
-                                    <p className='font-normal text-sm text-[#4F5962]'>
-                                        {notificationItem?.type === 'kyc'
-                                            ? `Pending KYC Registration for ${formatID(notificationItem.user_id)}`
-                                            : notificationItem?.type === 'delete'
-                                                ? `Pending Delete Account Request for ${formatID(notificationItem.user_id)}`
-                                                : notificationItem?.type === 'flag'
-                                                    ? `Pending Flag Transaction Request for ${formatID(notificationItem.user_id)}`
-                                                    : `Pending Payout Request for ${formatID(notificationItem.user_id)}`}</p>
-                                    <p className='font-normal text-sm text-[#4F5962]'>{notificationItem.type === 'kyc'
-                                        ? 'There are pending KYC Registrations requiring your attention.'
-                                        : notificationItem.type === 'delete'
-                                            ? 'There are pending Delete Account Requests requiring your attention.'
-                                            : notificationItem.type === 'flag'
-                                                ? 'There are flagged transactions requiring your attention.'
-                                                : 'There are pending Payout Transactions requiring your attention.'}</p>
-                                </div>
-                            </div>
-                            <div className='w-[12%] '>
-                                <p className='text-xs text-[#A4A9AE] font-normal text-end'>
-                                    {formatTimeAgo(notificationItem.created_at)}</p>
-                            </div>
+                {isLoading
+                    ? (
+                        <div className="flex flex-col space-y-1 p-2 pl-0">
+                            {[...Array(9)].map((_, index) => (
+                                <Shimmer key={index} width={'w-[700px]'} />
+                            ))}
                         </div>
-                    ))}
-                </InfiniteScroll>
+                    )
+                    : (
+                        <InfiniteScroll
+                            dataLength={notificationData.length}
+                            next={() => setPage(page + 1)}
+                            hasMore={hasMore}
+                            loader={<p>Loading...</p>}
+                            scrollableTarget="scrollBar"
+                            scrollThreshold={0.9}
+                        >
+                            {notificationData.map((notificationItem, notificationIndex) => (
+                                <div className=' px-[10px] flex justify-between items-center' key={notificationIndex}
+                                    onClick={() => handleOnClick(notificationItem.user_id, notificationItem.type, notificationItem.request_id, notificationItem.sender_id)}
+                                    data-testid={
+                                        notificationItem.type === 'kyc'
+                                            ? 'view_kyc_notification'
+                                            : notificationItem.type === 'delete'
+                                                ? 'view_delete_request_notification'
+                                                : notificationItem.type === 'flag'
+                                                    ? 'view_flag_transaction_notification'
+                                                    : 'view_payout_transaction_notification'
+                                    }
+                                >
+                                    <div className='flex items-center w-[90%]'>
+                                        <div className='w-[15%]'>
+                                            <img src="/images/notification-icon.svg" alt="notification" className='w-full' />
+                                        </div>
+                                        <div className='ml-2.5 w-[85%]'>
+                                            <p className='font-normal text-sm text-[#4F5962]'>
+                                                {notificationItem?.type === 'kyc'
+                                                    ? `Pending KYC Registration for ${formatID(notificationItem.user_id)}`
+                                                    : notificationItem?.type === 'delete'
+                                                        ? `Pending Delete Account Request for ${formatID(notificationItem.user_id)}`
+                                                        : notificationItem?.type === 'flag'
+                                                            ? `Pending Flag Transaction Request for ${formatID(notificationItem.user_id)}`
+                                                            : notificationItem?.type === 'report-merchant'
+                                                                ? 'Merchant Reported'
+                                                                : `Pending Payout Request for ${formatID(notificationItem.user_id)}`}</p>
+                                            <p className='font-normal text-sm text-[#4F5962]'>{notificationItem.type === 'kyc'
+                                                ? 'There are pending KYC Registrations requiring your attention.'
+                                                : notificationItem.type === 'delete'
+                                                    ? 'There are pending Delete Account Requests requiring your attention.'
+                                                    : notificationItem.type === 'flag'
+                                                        ? 'There are flagged transactions requiring your attention.'
+                                                        : notificationItem?.type === 'report-merchant'
+                                                            ? `Customer(${notificationItem?.customer_id}) has reported a merchant(${notificationItem?.user_id}). Tap to view`
+                                                            : 'There are pending Payout Transactions requiring your attention.'}</p>
+                                        </div>
+                                    </div>
+                                    <div className='w-[12%] '>
+                                        <p className='text-xs text-[#A4A9AE] font-normal text-end'>
+                                            {formatTimeAgo(notificationItem.created_at)}</p>
+                                    </div>
+                                </div>
+                            ))}
+                        </InfiniteScroll>
+                    )}
             </div>
         </div>
     );

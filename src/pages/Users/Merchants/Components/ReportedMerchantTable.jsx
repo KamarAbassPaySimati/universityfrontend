@@ -13,16 +13,16 @@ const ReportedMerchantTable = ({ loading, error, List, notFound, searchParams, s
                 {(List?.data?.length > 0 || loading) &&
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Paymaart ID</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>
+                            <th className='py-2 px-[10px] text-left font-[400] min-w-[150px]'>Paymaart ID</th>
+                            <th className='py-2 px-[10px] text-left font-[400] min-w-[200px] max-w-[200px]'>
                                 <div data-testid="sort_merchant_name" className='cursor-pointer flex gap-1 w-fit' onClick={() => handleSort('name', searchParams, setSearchParams)}>
                                     <span>Name</span>
                                     <Image src='sort_icon' />
                                 </div>
                             </th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Phone Number</th>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Email</th>
-                            <div data-testid="sort_merchant_name" className='cursor-pointer flex gap-1 w-fit py-2 px-[10px] text-left font-[400]' onClick={() => handleSort('created_at', searchParams, setSearchParams)}>
+                            <th className='py-2 px-[10px] text-left font-[400] min-w-[200px] max-w-[200px]'>Phone Number</th>
+                            <th className='py-2 px-[10px] text-left font-[400] min-w-[200px] max-w-[200px]'>Email</th>
+                            <div data-testid="sort_merchant_name" className='cursor-pointer flex gap-1 w-fit py-2 px-[10px] text-left font-[400] min-w-[200px] max-w-[200px]' onClick={() => handleSort('created_at', searchParams, setSearchParams)}>
                                 <span>Reported date</span>
                                 <Image src='sort_icon' />
                             </div>

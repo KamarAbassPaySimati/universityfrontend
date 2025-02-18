@@ -5,6 +5,7 @@ import { Tooltip } from 'react-tooltip';
 import Image from '../../../../components/Image/Image';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatID from '../../../../CommonMethods/formatId';
+import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
 export default function ReportedMerchantTableBody ({ user, index, GetList }) {
     const Navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function ReportedMerchantTableBody ({ user, index, GetList }) {
                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'
                     title={`${user?.country_code} ${user?.phone_number ? user?.phone_number : '-'}`}>
-                    {`${user?.country_code} ${user?.phone_number ? user?.phone_number : '-'}`}
+                    {`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}
                 </td>
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.email}>{`${user?.email ? user?.email : '-'}`}</td>
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{convertTimestampToCAT(user?.created_at)}</td>
