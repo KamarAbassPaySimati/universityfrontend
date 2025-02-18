@@ -111,6 +111,7 @@ const Merchant = () => {
             onToggle={handleToggle}
             toggleButtons={toggleButtons}
             isStateLoading={isStateLoading}
+            dataLoading={loading}
 
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
