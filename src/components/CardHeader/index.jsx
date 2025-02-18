@@ -21,7 +21,7 @@ import NotificationPopup from '../Notification/NotificationPopup';
 import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
-    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs, isStateLoading,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
@@ -149,6 +149,7 @@ const CardHeader = ({
                                     <button
                                         data-testid={item.key.toLowerCase()}
                                         key={index}
+                                        // disabled={isStateLoading}
                                         onClick={() => { if (!dataLoading) handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams); }}
                                         className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
                                     >

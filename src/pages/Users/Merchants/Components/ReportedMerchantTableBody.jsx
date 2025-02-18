@@ -20,7 +20,10 @@ export default function ReportedMerchantTableBody ({ user, index, GetList }) {
                 <td data-testid="merchant_name"
                     title={user?.name}
                     className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
-                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.phone_number}>{`${user?.phone_number ? user?.phone_number : '-'}`}</td>
+                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'
+                    title={`${user?.country_code} ${user?.phone_number ? user?.phone_number : '-'}`}>
+                    {`${user?.country_code} ${user?.phone_number ? user?.phone_number : '-'}`}
+                </td>
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.email}>{`${user?.email ? user?.email : '-'}`}</td>
                 <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{convertTimestampToCAT(user?.created_at)}</td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>

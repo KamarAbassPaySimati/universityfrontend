@@ -13,7 +13,6 @@ import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
-    console.log('transactions', List);
     const obj = {
         ft01: 'Transaction & System Failures',
         ft02: 'Policy Clarity & Customer Support',

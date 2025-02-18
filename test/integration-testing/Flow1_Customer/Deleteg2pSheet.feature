@@ -29,7 +29,7 @@ Feature: Paymaart - Admin Web - Delete G2P Sheet
     Then I should view G2P customer details
     When I upload the valid excel sheet as "ValidSheetIntegration.xlsx"
     And I should read a message stating that "Successfully Uploaded G2P sheet"
-    Then I should see table header containing '["Sheet Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
+    Then I should see table header containing '["File Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
     When I click on the delete sheet button
     Then I should see a confirmation prompt for deleting excel sheet
     When I click on confirm button
