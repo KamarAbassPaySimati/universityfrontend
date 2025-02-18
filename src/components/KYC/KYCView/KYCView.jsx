@@ -152,7 +152,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const handleupdatebutton = () => {
         setIsUpdateModalOpen(true);
     };
-
     return (
         <>
             <CardHeader
@@ -284,18 +283,94 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                 </div>
                                             )))
                                             : (
-                                                Object.keys(userDetails?.basicDetails
-                                                ).map((itemkey, index = 0) =>
-                                                    (<div key={index} className='w-1/3 px-1'>
-                                                        <ViewDetail
-                                                            itemkey={itemkey.replaceAll('_', ' ')}
-                                                            userDetails={
-                                                                userDetails?.basicDetails[itemkey]
-                                                            }
-                                                            loading={loading}
-                                                        />
-                                                    </div>)
-                                                )
+                                                <div className='w-full flex'>
+                                                    <div className='w-1/3 px-1'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Trading Name</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{userDetails?.trading_name || '-'}</p>
+                                                    </div>
+                                                    <div className='w-1/3 px-1'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Phone Number</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{`${userDetails?.country_code} ${userDetails?.phone_number}` || '-'}</p>
+                                                    </div>
+                                                    <div className='w-1/3 px-1'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Email</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{userDetails?.email || '-'}</p>
+                                                    </div>
+                                                </div>
+                                            )
+                                        }
+                                    </div>
+                                }
+                            />
+                        }
+                        {viewType === 'Reported_merchants' &&
+                            <KYCSections
+                                heading='Reported Issues'
+                                testId='Reported Issues'
+                                data-testid="Reported Issues"
+                                childe={
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(4)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                <div className='w-full flex flex-wrap'>
+                                                    <div className='w-1/3 px-1'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Reported by</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{userDetails?.customer_name || '-'}</p>
+                                                    </div>
+                                                    <div className='w-1/3 px-1'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Reported Date</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>
+                                                            {userDetails?.created_at
+                                                                ? new Date(userDetails.created_at * 1000).toLocaleString('en-GB', {
+                                                                    day: '2-digit',
+                                                                    month: 'short',
+                                                                    year: 'numeric',
+                                                                    hour: '2-digit',
+                                                                    minute: '2-digit',
+                                                                    hour12: false
+                                                                }).replace(',', '') + ' hours'
+                                                                : '-'}
+                                                        </p>
+                                                    </div>
+                                                    <div className='w-1/3 px-1'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Reason</p>
+                                                        <div className='font-normal text-sm text-[#4F5962] mt-1'>
+                                                            {userDetails?.reasons?.length > 0
+                                                                ? userDetails.reasons.map((item, index) => (
+                                                                    <p key={index} className='mt-1 font-normal text-sm text-[#4F5962]'>{item}</p>
+                                                                ))
+                                                                : '-'}
+                                                        </div>
+                                                    </div>
+                                                    {<div className='w-1/3 px-1 mt-6'>
+                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Proof</p>
+                                                        {userDetails?.image_1 !== null &&
+                                                        <ImageViewWithModel
+                                                            name={userDetails?.image_1.split('/').pop()}
+                                                            item={`${CDN}${userDetails.image_1}`}
+                                                            // testId={`businessImages_${index}`}
+                                                            className={'min-w-[245px]'}
+                                                            ReportedMerchant={true}
+                                                        />}
+                                                        {userDetails?.image_2 !== null &&
+                                                        <ImageViewWithModel
+                                                            name={userDetails?.image_2.split('/').pop()}
+                                                            item={`${CDN}${userDetails.image_2}`}
+                                                            // testId={`businessImages_${index}`}
+                                                            className={'min-w-[245px]'}
+                                                            ReportedMerchant={true}
+                                                        />}
+                                                    </div>}
+                                                </div>
                                             )
                                         }
                                     </div>
@@ -319,7 +394,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                     />
                                                 </div>
                                             )))
-                                            : (
+                                            : userDetails?.basicDetails && (
                                                 Object.keys(userDetails?.basicDetails
                                                 ).map((itemkey, index = 0) =>
                                                     (<div key={index} className='w-1/3 px-1'>
@@ -354,7 +429,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                     />
                                                 </div>
                                             )))
-                                            : (
+                                            : userDetails?.identityDetails && (
                                                 Object.keys(userDetails?.identityDetails).map((itemkey, index = 0) => (
                                                     <div key={index} className='flex flex-wrap xl:px-[40px] xl:w-1/3 w-1/2'>
                                                         <div key={index} className=''>
@@ -438,7 +513,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         />
                                                     </div>
                                                 )))
-                                                : (
+                                                : userDetails.tradingDetails && (
                                                     <>
                                                         {Object.keys(userDetails.tradingDetails).map((itemkey, index = 0) => (
                                                             <div key={index} className='w-1/3 px-1 xl:pr-[100px] pr-[40px]'>
