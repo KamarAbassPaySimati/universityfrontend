@@ -346,27 +346,27 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         <div className='font-normal text-sm text-[#4F5962] mt-1'>
                                                             {userDetails?.reasons?.length > 0
                                                                 ? userDetails.reasons.map((item, index) => (
-                                                                    <p key={index} className='mt-1 font-normal text-sm text-[#4F5962]'>{item}</p>
+                                                                    <p key={index} className='mt-1 font-normal text-sm text-[#4F5962] break-words'>{item}</p>
                                                                 ))
                                                                 : '-'}
                                                         </div>
                                                     </div>
                                                     {<div className='w-1/3 px-1 mt-6'>
                                                         <p className='font-normal text-sm text-[#A4A9AE]'>Proof</p>
-                                                        {userDetails?.image_1 !== null &&
+                                                        {userDetails && userDetails?.image_1 !== null &&
                                                         <ImageViewWithModel
                                                             name={userDetails?.image_1.split('/').pop()}
-                                                            item={`${CDN}${userDetails.image_1}`}
+                                                            item={`${userDetails.image_1}`}
                                                             // testId={`businessImages_${index}`}
-                                                            className={'min-w-[245px]'}
+                                                            className={'2xl:w-[65%] min-w-[245px]'}
                                                             ReportedMerchant={true}
                                                         />}
                                                         {userDetails?.image_2 !== null &&
                                                         <ImageViewWithModel
                                                             name={userDetails?.image_2.split('/').pop()}
-                                                            item={`${CDN}${userDetails.image_2}`}
+                                                            item={`${userDetails.image_2}`}
                                                             // testId={`businessImages_${index}`}
-                                                            className={'min-w-[245px]'}
+                                                            className={'2xl:w-[65%] min-w-[245px]'}
                                                             ReportedMerchant={true}
                                                         />}
                                                     </div>}
@@ -566,7 +566,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
                                                             }
                                                         </div>
-
                                                     </>
                                                 )
                                             }
@@ -590,7 +589,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         />
                                                     </div>
                                                 )))
-                                                : (
+                                                : userDetails.personalDetails && (
                                                     Object.keys(userDetails.personalDetails).map((itemkey, index = 0) => (
                                                         <div key={index} className='w-1/3 px-1'>
                                                             <ViewDetail
@@ -618,7 +617,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                             />
                                                         </div>
                                                     )))
-                                                    : (
+                                                    : userDetails.Occupation && (
                                                         Object.keys(userDetails.Occupation).map((itemkey, index = 0) => (
                                                             <div key={index} className='w-1/3 px-1'>
                                                                 <ViewDetail
@@ -672,7 +671,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         />
                                                     </div>
                                                 )))
-                                                : (
+                                                : userDetails.incomeDetails && (
                                                     Object.keys(userDetails.incomeDetails).map((itemkey, index = 0) => (
                                                         <div key={index} className='w-1/3 px-1'>
                                                             <ViewDetail
@@ -703,7 +702,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                     />
                                                 </div>
                                             )))
-                                            : (userDetails.bankDetails.length === 0
+                                            : (userDetails.bankDetails && userDetails.bankDetails.length === 0
                                                 ? bankDetails.map((itemKey, index) => (
                                                     <div key={itemKey + index} className="w-1/3 px-1 hello">
                                                         <div className={`text-[14px] leading-[24px] font-[400] mt-6 ${loading ? 'animate-pulse z-0' : ''}`}>
