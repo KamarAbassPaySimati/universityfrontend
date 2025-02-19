@@ -19,17 +19,27 @@ const Merchant = () => {
     const [isStateLoading, setIsStateLoading] = useState(false);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.merchantUsers);
+    const currentTab = searchParams.get('type') || 'all merchants';
 
-    // filter options
-    const initialToggleButtons = [
-        { key: 'All Merchants', status: true },
-        { key: 'Reported Merchants', status: false }
-    ];
-    const [toggleButtons, setToggleButtons] = useState(initialToggleButtons);
+    // Initialize toggle buttons based on searchParams
+    const [toggleButtons, setToggleButtons] = useState([
+        { key: 'All Merchants', status: currentTab === 'all merchants' },
+        { key: 'Reported Merchants', status: currentTab === 'reported merchants' }
+    ]);
 
-    const handleToggle = (updatedButtons) => {
-        setToggleButtons(updatedButtons);
-        // Perform API call or any other action based on the updated button values
+    // Handle tab toggle
+    const handleToggle = (selectedKey) => {
+        setToggleButtons(prevButtons =>
+            prevButtons.map(btn => ({
+                ...btn,
+                status: btn.key.toLowerCase() === selectedKey.toLowerCase()
+            }))
+        );
+
+        // Update URL params to persist tab selection
+        const updatedParams = new URLSearchParams(searchParams);
+        updatedParams.set('type', selectedKey.toLowerCase());
+        setSearchParams(updatedParams);
     };
 
     const { user } = useSelector((state) => state.auth);

@@ -7,7 +7,7 @@ import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatID from '../../../../CommonMethods/formatId';
 import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
-export default function ReportedMerchantTableBody ({ user, index, GetList }) {
+export default function ReportedMerchantTableBody({ user, index, GetList, setSearchParams, searchParams }) {
     const Navigate = useNavigate();
 
     return (
@@ -29,8 +29,17 @@ export default function ReportedMerchantTableBody ({ user, index, GetList }) {
                 <td className='py-2 px-[10px] truncate '>{convertTimestampToCAT(user?.created_at)}</td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-center'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/merchants/reported-merchant/specific-view/${user?.id}`
-                        )} />
+                        onClick={() => {
+                            const query = searchParams.get('search');
+                            const activeTab = searchParams.get('tab');
+
+                            let url = `/users/merchants/reported-merchant/specific-view/${user?.id}`;
+                            if (query || activeTab) {
+                                url += `?${query ? `search=${query}` : ''}${query && activeTab ? '&' : ''}${activeTab ? `tab=${activeTab}` : ''}`;
+                            }
+                            Navigate(url);
+                        }}
+                    />
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'

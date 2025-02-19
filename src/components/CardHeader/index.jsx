@@ -143,7 +143,6 @@ const CardHeader = ({
                     >
                         <Link to="/profile">Profile</Link>
                     </Tooltip>
-
                 </div>
             </div>
             <div className={'h-[calc(100vh-56px)] bg-background border-t border-neutral-outline '}>
@@ -165,7 +164,7 @@ const CardHeader = ({
                                                 if (!dataLoading) {
                                                     handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams);
                                                 } if (reportedMerchant) {
-                                                    handleSearchParams(); // Ensure this function has the correct parameters if needed
+                                                    // handleSearchParams(); // Ensure this function has the correct parameters if needed
                                                 }
                                             }}
                                             className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
