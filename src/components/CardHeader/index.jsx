@@ -164,8 +164,6 @@ const CardHeader = ({
                                             onClick={() => {
                                                 if (!dataLoading) {
                                                     handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams);
-                                                } if (reportedMerchant) {
-                                                    handleSearchParams(); // Ensure this function has the correct parameters if needed
                                                 }
                                             }}
                                             className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
