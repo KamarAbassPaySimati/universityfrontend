@@ -145,7 +145,7 @@ export default function NotificationPopup ({
                                                         : notificationItem?.type === 'flag'
                                                             ? `Pending Flag Transaction Request for ${formatID(notificationItem.user_id)}`
                                                             : notificationItem?.type === 'report-merchant'
-                                                                ? 'Merchant Reported'
+                                                                ? `Merchant Reported for ${formatID(notificationItem?.user_id)}`
                                                                 : `Pending Payout Request for ${formatID(notificationItem.user_id)}`}</p>
                                             <p className='font-normal text-sm text-[#4F5962]'>{notificationItem.type === 'kyc'
                                                 ? 'There are pending KYC Registrations requiring your attention.'
@@ -154,7 +154,12 @@ export default function NotificationPopup ({
                                                     : notificationItem.type === 'flag'
                                                         ? 'There are flagged transactions requiring your attention.'
                                                         : notificationItem?.type === 'report-merchant'
-                                                            ? `Customer(${notificationItem?.customer_id}) has reported a merchant(${notificationItem?.user_id}). Tap to view`
+                                                            ? <>
+                                                                Customer {formatID(notificationItem?.customer_id)} has reported this merchant.
+                                                                <br />
+                                                                Your attention is required
+                                                            </>
+
                                                             : 'There are pending Payout Transactions requiring your attention.'}</p>
                                         </div>
                                     </div>
