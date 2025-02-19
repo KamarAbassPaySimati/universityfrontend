@@ -5,7 +5,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 function NotFound ({ link }) {
     const navigate = useNavigate();
     const location = useLocation();
-
     const handleGoBack = () => {
         if (link) {
             navigate(link);
