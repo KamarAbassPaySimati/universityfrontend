@@ -21,6 +21,7 @@ import { CDN } from '../../../config';
 import { endpoints } from '../../../services/endpoints';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
+import formatLocalPhoneNumber from '../../../CommonMethods/formatLocalPhoneNumber';
 
 export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
@@ -290,7 +291,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                     </div>
                                                     <div className='w-1/3 px-1'>
                                                         <p className='font-normal text-sm text-[#A4A9AE]'>Phone Number</p>
-                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{`${userDetails?.country_code} ${userDetails?.phone_number}` || '-'}</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{`${userDetails?.country_code} ${formatLocalPhoneNumber(userDetails?.country_code, userDetails?.phone_number)}`}</p>
                                                     </div>
                                                     <div className='w-1/3 px-1'>
                                                         <p className='font-normal text-sm text-[#A4A9AE]'>Email</p>
@@ -305,9 +306,9 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                         }
                         {viewType === 'Reported_merchants' &&
                             <KYCSections
-                                heading='Reported Issues'
-                                testId='Reported Issues'
-                                data-testid="Reported Issues"
+                                heading='Reported Issue'
+                                testId='Reported Issue'
+                                data-testid="Reported Issue"
                                 childe={
                                     <div className='w-full flex flex-wrap mt-1 -mx-1'>
                                         {loading
@@ -324,7 +325,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                 <div className='w-full flex flex-wrap'>
                                                     <div className='w-1/3 px-1'>
                                                         <p className='font-normal text-sm text-[#A4A9AE]'>Reported by</p>
-                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{userDetails?.customer_name || '-'}</p>
+                                                        <p className='font-normal text-sm text-[#4F5962] mt-1'>{`${userDetails?.customer_name}, ${userDetails?.customer_id}` || '-'}</p>
                                                     </div>
                                                     <div className='w-1/3 px-1'>
                                                         <p className='font-normal text-sm text-[#A4A9AE]'>Reported Date</p>
@@ -336,9 +337,11 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                                     year: 'numeric',
                                                                     hour: '2-digit',
                                                                     minute: '2-digit',
-                                                                    hour12: false
+                                                                    hour12: false,
+                                                                    timeZone: 'Africa/Harare' // CAT time zone (UTC+2)
                                                                 }).replace(',', '') + ' hours'
-                                                                : '-'}
+                                                                : '-'
+                                                            }
                                                         </p>
                                                     </div>
                                                     <div className='w-1/3 px-1'>
@@ -352,23 +355,24 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         </div>
                                                     </div>
                                                     {<div className='w-1/3 px-1 mt-6'>
-                                                        <p className='font-normal text-sm text-[#A4A9AE]'>Proof</p>
+                                                        {(userDetails && userDetails?.image_1 !== null || userDetails?.image_2 !== null) &&
+                                                            <p className='font-normal text-sm text-[#A4A9AE]'>Proof</p>}
                                                         {userDetails && userDetails?.image_1 !== null &&
-                                                        <ImageViewWithModel
-                                                            name={userDetails?.image_1.split('/').pop()}
-                                                            item={`${userDetails.image_1}`}
-                                                            // testId={`businessImages_${index}`}
-                                                            className={'2xl:w-[65%] min-w-[245px]'}
-                                                            ReportedMerchant={true}
-                                                        />}
+                                                            <ImageViewWithModel
+                                                                name={userDetails?.image_1 && userDetails?.image_1?.split('/').pop()}
+                                                                item={`${userDetails.image_1}`}
+                                                                // testId={`businessImages_${index}`}
+                                                                className={'2xl:w-[65%] min-w-[245px]'}
+                                                                ReportedMerchant={true}
+                                                            />}
                                                         {userDetails?.image_2 !== null &&
-                                                        <ImageViewWithModel
-                                                            name={userDetails?.image_2.split('/').pop()}
-                                                            item={`${userDetails.image_2}`}
-                                                            // testId={`businessImages_${index}`}
-                                                            className={'2xl:w-[65%] min-w-[245px]'}
-                                                            ReportedMerchant={true}
-                                                        />}
+                                                            <ImageViewWithModel
+                                                                name={userDetails?.image_2 && userDetails?.image_2.split('/').pop()}
+                                                                item={`${userDetails.image_2}`}
+                                                                // testId={`businessImages_${index}`}
+                                                                className={'2xl:w-[65%] min-w-[245px]'}
+                                                                ReportedMerchant={true}
+                                                            />}
                                                     </div>}
                                                 </div>
                                             )
@@ -718,7 +722,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         </div>
                                                     </div>
                                                 ))
-                                                : userDetails.bankDetails.map((bankDetail, idx) => (
+                                                : userDetails?.bankDetails && userDetails?.bankDetails?.map((bankDetail, idx) => (
                                                     <div key={idx} className={`w-full flex ${idx}`}>
                                                         {idx === 0
                                                             ? (

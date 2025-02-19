@@ -98,7 +98,7 @@ const SideBar = ({ role }) => {
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>
                 <div className='flex justify-center h-[56px] items-center'>
-                    <Image src='sideNavLogo' />
+                    <Image src='sideNavLogo' className={'-ml-3'} />
                 </div>
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
                     <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4 max-h-[calc(100vh-151px)] overflow-y-auto scrollBar'>

@@ -79,12 +79,23 @@ const Merchant = () => {
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
-        if (searchParams.get('page') === null) {
-            setSearchParams({ page: 1, type: 'all merchants' });
+        const updatedParams = new URLSearchParams(searchParams);
+
+        if (!searchParams.get('type')) {
+            updatedParams.set('type', 'all merchants');
+        }
+
+        if (!searchParams.get('page')) {
+            updatedParams.set('page', '1');
+        }
+
+        // Update only if changes are needed
+        if (updatedParams.toString() !== searchParams.toString()) {
+            setSearchParams(updatedParams);
         } else {
             GetList();
         }
-    }, [GetList]);
+    }, [searchParams, setSearchParams, GetList]);
 
     useEffect(() => {
         if (List?.data?.length === 0 && !loading) {
@@ -112,6 +123,7 @@ const Merchant = () => {
             toggleButtons={toggleButtons}
             isStateLoading={isStateLoading}
             dataLoading={loading}
+            reportedMerchant={true}
 
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>
