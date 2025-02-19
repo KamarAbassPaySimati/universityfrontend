@@ -11,10 +11,10 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Paginator from '../../../../components/Paginator/Paginator';
 import { dataService } from '../../../../services/data.services';
 import * as XLSX from 'xlsx';
-import { handleUpload } from '../../../../components/S3Upload/S3Functions';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { BeatLoader } from 'react-spinners';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import { handleUploadG2pSheet } from './uploadSheet';
 
 export default function G2PCustomerViewList () {
     const { id } = useParams();
@@ -101,9 +101,10 @@ export default function G2PCustomerViewList () {
                 }
 
                 const path = 'g2p_customers';
-                const file = await handleUpload(e.target.files[0], path);
+                const file = await handleUploadG2pSheet(e.target.files[0], path);
                 if (file.key !== '') {
                     const payload = {
+
                         sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
                         uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
                         paymaart_id: user?.paymaart_id,
@@ -118,7 +119,6 @@ export default function G2PCustomerViewList () {
                         e.target.value = '';
                         setFile(null);
                     } else {
-                        console.log('response', response);
                         setThreedotLoader(false);
                         e.target.value = '';
                         setFile(null);
