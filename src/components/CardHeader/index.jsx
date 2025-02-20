@@ -14,7 +14,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
 import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
 import NotificationPopup from '../Notification/NotificationPopup';
@@ -28,7 +28,7 @@ const CardHeader = ({
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
-    function cumulativeSum(arr) {
+    function cumulativeSum (arr) {
         const result = [];
         let sum = '';
 
@@ -45,7 +45,7 @@ const CardHeader = ({
 
         return result;
     }
-
+    const location = useLocation();
     const [isNotification, setIsNotification] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -84,6 +84,7 @@ const CardHeader = ({
 
     //     setSearchParams(updatedParams); // Update the search params
     // };
+    console.log(location, 'location from cardheader');
 
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
