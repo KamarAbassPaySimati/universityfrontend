@@ -106,7 +106,7 @@ const PayOutTable = (
                                     {
                                         <>
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
-                                                onClick={() => Navigate(`${geturl()}${user?.request_id}`
+                                                onClick={() => Navigate(`${geturl()}${user?.request_id}`, { state: { page: searchParams.get('page'), type: searchParams.get('type'), search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                                 )}
                                             />
                                         </>
