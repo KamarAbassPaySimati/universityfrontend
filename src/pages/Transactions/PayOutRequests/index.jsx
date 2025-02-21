@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import Paginator from '../../../components/Paginator/Paginator';
 import GlobalContext from '../../../components/Context/GlobalContext';
@@ -12,7 +12,6 @@ import PayOutTable from './Components/PayOutTable';
 const PayOutRequests = () => {
     const [notFound, setNotFound] = useState(false);
     const [isStateLoading, setIsStateLoading] = useState(false);
-    const location=useLocation();
     let url = '';
     const { setToastError } = useContext(GlobalContext);
     const { List, error, loading } = useSelector(state => state.PayOutRequests);
@@ -28,7 +27,6 @@ const PayOutRequests = () => {
         setToggleButtons(updatedButtons);
         // Perform API call or any other action based on the updated button values
     };
-    console.log(location, 'location');
     const [searchParams, setSearchParams] = useSearchParams();
 
     const dispatch = useDispatch();
@@ -118,6 +116,7 @@ const PayOutRequests = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.records?.length !== 0) {

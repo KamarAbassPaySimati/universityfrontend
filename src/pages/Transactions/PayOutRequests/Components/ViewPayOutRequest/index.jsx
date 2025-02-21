@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import CardHeader from '../../../../../components/CardHeader';
 import ViewDetail from '../../../../../components/ViewDeatilComponent/ViewDeatil';
 import Modal from 'react-responsive-modal';
@@ -17,12 +17,12 @@ export default function ViewPayOutRequest () {
     const dispatch = useDispatch();
     const { id } = useParams();
     const location = useLocation();
-
     const [BankDropDownValue, setBankDropDownValue] = useState([]);
     const getBankTypes = async () => {
         try {
             const response = await dataService.GetAPI('admin-users/list-trust-bank');
             const bankTypes = response.data.data;
+
             const arrayValue = bankTypes.reduce((acc, item) => {
                 if (item.ref_no !== 'PTBAT') {
                     acc.push(`Pay-out to Agent from  ${item.ref_no} | EM credit to PMCAT`);
@@ -60,7 +60,24 @@ export default function ViewPayOutRequest () {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     // const { user } = useSelector((state) => state.auth);
     // const { paymaart_id: PaymaartId } = user;
-    console.log(location, 'location checking');
+
+    const prevLocationRef = useRef();
+
+    useEffect(() => {
+        prevLocationRef.current = location;
+    }, [location]);
+
+    const type = location?.state?.type;
+
+    const dynamicPath = type === 'merchants' ? 'Merchants' : type === 'agents' ? 'Agents' : '';
+    const paths = ['Transactions', 'Pay-out Requests', ...(dynamicPath ? [dynamicPath] : [])];
+    const pathurls = [
+        'transactions/pay-out-requests',
+        'transactions/pay-out-requests',
+        ...(type === 'merchants' ? ['transactions/pay-out-requests?type=merchants'] : ['']),
+        ...(type === 'agents' ? ['transactions/pay-out-requests?type=agents'] : ['transactions/pay-out-requests'])
+    ];
+
     const getView = () => {
         try {
             dispatch(PayOutRequestView(id));
@@ -133,13 +150,13 @@ export default function ViewPayOutRequest () {
         setSubmitSelected(false);
         setState((prevState) => ({ ...prevState, reason: newValue }));
     };
-    console.log(searchParams, 'searchParams');
+
     return (
         <>
             <CardHeader
                 activePath='Pay-out Request Details'
-                paths={['Transactions', 'Pay-out Requests']}
-                pathurls={['transactions/pay-out-requests']}
+                paths={paths}
+                pathurls={location?.state?.type !== undefined ? pathurls : 'transactions/pay-out-requests'}
                 minHeightRequired={true}
                 ChildrenElement
             >
