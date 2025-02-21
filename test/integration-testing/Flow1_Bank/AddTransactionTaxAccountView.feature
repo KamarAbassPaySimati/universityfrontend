@@ -38,3 +38,5 @@ Pagination option should be present if more than 10 transactions(number of recor
     When I upload the valid transaction POP file as "document_front.png"
     When I click on add button
     Then I should read a message stating that "Transaction details added successfully"
+
+  
