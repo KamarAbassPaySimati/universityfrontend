@@ -33,7 +33,7 @@ const ReportedMerchantTable = ({ loading, error, List, notFound, searchParams, s
                 }
                 <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                     {List?.data?.map((user, index) => (
-                        <ReportedMerchantTableBody key={index} user={user} index={index} GetList={GetList} />
+                        <ReportedMerchantTableBody key={index} user={user} index={index} GetList={GetList} setSearchParams={setSearchParams} searchParams={searchParams} />
                     ))}
                 </tbody>
             </table>
