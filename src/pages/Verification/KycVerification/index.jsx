@@ -134,7 +134,6 @@ const KycVerification = () => {
     // }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400 || error.status === 404) {
                 setNotFound(true);

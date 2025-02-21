@@ -52,7 +52,6 @@ export async function fetchFeatureFlags () {
 
         // Parse the string as JSON
         const featureFlags = JSON.parse(configString);
-        console.log('Fetched Feature Flags:', featureFlags);
         return featureFlags;
     } catch (error) {
         console.error('Error fetching feature flags from AppConfig:', error);

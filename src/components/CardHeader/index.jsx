@@ -23,12 +23,12 @@ import { dataService } from '../../services/data.services';
 const CardHeader = ({
     children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading
+    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
-    function cumulativeSum (arr) {
+    function cumulativeSum(arr) {
         const result = [];
         let sum = '';
 
@@ -70,6 +70,7 @@ const CardHeader = ({
             setLoading(false); // Reset loading state after API call is completed
         }
     };
+
     useEffect(() => {
         fetchNotificationData(1);
     }, []);
@@ -132,7 +133,6 @@ const CardHeader = ({
                     >
                         <Link to="/profile">Profile</Link>
                     </Tooltip>
-
                 </div>
             </div>
             <div className={'h-[calc(100vh-56px)] bg-background border-t border-neutral-outline '}>
@@ -143,19 +143,32 @@ const CardHeader = ({
                         <div className=''>
                             {header}
                             {showTabs &&
-                            <div className='-mt-[2px] flex gap-6 pt-2'>
-                                {/* toggle buttons  */}
-                                {toggleButtons && toggleButtons.map((item, index) => (
-                                    <button
-                                        data-testid={item.key.toLowerCase()}
-                                        key={index}
-                                        onClick={() => { if (!dataLoading) handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams); }}
-                                        className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
-                                    >
-                                        {item.key}
-                                    </button>
-                                ))}
-                            </div>}
+                                <div className='-mt-[2px] flex gap-6 pt-2'>
+                                    {/* toggle buttons  */}
+                                    {toggleButtons && toggleButtons.map((item, index) => (
+                                        <button
+                                            data-testid={item.key.toLowerCase()}
+                                            key={index}
+                                            onClick={() => {
+                                                if (!dataLoading) {
+                                                    const updatedParams = new URLSearchParams(searchParams);
+
+                                                    // Set the new tab type
+                                                    updatedParams.set('type', item.key.toLowerCase());
+
+                                                    // Clear sorting parameters
+                                                    updatedParams.delete('sortBy');
+                                                    updatedParams.delete('order_by');
+
+                                                    setSearchParams(updatedParams); // Update the search params
+                                                }
+                                            }}
+                                            className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
+                                        >
+                                            {item.key}
+                                        </button>
+                                    ))}
+                                </div>}
                         </div>
                         <div className='flex'>
                             {buttonText && (
@@ -202,7 +215,14 @@ const CardHeader = ({
                                             </button>))
                                     : (statusButton && ((updateButton !== '' && updateButton !== true)
                                         ? (
-                                            <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
+                                            <button data-testid="update_button"
+                                                onClick={() => {
+                                                    if (handleupdatebutton) {
+                                                        handleupdatebutton();
+                                                        return;
+                                                    };
+                                                    navigate(updateButtonPath);
+                                                }}
                                                 className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                                                 {updateButton === 'Update' && <Image src='update'

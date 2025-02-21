@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
@@ -104,7 +104,6 @@ const MultiFilter = ({
         }
 
         const transactionTypes = checkTrueProperties(appliedFilter['transaction-type']);
-        console.log(transactionTypes, 'oooo');
         if (transactionTypes) {
             params.transaction_type = transactionTypes;
         } else {
@@ -134,12 +133,6 @@ const MultiFilter = ({
         setErrorMessage('');
         setDateRange((prevState) => ({ ...prevState, [id]: value }));
     };
-
-    useEffect(() => {
-        console.log(appliedFilter, 'app');
-        console.log(isFilterOpen, 'opne');
-        console.log(dateRange, 'range');
-    }, [appliedFilter, isFilterOpen]);
 
     useOnClickOutside(filterDiv, () => {
         setIsFilterOpen(false);

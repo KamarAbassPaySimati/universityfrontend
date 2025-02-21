@@ -16,19 +16,30 @@ const Merchant = () => {
     const [searchParams, setSearchParams] = useSearchParams({});
     const [notFound, setNotFound] = useState(false);
     const { setToastError } = useContext(GlobalContext);
+    const [isStateLoading, setIsStateLoading] = useState(false);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.merchantUsers);
+    const currentTab = searchParams.get('type') || 'all merchants';
 
-    // filter options
-    const initialToggleButtons = [
-        { key: 'All Merchants', status: true },
-        { key: 'Reported Merchants', status: false }
-    ];
-    const [toggleButtons, setToggleButtons] = useState(initialToggleButtons);
+    // Initialize toggle buttons based on searchParams
+    const [toggleButtons, setToggleButtons] = useState([
+        { key: 'All Merchants', status: currentTab === 'all merchants' },
+        { key: 'Reported Merchants', status: currentTab === 'reported merchants' }
+    ]);
 
-    const handleToggle = (updatedButtons) => {
-        setToggleButtons(updatedButtons);
-        // Perform API call or any other action based on the updated button values
+    // Handle tab toggle
+    const handleToggle = (selectedKey) => {
+        setToggleButtons(prevButtons =>
+            prevButtons.map(btn => ({
+                ...btn,
+                status: btn.key.toLowerCase() === selectedKey.toLowerCase()
+            }))
+        );
+
+        // Update URL params to persist tab selection
+        const updatedParams = new URLSearchParams(searchParams);
+        updatedParams.set('type', selectedKey.toLowerCase());
+        setSearchParams(updatedParams);
     };
 
     const { user } = useSelector((state) => state.auth);
@@ -78,12 +89,31 @@ const Merchant = () => {
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
-        if (searchParams.get('page') === null) {
-            setSearchParams({ page: 1, type: 'all merchants' });
+        const updatedParams = new URLSearchParams(searchParams);
+
+        if (!searchParams.get('type')) {
+            updatedParams.set('type', 'all merchants');
+        }
+
+        if (!searchParams.get('page')) {
+            updatedParams.set('page', '1');
+        }
+
+        // Update only if changes are needed
+        if (updatedParams.toString() !== searchParams.toString()) {
+            setSearchParams(updatedParams);
         } else {
             GetList();
         }
-    }, [GetList]);
+    }, [searchParams, setSearchParams, GetList]);
+
+    useEffect(() => {
+        if (List?.data?.length === 0 && !loading) {
+            setIsStateLoading(false);
+        } else {
+            setIsStateLoading(true);
+        }
+    }, [loading]);
 
     return (
         <CardHeader
@@ -101,6 +131,7 @@ const Merchant = () => {
             setSearchParams={setSearchParams}
             onToggle={handleToggle}
             toggleButtons={toggleButtons}
+            dataLoading={loading}
 
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>

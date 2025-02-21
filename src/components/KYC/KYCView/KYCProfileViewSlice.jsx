@@ -13,6 +13,9 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
     // Construct URL safely using query parameters instead of string interpolation
     try {
         const res = await dataService.GetAPI(`admin-users/${url}`);
+        if (url.includes('reported-merchants')) {
+            return { res, viewType: 'Reported-merchants' };
+        }
         return res;
     } catch (error) {
         // Log error or send notification
@@ -20,6 +23,7 @@ export const KYCProfileView = createAsyncThunk('agentUser', async (url, { reject
         return rejectWithValue({ message: error });
     }
 });
+
 const AddressKeys = ['house_number', 'street_name', 'landmark', 'town_village_ta', 'district', 'po_box_no'];
 const InternatinalAddressKeys = ['intl_address'];
 const TradingAddressKeys = ['trading_house_name', 'trading_street_name', 'trading_town_village_ta', 'trading_district'];
@@ -28,7 +32,6 @@ const KYCProfileViewSlice = createSlice({
     name: 'agent-view',
     initialState,
     reducers: {
-
     },
     extraReducers: (builder) => {
         builder
@@ -38,6 +41,11 @@ const KYCProfileViewSlice = createSlice({
             })
             .addCase(KYCProfileView.fulfilled, (state, action) => {
                 state.loading = false;
+                if (action.payload?.viewType === 'Reported-merchants') {
+                    state.userDetails = action?.payload?.res.data; // please check where the object is
+                    state.View = action?.payload?.res?.data;
+                    return;
+                }
                 if (!action.payload.error && action.payload.data.success_status) {
                     state.View = action?.payload?.data?.data;
                     const AddressValues = [];
@@ -97,17 +105,17 @@ const KYCProfileViewSlice = createSlice({
                     }
                     state.address = {
                         'Phone Number':
-                        `${state?.View?.country_code} ${state?.View?.phone_number
-                            ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
-                            : ''}`,
+                            `${state?.View?.country_code} ${state?.View?.phone_number
+                                ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
+                                : ''}`,
                         Email: state?.View?.email,
                         Address: AddressValues.join(', ')
                     };
                     state.nonMalawiAddress = {
                         'Phone Number':
-                        `${state?.View?.country_code} ${state?.View?.phone_number
-                            ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
-                            : ''}`,
+                            `${state?.View?.country_code} ${state?.View?.phone_number
+                                ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
+                                : ''}`,
                         Email: state?.View?.email,
                         Nationality: state?.View?.citizen === 'Non Malawian' ? '-' : state?.View?.citizen,
                         'Malawi Address': AddressValues.join(', '),
@@ -116,9 +124,9 @@ const KYCProfileViewSlice = createSlice({
                     };
                     state.not_started = {
                         'Phone Number':
-                        `${state?.View?.country_code} ${state?.View?.phone_number
-                            ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
-                            : ''}`,
+                            `${state?.View?.country_code} ${state?.View?.phone_number
+                                ? formatLocalPhoneNumber(state?.View?.country_code, state?.View?.phone_number)
+                                : ''}`,
                         Email: state?.View?.email
                     };
                     state.userDetails = {
@@ -130,7 +138,7 @@ const KYCProfileViewSlice = createSlice({
                                 ? [state?.View?.id_document_front, state?.View?.id_document_back]
                                 : [state?.View?.id_document_front],
                             'Verification Document': state?.View?.verification_document_back !== null &&
-                            state?.View?.verification_document_back !== ''
+                                state?.View?.verification_document_back !== ''
                                 ? [state?.View?.verification_document_front,
                                     state?.View?.verification_document_back]
                                 : [state?.View?.verification_document_front],

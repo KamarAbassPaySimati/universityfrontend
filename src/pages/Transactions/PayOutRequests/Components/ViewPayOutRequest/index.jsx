@@ -184,7 +184,7 @@ export default function ViewPayOutRequest () {
                                         />
                                     </div>
                                 )))
-                                : (Object.keys(TransactionDetails).map((itemkey, index = 0) => (
+                                : (Object?.keys(TransactionDetails)?.map((itemkey, index = 0) => (
                                     <div key={index} className='w-1/3 px-1'>
                                         <ViewDetail
                                             itemkey={itemkey.replaceAll('_', ' ')}
