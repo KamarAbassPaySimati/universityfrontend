@@ -60,16 +60,16 @@ const PayOutTable = (
                 {(List?.records?.length > 0 || loading) &&
                 <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                     <tr className=' border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                        <th className='py-2 px-[10px] text-left font-[400] '>Pay-out Request ID</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Recipient Paymaart ID</th>
-                        <th className='py-2 px-[10px] text-right font-[400]'>Amount</th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[200px]'>Pay-out Request ID</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[200px]'>Recipient Paymaart ID</th>
+                        <th className='py-2 px-[10px] text-right font-[400] min-w-[200px]'>Amount</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[200px]'>
                             <div className='cursor-pointer flex gap-1 w-fit' data-testid="sort_submission_date" onClick={() => handleSort('order_by', searchParams, setSearchParams)}>
                                 <span>Date/Time In, CAT</span>
                                 <Image src='sort_icon' />
                             </div>
                         </th>
-                        <th className='py-2 px-[10px] text-left font-[400]'>Status</th>
+                        <th className='py-2 px-[10px] text-left font-[400] min-w-[200px]'>Status</th>
                         <th className='py-2 px-[10px]'></th>
                     </tr>
                 </thead>}
@@ -79,14 +79,14 @@ const PayOutTable = (
                         { List?.records?.map((user, index) => (
                             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
                                 <td data-testid="paymaart_id" title={user?.transaction_id}
-                                    className='py-2 px-[10px] text-left truncate max-w-[50px]'>{user?.transaction_id || '-'}</td>
+                                    className='py-2 px-[10px] text-left truncate'>{user?.transaction_id || '-'}</td>
                                 <td data-testid="recipient_paymaart_id" title={formatID(user?.recipient_id)}
-                                    className='py-2 px-[10px] text-left truncate max-w-[200px]'>{formatID(user?.recipient_id) || '-'}
+                                    className='py-2 px-[10px] text-left truncate'>{formatID(user?.recipient_id) || '-'}
                                 </td>
                                 <td data-testid="amount" title={`${formattedAmount(user?.amount)} MWK`}
-                                    className='py-2 px-[10px] text-right truncate max-w-[200px]'>{`${formattedAmount(user?.amount)} MWK` || '-'}
+                                    className='py-2 px-[10px] text-right truncate'>{`${formattedAmount(user?.amount)} MWK` || '-'}
                                 </td>
-                                <td data-testid="submission_date" title = {convertTimestampToCAT(user?.created_at)} className='py-2 px-[10px] text-left truncate max-w-[300px]'>
+                                <td data-testid="submission_date" title = {convertTimestampToCAT(user?.created_at)} className='py-2 px-[10px] text-left truncate'>
                                     {convertTimestampToCAT(user?.created_at)}</td>
                                 <td data-testid="status" className='py-2 px-[10px]'>
                                     {user?.status

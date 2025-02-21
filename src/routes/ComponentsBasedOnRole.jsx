@@ -208,8 +208,14 @@ export const ComponentsBasedOnRole = {
             // Merchant Specific View from Merchant Listing
             {
                 name: 'Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'specific'} />,
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
                 path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
             },
             // customer Specific View from Merchant Listing
             {

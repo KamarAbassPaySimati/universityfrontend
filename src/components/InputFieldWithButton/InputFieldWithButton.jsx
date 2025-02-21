@@ -82,13 +82,13 @@ const InputFieldWithButton = ({
         }
     };
 
-    const handleCountryCodeChange = (selectedCode, selectedCodeAlpha) => {
+    const handleCountryCodeChange = (selectedCode) => {
         setFormData(prevState => {
             return { ...prevState, phoneNumber: '' };
         });
         setCountryCode(selectedCode);
-        setCountryCodeAlpha(selectedCodeAlpha);
-        switch (selectedCodeAlpha) {
+        setCountryCodeAlpha(selectedCode);
+        switch (selectedCode) {
         case '+91': // India
         case '+44': // United Kingdom (UK)
         case '+1': // United States (US)
@@ -117,10 +117,19 @@ const InputFieldWithButton = ({
                     </div>}
                 {phoneNumber && role === 'customer' &&
                     <Dropdown
-                        selectedCode={countryCode}
+                        initialSelect={countryCode}
                         onChange={handleCountryCodeChange}
                         error={error}
                         isFocused={isFocused}
+                        data={['+1', '+27', '+39', '+44', '+46', '+91', '+234', '+265']}
+                        testid='change_code'
+                        testidInput='change_code_search'
+                        testidOpions='change_code_option'
+                        className='w-[68px] py-[10px] max-h-[210px] text-primary-normal'
+                        optionClassname=' px-2 py-2 text-[14px] hover:bg-gray-200'
+                        scroll='thin-scrollBar'
+                        textColor='text-primary-normal'
+                        height='max-h-52'
                     />
                 }
                 <input

@@ -28,7 +28,6 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
     };
 
     const getKeyByValue = (obj, value) => {
-        console.log(Object.keys(obj).find(key => obj[key] === value), 'llll');
         return Object.keys(obj).find(key => obj[key] === value);
     };
 

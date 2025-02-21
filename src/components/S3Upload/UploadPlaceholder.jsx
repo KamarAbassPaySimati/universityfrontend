@@ -42,7 +42,6 @@ export default function UploadPlaceholder ({
             setLoadingImg(false);
             e.target.value = '';
         } catch (error) {
-            console.log('errrr', error);
             e.target.value = '';
         }
     };

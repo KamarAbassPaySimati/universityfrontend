@@ -37,7 +37,6 @@ const Admin = () => {
     //     try {
     //         // to get the data from authslice
     //         dispatch(AdminList(searchParams)).then((response) => {
-    //             console.log(response, 'respinse');
     //             if (response.payload.error) {
     //                 if (error.status === 400) {
     //                     setNotFound(true);
@@ -64,7 +63,6 @@ const Admin = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400) {
                 setNotFound(true);

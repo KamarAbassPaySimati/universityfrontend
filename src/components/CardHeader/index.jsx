@@ -21,14 +21,14 @@ import NotificationPopup from '../Notification/NotificationPopup';
 import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
-    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired,
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
-    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading
+    searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
-    function cumulativeSum (arr) {
+    function cumulativeSum(arr) {
         const result = [];
         let sum = '';
 
@@ -45,16 +45,7 @@ const CardHeader = ({
 
         return result;
     }
-    // const handleToggle = (index) => {
-    //     const updatedButtons = toggleButtons.map((button, i) => {
-    //         if (i === index) {
-    //             return { ...button, status: true };
-    //         } else {
-    //             return { ...button, status: false };
-    //         }
-    //     });
-    //     onToggle(updatedButtons); // Notify the parent component of the updated button values
-    // };
+
     const [isNotification, setIsNotification] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
@@ -79,9 +70,11 @@ const CardHeader = ({
             setLoading(false); // Reset loading state after API call is completed
         }
     };
+
     useEffect(() => {
         fetchNotificationData(1);
     }, []);
+
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -122,15 +115,15 @@ const CardHeader = ({
                         <Link to="/profile">Notifications</Link>
                     </Tooltip>
                     {isNotification &&
-                    <NotificationPopup
-                        page={page}
-                        setPage={setPage}
-                        setIsNotification={setIsNotification}
-                        loading={loading}
-                        notificationData={notificationData}
-                        fetchNotificationData={fetchNotificationData}
-                        hasMore={hasMore}
-                    />}
+                        <NotificationPopup
+                            page={page}
+                            setPage={setPage}
+                            setIsNotification={setIsNotification}
+                            loading={loading}
+                            notificationData={notificationData}
+                            fetchNotificationData={fetchNotificationData}
+                            hasMore={hasMore}
+                        />}
                     <Image onClick={() => navigate('/profile')} className='profile cursor-pointer ml-9' src='profile' />
                     <Tooltip
                         className='my-tooltip'
@@ -140,15 +133,43 @@ const CardHeader = ({
                     >
                         <Link to="/profile">Profile</Link>
                     </Tooltip>
-
                 </div>
             </div>
             <div className={'h-[calc(100vh-56px)] bg-background border-t border-neutral-outline '}>
                 {/* checks for card has buttons */}
                 {header && (headerWithoutButton === false || headerWithoutButton === undefined) &&
-                    <div data-testid='header-text' className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'}  mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
+                    <div data-testid='header-text' className={`${ChildrenElement ? '' : showTabs ? 'px-8 bg-[#FFFFFF] border-b border-neutral-outline pt-5' : 'bg-[#FFFFFF] border-b border-neutral-outline py-7 px-8'}  mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                  text-header-dark flex flex-row justify-between `}>
-                        {header}
+                        <div className=''>
+                            {header}
+                            {showTabs &&
+                                <div className='-mt-[2px] flex gap-6 pt-2'>
+                                    {/* toggle buttons  */}
+                                    {toggleButtons && toggleButtons.map((item, index) => (
+                                        <button
+                                            data-testid={item.key.toLowerCase()}
+                                            key={index}
+                                            onClick={() => {
+                                                if (!dataLoading) {
+                                                    const updatedParams = new URLSearchParams(searchParams);
+
+                                                    // Set the new tab type
+                                                    updatedParams.set('type', item.key.toLowerCase());
+
+                                                    // Clear sorting parameters
+                                                    updatedParams.delete('sortBy');
+                                                    updatedParams.delete('order_by');
+
+                                                    setSearchParams(updatedParams); // Update the search params
+                                                }
+                                            }}
+                                            className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
+                                        >
+                                            {item.key}
+                                        </button>
+                                    ))}
+                                </div>}
+                        </div>
                         <div className='flex'>
                             {buttonText && (
                                 <button
@@ -194,7 +215,14 @@ const CardHeader = ({
                                             </button>))
                                     : (statusButton && ((updateButton !== '' && updateButton !== true)
                                         ? (
-                                            <button data-testid="update_button" onClick={() => { navigate(updateButtonPath); }}
+                                            <button data-testid="update_button"
+                                                onClick={() => {
+                                                    if (handleupdatebutton) {
+                                                        handleupdatebutton();
+                                                        return;
+                                                    };
+                                                    navigate(updateButtonPath);
+                                                }}
                                                 className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
                     h-[40px] rounded-[6px]'>
                                                 {updateButton === 'Update' && <Image src='update'
@@ -207,7 +235,7 @@ const CardHeader = ({
                     </div>
                 }
                 {/* checks for card has only toggles down */}
-                {header && headerWithoutButton &&
+                {((header && headerWithoutButton)) &&
                     <div className={`${ChildrenElement ? '' : 'bg-[#FFFFFF] border-b border-neutral-outline pt-5 px-8'} mx-10 mt-8 mb-6 text-[30px] font-[700] leading-[40px]
                     ${(buttonText === '' || g2pHeight) ? 'h-[90px]' : ' h-[107px]'}
                  text-header-dark flex flex-col gap-2`}>

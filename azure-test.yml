@@ -1,0 +1,203 @@
+trigger:
+  branches:
+    include:
+      - none
+      
+pr:
+  branches:
+    include:
+      - qa
+variables:
+  - group: general
+  - group: qa
+
+stages:
+- stage: CodeQuality
+  jobs:
+    - job: "lint"
+      displayName: "Code Quality"
+      condition: and(contains(variables['System.PullRequest.SourceBranch'], 'test'), succeeded())
+      pool:
+          vmImage: "ubuntu-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --force
+            node scripts/licences_complaince.js
+            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+            aws s3 cp licenses.json s3://$S3_BUCKET_LIVING_DOCUMENTATION/licences-ADMIN/dev/licenses.json
+          condition: ne(variables.CACHE_RESTORED, 'true')
+          displayName: 'Dependencies'
+        - script: |
+            npm run eslint
+          displayName: 'Lint'
+    - job: "secret"
+      displayName: "Secret Checking"
+      condition: and(contains(variables['System.PullRequest.SourceBranch'], 'test'), succeeded())
+      pool:
+          vmImage: "ubuntu-latest"
+      steps:
+        - script: |
+            pip3 install detect-secrets
+            detect-secrets scan
+          displayName: 'Lint'
+    - job: "licence_complaiance"
+      displayName: "License Compliance"
+      condition: and(contains(variables['System.PullRequest.SourceBranch'], 'test'), succeeded())
+      pool:
+          vmImage: "ubuntu-latest"
+      steps:
+        - script: |
+            npm install -g license-checker 
+            license-checker --json > licenses.json  
+            node scripts/license.js
+          displayName: 'License Compliance'
+    - job: "sast"
+      displayName: 'Static Application Security Testing (SAST)'
+      condition: and(contains(variables['System.PullRequest.SourceBranch'], 'test'), succeeded())
+      pool:
+          vmImage: "ubuntu-latest"
+      steps:
+        - script: |
+            pip3 install njsscan
+            njsscan -w .
+          displayName: 'Static Application Security Testing (SAST)'
+
+- stage: Build
+  jobs:
+    - job: "Download_Environment"
+      displayName: "Dependencies"
+      condition: and(contains(variables['System.PullRequest.SourceBranch'], 'test'), succeeded())
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+        - script: |
+            ./scripts/azure_envs.sh
+          displayName: 'Copy Environment Files'
+        - publish: $(System.DefaultWorkingDirectory)/.env
+          artifact: Environment
+    - job: build
+      displayName: "Build"
+      dependsOn: Download_Environment
+      pool:
+        vmImage: "ubuntu-latest"
+      steps:
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: Cache@2
+          inputs:
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
+          displayName: 'Dependencies'
+        - script: |
+            export NODE_OPTIONS=--max-old-space-size=8192
+            npm run build
+            mkdir artifact
+            mv dist artifact
+          displayName: 'Build'
+        - publish: $(System.DefaultWorkingDirectory)/artifact
+          artifact: bundle
+
+- stage: Test
+  jobs:    
+    - job: UITesting
+      displayName: "UI Testing"
+      condition: and(contains(variables['System.PullRequest.SourceBranch'], 'test'), succeeded())
+      pool:
+        vmImage: "macos-latest"
+      steps:
+        - task: Cache@2
+          inputs:
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
+            restoreKeys: |
+              npm | "$(Agent.OS)"
+            path: "$(System.DefaultWorkingDirectory)/node_modules"
+            cacheHitVar: CACHE_RESTORED
+          displayName: Cache npm
+        - script: |
+            npm install --force
+          condition: ne(variables.CACHE_RESTORED, 'true')
+        - task: DownloadPipelineArtifact@2
+          name: environment
+          inputs:
+            artifact: Environment
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - task: DownloadPipelineArtifact@2
+          name: bundle
+          inputs:
+            artifact: bundle
+            targetPath: '$(System.DefaultWorkingDirectory)'
+        - script: |
+            npm install pm2@5.3.0 -g
+            source .env
+            export NODE_OPTIONS=--max-old-space-size=8192
+            npm install express --force
+            pm2 start scripts/server.js
+            sleep 60
+            mkdir reports
+            npm install nyc --save-dev --force
+            mkdir reports-xml
+            node scripts/bdd-execution-split1.js
+            if [ $? -ne 0 ]; then
+              echo "Integration Testing"
+              exit 1
+            fi
+            mkdir coverage
+            npm run generate_report
+          displayName: Integration Testing
+        - script: |
+            cat log.txt
+          condition: always()
+        - task: PublishTestResults@2
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/TEST-*.xml'
+        - script: |
+            # ls -R reports-xml
+            node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
+            export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
+            export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
+            aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
+            aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/qa/ --acl public-read
+            aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
+            if [ $? -ne 0 ]; then
+              echo "BDD Living documentation"
+              exit 1
+            fi
+          displayName: BDD Living documentation
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-failedScenarios'
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-coverageData'
+          condition: always()
+        - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
+          artifact: '$(system.JobId)-living-documentation'
+          condition: always()
+        - task: PublishTestResults@2
+          condition: always()
+          inputs:
+            testResultsFormat: 'JUnit'
+            testResultsFiles: '**/TEST-*.xml'
+
+  
