@@ -21,7 +21,7 @@ import NotificationPopup from '../Notification/NotificationPopup';
 import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
-    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs, isStateLoading, reportedMerchant,
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
@@ -74,16 +74,6 @@ const CardHeader = ({
     useEffect(() => {
         fetchNotificationData(1);
     }, []);
-
-    // const handleSearchParams = () => {
-    //     const updatedParams = new URLSearchParams(searchParams);
-
-    //     // Remove sorting parameters
-    //     updatedParams.delete('sortBy');
-    //     updatedParams.delete('order_by');
-
-    //     setSearchParams(updatedParams); // Update the search params
-    // };
 
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
@@ -159,12 +149,18 @@ const CardHeader = ({
                                         <button
                                             data-testid={item.key.toLowerCase()}
                                             key={index}
-                                            // disabled={isStateLoading}
                                             onClick={() => {
                                                 if (!dataLoading) {
-                                                    handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams);
-                                                } if (reportedMerchant) {
-                                                    // handleSearchParams(); // Ensure this function has the correct parameters if needed
+                                                    const updatedParams = new URLSearchParams(searchParams);
+
+                                                    // Set the new tab type
+                                                    updatedParams.set('type', item.key.toLowerCase());
+
+                                                    // Clear sorting parameters
+                                                    updatedParams.delete('sortBy');
+                                                    updatedParams.delete('order_by');
+
+                                                    setSearchParams(updatedParams); // Update the search params
                                                 }
                                             }}
                                             className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}

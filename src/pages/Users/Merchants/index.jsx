@@ -131,9 +131,7 @@ const Merchant = () => {
             setSearchParams={setSearchParams}
             onToggle={handleToggle}
             toggleButtons={toggleButtons}
-            isStateLoading={isStateLoading}
             dataLoading={loading}
-            reportedMerchant={true}
 
         >
             <div className={`relative ${notFound || List?.data?.length === 0 ? '' : 'thead-border-bottom'}`}>

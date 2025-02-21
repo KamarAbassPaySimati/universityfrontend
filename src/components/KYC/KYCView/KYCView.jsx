@@ -517,13 +517,13 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         />
                                                     </div>
                                                 )))
-                                                : userDetails.tradingDetails && (
+                                                : userDetails?.tradingDetails && (
                                                     <>
-                                                        {Object.keys(userDetails.tradingDetails).map((itemkey, index = 0) => (
+                                                        {Object.keys(userDetails?.tradingDetails).map((itemkey, index = 0) => (
                                                             <div key={index} className='w-1/3 px-1 xl:pr-[100px] pr-[40px]'>
                                                                 <ViewDetail
                                                                     itemkey={itemkey.replaceAll('_', ' ')}
-                                                                    userDetails={userDetails.tradingDetails[itemkey]}
+                                                                    userDetails={userDetails?.tradingDetails[itemkey]}
                                                                     loading={loading}
                                                                 />
                                                             </div>
@@ -593,12 +593,12 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         />
                                                     </div>
                                                 )))
-                                                : userDetails.personalDetails && (
-                                                    Object.keys(userDetails.personalDetails).map((itemkey, index = 0) => (
+                                                : userDetails?.personalDetails && (
+                                                    Object.keys(userDetails?.personalDetails).map((itemkey, index = 0) => (
                                                         <div key={index} className='w-1/3 px-1'>
                                                             <ViewDetail
                                                                 itemkey={itemkey.replaceAll('_', ' ')}
-                                                                userDetails={userDetails.personalDetails[itemkey]}
+                                                                userDetails={userDetails?.personalDetails[itemkey]}
                                                                 loading={loading}
                                                             />
                                                         </div>)
@@ -621,12 +621,12 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                             />
                                                         </div>
                                                     )))
-                                                    : userDetails.Occupation && (
-                                                        Object.keys(userDetails.Occupation).map((itemkey, index = 0) => (
+                                                    : userDetails?.Occupation && (
+                                                        Object.keys(userDetails?.Occupation).map((itemkey, index = 0) => (
                                                             <div key={index} className='w-1/3 px-1'>
                                                                 <ViewDetail
                                                                     itemkey={itemkey.replaceAll('_', ' ')}
-                                                                    userDetails={userDetails.Occupation[itemkey]}
+                                                                    userDetails={userDetails?.Occupation[itemkey]}
                                                                     loading={loading}
                                                                 />
                                                             </div>)
@@ -675,12 +675,12 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                         />
                                                     </div>
                                                 )))
-                                                : userDetails.incomeDetails && (
-                                                    Object.keys(userDetails.incomeDetails).map((itemkey, index = 0) => (
+                                                : userDetails?.incomeDetails && (
+                                                    Object.keys(userDetails?.incomeDetails).map((itemkey, index = 0) => (
                                                         <div key={index} className='w-1/3 px-1'>
                                                             <ViewDetail
                                                                 itemkey={itemkey.replaceAll('_', ' ')}
-                                                                userDetails={userDetails.incomeDetails[itemkey]}
+                                                                userDetails={userDetails?.incomeDetails[itemkey]}
                                                                 loading={loading}
                                                             />
                                                         </div>)
@@ -706,7 +706,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                     />
                                                 </div>
                                             )))
-                                            : (userDetails.bankDetails && userDetails.bankDetails.length === 0
+                                            : (userDetails?.bankDetails && userDetails?.bankDetails.length === 0
                                                 ? bankDetails.map((itemKey, index) => (
                                                     <div key={itemKey + index} className="w-1/3 px-1 hello">
                                                         <div className={`text-[14px] leading-[24px] font-[400] mt-6 ${loading ? 'animate-pulse z-0' : ''}`}>
