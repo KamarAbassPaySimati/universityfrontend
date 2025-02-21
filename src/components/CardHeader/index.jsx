@@ -244,7 +244,6 @@ const CardHeader = ({
                             {/* toggle buttons  */}
                             {toggleButtons && toggleButtons.map((item, index) => (
                                 <button
-                                    disabled={isnowloading}
                                     data-testid={item.key.toLowerCase()}
                                     key={index}
                                     onClick={() => { if (!dataLoading) handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams); }}
