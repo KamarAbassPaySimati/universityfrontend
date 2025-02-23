@@ -27,7 +27,6 @@ const PayOutRequests = () => {
         setToggleButtons(updatedButtons);
         // Perform API call or any other action based on the updated button values
     };
-
     const [searchParams, setSearchParams] = useSearchParams();
 
     const dispatch = useDispatch();
@@ -117,6 +116,7 @@ const PayOutRequests = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.records?.length !== 0) {
