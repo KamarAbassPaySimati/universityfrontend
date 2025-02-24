@@ -424,7 +424,7 @@ const ViewTransactionDetails = ({ type }) => {
                     <ConfirmationPopup
                         title={'Flag Transaction'}
                         message={'Select all applicable'}
-                        messageStyle={'text-[14px] font-medium text-[#A4A9AE] mt-2'}
+                        messageStyle={'text-[14px] font-medium text-[#A4A9AE] mt-2 mb-6'}
                         Reason={(<>
                             {Object.keys(flagReason).map((item, index = 0) => (
                                 <>
