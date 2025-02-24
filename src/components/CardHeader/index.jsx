@@ -27,6 +27,7 @@ const CardHeader = ({
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
+
     function cumulativeSum (arr) {
         const result = [];
         let sum = '';

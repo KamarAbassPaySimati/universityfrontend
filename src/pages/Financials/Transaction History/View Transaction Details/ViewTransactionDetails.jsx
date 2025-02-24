@@ -101,8 +101,7 @@ const ViewTransactionDetails = ({ type }) => {
                 };
                 setIsLoading(true);
                 // The endpoint to flag a transaction depends on the user type:
-                // - For agents and admins, use 'admin-transactions/flag-admin-transaction'.
-                // - For customers, use 'admin-transactions/flag-customer-transaction'.
+                // - For agents, admins and customer, use 'admin-transactions/flag-admin-transaction'.
                 const response = await dataService.PostAPI('admin-transactions/flag-admin-transaction', payload);
                 if (!response.error) {
                     setIsLoading(false);

@@ -207,6 +207,10 @@ body {
   top: 50%;
 }
 
+.filter-checkbox .merchant-checkbox label::before {
+  top: 16%;
+}
+
 .label-checkbox input{
   opacity: 0;
   position: relative;

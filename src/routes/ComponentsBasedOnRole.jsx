@@ -300,6 +300,12 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionList type='customers' />,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
+            },
             // Flagged List
             {
                 name: 'Flagged List',
@@ -363,6 +369,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Customer Transaction List',
                 element: <ViewTransactionList type='customers'/>,
                 path: '/users/customers/customers-transaction-histories/:id'
+            },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
             },
             {
                 name: 'KYC Verification list',

@@ -79,7 +79,6 @@ const TransactionHistory = () => {
             params.page_number = 1;
         }
     }, [List]);
-
     /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */

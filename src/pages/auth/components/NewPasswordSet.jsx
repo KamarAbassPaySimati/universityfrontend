@@ -187,7 +187,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin, activ
             ? (<>
                 <div className='z-20 mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] w-[calc(100%-24px)] md:w-auto md:min-w-[425px] mx-[12px] md:mx-0'>
                     <div className='flex justify-center items-center mb-9'>
-                        <img src='/images/logo.svg' />
+                        <img src='/images/logo.svg' loading='lazy'/>
                     </div>
                     <div>
                         <div className='mb-9 flex justify-evenly'>
@@ -250,7 +250,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin, activ
             </>)
             : (<div className='z-20 mt-6 relative bg-[#FFFFFF] p-8 rounded-[8px] min-w-[425px]'>
                 <div className='flex justify-center items-center mb-9'>
-                    <img src='/images/logo.svg' />
+                    <img src='/images/logo.svg' loading='lazy'/>
                 </div>
                 <div>
                     <div className='mb-9'>

@@ -26,7 +26,6 @@ function SetLimit () {
         simplified_agent: false,
         simplified_merchant: false,
         simplified_customer: false
-
     });
 
     useEffect(() => {
@@ -191,7 +190,6 @@ function SetLimit () {
                     navigationPath=''
                     table={true}
                     headerWithoutButton={isEditing}
-
                 >
                     <div className='p-10'>
                         <p className='font-semibold text-lg text-[#4F5962]'>Maximum Account Balances</p>
@@ -233,7 +231,6 @@ function SetLimit () {
                                                 className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.max_merchant ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                 onChange={handleInputChange}
                                                 onKeyPress={handleKeyPress}
-
                                             />
                                             {errors.max_merchant && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
                                         </div>
@@ -257,7 +254,6 @@ function SetLimit () {
                                                 className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.max_customer ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                 onChange={handleInputChange}
                                                 onKeyPress={handleKeyPress}
-
                                             />
                                             {errors.max_customer && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
                                         </div>
@@ -335,7 +331,6 @@ function SetLimit () {
                                                             className={`mt-2 font-normal text-sm text-[#4F5962] bg-[#F8F8F8] ${errors.full_merchant ? 'border-b border-[#FF4343]' : 'border-b border-[#DDDDDD]'} w-full rounded-tl-[4px] rounded-tr-[4px] p-2.5 outline-0`}
                                                             onChange={handleInputChange}
                                                             onKeyPress={handleKeyPress}
-
                                                         />
                                                         {errors.full_merchant && <span className="text-[#FF4343] font-medium text-sm mt-1">Required field</span>}
                                                     </div>

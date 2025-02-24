@@ -11,7 +11,7 @@ const initialState = {
 export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHistory', async ({ searchParams, id, type }, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
-        const res = await dataService.GetAPI(`admin-transactions/${type === 'customers' ? 'customer-transaction?customer_id=' : 'agent-transactions?agent_id='}${id}&${searchParams.toString()}`);
+        const res = await dataService.GetAPI(`admin-transactions/${type === 'customers' ? 'customer-transaction?customer_id=' : type === 'merchants' ? 'merchant-transactions?merchant_id=' : 'agent-transactions?agent_id='}${id}&${searchParams.toString()}`);
         return res;
     } catch (error) {
         // Log error or send notification

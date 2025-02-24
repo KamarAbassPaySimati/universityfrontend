@@ -1,5 +1,6 @@
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
+
 const assert = require('assert');
 const { When, Then } = require('@cucumber/cucumber');
 const { Key, until, By } = require('selenium-webdriver');
@@ -42,6 +43,7 @@ Then('I should be redirected to transaction view page', async function () {
     const actual_paymaart_ID = await driver.wait(until.elementLocated(By.css('[data-testid="user_details"] [data-testid="paymaart_id"]'))).getText();
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
+
 
 Then('I should be able to view the wallet balance', async function () {
     await driver.wait(until.elementIsVisible(By.css('[[data-testid="wallet_balance_card"]]')));

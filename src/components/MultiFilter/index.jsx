@@ -20,7 +20,8 @@ const MultiFilter = ({
     setAppliedFilter,
     customClass,
     initialState,
-    pageNumber
+    pageNumber,
+    merchant
 }) => {
     const filterDiv = useRef();
 
@@ -44,6 +45,7 @@ const MultiFilter = ({
             'Pay Afrimax': 'afrimax',
             'Pay Merchant': 'merchant',
             'Interest Earned': 'interest',
+            'Customer payments': 'customer_payments',
             Refund: 'refund',
             Other: 'other'
         };
@@ -194,7 +196,7 @@ const MultiFilter = ({
                                 <div className='font-semibold mb-2 capitalize'>
                                     {key}
                                 </div>
-                                <div className='flex gap-x-10 gap-y-4 flex-wrap'>
+                                <div className={`flex ${merchant ? 'gap-x-10' : 'gap-x-2'} gap-y-4 flex-wrap`}>
                                     {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox2
                                             isLoading={false}
@@ -207,6 +209,7 @@ const MultiFilter = ({
                                             setAppliedFilter={setAppliedFilter}
                                             appliedFilter={appliedFilter}
                                             customClass={customClass}
+                                            merchant={merchant}
                                         />
                                     ))}
                                 </div>

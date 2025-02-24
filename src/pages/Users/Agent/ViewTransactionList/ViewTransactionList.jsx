@@ -35,7 +35,9 @@ const ViewTransactionList = ({ type }) => {
     const filterOptions = {
         'Transaction Type': type === 'customers'
             ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'G2P Pay-in']
-            : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
+            : type === 'merchants'
+                ? ['Pay Paymaart', 'Cash-out', 'Customer payments', 'Pay-out']
+                : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
 
     const handleExport = async () => {
@@ -99,8 +101,8 @@ const ViewTransactionList = ({ type }) => {
     return (
         <CardHeader
             activePath={'Transaction History'}
-            paths={['Users', type === 'customers' ? 'Customers' : 'Agents']}
-            pathurls={[type === 'customers' ? 'users/customers' : 'users/agents']}
+            paths={['Users', type === 'customers' ? 'Customers' : type === 'merchants' ? 'Merchants' : 'Agents']}
+            pathurls={[type === 'customers' ? 'users/customers' : type === 'merchants' ? 'users/merchants' : 'users/agents']}
             header=''
             g2pHeight='true'
             minHeightRequired={true}
@@ -114,7 +116,7 @@ const ViewTransactionList = ({ type }) => {
                 </div>
             </div>
             <div className={`max-h-[calc(100vh-245px)] min-h-[calc(100vh-265px)] relative z-[9] scrollBar overflow-auto ml-10 mr-5 pr-4 my-6
-                ${type === 'customers' ? '' : 'flex flex-col'} `}
+                ${type === 'customers' || type === 'merchants' ? '' : 'flex flex-col'} `}
             >
                 <div className='flex w-full gap-5'>
                     <InfoCard
@@ -126,7 +128,7 @@ const ViewTransactionList = ({ type }) => {
                         isLoading={loading}
                         type={type}
                     />
-                    {type !== 'customers' && <InfoCard
+                    {(type !== 'customers' && type !== 'merchants') && <InfoCard
                         testId='commission_card'
                         title="Gross Agent Commission"
                         amount={`${List?.commission ? formattedAmount(List?.commission) : '0.00'} MWK`}
@@ -136,8 +138,6 @@ const ViewTransactionList = ({ type }) => {
                         bgColor="bg-[#8075A1]"
                         isLoading={loading}
                     />}
-                    {/* <WalletCard />
-                    <CommisionCard /> */}
                 </div>
                 <div className='relative z-[9] my-6 flex flex-col bg-[#FFFFFF] border-neutral-outline rounded-[6px] pb-2'> {/* border */}
                     <div className='mx-8 h-[67px] items-center flex justify-between'>
@@ -174,6 +174,8 @@ const ViewTransactionList = ({ type }) => {
                                     appliedFilter={appliedFilter}
                                     customClass={true}
                                     initialState={initailState}
+                                    merchant={true}
+
                                 />
                             </div>)
                         }
