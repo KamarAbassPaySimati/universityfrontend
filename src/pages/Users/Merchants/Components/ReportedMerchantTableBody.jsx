@@ -26,7 +26,7 @@ export default function ReportedMerchantTableBody({ user, index, GetList, setSea
                     {`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}
                 </td>
                 <td className='py-2 px-[10px] truncate' title={user?.email}>{`${user?.email ? user?.email : '-'}`}</td>
-                <td className='py-2 px-[10px] truncate '>{convertTimestampToCAT(user?.created_at)}</td>
+                <td data-testid="reported_date" className='py-2 px-[10px] truncate '>{convertTimestampToCAT(user?.created_at)}</td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-center'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
                         onClick={() => {

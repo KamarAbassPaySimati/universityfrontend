@@ -16,6 +16,7 @@ const Merchant = () => {
     const [searchParams, setSearchParams] = useSearchParams({});
     const [notFound, setNotFound] = useState(false);
     const { setToastError } = useContext(GlobalContext);
+    // eslint-disable-next-line no-unused-vars
     const [isStateLoading, setIsStateLoading] = useState(false);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.merchantUsers);

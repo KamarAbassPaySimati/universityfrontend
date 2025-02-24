@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React from 'react';
 
 export default function FilterCheckbox2 ({
@@ -6,7 +7,8 @@ export default function FilterCheckbox2 ({
     checkboxText,
     setAppliedFilter,
     appliedFilter,
-    customClass
+    customClass,
+    merchant
 }) {
     const toggleFilter = () => {
         setAppliedFilter(prevState => ({
@@ -19,7 +21,7 @@ export default function FilterCheckbox2 ({
     };
 
     return (
-        <div className={`filter-checkbox checkbox relative ${customClass ? 'w-[148px]' : ''}`}>
+        <div className={`filter-checkbox checkbox relative ${customClass && !merchant ? 'w-[148px]' : merchant ? 'w-[40%] merchant-checkbox' : ''}`}>
             <input
                 className=''
                 type="checkbox"
