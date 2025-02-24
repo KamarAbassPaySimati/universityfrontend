@@ -85,7 +85,8 @@ const CardHeader = ({
                                     if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined) {
                                         navigate(-1); // Use the correct index
                                     } else {
-                                        navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
+                                        // navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
+                                        navigate(-1);
                                     }
                                 }}
                                 className="text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary cursor-pointer">
@@ -164,6 +165,8 @@ const CardHeader = ({
                                                     updatedParams.delete('sortBy');
                                                     updatedParams.delete('order_by');
                                                     updatedParams.delete('status');
+                                                    updatedParams.delete('search');
+                                                    updatedParams.delete('page');
                                                     setSearchParams(updatedParams); // Update the search params
                                                 }
                                             }}
@@ -262,6 +265,8 @@ const CardHeader = ({
                                                 updatedParams.delete('order_by');
                                                 updatedParams.delete('status');
                                                 updatedParams.delete('search');
+                                                updatedParams.delete('page');
+
                                                 setSearchParams(updatedParams); // Update the search params
                                             } else {
                                                 handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams);
