@@ -330,6 +330,12 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionDetails type='customer' />,
                 path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
             },
+            // Specific Merchant view specific transaction
+            {
+                name: 'Specific Merchant view Specific Transaction',
+                element: <ViewTransactionDetails type='merchant' />,
+                path: '/users/merchants/merchants-transaction-histories/view/:agentId/:transactionType/:id'
+            },
             // View specific flagged transaction
             {
                 name: 'View specific flagged transaction',
