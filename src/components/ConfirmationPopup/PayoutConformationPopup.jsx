@@ -46,9 +46,10 @@ export default function PayoutConformationPopup ({
                 />
             </div>
             <div className="flex mt-8 gap-6 justify-end">
-                <button className={`${buttonWidth || 'w-[117px]'} border-[#3B2A6F] text-[#3B2A6F] border rounded-md font-normal text-[14px] leading-6`}
+                <button className={`${buttonWidth || 'w-[117px]'} border-[#3B2A6F] text-[#3B2A6F] border rounded-md font-normal text-[14px] leading-6 ${isLoading ? 'cursor-not-allowed' : 'cursor-pointer'}`}
                     onClick={() => handleClose()}
                     data-testid='cancel_button'
+                    disabled={isLoading}
                 >
                     {CancelButtonText || 'Cancel'}
                 </button>

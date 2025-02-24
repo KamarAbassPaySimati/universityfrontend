@@ -25,7 +25,7 @@ export default function ViewPayOutRequest () {
 
             const arrayValue = bankTypes.reduce((acc, item) => {
                 if (item.ref_no !== 'PTBAT') {
-                    acc.push(`Pay-out to Agent from  ${item.ref_no} | EM credit to PMCAT`);
+                    acc.push(`${location.state?.type !== undefined ? 'Settlement to Merchant' : 'Pay-out to Agent'} from  ${item.ref_no} | EM credit to PMCAT`);
                 }
                 return acc;
             }, []);
@@ -166,7 +166,7 @@ export default function ViewPayOutRequest () {
                 `}>
                         <div className='flex justify-between items-center'>
                             <h1 className='text-[#252C32] font-bold text-[30px] leading-[40px]'>Pay-out Request Details</h1>
-                            {(View?.status !== 'rejected' && View?.status !== 'approved') && <div className='flex'>
+                            {(View?.status !== undefined && !loading && View?.status !== 'rejected' && View?.status !== 'approved') && <div className='flex'>
                                 <button data-testid="reject_button"
                                     onClick={() => setRejectModalOpen(true)}
                                     className={`flex  bg-primary-negative py-[8px] px-[16px] 
@@ -245,7 +245,7 @@ export default function ViewPayOutRequest () {
                     </div>
                 </>}
             </CardHeader>
-            <Modal center open={isRejectModalOpen} onClose={() => setRejectModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={isRejectModalOpen} onClose={() => { !isLoading && setRejectModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm to Reject?'}
@@ -269,7 +269,7 @@ export default function ViewPayOutRequest () {
                     />
                 </div>
             </Modal>
-            <Modal center open={isApproveModalOpen} onClose={() => setApproveModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={isApproveModalOpen} onClose={() => { !isLoading && setApproveModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <PayoutConformationPopup
                         title={'Confirm to Approve?'}
