@@ -88,7 +88,6 @@ const FilterWithSingleOption = ({
                                             handleSearchParams={handleSearchParamValue}
                                             searchParams={searchParams}
                                             isLoading={isLoading}
-
                                         />
                                     ))}
                                 </div>

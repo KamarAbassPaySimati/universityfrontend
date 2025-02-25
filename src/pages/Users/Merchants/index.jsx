@@ -21,7 +21,6 @@ const Merchant = () => {
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.merchantUsers);
     const currentTab = searchParams.get('type') || 'all merchants';
-
     // Initialize toggle buttons based on searchParams
     const [toggleButtons, setToggleButtons] = useState([
         { key: 'All Merchants', status: currentTab === 'all merchants' },
