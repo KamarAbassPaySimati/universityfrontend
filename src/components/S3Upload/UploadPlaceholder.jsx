@@ -9,7 +9,7 @@ import { Tooltip } from 'react-tooltip';
 
 export default function UploadPlaceholder ({
     label, path, selectedUploadImg, states, handleStates, disabled, error, testId,
-    labelValue, multiselectImage, info
+    labelValue, multiselectImage, info, viewOutside
 }) {
     const [loadingImg, setLoadingImg] = useState(false);
     const [showIframe, setShowIframe] = useState(false);
@@ -71,7 +71,8 @@ export default function UploadPlaceholder ({
                                 {states[selectedUploadImg].split('/')[states[selectedUploadImg].split('/').length - 1]}</p>
                             <div className='flex gap-3 px-2'>
                                 <Image src='eyeLight' testId={`view_${testId}`}
-                                    className='h-6 w-6 cursor-pointer' onClick={() => setShowIframe(true)}/>
+                                    className='h-6 w-6 cursor-pointer'
+                                    onClick={() => { viewOutside ? viewOutside(true) : setShowIframe(true); }}/>
                                 <Image src='refresh' testId={`remove_${testId}`} className='h-6 w-6 cursor-pointer'
                                     onClick={() => {
                                         handleDelete(states[selectedUploadImg]);
@@ -129,7 +130,7 @@ export default function UploadPlaceholder ({
                             </div>
                         </div>
                     }
-                    {multiselectImage === undefined && <IframeModal
+                    {!viewOutside && multiselectImage === undefined && <IframeModal
                         isOpen={showIframe} handleClose={() => setShowIframe(false)} link={states[selectedUploadImg]}
                         labelValue={labelValue}/>}
                 </div>
