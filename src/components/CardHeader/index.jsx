@@ -21,13 +21,13 @@ import NotificationPopup from '../Notification/NotificationPopup';
 import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
-    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs, upadteButtonStatus,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
-
+    // eslint-disable-next-line no-unused-vars
     function cumulativeSum (arr) {
         const result = [];
         let sum = '';
@@ -220,7 +220,7 @@ const CardHeader = ({
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
                                                 <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>
                                             </button>))
-                                    : (statusButton && ((updateButton !== '' && updateButton !== true)
+                                    : ((statusButton || upadteButtonStatus) && ((updateButton !== '' && updateButton !== true)
                                         ? (
                                             <button data-testid="update_button"
                                                 onClick={() => {
