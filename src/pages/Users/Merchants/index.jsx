@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import { useDispatch, useSelector } from 'react-redux';
 import Slugify from '../../../CommonMethods/Sulgify';
@@ -88,7 +88,7 @@ const Merchant = () => {
     /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
-    useEffect(() => {
+    useLayoutEffect(() => {
         const updatedParams = new URLSearchParams(searchParams);
 
         if (!searchParams.get('type')) {

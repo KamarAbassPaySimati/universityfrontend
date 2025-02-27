@@ -125,13 +125,6 @@ const KycVerification = () => {
             setToastError('Something went wrong!');
         }
     }, [searchParams]);
-    // const GetList = useCallback(async () => {
-    //     try {
-    //         dispatch(AdminList(searchParams));
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }, [searchParams]);
 
     useEffect(() => {
         if (error) {

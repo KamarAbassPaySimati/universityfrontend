@@ -76,6 +76,7 @@ const CardHeader = ({
     }, []);
 
     const location = useLocation();
+
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -261,33 +262,13 @@ const CardHeader = ({
                                 <button
                                     data-testid={item.key.toLowerCase()}
                                     key={index}
-                                    onClick={() => {
-                                        if (!dataLoading) {
-                                            const params = Object.fromEntries(searchParams);
-                                            if (params.type === 'merchants' || params.type === 'agents') {
-                                                const updatedParams = new URLSearchParams(searchParams);
-                                                // Set the new tab type
-                                                updatedParams.set('type', item.key.toLowerCase());
-                                                // Clear sorting parameters
-                                                updatedParams.delete('sortBy');
-                                                updatedParams.delete('order_by');
-                                                updatedParams.delete('status');
-                                                updatedParams.delete('search');
-                                                updatedParams.delete('page');
-
-                                                setSearchParams(updatedParams); // Update the search params
-                                            } else {
-                                                handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams);
-                                            }
-                                        }
-                                    }}
+                                    onClick={() => { if (!dataLoading) handleSearchParamsForKyc('type', item.key.toLowerCase(), searchParams, setSearchParams); }}
                                     className={`-py-2 h-10 text-[14px] text-neutral-primary ${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer'} ${searchParams.get('type') === item.key.toLowerCase() ? '  border-b-[1px] border-neutral-primary font-semibold' : 'font-[400]'}`}
                                 >
                                     {item.key}
                                 </button>
                             ))}
                         </div>
-
                     </div>
                 }
                 {ChildrenElement !== true
