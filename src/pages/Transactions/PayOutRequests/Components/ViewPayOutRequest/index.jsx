@@ -292,7 +292,7 @@ export default function ViewPayOutRequest () {
                         buttonColor={'bg-primary-negative'}
                         handleReason={handleReason}
                         error={submitSelected}
-                        disabled={states?.reason.trim() === ''}
+                        disabled={states?.reason?.trim() === ''}
                         setApproveModalOpen={setApproveModalOpen}
                     />
                 </div>
