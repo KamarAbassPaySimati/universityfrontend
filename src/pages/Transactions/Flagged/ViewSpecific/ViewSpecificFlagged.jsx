@@ -65,7 +65,7 @@ const ViewSpecificFlagged = () => {
             status: method
         };
         if (method === 'rejected') {
-            if (states.reason === undefined || states.reason.trim() === '') {
+            if (states.reason === undefined || states?.reason?.trim() === '') {
                 setSubmitSelected(true);
                 return;
             }
