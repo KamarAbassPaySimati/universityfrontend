@@ -4,7 +4,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
 import KYCSections from './KYCSections';
@@ -155,12 +155,57 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const handleupdatebutton = () => {
         setIsUpdateModalOpen(true);
     };
+
+    const location = useLocation();
+    const state = location.state || {};
+
+    // Function to construct query parameters dynamically
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        if (state.page) params.append('page', state.page);
+        if (state.status && state.status.trim() !== '') {
+            params.append('status', state.status);
+        }
+        if (state.type && state.type.trim() !== '') {
+            params.append('type', state.type);
+        }
+        if (state.citizen && state.citizen.trim() !== '') {
+            params.append('citizen', state.citizen);
+        }
+        if (state.fullkyc && state.fullkyc.trim() !== '') {
+            params.append('fullkyc', state.fullkyc);
+        }
+        if (state.simplifiedkyc && state.simplifiedkyc.trim() !== '') {
+            params.append('simplifiedkyc', state.simplifiedkyc);
+        }
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    // Get the base path from getPaths function
+    const { pathurls } = getPaths(viewType, role, state.status) || { pathurls: [] };
+
+    // Construct the dynamic path using getPaths result
+    const basePath = pathurls.join('/'); // Join array into a single path
+    const queryParams = constructQueryParams(state);
+
+    // Final path construction
+    const fullUrl = `${basePath}${queryParams ? `?${queryParams}` : ''}`;
+
+    // Updated pathurls array
+    const updatedPathurls = [fullUrl];
+    console.log(updatedPathurls, 'updatedPathurls');
+
     return (
         <>
             <CardHeader
                 activePath={getPaths(viewType, role).activePath}
                 paths={getPaths(viewType, role).paths}
-                pathurls={getPaths(viewType, role).pathurls}
+                pathurls={updatedPathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
                 rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}

@@ -32,7 +32,7 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                     ? <Shimmer column={8} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <MerchantTableBody key={index} user={user} index={index} GetList={GetList}/>
+                            <MerchantTableBody key={index} user={user} index={index} GetList={GetList} searchParams={searchParams}/>
                         ))}
                     </tbody>
                 }

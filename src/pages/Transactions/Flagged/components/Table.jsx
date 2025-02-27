@@ -70,7 +70,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${user.status === 'pending' ? 'pending' : 'other'}`}
-                                        onClick={() => Navigate(`/transactions/flagged/view/${user?.sender_id}/${user?.transaction_type}/${user?.id}`
+                                        onClick={() => Navigate(`/transactions/flagged/view/${user?.sender_id}/${user?.transaction_type}/${user?.id}`, { state: { page: searchParams.get('page'), FlaggedReason: searchParams.get('Flagged Reason') ? searchParams.get('Flagged Reason') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                         )} />
                                     <Tooltip
                                         id={`eye-${index}`}

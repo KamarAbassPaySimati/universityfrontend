@@ -10,7 +10,7 @@ import { handleAnswerSubmit } from '../../../../../components/Modals/AccountUnlo
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 import formatLocalPhoneNumber from '../../../../../CommonMethods/formatLocalPhoneNumber';
 
-export default function TableBody ({ user, index, GetList }) {
+export default function TableBody ({ user, index, GetList, searchParams }) {
     const Navigate = useNavigate();
     const [isUnlock, setIsUnlock] = useState(false);
     const { setToastError } = useContext(GlobalContext);
@@ -63,16 +63,20 @@ export default function TableBody ({ user, index, GetList }) {
                 </td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`
+                        onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`,
+                            { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                         )} />
                     {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
                         ? <span className='w-[24px]'></span>
                         : (
                             <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                                onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
+                                onClick={() => user?.kyc_status === 'not_started'
+                                    ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
+                                    )
+                                    : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
                             />
                         )}
-                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`)} src='report' />
+                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } })} src='report' />
                     {loadingUnlock
                         ? <div role="status">
                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin  fill-[#3B2A6F]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

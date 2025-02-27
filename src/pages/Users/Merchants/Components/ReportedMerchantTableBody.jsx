@@ -7,7 +7,7 @@ import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import formatID from '../../../../CommonMethods/formatId';
 import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 
-export default function ReportedMerchantTableBody({ user, index, GetList, setSearchParams, searchParams }) {
+export default function ReportedMerchantTableBody ({ user, index, GetList, setSearchParams, searchParams }) {
     const Navigate = useNavigate();
 
     return (
@@ -37,7 +37,8 @@ export default function ReportedMerchantTableBody({ user, index, GetList, setSea
                             if (query || activeTab) {
                                 url += `?${query ? `search=${query}` : ''}${query && activeTab ? '&' : ''}${activeTab ? `tab=${activeTab}` : ''}`;
                             }
-                            Navigate(url);
+                            Navigate(url, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
+                            );
                         }}
                     />
                     <Tooltip
