@@ -182,7 +182,7 @@ export default function ViewPayOutRequest () {
             <CardHeader
                 activePath='Pay-out Request Details'
                 paths={paths}
-                pathurls={location?.state?.type !== undefined ? pathurls : 'transactions/pay-out-requests'}
+                pathurls={location?.state?.type !== undefined ? pathurls : ['transactions/pay-out-requests']}
                 minHeightRequired={true}
                 ChildrenElement
             >
@@ -292,6 +292,7 @@ export default function ViewPayOutRequest () {
                         buttonColor={'bg-primary-negative'}
                         handleReason={handleReason}
                         error={submitSelected}
+                        disabled={states?.reason.trim() === ''}
                         setApproveModalOpen={setApproveModalOpen}
                     />
                 </div>

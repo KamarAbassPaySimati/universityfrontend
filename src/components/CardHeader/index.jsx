@@ -86,7 +86,7 @@ const CardHeader = ({
                             <span
                                 onClick={() => {
                                     if (index === 0) return; // Disable the first option
-                                    if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined) {
+                                    if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined && location.state.payoutRequest === 'payoutRequest') {
                                         // Navigate to the URL at the current index in pathurls
                                         const targetUrl = pathurls[index];
                                         navigate(`/${targetUrl}`);

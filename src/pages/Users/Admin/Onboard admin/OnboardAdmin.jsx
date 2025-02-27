@@ -10,7 +10,7 @@ import { endpoints } from '../../../../services/endpoints';
 import { dataService } from '../../../../services/data.services';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { formatInputPhone } from '../../../../CommonMethods/phoneNumberFormat';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import addBackslashBeforeApostrophe from '../../../../CommonMethods/textCorrection';
 import { useDispatch, useSelector } from 'react-redux';
 import { SpecificView } from '../Components/SpecificAdminViewSlice';
@@ -260,11 +260,46 @@ const OnboardAdmin = ({ actionKey }) => {
             getAdminView();
         }
     }, []);
+
+    const location = useLocation();
+    const state = location.state || {};
+
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        // Always include 'page' if it exists
+        if (state.page) params.append('page', state.page);
+
+        // Include 'role' only if it is non-empty
+        if (state.role && state.role.trim() !== '') {
+            params.append('role', state.role);
+        }
+
+        // Include 'status' only if it is non-empty
+        if (state.status && state.status.trim() !== '') {
+            params.append('status', state.status);
+        }
+
+        // Include 'search' only if it is non-empty
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    // Construct the full URL with query parameters
+    const queryParams = constructQueryParams(state);
+    const fullUrl = `users/admins${queryParams ? `?${queryParams}` : ''}`;
+
+    // Update the pathurls array
+    const pathurls = [fullUrl];
+
     return (
         <CardHeader
             activePath={actionKey === 'update' ? 'Update Admin' : 'Register Admin'}
             paths={['Users', 'Admins']}
-            pathurls={['users/admins']}
+            pathurls={pathurls}
             header={actionKey === 'update' ? 'Update Admin' : 'Register Admin'}
             minHeightRequired={true}
         >
