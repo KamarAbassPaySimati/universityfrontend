@@ -49,11 +49,13 @@ const CardHeader = ({
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false); // New loading state
     const [page, setPage] = useState(1);
+    const [notificationMessage, setNotificationMessage] = useState('');
 
     const fetchNotificationData = async (pageNumber) => {
         try {
             setLoading(true); // Set loading state to true before API call
             const res = await dataService.GetAPI(`admin-users/notifications?page=${pageNumber}`);
+            setNotificationMessage(res.data.message);
             const newData = res.data.data;
             if (res.data.nextPage === null) {
                 setHasMore(false);
@@ -85,7 +87,9 @@ const CardHeader = ({
                                 onClick={() => {
                                     if (index === 0) return; // Disable the first option
                                     if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined) {
-                                        navigate(-1); // Use the correct index
+                                        // Navigate to the URL at the current index in pathurls
+                                        const targetUrl = pathurls[index];
+                                        navigate(`/${targetUrl}`);
                                     } else {
                                         navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
                                     }
@@ -133,6 +137,7 @@ const CardHeader = ({
                             notificationData={notificationData}
                             fetchNotificationData={fetchNotificationData}
                             hasMore={hasMore}
+                            notificationMessage={notificationMessage}
                         />}
                     <Image onClick={() => navigate('/profile')} className='profile cursor-pointer ml-9' src='profile' />
                     <Tooltip

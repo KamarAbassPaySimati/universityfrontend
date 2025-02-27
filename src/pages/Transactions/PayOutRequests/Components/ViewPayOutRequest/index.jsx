@@ -12,12 +12,14 @@ import { dataService } from '../../../../../services/data.services';
 import { PayOutRequestView } from './ViewPayOutRequeSlice';
 import PayoutConformationPopup from '../../../../../components/ConfirmationPopup/PayoutConformationPopup';
 import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
+import IframeModal from '../../../../../components/Iframe/IframeModal';
 
 export default function ViewPayOutRequest () {
     const dispatch = useDispatch();
     const { id } = useParams();
     const location = useLocation();
     const [BankDropDownValue, setBankDropDownValue] = useState([]);
+    const [showIframe, setShowIframe] = useState(false);
     const getBankTypes = async () => {
         try {
             const response = await dataService.GetAPI('admin-users/list-trust-bank');
@@ -67,15 +69,33 @@ export default function ViewPayOutRequest () {
         prevLocationRef.current = location;
     }, [location]);
 
-    const type = location?.state?.type;
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
 
+        // Always include 'type' and 'page' if they exist
+        if (state.type) params.append('type', state.type);
+        if (state.page) params.append('page', state.page);
+
+        // Include 'search' only if it is non-empty
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    const type = location?.state?.type;
     const dynamicPath = type === 'merchants' ? 'Merchants' : type === 'agents' ? 'Agents' : '';
     const paths = ['Transactions', 'Pay-out Requests', ...(dynamicPath ? [dynamicPath] : [])];
+
+    // Construct the base URL with query parameters
+    const queryParams = constructQueryParams(location?.state || {});
+    const baseUrlWithQuery = `transactions/pay-out-requests${queryParams ? `?${queryParams}` : ''}`;
+
     const pathurls = [
         'transactions/pay-out-requests',
         'transactions/pay-out-requests',
-        ...(type === 'merchants' ? ['transactions/pay-out-requests?type=merchants'] : ['']),
-        ...(type === 'agents' ? ['transactions/pay-out-requests?type=agents'] : ['transactions/pay-out-requests'])
+        ...(type ? [baseUrlWithQuery] : ['']) // Add the base URL with query parameters if type exists
     ];
 
     const getView = () => {
@@ -85,6 +105,7 @@ export default function ViewPayOutRequest () {
             console.error(error);
         }
     };
+
     useEffect(() => {
         getView();
         getBankTypes();
@@ -107,7 +128,8 @@ export default function ViewPayOutRequest () {
                     transaction_id: View?.transaction_id,
                     pop_file_key: states?.pop_file_key,
                     transaction_code: states?.transaction_code,
-                    pop_file_ref_no: states?.pop_file_ref_no
+                    pop_file_ref_no: states?.pop_file_ref_no,
+                    reason: states?.reason
                 };
                 switch (states.transaction_code) {
                 case 'Pay-out to Agent from  PTBA1 | EM credit to PMCAT':
@@ -149,6 +171,10 @@ export default function ViewPayOutRequest () {
         const newValue = event.target.value;
         setSubmitSelected(false);
         setState((prevState) => ({ ...prevState, reason: newValue }));
+    };
+    const handleOpenIfram = (key) => {
+        setShowIframe(key);
+        setApproveModalOpen(!key);
     };
 
     return (
@@ -266,6 +292,7 @@ export default function ViewPayOutRequest () {
                         buttonColor={'bg-primary-negative'}
                         handleReason={handleReason}
                         error={submitSelected}
+                        setApproveModalOpen={setApproveModalOpen}
                     />
                 </div>
             </Modal>
@@ -283,9 +310,13 @@ export default function ViewPayOutRequest () {
                         states={states}
                         setState={setState}
                         Felids={Felids}
+                        viewOutside={handleOpenIfram}
                     />
                 </div>
             </Modal>
+            <IframeModal
+                isOpen={showIframe} handleClose={() => handleOpenIfram(false)} link={states.pop_file_key}
+                labelValue={'Transaction POP'}/>
         </>
 
     );

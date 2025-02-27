@@ -35,7 +35,6 @@ const ViewPayOutRequestSlice = createSlice({
             })
             .addCase(PayOutRequestView.fulfilled, (state, action) => {
                 state.loading = false;
-                console.log('action.payload', action.payload);
                 if (!action.payload.error) {
                     state.View = action?.payload?.data;
                     console.log('state?.View', state?.View);
