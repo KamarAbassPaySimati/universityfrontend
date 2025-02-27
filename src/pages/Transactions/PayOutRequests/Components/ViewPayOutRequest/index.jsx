@@ -69,15 +69,33 @@ export default function ViewPayOutRequest () {
         prevLocationRef.current = location;
     }, [location]);
 
-    const type = location?.state?.type;
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
 
+        // Always include 'type' and 'page' if they exist
+        if (state.type) params.append('type', state.type);
+        if (state.page) params.append('page', state.page);
+
+        // Include 'search' only if it is non-empty
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    const type = location?.state?.type;
     const dynamicPath = type === 'merchants' ? 'Merchants' : type === 'agents' ? 'Agents' : '';
     const paths = ['Transactions', 'Pay-out Requests', ...(dynamicPath ? [dynamicPath] : [])];
+
+    // Construct the base URL with query parameters
+    const queryParams = constructQueryParams(location?.state || {});
+    const baseUrlWithQuery = `transactions/pay-out-requests${queryParams ? `?${queryParams}` : ''}`;
+
     const pathurls = [
         'transactions/pay-out-requests',
         'transactions/pay-out-requests',
-        ...(type === 'merchants' ? ['transactions/pay-out-requests?type=merchants'] : ['']),
-        ...(type === 'agents' ? ['transactions/pay-out-requests?type=agents'] : ['transactions/pay-out-requests'])
+        ...(type ? [baseUrlWithQuery] : ['']) // Add the base URL with query parameters if type exists
     ];
 
     const getView = () => {
@@ -87,6 +105,7 @@ export default function ViewPayOutRequest () {
             console.error(error);
         }
     };
+
     useEffect(() => {
         getView();
         getBankTypes();

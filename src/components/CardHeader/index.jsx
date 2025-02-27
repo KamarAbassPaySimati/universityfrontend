@@ -85,10 +85,11 @@ const CardHeader = ({
                             <span
                                 onClick={() => {
                                     if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined) {
-                                        navigate(-1); // Use the correct index
+                                        // Navigate to the URL at the current index in pathurls
+                                        const targetUrl = pathurls[index];
+                                        navigate(`/${targetUrl}`);
                                     } else {
-                                        // navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
-                                        navigate(-1);
+                                        navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
                                     }
                                 }}
                                 className="text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary cursor-pointer">
