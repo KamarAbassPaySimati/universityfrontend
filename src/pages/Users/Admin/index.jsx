@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import AdminTable from './Components/AdminTable';
@@ -71,6 +71,7 @@ const Admin = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
@@ -81,7 +82,7 @@ const Admin = () => {
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
         } else {

@@ -32,14 +32,14 @@ const ReportedMerchantTable = ({ loading, error, List, notFound, searchParams, s
                     </thead>
                 }
                 <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
-                    {List?.data?.map((user, index) => (
+                    {List && List?.data?.map((user, index) => (
                         <ReportedMerchantTableBody key={index} user={user} index={index} GetList={GetList} setSearchParams={setSearchParams} searchParams={searchParams} />
                     ))}
                 </tbody>
             </table>
             {!notFound && error &&
                 (<NoDataError heading='No merchants reported yet' text='please check back later' />)}
-            {List?.data?.length === 0 && !loading &&
+            {List && List?.data?.length === 0 && !loading &&
                 (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                 (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
         </>
