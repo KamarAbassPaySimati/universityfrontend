@@ -42,6 +42,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const UpdateStatusList = ['Pending Investigation', 'Under Review', 'Resolved', 'Banned'];
 
+    console.log(View, 'View');
+
     const getView = () => {
         try {
             dispatch(KYCProfileView(getApiurl(id, viewType, role)), viewType);
@@ -63,6 +65,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const handleClose = () => {
         setError(false);
         setIsApprovalModalOpen(false);
+        setIsUpdateModalOpen(false);
     };
     const toggleExpand = () => {
         setIsExpanded(prevState => !prevState);
@@ -81,6 +84,25 @@ export default function KYCView ({ role, viewType, getStatusText }) {
             setError(true);
             return;
         }
+        if (viewType === 'Reported_merchants') {
+            try {
+                setIsLoading(true);
+                const payload = {
+                    status: inputValue,
+                    reason: 'qqq'
+                };
+
+                const response = await dataService.PatchAPI(
+                    `admin-users/reported-merchants/${View?.id}`,
+                    payload // Send payload in the request body
+                );
+
+                console.log('Response:', response);
+            } catch (error) {
+                console.error('Error updating status:', error);
+            }
+        }
+
         if (viewType !== 'DeleteAccount') {
             try {
                 setIsLoading(true);
@@ -155,6 +177,12 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const handleupdatebutton = () => {
         setIsUpdateModalOpen(true);
     };
+
+    const handleUpdateStatus = (selectedValue) => {
+        setError(false);
+        setInputValue(selectedValue);
+    };
+
     return (
         <>
             <CardHeader
@@ -836,15 +864,13 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                         updateStatus={viewType === 'Reported_merchants'
                             ? (
                                 UpdateStatusList.map((radioItem) => (
-                                    (
-                                        <InputTypeRadio
-                                            id={radioItem}
-                                            label={radioItem}
-                                            key={radioItem}
-                                            checkedState={radioItem}
-                                            // handleRadioButton={() => handleStates(radioItem, 'personal_customer')}
-                                        />
-                                    )
+                                    <InputTypeRadio
+                                        id={radioItem}
+                                        label={radioItem}
+                                        key={radioItem}
+                                        checkedState={inputValue === radioItem} // Check if selected
+                                        handleRadioButton={() => handleUpdateStatus(radioItem)}
+                                    />
                                 ))
                             )
                             : undefined}
@@ -859,8 +885,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 placeholder={viewType === 'Reported_merchants' ? 'Add a note' : 'Enter Reason'}
                             />
 
-                            {error && <ErrorMessage error={'Required field'} />
-                            }
+                            {error && <ErrorMessage error={'Required field'} />}
                         </>)}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}

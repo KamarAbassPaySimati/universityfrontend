@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from '../Button/Button';
 
-export default function ConfirmationPopup ({ message, buttonWidth, messageStyle, CancelButtonText, title, handleSubmit, isLoading, handleClose, buttonColor, buttonText, Reason, handleReason, handleUpdateStatus, updateStatus, setApproveModalOpen }) {
+export default function ConfirmationPopup({ message, buttonWidth, messageStyle, CancelButtonText, title, handleSubmit, isLoading, handleClose, buttonColor, buttonText, Reason, handleReason, handleUpdateStatus, updateStatus, setApproveModalOpen }) {
     return (
         <div className="p-6 w-[550px] bg-white rounded-[8px] " data-testid="modal">
             <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
@@ -15,6 +15,7 @@ export default function ConfirmationPopup ({ message, buttonWidth, messageStyle,
                 {updateStatus}
             </div>
             <div onChange={() => handleReason(event)}>
+                {console.log(event, 'jfjfjfjf')}
                 {Reason}
             </div>
             {/* {error && <ErrorMessage error={'Required field'} />} */}
