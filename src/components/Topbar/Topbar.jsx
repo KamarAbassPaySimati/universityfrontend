@@ -28,6 +28,7 @@ const Topbar = ({
 
 }) => {
     const [timer, setTimer] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
 
     const handleSearch = (e) => {
@@ -77,11 +78,13 @@ const Topbar = ({
     const handleClearSearch = () => {
         setSearch('');
         handleSearchParams('search', '');
+        setErrorMessage('');
     };
+
     useEffect(() => {
-       if (searchParams.get('search') === null) {
-        setSearch('');
-       }
+        if (searchParams.get('search') === null) {
+            setSearch('');
+        }
     }, [searchParams]);
 
     const handleClearFilter = () => {
@@ -102,6 +105,7 @@ const Topbar = ({
         delete params.end_date;
         setSearchParams({ ...params });
     };
+
     const handleClearFilterForSingleCheck = () => {
         // Reset filterValues to an empty object or default values
         const params = Object.fromEntries(searchParams);
@@ -119,13 +123,13 @@ const Topbar = ({
     };
 
     return (
-        <div className="relative my-2  ">
+        <div className="relative my-2">
             <input
                 type="text"
                 value={search}
                 data-testid="search"
                 onChange={handleSearch}
-                placeholder= {placeHolder}
+                placeholder={placeHolder}
                 className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
                 outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[360px] ml-4 pr-8 rounded-[4px]
                 ${search?.length > 0 ? 'bg-[#F8F8F8]' : ''}`}
@@ -146,7 +150,7 @@ const Topbar = ({
                     ? <MultiFilter
                             filterOptions={filterOptions}
                             filterType={filterType}
-                            handleApplySearchParams={ null } // write a function to apply the seach params
+                            handleApplySearchParams={null} // write a function to apply the seach params
                             searchParams={searchParams}
                             filterActive={filterActive}
                             setSearchParams={setSearchParams}
@@ -156,7 +160,9 @@ const Topbar = ({
                             initialState={initialState}
                             pageNumber={pageNumber}
                             merchant={merchant}
-                     />
+                            setErrorMessage={setErrorMessage}
+                            errorMessage={errorMessage}
+                    />
                     : singleSelectFilter
                         ? <FilterWithSingleOption
                                 filterOptionOne={filter1}
