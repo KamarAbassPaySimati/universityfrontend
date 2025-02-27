@@ -149,6 +149,7 @@ const ViewTransactionList = ({ type }) => {
                             className='!w-[117px]'
                             isLoading={exportLoading}
                             onClick={handleExport}
+                            disabled={List?.transactions?.length === 0}
                         />
                     </div>
 
@@ -165,7 +166,7 @@ const ViewTransactionList = ({ type }) => {
                                     setSearchParams={setSearchParams}
                                     searchParams={searchParams}
                                     filterOptions={filterOptions}
-                                    placeHolder="Transaction ID or recipient Paymaart ID"
+                                    placeHolder="Transaction ID or Beneficiary Paymaart ID"
                                     filterType='Filter Transaction History'
                                     isLoading={loading}
                                     filterActive={(searchParams.get('transaction_type') !== null) && searchParams.get('start_date') !== null && searchParams.get('end_date') !== null}

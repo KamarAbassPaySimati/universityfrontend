@@ -27,7 +27,7 @@ const CardHeader = ({
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
-    // eslint-disable-next-line no-unused-vars
+
     function cumulativeSum (arr) {
         const result = [];
         let sum = '';
@@ -84,6 +84,7 @@ const CardHeader = ({
                         <div key={index} className='flex'>
                             <span
                                 onClick={() => {
+                                    if (index === 0) return; // Disable the first option
                                     if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined) {
                                         // Navigate to the URL at the current index in pathurls
                                         const targetUrl = pathurls[index];
@@ -92,7 +93,10 @@ const CardHeader = ({
                                         navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
                                     }
                                 }}
-                                className="text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary cursor-pointer">
+                                className={`text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary ${
+                                    index === 0 ? 'cursor-default' : 'cursor-pointer'
+                                }`}
+                            >
                                 {path}
                             </span>
                             <Image src='chevron-right' />
