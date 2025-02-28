@@ -36,7 +36,7 @@ const TransactionsLog = () => {
             url += `&page=${searchParams.get('page')}`;
         }
         if (searchParams.get('search') !== null) {
-            url += `&search=${searchParams.get('search')}`;
+            url += `&search=${encodeURIComponent(searchParams.get('search'))}`;
         }
         if (searchParams.get('order_by') !== null) {
             url += `&order_by=${searchParams.get('order_by')}`;
