@@ -22,7 +22,8 @@ const ViewTransactionList = ({ type }) => {
     const [notFound, setNotFound] = useState(false);
     const [exportLoading, setExportloading] = useState(false);
     const { id } = useParams();
-    const navigate = useNavigate();    const location = useLocation();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [state, setState] = useState(location.state || {});
 
     // Ensure `state` is updated only once, preserving it across re-renders
