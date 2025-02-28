@@ -54,7 +54,7 @@ const KycVerification = () => {
             url += `page=${searchParams.get('page')}`;
         }
         if (searchParams.get('search') !== null) {
-            url += `&search=${searchParams.get('search')}`;
+            url += `&search=${encodeURIComponent(searchParams.get('search'))}`;
         }
         if (searchParams.get('sortOrder') !== null) {
             url += `&sortOrder=${searchParams.get('sortOrder')}`;

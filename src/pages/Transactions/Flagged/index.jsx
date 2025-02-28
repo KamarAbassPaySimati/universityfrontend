@@ -51,7 +51,7 @@ const Flagged = () => {
                     return key; // Return the key if found
                 }).filter(key => key !== undefined));
             }
-            const endPoint = `page=${searchParams.get('page') || '1'}${searchParams.get('Flagged Reason') === null ? '' : `&reasons=${params.reasons}`}${searchParams.get('search') !== null ? `&search=${searchParams.get('search')}` : ''}`;
+            const endPoint = `page=${searchParams.get('page') || '1'}${searchParams.get('Flagged Reason') === null ? '' : `&reasons=${params.reasons}`}${searchParams.get('search') !== null ? `&search=${encodeURIComponent(searchParams.get('search'))}` : ''}`;
             dispatch(FlaggedList(endPoint));
         } catch (error) {
             console.error(error);
