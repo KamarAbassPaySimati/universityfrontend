@@ -176,7 +176,7 @@ const ViewTransactionList = ({ type }) => {
                             className='!w-[117px]'
                             isLoading={exportLoading}
                             onClick={handleExport}
-                            disabled={List?.transactions?.length === 0}
+                            disabled={List?.transactions?.length === 0 || loading}
                         />
                     </div>
 

@@ -15,7 +15,6 @@ export default function ConfirmationPopup ({ message, buttonWidth, messageStyle,
                 {updateStatus}
             </div>
             <div onChange={() => handleReason(event)}>
-                {console.log(event, 'jfjfjfjf')}
                 {Reason}
             </div>
             {/* {error && <ErrorMessage error={'Required field'} />} */}
