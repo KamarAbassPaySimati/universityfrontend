@@ -135,7 +135,6 @@ const ViewTransactionList = ({ type }) => {
     const queryParams = constructQueryParams(state);
     const fullUrl = `${basePath}${queryParams ? `?${queryParams}` : ''}`;
     const pathurl = [fullUrl];
-
     return (
         <CardHeader
             activePath={'Transaction History'}
