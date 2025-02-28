@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import ProfileName from '../../../../components/ProfileName/ProfileName';
 import Button from '../../../../components/Button/Button';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Topbar from '../../../../components/Topbar/Topbar';
 import { useDispatch, useSelector } from 'react-redux';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
@@ -18,10 +18,11 @@ import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import getInitials from '../../../../CommonMethods/getInitials';
 
 const ViewTransactionList = ({ type }) => {
-    const [searchParams, setSearchParams] = useSearchParams({ });
+    const [searchParams, setSearchParams] = useSearchParams({});
     const [notFound, setNotFound] = useState(false);
     const [exportLoading, setExportloading] = useState(false);
     const { id } = useParams();
+    const navigate = useNavigate();
     const location = useLocation();
     const [state, setState] = useState(location.state || {});
 
@@ -72,11 +73,15 @@ const ViewTransactionList = ({ type }) => {
 
     const GetList = useCallback(async () => {
         try {
-            dispatch(AgentTransactionHistoryList({ searchParams, id, type }));
+            dispatch(AgentTransactionHistoryList({ searchParams, id, type, handleRedirection }));
         } catch (error) {
             console.error(error);
         }
     }, [searchParams]);
+
+    const handleRedirection = () => {
+        navigate('/404');
+    };
 
     useEffect(() => {
         if (error) {
@@ -188,51 +193,51 @@ const ViewTransactionList = ({ type }) => {
 
                     <div className={`relative ${notFound || List?.transactions?.length === 0 ? '' : 'thead-border-bottom'}`}>
                         {(!notFound && List?.transactions?.length === 0 &&
-                        searchParams.get('transaction_type') === null &&
-                    searchParams.get('search') === null && searchParams.get('start_date') === null && searchParams.get('end_date') === null)
+                            searchParams.get('transaction_type') === null &&
+                            searchParams.get('search') === null && searchParams.get('start_date') === null && searchParams.get('end_date') === null)
                             ? (
                                 <></>
                             )
                             : (!notFound &&
-                            <div className='bg-[#fff] border-b border-neutral-outline'>
-                                <Topbar
-                                    setSearchParams={setSearchParams}
-                                    searchParams={searchParams}
-                                    filterOptions={filterOptions}
-                                    placeHolder="Transaction ID or Beneficiary Paymaart ID"
-                                    filterType='Filter Transaction History'
-                                    isLoading={loading}
-                                    filterActive={(searchParams.get('transaction_type') !== null) && searchParams.get('start_date') !== null && searchParams.get('end_date') !== null}
-                                    multiFilter={true}
-                                    setAppliedFilter={setAppliedFilter}
-                                    appliedFilter={appliedFilter}
-                                    customClass={true}
-                                    initialState={initailState}
-                                    merchant={true}
+                                <div className='bg-[#fff] border-b border-neutral-outline'>
+                                    <Topbar
+                                        setSearchParams={setSearchParams}
+                                        searchParams={searchParams}
+                                        filterOptions={filterOptions}
+                                        placeHolder="Transaction ID or Beneficiary Paymaart ID"
+                                        filterType='Filter Transaction History'
+                                        isLoading={loading}
+                                        filterActive={(searchParams.get('transaction_type') !== null) && searchParams.get('start_date') !== null && searchParams.get('end_date') !== null}
+                                        multiFilter={true}
+                                        setAppliedFilter={setAppliedFilter}
+                                        appliedFilter={appliedFilter}
+                                        customClass={true}
+                                        initialState={initailState}
+                                        merchant={true}
 
-                                />
-                            </div>)
+                                    />
+                                </div>)
                         }
                         {!notFound && !(List?.transactions?.length === 0 && !loading &&
-                !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null)) &&
-                <div className='overflow-auto scrollBar h-tableHeight'>
-                    <TransactionTable
-                        error={error}
-                        loading={loading}
-                        List={List}
-                        setSearchParams={setSearchParams}
-                        notFound={notFound}
-                        searchParams={searchParams}
-                        paymaartId={id}
-                        type={type}
-                    />
-                </div>}
+                            !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null)) &&
+                            <div className='overflow-auto scrollBar h-tableHeight'>
+                                <TransactionTable
+                                    error={error}
+                                    loading={loading}
+                                    List={List}
+                                    setSearchParams={setSearchParams}
+                                    notFound={notFound}
+                                    searchParams={searchParams}
+                                    paymaartId={id}
+                                    type={type}
+                                />
+                            </div>}
                         {notFound &&
-                        <NoDataError
-                            className='h-noDataError1' heading='No data found' text = "404 could not find what you are looking for."/>}
+                            <NoDataError
+                                className='h-noDataError1' heading='No data found' text="404 could not find what you are looking for." />}
                         {List?.transactions?.length === 0 && !loading &&
-                !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null) &&
-                (<NoDataError className='h-noDataError1' heading='No transaction history to view yet' text='Please check back later' />)}
+                            !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null) &&
+                            (<NoDataError className='h-noDataError1' heading='No transaction history to view yet' text='Please check back later' />)}
                         {!loading && !error && !notFound && List?.transactions?.length !== 0 && <Paginator
                             currentPage={searchParams.get('page')}
                             totalPages={Math.ceil(List?.total_records / 10)}

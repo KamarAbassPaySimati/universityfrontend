@@ -53,7 +53,7 @@ When('I click on the sort by {string}', async function (sortBy) {
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
     case 'Merchant Name':
-        console.log('entering to sort')
+        console.log('entering to sort');
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_merchant_name"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
@@ -67,6 +67,10 @@ When('I click on the sort by {string}', async function (sortBy) {
         break;
     case 'Reported Date':
         await driver.wait(until.elementLocated(By.css('[data-testid="sort_reported_date"]'))).click();
+        await new Promise(resolve => setTimeout(resolve, 500));
+        break;
+    case 'Requested Date':
+        await driver.wait(until.elementLocated(By.css('[data-testid="sort_submission_date"]'))).click();
         await new Promise(resolve => setTimeout(resolve, 500));
         break;
     default:
