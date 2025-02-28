@@ -21,6 +21,7 @@ const Merchant = () => {
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.merchantUsers);
     const currentTab = searchParams.get('type') || 'all merchants';
+
     // Initialize toggle buttons based on searchParams
     const [toggleButtons, setToggleButtons] = useState([
         { key: 'All Merchants', status: currentTab === 'all merchants' },
@@ -69,21 +70,15 @@ const Merchant = () => {
 
     useEffect(() => {
         if (error) {
-            if (error.status === 400) {
-                setNotFound(true);
-            } else {
-                setToastError('Something went wrong!');
-            }
+            error.status === 400 ? setNotFound(true) : setToastError('Something went wrong!');
         }
-    }, [error]);
 
-    useEffect(() => {
-        const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
             setNotFound(false);
+            const params = Object.fromEntries(searchParams);
             params.page = 1;
         }
-    }, [List]);
+    }, [error, List]);
 
     /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
@@ -187,7 +182,7 @@ const Merchant = () => {
                     !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                     (<NoDataError className='h-noDataError'
                         heading='No data found' text='Click “Register Merchant ” to add merchant' />)}
-                {!loading && !error && !notFound && List?.data?.length !== 0 && <Paginator
+                {List?.data?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
                     setSearchParams={setSearchParams}

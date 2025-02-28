@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 /* eslint-disable camelcase */
 const assert = require('assert');
 const { Given, When, Then } = require('@cucumber/cucumber');
@@ -188,7 +190,7 @@ When('I click on view reported merchant', async function () {
 });
 Then('I should see all the valid details of reported merchant', async function () {
     await new Promise(resolve => setTimeout(resolve, 500));
-    console.log(id ,merchant_name ,phone_number,email,"values" )
+    console.log(id, merchant_name, phone_number, email, 'values');
     const pageSource = await driver.getPageSource();
     pageSource.includes(id);
     pageSource.includes(merchant_name);
