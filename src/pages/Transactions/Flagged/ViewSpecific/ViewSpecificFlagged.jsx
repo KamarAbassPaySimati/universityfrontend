@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import React, { useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import Modal from 'react-responsive-modal';
 import ConfirmationPopup from '../../../../components/ConfirmationPopup/ConfirmationPopup';
@@ -65,7 +65,7 @@ const ViewSpecificFlagged = () => {
             status: method
         };
         if (method === 'rejected') {
-            if (states.reason === undefined || states.reason === '') {
+            if (states.reason === undefined || states?.reason?.trim() === '') {
                 setSubmitSelected(true);
                 return;
             }
@@ -135,12 +135,41 @@ const ViewSpecificFlagged = () => {
         getFlaggedDetails();
     }, []);
 
+    const location = useLocation();
+    const state = location.state || {};
+
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        // Always include 'page' if it exists
+        if (state.page) params.append('page', state.page);
+
+        // Include 'Flagged Reason' only if it is non-empty
+        if (state.FlaggedReason && state.FlaggedReason.trim() !== '') {
+            params.append('Flagged Reason', state.FlaggedReason);
+        }
+
+        // Include 'search' only if it is non-empty
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    // Construct the full URL with query parameters
+    const queryParams = constructQueryParams(state);
+    const fullUrl = `transactions/flagged${queryParams ? `?${queryParams}` : ''}`;
+
+    // Update the pathurls array
+    const pathurls = [fullUrl];
+
     return (
         <>
             <CardHeader
                 activePath='Flagged Details'
                 paths={['Transactions', 'Flagged ']}
-                pathurls={['transactions/flagged']}
+                pathurls={pathurls} // Pass the dynamically constructed pathurls
                 minHeightRequired={true}
                 ChildrenElement
             >
@@ -419,7 +448,7 @@ const ViewSpecificFlagged = () => {
                                     <p className='text-neutral-secondary'>Flagged Reason</p>
                                     {isLoading
                                         ? <TransactionDetailsShimmer col={1} />
-                                        : flaggedDetails?.reasons.map((reason, index) => (
+                                        : flaggedDetails?.reasons?.map((reason, index) => (
                                             <p key={index} className='text-neutral-primary'>{index + 1}. {reasonsKey?.[reason] || '-'}</p>
                                         ))}
                                 </div>

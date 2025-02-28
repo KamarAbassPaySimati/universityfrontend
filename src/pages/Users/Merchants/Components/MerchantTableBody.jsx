@@ -10,7 +10,7 @@ import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQ
 import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 
-export default function MerchantTableBody ({ user, index, GetList }) {
+export default function MerchantTableBody ({ user, index, GetList, searchParams }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const [isUnlock, setIsUnlock] = useState(false);
@@ -72,16 +72,27 @@ export default function MerchantTableBody ({ user, index, GetList }) {
                 </td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`
+                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`,
+                            { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                         )} />
                     {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
                         ? <span className='w-[24px]'></span>
                         : (
                             <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                                onClick={() => user?.kyc_status === 'not_started' ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`) : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`)}
+                                onClick={() => user?.kyc_status === 'not_started'
+                                    ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`,
+                                        { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
+
+                                    )
+                                    : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`,
+                                        { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
+                                    )}
                             />
                         )}
-                    <Image testId={`merchant-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/merchants/merchants-transaction-histories/${user?.paymaart_id}`)} src='report' />
+                    <Image testId={`merchant-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/merchants/merchants-transaction-histories/${user?.paymaart_id}`,
+                        { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
+
+                    )} src='report' />
                     {loadingUnlock
                         ? <div role="status">
                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin  fill-[#3B2A6F]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

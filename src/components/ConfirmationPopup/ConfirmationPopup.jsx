@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from '../Button/Button';
 
-export default function ConfirmationPopup({ message, buttonWidth, messageStyle, CancelButtonText, title, handleSubmit, isLoading, handleClose, buttonColor, buttonText, Reason, handleReason, handleUpdateStatus, updateStatus, setApproveModalOpen }) {
+export default function ConfirmationPopup ({ message, buttonWidth, messageStyle, CancelButtonText, title, handleSubmit, isLoading, handleClose, buttonColor, buttonText, Reason, handleReason, handleUpdateStatus, updateStatus, setApproveModalOpen, disabled }) {
     return (
         <div className="p-6 w-[550px] bg-white rounded-[8px] " data-testid="modal">
             <h1 data-testid="modal-title" className="text-[20px] leading-[28px] font-[400] text-neutral-primary pb-2 border-b border-neutral-outline">
@@ -35,6 +35,7 @@ export default function ConfirmationPopup({ message, buttonWidth, messageStyle, 
                         text={`${buttonText === undefined || buttonText === null ? 'Confirm' : buttonText}`}
                         testId="confirm_button"
                         buttonColor={buttonColor}
+                        disabled={disabled}
                     />
                 </div>
             </div>

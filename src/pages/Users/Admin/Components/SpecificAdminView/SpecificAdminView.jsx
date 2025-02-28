@@ -2,7 +2,7 @@
 /* eslint-disable max-len */
 import React, { useContext, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { SpecificView } from '../SpecificAdminViewSlice';
 import CardHeader from '../../../../../components/CardHeader';
 import ProfileName from '../../../../../components/ProfileName/ProfileName';
@@ -64,12 +64,47 @@ export default function SpecificAdminView () {
             setToastError('Something went wrong!');
         }
     };
+
+    const location = useLocation();
+    const state = location.state || {};
+
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        // Always include 'page' if it exists
+        if (state.page) params.append('page', state.page);
+
+        // Include 'role' only if it is non-empty
+        if (state.role && state.role.trim() !== '') {
+            params.append('role', state.role);
+        }
+
+        // Include 'status' only if it is non-empty
+        if (state.status && state.status.trim() !== '') {
+            params.append('status', state.status);
+        }
+
+        // Include 'search' only if it is non-empty
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    // Construct the full URL with query parameters
+    const queryParams = constructQueryParams(state);
+    const fullUrl = `users/admins${queryParams ? `?${queryParams}` : ''}`;
+
+    // Update the pathurls array
+    const pathurls = [fullUrl];
+
     return (
         <>
             <CardHeader
                 activePath='Admin Profile'
                 paths={['Users', 'Admins']}
-                pathurls={['users/admins']}
+                pathurls={pathurls}
                 header='Admin Profile'
                 minHeightRequired={true}
                 updateButton={loading || 'Update'}
