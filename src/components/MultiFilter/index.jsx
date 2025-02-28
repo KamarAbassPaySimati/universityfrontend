@@ -20,12 +20,14 @@ const MultiFilter = ({
     setAppliedFilter,
     customClass,
     initialState,
-    pageNumber
+    pageNumber,
+    merchant,
+    setErrorMessage,
+    errorMessage
 }) => {
     const filterDiv = useRef();
 
     const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [dateRange, setDateRange] = useState({
         start_date: new Date(Number(searchParams.get('start_date'))).getTime() * 1000,
         end_date: new Date(Number(searchParams.get('end_date'))).getTime() * 1000
@@ -44,6 +46,7 @@ const MultiFilter = ({
             'Pay Afrimax': 'afrimax',
             'Pay Merchant': 'merchant',
             'Interest Earned': 'interest',
+            'Customer payments': 'customer_payments',
             Refund: 'refund',
             Other: 'other'
         };
@@ -127,6 +130,7 @@ const MultiFilter = ({
         delete params.start_date;
         delete params.end_date;
         setSearchParams({ ...params });
+        setErrorMessage('');
     };
 
     const handleStates = (value, id) => {
@@ -136,6 +140,7 @@ const MultiFilter = ({
 
     useOnClickOutside(filterDiv, () => {
         setIsFilterOpen(false);
+        setErrorMessage('');
     });
 
     return (
@@ -144,7 +149,32 @@ const MultiFilter = ({
                 src={`${filterActive ? 'active_' : ''}filter_icon`}
                 testId='filter-tab'
                 className={'filter_icon absolute top-1/2 -translate-y-1/2 right-6 cursor-pointer'}
-                onClick={() => setIsFilterOpen(prevState => !prevState)}
+                onClick={() => {
+                    if (!searchParams.get('start_date') && !searchParams.get('end_date')) {
+                        setDateRange('');
+                    }
+
+                    if (!searchParams.get('transaction_type')) {
+                        const updatedFilters = { ...appliedFilter }; // Copy applied filters
+                        let hasChanges = false;
+
+                        // Iterate over 'transaction-type' filter options
+                        Object.keys(appliedFilter['transaction-type']).forEach(option => {
+                            if (appliedFilter['transaction-type'][option] === true) {
+                                updatedFilters['transaction-type'][option] = false; // Reset filter
+                                hasChanges = true;
+                            }
+                        });
+
+                        // Only update state if changes were made
+                        if (hasChanges) {
+                            setAppliedFilter(updatedFilters);
+                        }
+                    }
+
+                    setIsFilterOpen(prevState => !prevState);
+                }}
+
             />
             <Tooltip
                 className='my-tooltip'
@@ -158,7 +188,7 @@ const MultiFilter = ({
                         <div className='font-semibold'>
                             {filterType}
                         </div>
-                        <button data-testid="clear-filter" onClick={() => { setIsFilterOpen(false); handleClearFilter(); } } className='font-[400]'>
+                        <button data-testid="clear-filter" onClick={() => { setIsFilterOpen(false); handleClearFilter(); }} className='font-[400]'>
                             Clear
                         </button>
                     </div>
@@ -189,12 +219,12 @@ const MultiFilter = ({
                     </div>
                     <div className='ml-6 mb-2'><ErrorMessage error={errorMessage} /></div>
                     <div className='p-4 pl-6 flex flex-col gap-4'>
-                        { Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
+                        {Object.keys(filterOptions).map((key) => ( // go through the number of keys  (for eg role, status)
                             <div key={key}>
                                 <div className='font-semibold mb-2 capitalize'>
                                     {key}
                                 </div>
-                                <div className='flex gap-x-10 gap-y-4 flex-wrap'>
+                                <div className={`flex ${merchant ? 'gap-x-10' : 'gap-x-2'} gap-y-4 flex-wrap`}>
                                     {filterOptions[key].map((option) => ( // in a key number of options (active, inactive)
                                         <FilterCheckbox2
                                             isLoading={false}
@@ -207,6 +237,7 @@ const MultiFilter = ({
                                             setAppliedFilter={setAppliedFilter}
                                             appliedFilter={appliedFilter}
                                             customClass={customClass}
+                                            merchant={merchant}
                                         />
                                     ))}
                                 </div>

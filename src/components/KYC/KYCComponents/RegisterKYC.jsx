@@ -10,7 +10,7 @@ import PersonalDetails from './PersonalDetails';
 import Address from './Address';
 import ConfirmationPopup from '../../ConfirmationPopup/ConfirmationPopup';
 import IdentityDetails from './IdentityDetails';
-import { useSearchParams, useParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useParams, useNavigate, useLocation } from 'react-router-dom';
 import { dataService } from '../../../services/data.services';
 import {
     AddressDetails, BankDetailsList, GetDocumentValidation, MerchantProgressBar, PersonalDetailsList, ProgressBar,
@@ -799,6 +799,33 @@ export default function RegisterKYC ({ role, type }) {
         }
         getKYCView();
     };
+
+    const location = useLocation();
+    const state = location.state || {};
+
+    // Determine base path dynamically based on role
+    const basePath = role === 'agent'
+        ? 'users/agents'
+        : role === 'merchant'
+            ? 'users/merchants'
+            : 'users/customers';
+
+    // Function to construct query parameters dynamically
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        if (state.page) params.append('page', state.page);
+        if (state.status && state.status.trim() !== '') params.append('status', state.status);
+        if (state.search && state.search.trim() !== '') params.append('search', state.search.trim());
+
+        return params.toString();
+    };
+
+    // Construct the final URL
+    const queryParams = constructQueryParams(state);
+    const fullUrl = `${basePath}${queryParams ? `?${queryParams}` : ''}`;
+    const pathurl = [fullUrl];
+
     return (
         <CardHeader
             activePath={role === 'agent'
@@ -808,7 +835,8 @@ export default function RegisterKYC ({ role, type }) {
                     ? ` ${type === 'update' ? 'Update' : 'Register'} Merchant`
                     : `${type === 'update' ? 'Update' : 'Register'} Customer`}
             paths={role === 'agent' ? ['Users', 'Agents'] : role === 'merchant' ? ['Users', 'Merchants'] : ['Users', 'Customers']}
-            pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
+            // pathurls={role === 'agent' ? ['users/agents'] : role === 'merchant' ? ['users/merchants'] : ['users/customers']}
+            pathurls={pathurl}
             header={false}
             ChildrenElement
         >

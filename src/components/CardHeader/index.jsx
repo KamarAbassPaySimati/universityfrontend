@@ -14,21 +14,21 @@
 import React, { useEffect, useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Shimmer from '../Shimmers/Shimmer';
 import { handleSearchParamsForKyc } from '../../CommonMethods/ListFunctions';
 import NotificationPopup from '../Notification/NotificationPopup';
 import { dataService } from '../../services/data.services';
 
 const CardHeader = ({
-    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs,
+    children, paths, activePath, pathurls, testId, header, buttonText, minHeightRequired, showTabs, upadteButtonStatus,
     navigationPath, table, updateButton, updateButtonPath, statusButton, ChildrenElement, onHandleStatusChange, headerWithoutButton, toggleButtons,
     searchParams, setSearchParams, rejectOrApprove, reject, approve, onHandleReject, UpdateIcon, onClickButtonFunction, g2pHeight, dataLoading, handleupdatebutton
 }) => {
     const [onHover, setONHover] = useState(false);
     const navigate = useNavigate();
 
-    function cumulativeSum(arr) {
+    function cumulativeSum (arr) {
         const result = [];
         let sum = '';
 
@@ -42,20 +42,20 @@ const CardHeader = ({
             }
             result.push(sum);
         }
-
         return result;
     }
-
     const [isNotification, setIsNotification] = useState(false);
     const [notificationData, setNotificationData] = useState([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false); // New loading state
     const [page, setPage] = useState(1);
+    const [notificationMessage, setNotificationMessage] = useState('');
 
     const fetchNotificationData = async (pageNumber) => {
         try {
             setLoading(true); // Set loading state to true before API call
             const res = await dataService.GetAPI(`admin-users/notifications?page=${pageNumber}`);
+            setNotificationMessage(res.data.message);
             const newData = res.data.data;
             if (res.data.nextPage === null) {
                 setHasMore(false);
@@ -75,6 +75,8 @@ const CardHeader = ({
         fetchNotificationData(1);
     }, []);
 
+    const location = useLocation();
+
     return (
         <div className='h-screen w-[calc(100vw-240px)]'>
             <div className=' h-[56px] flex justify-between mx-10'>
@@ -82,8 +84,20 @@ const CardHeader = ({
                     {paths && paths.map((path, index) =>
                         <div key={index} className='flex'>
                             <span
-                                onClick={() => navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`)}
-                                className="text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary cursor-pointer">
+                                onClick={() => {
+                                    if (index === 0) return; // Disable the first option
+                                    if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined && location.state.payoutRequest === 'payoutRequest') {
+                                        // Navigate to the URL at the current index in pathurls
+                                        const targetUrl = pathurls[index];
+                                        navigate(`/${targetUrl}`);
+                                    } else {
+                                        navigate(`/${cumulativeSum(pathurls.slice(0, index + 1)).pop()}`);
+                                    }
+                                }}
+                                className={`text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary ${
+                                    index === 0 ? 'cursor-default' : 'cursor-pointer'
+                                }`}
+                            >
                                 {path}
                             </span>
                             <Image src='chevron-right' />
@@ -123,6 +137,7 @@ const CardHeader = ({
                             notificationData={notificationData}
                             fetchNotificationData={fetchNotificationData}
                             hasMore={hasMore}
+                            notificationMessage={notificationMessage}
                         />}
                     <Image onClick={() => navigate('/profile')} className='profile cursor-pointer ml-9' src='profile' />
                     <Tooltip
@@ -155,11 +170,12 @@ const CardHeader = ({
 
                                                     // Set the new tab type
                                                     updatedParams.set('type', item.key.toLowerCase());
-
                                                     // Clear sorting parameters
                                                     updatedParams.delete('sortBy');
                                                     updatedParams.delete('order_by');
-
+                                                    updatedParams.delete('status');
+                                                    updatedParams.delete('search');
+                                                    updatedParams.delete('page');
                                                     setSearchParams(updatedParams); // Update the search params
                                                 }
                                             }}
@@ -213,7 +229,7 @@ const CardHeader = ({
                                         justify-center items-center h-[40px] rounded-[6px] w-[117px]`}>
                                                 <p className='text-[14px] font-semibold text-[#ffffff]'>Approve</p>
                                             </button>))
-                                    : (statusButton && ((updateButton !== '' && updateButton !== true)
+                                    : ((statusButton || upadteButtonStatus) && ((updateButton !== '' && updateButton !== true)
                                         ? (
                                             <button data-testid="update_button"
                                                 onClick={() => {
@@ -253,7 +269,6 @@ const CardHeader = ({
                                 </button>
                             ))}
                         </div>
-
                     </div>
                 }
                 {ChildrenElement !== true

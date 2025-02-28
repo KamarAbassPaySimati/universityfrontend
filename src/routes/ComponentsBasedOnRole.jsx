@@ -300,6 +300,12 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionList type='customers' />,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
+            },
             // Flagged List
             {
                 name: 'Flagged List',
@@ -323,6 +329,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Customer view Specific Transaction',
                 element: <ViewTransactionDetails type='customer' />,
                 path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
+            },
+            // Specific Merchant view specific transaction
+            {
+                name: 'Specific Merchant view Specific Transaction',
+                element: <ViewTransactionDetails type='merchant' />,
+                path: '/users/merchants/merchants-transaction-histories/view/:agentId/:transactionType/:id'
             },
             // View specific flagged transaction
             {
@@ -363,6 +375,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Customer Transaction List',
                 element: <ViewTransactionList type='customers'/>,
                 path: '/users/customers/customers-transaction-histories/:id'
+            },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
             },
             {
                 name: 'KYC Verification list',

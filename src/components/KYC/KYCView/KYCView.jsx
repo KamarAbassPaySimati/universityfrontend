@@ -4,7 +4,7 @@ import React, { Fragment, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../CardHeader';
 import { getApiurl, getPaths, getStatusColor } from './KYCViewFunctions';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import ViewDetail from '../../ViewDeatilComponent/ViewDeatil';
 import ProfileName from '../../ProfileName/ProfileName';
 import KYCSections from './KYCSections';
@@ -22,6 +22,7 @@ import { endpoints } from '../../../services/endpoints';
 import ErrorMessage from '../../ErrorMessage/ErrorMessage';
 import convertTimestampToCAT from '../../../CommonMethods/timestampToCAT';
 import formatLocalPhoneNumber from '../../../CommonMethods/formatLocalPhoneNumber';
+import InputTypeRadio from '../../InputField/InputTypeRadio';
 
 export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
@@ -39,6 +40,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [inputValue, setInputValue] = useState('');
     const [error, setError] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
+    const UpdateStatusList = ['Pending Investigation', 'Under Review', 'Resolved', 'Banned'];
+    const [updateStatusValue, setIsUpdateStatusValue] = useState('');
 
     const getView = () => {
         try {
@@ -55,31 +58,66 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const handleApproveClick = () => {
         setIsApprovalModalOpen(true);
     };
+
     const handleRejectClick = () => {
         setIsRejectModalOpen(true);
     };
+
     const handleClose = () => {
         setError(false);
         setIsApprovalModalOpen(false);
+        setIsUpdateModalOpen(false);
+        setInputValue('');
     };
+
     const toggleExpand = () => {
         setIsExpanded(prevState => !prevState);
     };
+
     const handleTillNumber = () => {
         setIsTillNumberValue(true);
     };
+
     const handleReason = (event) => {
         const newValue = event.target.value;
         setError(false);
         setInputValue(newValue);
     };
+
     const handleConfirmAction = async () => {
         setError(false);
-        if (inputValue.trim() === '' && viewType === 'DeleteAccount') {
+        if (inputValue.trim() === '' && (viewType === 'DeleteAccount' || viewType === 'Reported_merchants')) {
             setError(true);
             return;
         }
-        if (viewType !== 'DeleteAccount') {
+        if (viewType === 'Reported_merchants') {
+            try {
+                setIsLoading(true);
+                const payload = {
+                    status: updateStatusValue,
+                    reason: inputValue
+                };
+
+                const response = await dataService.PatchAPI(
+                    `admin-users/reported-merchants/${View?.id}`,
+                    payload // Send payload in the request body
+                );
+                if (response.error) {
+                    setIsUpdateModalOpen(false);
+                    setToastError(response?.data?.data?.message);
+                } else {
+                    setIsUpdateModalOpen(false);
+                    setToastSuccess(response?.data?.message);
+                }
+                setIsLoading(false);
+                setIsUpdateModalOpen(false);
+            } catch (error) {
+                setIsUpdateModalOpen(false);
+                console.error('Error updating status:', error);
+            }
+        }
+
+        if (viewType !== 'DeleteAccount' && viewType !== 'Reported_merchants') {
             try {
                 setIsLoading(true);
                 const response = await dataService.PostAPI(`admin-users/${approveKyc}`,
@@ -99,7 +137,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 setIsApprovalModalOpen(false);
                 setToastError('Something went wrong!');
             }
-        } else {
+        } else if (viewType !== 'Reported_merchants') {
             try {
                 const body = { reason: inputValue };
                 setIsLoading(true);
@@ -122,6 +160,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
             }
         }
     };
+
     const handleConfirmActivation = async () => {
         try {
             setIsLoading(true);
@@ -153,37 +192,106 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const handleupdatebutton = () => {
         setIsUpdateModalOpen(true);
     };
+
+    const handleUpdateStatus = (selectedValue) => {
+        setError(false);
+        setIsUpdateStatusValue(selectedValue);
+    };
+
+    useEffect(() => {
+        if (View?.status) {
+            setIsUpdateStatusValue(View.status); // Update status when API response updates
+        } else if (UpdateStatusList.length > 0) {
+            setIsUpdateStatusValue(UpdateStatusList[0]); // Default to first item
+        }
+    }, [View]);
+
+    useEffect(() => {
+        if (viewType === 'Reported_merchants') {
+            if (View?.admin_comment) {
+                setInputValue(View.admin_comment);
+            } else {
+                setInputValue('');
+            }
+        }
+    }, [View, viewType]);
+
+    const location = useLocation();
+    const state = location.state || {};
+
+    // Function to construct query parameters dynamically
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        if (state.page) params.append('page', state.page);
+        if (state.status && state.status.trim() !== '') {
+            params.append('status', state.status);
+        }
+        if (state.type && state.type.trim() !== '') {
+            params.append('type', state.type);
+        }
+        if (state.citizen && state.citizen.trim() !== '') {
+            params.append('citizen', state.citizen);
+        }
+        if (state.fullkyc && state.fullkyc.trim() !== '') {
+            params.append('fullkyc', state.fullkyc);
+        }
+        if (state.simplifiedkyc && state.simplifiedkyc.trim() !== '') {
+            params.append('simplifiedkyc', state.simplifiedkyc);
+        }
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    // Get the base path from getPaths function
+    const { pathurls } = getPaths(viewType, role, state.status) || { pathurls: [] };
+
+    // Construct the dynamic path using getPaths result
+    const basePath = pathurls.join('/'); // Join array into a single path
+    const queryParams = constructQueryParams(state);
+
+    // Final path construction
+    const fullUrl = `${basePath}${queryParams ? `?${queryParams}` : ''}`;
+
+    // Updated pathurls array
+    const updatedPathurls = [fullUrl];
+
     return (
         <>
             <CardHeader
                 activePath={getPaths(viewType, role).activePath}
                 paths={getPaths(viewType, role).paths}
-                pathurls={getPaths(viewType, role).pathurls}
+                pathurls={updatedPathurls}
                 header={getPaths(viewType, role).activePath}
                 minHeightRequired={true}
                 rejectOrApprove={((viewType === 'DeleteAccount' && View?.status === 'pending') || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? true : undefined}
                 reject={loading}
                 approve={loading}
-                updateButton={(loading) || (viewType === 'Reported_merchants'
-                    ? 'Update Status'
-                    : (viewType === 'specific'
-                        ? (() => {
-                            switch (View?.user_kyc_status) {
-                            case 'not_started':
-                                return 'Complete KYC Registration';
-                            case 'completed':
-                                return (View?.kyc_type === 'simplified' && View?.citizen === 'Malawian') ? 'Update' : '';
-                            default:
-                                return 'Update';
-                            }
-                        })()
-                        : undefined))}
+                updateButton={(loading) || (
+                    (viewType === 'Reported_merchants'
+                        ? 'Update Status'
+                        : viewType === 'specific'
+                            ? (() => {
+                                switch (View?.user_kyc_status) {
+                                case 'not_started':
+                                    return 'Complete KYC Registration';
+                                case 'completed':
+                                    return (View?.kyc_type === 'simplified' && View?.citizen === 'Malawian') ? 'Update' : '';
+                                default:
+                                    return 'Update';
+                                }
+                            })()
+                            : undefined))}
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
                 handleupdatebutton={(viewType === 'Reported_merchants' ? handleupdatebutton : null)}
                 ChildrenElement
+                upadteButtonStatus={viewType === 'Reported_merchants'}
             >
                 {<>
                     <div className={` mx-10 mb-4 px-[30px] pt-[24px] pb-[28px] 
@@ -823,9 +931,52 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                     setInputValue={setInputValue}
                 />
             }
-            {isUpdateModalOpen &&
-                <p>Hiii</p>
-            }
+            <Modal center open={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+                <div className='customModal'>
+                    <ConfirmationPopup
+                        title={viewType === 'Reported_merchants' ? 'Update Status' : 'Confirm to Approve?'}
+                        message={viewType === 'DeleteAccount' ? 'Reason for approval' : viewType === 'Reported_merchants' ? 'Select any one' : `This will allow ${role.charAt(0).toUpperCase() + role.slice(1)} to gain access to Paymaart`}
+                        messageStyle={viewType === 'DeleteAccount' ? 'text-[14px] font-medium text-[#4F5962] mt-2' : undefined}
+                        updateStatus={viewType === 'Reported_merchants'
+                            ? (
+                                UpdateStatusList.map((radioItem) => (
+                                    <InputTypeRadio
+                                        id={radioItem}
+                                        label={radioItem}
+                                        key={radioItem}
+                                        checkedState={updateStatusValue === radioItem} // Check if selected
+                                        handleRadioButton={() => handleUpdateStatus(radioItem)}
+                                    />
+                                ))
+                            )
+                            : undefined}
+
+                        Reason={viewType === 'DeleteAccount' || viewType === 'Reported_merchants' &&
+                        (<>
+                            {viewType === 'Reported_merchants' &&
+                                <label htmlFor="" className='font-medium text-sm text-[#4F5962] mt-8'>Note</label>}
+                            <input
+                                data-testid="reason"
+                                className={`w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded mt-2 ${error ? 'border-bottom-red mb-1' : 'border-bottom-default'
+                                }`}
+                                placeholder={viewType === 'Reported_merchants' ? 'Add a note' : 'Enter Reason'}
+                                value={inputValue}
+                                onChange={handleReason}
+
+                            />
+
+                            {error && <ErrorMessage error={'Required field'} />}
+                        </>)}
+                        handleSubmit={handleConfirmAction}
+                        isLoading={isLoading}
+                        handleClose={handleClose}
+                        buttonText={viewType === 'Reported_merchants' ? 'Update' : 'Approve'}
+                        buttonColor={viewType === 'Reported_merchants' ? 'bg-primary-normal' : 'bg-accent-positive'}
+                        handleReason={handleReason}
+                        error={error}
+                    />
+                </div>
+            </Modal>
             <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={View} />
         </>
     );

@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-key */
 /* eslint-disable max-len */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import CardHeader from '../../../../../components/CardHeader';
 import ViewDetail from '../../../../../components/ViewDeatilComponent/ViewDeatil';
 import Modal from 'react-responsive-modal';
@@ -12,18 +12,22 @@ import { dataService } from '../../../../../services/data.services';
 import { PayOutRequestView } from './ViewPayOutRequeSlice';
 import PayoutConformationPopup from '../../../../../components/ConfirmationPopup/PayoutConformationPopup';
 import ErrorMessage from '../../../../../components/ErrorMessage/ErrorMessage';
+import IframeModal from '../../../../../components/Iframe/IframeModal';
 
 export default function ViewPayOutRequest () {
     const dispatch = useDispatch();
     const { id } = useParams();
+    const location = useLocation();
     const [BankDropDownValue, setBankDropDownValue] = useState([]);
+    const [showIframe, setShowIframe] = useState(false);
     const getBankTypes = async () => {
         try {
             const response = await dataService.GetAPI('admin-users/list-trust-bank');
             const bankTypes = response.data.data;
+
             const arrayValue = bankTypes.reduce((acc, item) => {
                 if (item.ref_no !== 'PTBAT') {
-                    acc.push(`Pay-out to Agent from  ${item.ref_no} | EM credit to PMCAT`);
+                    acc.push(`${location.state?.type !== undefined ? 'Settlement to Merchant' : 'Pay-out to Agent'} from  ${item.ref_no} | EM credit to PMCAT`);
                 }
                 return acc;
             }, []);
@@ -59,6 +63,41 @@ export default function ViewPayOutRequest () {
     // const { user } = useSelector((state) => state.auth);
     // const { paymaart_id: PaymaartId } = user;
 
+    const prevLocationRef = useRef();
+
+    useEffect(() => {
+        prevLocationRef.current = location;
+    }, [location]);
+
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        // Always include 'type' and 'page' if they exist
+        if (state.type) params.append('type', state.type);
+        if (state.page) params.append('page', state.page);
+
+        // Include 'search' only if it is non-empty
+        if (state.search && state.search.trim() !== '') {
+            params.append('search', state.search);
+        }
+
+        return params.toString();
+    };
+
+    const type = location?.state?.type;
+    const dynamicPath = type === 'merchants' ? 'Merchants' : type === 'agents' ? 'Agents' : '';
+    const paths = ['Transactions', 'Pay-out Requests', ...(dynamicPath ? [dynamicPath] : [])];
+
+    // Construct the base URL with query parameters
+    const queryParams = constructQueryParams(location?.state || {});
+    const baseUrlWithQuery = `transactions/pay-out-requests${queryParams ? `?${queryParams}` : ''}`;
+
+    const pathurls = [
+        'transactions/pay-out-requests',
+        'transactions/pay-out-requests',
+        ...(type ? [baseUrlWithQuery] : ['']) // Add the base URL with query parameters if type exists
+    ];
+
     const getView = () => {
         try {
             dispatch(PayOutRequestView(id));
@@ -66,6 +105,7 @@ export default function ViewPayOutRequest () {
             console.error(error);
         }
     };
+
     useEffect(() => {
         getView();
         getBankTypes();
@@ -88,7 +128,8 @@ export default function ViewPayOutRequest () {
                     transaction_id: View?.transaction_id,
                     pop_file_key: states?.pop_file_key,
                     transaction_code: states?.transaction_code,
-                    pop_file_ref_no: states?.pop_file_ref_no
+                    pop_file_ref_no: states?.pop_file_ref_no,
+                    reason: states?.reason
                 };
                 switch (states.transaction_code) {
                 case 'Pay-out to Agent from  PTBA1 | EM credit to PMCAT':
@@ -131,12 +172,17 @@ export default function ViewPayOutRequest () {
         setSubmitSelected(false);
         setState((prevState) => ({ ...prevState, reason: newValue }));
     };
+    const handleOpenIfram = (key) => {
+        setShowIframe(key);
+        setApproveModalOpen(!key);
+    };
+
     return (
         <>
             <CardHeader
                 activePath='Pay-out Request Details'
-                paths={['Transactions', 'Pay-out Requests']}
-                pathurls={['transactions/pay-out-requests']}
+                paths={paths}
+                pathurls={location?.state?.type !== undefined ? pathurls : ['transactions/pay-out-requests']}
                 minHeightRequired={true}
                 ChildrenElement
             >
@@ -146,7 +192,7 @@ export default function ViewPayOutRequest () {
                 `}>
                         <div className='flex justify-between items-center'>
                             <h1 className='text-[#252C32] font-bold text-[30px] leading-[40px]'>Pay-out Request Details</h1>
-                            {(View?.status !== 'rejected' && View?.status !== 'approved') && <div className='flex'>
+                            {(View?.status !== undefined && !loading && View?.status !== 'rejected' && View?.status !== 'approved') && <div className='flex'>
                                 <button data-testid="reject_button"
                                     onClick={() => setRejectModalOpen(true)}
                                     className={`flex  bg-primary-negative py-[8px] px-[16px] 
@@ -225,7 +271,7 @@ export default function ViewPayOutRequest () {
                     </div>
                 </>}
             </CardHeader>
-            <Modal center open={isRejectModalOpen} onClose={() => setRejectModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={isRejectModalOpen} onClose={() => { !isLoading && setRejectModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={'Confirm to Reject?'}
@@ -246,10 +292,12 @@ export default function ViewPayOutRequest () {
                         buttonColor={'bg-primary-negative'}
                         handleReason={handleReason}
                         error={submitSelected}
+                        disabled={states?.reason?.trim() === ''}
+                        setApproveModalOpen={setApproveModalOpen}
                     />
                 </div>
             </Modal>
-            <Modal center open={isApproveModalOpen} onClose={() => setApproveModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={isApproveModalOpen} onClose={() => { !isLoading && setApproveModalOpen(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <PayoutConformationPopup
                         title={'Confirm to Approve?'}
@@ -263,9 +311,13 @@ export default function ViewPayOutRequest () {
                         states={states}
                         setState={setState}
                         Felids={Felids}
+                        viewOutside={handleOpenIfram}
                     />
                 </div>
             </Modal>
+            <IframeModal
+                isOpen={showIframe} handleClose={() => handleOpenIfram(false)} link={states.pop_file_key}
+                labelValue={'Transaction POP'}/>
         </>
 
     );

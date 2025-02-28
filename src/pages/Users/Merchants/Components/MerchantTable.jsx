@@ -5,11 +5,12 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Image from '../../../../components/Image/Image';
 import { handleSort } from '../../../../CommonMethods/ListFunctions';
 import MerchantTableBody from './MerchantTableBody';
+
 const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearchParams, GetList }) => {
     return (
         <>
             <table className='w-full min-w-max'>
-                {(List?.data?.length > 0 || loading) &&
+                {List && (List?.data?.length > 0 || loading) &&
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
                             <th className='py-2 px-[10px] text-left font-[400] min-w-[150px]'>Paymaart ID</th>
@@ -31,8 +32,8 @@ const MerchantTable = ({ loading, error, List, notFound, searchParams, setSearch
                 {loading
                     ? <Shimmer column={8} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
-                        {List?.data?.map((user, index) => (
-                            <MerchantTableBody key={index} user={user} index={index} GetList={GetList}/>
+                        {List && List?.data?.map((user, index) => (
+                            <MerchantTableBody key={index} user={user} index={index} GetList={GetList} searchParams={searchParams}/>
                         ))}
                     </tbody>
                 }
