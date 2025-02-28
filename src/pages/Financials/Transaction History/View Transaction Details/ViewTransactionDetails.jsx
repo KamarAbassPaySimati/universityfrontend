@@ -417,7 +417,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             </>}
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
                                         <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
-                                        <p>{convertTimestampToCAT(transactionDetails?.created_at) || '-'}</p>
+                                        <p data-testid="date">{convertTimestampToCAT(transactionDetails?.created_at) || '-'}</p>
                                         {transactionType === 'afrimax' && <p>{transactionDetails?.afrimax_plan_name || '-'}</p>}
                                         {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}

@@ -86,8 +86,7 @@ Feature: PayOut-requests Flow Merchent and Agent
         And  I fill all the details to approve the request
         When I click on the approve
         Then I should read a message stating that "Pay-out request approved successfully"
-        
-    @delete_admin_account
+
     Scenario: View Particular Partcular Payout Requests
         Given I navigate to payout request Merchants listing screen
         When  I click on view payout request
