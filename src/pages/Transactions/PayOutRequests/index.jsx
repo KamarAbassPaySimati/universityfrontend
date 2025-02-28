@@ -44,7 +44,7 @@ const PayOutRequests = () => {
             url += `page=${searchParams.get('page')}`;
         }
         if (searchParams.get('search') !== null) {
-            url += `&search=${searchParams.get('search')}`;
+            url += `&search=${encodeURIComponent(searchParams.get('search'))}`;
         }
         if (searchParams.get('order_by') !== null) {
             url += `&order_by=${searchParams.get('order_by')}`;
@@ -140,6 +140,8 @@ const PayOutRequests = () => {
 
         // Update only if changes are needed
         if (updatedParams.toString() !== searchParams.toString()) {
+            console.log('updatedParams', updatedParams);
+
             setSearchParams(updatedParams);
         } else {
             GetList();
@@ -230,7 +232,7 @@ const PayOutRequests = () => {
                         )
                 }
 
-                {!loading && !error && !notFound && List?.recodes?.length !== 0 && <Paginator
+                {!loading && !error && !notFound && List?.records?.length !== 0 && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.total_count / 10)}
                     setSearchParams={setSearchParams}

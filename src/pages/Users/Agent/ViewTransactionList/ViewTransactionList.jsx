@@ -22,7 +22,16 @@ const ViewTransactionList = ({ type }) => {
     const [notFound, setNotFound] = useState(false);
     const [exportLoading, setExportloading] = useState(false);
     const { id } = useParams();
-    const navigate = useNavigate();
+    const navigate = useNavigate();    const location = useLocation();
+    const [state, setState] = useState(location.state || {});
+
+    // Ensure `state` is updated only once, preserving it across re-renders
+    useEffect(() => {
+        if (location.state) {
+            setState(location.state);
+        }
+    }, [location.state]);
+
     const initailState = {
         'transaction-type': { 'Pay-Out': false, 'Pay-In': false, G2P: false, Others: false }
     };
@@ -102,9 +111,6 @@ const ViewTransactionList = ({ type }) => {
         }
     }, [GetList]);
 
-    const location = useLocation();
-    const state = location.state || {};
-
     // Determine base path dynamically based on role
     const basePath = type === 'customers'
         ? 'users/customers'
@@ -115,6 +121,7 @@ const ViewTransactionList = ({ type }) => {
     // Function to construct query parameters dynamically
     const constructQueryParams = (state) => {
         const params = new URLSearchParams();
+        console.log(params, 'paramsss');
 
         if (state.page) params.append('page', state.page);
         if (state.status && state.status.trim() !== '') params.append('status', state.status);
