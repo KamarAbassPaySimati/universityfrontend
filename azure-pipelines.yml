@@ -2,7 +2,7 @@ trigger:
   branches:
     include:
       - qa
-      - pre-production
+      - pre-prod
       - master
 pr:
   branches:
@@ -14,7 +14,7 @@ variables:
     - group: master
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/qa') }}:
     - group: qa
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-prod') }}:
     - group: pre-production
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - group: develop
@@ -592,7 +592,7 @@ stages:
 - stage: Deploy
   jobs:
     - deployment: Deployment
-      condition: and(or(contains(variables['Build.Reason'], 'PullRequest'),contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'qa'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded())
+      condition: and(or(contains(variables['Build.Reason'], 'PullRequest'),contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'qa'), contains(variables['build.SourceBranch'], 'pre-prod')), succeeded())
       displayName: Deployment
       pool:
         vmImage: 'macos-latest'
