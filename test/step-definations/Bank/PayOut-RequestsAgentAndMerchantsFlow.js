@@ -158,6 +158,7 @@ When('I fill all the details to approve the request', async function () {
     await element.sendKeys(filePath);
 });
 When('I click on the approve', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
     await driver.wait(until.elementLocated(By.css('[data-testid="confirm_button"]'))).click();
 });
 When('I fill all the details to approve the request of agent', async function () {
