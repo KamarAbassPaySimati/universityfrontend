@@ -6,6 +6,7 @@ const { Given, When, Then } = require('@cucumber/cucumber');
 const { until, By } = require('selenium-webdriver');
 const { driver } = require('../1_Driver.js');
 const assert = require('assert');
+const path = require('path');
 
 function customSort (order = 'asc') {
     return (a, b) => {
@@ -112,8 +113,8 @@ Then('I should see the payout request sorted in descending order based on {strin
     let itemTexts;
     let sortedItemTexts;
     switch (sortBy) {
-    case 'Reported Date':
-        items = await driver.wait(until.elementsLocated(By.css('[data-testid="reported_date"]')));
+    case 'Requested Date':
+        items = await driver.wait(until.elementsLocated(By.css('[data-testid="submission_date"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
         sortedItemTexts = [...itemTexts].sort(customSort('desc'));
         assert.deepStrictEqual(itemTexts, sortedItemTexts, 'Items are not sorted in descending order');
@@ -130,8 +131,8 @@ Then('I should see the payout request sorted in ascending order based on {string
     let itemTexts;
     let sortedItemTexts;
     switch (sortBy) {
-    case 'Reported Date':
-        items = await driver.wait(until.elementsLocated(By.css('[data-testid="reported_date"]')));
+    case 'Requested Date':
+        items = await driver.wait(until.elementsLocated(By.css('[data-testid="submission_date"]')));
         itemTexts = await Promise.all(items.map((item) => item.getText()));
         sortedItemTexts = [...itemTexts].sort(customSort('asc'));
         console.log('Original Items:', itemTexts);
@@ -143,4 +144,31 @@ Then('I should see the payout request sorted in ascending order based on {string
     default:
         break;
     }
+});
+When('I fill all the details to approve the request', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]'))).click();
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code_0"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="pop_file_ref_no"]'))).sendKeys('636362652');
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    element = await driver.wait(until.elementLocated(By.css('[data-testid="pop_file_key"]')));
+    const filePath = path.join(__dirname, '../../support/document_front.png');
+    await element.sendKeys(filePath);
+});
+When('I click on the approve', async function () {
+    await driver.wait(until.elementLocated(By.css('[data-testid="confirm_button"]'))).click();
+});
+When('I fill all the details to approve the request of agent', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="activate_deactivate_button"]'))).click();
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    await driver.wait(until.elementLocated(By.css('[data-testid="transaction_code"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="pay-out_to_agent_from__ptba1_|_em_credit_to_pmcat"]'))).click();
+    await driver.wait(until.elementLocated(By.css('[data-testid="pop_file_ref_no"]'))).sendKeys('636362652');
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    element = await driver.wait(until.elementLocated(By.css('[data-testid="pop_file_key"]')));
+    const filePath = path.join(__dirname, '../../support/document_front.png');
+    await element.sendKeys(filePath);
 });
