@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from '../Image/Image';
 import { Tooltip } from 'react-tooltip';
 import { useOnClickOutside } from '../../CommonMethods/outsideClick';
@@ -33,23 +33,23 @@ const MultiFilter = ({
         end_date: new Date(Number(searchParams.get('end_date'))).getTime() * 1000
     });
 
+    // Mapping of original keys to desired transformations
+    const keyTransformations = {
+        'Pay-in': 'pay_in',
+        'Pay-out': 'pay_out',
+        'Cash-in': 'cash_in',
+        'Cash-out': 'cashout',
+        'Pay Paymaart': 'paymaart',
+        'Pay Afrimax': 'afrimax',
+        'Pay Merchant': 'merchant',
+        'Interest Earned': 'interest',
+        'Customer payments': 'customer_payments',
+        Refund: 'refund',
+        Other: 'other'
+    };
+
     const checkTrueProperties = (obj) => {
         const trueProperties = [];
-
-        // Mapping of original keys to desired transformations
-        const keyTransformations = {
-            'Pay-in': 'pay_in',
-            'Pay-out': 'pay_out',
-            'Cash-in': 'cash_in',
-            'Cash-out': 'cashout',
-            'Pay Paymaart': 'paymaart',
-            'Pay Afrimax': 'afrimax',
-            'Pay Merchant': 'merchant',
-            'Interest Earned': 'interest',
-            'Customer payments': 'customer_payments',
-            Refund: 'refund',
-            Other: 'other'
-        };
 
         for (const key in obj) {
             if (obj[key] === true) {
@@ -142,6 +142,22 @@ const MultiFilter = ({
         setIsFilterOpen(false);
         setErrorMessage('');
     });
+
+    useEffect(() => {
+        if (isFilterOpen) {
+            const types = searchParams.get('transaction_type');
+            const updatedFilters = { ...appliedFilter };
+            const type = types?.split(',');
+            if (type) {
+                type.forEach((option) => {
+                    if (updatedFilters['transaction-type'][Object.keys(keyTransformations).find(key => keyTransformations[key] === option)] === false) {
+                        updatedFilters['transaction-type'][Object.keys(keyTransformations).find(key => keyTransformations[key] === option)] = true; // Set filter
+                    }
+                });
+            }
+            setAppliedFilter(updatedFilters);
+        }
+    }, [isFilterOpen]);
 
     return (
         <div ref={filterDiv} className="z-1">
