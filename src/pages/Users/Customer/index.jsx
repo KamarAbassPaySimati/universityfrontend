@@ -9,6 +9,7 @@ import Slugify from '../../../CommonMethods/Sulgify';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { CustomerList } from './customerSlice';
 import CustomerTable from './components/customerTable';
+import { setSearchedParamsList, setSearchedParamsView } from '../../../redux/GlobalSlice';
 
 const Customer = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
@@ -66,6 +67,11 @@ const Customer = () => {
             GetList();
         }
     }, [GetList]);
+
+    useEffect(() => {
+        dispatch(setSearchedParamsView(''));
+        dispatch(setSearchedParamsList(''));
+    }, []);
 
     return (
         <CardHeader

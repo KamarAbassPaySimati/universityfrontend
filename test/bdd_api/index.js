@@ -374,6 +374,52 @@ async function lockingAccount (paymaart_id) {
     }
 }
 
+async function generateMobileTokenAgent (merchant) {
+    const payload = {
+        username: merchant ? 'MCT1476078' : 'AGT590408',
+        password: merchant ? '352791' : '412786',
+        userType: merchant ? 'Merchant' : 'Agent'
+    };
+    try {
+        const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/bdd/generate-bdd-token`, payload, {});
+        return data.data;
+    } catch (error) {
+        console.log('API Error', error);
+    }
+}
+async function RequestPayoutAgent (token, Merchant) {
+    const axiosOptions = {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+    };
+    if (Merchant) {
+        const payload = {
+            amount: 1.0,
+            bank_account_id: '8f67a5c4-9ec3-4c3c-ba23-f35be3e77f27',
+            call_type: false,
+            password: 'xJkv6TZil7crlVEjL6I7cg==:28J6PgMRk3qwjx9sPh3qxT9lNbxj6A=='
+        };
+        try {
+            const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/payout-transactions/payout-merchant`, payload, { headers: axiosOptions });
+            return data.data;
+        } catch (error) {
+            console.log('API Error', error);
+        }
+    } else {
+        const payload = {
+            amount: 1.0,
+            bank_account_id: 'a5204a32-f65e-4695-8acd-5e9a91836855',
+            call_type: false,
+            password: 'XL8fEydoUGwMRgKKjLSujw==:XK7ePyhN8CVncSuXkz46+Gew5tGSQg=='
+        };
+        try {
+            const data = await axios.post(`https:/${process.env.VITE_DOMAIN_NAME}/v1/payout-transactions/payout`, payload, { headers: axiosOptions });
+            return data.data;
+        } catch (error) {
+            console.log('API Error', error);
+        }
+    }
+}
 module.exports = {
     getMFASecret,
     addAdminUser,
@@ -402,5 +448,7 @@ module.exports = {
     deletePayoutRequest,
     payoutRequestBDDAPI,
     send_payout_request,
-    lockingAccount
+    lockingAccount,
+    generateMobileTokenAgent,
+    RequestPayoutAgent
 };

@@ -13,10 +13,12 @@ When('I click on logout', async function () {
 });
 
 When('I click on cancel', async function () {
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="cancel_button"]')));
     await driver.wait(until.elementIsVisible(element));
     await element.click();
+    await new Promise(resolve => setTimeout(resolve, 3000));
+
 });
 
 When('I click on confirm logout', async function () {
@@ -26,6 +28,7 @@ When('I click on confirm logout', async function () {
     await element.click();
 });
 Then('I should see a confirmation prompt for logout', async function () {
+    await new Promise(resolve => setTimeout(resolve, 3000));
     const element = await driver.wait(until.elementLocated(By.css('[data-testid="modal"]')));
     await driver.wait(until.elementIsVisible(element));
 
