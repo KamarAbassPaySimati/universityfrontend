@@ -69,7 +69,24 @@ Feature: PayOut-requests Flow Merchent and Agent
         When I click on paginate to previous page
         Then I should be navigated to page 1
 
-    @delete_admin_account
+    @GenerateMobileToken
+    @PayOutRequestAgent
+    Scenario: Approve the payout request agent
+        Given I navigate to payout request agents listing screen
+        When  I click on view payout request
+        And  I fill all the details to approve the request of agent
+        When I click on the approve
+        Then I should read a message stating that "Pay-out request approved successfully"
+
+    @GenerateMobileTokenMerchant
+    @PayOutRequestMerchent
+    Scenario: Approve the payout request merchant
+        Given I navigate to payout request Merchants listing screen
+        When  I click on view payout request
+        And  I fill all the details to approve the request
+        When I click on the approve
+        Then I should read a message stating that "Pay-out request approved successfully"
+
     Scenario: View Particular Partcular Payout Requests
         Given I navigate to payout request Merchants listing screen
         When  I click on view payout request

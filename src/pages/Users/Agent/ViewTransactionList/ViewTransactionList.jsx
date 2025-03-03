@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import ProfileName from '../../../../components/ProfileName/ProfileName';
 import Button from '../../../../components/Button/Button';
-import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Topbar from '../../../../components/Topbar/Topbar';
 import { useDispatch, useSelector } from 'react-redux';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
@@ -23,15 +23,6 @@ const ViewTransactionList = ({ type }) => {
     const [exportLoading, setExportloading] = useState(false);
     const { id } = useParams();
     const navigate = useNavigate();
-    const location = useLocation();
-    const [state, setState] = useState(location.state || {});
-
-    // Ensure `state` is updated only once, preserving it across re-renders
-    useEffect(() => {
-        if (location.state) {
-            setState(location.state);
-        }
-    }, [location.state]);
 
     const initailState = {
         'transaction-type': { 'Pay-Out': false, 'Pay-In': false, G2P: false, Others: false }
@@ -41,6 +32,7 @@ const ViewTransactionList = ({ type }) => {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentTransactionHistory);
+    const searchedFromList = useSelector(state => state?.globalData?.setSearchedParamsList);
 
     const filterOptions = {
         'Transaction Type': type === 'customers'
@@ -119,22 +111,10 @@ const ViewTransactionList = ({ type }) => {
             ? 'users/merchants'
             : 'users/agents';
 
-    // Function to construct query parameters dynamically
-    const constructQueryParams = (state) => {
-        const params = new URLSearchParams();
-        console.log(params, 'paramsss');
-
-        if (state.page) params.append('page', state.page);
-        if (state.status && state.status.trim() !== '') params.append('status', state.status);
-        if (state.search && state.search.trim() !== '') params.append('search', state.search.trim());
-
-        return params.toString();
-    };
-
     // Construct the final URL
-    const queryParams = constructQueryParams(state);
-    const fullUrl = `${basePath}${queryParams ? `?${queryParams}` : ''}`;
+    const fullUrl = `${basePath}${searchedFromList ? `${searchedFromList.startsWith('?') ? searchedFromList : `?${searchedFromList}`}` : ''}`;
     const pathurl = [fullUrl];
+
     return (
         <CardHeader
             activePath={'Transaction History'}

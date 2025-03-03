@@ -11,6 +11,7 @@ import NoDataError from '../../../components/NoDataError/NoDataError';
 import Paginator from '../../../components/Paginator/Paginator';
 import { MerchantList, ReportedMerchantList } from './merchantSlice';
 import ReportedMerchantTable from './Components/ReportedMerchantTable';
+import { setSearchedParamsList, setSearchedParamsView } from '../../../redux/GlobalSlice';
 
 const Merchant = () => {
     const [searchParams, setSearchParams] = useSearchParams({});
@@ -109,6 +110,11 @@ const Merchant = () => {
             setIsStateLoading(true);
         }
     }, [loading]);
+
+    useEffect(() => {
+        dispatch(setSearchedParamsView(''));
+        dispatch(setSearchedParamsList(''));
+    }, []);
 
     return (
         <CardHeader

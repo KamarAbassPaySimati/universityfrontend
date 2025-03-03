@@ -110,7 +110,6 @@ export default function ViewPayOutRequest () {
         getView();
         getBankTypes();
     }, []);
-    console.log(states, 'states transaction code');
 
     const handleConfirmAction = async () => {
         if (isApproveModalOpen && (states.transaction_code === undefined || states.pop_file_ref_no === undefined || states.pop_file_ref_no === '' || states.pop_file_key === undefined || states.pop_file_key === '')) {
@@ -132,7 +131,6 @@ export default function ViewPayOutRequest () {
                     pop_file_ref_no: states?.pop_file_ref_no,
                     reason: states?.reason
                 };
-                console.log(states.transaction_code);
                 switch (states.transaction_code) {
                 case 'Pay-out to Agent from  PTBA1 | EM credit to PMCAT':
                     payload.bank_type = 'PTBA1';
