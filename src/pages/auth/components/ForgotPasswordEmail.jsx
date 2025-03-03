@@ -99,7 +99,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         placeholder='Enter email'
                         setEnteredLetter={setEnteredLetter}
                     />
-                    {(window.location.host !== 'localhost:3000' || window.location.host !== 'pre-production-admin.paymaart.net') && (
+                    {(window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') && (
                         <ReCAPTCHA
                             style={{ display: 'inline-block', height: '10px !important' }}
                             theme="dark"
