@@ -115,7 +115,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         text="Proceed"
                         onClick={handleClick}
                         id="Proceed"
-                        disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
+                        disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net'}
                         isLoading={isLoading}
                     />
                     <Button2 testId='back_to_login' onClick={handleBacktoLogin} text='Back to Login' disabled={isLoading} />
