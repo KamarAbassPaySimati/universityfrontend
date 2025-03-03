@@ -38,7 +38,7 @@ const ViewTransactionList = ({ type }) => {
         'Transaction Type': type === 'customers'
             ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'G2P Pay-in']
             : type === 'merchants'
-                ? ['Pay Paymaart', 'Cash-out', 'Customer payments', 'Pay-out']
+                ? ['Pay Paymaart', 'Pay Merchant', 'Cash-out', 'Pay-out', 'Payment Completed', 'Pay Merchant Onbehalf', 'Payout Reject', 'Payout Completed', 'Payout Approved', 'Cashout Failed', 'Cashout Refund']
                 : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
 

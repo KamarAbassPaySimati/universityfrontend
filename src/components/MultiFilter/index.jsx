@@ -44,6 +44,14 @@ const MultiFilter = ({
         'Pay Merchant': 'merchant',
         'Interest Earned': 'interest',
         'Customer payments': 'customer_payments',
+        'Pay Merchant Onbehalf': 'pay_merchant_onbehalf',
+        'Payment Completed': 'payment_completed',
+        'Payout Reject': 'payout_reject',
+        'Payout Completed': 'payout_completed',
+        'Payout Approved': 'payout_approved',
+        'Cashout Failed': 'cashout_failed',
+        'Cashout Refund': 'cashout_refund',
+
         Refund: 'refund',
         Other: 'other'
     };
