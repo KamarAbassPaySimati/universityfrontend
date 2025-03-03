@@ -421,7 +421,7 @@ const ViewSpecificFlagged = () => {
                                                             </>}
                                                         {flaggedDetails?.commission && <p>{formattedAmount(flaggedDetails?.commission) || '0.00'} MWK</p>}
                                                         <p data-testid="transaction_id">{flaggedDetails?.transaction_id || '-'}</p>
-                                                        <p>{`${convertTimestampToCAT(flaggedDetails?.created_at)}` || '-'}</p>
+                                                        <p data-testid="date"> {`${convertTimestampToCAT(flaggedDetails?.created_at)}` || '-'}</p>
                                                         {transactionType === 'afrimax' && <p>{flaggedDetails?.afrimax_plan_name || '-'}</p>}
                                                         {flaggedDetails?.agent_closing_balance && <p>{formattedAmount(flaggedDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                                         {flaggedDetails?.note && <p>{flaggedDetails?.note}</p>}

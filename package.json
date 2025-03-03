@@ -12,7 +12,8 @@
     "generate_report_cobertura": "nyc report --temp-dir ./test/step-definations/coverageData --reporter cobertura --report-dir ./coverage-cobertura",
     "code_coverage": "nyc check-coverage --temp-dir ./test/step-definations/coverageData",
     "bdd_unit": "./node_modules/@cucumber/cucumber/bin/cucumber.js --import test --force-exit -f json:./reports/test-report-unit-test.json test/unit-testing/unit-testing-flow1/Admin/ListDeleteRequestOfCustomer.feature -f junit:./reports-xml/TEST-test-report-unit-test-1.xml",
-    "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt"
+    "owasp": "owasp-dependency-check --out=./dependency-check-reports --project ARCM -f JSON -f HTML --prettyPrint --failOnCVSS 8 --data=/tmp/dependency-check-data --scan=package-lock.json --log=logs.txt && cat logs.txt",
+    "bdd_int": "./node_modules/@cucumber/cucumber/bin/cucumber.js -f json:./reports/test-report.json --config test/integration-testing/Flow1_Login/cucumber.js --import test"
   },
   "dependencies": {
     "@aws-sdk/client-appconfigdata": "^3.716.0",

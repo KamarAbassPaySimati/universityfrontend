@@ -9,6 +9,8 @@ import AccountUnlockQuestions from '../../../../../components/Modals/AccountUnlo
 import { handleAnswerSubmit } from '../../../../../components/Modals/AccountUnlock';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 import formatLocalPhoneNumber from '../../../../../CommonMethods/formatLocalPhoneNumber';
+import { useDispatch } from 'react-redux';
+import { setSearchedParamsList } from '../../../../../redux/GlobalSlice';
 
 export default function TableBody ({ user, index, GetList, searchParams }) {
     const Navigate = useNavigate();
@@ -32,6 +34,9 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
         }, setToastError, setIsUnlock, setPrevAppearedQuestion, setQuestion);
         setLoadingUnlock(false);
     };
+    const dispatch = useDispatch();
+    const searchParamsString = window.location.search;
+
     return (
         <>
             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
@@ -76,7 +81,20 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
                                     : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
                             />
                         )}
-                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`} onClick={() => Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } })} src='report' />
+                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
+                        onClick={() => {
+                            // Navigate to the new route with state
+                            Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`, {
+                                state: {
+                                    page: searchParams.get('page'),
+                                    status: searchParams.get('status') || '',
+                                    search: searchParams.get('search') || ''
+                                }
+                            });
+
+                            // Dispatch the search params string to Redux
+                            dispatch(setSearchedParamsList(searchParamsString));
+                        }}src='report' />
                     {loadingUnlock
                         ? <div role="status">
                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin  fill-[#3B2A6F]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">

@@ -14,7 +14,7 @@ Feature: Paymaart - Admin Web - Specific Agent Transaction View
         When I click on transaction history icon
         Then I should be navigated to transaction history page
         When I click on view transaction for most recent transaction
-        Then I should see the transaction recipt 
+        Then I should see the transaction receipt of agent
         Then I should see the flag transaction and share button
 
     
