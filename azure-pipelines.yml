@@ -266,4 +266,4 @@ stages:
             aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/dast-admin/dev/ --acl public-read
             aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
           displayName: 'DAST Report documentation'
-          condition: always()   
+          condition: always()    
