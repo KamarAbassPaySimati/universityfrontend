@@ -36,9 +36,11 @@ const {
     getKYCCompletedCustomerList,
     createTransactionList,
     deleteTransactionList,
+    generateMobileTokenAgent,
     getKYCCompletedAgentDeactivateList,
     getKYCDeactivateCustomerList,
-    send_payout_request
+    send_payout_request,
+    RequestPayoutAgent
 } = require('../bdd_api/index');
 const {
     extractQRCodeData,
@@ -223,7 +225,40 @@ Before(async function () {
 After(async function () {
     await new Promise(resolve => setTimeout(resolve, 2000));
 });
-
+Before('@GenerateMobileToken', async function () {
+    try {
+        const response = await generateMobileTokenAgent();
+        global.token = response.IdToken;
+        console.log(global.token, 'response');
+    } catch (error) {
+        console.log(error, 'error');
+    }
+});
+Before('@GenerateMobileTokenMerchant', async function () {
+    try {
+        const response = await generateMobileTokenAgent('merchant');
+        global.token = response.IdToken;
+        console.log(global.token, 'response');
+    } catch (error) {
+        console.log(error, 'error');
+    }
+});
+Before('@PayOutRequestAgent', async function () {
+    try {
+        const response = await RequestPayoutAgent(global.token);
+        console.log(response, 'response');
+    } catch (error) {
+        console.log(error, 'error');
+    }
+});
+Before('@PayOutRequestMerchent', async function () {
+    try {
+        const response = await RequestPayoutAgent(global.token, 'Merchant');
+        console.log(response, 'response');
+    } catch (error) {
+        console.log(error, 'error');
+    }
+});
 AfterStep(async function () {
     await new Promise(resolve => setTimeout(resolve, 100));
     const updatedCoverageData = await driver.executeScript('return __coverage__;');
