@@ -4,13 +4,14 @@ import Shimmer from '../../../../../components/Shimmers/Shimmer';
 import NoDataError from '../../../../../components/NoDataError/NoDataError';
 import Image from '../../../../../components/Image/Image';
 import convertTimestampToCAT from '../../../../../CommonMethods/timestampToCAT';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 import formatPhoneNumber from '../../../../../CommonMethods/formatPhoneNumber';
 import formatID from '../../../../../CommonMethods/formatId';
 
 const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type }) => {
     const navigate = useNavigate();
+    const location = useLocation();
 
     // Mapping of original keys to desired transformations
     const keyTransformations = {
@@ -28,7 +29,6 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
     };
 
     const getKeyByValue = (obj, value) => {
-        console.log(Object.keys(obj).find(key => obj[key] === value), 'llll');
         return Object.keys(obj).find(key => obj[key] === value);
     };
 
@@ -83,7 +83,19 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid={`transaction_view-${index}`}
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
-                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/${type}/${type}-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`)} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/${type}/${type}-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`,
+                                        {
+                                            state: {
+                                                ...location.state,
+                                                page: searchParams.get('page'),
+                                                search: searchParams.get('search') || '',
+                                                start_date: searchParams.get('start_date') || '',
+                                                end_date: searchParams.get('end_date') || '',
+                                                transaction_type: searchParams.get('transaction_type') || ''
+                                            }
+                                        }
+
+                                    )} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
                                 </td>
                             </tr>
                         ))}

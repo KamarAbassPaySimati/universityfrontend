@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import Paginator from '../../../components/Paginator/Paginator';
@@ -39,7 +39,6 @@ const Customer = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400) {
                 setNotFound(true);
@@ -48,6 +47,7 @@ const Customer = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
@@ -59,7 +59,7 @@ const Customer = () => {
     /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
         } else {

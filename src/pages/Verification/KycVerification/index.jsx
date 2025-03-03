@@ -54,7 +54,7 @@ const KycVerification = () => {
             url += `page=${searchParams.get('page')}`;
         }
         if (searchParams.get('search') !== null) {
-            url += `&search=${searchParams.get('search')}`;
+            url += `&search=${encodeURIComponent(searchParams.get('search'))}`;
         }
         if (searchParams.get('sortOrder') !== null) {
             url += `&sortOrder=${searchParams.get('sortOrder')}`;
@@ -125,16 +125,8 @@ const KycVerification = () => {
             setToastError('Something went wrong!');
         }
     }, [searchParams]);
-    // const GetList = useCallback(async () => {
-    //     try {
-    //         dispatch(AdminList(searchParams));
-    //     } catch (error) {
-    //         console.error(error);
-    //     }
-    // }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400 || error.status === 404) {
                 setNotFound(true);
@@ -201,7 +193,6 @@ const KycVerification = () => {
                                 singleSelectFilter={true}
                             />
                         </div>)
-
                 }
                 {
                     (List?.data?.length !== 0 && !notFound) &&

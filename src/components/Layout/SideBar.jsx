@@ -81,16 +81,24 @@ const SideBar = ({ role }) => {
         dispatch(setDropdown(key));
     };
 
-    const handleOptionClick = (nav, option, key) => {
-        navigate(nav.toLowerCase() + '/' + Slugify(option));
+    const handleOptionClick = (nav, option, key, currentPath) => {
+        const targetPath = `/${nav.toLowerCase()}/${Slugify(option)}`;
+
+        if (currentPath === targetPath) {
+            // eslint-disable-next-line no-useless-return
+            return; // Prevent navigation if already on the same option
+        } else {
+            navigate(targetPath);
+        }
     };
+
     // useGlobalSignout();
 
     return (
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>
                 <div className='flex justify-center h-[56px] items-center'>
-                    <Image src='sideNavLogo' />
+                    <Image src='sideNavLogo' className={'-ml-3'} />
                 </div>
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
                     <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4 max-h-[calc(100vh-151px)] overflow-y-auto scrollBar'>
@@ -112,7 +120,7 @@ const SideBar = ({ role }) => {
                                     <>
                                         {sideNavObject[role][nav]?.dropdown?.map((option) => (
                                             <div key={option} className={`ml-12 hover:text-primary-normal mr-3 my-1 font-[400] text-[14px] leading-[24px] text-neutral-secondary cursor-pointer
-                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown)} >
+                                        ${location.pathname.includes(Slugify(option)) ? 'text-primary-normal' : ''}`} onClick={() => handleOptionClick(nav, option, sideNavObject[role][nav]?.dropdown, location.pathname)} >
                                                 {option}
                                             </div>
                                         ))}

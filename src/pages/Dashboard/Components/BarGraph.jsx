@@ -61,9 +61,9 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
             setIsParams(params);
             const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${((DashboardName === 'Customer Registrations' || DashboardName === 'Merchant Registrations') && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase().replace(/ /g, '_')}` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type === 'Pay Person' ? 'pay_person' : states.transaction_type === 'Pay Paymaart' ? 'paymaart' : 'afrimax'}` : ''}${params !== undefined ? `${params}` : ''}`);
             let count = 0;
-            res.data.data.forEach(element => {
+            res?.data?.data?.forEach(element => {
                 if (multiple) {
-                    multiple.forEach(item => {
+                    multiple?.forEach(item => {
                         if (element[item.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_')] !== 0) {
                             count = count + 1;
                         }

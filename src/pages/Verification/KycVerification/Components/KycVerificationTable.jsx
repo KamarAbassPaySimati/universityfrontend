@@ -112,7 +112,7 @@ const KycVerificationTable = (
                                     {
                                         <>
                                             <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'}
-                                                onClick={() => Navigate(`${geturl()}${user?.paymaart_id}`
+                                                onClick={() => Navigate(`${geturl()}${user?.paymaart_id}`, { state: { page: searchParams.get('page'), type: searchParams.get('type'), citizen: searchParams.get('citizen'), fullkyc: searchParams.get('fullkyc') ? searchParams.get('fullkyc') : '', simplifiedkyc: searchParams.get('simplifiedkyc') ? searchParams.get('simplifiedkyc') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                                 )}
                                             />
                                         </>

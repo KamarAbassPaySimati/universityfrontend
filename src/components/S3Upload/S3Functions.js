@@ -2,7 +2,7 @@ import { uploadData, remove } from 'aws-amplify/storage';
 import { v4 as uuidv4 } from 'uuid';
 
 export const handleUpload = async (file, path) => {
-    const fileName = file.name.split('.')[0].slice(-15) + '.' + file.name.split('.')[file.name.split('.').length - 1];
+    const fileName = file.name;
     try {
         const result = await uploadData({
             key: `${path}/${uuidv4()}/${fileName}`,
