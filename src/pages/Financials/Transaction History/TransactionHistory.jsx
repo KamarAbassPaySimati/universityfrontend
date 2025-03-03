@@ -12,6 +12,7 @@ import Paginator from '../../../components/Paginator/Paginator';
 import { TransactionHistoryList } from './transactionHistorySlice';
 import { dataService } from '../../../services/data.services';
 import TransactionHistoryTable from './components/TransactionHistoryTable';
+import { setSearchedParamsView } from '../../../redux/GlobalSlice';
 
 const TransactionHistory = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
@@ -127,6 +128,9 @@ const TransactionHistory = () => {
 
         return newState;
     }
+    useEffect(() => {
+        dispatch(setSearchedParamsView(''));
+    }, []);
 
     return (
         <CardHeader
