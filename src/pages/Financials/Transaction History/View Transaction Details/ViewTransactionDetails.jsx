@@ -41,8 +41,6 @@ const ViewTransactionDetails = ({ type }) => {
     // Construct the query string
     const queryString = `${searchedFromView ? `${searchedFromView.startsWith('?') ? searchedFromView : `?${searchedFromView}`}` : ''}`;
 
-    console.log(queryString, 'queryString');
-
     let navigation;
     let paths;
     let pathurls;
