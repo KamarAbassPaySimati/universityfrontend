@@ -104,7 +104,7 @@ const NewPasswordForm = ({
                     text="Reset"
                     testId='submit_button'
                     onClick={handleClick}
-                    disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
+                    disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net'}
                     isLoading={isLoading}
                 />
             </div>
