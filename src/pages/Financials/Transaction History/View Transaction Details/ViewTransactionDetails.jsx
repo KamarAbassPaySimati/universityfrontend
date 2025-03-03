@@ -5,7 +5,7 @@ import Image from '../../../../components/Image/Image';
 import { dataService } from '../../../../services/data.services';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { endpoints } from '../../../../services/endpoints';
-import { useNavigate, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
 import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
@@ -36,6 +36,26 @@ const ViewTransactionDetails = ({ type }) => {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { viewTransaction } = endpoints;
     const captureRef = useRef();
+    const location = useLocation();
+
+    const state = location.state || {};
+
+    // Function to construct query parameters dynamically
+    const constructQueryParams = (state) => {
+        const params = new URLSearchParams();
+
+        if (state.page) params.append('page', state.page);
+        if (state.start_date) params.append('start_date', state.start_date);
+        if (state.end_date) params.append('end_date', state.end_date);
+        if (state.transaction_type) params.append('transaction_type', state.transaction_type);
+        if (state.search && state.search.trim() !== '') params.append('search', state.search.trim());
+
+        return params.toString();
+    };
+
+    // Construct the query string
+    const queryParams = constructQueryParams(state);
+    const queryString = queryParams ? `?${queryParams}` : '';
 
     let navigation;
     let paths;
@@ -45,12 +65,17 @@ const ViewTransactionDetails = ({ type }) => {
     if (type === 'agent') {
         navigation = `/users/agents/agents-transaction-histories/${agentId}`;
         paths = ['Users', 'Agents', 'Transaction History'];
-        pathurls = ['users/agents', '', `agents-transaction-histories/${agentId}`];
+        pathurls = ['users/agents', '', `agents-transaction-histories/${agentId}${queryString}`];
         getUrl = `admin-users/view-agent-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${agentId}`;
+    } else if (type === 'merchant') {
+        navigation = `/users/merchants/merchant-transaction-histories/${agentId}`;
+        paths = ['Users', 'Merchants', 'Transaction History'];
+        pathurls = ['users/merchants', '', `merchants-transaction-histories/${agentId}${queryString}`];
+        getUrl = `admin-users/view-merchant-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${agentId}`;
     } else if (type === 'customer') {
         navigation = `/users/customers/customers-transaction-histories/${agentId}`;
         paths = ['Users', 'Customers', 'Transaction History'];
-        pathurls = ['users/customers', '', `customers-transaction-histories/${agentId}`];
+        pathurls = ['users/customers', '', `customers-transaction-histories/${agentId}${queryString}`];
         getUrl = `admin-users/view-customer-transaction?UUID=${id}&transactionType=${transactionType}&paymaartId=${agentId}`;
     } else {
         navigation = '/financials/transaction-history';
@@ -181,13 +206,13 @@ const ViewTransactionDetails = ({ type }) => {
                     flex flex-col justify-center items-center relative m-4'>
                     <Image src='sideNavLogo' className='w-[165px]' />
                     <div className='absolute top-[23px] right-[23px] flex gap-[14px] hide-during-capture'>
-                        { !transactionType?.includes('request') && (transactionDetails?.flagged
+                        {!transactionType?.includes('request') && (transactionDetails?.flagged
                             ? <Image src='flagged' testId='flag_transaction_button'
                             />
                             : <Image src='flag' onClick={() => { if (!dataLoading) setIsFlagModelOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} testId={'flag_transaction_button'}
                             />)
                         }
-                        <Image src='share' testId='share_transaction_button' onClick={() => { if (!dataLoading)setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
+                        <Image src='share' testId='share_transaction_button' onClick={() => { if (!dataLoading) setIsShareModalOpen(true); }} className={`${dataLoading ? 'cursor-not-allowed' : 'cursor-pointer '}`} />
                     </div>
                     <div className='font-[600] text-[14px] leading-[24px] text-[#A4A9AE] mt-[10px] mb-6'>
                         Thank you for using Paymaart
@@ -220,7 +245,7 @@ const ViewTransactionDetails = ({ type }) => {
                             <div className='w-1/2 pb-1'>
                                 {dataLoading
                                     ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                    : transactionType !== 'interest' && <p>{formatID(transactionDetails?.sender_id) || '-'}  </p> }
+                                    : transactionType !== 'interest' && <p>{formatID(transactionDetails?.sender_id) || '-'}  </p>}
                             </div>
                         </div>}
 
@@ -242,7 +267,7 @@ const ViewTransactionDetails = ({ type }) => {
                                     <div className='w-1/2 pb-1'>
                                         {dataLoading
                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                            : <p>{transactionDetails?.bank_name || '-'}</p> }
+                                            : <p>{transactionDetails?.bank_name || '-'}</p>}
                                     </div>
                                 </div>
                                 <div className='w-full flex gap-1'>
@@ -262,7 +287,7 @@ const ViewTransactionDetails = ({ type }) => {
                                     <div className='w-1/2 pb-1'>
                                         {dataLoading
                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                            : <p>{transactionDetails?.account_no || '-'}</p> }
+                                            : <p>{transactionDetails?.account_no || '-'}</p>}
                                     </div>
                                 </div>
                             </>
@@ -274,7 +299,7 @@ const ViewTransactionDetails = ({ type }) => {
                                     <div className='w-1/2 pb-1'>
                                         {dataLoading
                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                            : <p className='break-word'>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || transactionDetails?.merchantName || '-')}</p> }
+                                            : <p className='break-word'>{transactionType === 'afrimax' ? 'Afrimax' : (transactionDetails?.receiver_name || transactionDetails?.merchantName || '-')}</p>}
                                     </div>
                                 </div>
                                 <div className='w-full flex gap-1'>
@@ -295,29 +320,29 @@ const ViewTransactionDetails = ({ type }) => {
                                 </div>
                             </>}
                         {(transactionDetails?.obo_name ||
-                                transactionDetails?.obo_id ||
-                                transactionDetails?.afrimax_name ||
-                                transactionDetails?.afrimax_id) &&
-                                !dataLoading &&
-                                <>
-                                    {type !== 'customer'
-                                        ? <div className='w-full flex gap-1'>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
-                                            </div>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='h-[24px] mt-[10px]'></p>
-                                            </div>
+                            transactionDetails?.obo_id ||
+                            transactionDetails?.afrimax_name ||
+                            transactionDetails?.afrimax_id) &&
+                            !dataLoading &&
+                            <>
+                                {type !== 'customer'
+                                    ? <div className='w-full flex gap-1'>
+                                        <div className='w-1/2 pb-1'>
+                                            <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
                                         </div>
-                                        : <div className='w-full flex gap-1'>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='mt-1'></p>
-                                            </div>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='mt-1'></p>
-                                            </div>
-                                        </div>}
-                                    {transactionDetails?.obo_name && !dataLoading &&
+                                        <div className='w-1/2 pb-1'>
+                                            <p className='h-[24px] mt-[10px]'></p>
+                                        </div>
+                                    </div>
+                                    : <div className='w-full flex gap-1'>
+                                        <div className='w-1/2 pb-1'>
+                                            <p className='mt-1'></p>
+                                        </div>
+                                        <div className='w-1/2 pb-1'>
+                                            <p className='mt-1'></p>
+                                        </div>
+                                    </div>}
+                                {transactionDetails?.obo_name && !dataLoading &&
                                     (<div className='w-full flex gap-1'>
                                         <div className='w-1/2 pb-1'>
                                             <p>Paymaart Name</p>
@@ -326,8 +351,8 @@ const ViewTransactionDetails = ({ type }) => {
                                             <p className='break-word'>{transactionDetails?.obo_name || '-'}</p>
                                         </div>
                                     </div>)
-                                    }
-                                    {transactionDetails?.obo_id && !dataLoading &&
+                                }
+                                {transactionDetails?.obo_id && !dataLoading &&
                                     (<div className='w-full flex gap-1'>
                                         <div className='w-1/2 pb-1'>
                                             <p>Paymaart ID</p>
@@ -336,28 +361,28 @@ const ViewTransactionDetails = ({ type }) => {
                                             <p>{formatID(transactionDetails?.obo_id) || '-'}</p>
                                         </div>
                                     </div>)}
-                                    {(transactionDetails?.afrimax_name ||
+                                {(transactionDetails?.afrimax_name ||
                                     transactionDetails?.afrimax_id) && !dataLoading && (
-                                        <>
-                                            <div className='w-full flex gap-1'>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p>Afrimax Name</p>
-                                                </div>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p className='break-word'>{transactionDetails?.afrimax_name || '-'}</p>
-                                                </div>
+                                    <>
+                                        <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>Afrimax Name</p>
                                             </div>
-                                            <div className='w-full flex gap-1'>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p>Afrimax ID</p>
-                                                </div>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p>{transactionDetails?.afrimax_id || '-'}</p>
-                                                </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='break-word'>{transactionDetails?.afrimax_name || '-'}</p>
                                             </div>
-                                        </>
-                                    )}
-                                </>}
+                                        </div>
+                                        <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>Afrimax ID</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>{transactionDetails?.afrimax_id || '-'}</p>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+                            </>}
                     </div>
                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
@@ -365,10 +390,10 @@ const ViewTransactionDetails = ({ type }) => {
                             <div className='w-1/2 flex flex-col gap-1'>
                                 <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
                                 {transactionType !== 'interest' &&
-                                <>
-                                    <p>Txn Fee*</p>
-                                    <p>*VAT Included</p>
-                                </>}
+                                    <>
+                                        <p>Txn Fee*</p>
+                                        <p>*VAT Included</p>
+                                    </>}
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
                                 <p>Txn ID</p>
                                 <p>Date, time (CAT)</p>
@@ -386,21 +411,21 @@ const ViewTransactionDetails = ({ type }) => {
                                             {formattedAmount(Math.abs(transactionDetails?.transaction_amount)) || '0.00'} MWK
                                         </p>
                                         {transactionType !== 'interest' &&
-                                        <>
-                                            <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
-                                            <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
-                                        </>}
+                                            <>
+                                                <p>{formattedAmount(transactionDetails?.transaction_fee) || '0.00'} MWK</p>
+                                                <p>{formattedAmount(transactionDetails?.vat) || '0.00'} MWK</p>
+                                            </>}
                                         {transactionDetails?.commission && <p>{formattedAmount(transactionDetails?.commission) || '0.00'} MWK</p>}
                                         <p data-testid="transaction_id">{transactionDetails?.transaction_id || '-'}</p>
                                         <p>{convertTimestampToCAT(transactionDetails?.created_at) || '-'}</p>
-                                        {transactionType === 'afrimax' && <p>{ transactionDetails?.afrimax_plan_name || '-'}</p>}
+                                        {transactionType === 'afrimax' && <p>{transactionDetails?.afrimax_plan_name || '-'}</p>}
                                         {transactionDetails?.agent_closing_balance && <p>{formattedAmount(transactionDetails?.agent_closing_balance) || '0.00'} MWK</p>}
                                         {transactionDetails?.note && <p>{transactionDetails?.note}</p>}
                                         {transactionType === 'interest' &&
-                                        <>
-                                            <p>Customer Interest</p>
-                                            <p>{`${getQuarterEndDate(transactionDetails?.created_at)}`}</p>
-                                        </>}
+                                            <>
+                                                <p>Customer Interest</p>
+                                                <p>{`${getQuarterEndDate(transactionDetails?.created_at)}`}</p>
+                                            </>}
                                         {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && <p>{capitalizeFirstLetter(transactionDetails?.membership).replace(/Primex/i, 'PrimeX') || '-'}</p>}
                                         {(transactionDetails?.membership || transactionDetails?.membership_start || transactionDetails?.membership_expiry) && <p>{`${convertTimestampToDateYear(transactionDetails?.membership_start) || '---'} - ${convertTimestampToDateYear(transactionDetails?.membership_expiry)}`}</p>}
                                     </>}
@@ -419,7 +444,7 @@ const ViewTransactionDetails = ({ type }) => {
                     <ConfirmationPopup
                         title={'Flag Transaction'}
                         message={'Select all applicable'}
-                        messageStyle={'text-[14px] font-medium text-[#A4A9AE] mt-2'}
+                        messageStyle={'text-[14px] font-medium text-[#A4A9AE] mt-2 mb-6'}
                         Reason={(<>
                             {Object.keys(flagReason).map((item, index = 0) => (
                                 <>
@@ -432,7 +457,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         id={`reject_${index}`}
                                         type={'main'}
                                         flag
-                                        // Checked={selectedCheckBox.includes(item)}
+                                    // Checked={selectedCheckBox.includes(item)}
                                     />
                                     <ol className="space-y-4 ml-2 lower-alpha list-inside text-[12px] font-normal leading-[24px] pb-2">
                                         <ul className="ps-5 space-y-1 list-disc list-inside">
@@ -454,7 +479,7 @@ const ViewTransactionDetails = ({ type }) => {
                         handleClose={handleCloseModel}
                         buttonText={'Confirm'}
                         buttonColor={'bg-[#3B2A6F]'}
-                        handleReason={() => {}}
+                        handleReason={() => { }}
                         error={submitSelected}
                     />
                 </div>

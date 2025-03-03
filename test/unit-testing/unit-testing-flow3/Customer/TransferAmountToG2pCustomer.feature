@@ -32,7 +32,7 @@ Feature: Paymaart - Admin Web - Transfer amount to G2P Customer
             Then I should view G2P customer details
             When I upload the valid excel sheet as "ValidSheet.xlsx"
             And I should read a message stating that "Successfully Uploaded G2P sheet"
-            Then I should see table header containing '["Sheet Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
+            Then I should see table header containing '["File Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
             When I click on transfer amount button
             Then I should see a confirmation prompt to execute payment
             When I click on confirm button for transfer

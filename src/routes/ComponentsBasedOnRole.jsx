@@ -208,8 +208,14 @@ export const ComponentsBasedOnRole = {
             // Merchant Specific View from Merchant Listing
             {
                 name: 'Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'specific'} />,
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
                 path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
             },
             // customer Specific View from Merchant Listing
             {
@@ -294,6 +300,12 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionList type='customers' />,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
+            },
             // Flagged List
             {
                 name: 'Flagged List',
@@ -317,6 +329,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Customer view Specific Transaction',
                 element: <ViewTransactionDetails type='customer' />,
                 path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
+            },
+            // Specific Merchant view specific transaction
+            {
+                name: 'Specific Merchant view Specific Transaction',
+                element: <ViewTransactionDetails type='merchant' />,
+                path: '/users/merchants/merchants-transaction-histories/view/:agentId/:transactionType/:id'
             },
             // View specific flagged transaction
             {
@@ -357,6 +375,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Customer Transaction List',
                 element: <ViewTransactionList type='customers'/>,
                 path: '/users/customers/customers-transaction-histories/:id'
+            },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
             },
             {
                 name: 'KYC Verification list',

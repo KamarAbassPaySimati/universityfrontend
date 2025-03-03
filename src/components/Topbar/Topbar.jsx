@@ -23,10 +23,12 @@ const Topbar = ({
     pageNumber,
     NoFilter,
     customClass,
-    initialState
+    initialState,
+    merchant
 
 }) => {
     const [timer, setTimer] = useState(null);
+    const [errorMessage, setErrorMessage] = useState('');
     const [search, setSearch] = useState(!searchParams.get('search') ? '' : decodeURIComponent(searchParams.get('search')) || '');
 
     const handleSearch = (e) => {
@@ -46,11 +48,13 @@ const Topbar = ({
         } else {
             params.page = 1;
         }
-        if (key === 'search') params[key] = encodeURIComponent(value);
+        if (key === 'search') params[key] = (value);
         else params[key] = value;
+
         if (params.search === '') delete params.search;
         setSearchParams({ ...params });
     };
+
     const handleSearchParamsForFilter = (key, value) => {
         const params = Object.fromEntries(searchParams);
         if (pageNumber) {
@@ -74,11 +78,13 @@ const Topbar = ({
     const handleClearSearch = () => {
         setSearch('');
         handleSearchParams('search', '');
+        setErrorMessage('');
     };
+
     useEffect(() => {
-       if (searchParams.get('search') === null) {
-        setSearch('');
-       }
+        if (searchParams.get('search') === null) {
+            setSearch('');
+        }
     }, [searchParams]);
 
     const handleClearFilter = () => {
@@ -99,6 +105,7 @@ const Topbar = ({
         delete params.end_date;
         setSearchParams({ ...params });
     };
+
     const handleClearFilterForSingleCheck = () => {
         // Reset filterValues to an empty object or default values
         const params = Object.fromEntries(searchParams);
@@ -116,15 +123,15 @@ const Topbar = ({
     };
 
     return (
-        <div className="relative my-2  ">
+        <div className="relative my-2">
             <input
                 type="text"
                 value={search}
                 data-testid="search"
                 onChange={handleSearch}
-                placeholder= {placeHolder}
+                placeholder={placeHolder}
                 className={`hover:bg-[#F8F8F8] focus:bg-[#F8F8F8] text-neutral-primary placeholder:text-neutral-secondary
-                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[350px] ml-4 pr-8 rounded-[4px]
+                outline-none pl-[42px] py-1 text-[14px] font-[400] leading-[24px] w-[360px] ml-4 pr-8 rounded-[4px]
                 ${search?.length > 0 ? 'bg-[#F8F8F8]' : ''}`}
             />
             <Image
@@ -138,12 +145,12 @@ const Topbar = ({
                 testId='search-close'
                 className="absolute top-1/2 -translate-y-1/2 left-[340px] cursor-pointer bg-[#F8F8F8]"
             />}
-            {NoFilter === undefined && (
+            {NoFilter === undefined && !(searchParams.get('type') === 'reported merchants') && (
                 multiFilter
                     ? <MultiFilter
                             filterOptions={filterOptions}
                             filterType={filterType}
-                            handleApplySearchParams={ null } // write a function to apply the seach params
+                            handleApplySearchParams={null} // write a function to apply the seach params
                             searchParams={searchParams}
                             filterActive={filterActive}
                             setSearchParams={setSearchParams}
@@ -152,7 +159,10 @@ const Topbar = ({
                             customClass={customClass}
                             initialState={initialState}
                             pageNumber={pageNumber}
-                     />
+                            merchant={merchant}
+                            setErrorMessage={setErrorMessage}
+                            errorMessage={errorMessage}
+                    />
                     : singleSelectFilter
                         ? <FilterWithSingleOption
                                 filterOptionOne={filter1}

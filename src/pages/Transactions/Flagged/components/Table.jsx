@@ -13,7 +13,6 @@ import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
 
 const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, accessRole }) => {
     const Navigate = useNavigate();
-    console.log('transactions', List);
     const obj = {
         ft01: 'Transaction & System Failures',
         ft02: 'Policy Clarity & Customer Support',
@@ -48,7 +47,11 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 <td data-testid="flagged_by" title={user?.flagged_by} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{formatID(user?.flagged_by) || '-'}</td>
                                 <td data-testid={`beneficiary_paymaart_id_${user.status === 'pending' ? 'pending' : 'other'}`} title={user?.receiver_id?.startsWith('+') ? formatPhoneNumber(user?.receiver_id) : formatID(user?.receiver_id)} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{user?.receiver_id?.startsWith('+') ? formatPhoneNumber(user?.receiver_id) : formatID(user?.receiver_id) || '-'}</td>
                                 <td data-testid="reversal_admin_name" title={user?.reversal_admin_name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.reversal_admin_name || '-'}`}</td>
-                                <td data-testid="reason" title={user?.reasons.map(key => obj[key]).join(', ')} className='py-2 px-[10px] truncate min-w-[250px] max-w-[250px]'>{`${user?.reasons.map(key => obj[key]).join(', ')}` || '-'}</td>
+                                <td data-testid="reason"
+                                    title={user?.reasons?.length ? user.reasons.map(key => obj?.[key] || '').filter(Boolean).join(', ') : '-'}
+                                    className='py-2 px-[10px] truncate min-w-[250px] max-w-[250px]'>
+                                    {user?.reasons?.length ? user.reasons.map(key => obj?.[key] || '').filter(Boolean).join(', ') : '-'}
+                                </td>
                                 <td data-testid="amount" title={formattedAmount(user?.amount)} className='py-2 px-[10px] text-right truncate min-w-[150px] max-w-[150px]'>{`${formattedAmount(Math.abs(user?.amount)) || '0.00'} `}</td>
 
                                 <td data-testid="status" className='py-2 px-[10px]'>
@@ -67,7 +70,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                                 </td>
                                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${user.status === 'pending' ? 'pending' : 'other'}`}
-                                        onClick={() => Navigate(`/transactions/flagged/view/${user?.sender_id}/${user?.transaction_type}/${user?.id}`
+                                        onClick={() => Navigate(`/transactions/flagged/view/${user?.sender_id}/${user?.transaction_type}/${user?.id}`, { state: { page: searchParams.get('page'), FlaggedReason: searchParams.get('Flagged Reason') ? searchParams.get('Flagged Reason') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                         )} />
                                     <Tooltip
                                         id={`eye-${index}`}

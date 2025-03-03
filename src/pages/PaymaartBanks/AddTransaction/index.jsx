@@ -89,7 +89,6 @@ export default function AddTransaction ({ type }) {
         }
     }, [type]);
     const getStaticText = () => {
-        console.log(filedData.transaction_code, 'filedData.transaction_code');
         switch (filedData.transaction_code) {
         case `Pay-in by Agent to ${id} | RM credit`:
         case `Pay-in by Paymaart OBO Agent to ${id} | RM credit`:
@@ -374,8 +373,8 @@ export default function AddTransaction ({ type }) {
             setLoading(false);
         } else {
             try {
+                // eslint-disable-next-line no-unused-vars
                 const variable = TransactionCode(filedData.transaction_code, type);
-                console.log(variable);
                 const payload = {
                     transaction_code: TransactionCode(filedData.transaction_code, type),
                     entry_by: filedData?.entry_by,
@@ -446,7 +445,6 @@ export default function AddTransaction ({ type }) {
                     payload.entry_for = `${getStaticText()}${filedData?.entry_for}`;
                     break;
                 case `Charge for Bank Services or Transactions from ${id} | RM debit`:
-                    console.log('nnnn');
                     payload.transaction_type = 'bank_charges';
                     payload.entered_by = payload.entry_by;
                     delete payload.entry_by;

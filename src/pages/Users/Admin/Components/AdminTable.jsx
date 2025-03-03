@@ -88,8 +88,8 @@ const AdminTable = (
                                     {
                                         CurrentUserRole === 'super-admin' && (
                                             <>
-                                                <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)} />
-                                                {paymaartId !== user?.paymaart_id && <Image src='edit' testId={`edit-${index}`} className={'cursor-pointer'} toolTipId={`edit-${index}`} onClick={() => navigate(`/users/admins/update-admin/${user?.paymaart_id}`)}/>}
+                                                <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), role: searchParams.get('role') ? searchParams.get('role') : '', status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } })} />
+                                                {paymaartId !== user?.paymaart_id && <Image src='edit' testId={`edit-${index}`} className={'cursor-pointer'} toolTipId={`edit-${index}`} onClick={() => navigate(`/users/admins/update-admin/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), role: searchParams.get('role') ? searchParams.get('role') : '', status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } })}/>}
                                             </>
                                         )
                                     }
