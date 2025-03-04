@@ -36,11 +36,11 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     };
     const onSubmitValue = async (e) => {
         e.preventDefault();
-        if (window.location.host !== 'localhost:3000') {
+        if (window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') {
             await reCaptchaRef.current.executeAsync();
         }
         handleSubmit(e);
-        if (window.location.host !== 'localhost:3000') {
+        if (window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') {
             await reCaptchaRef.current.reset();
         }
     };
@@ -91,7 +91,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 showLoginError={true}
                                 setEnteredLetter={setEnteredLetter}
                             />
-                            {(window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') && (
+                            {(window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net' && window.location.host !== 'pre-production-admin.paymaart.net') && (
                                 <ReCAPTCHA
                                     style={{ display: 'inline-block', height: '10px !important' }}
                                     theme="dark"
@@ -103,7 +103,7 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
                                 />
                             )}
                             <Button
-                                disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net'}
+                                disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net' && window.location.host !== 'pre-production-admin.paymaart.net'}
                                 testId='login_button' isLoading={isLoading} text='Login' className='mt-4' />
                         </form>
                         {/* <div data-testid="forgot_password_link" onClick={() => navigate('/forgot-password')}
