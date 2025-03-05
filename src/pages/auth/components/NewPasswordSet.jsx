@@ -83,7 +83,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin, activ
 
     const handleClick = async (e) => {
         e.preventDefault();
-        if (window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') {
+        if (window.location.host !== 'localhost:3000' ) {
             await reCaptchaRef.current.executeAsync();
         }
 
@@ -130,7 +130,7 @@ const NewPasswordSet = ({ setIsSuccess, token, setIsValidToken, isWithPin, activ
                 setIsSuccess(false);
             }
         }
-        if (window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') {
+        if (window.location.host !== 'localhost:3000' ) {
             await reCaptchaRef.current.reset();
         }
     };
