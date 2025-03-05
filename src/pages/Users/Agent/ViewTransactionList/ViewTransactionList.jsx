@@ -3,7 +3,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react';
 import CardHeader from '../../../../components/CardHeader';
 import ProfileName from '../../../../components/ProfileName/ProfileName';
 import Button from '../../../../components/Button/Button';
-import { useLocation, useParams, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import Topbar from '../../../../components/Topbar/Topbar';
 import { useDispatch, useSelector } from 'react-redux';
 import NoDataError from '../../../../components/NoDataError/NoDataError';
@@ -18,19 +18,11 @@ import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
 import getInitials from '../../../../CommonMethods/getInitials';
 
 const ViewTransactionList = ({ type }) => {
-    const [searchParams, setSearchParams] = useSearchParams({ });
+    const [searchParams, setSearchParams] = useSearchParams({});
     const [notFound, setNotFound] = useState(false);
     const [exportLoading, setExportloading] = useState(false);
     const { id } = useParams();
-    const location = useLocation();
-    const [state, setState] = useState(location.state || {});
-
-    // Ensure `state` is updated only once, preserving it across re-renders
-    useEffect(() => {
-        if (location.state) {
-            setState(location.state);
-        }
-    }, [location.state]);
+    const navigate = useNavigate();
 
     const initailState = {
         'transaction-type': { 'Pay-Out': false, 'Pay-In': false, G2P: false, Others: false }
@@ -40,12 +32,13 @@ const ViewTransactionList = ({ type }) => {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const dispatch = useDispatch();
     const { List, loading, error } = useSelector(state => state.agentTransactionHistory);
+    const searchedFromList = useSelector(state => state?.globalData?.setSearchedParamsList);
 
     const filterOptions = {
         'Transaction Type': type === 'customers'
             ? ['Pay-in', 'Cash-in', 'Cash-out', 'Interest Earned', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Refund', 'Pay Person', 'G2P Pay-in']
             : type === 'merchants'
-                ? ['Pay Paymaart', 'Cash-out', 'Customer payments', 'Pay-out']
+                ? ['Pay Paymaart', 'Pay Merchant', 'Cash-out', 'Pay-out', 'Payment Completed', 'Pay Merchant Onbehalf', 'Payout Reject', 'Payout Completed', 'Payout Approved', 'Cashout Failed', 'Cashout Refund']
                 : ['Pay-in', 'Pay-out', 'Cash-in', 'Cash-out', 'Pay Paymaart', 'Pay Afrimax', 'Pay Merchant', 'Other']
     };
 
@@ -72,11 +65,15 @@ const ViewTransactionList = ({ type }) => {
 
     const GetList = useCallback(async () => {
         try {
-            dispatch(AgentTransactionHistoryList({ searchParams, id, type }));
+            dispatch(AgentTransactionHistoryList({ searchParams, id, type, handleRedirection }));
         } catch (error) {
             console.error(error);
         }
     }, [searchParams]);
+
+    const handleRedirection = () => {
+        navigate('/404');
+    };
 
     useEffect(() => {
         if (error) {
@@ -114,22 +111,10 @@ const ViewTransactionList = ({ type }) => {
             ? 'users/merchants'
             : 'users/agents';
 
-    // Function to construct query parameters dynamically
-    const constructQueryParams = (state) => {
-        const params = new URLSearchParams();
-        console.log(params, 'paramsss');
-
-        if (state.page) params.append('page', state.page);
-        if (state.status && state.status.trim() !== '') params.append('status', state.status);
-        if (state.search && state.search.trim() !== '') params.append('search', state.search.trim());
-
-        return params.toString();
-    };
-
     // Construct the final URL
-    const queryParams = constructQueryParams(state);
-    const fullUrl = `${basePath}${queryParams ? `?${queryParams}` : ''}`;
+    const fullUrl = `${basePath}${searchedFromList ? `${searchedFromList.startsWith('?') ? searchedFromList : `?${searchedFromList}`}` : ''}`;
     const pathurl = [fullUrl];
+
     return (
         <CardHeader
             activePath={'Transaction History'}
@@ -188,51 +173,51 @@ const ViewTransactionList = ({ type }) => {
 
                     <div className={`relative ${notFound || List?.transactions?.length === 0 ? '' : 'thead-border-bottom'}`}>
                         {(!notFound && List?.transactions?.length === 0 &&
-                        searchParams.get('transaction_type') === null &&
-                    searchParams.get('search') === null && searchParams.get('start_date') === null && searchParams.get('end_date') === null)
+                            searchParams.get('transaction_type') === null &&
+                            searchParams.get('search') === null && searchParams.get('start_date') === null && searchParams.get('end_date') === null)
                             ? (
                                 <></>
                             )
                             : (!notFound &&
-                            <div className='bg-[#fff] border-b border-neutral-outline'>
-                                <Topbar
-                                    setSearchParams={setSearchParams}
-                                    searchParams={searchParams}
-                                    filterOptions={filterOptions}
-                                    placeHolder="Transaction ID or Beneficiary Paymaart ID"
-                                    filterType='Filter Transaction History'
-                                    isLoading={loading}
-                                    filterActive={(searchParams.get('transaction_type') !== null) && searchParams.get('start_date') !== null && searchParams.get('end_date') !== null}
-                                    multiFilter={true}
-                                    setAppliedFilter={setAppliedFilter}
-                                    appliedFilter={appliedFilter}
-                                    customClass={true}
-                                    initialState={initailState}
-                                    merchant={true}
+                                <div className='bg-[#fff] border-b border-neutral-outline'>
+                                    <Topbar
+                                        setSearchParams={setSearchParams}
+                                        searchParams={searchParams}
+                                        filterOptions={filterOptions}
+                                        placeHolder="Transaction ID or Beneficiary Paymaart ID"
+                                        filterType='Filter Transaction History'
+                                        isLoading={loading}
+                                        filterActive={(searchParams.get('transaction_type') !== null) && searchParams.get('start_date') !== null && searchParams.get('end_date') !== null}
+                                        multiFilter={true}
+                                        setAppliedFilter={setAppliedFilter}
+                                        appliedFilter={appliedFilter}
+                                        customClass={true}
+                                        initialState={initailState}
+                                        merchant={true}
 
-                                />
-                            </div>)
+                                    />
+                                </div>)
                         }
                         {!notFound && !(List?.transactions?.length === 0 && !loading &&
-                !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null)) &&
-                <div className='overflow-auto scrollBar h-tableHeight'>
-                    <TransactionTable
-                        error={error}
-                        loading={loading}
-                        List={List}
-                        setSearchParams={setSearchParams}
-                        notFound={notFound}
-                        searchParams={searchParams}
-                        paymaartId={id}
-                        type={type}
-                    />
-                </div>}
+                            !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null)) &&
+                            <div className='overflow-auto scrollBar h-tableHeight'>
+                                <TransactionTable
+                                    error={error}
+                                    loading={loading}
+                                    List={List}
+                                    setSearchParams={setSearchParams}
+                                    notFound={notFound}
+                                    searchParams={searchParams}
+                                    paymaartId={id}
+                                    type={type}
+                                />
+                            </div>}
                         {notFound &&
-                        <NoDataError
-                            className='h-noDataError1' heading='No data found' text = "404 could not find what you are looking for."/>}
+                            <NoDataError
+                                className='h-noDataError1' heading='No data found' text="404 could not find what you are looking for." />}
                         {List?.transactions?.length === 0 && !loading &&
-                !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null) &&
-                (<NoDataError className='h-noDataError1' heading='No transaction history to view yet' text='Please check back later' />)}
+                            !(searchParams.get('transaction_type') !== null || searchParams.get('search') !== null || searchParams.get('start_date') !== null || searchParams.get('end_date') !== null) &&
+                            (<NoDataError className='h-noDataError1' heading='No transaction history to view yet' text='Please check back later' />)}
                         {!loading && !error && !notFound && List?.transactions?.length !== 0 && <Paginator
                             currentPage={searchParams.get('page')}
                             totalPages={Math.ceil(List?.total_records / 10)}

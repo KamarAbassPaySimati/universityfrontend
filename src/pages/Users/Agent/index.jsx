@@ -9,6 +9,7 @@ import { AgentList } from './agentSlice';
 import NoDataError from '../../../components/NoDataError/NoDataError';
 import Slugify from '../../../CommonMethods/Sulgify';
 import GlobalContext from '../../../components/Context/GlobalContext';
+import { setSearchedParamsList, setSearchedParamsView } from '../../../redux/GlobalSlice';
 
 const Agent = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
@@ -66,6 +67,11 @@ const Agent = () => {
             GetList();
         }
     }, [GetList]);
+
+    useEffect(() => {
+        dispatch(setSearchedParamsView(''));
+        dispatch(setSearchedParamsList(''));
+    }, []);
 
     return (
         <CardHeader

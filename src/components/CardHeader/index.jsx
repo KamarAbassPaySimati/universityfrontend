@@ -85,7 +85,9 @@ const CardHeader = ({
                         <div key={index} className='flex'>
                             <span
                                 onClick={() => {
-                                    if (index === 0) return; // Disable the first option
+                                    if (paths.length === 1) {
+                                        if (index === 0) return; // Disable the first option
+                                    }
                                     if ((location?.state?.type === 'agents' || location?.state?.type === 'merchants') && location.state.type !== undefined && location.state.payoutRequest === 'payoutRequest') {
                                         // Navigate to the URL at the current index in pathurls
                                         const targetUrl = pathurls[index];
@@ -232,15 +234,16 @@ const CardHeader = ({
                                     : ((statusButton || upadteButtonStatus) && ((updateButton !== '' && updateButton !== true)
                                         ? (
                                             <button data-testid="update_button"
-                                                onClick={() => {
-                                                    if (handleupdatebutton) {
-                                                        handleupdatebutton();
-                                                        return;
-                                                    };
-                                                    navigate(updateButtonPath);
-                                                }}
-                                                className='ml-6 flex bg-primary-normal py-[8px] px-[16px] justify-center items-center
-                    h-[40px] rounded-[6px]'>
+                                                onClick={(updateButton !== 'Banned' || updateButton !== 'Resolved')
+                                                    ? () => {
+                                                        if (handleupdatebutton) {
+                                                            handleupdatebutton();
+                                                            return;
+                                                        };
+                                                        navigate(updateButtonPath);
+                                                    }
+                                                    : ''}
+                                                className={`ml-6 flex ${updateButton === 'Banned' ? 'bg-[#FF6363] cursor-not-allowed' : updateButton === 'Resolved' ? 'bg-[#13B681] cursor-not-allowed' : 'bg-primary-normal cursor-pointer'}  py-[8px] px-[16px] justify-center items-center h-[40px] rounded-[6px]`}>
                                                 {updateButton === 'Update' && <Image src='update'
                                                     className='mr-[8px]' />}
                                                 <p className='text-[14px] font-semibold text-[#ffffff]'>{updateButton}</p>

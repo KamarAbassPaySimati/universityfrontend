@@ -140,8 +140,6 @@ const PayOutRequests = () => {
 
         // Update only if changes are needed
         if (updatedParams.toString() !== searchParams.toString()) {
-            console.log('updatedParams', updatedParams);
-
             setSearchParams(updatedParams);
         } else {
             GetList();

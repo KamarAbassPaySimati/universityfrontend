@@ -8,6 +8,8 @@ import { useLocation, useNavigate } from 'react-router';
 import { formattedAmount } from '../../../../../CommonMethods/formattedAmount';
 import formatPhoneNumber from '../../../../../CommonMethods/formatPhoneNumber';
 import formatID from '../../../../../CommonMethods/formatId';
+import { useDispatch } from 'react-redux';
+import { setSearchedParamsView } from '../../../../../redux/GlobalSlice';
 
 const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type }) => {
     const navigate = useNavigate();
@@ -31,6 +33,8 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
     const getKeyByValue = (obj, value) => {
         return Object.keys(obj).find(key => obj[key] === value);
     };
+    const dispatch = useDispatch();
+    const searchParamsString = window.location.search;
 
     return (
         <>
@@ -83,19 +87,24 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                 </td>
                                 <td data-testid={`transaction_view-${index}`}
                                     className='py-2 px-[10px] flex items-center justify-center h-[48px]'>
-                                    <Image toolTipId={`eye-${index}`} onClick={() => navigate(`/users/${type}/${type}-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`,
-                                        {
-                                            state: {
-                                                ...location.state,
-                                                page: searchParams.get('page'),
-                                                search: searchParams.get('search') || '',
-                                                start_date: searchParams.get('start_date') || '',
-                                                end_date: searchParams.get('end_date') || '',
-                                                transaction_type: searchParams.get('transaction_type') || ''
-                                            }
-                                        }
+                                    <Image toolTipId={`eye-${index}`}
+                                        onClick={() => {
+                                            // Navigate to the new route with state
+                                            navigate(`/users/${type}/${type}-transaction-histories/view/${paymaartId}/${transaction?.transaction_type}/${transaction?.id}`, {
+                                                state: {
+                                                    ...location.state, // Preserve existing state
+                                                    page: searchParams.get('page'),
+                                                    search: searchParams.get('search') || '',
+                                                    start_date: searchParams.get('start_date') || '',
+                                                    end_date: searchParams.get('end_date') || '',
+                                                    transaction_type: searchParams.get('transaction_type') || ''
+                                                }
+                                            });
 
-                                    )} testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
+                                            // Dispatch the search params string to Redux
+                                            dispatch(setSearchedParamsView(searchParamsString));
+                                        }}
+                                        testId={`view-${index}`} src='eye' className={'cursor-pointer'} />
                                 </td>
                             </tr>
                         ))}

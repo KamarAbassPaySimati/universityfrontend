@@ -8,13 +8,15 @@ const initialState = {
     success: ''
 };
 
-export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHistory', async ({ searchParams, id, type }, { rejectWithValue }) => {
+export const AgentTransactionHistoryList = createAsyncThunk('agentTransactionHistory', async ({ searchParams, id, type, handleRedirection }, { rejectWithValue }) => {
     // Construct URL safely using query parameters instead of string interpolation
     try {
         const res = await dataService.GetAPI(`admin-transactions/${type === 'customers' ? 'customer-transaction?customer_id=' : type === 'merchants' ? 'merchant-transactions?merchant_id=' : 'agent-transactions?agent_id='}${id}&${searchParams.toString()}`);
+        if (res.data?.status === 400 || res.data?.status === 404) {
+            handleRedirection('/404'); // Redirect using window.location
+        }
         return res;
     } catch (error) {
-        // Log error or send notification
         console.error('Error fetching orders:', error);
         return rejectWithValue({ message: error });
     }

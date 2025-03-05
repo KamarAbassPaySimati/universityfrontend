@@ -94,20 +94,15 @@ function DeleteAccount () {
 
     useEffect(() => {
         if (error) {
-            if (error.status === 400 || error.status === 404) {
-                setNotFound(true);
-            } else {
-                setToastError('Something went wrong!');
-            }
+            (error.status === 400 || error.status === 404) ? setNotFound(true) : setToastError('Something went wrong!');
         }
-    }, [error]);
-    useEffect(() => {
-        const params = Object.fromEntries(searchParams);
+
         if (List?.data?.length !== 0) {
             setNotFound(false);
+            const params = Object.fromEntries(searchParams);
             params.page = 1;
         }
-    }, [List]);
+    }, [error, List]);
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
@@ -195,7 +190,7 @@ function DeleteAccount () {
                                     text='Try adjusting your search or filter to find what you’re looking for' />)
                         )
                 }
-                {!loading && !notFound && List?.data?.length !== 0 && <Paginator
+                {List?.data?.length !== 0 && <Paginator
                     currentPage={currentPage}
                     totalPages={Math.ceil(List?.total_records / 10)}
                     setSearchParams={setSearchParams}

@@ -5,7 +5,7 @@ import Image from '../../../../components/Image/Image';
 import { dataService } from '../../../../services/data.services';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { endpoints } from '../../../../services/endpoints';
-import { useLocation, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import TransactionDetailsShimmer from '../../../../components/Shimmers/transactionDetailsShimmer';
 import convertTimestampToCAT, { convertTimestampToDateYear, getQuarterEndDate } from '../../../../CommonMethods/timestampToCAT';
 import { formattedAmount } from '../../../../CommonMethods/formattedAmount';
@@ -36,26 +36,10 @@ const ViewTransactionDetails = ({ type }) => {
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
     const { viewTransaction } = endpoints;
     const captureRef = useRef();
-    const location = useLocation();
-
-    const state = location.state || {};
-
-    // Function to construct query parameters dynamically
-    const constructQueryParams = (state) => {
-        const params = new URLSearchParams();
-
-        if (state.page) params.append('page', state.page);
-        if (state.start_date) params.append('start_date', state.start_date);
-        if (state.end_date) params.append('end_date', state.end_date);
-        if (state.transaction_type) params.append('transaction_type', state.transaction_type);
-        if (state.search && state.search.trim() !== '') params.append('search', state.search.trim());
-
-        return params.toString();
-    };
+    const searchedFromView = useSelector(state => state?.globalData?.setSearchedParamsView);
 
     // Construct the query string
-    const queryParams = constructQueryParams(state);
-    const queryString = queryParams ? `?${queryParams}` : '';
+    const queryString = `${searchedFromView ? `${searchedFromView.startsWith('?') ? searchedFromView : `?${searchedFromView}`}` : ''}`;
 
     let navigation;
     let paths;
@@ -388,10 +372,10 @@ const ViewTransactionDetails = ({ type }) => {
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
-                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
+                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value*</p>
                                 {transactionType !== 'interest' &&
                                     <>
-                                        <p>Txn Fee*</p>
+                                        <p>{transactionDetails?.membership ? 'Txn Fee' : 'Txn Fee*'}</p>
                                         <p>*VAT Included</p>
                                     </>}
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
@@ -408,7 +392,14 @@ const ViewTransactionDetails = ({ type }) => {
                                     ? <TransactionDetailsShimmer col={5} />
                                     : <>
                                         <p data-testid="amount" className='font-[600] text-base'>
-                                            {formattedAmount(Math.abs(transactionDetails?.transaction_amount)) || '0.00'} MWK
+                                            {formattedAmount(
+                                                Math.abs(
+                                                    Number(transactionDetails?.transaction_amount || 0) +
+                                                    Number(transactionDetails?.transaction_fee || 0) +
+                                                    Number(transactionDetails?.vat || 0)
+                                                )
+                                            ) || '0.00'} MWK
+
                                         </p>
                                         {transactionType !== 'interest' &&
                                             <>

@@ -251,7 +251,7 @@ const ViewSpecificFlagged = () => {
                                             <div className='w-1/2 pb-1'>
                                                 {isLoading
                                                     ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                                    : transactionType !== 'interest' && <p>{formatID(flaggedDetails?.sender_id) || '-'}  </p> }
+                                                    : transactionType !== 'interest' && <p>{formatID(flaggedDetails?.sender_id) || '-'}  </p>}
                                             </div>
                                         </div>}
                                         <div className='w-full flex gap-1'>
@@ -271,7 +271,7 @@ const ViewSpecificFlagged = () => {
                                                     <div className='w-1/2 pb-1'>
                                                         {isLoading
                                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                                            : <p>{flaggedDetails?.bank_name || '-'}</p> }
+                                                            : <p>{flaggedDetails?.bank_name || '-'}</p>}
                                                     </div>
                                                 </div>
                                                 <div className='w-full flex gap-1'>
@@ -291,7 +291,7 @@ const ViewSpecificFlagged = () => {
                                                     <div className='w-1/2 pb-1'>
                                                         {isLoading
                                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                                            : <p>{flaggedDetails?.account_no || '-'}</p> }
+                                                            : <p>{flaggedDetails?.account_no || '-'}</p>}
                                                     </div>
                                                 </div>
                                             </>
@@ -303,7 +303,7 @@ const ViewSpecificFlagged = () => {
                                                     <div className='w-1/2 pb-1'>
                                                         {isLoading
                                                             ? <div className="h-[20px] bg-neutral-primary rounded animate-pulse" />
-                                                            : <p className='break-word'>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || flaggedDetails?.merchantName || '-')}</p> }
+                                                            : <p className='break-word'>{transactionType === 'afrimax' ? 'Afrimax' : (flaggedDetails?.receiver_name || flaggedDetails?.merchantName || '-')}</p>}
                                                     </div>
                                                 </div>
                                                 <div className='w-full flex gap-1'>
@@ -324,78 +324,78 @@ const ViewSpecificFlagged = () => {
                                                 </div>
                                             </>}
                                         {(flaggedDetails?.obo_name ||
-                                flaggedDetails?.obo_id ||
-                                flaggedDetails?.afrimax_name ||
-                                flaggedDetails?.afrimax_id) &&
-                                !isLoading &&
-                                <>
-                                    {!transactionType?.includes('CMR')
-                                        ? <div className='w-full flex gap-1'>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
-                                            </div>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='h-[24px] mt-[10px]'></p>
-                                            </div>
-                                        </div>
-                                        : <div className='w-full flex gap-1'>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='mt-1'></p>
-                                            </div>
-                                            <div className='w-1/2 pb-1'>
-                                                <p className='mt-1'></p>
-                                            </div>
-                                        </div>}
-                                    {flaggedDetails?.obo_name && !isLoading &&
-                                    (<div className='w-full flex gap-1'>
-                                        <div className='w-1/2 pb-1'>
-                                            <p>Paymaart Name</p>
-                                        </div>
-                                        <div className='w-1/2 pb-1'>
-                                            <p className='break-word'>{flaggedDetails?.obo_name || '-'}</p>
-                                        </div>
-                                    </div>)
-                                    }
-                                    {flaggedDetails?.obo_id && !isLoading &&
-                                    (<div className='w-full flex gap-1'>
-                                        <div className='w-1/2 pb-1'>
-                                            <p>Paymaart ID</p>
-                                        </div>
-                                        <div className='w-1/2 pb-1'>
-                                            <p>{formatID(flaggedDetails?.obo_id) || '-'}</p>
-                                        </div>
-                                    </div>)}
-                                    {(flaggedDetails?.afrimax_name ||
-                                    flaggedDetails?.afrimax_id) && !isLoading && (
-                                        <>
-                                            <div className='w-full flex gap-1'>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p>Afrimax Name</p>
-                                                </div>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p className='break-word'>{flaggedDetails?.afrimax_name || '-'}</p>
-                                                </div>
-                                            </div>
-                                            <div className='w-full flex gap-1'>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p>Afrimax ID</p>
-                                                </div>
-                                                <div className='w-1/2 pb-1'>
-                                                    <p>{flaggedDetails?.afrimax_id || '-'}</p>
-                                                </div>
-                                            </div>
-                                        </>
-                                    )}
-                                </>}
+                                            flaggedDetails?.obo_id ||
+                                            flaggedDetails?.afrimax_name ||
+                                            flaggedDetails?.afrimax_id) &&
+                                            !isLoading &&
+                                            <>
+                                                {!transactionType?.includes('CMR')
+                                                    ? <div className='w-full flex gap-1'>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p className='font-[500] text-base mt-[10px]'>On Behalf of</p>
+                                                        </div>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p className='h-[24px] mt-[10px]'></p>
+                                                        </div>
+                                                    </div>
+                                                    : <div className='w-full flex gap-1'>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p className='mt-1'></p>
+                                                        </div>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p className='mt-1'></p>
+                                                        </div>
+                                                    </div>}
+                                                {flaggedDetails?.obo_name && !isLoading &&
+                                                    (<div className='w-full flex gap-1'>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p>Paymaart Name</p>
+                                                        </div>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p className='break-word'>{flaggedDetails?.obo_name || '-'}</p>
+                                                        </div>
+                                                    </div>)
+                                                }
+                                                {flaggedDetails?.obo_id && !isLoading &&
+                                                    (<div className='w-full flex gap-1'>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p>Paymaart ID</p>
+                                                        </div>
+                                                        <div className='w-1/2 pb-1'>
+                                                            <p>{formatID(flaggedDetails?.obo_id) || '-'}</p>
+                                                        </div>
+                                                    </div>)}
+                                                {(flaggedDetails?.afrimax_name ||
+                                                    flaggedDetails?.afrimax_id) && !isLoading && (
+                                                    <>
+                                                        <div className='w-full flex gap-1'>
+                                                            <div className='w-1/2 pb-1'>
+                                                                <p>Afrimax Name</p>
+                                                            </div>
+                                                            <div className='w-1/2 pb-1'>
+                                                                <p className='break-word'>{flaggedDetails?.afrimax_name || '-'}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className='w-full flex gap-1'>
+                                                            <div className='w-1/2 pb-1'>
+                                                                <p>Afrimax ID</p>
+                                                            </div>
+                                                            <div className='w-1/2 pb-1'>
+                                                                <p>{flaggedDetails?.afrimax_id || '-'}</p>
+                                                            </div>
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </>}
                                     </div>
                                     <div className='px-[26px] py-[12px] w-[480px] flex flex-col border-background-light border bg-background-light
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                                         <div className='w-full flex gap-1'>
                                             <div className='w-1/2 flex flex-col gap-1'>
-                                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
+                                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value*</p>
                                                 {transactionType !== 'interest' &&
                                                     <>
-                                                        <p>Txn Fee*</p>
+                                                        <p>{flaggedDetails?.membership ? 'Txn Fee' : 'Txn Fee*'}</p>
                                                         <p>*VAT Included</p>
                                                     </>}
                                                 {flaggedDetails?.commission && !isLoading && <p>Commission Earned</p>}
@@ -411,9 +411,14 @@ const ViewSpecificFlagged = () => {
                                                 {isLoading
                                                     ? <TransactionDetailsShimmer col={5} />
                                                     : <>
-                                                        <p data-testid="amount" className='font-[600] text-base'>
-                                                            {formattedAmount(Math.abs(flaggedDetails?.transaction_amount)) || '0.00'} MWK
-                                                        </p>
+                                                        {formattedAmount(
+                                                            Math.abs(
+                                                                Number(flaggedDetails?.transaction_amount || 0) +
+                                                                Number(flaggedDetails?.transaction_fee || 0) +
+                                                                Number(flaggedDetails?.vat || 0)
+                                                            )
+                                                        ) || '0.00'} MWK
+
                                                         {transactionType !== 'interest' &&
                                                             <>
                                                                 <p>{formattedAmount(flaggedDetails?.transaction_fee) || '0.00'} MWK</p>
@@ -469,14 +474,14 @@ const ViewSpecificFlagged = () => {
                                         </p>}
                                 </div>
                                 {flaggedDetails?.status_note &&
-                                <div className='flex flex-col gap-1 max-w-[450px]'>
-                                    <p className='text-neutral-secondary'>Admin Note</p>
-                                    {isLoading
-                                        ? <TransactionDetailsShimmer col={1} />
-                                        : <p className='text-neutral-primary break-words'>
-                                            {flaggedDetails?.status_note || '-'}
-                                        </p>}
-                                </div>}
+                                    <div className='flex flex-col gap-1 max-w-[450px]'>
+                                        <p className='text-neutral-secondary'>Admin Note</p>
+                                        {isLoading
+                                            ? <TransactionDetailsShimmer col={1} />
+                                            : <p className='text-neutral-primary break-words'>
+                                                {flaggedDetails?.status_note || '-'}
+                                            </p>}
+                                    </div>}
                             </div>
                         </div>
                     </div>

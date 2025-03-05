@@ -42,6 +42,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const UpdateStatusList = ['Pending Investigation', 'Under Review', 'Resolved', 'Banned'];
     const [updateStatusValue, setIsUpdateStatusValue] = useState('');
+    // eslint-disable-next-line no-unused-vars
 
     const getView = () => {
         try {
@@ -107,7 +108,8 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                     setToastError(response?.data?.data?.message);
                 } else {
                     setIsUpdateModalOpen(false);
-                    setToastSuccess(response?.data?.message);
+                    setToastSuccess('Status updated successfully');
+                    dispatch(KYCProfileView(getApiurl(id, viewType, role)), viewType);
                 }
                 setIsLoading(false);
                 setIsUpdateModalOpen(false);
@@ -190,14 +192,20 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const bankDetails = ['Bank Name', 'Account Number', 'Account Name'];
 
     const handleupdatebutton = () => {
-        setIsUpdateModalOpen(true);
+        if (View?.status === 'Banned' || View?.status === 'Resolved') {
+            setIsUpdateModalOpen(false);
+        } else {
+            if (View?.status === null) {
+                setIsUpdateStatusValue('Pending Investigation');
+            }
+            setIsUpdateModalOpen(true);
+        }
     };
 
     const handleUpdateStatus = (selectedValue) => {
         setError(false);
         setIsUpdateStatusValue(selectedValue);
     };
-
     useEffect(() => {
         if (View?.status) {
             setIsUpdateStatusValue(View.status); // Update status when API response updates
@@ -205,16 +213,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
             setIsUpdateStatusValue(UpdateStatusList[0]); // Default to first item
         }
     }, [View]);
-
-    useEffect(() => {
-        if (viewType === 'Reported_merchants') {
-            if (View?.admin_comment) {
-                setInputValue(View.admin_comment);
-            } else {
-                setInputValue('');
-            }
-        }
-    }, [View, viewType]);
 
     const location = useLocation();
     const state = location.state || {};
@@ -271,20 +269,28 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 reject={loading}
                 approve={loading}
                 updateButton={(loading) || (
-                    (viewType === 'Reported_merchants'
+                    viewType === 'Reported_merchants' && (View?.status !== 'Resolved' || View?.status !== 'Banned')
                         ? 'Update Status'
-                        : viewType === 'specific'
-                            ? (() => {
-                                switch (View?.user_kyc_status) {
-                                case 'not_started':
-                                    return 'Complete KYC Registration';
-                                case 'completed':
-                                    return (View?.kyc_type === 'simplified' && View?.citizen === 'Malawian') ? 'Update' : '';
-                                default:
-                                    return 'Update';
-                                }
-                            })()
-                            : undefined))}
+                        : viewType === 'Reported_merchants' && View?.status === 'Resolved'
+                            ? 'Resolved'
+                            : viewType === 'Reported_merchants' && View?.status === 'Banned'
+                                ? 'Banned'
+                                : viewType === 'specific'
+                                    ? (() => {
+                                        switch (View?.user_kyc_status) {
+                                        case 'not_started':
+                                            return 'Complete KYC Registration';
+                                        case 'completed':
+                                            return (View?.kyc_type === 'simplified' && View?.citizen === 'Malawian')
+                                                ? 'Update'
+                                                : '';
+                                        default:
+                                            return 'Update';
+                                        }
+                                    })()
+                                    : undefined
+                )}
+
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
                 statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
@@ -483,6 +489,67 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                                             />}
                                                     </div>}
                                                 </div>
+                                            )
+                                        }
+                                    </div>
+                                }
+                            />
+                        }
+                        {(viewType === 'Reported_merchants' && View?.status && View?.admin_comment) &&
+                            <KYCSections
+                                heading='Admin Actions'
+                                testId='Admin Actions'
+                                data-testid="Admin Actions"
+                                childe={
+                                    <div className='w-full flex flex-wrap mt-1 -mx-1'>
+                                        {loading
+                                            ? ([...Array(4)].map((_, ind) => (
+                                                <div className='w-1/3 px-1' key={ind}>
+                                                    <ViewDetail
+                                                        itemkey='Loading...'
+                                                        userDetails='Loading...'
+                                                        loading={loading}
+                                                    />
+                                                </div>
+                                            )))
+                                            : (
+                                                userDetails?.logs && userDetails?.logs.map((item, index) => (
+                                                    <div key={index} className='w-full flex flex-wrap'>
+                                                        <div className='w-1/3 px-1'>
+                                                            <p className='font-normal text-sm text-[#A4A9AE]'>{`Actioned Admin ${index + 1}`}</p>
+                                                            <p className='font-normal text-sm text-[#4F5962] mt-1'>{`${item?.actioned_by_name}, ${item?.actioned_by_id}` || '-'}</p>
+                                                        </div>
+                                                        <div className='w-1/3 px-1'>
+                                                            <p className='font-normal text-sm text-[#A4A9AE]'>Actioned Date</p>
+                                                            <p className='font-normal text-sm text-[#4F5962] mt-1'>
+                                                                {item?.created_at
+                                                                    ? new Date(item.created_at * 1000).toLocaleString('en-GB', {
+                                                                        day: '2-digit',
+                                                                        month: 'short',
+                                                                        year: 'numeric',
+                                                                        hour: '2-digit',
+                                                                        minute: '2-digit',
+                                                                        hour12: false,
+                                                                        timeZone: 'Africa/Harare' // CAT time zone (UTC+2)
+                                                                    }).replace(',', '') + ' hours'
+                                                                    : '-'
+                                                                }
+                                                            </p>
+                                                        </div>
+                                                        <div className='w-1/3 px-1'>
+                                                            <p className='font-normal text-sm text-[#A4A9AE]'>Actioned Status</p>
+                                                            <div className='font-normal text-sm text-[#4F5962] mt-1'>
+                                                                {item?.actioned_status || '-'}
+                                                            </div>
+                                                        </div>
+                                                        <div className='w-[90%] px-1 my-6'>
+                                                            <p className='font-normal text-sm text-[#A4A9AE]'>Note</p>
+                                                            <div className='font-normal text-sm text-[#4F5962] mt-1 break-words'>
+                                                                {item?.admin_comment || '-'}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                ))
                                             )
                                         }
                                     </div>
@@ -931,7 +998,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                     setInputValue={setInputValue}
                 />
             }
-            <Modal center open={isUpdateModalOpen} onClose={() => setIsUpdateModalOpen(false)} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
+            <Modal center open={isUpdateModalOpen} onClose={() => { setIsUpdateModalOpen(false); setError(false); }} closeIcon={<div style={{ color: 'white' }} disabled></div>}>
                 <div className='customModal'>
                     <ConfirmationPopup
                         title={viewType === 'Reported_merchants' ? 'Update Status' : 'Confirm to Approve?'}
@@ -952,21 +1019,20 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                             : undefined}
 
                         Reason={viewType === 'DeleteAccount' || viewType === 'Reported_merchants' &&
-                        (<>
-                            {viewType === 'Reported_merchants' &&
-                                <label htmlFor="" className='font-medium text-sm text-[#4F5962] mt-8'>Note</label>}
-                            <input
-                                data-testid="reason"
-                                className={`w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded mt-2 ${error ? 'border-bottom-red mb-1' : 'border-bottom-default'
-                                }`}
-                                placeholder={viewType === 'Reported_merchants' ? 'Add a note' : 'Enter Reason'}
-                                value={inputValue}
-                                onChange={handleReason}
+                            (<>
+                                {viewType === 'Reported_merchants' &&
+                                    <label htmlFor="" className='font-medium text-sm text-[#4F5962] mt-8'>Note</label>}
+                                <input
+                                    data-testid="reason"
+                                    className={`w-full border border-[#F8F8F8] bg-[#dddddd38] placeholder:font-normal placeholder:text-sm placeholder:text-[#8E949A] p-2.5 outline-none rounded mt-2 ${error ? 'border-bottom-red mb-1' : 'border-bottom-default'
+                                    }`}
+                                    placeholder={viewType === 'Reported_merchants' ? 'Add a note' : 'Enter Reason'}
+                                    onChange={handleReason}
+                                    maxLength={300}
 
-                            />
-
-                            {error && <ErrorMessage error={'Required field'} />}
-                        </>)}
+                                />
+                                {error && <ErrorMessage error={'Required field'} />}
+                            </>)}
                         handleSubmit={handleConfirmAction}
                         isLoading={isLoading}
                         handleClose={handleClose}
