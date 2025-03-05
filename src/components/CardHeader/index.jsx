@@ -97,7 +97,7 @@ const CardHeader = ({
                                     }
                                 }}
                                 className={`text-[14px] leading-[24px] font-[400] px-[6px] text-neutral-secondary ${
-                                    index === 0 ? 'cursor-default' : 'cursor-pointer'
+                                    paths.length === 1 ? 'cursor-default' : 'cursor-pointer'
                                 }`}
                             >
                                 {path}

@@ -41,7 +41,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [error, setError] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const UpdateStatusList = ['Pending Investigation', 'Under Review', 'Resolved', 'Banned'];
-    const [updateStatusValue, setIsUpdateStatusValue] = useState('');
+    const [updateStatusValue, setIsUpdateStatusValue] = useState('Pending Investigation');
     // eslint-disable-next-line no-unused-vars
 
     const getView = () => {
@@ -193,19 +193,19 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
     const handleupdatebutton = () => {
         if (View?.status === 'Banned' || View?.status === 'Resolved') {
-            setIsUpdateModalOpen(false);
-        } else {
-            if (View?.status === null) {
-                setIsUpdateStatusValue('Pending Investigation');
-            }
-            setIsUpdateModalOpen(true);
+            return setIsUpdateModalOpen(false);
         }
+        setIsUpdateStatusValue(
+            View?.status === 'pending' || View?.status === null ? 'Pending Investigation' : View?.status
+        );
+        setIsUpdateModalOpen(true);
     };
 
     const handleUpdateStatus = (selectedValue) => {
         setError(false);
         setIsUpdateStatusValue(selectedValue);
     };
+
     useEffect(() => {
         if (View?.status) {
             setIsUpdateStatusValue(View.status); // Update status when API response updates
@@ -256,7 +256,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
     // Updated pathurls array
     const updatedPathurls = [fullUrl];
-
     return (
         <>
             <CardHeader
@@ -269,7 +268,9 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 reject={loading}
                 approve={loading}
                 updateButton={(loading) || (
-                    viewType === 'Reported_merchants' && (View?.status !== 'Resolved' || View?.status !== 'Banned')
+                    ((viewType === 'Reported_merchants' && View?.status !== 'Resolved' && View?.status !== 'Banned') ||
+                        (viewType === 'Reported_merchants' && View?.status === 'Pending Investigation') ||
+                        (viewType === 'Reported_merchants' && View?.status === 'Under Review'))
                         ? 'Update Status'
                         : viewType === 'Reported_merchants' && View?.status === 'Resolved'
                             ? 'Resolved'

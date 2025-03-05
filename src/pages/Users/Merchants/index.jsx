@@ -188,7 +188,7 @@ const Merchant = () => {
                     !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                     (<NoDataError className='h-noDataError'
                         heading='No data found' text='Click “Register Merchant ” to add merchant' />)}
-                {List?.data?.length !== 0 && <Paginator
+                {List?.data?.length !== 0 && !loading && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
                     setSearchParams={setSearchParams}
