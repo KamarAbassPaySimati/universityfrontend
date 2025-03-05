@@ -414,8 +414,7 @@ const ViewSpecificFlagged = () => {
                                                         {formattedAmount(
                                                             Math.abs(
                                                                 Number(flaggedDetails?.transaction_amount || 0) +
-                                                                Number(flaggedDetails?.transaction_fee || 0) +
-                                                                Number(flaggedDetails?.vat || 0)
+                                                                Number(flaggedDetails?.transaction_fee || 0)
                                                             )
                                                         ) || '0.00'} MWK
 
