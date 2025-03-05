@@ -395,8 +395,7 @@ const ViewTransactionDetails = ({ type }) => {
                                             {formattedAmount(
                                                 Math.abs(
                                                     Number(transactionDetails?.transaction_amount || 0) +
-                                                    Number(transactionDetails?.transaction_fee || 0) +
-                                                    Number(transactionDetails?.vat || 0)
+                                                    Number(transactionDetails?.transaction_fee || 0)
                                                 )
                                             ) || '0.00'} MWK
 
