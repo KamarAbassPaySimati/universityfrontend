@@ -22,7 +22,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
     // regex check for email and call the api
     const handleClick = async (e) => {
         e.preventDefault();
-        if (window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') {
+        if (window.location.host !== 'localhost:3000' ) {
             await reCaptchaRef.current.executeAsync();
         }
         if (email === '') {
@@ -52,7 +52,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                 setIsSuccess(false);
             }
         }
-        if (window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net') {
+        if (window.location.host !== 'localhost:3000' ) {
             await reCaptchaRef.current.reset();
         }
     };
@@ -99,7 +99,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         placeholder='Enter email'
                         setEnteredLetter={setEnteredLetter}
                     />
-                    {(window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net' && window.location.host !== 'pre-production-admin.paymaart.net') && (
+                    {(window.location.host !== 'localhost:3000') && (
                         <ReCAPTCHA
                             style={{ display: 'inline-block', height: '10px !important' }}
                             theme="dark"
@@ -115,7 +115,7 @@ const ForgotPasswordEmail = ({ setIsSuccess }) => {
                         text="Proceed"
                         onClick={handleClick}
                         id="Proceed"
-                        disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000' && window.location.host !== 'pre-production-admin.paymaart.net' && window.location.host !== 'pre-production-admin.paymaart.net'}
+                        disabled={!recaptchaLoaded && window.location.host !== 'localhost:3000'}
                         isLoading={isLoading}
                     />
                     <Button2 testId='back_to_login' onClick={handleBacktoLogin} text='Back to Login' disabled={isLoading} />
