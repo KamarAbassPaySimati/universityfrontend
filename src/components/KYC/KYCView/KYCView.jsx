@@ -110,6 +110,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                     setIsUpdateModalOpen(false);
                     setToastSuccess('Status updated successfully');
                     dispatch(KYCProfileView(getApiurl(id, viewType, role)), viewType);
+                    setInputValue('');
                 }
                 setIsLoading(false);
                 setIsUpdateModalOpen(false);
