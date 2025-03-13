@@ -32,6 +32,7 @@ export default function G2PCustomerViewList () {
     // const [selectedSheets, setSelectedSheets] = useState();
     const [threedotLoader, setThreedotLoader] = useState(false);
     const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
 
     const getG2PCustomerView = async () => {
         try {
@@ -166,7 +167,7 @@ export default function G2PCustomerViewList () {
                                 CreatedDate={`${convertTimestampToCAT(View?.created_at)} CAT`}
                                 loading={loading}
                             />
-                            <div>
+                            {['Super admin', 'Finance admin'].includes(CurrentUserRole) && <div>
                                 <div className="flex items-start">
                                     <a download href='/Sample-file.xlsx'>
                                         <button onClick={() => setToastSuccess('Sample file downloaded successfully')} type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
@@ -204,7 +205,7 @@ export default function G2PCustomerViewList () {
                                         {validationMessage}
                                     </p>
                                 )}
-                            </div>
+                            </div>}
                         </div>
                     </div>
                     <div className={`relative ${notFound || View?.length === 0 ? '' : 'mx-10 mb-8 mt-8 border border-[#DDDDDD] bg-white rounded-[6px]'}`}>

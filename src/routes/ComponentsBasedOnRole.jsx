@@ -111,6 +111,11 @@ export const ComponentsBasedOnRole = {
                 element: <Customer />,
                 path: '/users/customers'
             },
+            {
+                name: 'Customer Specific View',
+                element: <KYCView role={'customer'} viewType={'specific'} />,
+                path: '/users/customers/register-customer/specific-view/:id'
+            },
 
             {
                 name: 'Admin Users Update',
@@ -259,12 +264,6 @@ export const ComponentsBasedOnRole = {
                 name: 'Merchant KYC Registration',
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
-            },
-            // customer Specific View from Merchant Listing
-            {
-                name: 'Customer Specific View',
-                element: <KYCView role={'customer'} viewType={'specific'} />,
-                path: '/users/customers/register-customer/specific-view/:id'
             },
             // KYC Update for Agent
             {
@@ -427,7 +426,23 @@ export const ComponentsBasedOnRole = {
                 element: <Customer />,
                 path: '/users/customers'
             },
-
+            {
+                name: 'Customer Specific View',
+                element: <KYCView role={'customer'} viewType={'specific'} />,
+                path: '/users/customers/register-customer/specific-view/:id'
+            },
+            // G2P Customer
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                path: '/financials/g2p'
+            },
+            // View G2P customer
+            {
+                name: 'G2P Customer View',
+                element: <G2PCustomerViewList />,
+                path: '/financials/g2p/view-profile/:id'
+            },
             {
                 name: 'Onboard Agent Users',
                 element: <OnboardAgent role={'agent'} />,
@@ -477,12 +492,6 @@ export const ComponentsBasedOnRole = {
                 name: 'Customer Kyc Specific View',
                 element: <KYCView role={'customer'} viewType={'kyc'} />,
                 path: '/verify/kyc-registration/customer-profile/:id'
-            },
-            // Merchant Specific View from Merchant Listing
-            {
-                name: 'Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'specific'} />,
-                path: '/users/merchants/register-merchant/specific-view/:id'
             },
             {
                 name: 'Paymaart Trust Banks',
@@ -662,6 +671,11 @@ export const ComponentsBasedOnRole = {
                 name: 'customers Users List',
                 element: <Customer />,
                 path: '/users/customers'
+            },
+            {
+                name: 'Customer Specific View',
+                element: <KYCView role={'customer'} viewType={'specific'} />,
+                path: '/users/customers/register-customer/specific-view/:id'
             },
 
             {

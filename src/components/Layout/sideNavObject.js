@@ -34,7 +34,11 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers']
+            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
+        },
+        Financials: {
+            path: 'financials',
+            dropdown: ['G2P']
         },
         Verify: {
             path: 'verify',
@@ -68,7 +72,11 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Merchants', 'Customers', 'KYC Registration', 'Delete Account']
+            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants', 'KYC Registration', 'Delete Account']
+        },
+        Financials: {
+            path: 'financials',
+            dropdown: ['G2P', 'Transaction History']
         },
         'Paymaart Banks': {
             path: 'paymaart-banks'
