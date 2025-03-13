@@ -45,7 +45,7 @@ const MapUpdater = ({ center, zoom }) => {
     return null;
 };
 
-const MapView = ({ DashboardName, endpoint, initialStates }) => {
+const MapView = ({ DashboardName, endpoint, initialStates, exportPermissions }) => {
     const [filteredCordinate, setFilterCordinate] = useState(DEFAULT_CORDINATE);
     const [filter, setFilter] = useState(initialStates.districtFilter);
     const [data, setData] = useState([]);
@@ -176,7 +176,7 @@ const MapView = ({ DashboardName, endpoint, initialStates }) => {
                             toolTip
                         />
                         {
-                            CurrentUserRole === 'Super admin' &&
+                            exportPermissions.includes(CurrentUserRole) &&
                             <>
                                 <button data-testid={`${DashboardName} Export`} onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
                                     <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export' />

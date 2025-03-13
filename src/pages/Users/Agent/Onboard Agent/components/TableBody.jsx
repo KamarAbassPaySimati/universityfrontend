@@ -9,15 +9,17 @@ import AccountUnlockQuestions from '../../../../../components/Modals/AccountUnlo
 import { handleAnswerSubmit } from '../../../../../components/Modals/AccountUnlock';
 import GlobalContext from '../../../../../components/Context/GlobalContext';
 import formatLocalPhoneNumber from '../../../../../CommonMethods/formatLocalPhoneNumber';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setSearchedParamsList } from '../../../../../redux/GlobalSlice';
 
-export default function TableBody ({ user, index, GetList, searchParams }) {
+export default function TableBody ({ userRole, index, GetList, searchParams }) {
     const Navigate = useNavigate();
     const [isUnlock, setIsUnlock] = useState(false);
     const { setToastError } = useContext(GlobalContext);
     const [prevAppearedQuestion, setPrevAppearedQuestion] = useState([]);
     const [loadingUnlock, setLoadingUnlock] = useState(false);
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const [question, setQuestion] = useState({
         question: '',
         answerType: '',
@@ -26,7 +28,7 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
     const handleUnlock = async () => {
         setLoadingUnlock(true);
         await handleAnswerSubmit({
-            paymaart_id: user.paymaart_id,
+            paymaart_id: userRole.paymaart_id,
             question_id: '',
             answer: '',
             questions: [],
@@ -40,24 +42,24 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
     return (
         <>
             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                <td data-testid="paymaart_id" title={formatID(user?.paymaart_id)} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(user?.paymaart_id) || '-'}</td>
-                <td data-testid="agent_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
-                <td data-testid="phone_number" className='py-2 px-[10px]'>{`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}</td>
-                <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
+                <td data-testid="paymaart_id" title={formatID(userRole?.paymaart_id)} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(userRole?.paymaart_id) || '-'}</td>
+                <td data-testid="agent_name" title={userRole?.name} className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${userRole?.name}`}</td>
+                <td data-testid="phone_number" className='py-2 px-[10px]'>{`${userRole?.country_code} ${formatLocalPhoneNumber(userRole?.country_code, userRole?.phone_number)}`}</td>
+                <td className='py-2 px-[10px]'>{convertTimestampToCAT(userRole?.created_at)}</td>
                 <td className='py-2 px-[10px]'>
-                    {user?.last_logged_in
-                        ? isNaN(Number(user?.last_logged_in))
+                    {userRole?.last_logged_in
+                        ? isNaN(Number(userRole?.last_logged_in))
                             ? <span style={{ color: '#13B681', fontWeight: 'semibold' }}>Online</span>
-                            : convertTimestampToCAT(user?.last_logged_in)
+                            : convertTimestampToCAT(userRole?.last_logged_in)
                         : '-'}</td>
                 <td data-testid="status" className='py-2 px-[10px]'>
-                    {user?.status
+                    {userRole?.status
                         ? (
                             <span className={`py-[2px] px-[10px] rounded text-[13px] font-semibold capitalize 
-                                            ${user.status === 'active'
+                                            ${userRole.status === 'active'
                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                 : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                {user.status}
+                                {userRole.status}
                             </span>
                         )
                         : (
@@ -68,23 +70,23 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
                 </td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/agents/register-agent/specific-view/${user?.paymaart_id}`,
+                        onClick={() => Navigate(`/users/agents/register-agent/specific-view/${userRole?.paymaart_id}`,
                             { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                         )} />
-                    {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && (userRole?.kyc_status === 'completed' && userRole?.kyc_type === 'full'
                         ? <span className='w-[24px]'></span>
                         : (
                             <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                                onClick={() => user?.kyc_status === 'not_started'
-                                    ? Navigate(`/users/agents/register-agent/kyc-registration/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
+                                onClick={() => userRole?.kyc_status === 'not_started'
+                                    ? Navigate(`/users/agents/register-agent/kyc-registration/${userRole?.paymaart_id}`, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                     )
-                                    : Navigate(`/users/agents/register-agent/kyc-update/${user?.paymaart_id}`)}
+                                    : Navigate(`/users/agents/register-agent/kyc-update/${userRole?.paymaart_id}`)}
                             />
-                        )}
-                    <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
+                        ))}
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
                         onClick={() => {
                             // Navigate to the new route with state
-                            Navigate(`/users/agents/agents-transaction-histories/${user?.paymaart_id}`, {
+                            Navigate(`/users/agents/agents-transaction-histories/${userRole?.paymaart_id}`, {
                                 state: {
                                     page: searchParams.get('page'),
                                     status: searchParams.get('status') || '',
@@ -94,8 +96,8 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
 
                             // Dispatch the search params string to Redux
                             dispatch(setSearchedParamsList(searchParamsString));
-                        }}src='report' />
-                    {loadingUnlock
+                        }}src='report' />}
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && (loadingUnlock
                         ? <div role="status">
                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin  fill-[#3B2A6F]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -103,9 +105,9 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
                             </svg>
                             <span class="sr-only">Loading...</span>
                         </div>
-                        : user?.is_locked
+                        : userRole?.is_locked
                             ? <Image testId={`unlock_button_${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlock()} src='lock'/>
-                            : <Image src='unlock' className='cursor-default'/>}
+                            : <Image src='unlock' className='cursor-default'/>)}
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'
@@ -116,7 +118,7 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
                         id={`edit-${index}`}
                         className='my-tooltip z-30'
                         place="top"
-                        content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
+                        content={userRole?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                     />
                     <Tooltip
                         id={`transactions-${index}`}
@@ -135,7 +137,7 @@ export default function TableBody ({ user, index, GetList, searchParams }) {
             <AccountUnlockQuestions
                 isModalOpen={isUnlock}
                 setModalOpen={setIsUnlock}
-                user={user}
+                user={userRole}
                 question={question}
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}

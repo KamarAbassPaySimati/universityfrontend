@@ -27,6 +27,7 @@ import InputTypeRadio from '../../InputField/InputTypeRadio';
 export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
     const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const { approveKyc } = endpoints;
@@ -294,7 +295,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 )}
 
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
-                statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
+                statusButton={(CurrentUserRole === 'Super admin' || (CurrentUserRole === 'Admin' && role === 'agent')) ? loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined) : undefined}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
                 handleupdatebutton={(viewType === 'Reported_merchants' ? handleupdatebutton : null)}
