@@ -93,6 +93,18 @@ export const ComponentsBasedOnRole = {
                 element: <Merchant />,
                 path: '/users/merchants'
             },
+            // Merchant Specific View from Merchant Listing
+            {
+                name: 'Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
+                path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
+            },
             // customers
             {
                 name: 'customers Users List',
@@ -248,18 +260,6 @@ export const ComponentsBasedOnRole = {
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
             },
-            // Merchant Specific View from Merchant Listing
-            {
-                name: 'Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
-                path: '/users/merchants/register-merchant/specific-view/:id'
-            },
-            // Reported Merchant Specific View from Merchant Listing
-            {
-                name: 'Reported Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
-                path: '/users/merchants/reported-merchant/specific-view/:id'
-            },
             // customer Specific View from Merchant Listing
             {
                 name: 'Customer Specific View',
@@ -408,6 +408,18 @@ export const ComponentsBasedOnRole = {
                 name: 'Merchant Users List',
                 element: <Merchant />,
                 path: '/users/merchants'
+            },
+            // Merchant Specific View from Merchant Listing
+            {
+                name: 'Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
+                path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
             },
             // customers
             {
@@ -632,6 +644,18 @@ export const ComponentsBasedOnRole = {
                 name: 'Merchant Users List',
                 element: <Merchant />,
                 path: '/users/merchants'
+            },
+            // Merchant Specific View from Merchant Listing
+            {
+                name: 'Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
+                path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
             },
             // customers
             {

@@ -83,7 +83,7 @@ export default function TableBody ({ userRole, index, GetList, searchParams }) {
                                     : Navigate(`/users/agents/register-agent/kyc-update/${userRole?.paymaart_id}`)}
                             />
                         ))}
-                    {['Super admin', 'Admin'].includes(CurrentUserRole) && <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
+                    {['Super admin'].includes(CurrentUserRole) && <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
                         onClick={() => {
                             // Navigate to the new route with state
                             Navigate(`/users/agents/agents-transaction-histories/${userRole?.paymaart_id}`, {

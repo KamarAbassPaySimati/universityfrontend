@@ -80,7 +80,7 @@ const Agent = () => {
             pathurls={['users/agents']}
             header='List of Agents'
             minHeightRequired={true}
-            buttonText={`${CurrentUserRole !== 'super-admin' ? '' : 'Register Agent'}`}
+            buttonText={`${!['super-admin', 'admin'].includes(CurrentUserRole) ? '' : 'Register Agent'}`}
             navigationPath='/users/agents/register-agent'
             table={true}
             headerWithoutButton={false}
