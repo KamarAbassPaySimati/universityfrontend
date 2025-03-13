@@ -123,7 +123,7 @@ const Merchant = () => {
             pathurls={['users/merchants']}
             header='List of Merchants'
             minHeightRequired={true}
-            buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Merchant'}`}
+            buttonText={`${!['super-admin', 'admin'].includes(CurrentUserRole) ? '' : 'Register Merchant'}`}
             navigationPath='/users/merchants/register-merchant'
             table={true}
             headerWithoutButton={false}

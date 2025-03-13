@@ -14,6 +14,7 @@ import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 import formatID from '../../../../CommonMethods/formatId';
 import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
+import { useSelector } from 'react-redux';
 
 const ViewSpecificFlagged = () => {
     const [states, setState] = useState({});
@@ -24,7 +25,8 @@ const ViewSpecificFlagged = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
-
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const { id, senderId, transactionType } = useParams();
     const navigate = useNavigate();
 
@@ -184,7 +186,7 @@ const ViewSpecificFlagged = () => {
                                     {!isLoading && getStatusText(flaggedDetails?.status)}
                                 </span>
                             </div>
-                            {(flaggedDetails?.status !== 'rejected' && flaggedDetails?.status !== 'approved') &&
+                            {['Super admin', 'Finance admin'].includes(CurrentUserRole) && (flaggedDetails?.status !== 'rejected' && flaggedDetails?.status !== 'approved') &&
                                 <div className='flex gap-4'>
                                     <button data-testid="reject_button"
                                         onClick={() => {

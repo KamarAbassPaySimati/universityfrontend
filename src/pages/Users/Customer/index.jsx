@@ -80,7 +80,7 @@ const Customer = () => {
             pathurls={['users/customers']}
             header='List of Customers'
             minHeightRequired={true}
-            buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Customer'}`}
+            buttonText={`${!['super-admin', 'admin'].includes(CurrentUserRole) ? '' : 'Register Customer'}`}
             navigationPath='/users/customers/register-customer'
             table={true}
             headerWithoutButton={false}

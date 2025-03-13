@@ -20,6 +20,8 @@ export default function ViewPayOutRequest () {
     const location = useLocation();
     const [BankDropDownValue, setBankDropDownValue] = useState([]);
     const [showIframe, setShowIframe] = useState(false);
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const getBankTypes = async () => {
         try {
             const response = await dataService.GetAPI('admin-users/list-trust-bank');
@@ -201,7 +203,7 @@ export default function ViewPayOutRequest () {
                 `}>
                         <div className='flex justify-between items-center'>
                             <h1 className='text-[#252C32] font-bold text-[30px] leading-[40px]'>Pay-out Request Details</h1>
-                            {(View?.status !== undefined && !loading && View?.status !== 'rejected' && View?.status !== 'approved') && <div className='flex'>
+                            {CurrentUserRole === 'Super admin' && (View?.status !== undefined && !loading && View?.status !== 'rejected' && View?.status !== 'approved') && <div className='flex'>
                                 <button data-testid="reject_button"
                                     onClick={() => setRejectModalOpen(true)}
                                     className={`flex  bg-primary-negative py-[8px] px-[16px] 
