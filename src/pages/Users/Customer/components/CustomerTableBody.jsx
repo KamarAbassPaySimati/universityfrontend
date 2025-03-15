@@ -10,9 +10,9 @@ import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock'
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import formatLocalPhoneNumber from '../../../../CommonMethods/formatLocalPhoneNumber';
 import { setSearchedParamsList } from '../../../../redux/GlobalSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-export default function CustomerTableBody ({ user, index, GetList, searchParams }) {
+export default function CustomerTableBody ({ userValue, index, GetList, searchParams }) {
     const Navigate = useNavigate();
     const [isUnlock, setIsUnlock] = useState(false);
     const { setToastError } = useContext(GlobalContext);
@@ -23,10 +23,12 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
         answerType: '',
         questionId: ''
     });
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const handleUnlock = async () => {
         setLoadingUnlock(true);
         await handleAnswerSubmit({
-            paymaart_id: user.paymaart_id,
+            paymaart_id: userValue.paymaart_id,
             question_id: '',
             answer: '',
             questions: [],
@@ -40,24 +42,24 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
     return (
         <>
             <tr key={index} className='border-b border-neutral-outline h-[48px]'>
-                <td data-testid="paymaart_id" title={formatID(user?.paymaart_id)} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(user?.paymaart_id) || '-'}</td>
-                <td data-testid="customer_name" title={user?.name} className='py-2 px-[10px] truncate min-w-[150px] max-w-[150px]'>{`${user?.name}`}</td>
-                <td className='py-2 px-[10px] truncate min-w-[130px] max-w-[110px]' title={`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}>
-                    {`${user?.country_code} ${formatLocalPhoneNumber(user?.country_code, user?.phone_number)}`}
+                <td data-testid="paymaart_id" title={formatID(userValue?.paymaart_id)} className='py-2 px-[10px] text-left truncate min-w-[70px] max-w-[70px]'>{formatID(userValue?.paymaart_id) || '-'}</td>
+                <td data-testid="customer_name" title={userValue?.name} className='py-2 px-[10px] truncate min-w-[150px] max-w-[150px]'>{`${userValue?.name}`}</td>
+                <td className='py-2 px-[10px] truncate min-w-[130px] max-w-[110px]' title={`${userValue?.country_code} ${formatLocalPhoneNumber(userValue?.country_code, userValue?.phone_number)}`}>
+                    {`${userValue?.country_code} ${formatLocalPhoneNumber(userValue?.country_code, userValue?.phone_number)}`}
                 </td>
 
-                <td className='py-2 px-[10px] truncate min-w-[80px] max-w-[150px]' title={convertTimestampToCAT(user?.created_at)}>
-                    {convertTimestampToCAT(user?.created_at)}
+                <td className='py-2 px-[10px] truncate min-w-[80px] max-w-[150px]' title={convertTimestampToCAT(userValue?.created_at)}>
+                    {convertTimestampToCAT(userValue?.created_at)}
                 </td>
 
                 <td data-testid="status" className='py-2 px-[10px] truncate min-w-[50px] max-w-[100px]'>
-                    {user?.status
+                    {userValue?.status
                         ? (
                             <span className={`py-[2px] px-[10px] rounded text-[13px] font-semibold capitalize 
-                                             ${user.status === 'active'
+                                             ${userValue.status === 'active'
                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                 : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                {user.status}
+                                {userValue.status}
                             </span>
                         )
                         : (
@@ -68,26 +70,26 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
                 </td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/customers/register-customer/specific-view/${user?.paymaart_id}`,
+                        onClick={() => Navigate(`/users/customers/register-customer/specific-view/${userValue?.paymaart_id}`,
                             { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                         )} />
-                    {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && (userValue?.kyc_status === 'completed' && userValue?.kyc_type === 'full'
                         ? <span className='w-[24px]'></span>
                         : (
                             <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit' testId={`edit-${index}`}
-                                onClick={() => user?.kyc_status === 'not_started'
-                                    ? Navigate(`/users/customers/register-customer/kyc-registration/${user?.paymaart_id}`,
+                                onClick={() => userValue?.kyc_status === 'not_started'
+                                    ? Navigate(`/users/customers/register-customer/kyc-registration/${userValue?.paymaart_id}`,
                                         { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                     )
-                                    : Navigate(`/users/customers/register-customer/kyc-update/${user?.paymaart_id}`,
+                                    : Navigate(`/users/customers/register-customer/kyc-update/${userValue?.paymaart_id}`,
                                         { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                     )}
-                            />
-                        )}
-                    <Image testId={`customer-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
+                            />)
+                    )}
+                    {['Super admin'].includes(CurrentUserRole) && <Image testId={`customer-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
                         onClick={() => {
                             // Navigate to the new route with state
-                            Navigate(`/users/customers/customers-transaction-histories/${user?.paymaart_id}`, {
+                            Navigate(`/users/customers/customers-transaction-histories/${userValue?.paymaart_id}`, {
                                 state: {
                                     page: searchParams.get('page'),
                                     status: searchParams.get('status') || '',
@@ -97,8 +99,8 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
                             // Dispatch the search params string to Redux
                             dispatch(setSearchedParamsList(searchParamsString));
                         }}
-                        src='report' />
-                    {loadingUnlock
+                        src='report' />}
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && (loadingUnlock
                         ? <div role="status">
                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin  fill-[#3B2A6F]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -106,9 +108,9 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
                             </svg>
                             <span class="sr-only">Loading...</span>
                         </div>
-                        : user?.is_locked
+                        : userValue?.is_locked
                             ? <Image testId={`unlock_button_${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlock()} src='lock'/>
-                            : <Image src='unlock' className='cursor-default'/>}
+                            : <Image src='unlock' className='cursor-default'/>)}
                     {/* <Image className='cursor-pointer' toolTipId={`payin-${index}`} src='payin' /> */}
                     <Tooltip
                         id={`eye-${index}`}
@@ -120,7 +122,7 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
                         id={`edit-${index}`}
                         className='my-tooltip z-30'
                         place="top"
-                        content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
+                        content={userValue?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                     />
                     <Tooltip
                         id={`transactions-${index}`}
@@ -145,7 +147,7 @@ export default function CustomerTableBody ({ user, index, GetList, searchParams 
             <AccountUnlockQuestions
                 isModalOpen={isUnlock}
                 setModalOpen={setIsUnlock}
-                user={user}
+                user={userValue}
                 question={question}
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}

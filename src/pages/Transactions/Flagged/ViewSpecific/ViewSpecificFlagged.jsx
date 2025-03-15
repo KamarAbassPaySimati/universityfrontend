@@ -14,6 +14,7 @@ import { dataService } from '../../../../services/data.services';
 import { capitalizeFirstLetter } from '../../../../CommonMethods/textCorrection';
 import formatID from '../../../../CommonMethods/formatId';
 import formatPhoneNumber from '../../../../CommonMethods/formatPhoneNumber';
+import { useSelector } from 'react-redux';
 
 const ViewSpecificFlagged = () => {
     const [states, setState] = useState({});
@@ -24,7 +25,8 @@ const ViewSpecificFlagged = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [isButtonLoading, setIsButtonLoading] = useState(false);
     const { setToastError, setToastSuccess } = useContext(GlobalContext);
-
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const { id, senderId, transactionType } = useParams();
     const navigate = useNavigate();
 
@@ -184,7 +186,7 @@ const ViewSpecificFlagged = () => {
                                     {!isLoading && getStatusText(flaggedDetails?.status)}
                                 </span>
                             </div>
-                            {(flaggedDetails?.status !== 'rejected' && flaggedDetails?.status !== 'approved') &&
+                            {['Super admin', 'Finance admin'].includes(CurrentUserRole) && (flaggedDetails?.status !== 'rejected' && flaggedDetails?.status !== 'approved') &&
                                 <div className='flex gap-4'>
                                     <button data-testid="reject_button"
                                         onClick={() => {
@@ -392,10 +394,10 @@ const ViewSpecificFlagged = () => {
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                                         <div className='w-full flex gap-1'>
                                             <div className='w-1/2 flex flex-col gap-1'>
-                                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value*</p>
+                                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
                                                 {transactionType !== 'interest' &&
                                                     <>
-                                                        <p>{flaggedDetails?.membership ? 'Txn Fee' : 'Txn Fee*'}</p>
+                                                        <p>Txn Fee*</p>
                                                         <p>*VAT Included</p>
                                                     </>}
                                                 {flaggedDetails?.commission && !isLoading && <p>Commission Earned</p>}
@@ -413,9 +415,7 @@ const ViewSpecificFlagged = () => {
                                                     : <>
                                                         {formattedAmount(
                                                             Math.abs(
-                                                                Number(flaggedDetails?.transaction_amount || 0) +
-                                                                Number(flaggedDetails?.transaction_fee || 0) +
-                                                                Number(flaggedDetails?.vat || 0)
+                                                                Number(flaggedDetails?.transaction_amount || 0)
                                                             )
                                                         ) || '0.00'} MWK
 

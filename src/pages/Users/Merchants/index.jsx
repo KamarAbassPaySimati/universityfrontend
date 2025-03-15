@@ -123,7 +123,7 @@ const Merchant = () => {
             pathurls={['users/merchants']}
             header='List of Merchants'
             minHeightRequired={true}
-            buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Merchant'}`}
+            buttonText={`${!['super-admin', 'admin'].includes(CurrentUserRole) ? '' : 'Register Merchant'}`}
             navigationPath='/users/merchants/register-merchant'
             table={true}
             headerWithoutButton={false}
@@ -188,7 +188,7 @@ const Merchant = () => {
                     !(searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                     (<NoDataError className='h-noDataError'
                         heading='No data found' text='Click “Register Merchant ” to add merchant' />)}
-                {List?.data?.length !== 0 && <Paginator
+                {List?.data?.length !== 0 && !loading && <Paginator
                     currentPage={searchParams.get('page')}
                     totalPages={Math.ceil(List?.totalRecords / 10)}
                     setSearchParams={setSearchParams}

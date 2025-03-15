@@ -31,7 +31,7 @@ ChartJS.register(
     Legend
 );
 
-export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple, count }) {
+export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple, count, exportPermissions }) {
     const [states, setStates] = useState(initialStates);
     const [data, setData] = useState([]);
     const { user } = useSelector((state) => state.auth);
@@ -316,7 +316,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             handleClearFilter={handleClearFilter}
                         />}
                         {
-                            CurrentUserRole === 'Super admin' &&
+                            exportPermissions.includes(CurrentUserRole) &&
                             <>
                                 <button data-testid={`${DashboardName} Export`} onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
                                     <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export'/>
