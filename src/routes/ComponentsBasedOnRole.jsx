@@ -25,6 +25,9 @@ import ViewTransactionList from '../pages/Users/Agent/ViewTransactionList/ViewTr
 import Flagged from '../pages/Transactions/Flagged';
 import TransactionsLog from '../pages/Transactions/TransactionsLog/TransactionsLog';
 import ViewSpecificFlagged from '../pages/Transactions/Flagged/ViewSpecific/ViewSpecificFlagged';
+import Agent from '../pages/Users/Agent';
+import Merchant from '../pages/Users/Merchants';
+import Customer from '../pages/Users/Customer';
 
 export const ComponentsBasedOnRole = {
     'super-admin':
@@ -34,6 +37,35 @@ export const ComponentsBasedOnRole = {
                 element: <Dashboard />,
                 path: '/dashboard'
             },
+            // pay-out
+            {
+                name: 'Pay Out Requests',
+                element: <PayOutRequests />,
+                path: '/transactions/pay-out-requests'
+            },
+            {
+                name: 'Pay Out Requests Specific View',
+                element: <ViewPayOutRequest />,
+                path: '/transactions/pay-out-requests/:id'
+            },
+            // Flagged List
+            {
+                name: 'Flagged List',
+                element: <Flagged />,
+                path: '/transactions/flagged'
+            },
+            {
+                name: 'View specific flagged transaction',
+                element: <ViewSpecificFlagged />,
+                path: '/transactions/flagged/view/:senderId/:transactionType/:id'
+            },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
+            },
+            // Admin
             {
                 name: 'Admin Users List',
                 element: <Admin />,
@@ -44,6 +76,47 @@ export const ComponentsBasedOnRole = {
                 element: <SpecificAdminView />,
                 path: '/users/admins/:id'
             },
+            // Agent
+            {
+                name: 'Agent Users List',
+                element: <Agent />,
+                path: '/users/agents'
+            },
+            {
+                name: 'Agent Specific View',
+                element: <KYCView role={'agent'} viewType={'specific'} />,
+                path: '/users/agents/register-agent/specific-view/:id'
+            },
+            // Merchant
+            {
+                name: 'Merchant Users List',
+                element: <Merchant />,
+                path: '/users/merchants'
+            },
+            // Merchant Specific View from Merchant Listing
+            {
+                name: 'Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
+                path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
+            },
+            // customers
+            {
+                name: 'customers Users List',
+                element: <Customer />,
+                path: '/users/customers'
+            },
+            {
+                name: 'Customer Specific View',
+                element: <KYCView role={'customer'} viewType={'specific'} />,
+                path: '/users/customers/register-customer/specific-view/:id'
+            },
+
             {
                 name: 'Admin Users Update',
                 element: <OnboardAdmin actionKey={'update'} />,
@@ -192,31 +265,6 @@ export const ComponentsBasedOnRole = {
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
             },
-
-            // Agent Specific View from Agent Listing
-            {
-                name: 'Agent Specific View',
-                element: <KYCView role={'agent'} viewType={'specific'} />,
-                path: '/users/agents/register-agent/specific-view/:id'
-            },
-            // Agent Specific View from Agent Listing
-            {
-                name: 'Agent Specific View',
-                element: <KYCView role={'agent'} viewType={'specific'} />,
-                path: '/users/agents/register-agent/specific-view/:id'
-            },
-            // Merchant Specific View from Merchant Listing
-            {
-                name: 'Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'specific'} />,
-                path: '/users/merchants/register-merchant/specific-view/:id'
-            },
-            // customer Specific View from Merchant Listing
-            {
-                name: 'Customer Specific View',
-                element: <KYCView role={'customer'} viewType={'specific'} />,
-                path: '/users/customers/register-customer/specific-view/:id'
-            },
             // KYC Update for Agent
             {
                 name: 'Agent KYC Update',
@@ -271,17 +319,6 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
             },
-            // pay-out
-            {
-                name: 'Pay Out Requests',
-                element: <PayOutRequests />,
-                path: '/transactions/pay-out-requests'
-            },
-            {
-                name: 'Pay Out Requests Specific View',
-                element: <ViewPayOutRequest />,
-                path: '/transactions/pay-out-requests/:id'
-            },
             // Specific agent transaction list
             {
                 name: 'Specific Agent Transaction List',
@@ -294,17 +331,11 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionList type='customers' />,
                 path: '/users/customers/customers-transaction-histories/:id'
             },
-            // Flagged List
+            // Specific Merchant transaction list
             {
-                name: 'Flagged List',
-                element: <Flagged />,
-                path: '/transactions/flagged'
-            },
-            // Transaction Log
-            {
-                name: 'Transaction Log',
-                element: <TransactionsLog />,
-                path: '/transactions/log'
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
             },
             // Specific agent view specific transaction
             {
@@ -318,11 +349,11 @@ export const ComponentsBasedOnRole = {
                 element: <ViewTransactionDetails type='customer' />,
                 path: '/users/customers/customers-transaction-histories/view/:agentId/:transactionType/:id'
             },
-            // View specific flagged transaction
+            // Specific Merchant view specific transaction
             {
-                name: 'View specific flagged transaction',
-                element: <ViewSpecificFlagged />,
-                path: '/transactions/flagged/view/:senderId/:transactionType/:id'
+                name: 'Specific Merchant view Specific Transaction',
+                element: <ViewTransactionDetails type='merchant' />,
+                path: '/users/merchants/merchants-transaction-histories/view/:agentId/:transactionType/:id'
             }
         ],
     admin:
@@ -332,10 +363,85 @@ export const ComponentsBasedOnRole = {
                 element: <Dashboard />,
                 path: '/dashboard'
             },
+            // Flagged List
+            {
+                name: 'Flagged List',
+                element: <Flagged />,
+                path: '/transactions/flagged'
+            },
+            {
+                name: 'View specific flagged transaction',
+                element: <ViewSpecificFlagged />,
+                path: '/transactions/flagged/view/:senderId/:transactionType/:id'
+            },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
+            },
+            // Admin
             {
                 name: 'Admin Users List',
                 element: <Admin />,
                 path: '/users/admins'
+            },
+            {
+                name: 'Admin Users Specific View',
+                element: <SpecificAdminView />,
+                path: '/users/admins/:id'
+            },
+            // Agent
+            {
+                name: 'Agent Users List',
+                element: <Agent />,
+                path: '/users/agents'
+            },
+            {
+                name: 'Agent Specific View',
+                element: <KYCView role={'agent'} viewType={'specific'} />,
+                path: '/users/agents/register-agent/specific-view/:id'
+            },
+            // Merchant
+            {
+                name: 'Merchant Users List',
+                element: <Merchant />,
+                path: '/users/merchants'
+            },
+            // Merchant Specific View from Merchant Listing
+            {
+                name: 'Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
+                path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
+            },
+            // customers
+            {
+                name: 'customers Users List',
+                element: <Customer />,
+                path: '/users/customers'
+            },
+            {
+                name: 'Customer Specific View',
+                element: <KYCView role={'customer'} viewType={'specific'} />,
+                path: '/users/customers/register-customer/specific-view/:id'
+            },
+            // G2P Customer
+            {
+                name: 'G2P Customers',
+                element: <G2pList />,
+                path: '/financials/g2p'
+            },
+            // View G2P customer
+            {
+                name: 'G2P Customer View',
+                element: <G2PCustomerViewList />,
+                path: '/financials/g2p/view-profile/:id'
             },
             {
                 name: 'Onboard Agent Users',
@@ -357,6 +463,12 @@ export const ComponentsBasedOnRole = {
                 name: 'Specific Customer Transaction List',
                 element: <ViewTransactionList type='customers'/>,
                 path: '/users/customers/customers-transaction-histories/:id'
+            },
+            // Specific Merchant transaction list
+            {
+                name: 'Specific Merchant Transaction List',
+                element: <ViewTransactionList type='merchants' />,
+                path: '/users/merchants/merchants-transaction-histories/:id'
             },
             {
                 name: 'KYC Verification list',
@@ -380,18 +492,6 @@ export const ComponentsBasedOnRole = {
                 name: 'Customer Kyc Specific View',
                 element: <KYCView role={'customer'} viewType={'kyc'} />,
                 path: '/verify/kyc-registration/customer-profile/:id'
-            },
-            // Agent Specific View from Agent Listing
-            {
-                name: 'Agent Specific View',
-                element: <KYCView role={'agent'} viewType={'specific'} />,
-                path: '/users/agents/register-agent/specific-view/:id'
-            },
-            // Merchant Specific View from Merchant Listing
-            {
-                name: 'Merchant Specific View',
-                element: <KYCView role={'merchant'} viewType={'specific'} />,
-                path: '/users/merchants/register-merchant/specific-view/:id'
             },
             {
                 name: 'Paymaart Trust Banks',
@@ -470,12 +570,6 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
-            },
-            // Transaction Log
-            {
-                name: 'Transaction Log',
-                element: <TransactionsLog />,
-                path: '/transactions/log'
             }
         ],
     'support-admin':
@@ -485,35 +579,16 @@ export const ComponentsBasedOnRole = {
                 element: <Dashboard />,
                 path: '/dashboard'
             },
+            // Flagged List
             {
-                name: 'Onboard Agent Users',
-                element: <OnboardAgent role={'agent'} />,
-                path: '/users/agents/register-agent'
+                name: 'Flagged List',
+                element: <Flagged />,
+                path: '/transactions/flagged'
             },
             {
-                name: 'Onboard Merchant Users',
-                element: <OnboardAgent role={'merchant'} />,
-                path: '/users/merchants/register-merchant'
-            },
-            {
-                name: 'Onboard Customer Users',
-                element: <OnboardAgent role={'customer'} />,
-                path: '/users/customers/register-customer'
-            },
-            {
-                name: 'Agent KYC Registration',
-                element: <RegisterKYC role={'agent'} />,
-                path: '/users/agents/register-agent/kyc-registration/:id'
-            },
-            {
-                name: 'Customer KYC Registration',
-                element: <RegisterKYC role={'customers'} />,
-                path: '/users/customers/register-customer/kyc-registration/:id'
-            },
-            {
-                name: 'Merchant KYC Registration',
-                element: <RegisterKYC role={'merchant'} />,
-                path: '/users/merchants/register-merchant/kyc-registration/:id'
+                name: 'View specific flagged transaction',
+                element: <ViewSpecificFlagged />,
+                path: '/transactions/flagged/view/:senderId/:transactionType/:id'
             }
         ],
     'finance-admin':
@@ -523,6 +598,86 @@ export const ComponentsBasedOnRole = {
                 element: <Dashboard />,
                 path: '/dashboard'
             },
+            // pay-out
+            {
+                name: 'Pay Out Requests',
+                element: <PayOutRequests />,
+                path: '/transactions/pay-out-requests'
+            },
+            {
+                name: 'Pay Out Requests Specific View',
+                element: <ViewPayOutRequest />,
+                path: '/transactions/pay-out-requests/:id'
+            },
+            // Flagged List
+            {
+                name: 'Flagged List',
+                element: <Flagged />,
+                path: '/transactions/flagged'
+            },
+            {
+                name: 'View specific flagged transaction',
+                element: <ViewSpecificFlagged />,
+                path: '/transactions/flagged/view/:senderId/:transactionType/:id'
+            },
+            // Transaction Log
+            {
+                name: 'Transaction Log',
+                element: <TransactionsLog />,
+                path: '/transactions/log'
+            },
+            // Admin
+            {
+                name: 'Admin Users List',
+                element: <Admin />,
+                path: '/users/admins'
+            },
+            {
+                name: 'Admin Users Specific View',
+                element: <SpecificAdminView />,
+                path: '/users/admins/:id'
+            },
+            // Agent
+            {
+                name: 'Agent Users List',
+                element: <Agent />,
+                path: '/users/agents'
+            },
+            {
+                name: 'Agent Specific View',
+                element: <KYCView role={'agent'} viewType={'specific'} />,
+                path: '/users/agents/register-agent/specific-view/:id'
+            },
+            // Merchant
+            {
+                name: 'Merchant Users List',
+                element: <Merchant />,
+                path: '/users/merchants'
+            },
+            // Merchant Specific View from Merchant Listing
+            {
+                name: 'Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'All_merchants'} />,
+                path: '/users/merchants/register-merchant/specific-view/:id'
+            },
+            // Reported Merchant Specific View from Merchant Listing
+            {
+                name: 'Reported Merchant Specific View',
+                element: <KYCView role={'merchant'} viewType={'Reported_merchants'} />,
+                path: '/users/merchants/reported-merchant/specific-view/:id'
+            },
+            // customers
+            {
+                name: 'customers Users List',
+                element: <Customer />,
+                path: '/users/customers'
+            },
+            {
+                name: 'Customer Specific View',
+                element: <KYCView role={'customer'} viewType={'specific'} />,
+                path: '/users/customers/register-customer/specific-view/:id'
+            },
+
             {
                 name: 'Paymaart Trust Banks',
                 element: <TrustBanks />,
@@ -609,17 +764,6 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails type='admin'/>,
                 path: '/financials/transaction-history/:id'
-            },
-            // pay-out
-            {
-                name: 'Pay Out Requests',
-                element: <PayOutRequests />,
-                path: '/transactions/pay-out-requests'
-            },
-            {
-                name: 'Pay Out Requests Specific View',
-                element: <ViewPayOutRequest />,
-                path: '/transactions/pay-out-requests/:id'
             }
         ]
 };

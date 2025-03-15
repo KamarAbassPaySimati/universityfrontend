@@ -31,7 +31,7 @@ ChartJS.register(
     Legend
 );
 
-export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple, count }) {
+export default function BarGraph ({ DashboardName, endpoint, initialStates, multiple, count, exportPermissions }) {
     const [states, setStates] = useState(initialStates);
     const [data, setData] = useState([]);
     const { user } = useSelector((state) => state.auth);
@@ -61,9 +61,9 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
             setIsParams(params);
             const res = await dataService.GetAPI(`admin-dashboard/${endpoint}?time_period=${states?.dateRangeType.toLowerCase().replaceAll(' ', '_')}${((DashboardName === 'Customer Registrations' || DashboardName === 'Merchant Registrations') && states.membership !== 'All') ? `&membership=${states.membership.toUpperCase().replace(/ /g, '_')}` : ''}${(DashboardName === 'Customer e-Payments' && states.transaction_type !== 'All') ? `&transaction_type=${states.transaction_type === 'Pay Person' ? 'pay_person' : states.transaction_type === 'Pay Paymaart' ? 'paymaart' : 'afrimax'}` : ''}${params !== undefined ? `${params}` : ''}`);
             let count = 0;
-            res.data.data.forEach(element => {
+            res?.data?.data?.forEach(element => {
                 if (multiple) {
-                    multiple.forEach(item => {
+                    multiple?.forEach(item => {
                         if (element[item.toLowerCase().replaceAll('-', '_').replaceAll(' ', '_')] !== 0) {
                             count = count + 1;
                         }
@@ -316,7 +316,7 @@ export default function BarGraph ({ DashboardName, endpoint, initialStates, mult
                             handleClearFilter={handleClearFilter}
                         />}
                         {
-                            CurrentUserRole === 'Super admin' &&
+                            exportPermissions.includes(CurrentUserRole) &&
                             <>
                                 <button data-testid={`${DashboardName} Export`} onClick={handleExport} disabled={data?.length === 0 || exportLoading}>
                                     <Image src={'export'} className={`w-6 h-6 bottom-1 ${data?.length ? 'cursor-pointer' : ''}`} toolTipId='export'/>

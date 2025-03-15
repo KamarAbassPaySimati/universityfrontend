@@ -38,7 +38,7 @@ Feature: Paymaart - Admin Web - Specific View G2P Customer
     Given I navigate to G2P customer listing page
     When I click on the view button for customer details
     Then I should view G2P customer details
-    Then I should see table header containing '["Sheet Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
+    Then I should see table header containing '["File Name","Uploaded Date, CAT","Uploaded By","Transferred Amount"]'
 
   Scenario: Checking Pagination
     Given I navigate to G2P customer listing page

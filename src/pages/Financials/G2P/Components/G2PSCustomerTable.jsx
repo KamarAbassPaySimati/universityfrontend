@@ -52,7 +52,6 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
 
     // function for Transacction
     const handleConfirmClick = async () => {
-        console.log(isTransactionModal, 'isTransactionModal');
         setError(false);
         try {
             setIsLoading(true);
@@ -95,7 +94,7 @@ function G2PCustomerTable ({ loading, View, notFound, searchParams, getG2PCustom
                 {View && View.sheets.length > 0 &&
                     <thead className='text-neutral-secondary whitespace-nowrap text-[14px] leading-[24px]'>
                         <tr className='border-b border-neutral-outline sticky top-0 bg-white z-10'>
-                            <th className='py-2 px-[10px] text-left font-[400]'>Sheet Name</th>
+                            <th className='py-2 px-[10px] text-left font-[400]'>File Name</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Uploaded Date, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Uploaded By</th>
                             <th className='py-2 px-[10px] text-right font-[400]'>Transferred Amount (MWK)</th>

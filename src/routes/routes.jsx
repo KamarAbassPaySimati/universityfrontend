@@ -16,10 +16,7 @@ import Profile from '../pages/Profile';
 import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
 import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
 import Slugify from '../CommonMethods/Sulgify';
-import Agent from '../pages/Users/Agent';
 import Toast from '../components/Toast/Toast';
-import Merchant from '../pages/Users/Merchants';
-import Customer from '../pages/Users/Customer';
 import SetNewPasswordWithPin from '../pages/auth/SetNewPasswordWithPin';
 export default function NavigationRoutes (props) {
     const auth = useSelector((state) => state.auth);
@@ -101,9 +98,6 @@ export default function NavigationRoutes (props) {
                                                 ))}
                                                 <Route path="/profile" element={<Profile />} />
                                                 <Route path="/profile/update-password" element={<UpdatePassword />} />
-                                                <Route path="/users/agents" element={<Agent />} />
-                                                <Route path="/users/merchants" element={<Merchant />} />
-                                                <Route path="/users/customers" element={<Customer />} />
                                             </Route>
                                             <Route path="*" element={<NotFound />} />
                                         </>

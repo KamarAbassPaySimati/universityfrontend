@@ -36,11 +36,11 @@ const LoginPage = ({ handleSubmit, setFormData, formData, setErrors, errors, log
     };
     const onSubmitValue = async (e) => {
         e.preventDefault();
-        if (window.location.host !== 'localhost:3000') {
+        if (window.location.host !== 'localhost:3000' ) {
             await reCaptchaRef.current.executeAsync();
         }
         handleSubmit(e);
-        if (window.location.host !== 'localhost:3000') {
+        if (window.location.host !== 'localhost:3000' ) {
             await reCaptchaRef.current.reset();
         }
     };

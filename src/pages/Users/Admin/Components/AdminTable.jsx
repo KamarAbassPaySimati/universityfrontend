@@ -82,17 +82,8 @@ const AdminTable = (
                                         )}
                                 </td>
                                 <td className={'py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'}>
-                                    {/* {CurrentUserRole === 'super-admin' && <><Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)}/>
-                                        <Image src='edit' toolTipId={`edit-${index}`}/></>} */}
-
-                                    {
-                                        CurrentUserRole === 'super-admin' && (
-                                            <>
-                                                <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`)} />
-                                                {paymaartId !== user?.paymaart_id && <Image src='edit' testId={`edit-${index}`} className={'cursor-pointer'} toolTipId={`edit-${index}`} onClick={() => navigate(`/users/admins/update-admin/${user?.paymaart_id}`)}/>}
-                                            </>
-                                        )
-                                    }
+                                    <Image toolTipId={`eye-${index}`} testId={`view-${index}`} src='eye' className={'cursor-pointer'} onClick={() => navigate(`/users/admins/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), role: searchParams.get('role') ? searchParams.get('role') : '', status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } })} />
+                                    {['super-admin'].includes(CurrentUserRole) && paymaartId !== user?.paymaart_id && <Image src='edit' testId={`edit-${index}`} className={'cursor-pointer'} toolTipId={`edit-${index}`} onClick={() => navigate(`/users/admins/update-admin/${user?.paymaart_id}`, { state: { page: searchParams.get('page'), role: searchParams.get('role') ? searchParams.get('role') : '', status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } })}/>}
 
                                     <Tooltip
                                         id={`eye-${index}`}

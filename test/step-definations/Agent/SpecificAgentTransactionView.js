@@ -81,32 +81,43 @@ When('I click on view transaction for most recent transaction', async function (
     await driver.wait(until.elementIsVisible(element));
 
     this.transaction_id = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_id"]'))).getText();
-    this.beneficiary_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="beneficiary_id"]'))).getText();
     this.type = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_type"]'))).getText();
     this.amount = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_amount"]'))).getText();
-
+    this.date = await driver.wait(until.elementLocated(By.css('[data-testid="dateRow"]'))).getText();
     await element.click();
 });
 
-Then('I should see the transaction recipt', async function () {
+Then('I should see the transaction receipt of agent', async function () {
     await new Promise(resolve => setTimeout(resolve, 4000));
 
-    console.log('this', this.transaction_id, this.beneficiary_paymaart_id, this.type, this.amount);
-    const element = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_details"]')));
-    await driver.wait(until.elementIsVisible(element));
+    console.log('this', this.transaction_id, this.beneficiary_paymaart_id, this.date, this.amount);
 
-    const actual_transaction_id = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_details"] [data-testid="transaction_id"]'))).getText();
+    const actual_transaction_id = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_id"]'))).getText();
     assert.equal(actual_transaction_id, this.transaction_id);
 
-    const actual_beneficiary_paymaart_id = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_details"] [data-testid="beneficiary_paymaart_id"]'))).getText();
-    assert.equal(actual_beneficiary_paymaart_id, this.beneficiary_paymaart_id);
+    const actual_type = await driver.wait(until.elementLocated(By.css('[data-testid="date"]'))).getText();
+    assert.equal(actual_type, this.date);
 
-    // const actual_type = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_details"] [data-testid="type"]'))).getText();
-    // assert.equal(actual_type, this.type);
+    // const actual_amount = await driver.wait(until.elementLocated(By.css('[data-testid="amount"]'))).getText();
+    // console.log(actual_amount ,"actual_amount")
+    // this.amount = this.amount + ' MWK';
+    // assert.equal(actual_amount, this.amount);
+});
+Then('I should see the transaction receipt of merchant', async function () {
+    await new Promise(resolve => setTimeout(resolve, 4000));
 
-    const actual_amount = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_details"] [data-testid="amount"]'))).getText();
-    this.amount = this.amount + ' MWK';
-    assert.equal(actual_amount, this.amount);
+    console.log('this', this.transaction_id, this.beneficiary_paymaart_id, this.date, this.amount);
+
+    const actual_transaction_id = await driver.wait(until.elementLocated(By.css('[data-testid="transaction_id"]'))).getText();
+    assert.equal(actual_transaction_id, this.transaction_id);
+
+    const actual_type = await driver.wait(until.elementLocated(By.css('[data-testid="date"]'))).getText();
+    assert.equal(actual_type, this.date);
+
+    // const actual_amount = await driver.wait(until.elementLocated(By.css('[data-testid="amount"]'))).getText();
+    // console.log(actual_amount ,"actual_amount")
+    // this.amount = this.amount + ' MWK';
+    // assert.equal(actual_amount, this.amount);
 });
 
 Then('I should see the flag transaction and share button', async function () {

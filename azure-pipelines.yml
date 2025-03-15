@@ -2,19 +2,20 @@ trigger:
   branches:
     include:
       - qa
-      - pre-production
+      - pre-prod
       - master
 pr:
   branches:
     include:
       - qa
+      - pre-prod
 variables:
   - group: general
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     - group: master
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/qa') }}:
     - group: qa
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-production') }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/pre-prod') }}:
     - group: pre-production
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - group: develop
@@ -23,10 +24,22 @@ variables:
 stages:
 - stage: CodeQuality
   jobs:
+    - job: "pr_review"
+      displayName: "GPT Pull Request Review"
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      pool:
+          vmImage: "ubuntu-latest"
+      steps:
+        - checkout: self
+          persistCredentials: true
+        - task: GPTPullRequestReview@0
+          inputs:
+            api_key: $(OPENAI_TOKEN)
+            aoi_endpoint: $(AOI_ENDPOINT)
     - job: "lint"
       displayName: "Code Quality"
       # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -52,7 +65,7 @@ stages:
     - job: "secret"
       displayName: "Secret Checking"
       # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -63,7 +76,7 @@ stages:
     - job: "licence_complaiance"
       displayName: "License Compliance"
       # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -75,7 +88,7 @@ stages:
     - job: "sast"
       displayName: 'Static Application Security Testing (SAST)'
       # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
           vmImage: "ubuntu-latest"
       steps:
@@ -92,6 +105,7 @@ stages:
         vmImage: "ubuntu-latest"
       steps:
         - script: |
+            aws sts get-caller-identity
             ./scripts/azure_envs.sh
           displayName: 'Copy Environment Files'
         - publish: $(System.DefaultWorkingDirectory)/.env
@@ -130,435 +144,15 @@ stages:
 
 - stage: Test
   jobs:
-    # - job: UnitTesting
-    #   displayName: "Unit Testing"
-    #   condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "macos-latest"
-    #   steps:
-    #     - task: Cache@2
-    #       inputs:
-    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #         restoreKeys: |
-    #           npm | "$(Agent.OS)"
-    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #         cacheHitVar: CACHE_RESTORED
-    #       displayName: Cache npm
-    #     - script: |
-    #         npm install --force
-    #       condition: ne(variables.CACHE_RESTORED, 'true')
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: Environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - script: |
-    #         npm install pm2@5.3.0 -g
-    #         source .env
-    #         echo "$VITE_COVERAGE $VITE_REGION $VITE_ADMIN_COGNITO_USERPOOL_ID $VITE_ADMIN_COGNITO_CLIENT_ID $VITE_ADMIN_COGNITO_IDENTITY_POOL_ID $VITE_STAGE"
-    #         echo "$VITE_BDD_TOKEN $VITE_DOMAIN_NAME $VITE_OTP_ENCODING $VITE_GOOGLE_API $VITE_BUCKET_NAME $VITE_CDN_URL"
-    #         npm install express --force
-    #         pm2 start scripts/server.js
-    #         node --version
-    #         sleep 5
-    #         mkdir reports
-    #         mkdir reports-xml
-    #         npm install nyc --save-dev --force
-    #         node scripts/bdd_unit_testing_azure.js
-    #       displayName: Unit Testing
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-    #       artifact: '$(system.JobId)-failedScenarios'
-    #       condition: always()
-
-    # - job: UnitTesting1
-    #   displayName: "Unit Testing-1"
-    #   # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-    #   condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #     - task: Cache@2
-    #       inputs:
-    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #         restoreKeys: |
-    #           npm | "$(Agent.OS)"
-    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #         cacheHitVar: CACHE_RESTORED
-    #       displayName: Cache npm
-    #     - script: |
-    #         npm install --force
-    #       condition: ne(variables.CACHE_RESTORED, 'true')
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: Environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - script: |
-    #         npm install pm2@5.3.0 -g
-    #         source .env
-    #         npm install express --force
-    #         pm2 start scripts/server.js
-    #         sleep 5
-    #         mkdir reports
-    #         mkdir reports-xml
-    #         npm install nyc --save-dev --force
-    #         node scripts/bdd_unit_testing_azure1.js
-    #         if [ $? -ne 0 ]; then
-    #           echo "Integration Testing"
-    #           exit 1
-    #         fi
-    #       displayName: Unit Testing
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-    #       artifact: '$(system.JobId)-failedScenarios'
-    #       condition: always()
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
-    #       artifact: 'flow1-coverageData'
-    #     - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
-    #       artifact: 'flow1-living-documentation'
-    #     - task: PublishTestResults@2
-    #       condition: always()
-    #       inputs:
-    #         testResultsFormat: 'JUnit'
-    #         testResultsFiles: '**/TEST-*.xml'
-
-
-    # - job: UnitTesting2
-    #   displayName: "Unit Testing-2"
-    #   # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-    #   condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #     - task: Cache@2
-    #       inputs:
-    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #         restoreKeys: |
-    #           npm | "$(Agent.OS)"
-    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #         cacheHitVar: CACHE_RESTORED
-    #       displayName: Cache npm
-    #     - script: |
-    #         npm install --force
-    #       condition: ne(variables.CACHE_RESTORED, 'true')
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: Environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - script: |
-    #         npm install pm2@5.3.0 -g
-    #         source .env
-    #         npm install express --force
-    #         pm2 start scripts/server.js
-    #         sleep 5
-    #         mkdir reports
-    #         mkdir reports-xml
-    #         npm install nyc --save-dev --force
-    #         node scripts/bdd_unit_testing_azure2.js
-    #         if [ $? -ne 0 ]; then
-    #           echo "Integration Testing"
-    #           exit 1
-    #         fi
-    #       displayName: Unit Testing
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-    #       artifact: '$(system.JobId)-failedScenarios'
-    #       condition: always()
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
-    #       artifact: 'flow2-coverageData'
-    #     - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
-    #       artifact: 'flow2-living-documentation'
-
-    # - job: UnitTesting3
-    #   displayName: "Unit Testing-3"
-    #   # condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-    #   condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #     - task: Cache@2
-    #       inputs:
-    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #         restoreKeys: |
-    #           npm | "$(Agent.OS)"
-    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #         cacheHitVar: CACHE_RESTORED
-    #       displayName: Cache npm
-    #     - script: |
-    #         npm install --force
-    #       condition: ne(variables.CACHE_RESTORED, 'true')
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: Environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - script: |
-    #         npm install pm2@5.3.0 -g
-    #         source .env
-    #         npm install express --force
-    #         pm2 start scripts/server.js
-    #         sleep 5
-    #         mkdir reports
-    #         mkdir reports-xml
-    #         npm install nyc --save-dev --force
-    #         node scripts/bdd_unit_testing_azure3.js
-    #         if [ $? -ne 0 ]; then
-    #           echo "Integration Testing"
-    #           exit 1
-    #         fi
-    #       displayName: Unit Testing
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-    #       artifact: '$(system.JobId)-failedScenarios'
-    #       condition: always()
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
-    #       artifact: 'flow3-coverageData'
-    #     - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
-    #       artifact: 'flow3-living-documentation'
-
-
-    # - job: BDDReports
-    #   displayName: 'BDD Living documentation'
-    #   dependsOn:
-    #       - UnitTesting1
-    #       - UnitTesting2
-    #       - UnitTesting3
-
-    #   condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: LivingDoc1
-    #       inputs:
-    #         artifactName: 'flow1-living-documentation'
-    #         targetPath: '$(System.DefaultWorkingDirectory)/reports'
-    #       displayName: 'Download Living Documentation Artifact'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: Coverage1
-    #       inputs:
-    #         artifactName: 'flow1-coverageData'
-    #         targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: LivingDoc2
-    #       inputs:
-    #         artifactName: 'flow2-living-documentation'
-    #         targetPath: '$(System.DefaultWorkingDirectory)/reports'
-    #       displayName: 'Download Living Documentation Artifact'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: Coverage2
-    #       inputs:
-    #         artifactName: 'flow2-coverageData'
-    #         targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: LivingDoc3
-    #       inputs:
-    #         artifactName: 'flow3-living-documentation'
-    #         targetPath: '$(System.DefaultWorkingDirectory)/reports'
-    #       displayName: 'Download Living Documentation Artifact'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: Coverage3
-    #       inputs:
-    #         artifactName: 'flow3-coverageData'
-    #         targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData'
-    #     - script: |
-    #         echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
-    #         echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
-    #         source .env
-    #         mkdir coverage
-    #         npm install nyc --save-dev --force
-    #         npm run generate_report
-    #         npm run generate_report_cobertura
-    #         ls -R reports-xml
-    #         node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
-    #         export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
-    #         export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-    #         aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
-    #         aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
-    #         aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
-    #       displayName: 'BDD Living documentation'
-    #       condition: always()
-    #     - task: PublishTestResults@2
-    #       condition: always()
-    #       inputs:
-    #         testResultsFormat: 'JUnit'
-    #         testResultsFiles: '**/TEST-*.xml'
-    #     - task: PublishCodeCoverageResults@1
-    #       condition: always()
-    #       inputs:
-    #         codeCoverageTool: 'Cobertura'
-    #         summaryFileLocation: 'coverage-cobertura/cobertura-coverage.xml'
-
-    # - job: UnitTestingResult
-    #   variables:
-    #     myVariable: $[replace(variables['BUILD.SOURCEBRANCH'], 'refs/heads/', '')]
-    #   displayName: "Unit Testing Result"
-    #   condition: or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix'))
-    #   dependsOn: UnitTesting
-    #   pool:
-    #     vmImage: "ubuntu-latest"
-    #   steps:
-    #   - task: Cache@2
-    #     inputs:
-    #       key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #       restoreKeys: |
-    #         npm | "$(Agent.OS)"
-    #       path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #       cacheHitVar: CACHE_RESTORED
-    #     displayName: Cache npm
-    #   - script: |
-    #       npm install --cache .npm
-    #     condition: ne(variables.CACHE_RESTORED, 'true')
-    #   - script: |
-    #      mkdir reports
-    #      mkdir test/step-definations/coverageData/
-    #   - task: DownloadPipelineArtifact@2
-    #     name: reports
-    #     inputs:
-    #       artifact: reports
-    #       targetPath: '$(System.DefaultWorkingDirectory)/reports'
-    #   - task: DownloadPipelineArtifact@2
-    #     name: coverage
-    #     inputs:
-    #       artifact: coverage
-    #       targetPath: '$(System.DefaultWorkingDirectory)/test/step-definations/coverageData/'
-    #   - script: |
-    #       echo "##vso[task.setvariable variable=RepositoryName]$BUILD_REPOSITORY_NAME"
-    #       echo "##vso[task.setvariable variable=SourceBranch]$SourceBranch"
-    #       source .env
-    #       mkdir coverage
-    #       npm install nyc --save-dev --force
-    #       npm run generate_report
-    #       node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
-    #       export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
-    #       export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-    #       aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
-    #       aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/dev/ --acl public-read
-    #       aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
-    #     displayName: 'BDD Living documentation'
-    
-    # - job: IntegrationTesting
-    #   displayName: "Integration Testing"
-    #   condition: and(succeeded(), contains(variables['build.SourceBranch'], 'qa'))
-    #   # condition: and(or(contains(variables['build.SourceBranch'], 'feature'), contains(variables['build.SourceBranch'], 'bugfix'), contains(variables['build.SourceBranch'], 'hotfix')), succeeded())
-    #   pool:
-    #     vmImage: "macos-latest"
-    #   steps:
-    #     - task: Cache@2
-    #       inputs:
-    #         key: 'npmV3 | "$(Agent.OS)" | package.json'
-    #         restoreKeys: |
-    #           npm | "$(Agent.OS)"
-    #         path: "$(System.DefaultWorkingDirectory)/node_modules"
-    #         cacheHitVar: CACHE_RESTORED
-    #       displayName: Cache npm
-    #     - script: |
-    #         npm install --force
-    #       condition: ne(variables.CACHE_RESTORED, 'true')
-    #     - task: DownloadPipelineArtifact@2
-    #       name: environment
-    #       inputs:
-    #         artifact: Environment
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - task: DownloadPipelineArtifact@2
-    #       name: bundle
-    #       inputs:
-    #         artifact: bundle
-    #         targetPath: '$(System.DefaultWorkingDirectory)'
-    #     - script: |
-    #         npm install pm2@5.3.0 -g
-    #         source .env
-    #         export NODE_OPTIONS=--max-old-space-size=8192
-    #         npm install express --force
-    #         pm2 start scripts/server.js
-    #         sleep 60
-    #         mkdir reports
-    #         npm install nyc --save-dev --force
-    #         mkdir reports-xml
-    #         node scripts/bdd-execution-split1.js
-    #         if [ $? -ne 0 ]; then
-    #           echo "Integration Testing"
-    #           exit 1
-    #         fi
-    #         mkdir coverage
-    #         npm run generate_report
-    #       displayName: Integration Testing
-    #     - script: |
-    #         cat log.txt
-    #       condition: always()
-    #     - task: PublishTestResults@2
-    #       condition: always()
-    #       inputs:
-    #         testResultsFormat: 'JUnit'
-    #         testResultsFiles: '**/TEST-*.xml'
-    #     # - script: |
-    #     #     # ls -R reports-xml
-    #     #     node scripts/livingdoc_azure.js $BUILD_REPOSITORY_NAME
-    #     #     export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID_MAIN}
-    #     #     export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY_MAIN}
-    #     #     aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/living-documentation-ADMIN/dev/ --acl public-read
-    #     #     aws s3 sync coverage s3://$S3_BUCKET_LIVING_DOCUMENTATION/coverage-ADMIN/qa/ --acl public-read
-    #     #     aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
-    #     #     if [ $? -ne 0 ]; then
-    #     #       echo "BDD Living documentation"
-    #     #       exit 1
-    #     #     fi
-    #     #   displayName: BDD Living documentation
-    #     #   condition: always()
-    #     - publish: $(System.DefaultWorkingDirectory)/test/step-definations/failedScenarios/ # Assuming logs are in working directory
-    #       artifact: '$(system.JobId)-failedScenarios'
-    #       condition: always()
-    #     # - publish: $(System.DefaultWorkingDirectory)/test/step-definations/coverageData/ # Assuming logs are in working directory
-    #     #   artifact: '$(system.JobId)-coverageData'
-    #     #   condition: always()
-    #     # - publish: $(System.DefaultWorkingDirectory)/reports/ # Assuming logs are in working directory
-    #     #   artifact: '$(system.JobId)-living-documentation'
-    #     #   condition: always()
-
-    #     # - task: PublishTestResults@2
-    #     #   condition: always()
-    #     #   inputs:
-    #     #     testResultsFormat: 'JUnit'
-    #     #     testResultsFiles: '**/TEST-*.xml'
-
-
     - job: BrowserPerformanceTesting
       displayName: "Browser Performance Testing"
-      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
         vmImage: "ubuntu-latest"
       steps:
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -592,12 +186,14 @@ stages:
 - stage: Deploy
   jobs:
     - deployment: Deployment
-      condition: and(or(contains(variables['Build.Reason'], 'PullRequest'),contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'qa'), contains(variables['build.SourceBranch'], 'pre-production')), succeeded())
+      condition: and(or(contains(variables['Build.Reason'], 'PullRequest'),contains(variables['build.SourceBranch'], 'master'), contains(variables['build.SourceBranch'], 'qa'), contains(variables['build.SourceBranch'], 'pre-prod')), succeeded())
       displayName: Deployment
       pool:
         vmImage: 'macos-latest'
       ${{ if eq(variables['Build.SourceBranchName'], 'master') }}:
           environment: 'Production'
+      ${{ if eq(variables['Build.SourceBranchName'], 'pre-prod') }}:
+          environment: 'Pre-Production'
       ${{ elseif eq(variables['Build.SourceBranchName'], 'qa') }}:
           environment: 'Testing'
       ${{ else }}:
@@ -625,13 +221,13 @@ stages:
                 
     - job: DAST
       displayName: "Dynamic Application Security Testing (DAST)"
-      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
+      condition: and(or(contains(variables['System.PullRequest.SourceBranch'], 'feature'), contains(variables['System.PullRequest.SourceBranch'], 'bugfix'), contains(variables['System.PullRequest.SourceBranch'], 'ci'), contains(variables['System.PullRequest.SourceBranch'], 'hotfix')), succeeded())
       pool:
         vmImage: "ubuntu-latest"
       steps:
         - task: Cache@2
           inputs:
-            key: 'npmV2 | "$(Agent.OS)" | package.json'
+            key: 'npmV3 | "$(Agent.OS)" | package.json'
             restoreKeys: |
               npm | "$(Agent.OS)"
             path: "$(System.DefaultWorkingDirectory)/node_modules"
@@ -670,6 +266,4 @@ stages:
             aws s3 sync living-documentation s3://$S3_BUCKET_LIVING_DOCUMENTATION/dast-admin/dev/ --acl public-read
             aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID_DOCS --paths "/*"
           displayName: 'DAST Report documentation'
-          condition: always()
-    
-    
+          condition: always()    

@@ -36,7 +36,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                     ? <Shimmer column={6} row={10} firstIndex />
                     : <tbody className='text-neutral-primary whitespace-nowrap text-[14px] leading-[24px] font-[400]'>
                         {List?.data?.map((user, index) => (
-                            <TableBody user={user} index={index} key={index} GetList={GetList}/>))}
+                            <TableBody userRole={user} index={index} key={index} GetList={GetList} searchParams={searchParams}/>))}
                     </tbody>
                 }
             </table>

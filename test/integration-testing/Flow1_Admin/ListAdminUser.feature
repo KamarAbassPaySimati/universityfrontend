@@ -30,7 +30,7 @@ Feature: Paymaart - Admin Web -Admin List
         Given I navigate to admin users listing screen
         When I click on the sort by "Admin Name"
         Then I should see the admin user sorted in ascending order based on "Admin Name"
-        * I click on the sort by "Admin Name"
+        When I click on the sort by "Admin Name"
         And I should see the admin user sorted in descending order based on "Admin Name"
 
     Scenario Outline: Filter admin users by role

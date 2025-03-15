@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import AdminTable from './Components/AdminTable';
@@ -30,31 +30,6 @@ const Admin = () => {
 
     const dispatch = useDispatch();
 
-    /* The `GetList` constant is a function created using the `useCallback` hook in React. It is an
-    asynchronous function that is responsible for fetching data using the `dispatch` function to
-    call the `AdminList` action creator with the `searchParams` as a parameter. */
-    // const GetList = useCallback(async () => {
-    //     try {
-    //         // to get the data from authslice
-    //         dispatch(AdminList(searchParams)).then((response) => {
-    //             console.log(response, 'respinse');
-    //             if (response.payload.error) {
-    //                 if (error.status === 400) {
-    //                     setNotFound(true);
-    //                 } else {
-    //                     setToastError('Something went wrong!');
-    //                 }
-    //             } else {
-    //                 if (response.payload.data.length !== 0) {
-    //                     setNotFound(false);
-    //                 }
-    //             }
-    //         });
-    //     } catch (error) {
-    //         console.error('geterror', error);
-    //     }
-    // }, [searchParams]);
-
     const GetList = useCallback(async () => {
         try {
             dispatch(AdminList(searchParams));
@@ -64,7 +39,6 @@ const Admin = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400) {
                 setNotFound(true);
@@ -73,6 +47,7 @@ const Admin = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
@@ -83,7 +58,7 @@ const Admin = () => {
 
     /* The `useEffect` hook in the provided code snippet is responsible for triggering a side effect
     when the component mounts or when the dependencies change. */
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
         } else {

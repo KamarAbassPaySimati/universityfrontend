@@ -13,12 +13,13 @@ export default function ProfileName ({
     profilePicture,
     Amount,
     g2pCustomer
+
 }) {
     return (
         <div className={`flex gap-[27px] justify-center items-center ${loading ? 'animate-pulse z-0 ' : ''}`}>
             {profilePicture
                 ? (<div>
-                    <img src={profilePicture} alt="profilePicture" className='h-[66px] w-[66px] rounded-[8px] object-cover'/>
+                    <img src={profilePicture} alt="profilePicture" className='h-[66px] w-[66px] rounded-[8px] object-cover' />
                 </div>)
                 : (<div className={`${loading ? 'bg-slate-200 text-slate-200 w-[66px]' : 'bg-primary-normal text-[#FFFFFF] '} h-[66px] px-2 w-fit flex justify-center items-center
                             font-[400] text-[24px] leading-[32px] rounded-[8px] uppercase`}>
@@ -34,14 +35,18 @@ export default function ProfileName ({
                     Paymaart ID: <span data-testid="paymaart_id" className='font-semibold'>{formatID(payMaartID)}</span>
                 </div>
                 {g2pCustomer &&
-                <div className='flex items-center'>
-                    <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
-                        Amount: <span data-testid="paymaart_id" className='font-semibold'>{Amount}</span>
-                    </div>
-                    <div className={`ml-6 ${loading ? 'bg-slate-200' : ''}`}>
-                        Created Date: <span data-testid="paymaart_id" className='font-semibold mr-4'>{CreatedDate}</span>
-                    </div>
-                </div>}
+                    <div className='flex items-center'>
+                        <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
+                            Balance: <span data-testid="paymaart_id" className='font-semibold'>
+                                {Amount && !isNaN(parseFloat(Amount))
+                                    ? parseFloat(Amount).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                    : '0.00'}
+                            </span>
+                        </div>
+                        <div className={`ml-6 ${loading ? 'bg-slate-200' : ''}`}>
+                            Created Date: <span data-testid="paymaart_id" className='font-semibold mr-4'>{CreatedDate}</span>
+                        </div>
+                    </div>}
                 {viewType === 'specific' && lastLoggedIn && <div className={`text-[14px] leading-[24px] font-[400] ${loading ? 'bg-slate-200' : ''}`}>
                     Created Date: <span data-testid="paymaart_id" className={`font-semibold mr-4 ${loading ? 'bg-slate-200' : ''}`}>{CreatedDate}</span>
                     Last Logged in: <span data-testid="paymaart_id" className={`font-semibold ${lastLoggedIn !== 'Online' ? '' : 'text-accent-positive'}`}>{lastLoggedIn}</span>

@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 
 const MapLocator = ({ markers }) => {
     useEffect(() => {
-        console.log(markers);
         const initMap = () => {
             if (!markers || markers.length === 0) return;
 

@@ -11,10 +11,10 @@ import NoDataError from '../../../../components/NoDataError/NoDataError';
 import Paginator from '../../../../components/Paginator/Paginator';
 import { dataService } from '../../../../services/data.services';
 import * as XLSX from 'xlsx';
-import { handleUpload } from '../../../../components/S3Upload/S3Functions';
 import GlobalContext from '../../../../components/Context/GlobalContext';
 import { BeatLoader } from 'react-spinners';
 import convertTimestampToCAT from '../../../../CommonMethods/timestampToCAT';
+import { handleUploadG2pSheet } from './uploadSheet';
 
 export default function G2PCustomerViewList () {
     const { id } = useParams();
@@ -32,6 +32,7 @@ export default function G2PCustomerViewList () {
     // const [selectedSheets, setSelectedSheets] = useState();
     const [threedotLoader, setThreedotLoader] = useState(false);
     const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
 
     const getG2PCustomerView = async () => {
         try {
@@ -101,9 +102,10 @@ export default function G2PCustomerViewList () {
                 }
 
                 const path = 'g2p_customers';
-                const file = await handleUpload(e.target.files[0], path);
+                const file = await handleUploadG2pSheet(e.target.files[0], path);
                 if (file.key !== '') {
                     const payload = {
+
                         sheet_name: file.key.split('/')[file.key.split('/').length - 1].split('.')[0],
                         uploaded_by: `${user?.first_name || ''} ${user?.middle_name || ''} ${user?.last_name || ''}`.trim(),
                         paymaart_id: user?.paymaart_id,
@@ -118,7 +120,6 @@ export default function G2PCustomerViewList () {
                         e.target.value = '';
                         setFile(null);
                     } else {
-                        console.log('response', response);
                         setThreedotLoader(false);
                         e.target.value = '';
                         setFile(null);
@@ -166,7 +167,7 @@ export default function G2PCustomerViewList () {
                                 CreatedDate={`${convertTimestampToCAT(View?.created_at)} CAT`}
                                 loading={loading}
                             />
-                            <div>
+                            {['Super admin', 'Finance admin'].includes(CurrentUserRole) && <div>
                                 <div className="flex items-start">
                                     <a download href='/Sample-file.xlsx'>
                                         <button onClick={() => setToastSuccess('Sample file downloaded successfully')} type='button' className='font-semibold text-base bg-white px-4 py-2 text-[#3B2A6F] border border-[#3B2A6F] rounded-[6px]'>
@@ -204,7 +205,7 @@ export default function G2PCustomerViewList () {
                                         {validationMessage}
                                     </p>
                                 )}
-                            </div>
+                            </div>}
                         </div>
                     </div>
                     <div className={`relative ${notFound || View?.length === 0 ? '' : 'mx-10 mb-8 mt-8 border border-[#DDDDDD] bg-white rounded-[6px]'}`}>

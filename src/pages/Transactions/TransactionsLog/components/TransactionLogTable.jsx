@@ -14,7 +14,6 @@ const TransactionLogTable = ({ loading, error, List, setSearchParams, notFound, 
     const [selectedIndex, setSelectedIndex] = useState(null);
 
     const getStatus = (transactionType) => {
-        console.log(transactionType);
         switch (transactionType) {
         case 'payout':
             return 'pending';

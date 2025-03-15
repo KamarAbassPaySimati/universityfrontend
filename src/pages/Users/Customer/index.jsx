@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import CardHeader from '../../../components/CardHeader';
 import Topbar from '../../../components/Topbar/Topbar';
 import Paginator from '../../../components/Paginator/Paginator';
@@ -9,6 +9,7 @@ import Slugify from '../../../CommonMethods/Sulgify';
 import GlobalContext from '../../../components/Context/GlobalContext';
 import { CustomerList } from './customerSlice';
 import CustomerTable from './components/customerTable';
+import { setSearchedParamsList, setSearchedParamsView } from '../../../redux/GlobalSlice';
 
 const Customer = () => {
     const [searchParams, setSearchParams] = useSearchParams({ });
@@ -39,7 +40,6 @@ const Customer = () => {
     }, [searchParams]);
 
     useEffect(() => {
-        console.log(error, 'error');
         if (error) {
             if (error.status === 400) {
                 setNotFound(true);
@@ -48,6 +48,7 @@ const Customer = () => {
             }
         }
     }, [error]);
+
     useEffect(() => {
         const params = Object.fromEntries(searchParams);
         if (List?.data?.length !== 0) {
@@ -59,13 +60,18 @@ const Customer = () => {
     /* This `useEffect` hook is responsible for triggering a side effect whenever the dependencies
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (searchParams.get('page') === null) {
             setSearchParams({ page: 1 });
         } else {
             GetList();
         }
     }, [GetList]);
+
+    useEffect(() => {
+        dispatch(setSearchedParamsView(''));
+        dispatch(setSearchedParamsList(''));
+    }, []);
 
     return (
         <CardHeader
@@ -74,7 +80,7 @@ const Customer = () => {
             pathurls={['users/customers']}
             header='List of Customers'
             minHeightRequired={true}
-            buttonText={`${CurrentUserRole === 'finance-admin' ? '' : 'Register Customer'}`}
+            buttonText={`${!['super-admin', 'admin'].includes(CurrentUserRole) ? '' : 'Register Customer'}`}
             navigationPath='/users/customers/register-customer'
             table={true}
             headerWithoutButton={false}

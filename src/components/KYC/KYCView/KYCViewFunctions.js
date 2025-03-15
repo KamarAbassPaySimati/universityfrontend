@@ -82,6 +82,19 @@ export const getPaths = (viewType, role, status) => {
             };
         }
         break;
+    case 'Reported_merchants':
+        return {
+            activePath: 'Reported Merchant Details',
+            paths: ['Users', 'Merchants', 'Reported Merchants'], // Added dynamically
+            pathurls: ['users', 'merchants', ''] // Updated path URLs accordingly
+        };
+    case 'All_merchants':
+        return {
+            activePath: 'Merchant Profile',
+            paths: ['Users', 'Merchants', 'All Merchants'], // Added dynamically
+            pathurls: ['users', 'merchants', ''] // Updated path URLs accordingly
+        };
+
     default:
         break;
     }
@@ -144,6 +157,14 @@ export const getApiurl = (id, viewType, role) => {
             break;
         }
         break;
+    case 'All_merchants':
+        switch (role) {
+        case 'merchant':
+            return `view-specific-merchant?paymaart_id=${id}`;
+        default:
+            break;
+        }
+        break;
     case 'kyc':
         switch (role) {
         case 'agent':
@@ -166,6 +187,8 @@ export const getApiurl = (id, viewType, role) => {
             return `specific-requests?user_id=${id}`;
         }
         break;
+    case 'Reported_merchants':
+        return `reported-merchants/${id}`;
     default:
         break;
     }

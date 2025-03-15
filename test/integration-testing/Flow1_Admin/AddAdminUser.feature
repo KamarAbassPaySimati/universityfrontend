@@ -31,7 +31,6 @@ Feature: Paymaart - Admin Web - Onboard Admin
     When I select the role as <role>
     When I submit the onboard admin form
     Then I should read a message stating that <message>
-
     Examples:
       | field          | role          | message                       |
       | "Email"        | "Super admin" | "Email already exists"        |
@@ -45,7 +44,6 @@ Feature: Paymaart - Admin Web - Onboard Admin
     When I select the role as <role>
     When I submit the onboard admin form
     Then I should read a message stating that <message>
-
     Examples:
       | role            | message                                 |
       | "Super admin"   | "Super admin registered successfully"   |
