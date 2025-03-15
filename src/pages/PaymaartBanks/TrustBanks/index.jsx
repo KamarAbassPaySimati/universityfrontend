@@ -21,6 +21,8 @@ const TrustBanks = () => {
     const { setToastError } = useContext(GlobalContext);
     const { List, error } = useSelector(state => state.bankAccounts);
     const { listTrustBank, listCapitalBank } = endpoints;
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const bankTypes = {
         'Trust Banks': 'clear',
         'Main Capital': 'clear',
@@ -111,7 +113,7 @@ const TrustBanks = () => {
             table={false}
         >
             <div className=''>
-                {searchParams.get('type') === 'trust-banks' && List?.data?.length !== 4 &&
+                {CurrentUserRole === 'Super admin' && searchParams.get('type') === 'trust-banks' && List?.data?.length !== 4 &&
                 <div className='flex justify-end mb-[10px]'>
                     <button data-testid="add_new_bank" onClick={() => { navigate('/paymaart-banks/trust-banks/add-trust-bank'); }}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center

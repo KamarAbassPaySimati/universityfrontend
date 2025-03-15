@@ -24,6 +24,7 @@ export default function SpecificAdminView () {
     const { adminActivateDeactivate } = endpoints;
     const { user } = useSelector((state) => state.auth);
     const { paymaart_id: PaymaartId } = user;
+    const { user_type: CurrentUserRole } = user;
 
     const getAdminView = () => {
         try {
@@ -109,7 +110,7 @@ export default function SpecificAdminView () {
                 minHeightRequired={true}
                 updateButton={loading || 'Update'}
                 updateButtonPath={`/users/admins/update-admin/${id}`}
-                statusButton={PaymaartId === View?.paymaart_id ? undefined : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate')}
+                statusButton={(CurrentUserRole === 'Super admin') ? PaymaartId === View?.paymaart_id ? undefined : loading || (View?.status !== 'active' ? 'Activate' : 'Deactivate') : undefined}
                 ChildrenElement
                 onHandleStatusChange={handleStatusClick}
             >

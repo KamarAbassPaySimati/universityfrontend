@@ -27,6 +27,7 @@ import InputTypeRadio from '../../InputField/InputTypeRadio';
 export default function KYCView ({ role, viewType, getStatusText }) {
     const dispatch = useDispatch();
     const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const [isApproveModalOpen, setIsApprovalModalOpen] = useState();
     const [isActivateModalOpen, setIsActivateModalOpen] = useState(false);
     const { approveKyc } = endpoints;
@@ -41,7 +42,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
     const [error, setError] = useState(false);
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const UpdateStatusList = ['Pending Investigation', 'Under Review', 'Resolved', 'Banned'];
-    const [updateStatusValue, setIsUpdateStatusValue] = useState('');
+    const [updateStatusValue, setIsUpdateStatusValue] = useState('Pending Investigation');
     // eslint-disable-next-line no-unused-vars
 
     const getView = () => {
@@ -110,6 +111,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                     setIsUpdateModalOpen(false);
                     setToastSuccess('Status updated successfully');
                     dispatch(KYCProfileView(getApiurl(id, viewType, role)), viewType);
+                    setInputValue('');
                 }
                 setIsLoading(false);
                 setIsUpdateModalOpen(false);
@@ -193,19 +195,19 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
     const handleupdatebutton = () => {
         if (View?.status === 'Banned' || View?.status === 'Resolved') {
-            setIsUpdateModalOpen(false);
-        } else {
-            if (View?.status === null) {
-                setIsUpdateStatusValue('Pending Investigation');
-            }
-            setIsUpdateModalOpen(true);
+            return setIsUpdateModalOpen(false);
         }
+        setIsUpdateStatusValue(
+            View?.status === 'pending' || View?.status === null ? 'Pending Investigation' : View?.status
+        );
+        setIsUpdateModalOpen(true);
     };
 
     const handleUpdateStatus = (selectedValue) => {
         setError(false);
         setIsUpdateStatusValue(selectedValue);
     };
+
     useEffect(() => {
         if (View?.status) {
             setIsUpdateStatusValue(View.status); // Update status when API response updates
@@ -256,7 +258,6 @@ export default function KYCView ({ role, viewType, getStatusText }) {
 
     // Updated pathurls array
     const updatedPathurls = [fullUrl];
-
     return (
         <>
             <CardHeader
@@ -269,7 +270,9 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 reject={loading}
                 approve={loading}
                 updateButton={(loading) || (
-                    viewType === 'Reported_merchants' && (View?.status !== 'Resolved' || View?.status !== 'Banned')
+                    ((viewType === 'Reported_merchants' && View?.status !== 'Resolved' && View?.status !== 'Banned') ||
+                        (viewType === 'Reported_merchants' && View?.status === 'Pending Investigation') ||
+                        (viewType === 'Reported_merchants' && View?.status === 'Under Review'))
                         ? 'Update Status'
                         : viewType === 'Reported_merchants' && View?.status === 'Resolved'
                             ? 'Resolved'
@@ -292,7 +295,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                 )}
 
                 updateButtonPath={`${getPaths(viewType, role, loading || View?.user_kyc_status).updateButtonPath}${id}`}
-                statusButton={loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined)}
+                statusButton={(CurrentUserRole === 'Super admin' || (CurrentUserRole === 'Admin' && role.includes(['merchant', 'agent', 'customer']))) ? loading || (viewType === 'specific' ? View?.status !== 'active' ? 'Activate' : 'Deactivate' : undefined) : undefined}
                 onHandleStatusChange={(viewType === 'DeleteAccount' || (viewType === 'kyc' && (View?.user_kyc_status === 'in_progress' && user.paymaart_id !== View.added_admin))) ? handleApproveClick : () => setIsActivateModalOpen(true)}
                 onHandleReject={handleRejectClick}
                 handleupdatebutton={(viewType === 'Reported_merchants' ? handleupdatebutton : null)}

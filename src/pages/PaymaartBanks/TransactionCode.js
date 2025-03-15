@@ -135,7 +135,7 @@ export function TransactionCode (value, type) {
     case 'Payout to Paymaart Operations for excess Float in PMCA to PTBA3':
         return 'PTCASHOPT3';
 
-    // suspense account transaction
+        // suspense account transaction
     case 'Pay-out to Agent Post Deactivation from PTBA1 | EM credit to PMCAT':
     case 'Pay-out to Agent Post Deactivation from PTBA2 | EM credit to PMCAT':
     case 'Pay-out to Agent Post Deactivation from PTBA3 | EM credit to PMCAT':
@@ -271,7 +271,7 @@ export function TransactionDescription (value, type, transactionType) {
     case 'PMTXCOUTFT':
         return 'Balance EM Excess Return to Paymaart Main Capital Account for Float';
     case 'PMTFPOUTRM':
-    case 'PMTXPOUTRM' :
+    case 'PMTXPOUTRM':
         return 'Balance EM Excess Return to Paymaart Main Capital Account for Payout';
 
         // Main Capital charge for bank service
@@ -355,6 +355,8 @@ export function TransactionDescription (value, type, transactionType) {
         return 'Balance EM Return to Paymaart User on Account Reactivation';
     case 'PMPU1':
         return 'Pay-out';
+    case 'PMSPG2PX04':
+        return 'Refund of Unpaid G2P Customer Payment to Customer Account';
     default:
         return '-';
     }

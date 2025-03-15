@@ -9,10 +9,9 @@ import formatID from '../../../../CommonMethods/formatId';
 import AccountUnlockQuestions from '../../../../components/Modals/AccountUnlockQuestions';
 import { handleAnswerSubmit } from '../../../../components/Modals/AccountUnlock';
 import GlobalContext from '../../../../components/Context/GlobalContext';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setSearchedParamsList } from '../../../../redux/GlobalSlice';
-
-export default function MerchantTableBody ({ user, index, GetList, searchParams }) {
+export default function MerchantTableBody ({ userValue, index, GetList, searchParams }) {
     const Navigate = useNavigate();
     const [isTillNumberValue, setIsTillNumberValue] = useState(false);
     const [isUnlock, setIsUnlock] = useState(false);
@@ -24,10 +23,12 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
         answerType: '',
         questionId: ''
     });
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     const handleUnlock = async () => {
         setLoadingUnlock(true);
         await handleAnswerSubmit({
-            paymaart_id: user.paymaart_id,
+            paymaart_id: userValue.paymaart_id,
             question_id: '',
             answer: '',
             questions: [],
@@ -45,28 +46,28 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
         <>
             <tr className='border-b border-neutral-outline h-[48px]'>
                 <td
-                    title={formatID(user?.paymaart_id)}
+                    title={formatID(userValue?.paymaart_id)}
                     data-testid="paymaart_id"
                     className='py-2 px-[10px] text-left min-w-[150px] max-w-[150px]'
-                >{formatID(user?.paymaart_id) || '-'}</td>
+                >{formatID(userValue?.paymaart_id) || '-'}</td>
                 <td data-testid="merchant_name"
-                    title={user?.name}
-                    className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${user?.name}`}</td>
-                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.trading_name}>{`${user?.trading_name ? user?.trading_name : '-'}`}</td>
-                <td className='py-2 px-[10px]'>{convertTimestampToCAT(user?.created_at)}</td>
+                    title={userValue?.name}
+                    className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]'>{`${userValue?.name}`}</td>
+                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={userValue?.trading_name}>{`${userValue?.trading_name ? userValue?.trading_name : '-'}`}</td>
+                <td className='py-2 px-[10px]'>{convertTimestampToCAT(userValue?.created_at)}</td>
                 <td
-                    className={`py-2 px-[10px] ${user?.till_numbers?.length > 1 ? ' cursor-pointer underline' : 'cursor-default'}`}
-                    onClick={() => user?.till_numbers?.length > 1 && handleTillNumber()}
-                >{`${(user?.till_numbers && Object.values(user?.till_numbers)[0] !== '') ? user?.till_numbers[0] : '-'}`}</td>
-                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={user?.trading_street_name}>{`${user?.trading_street_name ? user?.trading_street_name : '-'}`}</td>
+                    className={`py-2 px-[10px] ${userValue?.till_numbers?.length > 1 ? ' cursor-pointer underline' : 'cursor-default'}`}
+                    onClick={() => userValue?.till_numbers?.length > 1 && handleTillNumber()}
+                >{`${(userValue?.till_numbers && Object.values(userValue?.till_numbers)[0] !== '') ? userValue?.till_numbers[0] : '-'}`}</td>
+                <td className='py-2 px-[10px] truncate min-w-[200px] max-w-[200px]' title={userValue?.trading_street_name}>{`${userValue?.trading_street_name ? userValue?.trading_street_name : '-'}`}</td>
                 <td data-testid="status" className='py-2 px-[10px]'>
-                    {user?.status
+                    {userValue?.status
                         ? (
                             <span className={`py-[2px] px-[10px] rounded text-[13px] font-semibold capitalize
-                                             ${user.status === 'active'
+                                             ${userValue.status === 'active'
                                 ? 'bg-[#ECFDF5] text-accent-positive'
                                 : 'bg-neutral-grey text-neutral-secondary'}`}>
-                                {user.status}
+                                {userValue.status}
                             </span>
                         )
                         : (
@@ -77,27 +78,27 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
                 </td>
                 <td className='py-3 px-[10px] mr-1 ml-1 flex gap-[19px] text-center align-center justify-end'>
                     <Image className='cursor-pointer' toolTipId={`eye-${index}`} src='eye' testId={`view-${index}`}
-                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${user?.paymaart_id}`,
+                        onClick={() => Navigate(`/users/merchants/register-merchant/specific-view/${userValue?.paymaart_id}`,
                             { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                         )} />
-                    {user?.kyc_status === 'completed' && user?.kyc_type === 'full'
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && (userValue?.kyc_status === 'completed' && userValue?.kyc_type === 'full'
                         ? <span className='w-[24px]'></span>
                         : (
                             <Image className='cursor-pointer' toolTipId={`edit-${index}`} src='edit'
-                                onClick={() => user?.kyc_status === 'not_started'
-                                    ? Navigate(`/users/merchants/register-merchant/kyc-registration/${user?.paymaart_id}`,
+                                onClick={() => userValue?.kyc_status === 'not_started'
+                                    ? Navigate(`/users/merchants/register-merchant/kyc-registration/${userValue?.paymaart_id}`,
                                         { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
 
                                     )
-                                    : Navigate(`/users/merchants/register-merchant/kyc-update/${user?.paymaart_id}`,
+                                    : Navigate(`/users/merchants/register-merchant/kyc-update/${userValue?.paymaart_id}`,
                                         { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', type: searchParams.get('type') ? searchParams.get('type') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                     )}
                             />
-                        )}
-                    <Image testId={`merchant-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
+                        ))}
+                    {['Super admin'].includes(CurrentUserRole) && <Image testId={`merchant-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
                         onClick={() => {
                             // Navigate to the new route with state
-                            Navigate(`/users/merchants/merchants-transaction-histories/${user?.paymaart_id}`, {
+                            Navigate(`/users/merchants/merchants-transaction-histories/${userValue?.paymaart_id}`, {
                                 state: {
                                     page: searchParams.get('page'),
                                     status: searchParams.get('status') || '',
@@ -108,8 +109,8 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
 
                             // Dispatch the search params string to Redux
                             dispatch(setSearchedParamsList(searchParamsString));
-                        }}src='report' />
-                    {loadingUnlock
+                        }}src='report' />}
+                    {['Super admin', 'Admin'].includes(CurrentUserRole) && ((loadingUnlock
                         ? <div role="status">
                             <svg aria-hidden="true" class="w-6 h-6 text-gray-200 animate-spin  fill-[#3B2A6F]" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" />
@@ -117,9 +118,9 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
                             </svg>
                             <span class="sr-only">Loading...</span>
                         </div>
-                        : user?.is_locked
+                        : userValue?.is_locked
                             ? <Image testId={`unlock_button_${index}`} className='cursor-pointer' toolTipId={`lock-${index}`} onClick={() => handleUnlock()} src='lock' />
-                            : <Image src='unlock' className='cursor-default' />}
+                            : <Image src='unlock' className='cursor-default' />))}
                     <Tooltip
                         id={`eye-${index}`}
                         className='my-tooltip z-30'
@@ -130,7 +131,7 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
                         id={`edit-${index}`}
                         className='my-tooltip z-30'
                         place="top"
-                        content={user?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
+                        content={userValue?.kyc_status === 'not_started' ? 'Complete KYC Registration' : 'Edit'}
                     />
                     <Tooltip
                         id={`transactions-${index}`}
@@ -140,11 +141,11 @@ export default function MerchantTableBody ({ user, index, GetList, searchParams 
                     />
                 </td>
             </tr>
-            <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={user} />
+            <TillNumber isModalOpen={isTillNumberValue} setModalOpen={setIsTillNumberValue} user={userValue} />
             <AccountUnlockQuestions
                 isModalOpen={isUnlock}
                 setModalOpen={setIsUnlock}
-                user={user}
+                user={userValue}
                 question={question}
                 setQuestion={setQuestion}
                 prevAppearedQuestion={prevAppearedQuestion}

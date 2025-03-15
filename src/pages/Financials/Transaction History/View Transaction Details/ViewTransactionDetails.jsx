@@ -372,10 +372,10 @@ const ViewTransactionDetails = ({ type }) => {
                          text-neutral-primary font[400] text-sm rounded-lg mt-2'>
                         <div className='w-full flex gap-1'>
                             <div className='w-1/2 flex flex-col gap-1'>
-                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value*</p>
+                                <p className='font-[600] text-base'>{getValueType(transactionType)} Value</p>
                                 {transactionType !== 'interest' &&
                                     <>
-                                        <p>{transactionDetails?.membership ? 'Txn Fee' : 'Txn Fee*'}</p>
+                                        <p>Txn Fee*</p>
                                         <p>*VAT Included</p>
                                     </>}
                                 {transactionDetails?.commission && !dataLoading && <p>Commission Earned</p>}
@@ -394,9 +394,7 @@ const ViewTransactionDetails = ({ type }) => {
                                         <p data-testid="amount" className='font-[600] text-base'>
                                             {formattedAmount(
                                                 Math.abs(
-                                                    Number(transactionDetails?.transaction_amount || 0) +
-                                                    Number(transactionDetails?.transaction_fee || 0) +
-                                                    Number(transactionDetails?.vat || 0)
+                                                    Number(transactionDetails?.transaction_amount || 0)
                                                 )
                                             ) || '0.00'} MWK
 

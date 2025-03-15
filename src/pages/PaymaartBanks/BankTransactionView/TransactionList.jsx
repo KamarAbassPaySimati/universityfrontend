@@ -30,7 +30,8 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         start_date: new Date(Number(searchParams.get('start_date'))).getTime() * 1000,
         end_date: new Date(Number(searchParams.get('end_date'))).getTime() * 1000
     });
-
+    const { user } = useSelector((state) => state.auth);
+    const { user_type: CurrentUserRole } = user;
     let addTransactionPath;
     switch (type) {
     case 'transaction-fees-and-commissions':
@@ -110,16 +111,6 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
         params.page_number = 1;
         setSearchParams({ ...params });
     };
-
-    // const getDrCr = (value) => {
-    //     let givenValue = value.toString();
-    //     if (givenValue.substring(0, 1) === '-') {
-    //         givenValue = `${formattedAmount(givenValue)} DR`;
-    //     } else {
-    //         givenValue = `${formattedAmount(givenValue)} CR`;
-    //     }
-    //     return givenValue;
-    // };
 
     const getDrCr = (value) => {
         let givenValue = value.toString();
@@ -201,7 +192,7 @@ export default function TransactionList ({ searchParams, setSearchParams, type }
                         </div>
                     </div>
                     }
-                    {id !== 'PTBAT' && <button data-testid={`${type}-transaction`} onClick={() => Navigate(addTransactionPath)}
+                    {(id !== 'PTBAT' && CurrentUserRole === 'Super admin') && <button data-testid={`${type}-transaction`} onClick={() => Navigate(addTransactionPath)}
                         className='flex bg-primary-normal py-[8px] px-[16px] justify-center items-center ml-8
                     h-[40px] rounded-[6px]'>
                         <img src='/images/addIcon.svg'
