@@ -211,7 +211,7 @@ stages:
               - task: DownloadPipelineArtifact@2
                 name: environment
                 inputs:
-                  artifact: environment
+                  artifact: Environment
                   targetPath: '$(System.DefaultWorkingDirectory)'
               - script: |
                   source .env
