@@ -209,7 +209,7 @@ stages:
                   artifact: bundle
                   targetPath: '$(System.DefaultWorkingDirectory)'
               - task: DownloadPipelineArtifact@2
-                name: environment
+                name: Environment
                 inputs:
                   artifact: Environment
                   targetPath: '$(System.DefaultWorkingDirectory)'
