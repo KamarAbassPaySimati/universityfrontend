@@ -117,7 +117,7 @@ stages:
         vmImage: "ubuntu-latest"
       steps:
         - task: DownloadPipelineArtifact@2
-          name: Environment
+          name: environment
           inputs:
             artifact: Environment
             targetPath: '$(System.DefaultWorkingDirectory)'
@@ -162,7 +162,7 @@ stages:
             npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
-          name: Environment
+          name: environment
           inputs:
             artifact: Environment
             targetPath: '$(System.DefaultWorkingDirectory)'
@@ -209,7 +209,7 @@ stages:
                   artifact: bundle
                   targetPath: '$(System.DefaultWorkingDirectory)'
               - task: DownloadPipelineArtifact@2
-                name: Environment
+                name: environment
                 inputs:
                   artifact: Environment
                   targetPath: '$(System.DefaultWorkingDirectory)'
@@ -237,7 +237,7 @@ stages:
             npm install --force
           condition: ne(variables.CACHE_RESTORED, 'true')
         - task: DownloadPipelineArtifact@2
-          name: Environment
+          name: environment
           inputs:
             artifact: Environment
             targetPath: '$(System.DefaultWorkingDirectory)'
