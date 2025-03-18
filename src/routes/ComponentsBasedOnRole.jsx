@@ -570,6 +570,17 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
+            },
+            // pay-out
+            {
+                name: 'Pay Out Requests',
+                element: <PayOutRequests />,
+                path: '/transactions/pay-out-requests'
+            },
+            {
+                name: 'Pay Out Requests Specific View',
+                element: <ViewPayOutRequest />,
+                path: '/transactions/pay-out-requests/:id'
             }
         ],
     'support-admin':
@@ -589,6 +600,29 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific flagged transaction',
                 element: <ViewSpecificFlagged />,
                 path: '/transactions/flagged/view/:senderId/:transactionType/:id'
+            },
+            {
+                name: 'KYC Verification list',
+                element: <KycVerification />,
+                path: '/verify/kyc-registration'
+            },
+            // Agent Kyc Specific View
+            {
+                name: 'Agent Kyc Specific View',
+                element: <KYCView role={'agent'} viewType={'kyc'} />,
+                path: '/verify/kyc-registration/agent-profile/:id'
+            },
+            // Merchant Kyc Specific View
+            {
+                name: 'Merchant Kyc Specific View',
+                element: <KYCView role={'merchant'} viewType={'kyc'} />,
+                path: '/verify/kyc-registration/merchant-profile/:id'
+            },
+            // customer Kyc Specific View
+            {
+                name: 'Customer Kyc Specific View',
+                element: <KYCView role={'customer'} viewType={'kyc'} />,
+                path: '/verify/kyc-registration/customer-profile/:id'
             }
         ],
     'finance-admin':
