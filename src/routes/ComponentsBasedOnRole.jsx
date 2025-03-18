@@ -570,17 +570,6 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
-            },
-            // pay-out
-            {
-                name: 'Pay Out Requests',
-                element: <PayOutRequests />,
-                path: '/transactions/pay-out-requests'
-            },
-            {
-                name: 'Pay Out Requests Specific View',
-                element: <ViewPayOutRequest />,
-                path: '/transactions/pay-out-requests/:id'
             }
         ],
     'support-admin':
