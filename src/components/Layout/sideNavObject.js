@@ -30,7 +30,7 @@ export const sideNavObject = {
         },
         Transactions: {
             path: 'transactions',
-            dropdown: ['Pay-out Requests', 'Flagged', 'Log']
+            dropdown: ['Flagged', 'Log']
         },
         Users: {
             path: 'users',
