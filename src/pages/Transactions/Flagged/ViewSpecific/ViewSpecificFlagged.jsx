@@ -28,7 +28,6 @@ const ViewSpecificFlagged = () => {
     const { user } = useSelector((state) => state.auth);
     const { user_type: CurrentUserRole } = user;
     const { id, senderId, transactionType } = useParams();
-    console.log(id, senderId, transactionType);
     const navigate = useNavigate();
 
     const reasonsKey = {
