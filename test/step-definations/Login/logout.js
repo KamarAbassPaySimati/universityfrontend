@@ -18,7 +18,6 @@ When('I click on cancel', async function () {
     await driver.wait(until.elementIsVisible(element));
     await element.click();
     await new Promise(resolve => setTimeout(resolve, 3000));
-
 });
 
 When('I click on confirm logout', async function () {
