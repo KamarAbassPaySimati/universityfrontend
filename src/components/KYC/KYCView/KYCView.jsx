@@ -318,7 +318,7 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                 UserName={
                                     viewType === 'Reported_merchants'
                                         ? View?.merchant_name || '-'
-                                        : `${View?.first_name || '-'} ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`
+                                        : `${View?.first_name || '-'} ${View?.middle_name || ''} ${View?.last_name?.toUpperCase() || ''}`
                                 }
                                 payMaartID={viewType === 'Reported_merchants'
                                     ? View?.merchant_id || '-'

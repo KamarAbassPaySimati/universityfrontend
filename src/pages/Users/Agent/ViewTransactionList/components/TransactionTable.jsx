@@ -11,7 +11,7 @@ import formatID from '../../../../../CommonMethods/formatId';
 import { useDispatch } from 'react-redux';
 import { setSearchedParamsView } from '../../../../../redux/GlobalSlice';
 
-const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type }) => {
+const TransactionTable = ({ loading, error, List, notFound, searchParams, setSearchParams, paymaartId, type, name = '' }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -35,6 +35,7 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
     };
     const dispatch = useDispatch();
     const searchParamsString = window.location.search;
+    const showAfrimaxIdColumn = name.toLowerCase().includes('afrimax');
 
     return (
         <>
@@ -46,6 +47,9 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                             <th className='py-2 px-[10px] text-left font-[400]'>Date/ Time, CAT</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Transaction ID</th>
                             <th className='py-2 px-[10px] text-left font-[400]'>Beneficiary Paymaart ID</th>
+                            {showAfrimaxIdColumn && (
+                                <th className='py-2 px-[10px] text-left font-[400]'>Afrimax ID</th>
+                            )}
                             <th className='py-2 px-[10px] text-left font-[400]'>Type</th>
                             <th className='py-2 px-[10px] text-right font-[400]'>Amount (MWK)</th>
                             <th className='py-2 px-[10px] min-w-[60px]'></th>
@@ -75,6 +79,12 @@ const TransactionTable = ({ loading, error, List, notFound, searchParams, setSea
                                     className='py-2 px-[10px] text-left truncate max-w-[200px]'>
                                     {transaction?.transaction_type === 'pay_unregister' ? (transaction?.receiver_id && formatPhoneNumber(transaction?.receiver_id)) || '-' : (transaction?.receiver_id?.startsWith('+') ? formatPhoneNumber(transaction?.receiver_id) : formatID(transaction?.receiver_id)) || '-'}
                                 </td>
+                                { showAfrimaxIdColumn &&
+                                    <td data-testid="afrimax_id"
+                                        className='py-2 px-[10px] text-left truncate max-w-[200px]'>
+                                        { JSON.parse(transaction?.extras)?.afx_customer_id ? JSON.parse(transaction?.extras)?.afx_customer_id : '-'}
+                                    </td>
+                                }
                                 <td data-testid="transaction_type"
                                     className="py-2 px-[10px] text-left truncate max-w-[200px]"
                                     title={getKeyByValue(keyTransformations, transaction?.transaction_type) || transaction?.transaction_type.replace(/\b\w/g, char => char.toUpperCase()).replace(/_/g, ' ')}
