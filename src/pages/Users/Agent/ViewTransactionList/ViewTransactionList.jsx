@@ -210,6 +210,7 @@ const ViewTransactionList = ({ type }) => {
                                     searchParams={searchParams}
                                     paymaartId={id}
                                     type={type}
+                                    name={List?.full_name}
                                 />
                             </div>}
                         {notFound &&

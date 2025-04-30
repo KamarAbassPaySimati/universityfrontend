@@ -44,7 +44,6 @@ Then('I should be redirected to transaction view page', async function () {
     assert.equal(actual_paymaart_ID, this.paymaart_id);
 });
 
-
 Then('I should be able to view the wallet balance', async function () {
     await driver.wait(until.elementIsVisible(By.css('[[data-testid="wallet_balance_card"]]')));
 });
