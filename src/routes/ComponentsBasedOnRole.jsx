@@ -370,6 +370,11 @@ export const ComponentsBasedOnRole = {
                 path: '/transactions/flagged'
             },
             {
+                name: 'Agent KYC Update',
+                element: <RegisterKYC role={'agent'} type='update' />,
+                path: '/users/agents/register-agent/kyc-update/:id'
+            },
+            {
                 name: 'View specific flagged transaction',
                 element: <ViewSpecificFlagged />,
                 path: '/transactions/flagged/view/:senderId/:transactionType/:id'

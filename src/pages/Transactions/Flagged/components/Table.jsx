@@ -84,7 +84,7 @@ const Table = ({ loading, error, List, notFound, searchParams, setSearchParams, 
                 }
             </table>
             {!notFound && error &&
-                (<NoDataError className='h-tableHeight' heading='There are no agents added yet' text='Click “Register Agent ” to add agent' />)}
+                (<NoDataError className='h-tableHeight' heading='There are no transactions flagged yet' text='Click “Register Agent ” to add agent' />)}
             {List?.data?.length === 0 && !loading &&
                 (searchParams.get('status') !== null || searchParams.get('search') !== null) &&
                 (<NoDataError className='h-tableHeight' heading='No data found' text='Try adjusting your search or filter to find what you’re looking for' />)}
