@@ -369,6 +369,7 @@ export const ComponentsBasedOnRole = {
                 element: <Flagged />,
                 path: '/transactions/flagged'
             },
+            // added kyc update permissions
             {
                 name: 'Agent KYC Update',
                 element: <RegisterKYC role={'agent'} type='update' />,
