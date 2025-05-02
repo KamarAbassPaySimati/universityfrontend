@@ -77,7 +77,7 @@ export default function BankTransactionView ({ type }) {
             maximumFractionDigits: 2
         }).format(amount);
     };
-
+    console.log(type);
     return (
         <div>
             <CardHeader
