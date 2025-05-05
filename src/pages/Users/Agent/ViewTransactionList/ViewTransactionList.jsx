@@ -97,12 +97,13 @@ const ViewTransactionList = ({ type }) => {
     specified in the dependency array change. In this case, the effect will run when the `GetList`
     function changes. */
     useEffect(() => {
-        if (searchParams.get('page') === null) {
-            setSearchParams({ page: 1 });
+        const page = searchParams.get('page');
+        if (page === null) {
+            setSearchParams({ page: 1 }, { replace: true });
         } else {
             GetList();
         }
-    }, [GetList]);
+    }, [searchParams, GetList]);
 
     // Determine base path dynamically based on role
     const basePath = type === 'customers'
