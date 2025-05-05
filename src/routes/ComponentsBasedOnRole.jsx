@@ -369,12 +369,6 @@ export const ComponentsBasedOnRole = {
                 element: <Flagged />,
                 path: '/transactions/flagged'
             },
-            // added kyc update permissions
-            {
-                name: 'Agent KYC Update',
-                element: <RegisterKYC role={'agent'} type='update' />,
-                path: '/users/agents/register-agent/kyc-update/:id'
-            },
             {
                 name: 'View specific flagged transaction',
                 element: <ViewSpecificFlagged />,
@@ -554,6 +548,24 @@ export const ComponentsBasedOnRole = {
                 element: <RegisterKYC role={'merchant'} />,
                 path: '/users/merchants/register-merchant/kyc-registration/:id'
             },
+            // KYC Update for Agent
+            {
+                name: 'Agent KYC Update',
+                element: <RegisterKYC role={'agent'} type='update' />,
+                path: '/users/agents/register-agent/kyc-update/:id'
+            },
+            // KYC Update for Merchant
+            {
+                name: 'Merchant KYC Update',
+                element: <RegisterKYC role={'merchant'} type='update' />,
+                path: '/users/merchants/register-merchant/kyc-update/:id'
+            },
+            // KYC Update for Customer
+            {
+                name: 'Customer KYC Update',
+                element: <RegisterKYC role={'customer'} type='update' />,
+                path: '/users/customers/register-customer/kyc-update/:id'
+            },
             // Paymaart Bank Tax account
             {
                 name: 'Paymaart View Tax Account',
@@ -576,6 +588,12 @@ export const ComponentsBasedOnRole = {
                 name: 'View specific Self Transaction History',
                 element: <ViewTransactionDetails type='admin' />,
                 path: '/financials/transaction-history/:id'
+            },
+            // Paymaart Bank Transaction fees and Commision View
+            {
+                name: 'Paymaart View Transaction fees and Commision',
+                element: <BankTransactionView type={'transaction-fees-and-commissions'} />,
+                path: '/paymaart-banks/transaction-fees-and-commissions/view-transaction-fees-and-commissions/:id'
             }
         ],
     'support-admin':

@@ -793,16 +793,19 @@ export default function RegisterKYC ({ role, type }) {
             basicDetailsView();
         }
     }, []);
+    const location = useLocation();
+    const state = location.state || {};
     const handleTabChangeOtp = () => {
         if (searchParams.get('tab') === null) {
+        // When successful, navigate to basic details with replace
+            Navigate(`/users/${role}s/register-${role}/specific-view/${id}?tab=basic_details`, {
+                // replace: true,
+                // state: { skipOtpBack: true }
+            });
             handleSearchParamsValue('tab', 'basic_details', searchParams, setSearchParams);
         }
         getKYCView();
     };
-
-    const location = useLocation();
-    const state = location.state || {};
-
     // Determine base path dynamically based on role
     const basePath = role === 'agent'
         ? 'users/agents'
