@@ -42,7 +42,7 @@ export const sideNavObject = {
         },
         Verify: {
             path: 'verify',
-            dropdown: ['KYC Registration', 'Delete Account']
+            dropdown: ['KYC Registration']
         },
         'Paymaart Banks': {
             path: 'paymaart-banks'
@@ -57,10 +57,11 @@ export const sideNavObject = {
             path: 'transactions',
             dropdown: ['Flagged']
         },
-        Users: {
-            path: 'users',
-            dropdown: ['KYC Registration', 'Delete Account']
+        Verify: {
+            path: 'verify',
+            dropdown: ['KYC Registration']
         }
+
     },
     'finance-admin': {
         Dashboard: {
@@ -72,7 +73,7 @@ export const sideNavObject = {
         },
         Users: {
             path: 'users',
-            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants', 'KYC Registration', 'Delete Account']
+            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
         },
         Financials: {
             path: 'financials',
