@@ -799,7 +799,7 @@ export default function RegisterKYC ({ role, type }) {
         if (searchParams.get('tab') === null) {
         // When successful, navigate to basic details with replace
             Navigate(`/users/${role}s/register-${role}/specific-view/${id}?tab=basic_details`, {
-                // replace: true,
+                replace: true
                 // state: { skipOtpBack: true }
             });
             handleSearchParamsValue('tab', 'basic_details', searchParams, setSearchParams);
