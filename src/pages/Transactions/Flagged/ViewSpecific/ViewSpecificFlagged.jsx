@@ -121,12 +121,14 @@ const ViewSpecificFlagged = () => {
                         return { ...response?.data?.data, ...prevData };
                     });
                 } else {
+                    console.log(response);
                     navigate('/transactions/flagged');
                     setToastError('An Error Occured!');
                 }
             }
             setIsLoading(false);
         } catch (error) {
+            console.log(error);
             navigate('/transactions/flagged');
             setToastError('An Error Occured!');
             setIsLoading(false);

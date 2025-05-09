@@ -313,12 +313,12 @@ export default function KYCView ({ role, viewType, getStatusText }) {
                                         ? (View?.merchant_name
                                             ? View.merchant_name.split(' ').map(word => word[0]).join('')
                                             : '')
-                                        : `${View?.merchant_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`
+                                        : `${View?.first_name?.[0] || ''}${View?.middle_name?.[0] || ''}${View?.last_name?.[0] || ''}`
                                 }
                                 UserName={
                                     viewType === 'Reported_merchants'
                                         ? View?.merchant_name || '-'
-                                        : `${View?.first_name || '-'} ${View?.middle_name || '-'} ${View?.last_name?.toUpperCase() || '-'}`
+                                        : `${View?.first_name || '-'} ${View?.middle_name || ''} ${View?.last_name?.toUpperCase() || ''}`
                                 }
                                 payMaartID={viewType === 'Reported_merchants'
                                     ? View?.merchant_id || '-'

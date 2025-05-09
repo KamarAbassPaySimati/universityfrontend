@@ -132,7 +132,7 @@ export default function NotificationPopup ({
                                             handleOnClick(
                                                 notificationItem.user_id,
                                                 notificationItem.type,
-                                                notificationItem.request_id,
+                                                notificationItem.id,
                                                 notificationItem.sender_id
                                             )
                                         }

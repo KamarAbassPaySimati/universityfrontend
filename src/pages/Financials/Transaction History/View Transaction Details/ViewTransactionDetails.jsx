@@ -326,6 +326,27 @@ const ViewTransactionDetails = ({ type }) => {
                                             <p className='mt-1'></p>
                                         </div>
                                     </div>}
+                                {transactionDetails?.transaction_type === 'afrimax_unreg' &&
+                                    (<>
+                                        <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>Paymaart Name</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p className='break-word'>{transactionDetails?.reciever_name || '-'}</p>
+                                            </div>
+                                        </div>
+                                        <div className='w-full flex gap-1'>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>Phone Number</p>
+                                            </div>
+                                            <div className='w-1/2 pb-1'>
+                                                <p>{formatPhoneNumber(transactionDetails?.obo_phone_number) || '-'}</p>
+                                            </div>
+                                        </div>
+                                    </>
+                                    )
+                                }
                                 {transactionDetails?.obo_name && !dataLoading &&
                                     (<div className='w-full flex gap-1'>
                                         <div className='w-1/2 pb-1'>

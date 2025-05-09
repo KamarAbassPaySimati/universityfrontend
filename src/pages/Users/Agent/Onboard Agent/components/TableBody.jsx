@@ -38,6 +38,7 @@ export default function TableBody ({ userRole, index, GetList, searchParams }) {
     };
     const dispatch = useDispatch();
     const searchParamsString = window.location.search;
+    console.log(CurrentUserRole);
 
     return (
         <>
@@ -80,7 +81,8 @@ export default function TableBody ({ userRole, index, GetList, searchParams }) {
                                 onClick={() => userRole?.kyc_status === 'not_started'
                                     ? Navigate(`/users/agents/register-agent/kyc-registration/${userRole?.paymaart_id}`, { state: { page: searchParams.get('page'), status: searchParams.get('status') ? searchParams.get('status') : '', search: searchParams.get('search') ? searchParams.get('search') : '' } }
                                     )
-                                    : Navigate(`/users/agents/register-agent/kyc-update/${userRole?.paymaart_id}`)}
+                                    : Navigate(`/users/agents/register-agent/kyc-update/${userRole?.paymaart_id}`)
+                                }
                             />
                         ))}
                     {['Super admin'].includes(CurrentUserRole) && <Image testId={`agent-transaction-view-btn-${index}`} className='cursor-pointer' toolTipId={`transactions-${index}`}
