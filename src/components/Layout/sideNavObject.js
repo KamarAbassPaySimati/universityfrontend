@@ -1,87 +1,82 @@
 export const sideNavObject = {
     'super-admin': {
         Dashboard: {
-            path: 'dashboard'
+            path: 'dashboard',
+            icon: 'DashboardOutlined'
         },
-        Transactions: {
-            path: 'transactions',
-            dropdown: ['Pay-out Requests', 'Flagged', 'Log']
+        Students: {
+            path: 'students',
+            icon: 'UserOutlined',
+            dropdown: ['All Students', 'Admissions', 'Enrollments', 'Clearance']
         },
-        Users: {
-            path: 'users',
-            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
+        Faculty: {
+            path: 'faculty',
+            icon: 'TeamOutlined',
+            dropdown: ['All Faculty', 'Departments', 'Assignments']
         },
-        Financials: {
-            path: 'financials',
-            dropdown: ['Commissions', 'G2P', 'Set Limit', 'Transaction History']
+        Academics: {
+            path: 'academics',
+            icon: 'BookOutlined',
+            dropdown: ['Courses', 'Programs', 'Schedules', 'Grades', 'Analytics', 'Transcripts', 'Appeals', 'Attendance']
         },
-        Verify: {
-            path: 'verify',
-            dropdown: ['KYC Registration', 'Delete Account Requests']
-        },
-        'Paymaart Banks': {
-            path: 'paymaart-banks'
+        Administration: {
+            path: 'administration',
+            icon: 'SettingOutlined',
+            dropdown: ['Users', 'Settings', 'Reports']
         }
-
     },
     admin: {
         Dashboard: {
-            path: 'dashboard'
+            path: 'dashboard',
+            icon: 'DashboardOutlined'
         },
-        Transactions: {
-            path: 'transactions',
-            dropdown: ['Flagged', 'Log']
+        Students: {
+            path: 'students',
+            icon: 'UserOutlined',
+            dropdown: ['All Students', 'Admissions']
         },
-        Users: {
-            path: 'users',
-            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
+        Faculty: {
+            path: 'faculty',
+            icon: 'TeamOutlined',
+            dropdown: ['All Faculty', 'Departments']
         },
-        Financials: {
-            path: 'financials',
-            dropdown: ['G2P']
-        },
-        Verify: {
-            path: 'verify',
-            dropdown: ['KYC Registration']
-        },
-        'Paymaart Banks': {
-            path: 'paymaart-banks'
+        Academics: {
+            path: 'academics',
+            icon: 'BookOutlined',
+            dropdown: ['Courses', 'Programs']
         }
-
     },
-    'support-admin': {
+    faculty: {
         Dashboard: {
-            path: 'dashboard'
+            path: 'dashboard',
+            icon: 'DashboardOutlined'
         },
-        Transactions: {
-            path: 'transactions',
-            dropdown: ['Flagged']
+        'My Courses': {
+            path: 'my-courses',
+            icon: 'BookOutlined'
         },
-        Verify: {
-            path: 'verify',
-            dropdown: ['KYC Registration']
+        Students: {
+            path: 'students',
+            icon: 'UserOutlined',
+            dropdown: ['My Students', 'Grades']
         }
-
     },
-    'finance-admin': {
+    student: {
         Dashboard: {
-            path: 'dashboard'
+            path: 'dashboard',
+            icon: 'DashboardOutlined'
         },
-        Transactions: {
-            path: 'transactions',
-            dropdown: ['Pay-out Requests', 'Flagged', 'Log']
+        'My Courses': {
+            path: 'my-courses',
+            icon: 'BookOutlined'
         },
-        Users: {
-            path: 'users',
-            dropdown: ['Admins', 'Agents', 'Customers', 'Merchants']
+        Grades: {
+            path: 'grades',
+            icon: 'TrophyOutlined'
         },
-        Financials: {
-            path: 'financials',
-            dropdown: ['G2P', 'Transaction History']
-        },
-        'Paymaart Banks': {
-            path: 'paymaart-banks'
+        Profile: {
+            path: 'profile',
+            icon: 'UserOutlined'
         }
-
     }
 };

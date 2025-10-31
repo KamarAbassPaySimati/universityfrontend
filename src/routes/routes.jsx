@@ -4,69 +4,24 @@
 import React, { Suspense, useEffect, useState } from 'react';
 import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NotFound from '../pages/NotFound';
-import Login from '../pages/auth/Login';
-import ForgotPassword from '../pages/auth/ForgotPassword';
-import SetNewPassword from '../pages/auth/SetNewPassword';
-import { fetchUserAttributes } from 'aws-amplify/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { login, logout, setUser } from '../pages/auth/authSlice';
 import Layout from '../components/Layout/Layout';
 import Loading from '../components/Loading/Loading';
-import Profile from '../pages/Profile';
-import UpdatePassword from '../pages/UpdatePassword/UpdatePassword';
-import { ComponentsBasedOnRole } from './ComponentsBasedOnRole';
-import Slugify from '../CommonMethods/Sulgify';
-import Toast from '../components/Toast/Toast';
-import SetNewPasswordWithPin from '../pages/auth/SetNewPasswordWithPin';
+import Students from '../pages/Students';
+import Faculty from '../pages/Faculty';
+import Academics from '../pages/Academics';
+import Administration from '../pages/Administration';
+import Dashboard from '../pages/Dashboard/Dashboard';
 export default function NavigationRoutes (props) {
-    const auth = useSelector((state) => state.auth);
-    const { loggedIn, user } = auth;
-    // const { user_type } = user;
-    const [CurrentUserRole, setCurrentUserRole] = useState('Super admin');
-    const [ToastError, setToastError] = useState('');
-
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
     const [pageLoading, setPageLoading] = useState(true);
 
-    const checkLoggedInUser = async () => {
-        try {
-            setPageLoading(true);
-            const userAttributes = await fetchUserAttributes();
-            if (userAttributes) {
-                dispatch(setUser(userAttributes));
-                dispatch(login());
-                if (userAttributes['custom:user_type']) {
-                    setCurrentUserRole(Slugify(userAttributes['custom:user_type']));
-                }
-            }
-            setPageLoading(false);
-        } catch (error) {
-            setPageLoading(false);
-            if (
-                ((error.message.includes('User needs to be authenticated')) || (error.name === 'UserUnAuthenticatedException') ||
-               (error.message.includes('Access Token has been revoked')) || (error.name === 'NotAuthorizedException'))) {
-                dispatch(setUser(''));
-                if (localStorage.getItem("userLogedIn")) {
-                    setToastError('user session failed!');
-                }
-                dispatch(logout());
-            }
-        }
-    };
     useEffect(() => {
-        checkLoggedInUser();
-    }, []);
-
-    useEffect(() => {
-        if (!pageLoading && !loggedIn && (window.location.pathname !== '/forgot-password' &&
-        window.location.pathname !== '/set-new-password' && window.location.pathname !== '/set-new-password-with-pin')) {
-            navigate('/');
-        } else if (!pageLoading && loggedIn && window.location.pathname === '/') {
+        setPageLoading(false);
+        if (window.location.pathname === '/') {
             navigate('/dashboard');
         }
-    }, [pageLoading]);
+    }, []);
 
     return (
         <>
@@ -75,44 +30,43 @@ export default function NavigationRoutes (props) {
                     <Routes location={location} key={location.pathname}>
                         {pageLoading
                             ? <Route path="*" element={<Loading />} />
-                            : !user
-                                ? <>
-                                    <Route path="/" element={<Login />} />
-                                    <Route
-                                        path={'/forgot-password'}
-                                        element={<ForgotPassword />} />
-                                    <Route
-                                        path={'/set-new-password'}
-                                        element={<SetNewPassword />} />
-                                    <Route
-                                        path={'/set-new-password-with-pin'}
-                                        element={<SetNewPasswordWithPin />} />
-                                </>
                                 : (
-                                    CurrentUserRole && ComponentsBasedOnRole[CurrentUserRole] && (
-                                        <>
-                                            <Route element={<Layout {...props}/>} key={location.key}>
-                                                {ComponentsBasedOnRole[CurrentUserRole]?.map((nav) => (
-                                                    <Route path={nav.path} element={React.cloneElement(nav.element, props)}
-                                                        key={nav.path}/>
-                                                ))}
-                                                <Route path="/profile" element={<Profile />} />
-                                                <Route path="/profile/update-password" element={<UpdatePassword />} />
-                                            </Route>
-                                            <Route path="*" element={<NotFound />} />
-                                        </>
-                                    )
+                                    <>
+                                        <Route element={<Layout {...props}/>} key={location.key}>
+                                            <Route path="/dashboard" element={<Dashboard />} />
+                                            <Route path="/students" element={<Students />} />
+                                            <Route path="/students/all-students" element={<Students />} />
+                                            <Route path="/students/admissions" element={<Students />} />
+                                            <Route path="/students/enrollments" element={<Students />} />
+                                            <Route path="/students/clearance" element={<Students />} />
+                                            <Route path="/faculty" element={<Faculty />} />
+                                            <Route path="/faculty/all-faculty" element={<Faculty />} />
+                                            <Route path="/faculty/departments" element={<Faculty />} />
+                                            <Route path="/faculty/assignments" element={<Faculty />} />
+                                            <Route path="/academics" element={<Academics />} />
+                                            <Route path="/academics/courses" element={<Academics />} />
+                                            <Route path="/academics/programs" element={<Academics />} />
+                                            <Route path="/academics/schedules" element={<Academics />} />
+                                            <Route path="/academics/grades" element={<Academics />} />
+                                            <Route path="/academics/analytics" element={<Academics />} />
+                                            <Route path="/academics/transcripts" element={<Academics />} />
+                                            <Route path="/academics/appeals" element={<Academics />} />
+                                            <Route path="/academics/attendance" element={<Academics />} />
+                                            <Route path="/administration" element={<Administration />} />
+                                            <Route path="/administration/users" element={<Administration />} />
+                                            <Route path="/administration/settings" element={<Administration />} />
+                                            <Route path="/administration/reports" element={<Administration />} />
 
+                                        </Route>
+                                        <Route path="*" element={<NotFound />} />
+                                    </>
                                 )
                         }
                     </Routes>
                 </>
             }
             </Suspense>
-            {ToastError !== '' && <Toast
-                message={ToastError}
-                type="error"
-                setToastmessage={setToastError} />}
+
         </>
     );
 }

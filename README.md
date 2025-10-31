@@ -1,8 +1,19 @@
-# 
+# University Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern university management system built with React + Vite, featuring a clean admin interface for managing students, faculty, courses, and academic operations.
 
-Currently, two official plugins are available:
+## Features
+- Student Management
+- Faculty Management  
+- Course Management
+- Academic Records
+- User Authentication
+- Role-based Access Control
 
-[https://paymaart.com]
+## Tech Stack
+- React 18
+- Vite
+- Redux Toolkit
+- Tailwind CSS
+- Ant Design
 

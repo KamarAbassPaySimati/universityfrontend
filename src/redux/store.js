@@ -1,46 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import authSlice from '../pages/auth/authSlice';
 import GlobalSlice from './GlobalSlice';
-import agentSlice from '../pages/Users/Agent/agentSlice';
-import AdminSlice from '../pages/Users/Admin/AdminSlice';
-import SpecificAdminViewSlice from '../pages/Users/Admin/Components/SpecificAdminViewSlice';
-import KycVerificationSlice from '../pages/Verification/KycVerification/KycVerificationSlice';
-import BankSlice from '../pages/PaymaartBanks/TrustBanks/BankSlice';
-import merchantSlice from '../pages/Users/Merchants/merchantSlice';
-import customerSlice from '../pages/Users/Customer/customerSlice';
-import KYCProfileViewSlice from '../components/KYC/KYCView/KYCProfileViewSlice';
-import DeleteAccountSlice from '../pages/Verification/DeleteAccount/DeleteAccountSlice';
-import G2PSlice from '../pages/Financials/G2P/G2PSlice';
-import G2PCustomerViewSlice from '../pages/Financials/G2P/G2PCustomerViewSlice';
-import BankTransactionViewSlice from '../pages/PaymaartBanks/BankTransactionView/BankTransactionViewSlice';
-import transactionHistorySlice from '../pages/Financials/Transaction History/transactionHistorySlice';
-import PayOutRequestsSlice from '../pages/Transactions/PayOutRequests/PayOutRequestsSlice';
-import ViewPayOutRequestSlice from '../pages/Transactions/PayOutRequests/Components/ViewPayOutRequest/ViewPayOutRequeSlice';
-import AgentTransactionSlice from '../pages/Users/Agent/ViewTransactionList/AgentTransactionSlice';
-import flaggedSlice from '../pages/Transactions/Flagged/flaggedSlice';
-import TransactionLogSlice from '../pages/Transactions/TransactionsLog/TransactionLogSlice';
 
 export const store = configureStore({
     reducer: {
-        globalData: GlobalSlice,
-        auth: authSlice,
-        agentUsers: agentSlice,
-        flaggedUsers: flaggedSlice,
-        adminUsers: AdminSlice,
-        SpecificAdminView: SpecificAdminViewSlice,
-        PayOutRequestView: ViewPayOutRequestSlice,
-        KYCProfileSpecificView: KYCProfileViewSlice,
-        kycVerifications: KycVerificationSlice,
-        PayOutRequests: PayOutRequestsSlice,
-        bankAccounts: BankSlice,
-        merchantUsers: merchantSlice,
-        customerUsers: customerSlice,
-        DeleteteAccount: DeleteAccountSlice,
-        G2PList: G2PSlice,
-        G2PCustomerView: G2PCustomerViewSlice,
-        BankTransactionViewData: BankTransactionViewSlice,
-        transactionHistory: transactionHistorySlice,
-        agentTransactionHistory: AgentTransactionSlice,
-        transactionLog: TransactionLogSlice
+        globalData: GlobalSlice
     }
 });
