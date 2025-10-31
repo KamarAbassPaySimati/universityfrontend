@@ -1,3 +1,0 @@
-njsscan
-bandit
-detect-secrets
