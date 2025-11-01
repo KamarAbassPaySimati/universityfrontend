@@ -1,12 +1,14 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import SideBar from './SideBar';
 
 
 export default function Layout () {
-    // Mock role for university system
-    const role = 'super-admin';
+    // Dynamic role - can be changed for testing different user types
+    // In real app, this would come from authentication context
+    const [searchParams] = useSearchParams();
+    const role = searchParams.get('role') || 'super-admin';
 
     return (
         <>

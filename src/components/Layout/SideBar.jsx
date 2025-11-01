@@ -2,7 +2,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Modal } from 'antd';
+import { Modal, Select } from 'antd';
+const { Option } = Select;
 import { sideNavObject } from './sideNavObject.js';
 import { setDropdown } from '../../redux/GlobalSlice.js';
 import {
@@ -12,6 +13,8 @@ import {
     BookOutlined,
     SettingOutlined,
     TrophyOutlined,
+    DollarOutlined,
+    CalendarOutlined,
     DownOutlined,
     LogoutOutlined
 } from '@ant-design/icons';
@@ -29,6 +32,8 @@ const getIcon = (iconName, isActive) => {
         case 'BookOutlined': return <BookOutlined {...iconProps} />;
         case 'SettingOutlined': return <SettingOutlined {...iconProps} />;
         case 'TrophyOutlined': return <TrophyOutlined {...iconProps} />;
+        case 'DollarOutlined': return <DollarOutlined {...iconProps} />;
+        case 'CalendarOutlined': return <CalendarOutlined {...iconProps} />;
         default: return <DashboardOutlined {...iconProps} />;
     }
 };
@@ -92,15 +97,16 @@ const SideBar = ({ role }) => {
 
     const handleDropDown = (key, dropDown) => {
         if (dropDown === undefined) {
-            navigate(key);
+            navigate(`${key}?role=${role}`);
         }
         dispatch(setDropdown(key));
     };
 
     const handleOptionClick = (nav, option, key, currentPath) => {
         const targetPath = `/${nav.toLowerCase()}/${option.toLowerCase().replace(/\s+/g, '-')}`;
+        const targetPathWithRole = `${targetPath}?role=${role}`;
         if (currentPath !== targetPath) {
-            navigate(targetPath);
+            navigate(targetPathWithRole);
         }
     };
 
@@ -110,7 +116,7 @@ const SideBar = ({ role }) => {
         <>
             <div className='min-w-[240px] border-r border-neutral-outline'>
                 <div className='flex justify-center h-[56px] items-center'>
-                    <div className='text-xl font-bold text-primary-normal'>University MS</div>
+                    <div className='text-xl font-bold text-primary-normal'>EduAdmin Pro</div>
                 </div>
                 <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
                     <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4 max-h-[calc(100vh-151px)] overflow-y-auto scrollBar'>
@@ -141,7 +147,21 @@ const SideBar = ({ role }) => {
                         ))}
 
                     </div>
-                    <div className='flex justify-center items-center mt-2'>
+                    <div className='flex flex-col items-center mt-2 gap-2'>
+                        <Select 
+                            defaultValue={role} 
+                            style={{ width: 150 }} 
+                            onChange={(value) => {
+                                const url = new URL(window.location);
+                                url.searchParams.set('role', value);
+                                window.location.href = url.toString();
+                            }}
+                        >
+                            <Option value="super-admin">Super Admin</Option>
+                            <Option value="admin">Admin</Option>
+                            <Option value="faculty">Faculty</Option>
+                            <Option value="student">Student</Option>
+                        </Select>
                         <button
                             data-testid='logout'
                             onClick={() => setIsOpen(true)}

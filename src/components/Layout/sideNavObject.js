@@ -19,6 +19,11 @@ export const sideNavObject = {
             icon: 'BookOutlined',
             dropdown: ['Courses', 'Programs', 'Schedules', 'Grades', 'Analytics', 'Transcripts', 'Appeals', 'Attendance']
         },
+        Finance: {
+            path: 'finance',
+            icon: 'DollarOutlined',
+            dropdown: ['Fee Management', 'Scholarships', 'Budgets', 'Reports']
+        },
         Administration: {
             path: 'administration',
             icon: 'SettingOutlined',
@@ -69,6 +74,10 @@ export const sideNavObject = {
         'My Courses': {
             path: 'my-courses',
             icon: 'BookOutlined'
+        },
+        Schedule: {
+            path: 'schedule',
+            icon: 'CalendarOutlined'
         },
         Grades: {
             path: 'grades',

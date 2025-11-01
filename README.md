@@ -1,6 +1,6 @@
-# University Management System
+# EduAdmin Pro
 
-A modern university management system built with React + Vite, featuring a clean admin interface for managing students, faculty, courses, and academic operations.
+A modern university management system built with React + Vite, featuring a clean admin interface for managing students, faculty, courses, finance, and academic operations.
 
 ## Features
 - Student Management

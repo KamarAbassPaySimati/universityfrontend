@@ -5,6 +5,7 @@ import Students from '../pages/Students';
 import Faculty from '../pages/Faculty';
 import Academics from '../pages/Academics';
 import Administration from '../pages/Administration';
+import Profile from '../pages/Profile';
 
 export const ComponentsBasedOnRole = {
     'super-admin': [
@@ -168,6 +169,11 @@ export const ComponentsBasedOnRole = {
             name: 'Dashboard',
             element: <Dashboard />,
             path: '/dashboard'
+        },
+        {
+            name: 'Profile',
+            element: <Profile />,
+            path: '/profile'
         },
         {
             name: 'My Courses',
