@@ -15,6 +15,11 @@ export const ComponentsBasedOnRole = {
             path: '/dashboard'
         },
         {
+            name: 'Profile',
+            element: <Profile />,
+            path: '/profile'
+        },
+        {
             name: 'Students',
             element: <Students />,
             path: '/students'
@@ -132,6 +137,11 @@ export const ComponentsBasedOnRole = {
             path: '/dashboard'
         },
         {
+            name: 'Profile',
+            element: <Profile />,
+            path: '/profile'
+        },
+        {
             name: 'Students',
             element: <Students />,
             path: '/students'
@@ -152,6 +162,11 @@ export const ComponentsBasedOnRole = {
             name: 'Dashboard',
             element: <Dashboard />,
             path: '/dashboard'
+        },
+        {
+            name: 'Profile',
+            element: <Profile />,
+            path: '/profile'
         },
         {
             name: 'My Courses',

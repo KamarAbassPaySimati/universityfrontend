@@ -4,6 +4,10 @@ export const sideNavObject = {
             path: 'dashboard',
             icon: 'DashboardOutlined'
         },
+        Profile: {
+            path: 'profile',
+            icon: 'UserOutlined'
+        },
         Students: {
             path: 'students',
             icon: 'UserOutlined',
@@ -35,6 +39,10 @@ export const sideNavObject = {
             path: 'dashboard',
             icon: 'DashboardOutlined'
         },
+        Profile: {
+            path: 'profile',
+            icon: 'UserOutlined'
+        },
         Students: {
             path: 'students',
             icon: 'UserOutlined',
@@ -55,6 +63,10 @@ export const sideNavObject = {
         Dashboard: {
             path: 'dashboard',
             icon: 'DashboardOutlined'
+        },
+        Profile: {
+            path: 'profile',
+            icon: 'UserOutlined'
         },
         'My Courses': {
             path: 'my-courses',
