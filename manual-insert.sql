@@ -1,0 +1,22 @@
+-- Manual data insertion based on your Excel data
+INSERT INTO temp_student_data VALUES 
+('BBA/10/LL/NE/007', 'Kasewentha, Rowland', 1, '2010-2011', 'Semester 1', 'DP 112', 'Communication Studies I', '71', 'A - Distinction'),
+('BBA/10/LL/CE/034', 'Sendeza, Patricia', 3, '2010-2011', 'Semester 1', 'BUS 312', 'Management Information Systems', '71', 'A - Distinction'),
+('BBA/10/LL/CE/034', 'Sendeza, Patricia', 3, '2010-2011', 'Semester 1', 'BUS 313', 'Communication Management', '65', 'B - Credit'),
+('BBA/10/LL/CE/034', 'Sendeza, Patricia', 3, '2010-2011', 'Semester 1', 'BUS 311', 'Research Methodology', '60', 'B - Credit'),
+('BBA/10/LL/CE/034', 'Sendeza, Patricia', 3, '2010-2011', 'Semester 1', 'BUS 314', 'Legal Environment of Business', '63', 'B - Credit'),
+('MBA/11/LL/CE/01/001', 'Adebayo, Comfort', 1, '2011-2012', 'Semester 1', 'HRM 514', 'Strategic Human Resource Management', '58', 'C - Pass'),
+('MBA/11/LL/CE/01/001', 'Adebayo, Comfort', 1, '2011-2012', 'Semester 1', 'BUS 512', 'Business Ethics', '64', 'B - Credit'),
+('MBA/11/LL/CE/01/001', 'Adebayo, Comfort', 1, '2011-2012', 'Semester 1', 'BUS 511', 'Business Research Methodology', '66', 'B - Credit'),
+('MBA/11/LL/CE/01/001', 'Adebayo, Comfort', 1, '2011-2012', 'Semester 1', 'HRM 513', 'Organisational Behaviour', '69', 'B - Credit'),
+('BBA/11/LL/NE/006', 'Baluwa, Chikumbutso', 1, '2011-2012', 'Semester 1', 'BUS 113', 'Micro Economics', '50', 'C - Pass'),
+('BBA/11/LL/NE/006', 'Baluwa, Chikumbutso', 1, '2011-2012', 'Semester 1', 'ACC 111', 'Financial Accounting I', '52', 'C - Pass'),
+('BBA/11/LL/NE/006', 'Baluwa, Chikumbutso', 1, '2011-2012', 'Semester 1', 'BUS 110', 'Business Mathematics I', '55', 'C - Pass'),
+('BBA/11/LL/NE/006', 'Baluwa, Chikumbutso', 1, '2011-2012', 'Semester 1', 'BUS 112', 'Communication Studies I', '67', 'B - Credit'),
+('BBA/11/LL/CE/658', 'Chikuse, Nthambi', 1, '2011-2012', 'Semester 1', 'BUS 112', 'Communication Studies I', '60', 'B - Credit'),
+('BBA/11/LL/CE/658', 'Chikuse, Nthambi', 1, '2011-2012', 'Semester 1', 'BUS 111', 'Business Mathematics I', '61', 'B - Credit'),
+('BBA/11/LL/CE/658', 'Chikuse, Nthambi', 1, '2011-2012', 'Semester 1', 'BUS 113', 'Micro Economics', '55', 'C - Pass'),
+('BBA/11/LL/CE/658', 'Chikuse, Nthambi', 1, '2011-2012', 'Semester 1', 'BUS 114', 'HIV/AIDS Education', '64', 'B - Credit'),
+('BBA/11/LL/NE/001', 'Chipojola, Mwaiwawo Ethel', 1, '2011-2012', 'Semester 1', 'ACC 111', 'Financial Accounting I', '56', 'C - Pass'),
+('BBA/11/LL/NE/001', 'Chipojola, Mwaiwawo Ethel', 1, '2011-2012', 'Semester 1', 'BUS 112', 'Communication Studies I', '66', 'B - Credit'),
+('BBA/11/LL/NE/001', 'Chipojola, Mwaiwawo Ethel', 1, '2011-2012', 'Semester 1', 'BUS 113', 'Micro Economics', '57', 'C - Pass');

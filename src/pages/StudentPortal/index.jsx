@@ -23,8 +23,11 @@ const StudentPortal = () => {
     ];
 
     const mockGrades = [
-        { key: '1', course: 'Data Structures', assignment1: 18, assignment2: 17, midSem: 19, endSem: 55, total: 109, grade: 'A' },
-        { key: '2', course: 'Algorithms', assignment1: 16, assignment2: 18, midSem: 17, endSem: 50, total: 101, grade: 'B+' }
+        { key: '1', course: 'Data Structures', assignment1: 18, assignment2: 17, midSem: 19, endSem: 55, total: 109, grade: 'Distinction' },
+        { key: '2', course: 'Algorithms', assignment1: 16, assignment2: 18, midSem: 17, endSem: 50, total: 101, grade: 'Credit' },
+        { key: '3', course: 'Mathematics', assignment1: 14, assignment2: 15, midSem: 16, endSem: 45, total: 90, grade: 'Pass' },
+        { key: '4', course: 'Physics', assignment1: 12, assignment2: 13, midSem: 14, endSem: 42, total: 81, grade: 'Marginal Pass' },
+        { key: '5', course: 'Chemistry', assignment1: 8, assignment2: 9, midSem: 10, endSem: 25, total: 52, grade: 'Fail' }
     ];
 
     const feeData = {
@@ -44,7 +47,7 @@ const StudentPortal = () => {
                     code: 'CS301', 
                     name: 'Data Structures', 
                     credits: 3, 
-                    grade: 'A', 
+                    grade: 'Distinction', 
                     status: 'Completed',
                     instructor: 'Dr. Smith',
                     schedule: 'Mon/Wed 10:00-11:30',
@@ -55,7 +58,7 @@ const StudentPortal = () => {
                     code: 'CS302', 
                     name: 'Algorithms', 
                     credits: 3, 
-                    grade: 'B+', 
+                    grade: 'Credit', 
                     status: 'In Progress',
                     instructor: 'Prof. Johnson',
                     schedule: 'Tue/Thu 14:00-15:30',

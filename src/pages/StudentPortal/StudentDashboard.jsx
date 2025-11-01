@@ -15,8 +15,8 @@ const StudentDashboard = () => {
     };
 
     const mockCourses = [
-        { key: '1', code: 'CS301', name: 'Data Structures', credits: 3, grade: 'A', status: 'Completed' },
-        { key: '2', code: 'CS302', name: 'Algorithms', credits: 3, grade: 'B+', status: 'In Progress' },
+        { key: '1', code: 'CS301', name: 'Data Structures', credits: 3, grade: 'Distinction', status: 'Completed' },
+        { key: '2', code: 'CS302', name: 'Algorithms', credits: 3, grade: 'Credit', status: 'In Progress' },
         { key: '3', code: 'CS303', name: 'Database Systems', credits: 4, grade: '-', status: 'Enrolled' }
     ];
 
@@ -33,8 +33,8 @@ const StudentDashboard = () => {
     ];
 
     const recentGrades = [
-        { key: '1', course: 'Data Structures', assignment: 'Final Exam', grade: 'A', date: '2024-01-25' },
-        { key: '2', course: 'Algorithms', assignment: 'Assignment 1', grade: 'B+', date: '2024-01-20' }
+        { key: '1', course: 'Data Structures', assignment: 'Final Exam', grade: 'Distinction', date: '2024-01-25' },
+        { key: '2', course: 'Algorithms', assignment: 'Assignment 1', grade: 'Credit', date: '2024-01-20' }
     ];
 
     return (

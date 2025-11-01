@@ -1,0 +1,19 @@
+PGADMIN IMPORT STEPS (EASIEST METHOD):
+
+1. First run: step1-create-temp-table.sql
+
+2. Save your Excel as CSV:
+   - File → Save As → CSV (Comma delimited)
+   - Save as: student_grades.csv
+
+3. In pgAdmin:
+   - Find your temp_student_data table
+   - Right-click → Import/Export Data
+   - Choose "Import"
+   - Select your student_grades.csv file
+   - Make sure "Header" is checked
+   - Click OK
+
+4. Then run: step3-process-data.sql
+
+This bypasses all permission issues!
