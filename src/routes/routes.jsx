@@ -14,6 +14,7 @@ import Administration from '../pages/Administration';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import StudentPortal from '../pages/StudentPortal';
 import StudentDashboard from '../pages/StudentPortal/StudentDashboard';
+import Profile from '../pages/Profile';
 import ProtectedRoute from '../components/ProtectedRoute';
 export default function NavigationRoutes (props) {
     const navigate = useNavigate();
@@ -208,11 +209,7 @@ export default function NavigationRoutes (props) {
                                                     <StudentPortal />
                                                 </ProtectedRoute>
                                             } />
-                                            <Route path="/profile" element={
-                                                <ProtectedRoute allowedRoles={['student', 'faculty']} currentRole={role}>
-                                                    <StudentPortal />
-                                                </ProtectedRoute>
-                                            } />
+                                            <Route path="/profile" element={<Profile />} />
 
                                         </Route>
                                         <Route path="*" element={<NotFound />} />
