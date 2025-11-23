@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Table, Button, Select, Input, Modal, Descriptions, Divider, Row, Col } from 'antd';
 import { SearchOutlined, FileTextOutlined, DownloadOutlined, PrinterOutlined } from '@ant-design/icons';
 
@@ -8,28 +8,53 @@ const Transcripts = () => {
     const [searchText, setSearchText] = useState('');
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [transcriptVisible, setTranscriptVisible] = useState(false);
+    const [students, setStudents] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const students = [
-        {
-            key: '1',
-            studentId: 'STU001',
-            studentName: 'John Smith',
-            program: 'Computer Science',
-            year: 4,
-            cumulativeGPA: 3.8,
-            totalCredits: 120,
-            semesters: [
-                { semester: '2021-1', gpa: 3.6, credits: 18, courses: [
-                    { code: 'CS101', name: 'Programming I', credits: 3, grade: 'A', points: 12 },
-                    { code: 'MATH101', name: 'Calculus I', credits: 4, grade: 'B+', points: 13.2 }
-                ]},
-                { semester: '2021-2', gpa: 3.9, credits: 20, courses: [
-                    { code: 'CS102', name: 'Programming II', credits: 3, grade: 'A+', points: 12 },
-                    { code: 'MATH102', name: 'Calculus II', credits: 4, grade: 'A', points: 16 }
-                ]}
-            ]
+    useEffect(() => {
+        fetchTranscripts();
+    }, []);
+
+    const fetchTranscripts = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/academics/transcripts`);
+            const data = await response.json();
+            
+            console.log('Transcripts response:', data);
+            
+            if (data.error) {
+                console.error('API Error:', data.error);
+                setStudents([]);
+                return;
+            }
+            
+            if (Array.isArray(data)) {
+                setStudents(data.map(student => ({
+                    key: student.id.toString(),
+                    studentId: student.studentId,
+                    studentName: student.studentName,
+                    program: student.program,
+                    year: student.year,
+                    cumulativeGPA: student.cumulativeGPA,
+                    totalCredits: student.totalCredits,
+                    averageGrade: student.averageGrade,
+                    courseCount: student.courseCount,
+                    courses: student.courses
+                })));
+            } else {
+                console.error('Data is not an array:', data);
+                setStudents([]);
+            }
+        } catch (error) {
+            console.error('Error fetching transcripts:', error);
+            setStudents([]);
+        } finally {
+            setLoading(false);
         }
-    ];
+    };
+
+
 
     const showTranscript = (student) => {
         setSelectedStudent(student);
@@ -89,6 +114,7 @@ const Transcripts = () => {
                     <Table
                         columns={columns}
                         dataSource={filteredStudents}
+                        loading={loading}
                         pagination={{ pageSize: 20 }}
                     />
                 </Card>
@@ -124,31 +150,29 @@ const Transcripts = () => {
 
                         <Divider>Academic Record</Divider>
 
-                        {selectedStudent.semesters?.map((semester, index) => (
-                            <div key={index} className="mb-4">
-                                <h4 className="font-semibold mb-2">Semester {semester.semester}</h4>
-                                <Table
-                                    size="small"
-                                    columns={[
-                                        { title: 'Course Code', dataIndex: 'code', key: 'code' },
-                                        { title: 'Course Name', dataIndex: 'name', key: 'name' },
-                                        { title: 'Credits', dataIndex: 'credits', key: 'credits' },
-                                        { title: 'Grade', dataIndex: 'grade', key: 'grade' },
-                                        { title: 'Grade Points', dataIndex: 'points', key: 'points' }
-                                    ]}
-                                    dataSource={semester.courses}
-                                    pagination={false}
-                                    summary={() => (
-                                        <Table.Summary.Row>
-                                            <Table.Summary.Cell colSpan={2}><strong>Semester Totals</strong></Table.Summary.Cell>
-                                            <Table.Summary.Cell><strong>{semester.credits}</strong></Table.Summary.Cell>
-                                            <Table.Summary.Cell><strong>GPA: {semester.gpa}</strong></Table.Summary.Cell>
-                                            <Table.Summary.Cell></Table.Summary.Cell>
-                                        </Table.Summary.Row>
-                                    )}
-                                />
-                            </div>
-                        ))}
+                        <div className="mb-4">
+                            <h4 className="font-semibold mb-2">Course History</h4>
+                            <Table
+                                size="small"
+                                columns={[
+                                    { title: 'Course Code', dataIndex: 'courseCode', key: 'courseCode' },
+                                    { title: 'Course Name', dataIndex: 'courseName', key: 'courseName' },
+                                    { title: 'Semester', dataIndex: 'semester', key: 'semester' },
+                                    { title: 'Academic Year', dataIndex: 'academicYear', key: 'academicYear' },
+                                    { title: 'Grade', dataIndex: 'finalGrade', key: 'finalGrade' },
+                                    { title: 'Grade Description', dataIndex: 'gradeDescription', key: 'gradeDescription' }
+                                ]}
+                                dataSource={selectedStudent.courses}
+                                pagination={false}
+                                summary={() => (
+                                    <Table.Summary.Row>
+                                        <Table.Summary.Cell colSpan={4}><strong>Summary</strong></Table.Summary.Cell>
+                                        <Table.Summary.Cell><strong>Avg: {selectedStudent.averageGrade}%</strong></Table.Summary.Cell>
+                                        <Table.Summary.Cell><strong>Courses: {selectedStudent.courseCount}</strong></Table.Summary.Cell>
+                                    </Table.Summary.Row>
+                                )}
+                            />
+                        </div>
                     </div>
                 )}
             </Modal>

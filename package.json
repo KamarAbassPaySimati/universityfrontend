@@ -6,6 +6,8 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
+    "deploy": "npm run build && firebase deploy",
+    "firebase:init": "firebase init hosting",
     "eslint": "eslint src/**/*.jsx src/**/*.js test/**/*.js --fix",
     "bdd_dry_run": "./node_modules/@cucumber/cucumber/bin/cucumber.js --dry-run test --require test junit:./reports-xml/TEST-test-report-unit-test-1.xml",
     "generate_report": "nyc report --temp-dir ./test/step-definations/coverageData --reporter html --report-dir ./coverage",
@@ -53,6 +55,7 @@
     "selenium-webdriver": "^4.18.1",
     "tailwindcss": "^3.4.1",
     "vite": "5.1.4",
-    "vite-plugin-istanbul": "5.0.0"
+    "vite-plugin-istanbul": "5.0.0",
+    "firebase-tools": "^13.0.0"
   }
 }

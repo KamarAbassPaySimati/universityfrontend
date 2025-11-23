@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Table, 
     Input, 
@@ -39,8 +39,42 @@ const Programs = () => {
     const [editingProgram, setEditingProgram] = useState(null);
     const [form] = Form.useForm();
 
-    // Mock programs data
-    const [programs, setPrograms] = useState([
+    const [programs, setPrograms] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchPrograms();
+    }, []);
+
+    const fetchPrograms = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/academics/programs`);
+            const data = await response.json();
+            setPrograms(data.map(program => ({
+                key: program.id.toString(),
+                programCode: program.code,
+                programName: program.name,
+                department: program.department,
+                level: program.level,
+                duration: parseInt(program.duration.split(' ')[0]),
+                totalCredits: program.credits,
+                enrolledStudents: program.enrollment,
+                maxCapacity: program.maxCapacity,
+                status: program.status,
+                description: `${program.name} program with ${program.enrollment} enrolled students`,
+                averageGrade: program.averageGrade
+            })));
+        } catch (error) {
+            console.error('Error fetching programs:', error);
+            message.error('Failed to fetch programs');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Remove mock data
+    const [oldPrograms, setOldPrograms] = useState([
         {
             key: '1',
             programCode: 'BSC-CS',
@@ -379,6 +413,7 @@ const Programs = () => {
                     <Table
                         columns={columns}
                         dataSource={filteredPrograms}
+                        loading={loading}
                         pagination={{
                             pageSize: 10,
                             showSizeChanger: true,

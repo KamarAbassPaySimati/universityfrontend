@@ -86,3 +86,9 @@ package-lock.json
 dependency-check-bin**
 dependency-check-reports**
 logs.txt
+
+# Firebase
+.firebase/
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log

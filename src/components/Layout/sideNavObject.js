@@ -11,7 +11,7 @@ export const sideNavObject = {
         Students: {
             path: 'students',
             icon: 'UserOutlined',
-            dropdown: ['All Students', 'Admissions', 'Enrollments', 'Clearance']
+            dropdown: ['All Students', 'Admissions', 'Enrollments', 'Clearance', 'Upload Records']
         },
         Faculty: {
             path: 'faculty',

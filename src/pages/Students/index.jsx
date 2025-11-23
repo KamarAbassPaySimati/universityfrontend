@@ -4,6 +4,7 @@ import AllStudents from './AllStudents';
 import Admissions from './Admissions';
 import Enrollments from './Enrollments';
 import Clearance from './Clearance';
+import UploadRecords from './UploadRecords';
 
 const Students = () => {
     const location = useLocation();
@@ -11,6 +12,9 @@ const Students = () => {
     // Check if we're on a specific sub-route
     if (location.pathname.includes('/clearance')) {
         return <Clearance />;
+    }
+    if (location.pathname.includes('/upload-records')) {
+        return <UploadRecords />;
     }
     if (location.pathname.includes('/enrollments')) {
         return <Enrollments />;

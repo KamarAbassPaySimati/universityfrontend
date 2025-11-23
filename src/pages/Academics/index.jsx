@@ -38,13 +38,8 @@ const Academics = () => {
         return <Courses />;
     }
     
-    // Default view
-    return (
-        <div className="p-6">
-            <h1 className="text-2xl font-bold mb-4">Academic Management</h1>
-            <p className="text-gray-600">Manage courses, programs, schedules, and grades.</p>
-        </div>
-    );
+    // Default view - show courses
+    return <Courses />;
 };
 
 export default Academics;

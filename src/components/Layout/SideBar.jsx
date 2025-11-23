@@ -162,28 +162,10 @@ const SideBar = ({ role }) => {
                             <Option value="faculty">Faculty</Option>
                             <Option value="student">Student</Option>
                         </Select>
-                        <button
-                            data-testid='logout'
-                            onClick={() => setIsOpen(true)}
-                            className={`w-[123px] bg-[#fff] text-primary-normal border border-primary-normal font-[400] 
-                            text-[14px] leading-[16px] py-2 rounded-[4px] flex justify-center items-center gap-[10px] h-[37px]`}>
-                            Logout
-                            <LogoutOutlined />
-                        </button>
                     </div>
                 </div>
             </div>
-            <Modal
-                title="Logout User"
-                open={isOpen}
-                onOk={handleSignOut}
-                onCancel={handleClose}
-                confirmLoading={isLoading}
-                okText="Logout"
-                cancelText="Cancel"
-            >
-                <p>Confirm to Logout?</p>
-            </Modal>
+
         </>
     );
 };

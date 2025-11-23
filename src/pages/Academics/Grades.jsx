@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Table, 
     Input, 
@@ -23,11 +23,92 @@ import {
 const { Option } = Select;
 
 const Grades = () => {
-    const [selectedCourse, setSelectedCourse] = useState('CS101');
+    const [selectedCourse, setSelectedCourse] = useState('');
     const [searchText, setSearchText] = useState('');
+    const [grades, setGrades] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    // Mock student grades data
-    const [grades, setGrades] = useState([
+    // Fetch courses and grades from API
+    useEffect(() => {
+        fetchCourses();
+        fetchGrades();
+    }, []);
+
+    useEffect(() => {
+        if (selectedCourse) {
+            fetchGradesByCourse(selectedCourse);
+        } else {
+            fetchGrades();
+        }
+    }, [selectedCourse]);
+
+    const fetchCourses = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/academics/courses/codes`);
+            const data = await response.json();
+            setCourses(data);
+            if (data.length > 0) {
+                setSelectedCourse(data[0].code);
+            }
+        } catch (error) {
+            console.error('Error fetching courses:', error);
+            message.error('Failed to fetch courses');
+        }
+    };
+
+    const fetchGrades = async () => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/academics/grades`);
+            const data = await response.json();
+            setGrades(data.map((grade, index) => ({
+                key: grade._id,
+                studentId: grade.registrationNumber,
+                studentName: grade.studentName ? grade.studentName.trim() : 'Unknown',
+                courseCode: grade.courseCode,
+                courseName: grade.courseName,
+                finalGrade: grade.finalGrade,
+                gradeDescription: grade.gradeDescription || 'N/A',
+                yearOfStudy: grade.yearOfStudy,
+                academicYear: grade.academicYear,
+                semester: grade.semester
+            })));
+        } catch (error) {
+            console.error('Error fetching grades:', error);
+            message.error('Failed to fetch grades');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchGradesByCourse = async (courseCode) => {
+        try {
+            setLoading(true);
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3001/api'}/academics/grades/course/${courseCode}`);
+            const data = await response.json();
+            setGrades(data.map((grade, index) => ({
+                key: grade._id,
+                studentId: grade.registrationNumber,
+                studentName: grade.studentName ? grade.studentName.trim() : 'Unknown',
+                courseCode: grade.courseCode,
+                courseName: grade.courseName,
+                finalGrade: grade.finalGrade,
+                gradeDescription: grade.gradeDescription || 'N/A',
+                yearOfStudy: grade.yearOfStudy,
+                academicYear: grade.academicYear,
+                semester: grade.semester
+            })));
+        } catch (error) {
+            console.error('Error fetching grades by course:', error);
+            message.error('Failed to fetch grades');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // Remove mock data
+    const [oldGrades, setOldGrades] = useState([
         {
             key: '1',
             studentId: 'STU001',
@@ -90,12 +171,7 @@ const Grades = () => {
         }
     ]);
 
-    const courses = [
-        { code: 'CS101', name: 'Introduction to Computer Science' },
-        { code: 'MATH201', name: 'Calculus II' },
-        { code: 'ENG102', name: 'English Composition' },
-        { code: 'PHYS301', name: 'Quantum Physics' }
-    ];
+
 
     const calculateTotal = (assignment1, assignment2, midSem, endSem) => {
         const total = (assignment1 || 0) + (assignment2 || 0) + (midSem || 0) + (endSem || 0);
@@ -165,115 +241,76 @@ const Grades = () => {
 
     const columns = [
         {
-            title: 'Student ID',
+            title: 'Registration Number',
             dataIndex: 'studentId',
             key: 'studentId',
-            width: 100,
+            width: 150,
             fixed: 'left'
         },
         {
             title: 'Student Name',
             dataIndex: 'studentName',
             key: 'studentName',
-            width: 150,
+            width: 200,
             fixed: 'left'
         },
         {
-            title: 'Assignment 1 (20)',
-            dataIndex: 'assignment1',
-            key: 'assignment1',
-            width: 120,
-            render: (value, record) => (
-                <InputNumber
-                    min={0}
-                    max={20}
-                    value={value}
-                    onChange={(val) => handleGradeChange(record.key, 'assignment1', val)}
-                    size="small"
-                    style={{ width: '100%' }}
-                />
-            )
+            title: 'Course Code',
+            dataIndex: 'courseCode',
+            key: 'courseCode',
+            width: 100
         },
         {
-            title: 'Assignment 2 (20)',
-            dataIndex: 'assignment2',
-            key: 'assignment2',
-            width: 120,
-            render: (value, record) => (
-                <InputNumber
-                    min={0}
-                    max={20}
-                    value={value}
-                    onChange={(val) => handleGradeChange(record.key, 'assignment2', val)}
-                    size="small"
-                    style={{ width: '100%' }}
-                />
-            )
+            title: 'Course Name',
+            dataIndex: 'courseName',
+            key: 'courseName',
+            width: 250
         },
         {
-            title: 'Mid Sem (20)',
-            dataIndex: 'midSem',
-            key: 'midSem',
-            width: 120,
-            render: (value, record) => (
-                <InputNumber
-                    min={0}
-                    max={20}
-                    value={value}
-                    onChange={(val) => handleGradeChange(record.key, 'midSem', val)}
-                    size="small"
-                    style={{ width: '100%' }}
-                />
-            )
+            title: 'Year of Study',
+            dataIndex: 'yearOfStudy',
+            key: 'yearOfStudy',
+            width: 100
         },
         {
-            title: 'End Sem (60)',
-            dataIndex: 'endSem',
-            key: 'endSem',
-            width: 120,
-            render: (value, record) => (
-                <InputNumber
-                    min={0}
-                    max={60}
-                    value={value}
-                    onChange={(val) => handleGradeChange(record.key, 'endSem', val)}
-                    size="small"
-                    style={{ width: '100%' }}
-                />
-            )
+            title: 'Academic Year',
+            dataIndex: 'academicYear',
+            key: 'academicYear',
+            width: 120
         },
         {
-            title: 'Total (100)',
-            dataIndex: 'total',
-            key: 'total',
+            title: 'Semester',
+            dataIndex: 'semester',
+            key: 'semester',
+            width: 120
+        },
+        {
+            title: 'Final Grade',
+            dataIndex: 'finalGrade',
+            key: 'finalGrade',
             width: 100,
-            render: (total) => (
-                <span className={total >= 80 ? 'font-bold text-green-600' : total >= 60 ? 'font-bold text-blue-600' : 'font-bold text-red-600'}>
-                    {total}
-                </span>
-            )
-        },
-        {
-            title: 'Grade',
-            dataIndex: 'letterGrade',
-            key: 'letterGrade',
-            width: 80,
             render: (grade) => (
-                <Tag color={getGradeColor(grade)} className="font-bold">
+                <span className={grade >= 80 ? 'font-bold text-green-600' : grade >= 60 ? 'font-bold text-blue-600' : 'font-bold text-red-600'}>
                     {grade}
-                </Tag>
+                </span>
             )
         },
         {
-            title: 'GPA',
-            dataIndex: 'gpa',
-            key: 'gpa',
-            width: 80,
-            render: (gpa) => (
-                <span className="font-semibold">
-                    {gpa.toFixed(1)}
-                </span>
-            )
+            title: 'Grade Description',
+            dataIndex: 'gradeDescription',
+            key: 'gradeDescription',
+            width: 150,
+            render: (description) => {
+                if (!description) return <Tag>N/A</Tag>;
+                const color = description.includes('A') ? 'green' : 
+                             description.includes('B') ? 'blue' : 
+                             description.includes('C') ? 'orange' : 'red';
+                return (
+                    <Tag color={color} className="font-bold">
+                        {description}
+                    </Tag>
+                );
+            }
         }
     ];
 
@@ -283,18 +320,17 @@ const Grades = () => {
     );
 
     const classAverage = grades.length > 0 ? 
-        (grades.reduce((sum, student) => sum + student.total, 0) / grades.length).toFixed(1) : 0;
+        (grades.reduce((sum, student) => sum + student.finalGrade, 0) / grades.length).toFixed(1) : 0;
     
     const passRate = grades.length > 0 ? 
-        Math.round((grades.filter(student => student.total >= 50).length / grades.length) * 100) : 0;
+        Math.round((grades.filter(student => student.finalGrade >= 50).length / grades.length) * 100) : 0;
 
     const gradeDistribution = {
-        'A+': grades.filter(s => s.letterGrade === 'A+').length,
-        'A': grades.filter(s => s.letterGrade === 'A').length,
-        'B': grades.filter(s => s.letterGrade === 'B').length,
-        'C': grades.filter(s => s.letterGrade === 'C').length,
-        'D': grades.filter(s => s.letterGrade === 'D').length,
-        'F': grades.filter(s => s.letterGrade === 'F').length
+        'A': grades.filter(s => s.gradeDescription && s.gradeDescription.includes('A')).length,
+        'B': grades.filter(s => s.gradeDescription && s.gradeDescription.includes('B')).length,
+        'C': grades.filter(s => s.gradeDescription && s.gradeDescription.includes('C')).length,
+        'D': grades.filter(s => s.gradeDescription && s.gradeDescription.includes('D')).length,
+        'F': grades.filter(s => s.gradeDescription && s.gradeDescription.includes('F')).length
     };
 
     return (
@@ -324,7 +360,7 @@ const Grades = () => {
                     </Col>
                     <Col xs={24} sm={6}>
                         <Card>
-                            <Statistic title="A Grades" value={gradeDistribution['A+'] + gradeDistribution['A']} valueStyle={{ color: '#52c41a' }} />
+                            <Statistic title="A Grades" value={gradeDistribution['A']} valueStyle={{ color: '#52c41a' }} />
                         </Card>
                     </Col>
                 </Row>
@@ -338,6 +374,7 @@ const Grades = () => {
                                 onChange={setSelectedCourse}
                                 style={{ width: '100%' }}
                             >
+                                <Option value="">All Courses</Option>
                                 {courses.map(course => (
                                     <Option key={course.code} value={course.code}>
                                         {course.code} - {course.name}
@@ -371,32 +408,36 @@ const Grades = () => {
                     <Col xs={24}>
                         <Card title="Grade Distribution">
                             <Row gutter={[16, 16]}>
-                                {Object.entries(gradeDistribution).map(([grade, count]) => (
-                                    <Col xs={4} key={grade}>
-                                        <div className="text-center">
-                                            <div className="text-2xl font-bold" style={{ color: getGradeColor(grade) === 'gold' ? '#faad14' : getGradeColor(grade) === 'green' ? '#52c41a' : getGradeColor(grade) === 'blue' ? '#1890ff' : getGradeColor(grade) === 'orange' ? '#fa8c16' : '#f5222d' }}>
-                                                {count}
+                                {Object.entries(gradeDistribution).map(([grade, count]) => {
+                                    const color = grade === 'A' ? '#52c41a' : grade === 'B' ? '#1890ff' : grade === 'C' ? '#fa8c16' : '#f5222d';
+                                    return (
+                                        <Col xs={24} sm={4} key={grade}>
+                                            <div className="text-center">
+                                                <div className="text-2xl font-bold" style={{ color }}>
+                                                    {count}
+                                                </div>
+                                                <div className="text-sm text-gray-600">Grade {grade}</div>
+                                                <Progress 
+                                                    percent={grades.length > 0 ? Math.round((count / grades.length) * 100) : 0} 
+                                                    size="small" 
+                                                    showInfo={false}
+                                                    strokeColor={color}
+                                                />
                                             </div>
-                                            <div className="text-sm text-gray-600">Grade {grade}</div>
-                                            <Progress 
-                                                percent={grades.length > 0 ? Math.round((count / grades.length) * 100) : 0} 
-                                                size="small" 
-                                                showInfo={false}
-                                                strokeColor={getGradeColor(grade) === 'gold' ? '#faad14' : getGradeColor(grade) === 'green' ? '#52c41a' : getGradeColor(grade) === 'blue' ? '#1890ff' : getGradeColor(grade) === 'orange' ? '#fa8c16' : '#f5222d'}
-                                            />
-                                        </div>
-                                    </Col>
-                                ))}
+                                        </Col>
+                                    );
+                                })}
                             </Row>
                         </Card>
                     </Col>
                 </Row>
 
                 {/* Grades Table */}
-                <Card title={`Grades for ${selectedCourse}`}>
+                <Card title={selectedCourse ? `Grades for ${selectedCourse}` : 'All Grades'}>
                     <Table
                         columns={columns}
                         dataSource={filteredGrades}
+                        loading={loading}
                         pagination={{
                             pageSize: 20,
                             showSizeChanger: true,

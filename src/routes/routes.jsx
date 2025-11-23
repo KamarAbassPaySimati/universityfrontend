@@ -15,20 +15,26 @@ import Dashboard from '../pages/Dashboard/Dashboard';
 import StudentPortal from '../pages/StudentPortal';
 import StudentDashboard from '../pages/StudentPortal/StudentDashboard';
 import Profile from '../pages/Profile';
+import Login from '../pages/Login';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { useAuth } from '../context/AuthContext';
 export default function NavigationRoutes (props) {
     const navigate = useNavigate();
     const location = useLocation();
-    const [searchParams] = useSearchParams();
     const [pageLoading, setPageLoading] = useState(true);
-    const role = searchParams.get('role') || 'super-admin';
+    const { user, loading } = useAuth();
+    const role = user?.role || 'student';
 
     useEffect(() => {
         setPageLoading(false);
-        if (window.location.pathname === '/') {
+        if (!loading && !user && window.location.pathname !== '/login') {
+            navigate('/login');
+        } else if (!loading && user && window.location.pathname === '/') {
             navigate('/dashboard');
         }
-    }, []);
+    }, [user, loading, navigate]);
+
+    if (loading) return <Loading />;
 
     return (
         <>
@@ -39,6 +45,7 @@ export default function NavigationRoutes (props) {
                             ? <Route path="*" element={<Loading />} />
                                 : (
                                     <>
+                                        <Route path="/login" element={!user ? <Login /> : <Dashboard />} />
                                         <Route element={<Layout {...props}/>} key={location.key}>
                                             {/* Dashboard Routes */}
                                             <Route path="/dashboard" element={role === 'student' ? <StudentDashboard /> : <Dashboard />} />
@@ -66,6 +73,11 @@ export default function NavigationRoutes (props) {
                                             } />
                                             <Route path="/students/clearance" element={
                                                 <ProtectedRoute allowedRoles={['super-admin']} currentRole={role}>
+                                                    <Students />
+                                                </ProtectedRoute>
+                                            } />
+                                            <Route path="/students/upload-records" element={
+                                                <ProtectedRoute allowedRoles={['super-admin', 'admin']} currentRole={role}>
                                                     <Students />
                                                 </ProtectedRoute>
                                             } />
