@@ -114,12 +114,12 @@ const SideBar = ({ role }) => {
 
     return (
         <>
-            <div className='min-w-[240px] border-r border-neutral-outline'>
+            <div className='min-w-[240px] border-r border-neutral-outline h-full flex flex-col'>
                 <div className='flex justify-center h-[56px] items-center'>
                     <div className='text-xl font-bold text-primary-normal'>EduAdmin Pro</div>
                 </div>
-                <div className='py-6 flex flex-col justify-between min-h-[calc(100vh-56px)] border-t border-neutral-outline'>
-                    <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4 max-h-[calc(100vh-151px)] overflow-y-auto scrollBar'>
+                <div className='py-6 flex flex-col justify-between flex-1 border-t border-neutral-outline overflow-hidden'>
+                    <div className='min-w-[208px] pt-8 flex flex-col gap-4 justify-start mx-4 flex-1 overflow-y-auto scrollBar'>
 
                         {sideNavObject && sideNavObject[role] && Object.keys(sideNavObject[role]).map((nav) => (
                             <div key={nav} className='flex flex-col'>

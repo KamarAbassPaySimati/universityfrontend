@@ -11,13 +11,11 @@ export default function Layout () {
 
     return (
         <>
-            <div className="bg-[#FFFFFF]">
-                <div className="flex flex-col h-screen w-[100vw]">
+            <div className="bg-[#FFFFFF] h-screen overflow-hidden">
+                <div className="flex flex-col h-full">
                     <Topbar />
-                    <div className="flex flex-1 overflow-hidden">
-                        <div className="sticky top-0 h-full">
-                            <SideBar role={role} user={user} />
-                        </div>
+                    <div className="flex flex-1 h-0">
+                        <SideBar role={role} user={user} />
                         <div className="flex-1 overflow-y-auto">
                             <Outlet />
                         </div>
